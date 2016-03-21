@@ -62,15 +62,10 @@ class SEO_pre_reader:
         self.loop_to_reps = {}
         self.loop_queue = []
 
-        while True:
-            line = self.english_in.readline()
-            if not line:
-                break
-            self.tot_num_lines += 1
-            self.scan_line(line)
-        self.english_in.close()
+        while not self.english_in.closed:
+            self.scan_next_line()
 
-    def scan_line(self, line):
+    def scan_next_line(self):
         """
         Scans one line. Skips over any line that doesn't start with LOOP or
         NEXT.
@@ -84,8 +79,14 @@ class SEO_pre_reader:
         None
 
         """
+        line = self.english_in.readline()
+        if not line:
+            self.english_in.close()
+            return
+
         self.split_line = line.split()
         line_name = self.split_line[0]
+        self.tot_num_lines += 1
         if line_name == "LOOP":
             self.scan_LOOP()
         elif line_name == "NEXT":

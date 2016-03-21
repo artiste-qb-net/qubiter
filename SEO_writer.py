@@ -28,9 +28,9 @@ class SEO_writer:
     each line representing a single operation (e.g., a multi-controlled one
     qubit gate or a multi-controlled 2 qubit swap).
 
-    The English file contains complete info about the operation specified by
-    each line. A Picture file contains only partial info about each line in
-    the form of an ascii picture.
+    The English file (resp., Picture file) contains complete (resp.,
+    partial, in the form of an ASCII picture) info about the operation
+    specified by each line.
 
     In English and Picture files, time flows downward.
 
@@ -54,13 +54,13 @@ class SEO_writer:
         eng_file_examples.png
 
     These 2 images give examples of lines in analytic/Picture/English
-    formats. The Picture file follows the ZL convention.
+    formats. The Picture file png follows the ZL convention.
 
     3 kinds (called 0, 1, 2) of measurements MEAS are allowed. A type 0
-    measurement inserts a projector |0><0| = n = P_0 at the target node. A
+    measurement inserts a projector |0><0| = n = P_0 at the target bit. A
     type 1 measurement inserts a projector |1><1| = nbar = P_1 at the target
-    node. A type 2 measurement stores a copy of the state vector after
-    |0><0| has been applied, and another copy after |1><1| has been applied.
+    bit. A type 2 measurement stores a copy of the state vector after |0><0|
+    has been applied, and another copy after |1><1| has been applied.
 
     Attributes
     ----------
@@ -129,10 +129,10 @@ class SEO_writer:
 
     def write_pic_line(self, pic_line):
         """
-        Writes a line in the Picture file only using either the ZF or ZL
-        conventions. pic_line is originally written in ZL format, so does
-        nothing to pic_line if ZL option is chosen but reverses order of
-        gates if ZF option chosen.
+        Writes a line in the Picture file using either the ZF or ZL
+        conventions. pic_line is originally written in ZL format, so this
+        method does nothing to pic_line if ZL option is chosen but reverses
+        order of gates if ZF option chosen.
 
         Parameters
         ----------
@@ -654,8 +654,8 @@ class SEO_writer:
 
     def write_measurement(self, tar_bit_pos, kind):
         """
-        Writes a 'MEAS' line in eng & pic files. This is a measurement node.
-        We allow 3 kinds of measurement (0, 1, 2) at a target bit.
+        Writes a 'MEAS' line in eng & pic files. This denotes a measurement
+        step. We allow 3 kinds of measurements (0, 1, 2) at a target bit.
 
         Parameters
         ----------

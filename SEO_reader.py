@@ -247,7 +247,7 @@ class SEO_reader(SEO_pre_reader):
 
     def finalize_next_line(self):
         """
-        Useful for intercepting the end of each call to read_line()
+        Useful for intercepting the end of each call to next_line()
 
         Returns
         -------
@@ -382,7 +382,9 @@ class SEO_reader(SEO_pre_reader):
 
     def use_LOOP(self, loop_num, reps):
         """
-        Abstract use_ method that must be overridden by child class.
+        Don't override this unless you know what you are doing and have very
+        good reasons. It has been carefully set up to deal properly with
+        embedded loops.
 
         Parameters
         ----------
@@ -398,7 +400,9 @@ class SEO_reader(SEO_pre_reader):
 
     def use_NEXT(self, loop_num):
         """
-        Abstract use_ method that must be overridden by child class.
+        Don't override this unless you know what you are doing and have very
+        good reasons. It has been carefully set up to deal properly with
+        embedded loops.
 
         Parameters
         ----------

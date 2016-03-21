@@ -3,7 +3,7 @@
 
 The Qubiter project aims to  provide eventually a full suite of tools, written mostly in Python, for designing and simulating quantum circuits on classical computers. (So it will address only the needs of gate model, not annealer, quantum computer engineers). We or others could start a similar project for annealers.
 
-An earlier C++ computer program also called Qubiter (see http://www.ar-tiste.com/qubiter.html), written by Robert R. Tucci, did only quantum compiling. This newer project will eventually include a quantum compiler similar to earlier Qubiter, but written in Python. But this new project will also include much more than that.
+An earlier C++ computer program also called Qubiter (see http://www.ar-tiste.com/qubiter.html), written by Robert R. Tucci, did only quantum compiling. This newer project will eventually include a quantum compiler similar to the earlier Qubiter, but written in Python. But this new project will also include much more than that.
 
 On this initial release, we have included classes for reading and writing quantum circuit files. Also for embedding a circuit inside a larger one. And, last but not least, we've included a simulator.
 

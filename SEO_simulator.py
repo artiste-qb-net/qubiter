@@ -17,16 +17,16 @@ class SEO_simulator(SEO_reader):
     set to the ground state automatically by the constructor.
 
     3 kinds (called 0, 1, 2) of measurements MEAS are allowed. A type 0
-    measurement inserts a projector |0><0| = n = P_0 at the target node. A
+    measurement inserts a projector |0><0| = n = P_0 at the target bit. A
     type 1 measurement inserts a projector |1><1| = nbar = P_1 at the target
-    node. A type 2 measurement stores a copy of the state vector after
-    |0><0| has been applied, and another copy after |1><1| has been applied.
+    bit. A type 2 measurement stores a copy of the state vector after |0><0|
+    has been applied, and another copy after |1><1| has been applied.
 
-    cur_st_vec_list is a list of state vectors on num_bits many qubits. We
-    will refer to each state vec in the list as a branch. Initially,
-    this list contains a single branch. A measurement MEAS of kinds 0 or 1
-    does not change the number of branches in the list, but a measurement of
-    kind 3 doubles their number.
+    cur_st_vec_list is a list of state vectors on num_bits qubits. We will
+    refer to each state vec in the list as a branch. Initially, this list
+    contains a single branch. A measurement MEAS of kinds 0 or 1 does not
+    change the number of branches in the list, but a measurement of kind 3
+    doubles their number.
 
     Note that since projectors are not unitary matrices, the branches of
     cur_st_vec_list are not expected to be normalized except when there is
@@ -565,15 +565,16 @@ class SEO_simulator(SEO_reader):
 
 if __name__ == "__main__":
 
-    # use test = 0 if want to run all tests
-    test = 0
+    # use test = 0 if want to run all tests at once.
+    # test 1 and 2 work well. test 3 for MEAS seems to fail
+    test = 1
     if test in [0, 1]:
-        # test on circuit foa a quantum fourier transform
+        # test on circuit for a quantum fourier transform
         # (no loops, no internal measurements)
         sim = SEO_simulator('io_folder//sim_test1', 6, do_print=True)
 
     if test in [0, 2]:
-        # test on circuit with embedded loops
+        # test embedded loops
         sim = SEO_simulator('io_folder//sim_test2', 4, do_print=True)
 
     if test in [0, 3]:

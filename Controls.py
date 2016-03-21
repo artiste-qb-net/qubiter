@@ -8,8 +8,9 @@ class Controls:
     is P_1 = n = |1><1|. Kind is False if control is P_0 = nbar = |0><0|.
     Kind is a non-negative integer for multiplexor controls.
 
-    See the docstring for the class SEO_reader to get an explanation of the
-    meaning of the non-negative numbers used for the multiplexor kind.
+    See the docstring of the class SEO_writer to get more info and further
+    references on the meaning of the non-negative numbers used for the
+    multiplexor kind.
 
     Attributes
     ----------
