@@ -185,9 +185,9 @@ class Controls:
 
         self.refresh_lists()
         num_controls = len(self.bit_pos)
-        self.bit_pos_to_kind = {emb.aft(self.bit_pos[c]): self.kinds[c] for
+        new.bit_pos_to_kind = {emb.aft(self.bit_pos[c]): self.kinds[c] for
                     c in range(num_controls)}
-        self.refresh_lists()
+        new.refresh_lists()
         return new
 
 if __name__ == "__main__":

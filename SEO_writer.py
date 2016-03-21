@@ -50,10 +50,11 @@ class SEO_writer:
     The following images from the above paper are stored in the same folder
     as this python file.
 
-        pic_file_examples.png
+        ZLpic_file_examples.png
         eng_file_examples.png
 
-    These 2 images give examples of lines in analytic/Picture/English formats.
+    These 2 images give examples of lines in analytic/Picture/English
+    formats. The Picture file follows the ZL convention.
 
     3 kinds (called 0, 1, 2) of measurements MEAS are allowed. A type 0
     measurement inserts a projector |0><0| = n = P_0 at the target node. A
