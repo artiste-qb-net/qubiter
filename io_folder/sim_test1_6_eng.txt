@@ -1,7 +1,10 @@
 NOTA    this file is used to test class SEO_simulator
 SWAP	3	2
 SWAP	3	1
+SWAP	3	0
 SWAP	2	1
+SWAP	2	0
+SWAP	1	0
 HAD2	AT	0
 PHAS	90.0	AT	1	IF	0T
 PHAS	45.0	AT	2	IF	0T

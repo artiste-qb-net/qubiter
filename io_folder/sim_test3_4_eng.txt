@@ -1,6 +1,6 @@
 NOTA  testing MEAS branching. Each kind 2 measurement doubles number of state vectors
 SIGX	AT	0	IF	2F
-MEAS    1   AT  2
+MEAS    0   AT  2
 SIGX	AT	1	IF	2F
 MEAS    2   AT  3
 SIGX	AT	1

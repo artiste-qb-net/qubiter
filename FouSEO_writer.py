@@ -49,7 +49,7 @@ class FouSEO_writer(SEO_writer):
 
         # permutation R
         for r in range(num_bits-1, 0, -1):
-            for k in range(r-1, 0, -1):
+            for k in range(r-1, -1, -1):
                 self.write_bit_swap(r, k)
 
         controls = Controls(num_bits)

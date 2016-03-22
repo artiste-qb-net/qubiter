@@ -225,16 +225,17 @@ class SEO_simulator(SEO_reader):
         slicex = tuple(slicex)
 
         # components that are fixed are no longer axes
-        scout = -1
+        scout = 0
         for bit in range(self.num_bits):
-            if bit not in controls.bit_pos:
-                scout += 1
             if bit == bit1:
                 new1 = scout
             if bit == bit2:
                 new2 = scout
+            if bit not in controls.bit_pos:
+                scout += 1
+
         # perm = permutation that will use in transpose()
-        perm_len = scout + 1
+        perm_len = scout
         perm = list(range(perm_len))
         perm[new1], perm[new2] = perm[new2], perm[new1]
 
@@ -275,17 +276,24 @@ class SEO_simulator(SEO_reader):
         vec_slicex = tuple(vec_slicex)
 
         # components that are fixed are no longer axes
-        scout = -1
+        scout = 0
         for bit in range(self.num_bits):
-            if bit not in controls.bit_pos:
-                scout += 1
             if bit == tar_bit_pos:
                 new_tar = scout
-        perm_len = scout + 1
+            if bit not in controls.bit_pos:
+                scout += 1
+
+        perm_len = scout
         # example tar = 2
         # want to map [2, 0, 1, 3, 4] back to [0, 1, 2, 3, 4]
+
+        # this didn't work
         # use perm 0>2, 1>0, 2>1, 3>3, 4>4
-        perm = [new_tar] + list(range(new_tar))
+        # perm = [new_tar] + list(range(new_tar))
+        # perm += list(range(new_tar+1, perm_len))
+
+        # use perm 2>0, 0>1, 1>2, 3>3, 4>4
+        perm =  list(range(1, new_tar+1)) + [0]
         perm += list(range(new_tar+1, perm_len))
 
         # br = branch
@@ -375,6 +383,7 @@ class SEO_simulator(SEO_reader):
 
         """
         list_len = len(self.cur_st_vec_list)
+        # slicex = slice index
         slicex = [slice(None)]*self.num_bits
         # br = branch
         if kind == 0:
@@ -559,14 +568,13 @@ class SEO_simulator(SEO_reader):
         """
         assert False, \
             "This class cannot simulate a circuit containing " \
-            "raw multiplexors. Must first use" \
-            "multiplexorExpander application to expand " \
+            "raw multiplexors. Work around: use first our" \
+            "MultiplexorExpander application to expand " \
             "multiplexors into simpler gates "
 
 if __name__ == "__main__":
 
     # use test = 0 if want to run all tests at once.
-    # test 1 and 2 work well. test 3 for MEAS seems to fail
     test = 1
     if test in [0, 1]:
         # test on circuit for a quantum fourier transform
