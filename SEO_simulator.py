@@ -293,7 +293,7 @@ class SEO_simulator(SEO_reader):
         # perm += list(range(new_tar+1, perm_len))
 
         # use perm 2>0, 0>1, 1>2, 3>3, 4>4
-        perm =  list(range(1, new_tar+1)) + [0]
+        perm = list(range(1, new_tar+1)) + [0]
         perm += list(range(new_tar+1, perm_len))
 
         # br = branch
@@ -575,7 +575,7 @@ class SEO_simulator(SEO_reader):
 if __name__ == "__main__":
 
     # use test = 0 if want to run all tests at once.
-    test = 1
+    test = 0
     if test in [0, 1]:
         # test on circuit for a quantum fourier transform
         # (no loops, no internal measurements)

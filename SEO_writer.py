@@ -256,6 +256,11 @@ class SEO_writer:
         # aft_tar_bit_pos = self.emb.aft(tar_bit_pos)
 
         aft_trols = trols.new_embedded_self(self.emb)
+        # add extra controls if there are any
+        extra_dict = self.emb.extra_controls.bit_pos_to_kind
+        if extra_dict:
+            aft_trols.bit_pos_to_kind.update(extra_dict)
+            aft_trols.refresh_lists()
 
         # number of controls may be zero
         num_controls = len(aft_trols.bit_pos)
@@ -353,11 +358,17 @@ class SEO_writer:
 
         aft_trols = trols.new_embedded_self(self.emb)
 
+        # add extra controls if there are any
+        extra_dict = self.emb.extra_controls.bit_pos_to_kind
+        if extra_dict:
+            aft_trols.bit_pos_to_kind.update(extra_dict)
+            aft_trols.refresh_lists()
+
         # number of controls may be zero
         num_controls = len(aft_trols.bit_pos)
         # end of preamble
 
-        assert tar_bit_pos not in aft_trols.bit_pos,\
+        assert aft_tar_bit_pos not in aft_trols.bit_pos,\
             "target bit cannot be a control bit"
 
         if fun_arg_list is None:
@@ -429,7 +440,7 @@ class SEO_writer:
 
         c_int = 0
         for k in range(biggest, smallest-1, -1):
-            is_target = (k == tar_bit_pos)
+            is_target = (k == aft_tar_bit_pos)
             is_control = False
             control_kind = False
             tres = "   " if (k == smallest) else "---"
@@ -527,12 +538,17 @@ class SEO_writer:
         aft_tar_bit_pos = self.emb.aft(tar_bit_pos)
 
         aft_trols = trols.new_embedded_self(self.emb)
+        # add extra controls if there are any
+        extra_dict = self.emb.extra_controls.bit_pos_to_kind
+        if extra_dict:
+            aft_trols.bit_pos_to_kind.update(extra_dict)
+            aft_trols.refresh_lists()
 
         # number of controls may be zero
         num_controls = len(aft_trols.bit_pos)
         # end of preamble
         
-        assert tar_bit_pos not in aft_trols.bit_pos,\
+        assert aft_tar_bit_pos not in aft_trols.bit_pos,\
             "target bit cannot be a control bit"
 
         num_int_controls = aft_trols.get_num_int_controls()
@@ -723,7 +739,7 @@ if __name__ == "__main__":
     ang_rads = 30*np.pi/180
 
     for zf in [False, True]:
-        wr = SEO_writer('io_folder//test', emb, zero_bit_first=zf)
+        wr = SEO_writer('io_folder//wr_test', emb, zero_bit_first=zf)
 
         wr.write_NOTA('zero bit first = ' + str(zf))
 
