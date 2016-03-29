@@ -1,0 +1,337 @@
+from SEO_writer import *
+from FouSEO_writer import *
+import copy as cp
+
+
+class PhaseEstSEO_writer(SEO_writer):
+    """
+    The quantum phase estimation algorithm or PEA (see
+
+    https://en.wikipedia.org/wiki/Quantum_phase_estimation_algorithm
+
+    for an introduction) was invented by Kitaev in 1995. Since then, it has
+    been used for many purposes such as for finding the ground state energy
+    of molecules.
+
+    This class is a subclass of SEO_writer. It writes the PEA circuit that
+    is given, for example, in the Wikipedia article just mentioned.
+
+    We will divide the qubits used by PEA into 2 disjoint sets and refer to
+    those sets as: probe qubits and atom qubits. A matrix U that acts on the
+    atom qubits will be referred to as the atom matrix or just the atom.
+    First a Hadamard matrix is applied to each probe qubit. Then each probe
+    qubit interacts with a different power of the atom matrix U. Finally,
+    an inverse quantum Fourier transform is applied to all the probe qubits
+    together.
+
+    Even though these probe-atom interactions do not change the state of the
+    probe qubits, the probes do become correlated with the atom powers and
+    this shows up after we take the inverse Fourier transform.
+
+    Note that this class writes the whole PEA circuit, but it requires as
+    input a class 'atom_writer_cls' which will take care of writing the atom
+    matrix powers. See class AtomWriter1 below for a template for class
+    'atom_writer_cls'.
+
+
+    Attributes
+    ----------
+    atom_writer_cls : type
+        This should be a subclass of SEO_writer. See class AtomWriter1 below
+        for a template. An object of this class will write the atom matrix
+        powers.
+    cls_arg_list : list[]
+        list of extra arguments of constructor of class atom_writer_cls
+    num_probe_bits : int
+        Number of probe qubits.
+
+    emb : CktEmbedder
+    english_out : _io.TextIOWrapper
+        file object for output text file that stores English description of
+        circuit
+    picture_out : _io.TextIOWrapper
+        file object for output text file that stores ASCII Picture
+        description of circuit
+    file_prefix : str
+        beginning of the name of both English and Picture files
+    line_counter : int
+    zero_bit_first : bool
+
+    """
+
+    def __init__(self, do_write, num_probe_bits, atom_writer_cls,
+                 cls_arg_list, file_prefix, emb, **kwargs):
+        """
+        Constructor
+
+        Parameters
+        ----------
+        do_write : bool
+            True if want constructor to write automatically without
+            being asked.
+        num_probe_bits : int
+        atom_writer_cls : type
+        cls_arg_list : list[]
+        file_prefix : str
+        emb : CktEmbedder
+        kwargs : dict[]
+
+        Returns
+        -------
+
+        """
+        SEO_writer.__init__(self, file_prefix, emb, **kwargs)
+        self.num_probe_bits = num_probe_bits
+        self.atom_writer_cls = atom_writer_cls
+        self.cls_arg_list = cls_arg_list
+
+        if do_write:
+            self.write()
+
+    def write(self):
+        """
+        Writes the circuit for quantum phase estimation.
+
+        Returns
+        -------
+        None
+
+        """
+
+        num_bits = self.emb.num_bits_bef
+        num_atom_bits = num_bits - self.num_probe_bits
+        assert num_atom_bits >= 1, "must have >=1 probe bits"
+
+        # first write the Hadamards
+        for k in range(self.num_probe_bits):
+            self.write_one_bit_gate(k, OneBitGates.had2)
+
+        # next write the probe controlled atoms
+
+        # this pre_emb maps atom -> (atom + probes)
+        num_bits_bef = num_atom_bits
+        num_bits_aft = num_bits
+        bit_map = list(range(self.num_probe_bits, num_bits))
+        pre_emb = CktEmbedder(num_bits_bef, num_bits_aft, bit_map)
+
+        for k in range(self.num_probe_bits):
+            # set extra_controls to empty then add one control
+            pre_emb.extra_controls = Controls(num_bits)
+            pre_emb.extra_controls.set_control(
+                self.num_probe_bits-1-k,
+                True)
+            compo_emb = CktEmbedder.composition(self.emb, pre_emb)
+            atom_wr = self.atom_writer_cls(
+                arg_list=self.cls_arg_list,
+                do_write=False,
+                file_prefix=None,
+                emb=compo_emb,
+                english_out=self.english_out,
+                picture_out=self.picture_out,
+                zero_bit_first=self.zero_bit_first)
+            atom_wr.write_pow(1 << k)
+
+        # finally write the inverse Fourier transform
+
+        # this pre_emb maps probe bits -> (atom + probes)
+        num_bits_bef = self.num_probe_bits
+        num_bits_aft = num_bits
+        bit_map = list(range(num_bits_bef))
+        pre_emb = CktEmbedder(num_bits_bef, num_bits_aft, bit_map)
+
+        compo_emb = CktEmbedder.composition(self.emb, pre_emb)
+        fou_writer = FouSEO_writer(
+            file_prefix=None,
+            emb=compo_emb,
+            do_write=False,
+            english_out=self.english_out,
+            picture_out=self.picture_out,
+            zero_bit_first=self.zero_bit_first)
+        fou_writer.write_hermitian()
+
+    def write_hermitian(self):
+        """
+        Write Hermitian conjugate of circuit written by write()
+
+        Returns
+        -------
+        None
+
+        """
+
+        num_bits = self.emb.num_bits_bef
+        num_atom_bits = num_bits - self.num_probe_bits
+        assert num_atom_bits >= 1, "must have >=1 probe bits"
+
+        # first write the Fourier transform
+
+        # this pre_emb maps probe bits -> (atom + probes)
+        num_bits_bef = self.num_probe_bits
+        num_bits_aft = num_bits
+        bit_map = list(range(num_bits_bef))
+        pre_emb = CktEmbedder(num_bits_bef, num_bits_aft, bit_map)
+
+        compo_emb = CktEmbedder.composition(self.emb, pre_emb)
+        fou_writer = FouSEO_writer(
+            file_prefix=None,
+            emb=compo_emb,
+            do_write=False,
+            english_out=self.english_out,
+            picture_out=self.picture_out,
+            zero_bit_first=self.zero_bit_first)
+        fou_writer.write()
+
+        # next write the probe controlled atoms
+
+        # this pre_emb maps atom -> (atom + probes)
+        num_bits_bef = num_atom_bits
+        num_bits_aft = num_bits
+        bit_map = list(range(self.num_probe_bits, num_bits))
+        pre_emb = CktEmbedder(num_bits_bef, num_bits_aft, bit_map)
+
+        for k in reversed(range(self.num_probe_bits)):
+            # set extra_controls to empty then add one control
+            pre_emb.extra_controls = Controls(num_bits)
+            pre_emb.extra_controls.set_control(
+                self.num_probe_bits-1-k,
+                True)
+            compo_emb = CktEmbedder.composition(self.emb, pre_emb)
+            atom_wr = self.atom_writer_cls(
+                arg_list=self.cls_arg_list,
+                do_write=False,
+                file_prefix=None,
+                emb=compo_emb,
+                english_out=self.english_out,
+                picture_out=self.picture_out,
+                zero_bit_first=self.zero_bit_first)
+            atom_wr.write_pow_hermitian(1 << k)
+
+        # finally write the Hadamards
+        for k in reversed(range(self.num_probe_bits)):
+            self.write_one_bit_gate(k, OneBitGates.had2)
+
+if __name__ == "__main__":
+
+    class AtomWriter1(SEO_writer):
+        """
+        This class is a template for the class 'atom_writer_cls' used by
+        class PhaseEstSEO_writer. In this example, the atom matrix is a
+        simple controlled Ry rotation, but more generally, it can be a whole
+        circuit.
+
+        Attributes
+        ----------
+
+        This class has all the attributes of SEO_writer plus any additional
+        ones you want to include.
+
+        """
+
+        def __init__(self, arg_list, do_write, file_prefix, emb, **kwargs):
+            """
+            Constructor
+
+            Parameters
+            ----------
+            arg_list : list
+                list of extra arguments of constructor. In this example,
+                this list is empty but in more complicated cases it won't be.
+            do_write : bool
+
+            file_prefix : str
+            emb : CktEmbedder
+            kwargs : dict[]
+
+            Returns
+            -------
+
+            """
+            SEO_writer.__init__(self, file_prefix, emb, **kwargs)
+            if do_write:
+                self.write()
+
+        def write_pow(self, power):
+            """
+            Writes circuit for U^power, where U is the atom matrix.
+
+            Parameters
+            ----------
+            power : int
+
+            Returns
+            -------
+            None
+
+            """
+            num_bits = self.emb.num_bits_bef
+            trols = Controls(num_bits)
+            tar_bit_pos = 0
+            for k in range(1, num_bits):
+                trols.set_control(k, False)
+            trols.refresh_lists()
+            self.write_controlled_one_bit_gate(
+                tar_bit_pos,
+                trols,
+                OneBitGates.rot_ax,
+                [30*power*np.pi/180, 2])
+
+        def write_pow_hermitian(self, power):
+            """
+            Write Hermitian conjugate of circuit written by write_pow()
+
+            Parameters
+            ----------
+            power : int
+
+            Returns
+            -------
+            None
+
+            """
+            num_bits = self.emb.num_bits_bef
+            trols = Controls(num_bits)
+            tar_bit_pos = 0
+            for k in range(1, num_bits):
+                trols.set_control(k, False)
+            trols.refresh_lists()
+            self.write_controlled_one_bit_gate(
+                tar_bit_pos,
+                trols,
+                OneBitGates.rot_ax,
+                fun_arg_list=[-30*power*np.pi/180, 2])
+
+        def write(self):
+            """
+            Same as write_pow(1)
+
+            Returns
+            -------
+            None
+
+            """
+            self.write_pow(1)
+
+        def write_hermitian(self):
+            """
+            Write Hermitian conjugate of circuit written by write()
+
+            Returns
+            -------
+            None
+
+            """
+            self.write_pow_hermitian(1)
+
+    bit_map = list(range(7))
+    fin_emb = CktEmbedder(7, 8, bit_map)
+    for zf in [True, False]:
+        wr = PhaseEstSEO_writer(do_write=True,
+                                num_probe_bits=4,
+                                atom_writer_cls=AtomWriter1,
+                                cls_arg_list=[],
+                                file_prefix="io_folder//ph_est_test",
+                                emb=fin_emb,
+                                zero_bit_first=zf)
+        wr.write_NOTA("next write h.c.")
+        wr.write_hermitian()
+        wr.close_files()

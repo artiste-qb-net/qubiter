@@ -9,17 +9,22 @@ class FouSEO_writer(SEO_writer):
     Transform. We follow the conventions of quant-ph 0407215,
     "QC Paulinesia" by R.R. Tucci.
 
-    Parameters
+    Attributes
     ----------
     emb : CktEmbedder
     english_out : _io.TextIOWrapper
+        file object for output text file that stores English description of
+        circuit
     picture_out : _io.TextIOWrapper
+        file object for output text file that stores ASCII Picture
+        description of circuit
     file_prefix : str
+        beginning of the name of both English and Picture files
     line_counter : int
     zero_bit_first : bool
 
     """
-    def __init__(self, file_prefix, emb, do_write, **kwargs):
+    def __init__(self, do_write, file_prefix, emb, **kwargs):
         """
         Constructor
 
@@ -27,6 +32,8 @@ class FouSEO_writer(SEO_writer):
         ----------
         file_prefix : str
         do_write : bool
+            True if want constructor to write automatically without
+            being asked.
         kwargs :
 
         Returns
@@ -43,6 +50,7 @@ class FouSEO_writer(SEO_writer):
 
         Returns
         -------
+        None
 
         """
         num_bits = self.emb.num_bits_bef
@@ -73,6 +81,7 @@ class FouSEO_writer(SEO_writer):
 
         Returns
         -------
+        None
 
         """
         num_bits = self.emb.num_bits_bef
@@ -99,11 +108,13 @@ class FouSEO_writer(SEO_writer):
 if __name__ == "__main__":
     num_bits_bef = 4
     num_bits_aft = 6
-    emb = CktEmbedder(num_bits_bef, num_bits_aft)
-    emb.bit_map = list(range(num_bits_bef))
+    bit_map = list(range(num_bits_bef))
+    emb = CktEmbedder(num_bits_bef, num_bits_aft, bit_map)
 
     for zf in [True, False]:
-        wr = FouSEO_writer('io_folder//test', emb, do_write=True,
+        wr = FouSEO_writer(True,
+                           'io_folder//fou_test',
+                           emb,
                            zero_bit_first=zf)
         wr.write_NOTA('do h.c. next')
         wr.write_hermitian()

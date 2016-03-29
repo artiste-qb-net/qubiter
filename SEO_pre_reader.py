@@ -72,7 +72,6 @@ class SEO_pre_reader:
 
         Parameters
         ----------
-        line : str
 
         Returns
         -------

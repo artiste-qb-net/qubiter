@@ -1,3 +1,4 @@
+from CktEmbedder import *
 
 
 class Controls:
@@ -164,7 +165,7 @@ class Controls:
     def new_embedded_self(self, emb):
         """
         In bit_pos_to_kind, replace each key by a new key emb.bit_map[key].
-        Also map the entries of bit_pos.
+        Also add extra controls carried by emb.
 
         Parameters
         ----------
@@ -175,7 +176,7 @@ class Controls:
         Controls
 
         """
-        if emb.is_identity():
+        if emb.is_identity_map():
             return self
         if not self.bit_pos_to_kind:
             return self
@@ -185,9 +186,13 @@ class Controls:
         new = Controls(emb.num_bits_aft)
 
         self.refresh_lists()
-        num_controls = len(self.bit_pos)
+        bef_num_controls = len(self.bit_pos)
         new.bit_pos_to_kind = {emb.aft(self.bit_pos[c]): self.kinds[c] for
-                    c in range(num_controls)}
+                    c in range(bef_num_controls)}
+        # embedding can add new controls
+        extra_trols = emb.extra_controls.bit_pos_to_kind
+        if extra_trols:
+            new.bit_pos_to_kind.update(extra_trols)
         new.refresh_lists()
         return new
 
