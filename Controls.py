@@ -76,6 +76,7 @@ class Controls:
         ----------
         bit_pos : int
         kind : bool|int
+        do_refresh : bool
 
         Returns
         -------
@@ -105,6 +106,29 @@ class Controls:
         li = sorted(
             self.bit_pos_to_kind.items(), key=lambda t: t[0], reverse=True)
         self.bit_pos, self.kinds = zip(*li)
+
+
+    @staticmethod
+    def new_knob(num_bits, bit_pos, kind):
+        """
+        Returns a single control
+
+        Parameters
+        ----------
+        num_bits : int
+        bit_pos : int
+        kind : bool|int
+
+        Returns
+        -------
+        Controls
+
+        """
+
+        new = Controls(num_bits)
+        new.set_control(bit_pos, kind)
+        new.refresh_lists()
+        return new
 
     def is_control(self, bit_pos):
         """

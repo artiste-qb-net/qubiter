@@ -173,7 +173,7 @@ class SEO_writer:
 
         self.picture_out.write(new_line)
 
-    def write_NOTA(self, bla_str):
+    def write_NOTA(self, bla_str, permission=True):
         """
         Writes a 'NOTA' line in eng & pic files. As the name implies,
         a NOTA is just a note or comment such as "I love you Mary". It is
@@ -182,15 +182,18 @@ class SEO_writer:
         Parameters
         ----------
         bla_str : str
+        permission : bool
+            General permission, useful for turning off whole batches of NOTAs
 
         Returns
         -------
         None
 
         """
-        s = "NOTA\t" + bla_str + '\n'
-        self.english_out.write(s)
-        self.picture_out.write(s)
+        if permission:
+            s = "NOTA\t" + bla_str + '\n'
+            self.english_out.write(s)
+            self.picture_out.write(s)
 
     def write_LOOP(self, loop_num, reps):
         """

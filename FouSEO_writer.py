@@ -60,17 +60,14 @@ class FouSEO_writer(SEO_writer):
             for k in range(r-1, -1, -1):
                 self.write_bit_swap(r, k)
 
-        controls = Controls(num_bits)
         for k in range(num_bits):
             self.write_one_bit_gate(k, OneBitGates.had2)
-            controls.bit_pos_to_kind.clear()
-            controls.set_control(k, True)
-            controls.refresh_lists()
+            trols = Controls.new_knob(num_bits, k, True)
             for r in range(k+1, num_bits):
                 # note r>k
                 self.write_controlled_one_bit_gate(
                     r,  # target bit pos
-                    controls,
+                    trols,
                     OneBitGates.phase_fac,
                     [np.pi/(1 << (r-k))]
                 )
@@ -86,16 +83,13 @@ class FouSEO_writer(SEO_writer):
         """
         num_bits = self.emb.num_bits_bef
 
-        controls = Controls(num_bits)
         for k in range(num_bits-1, -1, -1):
-            controls.bit_pos_to_kind.clear()
-            controls.set_control(k, True)
-            controls.refresh_lists()
+            trols = Controls.new_knob(num_bits, k, True)
             for r in range(num_bits-1, k, -1):
                 # note r>k
                 self.write_controlled_one_bit_gate(
                     r,  # target bit pos
-                    controls,
+                    trols,
                     OneBitGates.phase_fac,
                     [-np.pi/(1 << (r-k))]  # negative of write()
                 )
