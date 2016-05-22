@@ -115,21 +115,18 @@ class PhaseEstSEO_writer(SEO_writer):
         bit_map = list(range(self.num_probe_bits, num_bits))
         pre_emb = CktEmbedder(num_bits_bef, num_bits_aft, bit_map)
 
+        atom_wr = self.atom_writer_cls(
+            arg_list=self.cls_arg_list,
+            do_write=False,
+            file_prefix=None,
+            emb=None,
+            english_out=self.english_out,
+            picture_out=self.picture_out,
+            zero_bit_first=self.zero_bit_first)
         for k in range(self.num_probe_bits):
-            # set extra_controls to empty then add one control
-            pre_emb.extra_controls = Controls(num_bits)
-            pre_emb.extra_controls.set_control(
-                self.num_probe_bits-1-k,
-                True)
+            pre_emb.extra_controls = Controls.new_knob(num_bits, k, True)
             compo_emb = CktEmbedder.composition(self.emb, pre_emb)
-            atom_wr = self.atom_writer_cls(
-                arg_list=self.cls_arg_list,
-                do_write=False,
-                file_prefix=None,
-                emb=compo_emb,
-                english_out=self.english_out,
-                picture_out=self.picture_out,
-                zero_bit_first=self.zero_bit_first)
+            atom_wr.emb = compo_emb
             atom_wr.write_pow(1 << k)
 
         # finally write the inverse Fourier transform
@@ -190,21 +187,18 @@ class PhaseEstSEO_writer(SEO_writer):
         bit_map = list(range(self.num_probe_bits, num_bits))
         pre_emb = CktEmbedder(num_bits_bef, num_bits_aft, bit_map)
 
+        atom_wr = self.atom_writer_cls(
+            arg_list=self.cls_arg_list,
+            do_write=False,
+            file_prefix=None,
+            emb=None,
+            english_out=self.english_out,
+            picture_out=self.picture_out,
+            zero_bit_first=self.zero_bit_first)
         for k in reversed(range(self.num_probe_bits)):
-            # set extra_controls to empty then add one control
-            pre_emb.extra_controls = Controls(num_bits)
-            pre_emb.extra_controls.set_control(
-                self.num_probe_bits-1-k,
-                True)
+            pre_emb.extra_controls = Controls.new_knob(num_bits, k, True)
             compo_emb = CktEmbedder.composition(self.emb, pre_emb)
-            atom_wr = self.atom_writer_cls(
-                arg_list=self.cls_arg_list,
-                do_write=False,
-                file_prefix=None,
-                emb=compo_emb,
-                english_out=self.english_out,
-                picture_out=self.picture_out,
-                zero_bit_first=self.zero_bit_first)
+            atom_wr.emb = compo_emb
             atom_wr.write_pow_hermitian(1 << k)
 
         # finally write the Hadamards
