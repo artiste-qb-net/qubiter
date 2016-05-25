@@ -19,12 +19,9 @@ NOTA	****Begin diag 2bit spoke
 ROTZ	3.580986219567645	AT	1	IF	3T
 ROTZ	3.580986219567645	AT	0	IF	2T
 NOTA	****End diag 2bit spoke
-NOTA	****Begin 2 bit spoke
 NOTA	Begin JW dumbbell stair
-SIGZ	AT	0	IF	4T
-SIGZ	AT	1	IF	4T
-SIGZ	AT	2	IF	4T
-SIGZ	AT	3	IF	4T
+NOTA	End JW dumbbell stair
+NOTA	Begin JW dumbbell stair
 NOTA	End JW dumbbell stair
 NOTA	Begin controlled sigx_stair
 SIGX	AT	0	IF	1T
@@ -32,143 +29,98 @@ NOTA	End controlled sigx_stair
 NOTA	Begin controlled sigx_stair
 SIGX	AT	2	IF	3T
 NOTA	End controlled sigx_stair
+NOTA	****Begin spoke core
 SIGX	AT	4
-ROTX	7.16197243913529	AT	1	IF	0T
-ROTX	7.16197243913529	AT	3	IF	2T
+ROTX	-7.16197243913529	AT	1	IF	0T
+ROTX	-7.16197243913529	AT	3	IF	2T
+NOTA	****End spoke core
+NOTA	Begin controlled sigx stair
+SIGX	AT	0	IF	1T
+NOTA	End controlled sigx stair
 NOTA	Begin controlled sigx stair
 SIGX	AT	2	IF	3T
 NOTA	End controlled sigx stair
-NOTA	Begin controlled sigx stair
-SIGX	AT	0	IF	1T
-NOTA	End controlled sigx stair
 NOTA	Begin JW dumbbell stair
-SIGZ	AT	3	IF	4T
-SIGZ	AT	2	IF	4T
-SIGZ	AT	1	IF	4T
-SIGZ	AT	0	IF	4T
 NOTA	End JW dumbbell stair
-NOTA	****End 2 bit spoke
-NOTA	****Begin 2 bit spoke
 NOTA	Begin JW dumbbell stair
-SIGZ	AT	0	IF	4T
-SIGZ	AT	1	IF	4T
-SIGZ	AT	2	IF	4T
-SIGZ	AT	3	IF	4T
+NOTA	End JW dumbbell stair
+NOTA	Begin JW dumbbell stair
 NOTA	End JW dumbbell stair
 NOTA	Begin controlled sigx_stair
 SIGX	AT	1	IF	2T
 NOTA	End controlled sigx_stair
-NOTA	Begin controlled sigx_stair
-SIGX	AT	0	IF	3T
-NOTA	End controlled sigx_stair
+NOTA	****Begin spoke core
 SIGX	AT	4
-ROTX	7.16197243913529	AT	2	IF	1T
-ROTX	7.16197243913529	AT	3	IF	0T
-NOTA	Begin controlled sigx stair
-SIGX	AT	0	IF	3T
-NOTA	End controlled sigx stair
+ROTX	-7.16197243913529	AT	2	IF	1T
+NOTA	****End spoke core
 NOTA	Begin controlled sigx stair
 SIGX	AT	1	IF	2T
 NOTA	End controlled sigx stair
 NOTA	Begin JW dumbbell stair
-SIGZ	AT	3	IF	4T
-SIGZ	AT	2	IF	4T
-SIGZ	AT	1	IF	4T
-SIGZ	AT	0	IF	4T
 NOTA	End JW dumbbell stair
-NOTA	****End 2 bit spoke
-NOTA	****Begin 2 bit spoke
 NOTA	Begin JW dumbbell stair
-SIGZ	AT	0	IF	4T
 SIGZ	AT	1	IF	4T
-SIGZ	AT	2	IF	4T
-SIGZ	AT	3	IF	4T
 NOTA	End JW dumbbell stair
-NOTA	Begin controlled sigx_stair
-SIGX	AT	1	IF	3T
-NOTA	End controlled sigx_stair
 NOTA	Begin controlled sigx_stair
 SIGX	AT	0	IF	2T
 NOTA	End controlled sigx_stair
+NOTA	****Begin spoke core
 SIGX	AT	4
-ROTX	7.16197243913529	AT	3	IF	1T
-ROTX	7.16197243913529	AT	2	IF	0T
+ROTX	-7.16197243913529	AT	2	IF	0T
+NOTA	****End spoke core
 NOTA	Begin controlled sigx stair
 SIGX	AT	0	IF	2T
 NOTA	End controlled sigx stair
-NOTA	Begin controlled sigx stair
-SIGX	AT	1	IF	3T
-NOTA	End controlled sigx stair
 NOTA	Begin JW dumbbell stair
-SIGZ	AT	3	IF	4T
-SIGZ	AT	2	IF	4T
 SIGZ	AT	1	IF	4T
-SIGZ	AT	0	IF	4T
 NOTA	End JW dumbbell stair
-NOTA	****End 2 bit spoke
-NOTA	****Begin 3 bit spoke
 NOTA	Begin JW dumbbell stair
-SIGZ	AT	0	IF	4T
-SIGZ	AT	1	IF	4T
 NOTA	End JW dumbbell stair
 NOTA	Begin controlled sigx_stair
 SIGX	AT	0	IF	1T
 NOTA	End controlled sigx_stair
-SIGX	AT	4
-ROTX	-7.16197243913529	AT	1	IF	2T	0T
-NOTA	Begin controlled sigx stair
-SIGX	AT	0	IF	1T
-NOTA	End controlled sigx stair
-NOTA	Begin JW dumbbell stair
-SIGZ	AT	1	IF	4T
-SIGZ	AT	0	IF	4T
-NOTA	End JW dumbbell stair
-NOTA	****End 3 bit spoke
-NOTA	****Begin 3 bit spoke
-NOTA	Begin JW dumbbell stair
-SIGZ	AT	0	IF	4T
-SIGZ	AT	1	IF	4T
-NOTA	End JW dumbbell stair
-NOTA	Begin controlled sigx_stair
-SIGX	AT	0	IF	1T
-NOTA	End controlled sigx_stair
+NOTA	****Begin spoke core
 SIGX	AT	4
 ROTX	-7.16197243913529	AT	1	IF	3T	0T
+NOTA	****End spoke core
 NOTA	Begin controlled sigx stair
 SIGX	AT	0	IF	1T
 NOTA	End controlled sigx stair
 NOTA	Begin JW dumbbell stair
-SIGZ	AT	1	IF	4T
-SIGZ	AT	0	IF	4T
 NOTA	End JW dumbbell stair
-NOTA	****End 3 bit spoke
-NOTA	****Begin 4 bit spoke
 NOTA	Begin JW dumbbell stair
-SIGZ	AT	0	IF	4T
+SIGZ	AT	2	IF	4T
+NOTA	End JW dumbbell stair
+NOTA	Begin controlled sigx_stair
+SIGX	AT	1	IF	3T
+NOTA	End controlled sigx_stair
+NOTA	****Begin spoke core
+SIGX	AT	4
+ROTX	-7.16197243913529	AT	3	IF	1T
+NOTA	****End spoke core
+NOTA	Begin controlled sigx stair
+SIGX	AT	1	IF	3T
+NOTA	End controlled sigx stair
+NOTA	Begin JW dumbbell stair
+SIGZ	AT	2	IF	4T
+NOTA	End JW dumbbell stair
+NOTA	Begin JW dumbbell stair
 SIGZ	AT	1	IF	4T
 SIGZ	AT	2	IF	4T
-SIGZ	AT	3	IF	4T
 NOTA	End JW dumbbell stair
 NOTA	Begin controlled sigx_stair
 SIGX	AT	0	IF	3T
-SIGX	AT	1	IF	3T
-SIGX	AT	2	IF	3T
 NOTA	End controlled sigx_stair
+NOTA	****Begin spoke core
 SIGX	AT	4
-ROTX	-7.16197243914	AT	3	IF	2F	1T	0T
-ROTX	7.16197243914	AT	3	IF	2T	1F	0T
-ROTX	-7.16197243914	AT	3	IF	2T	1T	0F
+ROTX	-7.16197243913529	AT	3	IF	0T
+NOTA	****End spoke core
 NOTA	Begin controlled sigx stair
-SIGX	AT	2	IF	3T
-SIGX	AT	1	IF	3T
 SIGX	AT	0	IF	3T
 NOTA	End controlled sigx stair
 NOTA	Begin JW dumbbell stair
-SIGZ	AT	3	IF	4T
-SIGZ	AT	2	IF	4T
 SIGZ	AT	1	IF	4T
-SIGZ	AT	0	IF	4T
+SIGZ	AT	2	IF	4T
 NOTA	End JW dumbbell stair
-NOTA	****End 4 bit spoke
 NEXT	-1
 NEXT	12

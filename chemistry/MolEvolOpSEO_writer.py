@@ -7,11 +7,11 @@ from chemistry.CombisInterlacer import *
 
 class MolEvolOpSEO_writer(SEO_writer):
     """
-    Molecular Evolution Operator SEO writer. (1) This class and (2) a list
-    of parameters constructed with the class MolEvolOpData or a child
-    thereof, are passed as arguments to the constructor of
-    PhaseEstSEO_writer. The role of this class is to write the "atom"
-    circuit used by PhaseEstSEO_writer.
+    Molecular Evolution Operator SEO writer. (1) This class (or child
+    thereof) and (2) a list of parameters constructed with the class
+    MolEvolOpData (or a child thereof), are passed as arguments to the
+    constructor of PhaseEstSEO_writer. The role of this class is to write
+    the "atom" circuit used by PhaseEstSEO_writer.
 
     So what is this atom circuit? It's a Trotter approximation of the
     evolution operator exp(-i t H) where the Hamiltonian H depends on the
@@ -39,9 +39,9 @@ class MolEvolOpSEO_writer(SEO_writer):
     obvious way. However, some gates in the sheaths of adjacent spokes will
     cancel out. The class JWDummbBellNeutralizer tries do such cancellations.
 
-    We will include one ancilla as the last qubit. Hence the total number of
-    qubits of the circuit writen by this class will equal the number of
-    orbitals plus 1.
+    We will use the last qubit as an ancilla to implement JW tails. Hence
+    the total number of qubits of the circuit written by this class will
+    equal the number of orbitals plus 1.
 
     Parameters
     ----------
@@ -184,7 +184,7 @@ class MolEvolOpSEO_writer(SEO_writer):
     def write_jw_dumbbell_stair(self, z_bits, trol_bit):
         """
         This function writes a stair (sequence) of dumbbells. A dumbbell is
-        a gate (-1)^{n(k1)n(k2)} for qubits k1 and k2, where n( k) = |1><1|
+        a gate (-1)^{n(k1)n(k2)} for qubits k1 and k2, where n(k) = |1><1|
         at k = P_1(k). In this situation, the dumbbells arise from using the
         Jordan Wigner (JW) transformation to model fermionic degrees of
         freedom. All gates in the sequence have their control at trol_bit.
@@ -272,14 +272,12 @@ class MolEvolOpSEO_writer(SEO_writer):
         self.write_stair_herm(x_bits, trol_bit, 1)
         self.write_NOTA("End controlled sigx stair", self.do_notas)
 
-    def write_2bit_combi(self, bits, theta):
+    def write_2bit_ckt(self, bits, theta):
         """
-        This function writes, without the begin and end caps, a gate
+        This function writes, without the left and right endcaps, a gate
         representing
 
-        exp(i sum_{k1 < k2} theta(k1, k2) n(k1)n(k2))
-
-        Caps are written by other functions.
+        exp(i sum_{k1 < k2} theta(k1, k2) a^\dag(k1)a(k2))
 
         Parameters
         ----------
@@ -299,15 +297,13 @@ class MolEvolOpSEO_writer(SEO_writer):
         self.write_controlled_one_bit_gate(
             bits[1], trol0, OneBitGates.rot_ax, [theta, 1])
 
-    def write_3bit_combi(self, bits, theta):
+    def write_3bit_ckt(self, bits, theta):
         """
-        This function writes, without the begin and end caps, a gate
+        This function writes, without the left and right endcaps, a gate
         representing
 
-        exp(i sum_{k1 < k2 , k3 != k1, k2}
+        exp(i \sum_{k1 < k2} \sum{k3 != k1, k2}
             theta(k1, k2, k3) a^\dag(k1) a(k2) n(k3) + h.c.)
-
-        Caps are written by other functions.
 
         Parameters
         ----------
@@ -328,10 +324,10 @@ class MolEvolOpSEO_writer(SEO_writer):
         self.write_controlled_one_bit_gate(
             bits[1], trols02, OneBitGates.rot_ax, [theta, 1])
 
-    def write_4bit_combi(self, bits, thetas):
+    def write_4bit_ckt(self, bits, thetas):
         """
-        This function writes, without the begin and end caps, a gate 
-        representing 
+        This function writes, without the left and right endcaps, a gate
+        representing
 
         exp(i sum_{k1 < k2 < k3 < k4}
             theta_0(k1, k2, k3, k4) a^\dag(k1) a^\dag(k2) a(k3) a(k4) + h.c.
@@ -365,79 +361,36 @@ class MolEvolOpSEO_writer(SEO_writer):
                 self.write_controlled_one_bit_gate(
                     bits[3], trols, OneBitGates.rot_ax, [theta, 1])
 
-    def get_2bit_bunch_coverage(self, bunch):
+    @staticmethod
+    def extended_combi(combi):
         """
-        the coverage of a 2 bit combi [a, b] is defined as the set of ints k
-        such that a <= k <= b. The coverage of a bunch of 2 bit combis is
-        defined as the union of the coverages of all the combis in the bunch.
-
-        This function returns a list of ints that represents the coverage of
-        the input bunch of 2 bit combis.
+        This function takes a combi and it returns its extended combi. The
+        extended combi has ints added to fill range(combi[0]+1, combi[1]) (
+        and also range(combi[2]+1, combi[3]) for 4 bits). These bits are
+        used by the JW dumbbells of the gate which combi represents, and may
+        not be used by other non-overlapping gates at the same time.
 
         Parameters
         ----------
-        bunch : tuple[tuple[int]]
+        combi : tuple[int]
 
         Returns
         -------
-        list[int]
+        tuple[int]
 
         """
-
-        is_covered = [False]*self.num_orbitals
-
-        for combi in bunch:
-            assert combi[0] < combi[1]
-            for k in range(combi[0], combi[1]+1):
-                is_covered[k] = True
-        coverage = [k for k in range(self.num_orbitals) if is_covered[k]]
-        return coverage
-
-    def get_3bit_bunch_coverage(self, bunch):
-        """
-        Let 'bunch' be a bunch of 3 bit combis and 'bunch2' be a bunch of 2
-        bit combis obtained from bunch by dropping the third int of each 3
-        bit combi. This function returns a list of ints that represents the
-        coverage of bunch2.
-
-        Parameters
-        ----------
-        bunch : tuple[tuple[int]]
-
-        Returns
-        -------
-        list[int]
-
-        """
-        return self.get_2bit_bunch_coverage(bunch)
-
-    def get_4bit_bunch_coverage(self, bunch):
-        """
-        Let 'bunch' be a bunch of 4 bit combis and 'bunch2' be a bunch of 2
-        bit combis obtained from bunch by breaking each 4 bit combi [a, b,
-        c, d] into two combis [a, b] and [c, d]. This function returns a
-        list of ints that represents the coverage of bunch2.
-
-        Parameters
-        ----------
-        bunch : tuple[tuple[int]]
-
-        Returns
-        -------
-        list[int]
-
-        """
-
-        is_covered = [False]*self.num_orbitals
-
-        for combi in bunch:
-            assert combi[0] < combi[1] < combi[2] < combi[3]
-            for k in range(combi[0], combi[1]+1):
-                is_covered[k] = True
-            for k in range(combi[2], combi[3]+1):
-                is_covered[k] = True
-        coverage = [k for k in range(self.num_orbitals) if is_covered[k]]
-        return coverage
+        le = len(combi)
+        assert le >= 2
+        lista = list(range(combi[0], combi[1]+1))
+        if le == 2:
+            pass
+        elif le == 3:
+            lista += [combi[2]]
+        elif le == 4:
+            lista += list(range(combi[2], combi[3]+1))
+        else:
+            assert False
+        return tuple(lista)
 
     def write_diag_1bit_spoke(self):
         """
@@ -486,10 +439,11 @@ class MolEvolOpSEO_writer(SEO_writer):
 
         self.write_NOTA("****End diag 2bit spoke", self.do_notas)
 
-    def write_2bit_spoke(self, bunch):
+    def write_nondiag_spoke(self, bunch):
         """
-        This function writes a spoke whose core consists of a bunch of
-        interlaced 2 qubit gates.
+        This function writes a spoke (spoke = left endcap, core,
+        right endcap) whose core consists of a bunch of interlaced 2,
+        3 or 4 qubit gates.
 
         Parameters
         ----------
@@ -501,89 +455,63 @@ class MolEvolOpSEO_writer(SEO_writer):
 
         """
 
-        self.write_NOTA("****Begin 2 bit spoke", self.do_notas)
-
-        coverage = self.get_2bit_bunch_coverage(bunch)
-
-        self.write_jw_dumbbell_stair(coverage, self.num_orbitals)
         for combi in bunch:
-            self.write_controlled_sigx_stair(combi[0:1], combi[1])
+            le = len(combi)
+            if le in [2, 3]:
+                jw_range = range(combi[0]+1, combi[1])
+                self.write_jw_dumbbell_stair(jw_range, self.num_orbitals)
+            elif le == 4:
+                jw_range = range(combi[0]+1, combi[1])
+                self.write_jw_dumbbell_stair(jw_range, self.num_orbitals)
+                jw_range = range(combi[2]+1, combi[3])
+                self.write_jw_dumbbell_stair(jw_range, self.num_orbitals)
+            else:
+                assert False
 
+        for combi in bunch:
+            le = len(combi)
+            if le in [2, 3]:
+                self.write_controlled_sigx_stair(combi[0:1], combi[1])
+            elif le == 4:
+                self.write_controlled_sigx_stair(combi[0:3], combi[3])
+            else:
+                assert False
+
+        self.write_NOTA("****Begin spoke core", self.do_notas)
         self.write_one_bit_gate(self.num_orbitals, OneBitGates.sigx)
         for combi in bunch:
-            self.write_2bit_combi(
-                combi, self._2bits_to_theta[combi])
-
-        for combi in reversed(bunch):
-            self.write_controlled_sigx_stair_herm(combi[0:1], combi[1])
-        self.write_jw_dumbbell_stair_herm(coverage, self.num_orbitals)
-
-        self.write_NOTA("****End 2 bit spoke", self.do_notas)
-
-    def write_3bit_spoke(self, bunch):
-        """
-        This function writes a spoke whose core consists of a bunch of
-        interlaced 3 qubit gates.
-
-        Parameters
-        ----------
-        bunch : tuple[tuple[int]]
-
-        Returns
-        -------
-        None
-
-        """
-        self.write_NOTA("****Begin 3 bit spoke", self.do_notas)
-
-        coverage = self.get_3bit_bunch_coverage(bunch)
-
-        self.write_jw_dumbbell_stair(coverage, self.num_orbitals)
-        for combi in bunch:
-            self.write_controlled_sigx_stair(combi[0:1], combi[1])
-
-        self.write_one_bit_gate(self.num_orbitals, OneBitGates.sigx)
-        for combi in bunch:
-            self.write_3bit_combi(combi, self._3bits_to_theta[combi])
-
-        for combi in reversed(bunch):
-            self.write_controlled_sigx_stair_herm(combi[0:1], combi[1])
-        self.write_jw_dumbbell_stair_herm(coverage, self.num_orbitals)
-
-        self.write_NOTA("****End 3 bit spoke", self.do_notas)
-
-    def write_4bit_spoke(self, bunch):
-        """
-        This function writes a spoke whose core consists of a bunch of
-        interlaced 4 qubit gates.
-
-        Parameters
-        ----------
-        bunch : tuple[tuple[int]]
-
-        Returns
-        -------
-        None
-
-        """
-
-        self.write_NOTA("****Begin 4 bit spoke", self.do_notas)
-
-        coverage = self.get_4bit_bunch_coverage(bunch)
-
-        self.write_jw_dumbbell_stair(coverage, self.num_orbitals)
-        for combi in bunch:
-            self.write_controlled_sigx_stair(combi[0:3], combi[3])
-
-        self.write_one_bit_gate(self.num_orbitals, OneBitGates.sigx)
-        for combi in bunch:                    
-            self.write_4bit_combi(combi, self._4bits_to_3thetas[combi])
+            le = len(combi)
+            if le == 2:
+                self.write_2bit_ckt(combi, self._2bits_to_theta[combi])
+            elif le == 3:
+                self.write_3bit_ckt(combi, self._3bits_to_theta[combi])
+            elif le == 4:
+                self.write_4bit_ckt(combi, self._4bits_to_3thetas[combi])
+            else:
+                assert False
+        self.write_NOTA("****End spoke core", self.do_notas)
 
         for combi in bunch:
-            self.write_controlled_sigx_stair_herm(combi[0:3], combi[3])
-        self.write_jw_dumbbell_stair_herm(coverage, self.num_orbitals)
+            le = len(combi)
+            if le in [2, 3]:
+                self.write_controlled_sigx_stair_herm(combi[0:1], combi[1])
+            elif le == 4:
+                self.write_controlled_sigx_stair_herm(combi[0:3], combi[3])
+            else:
+                assert False
 
-        self.write_NOTA("****End 4 bit spoke", self.do_notas)
+        for combi in bunch:
+            le = len(combi)
+            if le in [2, 3]:
+                jw_range = range(combi[0]+1, combi[1])
+                self.write_jw_dumbbell_stair(jw_range, self.num_orbitals)
+            elif le == 4:
+                jw_range = range(combi[2]+1, combi[3])
+                self.write_jw_dumbbell_stair_herm(jw_range, self.num_orbitals)
+                jw_range = range(combi[0]+1, combi[1])
+                self.write_jw_dumbbell_stair_herm(jw_range, self.num_orbitals)
+            else:
+                assert False
 
     def write_trotterized_evol_op(self):
         """
@@ -606,20 +534,19 @@ class MolEvolOpSEO_writer(SEO_writer):
         for bunch in ci.bunch_gen():
             self.write_diag_2bit_spoke(bunch)
 
-        ci = CombisInterlacer(n=self.num_orbitals,
-            combi_list=self._2bits_to_theta.keys())
-        for bunch in ci.bunch_gen():
-            self.write_2bit_spoke(bunch)
+        xcombi_to_combi = {}
+        xcombi_to_combi.update({self.extended_combi(combi): combi for
+                            combi in self._4bits_to_3thetas})
+        xcombi_to_combi.update({self.extended_combi(combi): combi for
+                            combi in self._3bits_to_theta})
+        xcombi_to_combi.update({self.extended_combi(combi): combi for
+                            combi in self._2bits_to_theta})
 
         ci = CombisInterlacer(n=self.num_orbitals,
-            combi_list=self._3bits_to_theta.keys())
-        for bunch in ci.bunch_gen():
-            self.write_3bit_spoke(bunch)
-
-        ci = CombisInterlacer(n=self.num_orbitals,
-            combi_list=self._4bits_to_3thetas.keys())
-        for bunch in ci.bunch_gen():
-            self.write_4bit_spoke(bunch)
+                              combi_list=xcombi_to_combi.keys())
+        for xbunch in ci.bunch_gen():
+            bunch = tuple([xcombi_to_combi[xcombi] for xcombi in xbunch])
+            self.write_nondiag_spoke(bunch)
             
         self.write_NEXT(self.loop_count)
 

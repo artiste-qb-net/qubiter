@@ -19,12 +19,9 @@ NOTA	****Begin diag 2bit spoke
 |   @---+---Rz  |   
 |   |   @---+---Rz  
 NOTA	****End diag 2bit spoke
-NOTA	****Begin 2 bit spoke
 NOTA	Begin JW dumbbell stair
-@---+---+---+---Z   
-@---+---+---Z   |   
-@---+---Z   |   |   
-@---Z   |   |   |   
+NOTA	End JW dumbbell stair
+NOTA	Begin JW dumbbell stair
 NOTA	End JW dumbbell stair
 NOTA	Begin controlled sigx_stair
 |   |   |   @---X   
@@ -32,143 +29,98 @@ NOTA	End controlled sigx_stair
 NOTA	Begin controlled sigx_stair
 |   @---X   |   |   
 NOTA	End controlled sigx_stair
+NOTA	****Begin spoke core
 X   |   |   |   |   
 |   |   |   Rx--@   
 |   Rx--@   |   |   
-NOTA	Begin controlled sigx stair
-|   @---X   |   |   
-NOTA	End controlled sigx stair
+NOTA	****End spoke core
 NOTA	Begin controlled sigx stair
 |   |   |   @---X   
 NOTA	End controlled sigx stair
+NOTA	Begin controlled sigx stair
+|   @---X   |   |   
+NOTA	End controlled sigx stair
 NOTA	Begin JW dumbbell stair
-@---Z   |   |   |   
-@---+---Z   |   |   
-@---+---+---Z   |   
-@---+---+---+---Z   
 NOTA	End JW dumbbell stair
-NOTA	****End 2 bit spoke
-NOTA	****Begin 2 bit spoke
 NOTA	Begin JW dumbbell stair
-@---+---+---+---Z   
-@---+---+---Z   |   
-@---+---Z   |   |   
-@---Z   |   |   |   
+NOTA	End JW dumbbell stair
+NOTA	Begin JW dumbbell stair
 NOTA	End JW dumbbell stair
 NOTA	Begin controlled sigx_stair
 |   |   @---X   |   
 NOTA	End controlled sigx_stair
-NOTA	Begin controlled sigx_stair
-|   @---+---+---X   
-NOTA	End controlled sigx_stair
+NOTA	****Begin spoke core
 X   |   |   |   |   
 |   |   Rx--@   |   
-|   Rx--+---+---@   
-NOTA	Begin controlled sigx stair
-|   @---+---+---X   
-NOTA	End controlled sigx stair
+NOTA	****End spoke core
 NOTA	Begin controlled sigx stair
 |   |   @---X   |   
 NOTA	End controlled sigx stair
 NOTA	Begin JW dumbbell stair
-@---Z   |   |   |   
-@---+---Z   |   |   
-@---+---+---Z   |   
-@---+---+---+---Z   
 NOTA	End JW dumbbell stair
-NOTA	****End 2 bit spoke
-NOTA	****Begin 2 bit spoke
 NOTA	Begin JW dumbbell stair
-@---+---+---+---Z   
 @---+---+---Z   |   
-@---+---Z   |   |   
-@---Z   |   |   |   
 NOTA	End JW dumbbell stair
-NOTA	Begin controlled sigx_stair
-|   @---+---X   |   
-NOTA	End controlled sigx_stair
 NOTA	Begin controlled sigx_stair
 |   |   @---+---X   
 NOTA	End controlled sigx_stair
+NOTA	****Begin spoke core
 X   |   |   |   |   
-|   Rx--+---@   |   
 |   |   Rx--+---@   
+NOTA	****End spoke core
 NOTA	Begin controlled sigx stair
 |   |   @---+---X   
 NOTA	End controlled sigx stair
-NOTA	Begin controlled sigx stair
-|   @---+---X   |   
-NOTA	End controlled sigx stair
 NOTA	Begin JW dumbbell stair
-@---Z   |   |   |   
-@---+---Z   |   |   
 @---+---+---Z   |   
-@---+---+---+---Z   
 NOTA	End JW dumbbell stair
-NOTA	****End 2 bit spoke
-NOTA	****Begin 3 bit spoke
 NOTA	Begin JW dumbbell stair
-@---+---+---+---Z   
-@---+---+---Z   |   
 NOTA	End JW dumbbell stair
 NOTA	Begin controlled sigx_stair
 |   |   |   @---X   
 NOTA	End controlled sigx_stair
-X   |   |   |   |   
-|   |   @---Rx--@   
-NOTA	Begin controlled sigx stair
-|   |   |   @---X   
-NOTA	End controlled sigx stair
-NOTA	Begin JW dumbbell stair
-@---+---+---Z   |   
-@---+---+---+---Z   
-NOTA	End JW dumbbell stair
-NOTA	****End 3 bit spoke
-NOTA	****Begin 3 bit spoke
-NOTA	Begin JW dumbbell stair
-@---+---+---+---Z   
-@---+---+---Z   |   
-NOTA	End JW dumbbell stair
-NOTA	Begin controlled sigx_stair
-|   |   |   @---X   
-NOTA	End controlled sigx_stair
+NOTA	****Begin spoke core
 X   |   |   |   |   
 |   @---+---Rx--@   
+NOTA	****End spoke core
 NOTA	Begin controlled sigx stair
 |   |   |   @---X   
 NOTA	End controlled sigx stair
 NOTA	Begin JW dumbbell stair
-@---+---+---Z   |   
-@---+---+---+---Z   
 NOTA	End JW dumbbell stair
-NOTA	****End 3 bit spoke
-NOTA	****Begin 4 bit spoke
 NOTA	Begin JW dumbbell stair
-@---+---+---+---Z   
+@---+---Z   |   |   
+NOTA	End JW dumbbell stair
+NOTA	Begin controlled sigx_stair
+|   @---+---X   |   
+NOTA	End controlled sigx_stair
+NOTA	****Begin spoke core
+X   |   |   |   |   
+|   Rx--+---@   |   
+NOTA	****End spoke core
+NOTA	Begin controlled sigx stair
+|   @---+---X   |   
+NOTA	End controlled sigx stair
+NOTA	Begin JW dumbbell stair
+@---+---Z   |   |   
+NOTA	End JW dumbbell stair
+NOTA	Begin JW dumbbell stair
 @---+---+---Z   |   
 @---+---Z   |   |   
-@---Z   |   |   |   
 NOTA	End JW dumbbell stair
 NOTA	Begin controlled sigx_stair
 |   @---+---+---X   
-|   @---+---X   |   
-|   @---X   |   |   
 NOTA	End controlled sigx_stair
+NOTA	****Begin spoke core
 X   |   |   |   |   
-|   Rx--O---@---@   
-|   Rx--@---O---@   
-|   Rx--@---@---O   
+|   Rx--+---+---@   
+NOTA	****End spoke core
 NOTA	Begin controlled sigx stair
-|   @---X   |   |   
-|   @---+---X   |   
 |   @---+---+---X   
 NOTA	End controlled sigx stair
 NOTA	Begin JW dumbbell stair
-@---Z   |   |   |   
-@---+---Z   |   |   
 @---+---+---Z   |   
-@---+---+---+---Z   
+@---+---Z   |   |   
 NOTA	End JW dumbbell stair
-NOTA	****End 4 bit spoke
 NEXT	-1
 NEXT	12
