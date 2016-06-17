@@ -101,14 +101,14 @@ class SEO_writer:
         self.emb = emb
         self.zero_bit_first = zero_bit_first
 
-        if english_out is None:
+        if english_out is None and file_prefix:
             self.english_out = open(
                 file_prefix + '_' +
                 str(self.emb.num_bits_aft) + '_eng.txt', 'wt')
         else:
             self.english_out = english_out
 
-        if picture_out is None:
+        if picture_out is None and file_prefix:
             self.picture_out = open(
                 file_prefix + '_' + str(self.emb.num_bits_aft) +
                 ('_ZF' if zero_bit_first else '_ZL') + 'pic.txt', 'wt')
