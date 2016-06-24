@@ -25,7 +25,7 @@ class SEO_simulator(SEO_reader):
     cur_st_vec_list is a list of state vectors on num_bits qubits. We will
     refer to each state vec in the list as a branch. Initially, this list
     contains a single branch. A measurement MEAS of kinds 0 or 1 does not
-    change the number of branches in the list, but a measurement of kind 3
+    change the number of branches in the list, but a measurement of kind 2
     doubles their number.
 
     Note that since projectors are not unitary matrices, the branches of
@@ -90,6 +90,10 @@ class SEO_simulator(SEO_reader):
         ----------
         file_prefix : str
         num_bits : int
+        init_st_vec : np.array
+            get this using the functions get_ground_st() or
+            get_standard_basis_st()
+        do_print : bool
 
         Returns
         -------
