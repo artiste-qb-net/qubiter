@@ -128,7 +128,7 @@ class SEO_simulator(SEO_reader):
         return mat
 
     @staticmethod
-    def get_standard_basis_st(spin_dir_list):
+    def get_standard_basis_st(spin_dir_list, zero_last=True):
         """
         Returns state |s0>|s1>|s2>..., where spin_dir_list=[s0, s1, s2,...],
         s_j \in {0, 1} for all j, |0> = [1,0]^t and |1> = [0,1]^t,
@@ -137,6 +137,8 @@ class SEO_simulator(SEO_reader):
         Parameters
         ----------
         spin_dir_list : list[int]
+        zero_last : bool
+            True(False) if last(first) qubit is at position 0
 
         Returns
         -------
@@ -147,6 +149,8 @@ class SEO_simulator(SEO_reader):
         num_bits = len(spin_dir_list)
         mat = np.zeros([1 << num_bits], dtype=ty)
         mat = mat.reshape([2]*num_bits)
+        if zero_last:
+            spin_dir_list = reversed(spin_dir_list)
         mat[tuple(spin_dir_list)] = 1
         return mat
 
