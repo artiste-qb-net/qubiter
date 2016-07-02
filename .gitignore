@@ -1,4 +1,8 @@
 .DS_Store
 *.pyc
 .idea
+<<<<<<< HEAD
 __pycache__/
+=======
+__pycache__/
+>>>>>>> 8417c9477cbb9a99ff34c3bd95c248d9f8ac55b1

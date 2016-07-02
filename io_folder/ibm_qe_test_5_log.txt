@@ -1,2 +1,7 @@
+<<<<<<< HEAD
 Number of lines in file = 9
 Number of Elem. Ops = 9
+=======
+Number of lines in file = 9
+Number of Elem. Ops = 9
+>>>>>>> 8417c9477cbb9a99ff34c3bd95c248d9f8ac55b1
