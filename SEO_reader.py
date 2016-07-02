@@ -576,6 +576,7 @@ class SEO_reader(SEO_pre_reader):
 
     def use_MP_Y(self, tar_bit_pos, trols, rad_angles):
         """
+        Abstract use_ method that must be overridden by child class.
 
         Parameters
         ----------

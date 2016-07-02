@@ -68,7 +68,7 @@ class FouSEO_writer(SEO_writer):
                 self.write_controlled_one_bit_gate(
                     r,  # target bit pos
                     trols,
-                    OneBitGates.phase_fac,
+                    OneBitGates.P_1_phase_fac,
                     [np.pi/(1 << (r-k))]
                 )
 
@@ -90,7 +90,7 @@ class FouSEO_writer(SEO_writer):
                 self.write_controlled_one_bit_gate(
                     r,  # target bit pos
                     trols,
-                    OneBitGates.phase_fac,
+                    OneBitGates.P_1_phase_fac,
                     [-np.pi/(1 << (r-k))]  # negative of write()
                 )
             self.write_one_bit_gate(k, OneBitGates.had2)
