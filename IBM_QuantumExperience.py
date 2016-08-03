@@ -24,14 +24,14 @@ wr.write_one_bit_gate(3, OneBitGates.had2)
 
 z_axis = 3
 # 'pos' means position
-# write exp(i*ang_rads*sigz) at pos=2 with ang_rads = pi/2, -pi/2, i.e.
-# sqrt(sigz), what they call S and S^\dagger
-wr.write_one_bit_gate(2, OneBitGates.rot_ax, [np.pi/2, z_axis])
-wr.write_one_bit_gate(2, OneBitGates.rot_ax, [-np.pi/2, z_axis])
-# rite exp(i*ang_rads*sigz) at pos=2 with ang_rads = pi/4, -pi/4, i.e.
-# sqrt sqrt (sigz), what they call T and T^\dagger
+# write exp(i*ang_rads*sigz) at pos=2 with ang_rads = pi/4, -pi/4, i.e.
+# sqrt(\pm i*sigz), what they call S and S^\dagger
 wr.write_one_bit_gate(2, OneBitGates.rot_ax, [np.pi/4, z_axis])
 wr.write_one_bit_gate(2, OneBitGates.rot_ax, [-np.pi/4, z_axis])
+# write exp(i*ang_rads*sigz) at pos=2 with ang_rads = pi/8, -pi/8, i.e.
+# sqrt sqrt (\pm i*sigz), what they call T and T^\dagger
+wr.write_one_bit_gate(2, OneBitGates.rot_ax, [np.pi/8, z_axis])
+wr.write_one_bit_gate(2, OneBitGates.rot_ax, [-np.pi/8, z_axis])
 
 # write CNOT = sigx(target_pos)^n(control_pos)
 control_pos = 3
