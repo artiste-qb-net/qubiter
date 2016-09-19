@@ -1,5 +1,6 @@
 import numpy as np
 import copy as cp
+import pprint as pp
 from SEO_reader import *
 from OneBitGates import *
 
@@ -43,7 +44,7 @@ class SEO_simulator(SEO_reader):
     ----------
     cur_st_vec_list : List[np.ndarray]
         current state vector list
-    do_print : bool
+    verbose : bool
         True if want to print a running commentary on console.
 
     num_ops : int
@@ -82,7 +83,7 @@ class SEO_simulator(SEO_reader):
     # LineList, UnitaryMat, SEO_readerMu
 
     def __init__(self, file_prefix, num_bits,
-                 init_st_vec=None, do_print=False):
+                 init_st_vec=None, verbose=False):
         """
         Constructor
 
@@ -93,7 +94,7 @@ class SEO_simulator(SEO_reader):
         init_st_vec : np.array
             get this using the functions get_ground_st() or
             get_standard_basis_st()
-        do_print : bool
+        verbose : bool
 
         Returns
         -------
@@ -102,7 +103,7 @@ class SEO_simulator(SEO_reader):
         if init_st_vec is None:
             init_st_vec = SEO_simulator.get_ground_st(num_bits)
         self.cur_st_vec_list = [init_st_vec]
-        self.do_print = do_print
+        self.verbose = verbose
 
         SEO_reader.__init__(self, file_prefix, num_bits)
 
@@ -130,9 +131,9 @@ class SEO_simulator(SEO_reader):
     @staticmethod
     def get_standard_basis_st(spin_dir_list, zero_last=True):
         """
-        Returns state |s0>|s1>|s2>..., where spin_dir_list=[s0, s1, s2,...],
-        s_j \in {0, 1} for all j, |0> = [1,0]^t and |1> = [0,1]^t,
-        t = transpose
+        If zero_last = True, Returns state ...|s2>|s1>|s0>, where
+        spin_dir_list=[...,s2, s1, s0], s_j \in {0, 1} for all j, |0> = [1,
+        0]^t and |1> = [0,1]^t, t = transpose
 
         Parameters
         ----------
@@ -193,13 +194,35 @@ class SEO_simulator(SEO_reader):
         num_bits = st_vec.ndim
         # slicex is a portmanteau of slice index
         slicex = [slice(None)]*num_bits
+        tot_prob = SEO_simulator.get_total_prob(st_vec)
         for k in range(num_bits):
             slicex[k] = 0
             vec = st_vec[tuple(slicex)]
-            p = np.sum(np.real(vec*vec.conj()))
+            p = np.sum(np.real(vec*vec.conj()))/tot_prob
             prob_dict[k] = (p, 1-p)
             slicex[k] = slice(None)  # restore to all entries slice(None)
         return prob_dict
+
+    def describe_fin_st(self, print_st_vec=False):
+        """
+        Prints a description of the final state vector
+
+        print_st_vec : bool
+            if True, prints the final state vector which may be huge
+
+        Returns
+        -------
+        None
+
+        """
+        fin_st_vec = self.cur_st_vec_list[0]
+        if print_st_vec:
+            print('final state vector')
+            print(fin_st_vec)
+        print('total probability of final state vector (=one if no measurements)=',
+            self.get_total_prob(fin_st_vec))
+        print('dictionary with key=qubit, value=final (P(0), P(1))')
+        pp.pprint(self.get_bit_probs(fin_st_vec))
 
     def evolve_by_controlled_bit_swap(self, bit1, bit2, controls):
         """
@@ -322,7 +345,7 @@ class SEO_simulator(SEO_reader):
 
         """
 
-        if self.do_print:
+        if self.verbose:
             print('\n')
             print(self.split_line)
             print('line number = ', self.line_count)
@@ -587,13 +610,14 @@ if __name__ == "__main__":
     if test in [0, 1]:
         # test on circuit for a quantum fourier transform
         # (no loops, no internal measurements)
-        sim = SEO_simulator('io_folder//sim_test1', 6, do_print=True)
+        sim = SEO_simulator('io_folder/sim_test1', 6, verbose=True)
 
     if test in [0, 2]:
         # test embedded loops
-        sim = SEO_simulator('io_folder//sim_test2', 4, do_print=True)
+        sim = SEO_simulator('io_folder/sim_test2', 4, verbose=True)
 
     if test in [0, 3]:
         # test MEAS branching. Each kind 2 measurement doubles number of
         # branches
-        sim = SEO_simulator('io_folder//sim_test3', 4, do_print=True)
+        sim = SEO_simulator('io_folder/sim_test3', 4, verbose=True)
+

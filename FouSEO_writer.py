@@ -107,7 +107,7 @@ if __name__ == "__main__":
 
     for zf in [True, False]:
         wr = FouSEO_writer(True,
-                           'io_folder//fou_test',
+                           'io_folder/fou_test',
                            emb,
                            zero_bit_first=zf)
         wr.write_NOTA('do h.c. next')

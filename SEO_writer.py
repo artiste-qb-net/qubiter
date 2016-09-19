@@ -742,7 +742,7 @@ if __name__ == "__main__":
     ang_rads = 30*np.pi/180
 
     for zf in [False, True]:
-        wr = SEO_writer('io_folder//wr_test', emb, zero_bit_first=zf)
+        wr = SEO_writer('io_folder/wr_test', emb, zero_bit_first=zf)
 
         wr.write_NOTA('zero bit first = ' + str(zf))
 
