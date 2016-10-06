@@ -45,3 +45,30 @@ def increment_dict(di, key, inc, initial=0):
     if key not in di:
         di[key] = initial
     di[key] += inc
+
+
+def pp_numpy_arr(arr, omit_zero_amps=False):
+    """
+    pp=pretty print. Print numpy array as column of (index, array value)
+    pairs of the form (i, j, k, ...) arr[i, j, k, ...], so zero bit first.
+
+    Parameters
+    ----------
+    arr : numpy.array
+    omit_zero_amps : bool
+        If True, will not list states with zero amplitude
+
+    Returns
+    -------
+    None
+
+    """
+    if not omit_zero_amps:
+        for index, x in np.ndenumerate(arr):
+            print(index, x)
+    else:
+        for index, x in np.ndenumerate(arr):
+            if np.absolute(x) > 1E-6:
+                print(index, x)
+
+

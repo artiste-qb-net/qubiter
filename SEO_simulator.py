@@ -3,6 +3,7 @@ import copy as cp
 import pprint as pp
 from SEO_reader import *
 from OneBitGates import *
+import Utilities as ut
 
 
 class SEO_simulator(SEO_reader):
@@ -203,12 +204,27 @@ class SEO_simulator(SEO_reader):
             slicex[k] = slice(None)  # restore to all entries slice(None)
         return prob_dict
 
-    def describe_fin_st(self, print_st_vec=False):
+    def describe_fin_st(
+            self, print_st_vec=False, do_pp=False, omit_zero_amps=False):
         """
         Prints a description of the final state vector
 
+        Parameters
+        ----------
+
         print_st_vec : bool
-            if True, prints the final state vector which may be huge
+            if True, prints the final state vector (which may be huge. For n
+            qubits, it has 2^n components.)
+
+        do_pp : bool
+            pp= pretty print. Only used if print_st_vec=True. For pp=False,
+            it prints final state vector in usual numpy array print style.
+            For pp=True, it prints final state vector as column of (index,
+            array value) pairs.
+
+        omit_zero_amps : bool
+            If print_st_vec=True, pp=True and this parameter is True too,
+            will omit states with zero amplitude
 
         Returns
         -------
@@ -218,9 +234,13 @@ class SEO_simulator(SEO_reader):
         fin_st_vec = self.cur_st_vec_list[0]
         if print_st_vec:
             print('final state vector')
-            print(fin_st_vec)
-        print('total probability of final state vector (=one if no measurements)=',
-            self.get_total_prob(fin_st_vec))
+            if do_pp:
+                print('(zero bit first in state tuple)')
+                ut.pp_numpy_arr(fin_st_vec, omit_zero_amps)
+            else:
+                print(fin_st_vec)
+        print('total probability of final state vector ' +
+              '(=one if no measurements)=', self.get_total_prob(fin_st_vec))
         print('dictionary with key=qubit, value=final (P(0), P(1))')
         pp.pprint(self.get_bit_probs(fin_st_vec))
 
