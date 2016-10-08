@@ -22,9 +22,11 @@ class FouSEO_writer(SEO_writer):
         beginning of the name of both English and Picture files
     line_counter : int
     zero_bit_first : bool
+    do_perm : bool
+        True if want circuit to include permutation that reverses qbit order
 
     """
-    def __init__(self, do_write, file_prefix, emb, **kwargs):
+    def __init__(self, do_write, file_prefix, emb, do_perm=True, **kwargs):
         """
         Constructor
 
@@ -34,12 +36,17 @@ class FouSEO_writer(SEO_writer):
         do_write : bool
             True if want constructor to write automatically without
             being asked.
+        emb : CktEmbedder
+        do_perm : bool
+        True if want circuit to include permutation that reverses qbit order
+
         kwargs :
 
         Returns
         -------
 
         """
+        self.do_perm = do_perm
         SEO_writer.__init__(self, file_prefix, emb, **kwargs)
         if do_write:
             self.write()
@@ -56,9 +63,10 @@ class FouSEO_writer(SEO_writer):
         num_bits = self.emb.num_bits_bef
 
         # permutation R
-        for r in range(num_bits-1, 0, -1):
-            for k in range(r-1, -1, -1):
-                self.write_bit_swap(r, k)
+        if self.do_perm:
+            for r in range(num_bits-1, 0, -1):
+                for k in range(r-1, -1, -1):
+                    self.write_bit_swap(r, k)
 
         for k in range(num_bits):
             self.write_one_bit_gate(k, OneBitGates.had2)
@@ -94,9 +102,10 @@ class FouSEO_writer(SEO_writer):
                     [-np.pi/(1 << (r-k))]  # negative of write()
                 )
             self.write_one_bit_gate(k, OneBitGates.had2)
-        for r in range(1, num_bits):
-            for k in range(r):
-                self.write_bit_swap(r, k)
+        if self.do_perm:
+            for r in range(1, num_bits):
+                for k in range(r):
+                    self.write_bit_swap(r, k)
 
 
 if __name__ == "__main__":

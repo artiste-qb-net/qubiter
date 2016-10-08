@@ -54,11 +54,13 @@ class PhaseEstSEO_writer(SEO_writer):
         beginning of the name of both English and Picture files
     line_counter : int
     zero_bit_first : bool
-
+    do_perm : bool
+        True if want quantum Fourier Transform circuit to include
+        permutation that reverses qbit order
     """
 
     def __init__(self, do_write, num_probe_bits, atom_writer,
-                 file_prefix, emb, **kwargs):
+                 file_prefix, emb, do_perm=True, **kwargs):
         """
         Constructor
 
@@ -71,12 +73,17 @@ class PhaseEstSEO_writer(SEO_writer):
         num_probe_bits : int
         file_prefix : str
         emb : CktEmbedder
+        do_perm : bool
+            True if want quantum Fourier Transform circuit to include
+            permutation that reverses qbit order
+
         kwargs : dict[]
 
         Returns
         -------
 
         """
+        self.do_perm = do_perm
         SEO_writer.__init__(self, file_prefix, emb, **kwargs)
         self.num_probe_bits = num_probe_bits
 
@@ -131,9 +138,10 @@ class PhaseEstSEO_writer(SEO_writer):
 
         compo_emb = CktEmbedder.composition(self.emb, pre_emb)
         fou_writer = FouSEO_writer(
+            do_write=False,
             file_prefix='blank',
             emb=compo_emb,
-            do_write=False,
+            do_perm=self.do_perm,
             english_out=self.english_out,
             picture_out=self.picture_out,
             zero_bit_first=self.zero_bit_first)
@@ -163,9 +171,10 @@ class PhaseEstSEO_writer(SEO_writer):
 
         compo_emb = CktEmbedder.composition(self.emb, pre_emb)
         fou_writer = FouSEO_writer(
+            do_write=False,
             file_prefix='blank',
             emb=compo_emb,
-            do_write=False,
+            do_perm=self.do_perm,
             english_out=self.english_out,
             picture_out=self.picture_out,
             zero_bit_first=self.zero_bit_first)
