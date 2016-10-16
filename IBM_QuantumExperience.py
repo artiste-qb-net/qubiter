@@ -36,7 +36,7 @@ wr.write_one_bit_gate(3, OneBitGates.had2)
 #
 # Write S, S^\dagger, T, T^dagger at position=2, up to a global phase factor
 z_axis = 3
-wr.write_one_bit_gate(2, OneBitGates.rot_ax, [-np.pi/4, z_axis]) # S)2)
+wr.write_one_bit_gate(2, OneBitGates.rot_ax, [-np.pi/4, z_axis]) # S(2)
 wr.write_one_bit_gate(2, OneBitGates.rot_ax, [+np.pi/4, z_axis])
 wr.write_one_bit_gate(2, OneBitGates.rot_ax, [-np.pi/8, z_axis]) # T(2)
 wr.write_one_bit_gate(2, OneBitGates.rot_ax, [+np.pi/8, z_axis])
