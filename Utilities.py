@@ -47,7 +47,7 @@ def increment_dict(di, key, inc, initial=0):
     di[key] += inc
 
 
-def pp_numpy_arr(arr, omit_zero_amps=False):
+def pp_numpy_arr(arr, omit_zero_amps=False, show_probs=False):
     """
     pp=pretty print. Print numpy array as column of (index, array value)
     pairs of the form (i, j, k, ...) arr[i, j, k, ...], so zero bit first.
@@ -57,18 +57,28 @@ def pp_numpy_arr(arr, omit_zero_amps=False):
     arr : numpy.array
     omit_zero_amps : bool
         If True, will not list states with zero amplitude
+    show_probs : bool
+        If True, will show probability of each amplitude
 
     Returns
     -------
     None
 
     """
-    if not omit_zero_amps:
-        for index, x in np.ndenumerate(arr):
-            print(index, x)
-    else:
-        for index, x in np.ndenumerate(arr):
-            if np.absolute(x) > 1E-6:
+    for index, x in np.ndenumerate(arr):
+        mag = np.absolute(x)
+        if show_probs:
+            if omit_zero_amps:
+                if mag > 1E-6:
+                    print(index, x, 'prob=', mag**2)
+            else:
+                print(index, x, 'prob=', mag**2)
+        else:
+            if omit_zero_amps:
+                if mag > 1E-6:
+                    print(index, x)
+            else:
                 print(index, x)
+
 
 

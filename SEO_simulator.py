@@ -205,7 +205,8 @@ class SEO_simulator(SEO_reader):
         return prob_dict
 
     def describe_fin_st(
-            self, print_st_vec=False, do_pp=False, omit_zero_amps=False):
+            self, print_st_vec=False, do_pp=False,
+            omit_zero_amps=False, show_probs=False):
         """
         Prints a description of the final state vector
 
@@ -226,6 +227,9 @@ class SEO_simulator(SEO_reader):
             If print_st_vec=True, pp=True and this parameter is True too,
             will omit states with zero amplitude
 
+        show_probs : bool
+            If True, will show probability of each standard basis state
+
         Returns
         -------
         None
@@ -236,7 +240,7 @@ class SEO_simulator(SEO_reader):
             print('final state vector')
             if do_pp:
                 print('(zero bit first in state tuple)')
-                ut.pp_numpy_arr(fin_st_vec, omit_zero_amps)
+                ut.pp_numpy_arr(fin_st_vec, omit_zero_amps, show_probs)
             else:
                 print(fin_st_vec)
         print('total probability of final state vector ' +
