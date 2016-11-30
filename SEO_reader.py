@@ -15,6 +15,12 @@ class SEO_reader(SEO_pre_reader):
     See the docstring for the class SEO_writer for more info about English
     files.
 
+    This class is intended to be an abstract class for use as a parent class
+    to a child class. However, one can create an object of it, in which case
+    it will produce a log file about the English file that it reads. That
+    log file will contain useful information about the English file,
+    like its number of lines, its number of elementary ops, its number of
+    SIGX (CNOT) operations, etc.
 
     Attributes
     ----------
@@ -73,6 +79,7 @@ class SEO_reader(SEO_pre_reader):
                 loop_num in self.loop_to_reps.keys()}
 
         self.num_ops = 0
+        self.num_sigx_ops = 0
         self.line_count = 0
         self.just_jumped = False
 
@@ -90,18 +97,23 @@ class SEO_reader(SEO_pre_reader):
         None
 
         """
-        log_out = open(
+        log = open(
             self.file_prefix + '_' + str(self.num_bits) + '_log.txt', 'wt')
 
         s = "Number of lines in file = " + str(self.tot_num_lines) + '\n'
-        log_out.write(s)
+        log.write(s)
         print(s)
 
         s = "Number of Elem. Ops = " + str(self.num_ops) + '\n'
-        log_out.write(s)
+        log.write(s)
         print(s)
 
-        log_out.close()
+        s = "Number of SIGX Ops (Controlled NOTs) = " + \
+            str(self.num_sigx_ops) + '\n'
+        log.write(s)
+        print(s)
+
+        log.close()
 
     def next_line(self):
         """
@@ -155,7 +167,7 @@ class SEO_reader(SEO_pre_reader):
             # example:
             # NOTA  "I love you Mary."
             self.num_ops -= 1
-            self.use_NOTA(line[4:])
+            self.use_NOTA(line[4:].strip())
 
         elif line_name == "SWAP":
             # example:
@@ -174,11 +186,11 @@ class SEO_reader(SEO_pre_reader):
 
             kind = int(self.split_line[1])
             tar_bit_pos = int(self.split_line[3])
-            self.use_MEAS(kind, tar_bit_pos)
+            self.use_MEAS(tar_bit_pos, kind)
 
         elif line_name == "PHAS":
             # example:
-            # PHAS 42.7 AT 3 IF 3F 2T
+            # PHAS 42.7 AT 1 IF 3F 2T
 
             angle_degs = float(self.split_line[1])
             tar_bit_pos = int(self.split_line[3])
@@ -190,6 +202,7 @@ class SEO_reader(SEO_pre_reader):
         elif line_name == "P1PH":
             self.read_P_phase_factor(1)
         elif line_name == "SIGX":
+            self.num_sigx_ops += 1
             self.read_SIG(1)
         elif line_name == "SIGY":
             self.read_SIG(2)
@@ -211,7 +224,7 @@ class SEO_reader(SEO_pre_reader):
             self.read_ROT(3)
         elif line_name == "ROTN":
             # example:
-            # ROTN 42.7 30.2 78.5 AT 3 IF 3F 2T
+            # ROTN 42.7 30.2 78.5 AT 1 IF 3F 2T
 
             angle_x_degs = float(self.split_line[1])
             angle_y_degs = float(self.split_line[2])
@@ -321,8 +334,8 @@ class SEO_reader(SEO_pre_reader):
 
         """
         # example:
-        # P0PH 42.7 AT 3 IF 2T
-        # P1PH 42.7 AT 3 IF 2T
+        # P0PH 42.7 AT 1 IF 3F 2T
+        # P1PH 42.7 AT 1 IF 3F 2T
 
         angle_degs = float(self.split_line[1])
         tar_bit_pos = int(self.split_line[3])
@@ -331,14 +344,14 @@ class SEO_reader(SEO_pre_reader):
         self.use_P_PH(projection_bit,
                           angle_degs, tar_bit_pos, controls)
 
-    def read_SIG(self, direction):
+    def read_SIG(self, axis):
         """
         Collect useful info from SIGX, SIGY, or SIGZ split_line and forward
         it to abstract use_ method.
 
         Parameters
         ----------
-        direction : int
+        axis : int
 
         Returns
         -------
@@ -352,17 +365,17 @@ class SEO_reader(SEO_pre_reader):
 
         tar_bit_pos = int(self.split_line[2])
         controls = self.read_TF_controls(self.split_line[4:])
-        assert direction in [1, 2, 3]
-        self.use_SIG(direction, tar_bit_pos, controls)
+        assert axis in [1, 2, 3]
+        self.use_SIG(axis, tar_bit_pos, controls)
 
-    def read_ROT(self, direction):
+    def read_ROT(self, axis):
         """
         Collect useful info from ROTX, ROTY, or ROTZ split_line and forward
         it to abstract use_ method.
 
         Parameters
         ----------
-        direction : int
+        axis : int
 
         Returns
         -------
@@ -370,15 +383,14 @@ class SEO_reader(SEO_pre_reader):
 
         """
         # example:
-        # ROTX 42.7 AT 3 IF 3F 2T
-        # ROTY 42.7 AT 3 IF 3F 2T
-        # ROTZ 42.7 AT 3 IF 3F 2T
+        # ROTX 42.7 AT 1 IF 3F 2T
+        # ROTY 42.7 AT 1 IF 3F 2T
+        # ROTZ 42.7 AT 1 IF 3F 2T
 
         angle_degs = float(self.split_line[1])
         tar_bit_pos = int(self.split_line[3])
         controls = self.read_TF_controls(self.split_line[5:])
-        self.use_ROT(direction,
-                         angle_degs, tar_bit_pos, controls)
+        self.use_ROT(axis, angle_degs, tar_bit_pos, controls)
 
     def use_LOOP(self, loop_num, reps):
         """
@@ -433,7 +445,7 @@ class SEO_reader(SEO_pre_reader):
         None
 
         """
-        assert False
+        pass
 
     def use_SWAP(self, bit1, bit2, controls):
         """
@@ -450,9 +462,9 @@ class SEO_reader(SEO_pre_reader):
         None
 
         """
-        assert False
+        pass
 
-    def use_MEAS(self, kind, tar_bit_pos):
+    def use_MEAS(self, tar_bit_pos, kind):
         """
         Abstract use_ method that must be overridden by child class.
 
@@ -466,7 +478,7 @@ class SEO_reader(SEO_pre_reader):
         None
 
         """
-        assert False
+        pass
 
     def use_PHAS(self, angle_degs, tar_bit_pos, controls):
         """
@@ -483,7 +495,7 @@ class SEO_reader(SEO_pre_reader):
         None
 
         """
-        assert False
+        pass
 
     def use_P_PH(self, projection_bit, angle_degs, tar_bit_pos, controls):
         """
@@ -501,15 +513,15 @@ class SEO_reader(SEO_pre_reader):
         None
 
         """
-        assert False
+        pass
 
-    def use_SIG(self, direction, tar_bit_pos, controls):
+    def use_SIG(self, axis, tar_bit_pos, controls):
         """
         Abstract use_ method that must be overridden by child class.
 
         Parameters
         ----------
-        direction : int
+        axis : int
         tar_bit_pos : int
         controls : Controls
 
@@ -518,7 +530,7 @@ class SEO_reader(SEO_pre_reader):
         None
 
         """
-        assert False
+        pass
 
     def use_HAD2(self, tar_bit_pos, controls):
         """
@@ -534,15 +546,15 @@ class SEO_reader(SEO_pre_reader):
         None
 
         """
-        assert False
+        pass
 
-    def use_ROT(self, direction, angle_degs, tar_bit_pos, controls):
+    def use_ROT(self, axis, angle_degs, tar_bit_pos, controls):
         """
         Abstract use_ method that must be overridden by child class.
 
         Parameters
         ----------
-        direction : int
+        axis : int
         angle_degs : float
         tar_bit_pos : int
         controls : Controls
@@ -552,7 +564,7 @@ class SEO_reader(SEO_pre_reader):
         None
 
         """
-        assert False
+        pass
 
     def use_ROTN(self, angle_x_degs, angle_y_degs, angle_z_degs,
                 tar_bit_pos, controls):
@@ -572,7 +584,7 @@ class SEO_reader(SEO_pre_reader):
         None
 
         """
-        assert False
+        pass
 
     def use_MP_Y(self, tar_bit_pos, trols, rad_angles):
         """
@@ -588,7 +600,7 @@ class SEO_reader(SEO_pre_reader):
         -------
 
         """
-        assert False
+        pass
 
 if __name__ == "__main__":
     print(5)

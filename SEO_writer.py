@@ -191,7 +191,7 @@ class SEO_writer:
 
         """
         if permission:
-            s = "NOTA\t" + bla_str + '\n'
+            s = "NOTA\t" + bla_str.rstrip() + '\n'
             self.english_out.write(s)
             self.picture_out.write(s)
 

@@ -107,7 +107,6 @@ class FouSEO_writer(SEO_writer):
                 for k in range(r):
                     self.write_bit_swap(r, k)
 
-
 if __name__ == "__main__":
     num_bits_bef = 4
     num_bits_aft = 6

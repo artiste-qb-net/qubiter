@@ -4,8 +4,8 @@ from Controls import *
 class CktEmbedder:
     """
     This class stores parameters for embedding a quantum circuit within a
-    larger circuit (one with more qubits). Note that we will use the words
-    bit to mean either cbits or qbits.
+    larger circuit (one with more qubits). Note that we will use the word
+    "bit" to mean either cbits or qbits.
 
     Attributes
     ----------

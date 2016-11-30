@@ -414,7 +414,7 @@ class SEO_simulator(SEO_reader):
         """
         self.evolve_by_controlled_bit_swap(bit1, bit2, controls)
 
-    def use_MEAS(self, kind, tar_bit_pos):
+    def use_MEAS(self, tar_bit_pos, kind):
         """
         Overrides the parent class use_ function. Calls
         evolve_by_controlled_one_bit_gate() for MEAS.
@@ -514,14 +514,14 @@ class SEO_simulator(SEO_reader):
         gate = fun[projection_bit](angle_degs*np.pi/180)
         self.evolve_by_controlled_one_bit_gate(tar_bit_pos, controls, gate)
 
-    def use_SIG(self, direction, tar_bit_pos, controls):
+    def use_SIG(self, axis, tar_bit_pos, controls):
         """
         Overrides the parent class use_ function. Calls
         evolve_by_controlled_one_bit_gate() for sigx, sigy, sigz.
 
         Parameters
         ----------
-        direction : int
+        axis : int
             1, 2, 3 for x, y, z
         tar_bit_pos : int
         controls : Controls
@@ -536,7 +536,7 @@ class SEO_simulator(SEO_reader):
             2: OneBitGates.sigy,
             3: OneBitGates.sigz
         }
-        gate = fun[direction]()
+        gate = fun[axis]()
         self.evolve_by_controlled_one_bit_gate(tar_bit_pos, controls, gate)
 
     def use_HAD2(self, tar_bit_pos, controls):
@@ -558,7 +558,7 @@ class SEO_simulator(SEO_reader):
         gate = OneBitGates.had2()
         self.evolve_by_controlled_one_bit_gate(tar_bit_pos, controls, gate)
 
-    def use_ROT(self, direction,
+    def use_ROT(self, axis,
                 angle_degs, tar_bit_pos, controls):
         """
         Overrides the parent class use_ function. Calls
@@ -566,7 +566,7 @@ class SEO_simulator(SEO_reader):
 
         Parameters
         ----------
-        direction : int
+        axis : int
             1, 2, 3 for x, y, z
         angle_degs : float
         tar_bit_pos : int
@@ -577,14 +577,14 @@ class SEO_simulator(SEO_reader):
         None
 
         """
-        gate = OneBitGates.rot_ax(angle_degs * np.pi/180, direction)
+        gate = OneBitGates.rot_ax(angle_degs * np.pi / 180, axis)
         self.evolve_by_controlled_one_bit_gate(tar_bit_pos, controls, gate)
 
     def use_ROTN(self, angle_x_degs, angle_y_degs, angle_z_degs,
                 tar_bit_pos, controls):
         """
         Overrides the parent class use_ function. Calls
-        evolve_by_controlled_one_bit_gate() for rot along arbitrary direction.
+        evolve_by_controlled_one_bit_gate() for rot along arbitrary axis.
 
 
         Parameters
