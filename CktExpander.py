@@ -96,7 +96,7 @@ class CktExpander(SEO_reader):
         self.wr = CGateSEO_writer(out_file_prefix, emb,
             one_line=False, expand_1c_u2=True)
 
-        SEO_reader.__init__(self, in_file_prefix, num_bits)
+        SEO_reader.__init__(self, in_file_prefix, num_bits, verbose)
 
         self.wr.close_files()
 

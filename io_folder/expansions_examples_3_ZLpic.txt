@@ -1,0 +1,14 @@
+NOTA	simple cnot ( sigx(1)^n(0) )
+|   X---@   
+NOTA	controlled sigy ( sigy(1)^n(0) )
+|   Y---@   
+NOTA	controlled Y,Z rotation ( rot(1)^n(0) with radx = 0 )
+|   R---@   
+NOTA	controlled rotation ( rot(1)^n(0) )
+|   R---@   
+NOTA	2-controlled not (sigx(2)^(nbar(1)n(0))
+X---O---@   
+NOTA	swap of 0 and 1
+|   <--->   
+NOTA	swap of 1 and 2 controlled by 0
+<--->---@   

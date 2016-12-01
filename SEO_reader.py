@@ -54,10 +54,10 @@ class SEO_reader(SEO_pre_reader):
     split_line : list[str]
         storage space for a list of strings obtained by splitting a line
 
-
+    verbose : bool
     """
     
-    def __init__(self, file_prefix, num_bits):
+    def __init__(self, file_prefix, num_bits, verbose=False):
         """
         Constructor
 
@@ -65,12 +65,14 @@ class SEO_reader(SEO_pre_reader):
         ----------
         file_prefix : str
         num_bits : int
+        verbose : bool
 
         Returns
         -------
 
         """
         SEO_pre_reader.__init__(self, file_prefix, num_bits)
+        self.verbose = verbose
 
         self.english_in = open(
             file_prefix + '_' + str(num_bits) + '_eng.txt', 'rt')
@@ -266,7 +268,8 @@ class SEO_reader(SEO_pre_reader):
         -------
 
         """
-        print('line_num, operation =', self.line_count, self.num_ops)
+        if self.verbose:
+            print('line_num, operation =', self.line_count, self.num_ops)
 
     def read_multi_controls(self, tokens, allow_only_TF=False):
         """

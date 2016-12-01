@@ -1,0 +1,93 @@
+NOTA	simple cnot ( sigx(1)^n(0) )
+|   X---@   
+NOTA	controlled sigy ( sigy(1)^n(0) )
+|   R   |   
+|   X---@   
+|   R   |   
+NOTA	controlled Y,Z rotation ( rot(1)^n(0) with radx = 0 )
+|   X---@   
+|   R   |   
+|   X---@   
+|   R   |   
+NOTA	controlled rotation ( rot(1)^n(0) )
+|   R   |   
+|   X---@   
+|   R   |   
+|   X---@   
+|   R   |   
+NOTA	2-controlled not (sigx(2)^(nbar(1)n(0))
+|   H   |   
+R   |   |   
+X---+---@   
+R   |   |   
+X---+---@   
+R   |   |   
+R   |   |   
+X---@   |   
+R   |   |   
+X---@   |   
+R   |   |   
+|   @---X   
+R   |   |   
+X---+---@   
+R   |   |   
+X---+---@   
+R   |   |   
+|   @---X   
+|   H   |   
+NOTA	swap of 0 and 1
+|   X---@   
+|   @---X   
+|   X---@   
+NOTA	swap of 1 and 2 controlled by 0
+R   |   |   
+X---+---@   
+R   |   |   
+X---+---@   
+R   |   |   
+R   |   |   
+X---@   |   
+R   |   |   
+X---@   |   
+R   |   |   
+|   @---X   
+R   |   |   
+X---+---@   
+R   |   |   
+X---+---@   
+R   |   |   
+|   @---X   
+|   R   |   
+|   X---@   
+|   R   |   
+|   X---@   
+|   R   |   
+|   R   |   
+@---X   |   
+|   R   |   
+@---X   |   
+|   R   |   
+@---+---X   
+|   R   |   
+|   X---@   
+|   R   |   
+|   X---@   
+|   R   |   
+@---+---X   
+R   |   |   
+X---+---@   
+R   |   |   
+X---+---@   
+R   |   |   
+R   |   |   
+X---@   |   
+R   |   |   
+X---@   |   
+R   |   |   
+|   @---X   
+R   |   |   
+X---+---@   
+R   |   |   
+X---+---@   
+R   |   |   
+|   @---X   

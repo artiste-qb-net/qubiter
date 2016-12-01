@@ -203,7 +203,7 @@ class CGateSEO_writer(SEO_writer):
             su2_pair_b = CGateSEO_writer.su2_mat_prod(
                 [-gamma/2, np.array([0, 1, 0])],
                 [-(alp+beta)/2, np.array([0, 0, 1])])
-            su2_pair_c = [(beta-alp)/2, [0, 0, 1]]
+            su2_pair_c = [(beta-alp)/2, np.array([0, 0, 1])]
             rads_list_a = list(su2_pair_a[0]*su2_pair_a[1])
             rads_list_b = list(su2_pair_b[0]*su2_pair_b[1])
             rads_list_c = list(su2_pair_c[0]*su2_pair_c[1])

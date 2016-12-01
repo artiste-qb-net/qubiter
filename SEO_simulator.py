@@ -106,7 +106,7 @@ class SEO_simulator(SEO_reader):
         self.cur_st_vec_list = [init_st_vec]
         self.verbose = verbose
 
-        SEO_reader.__init__(self, file_prefix, num_bits)
+        SEO_reader.__init__(self, file_prefix, num_bits, verbose)
 
     @staticmethod
     def get_ground_st(num_bits):
