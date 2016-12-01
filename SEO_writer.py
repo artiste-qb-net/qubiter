@@ -50,8 +50,8 @@ class SEO_writer:
     The following images from the above paper are stored in the same folder
     as this python file.
 
-        ZLpic_file_examples.png
-        eng_file_examples.png
+        ZLpic_file_examples.pdf
+        eng_file_examples.pdf
 
     These 2 images give examples of lines in analytic/Picture/English
     formats. The Picture file png follows the ZL convention.
