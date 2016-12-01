@@ -47,7 +47,7 @@ def increment_dict(di, key, inc, initial=0):
     di[key] += inc
 
 
-def pp_numpy_arr(arr, omit_zero_amps=False, show_probs=False):
+def pp_numpy_arr(arr, omit_zero_amps=False, show_probs=False, do_ZF=True):
     """
     pp=pretty print. Print numpy array as column of (index, array value)
     pairs of the form (i, j, k, ...) arr[i, j, k, ...], so zero bit first.
@@ -60,25 +60,36 @@ def pp_numpy_arr(arr, omit_zero_amps=False, show_probs=False):
     show_probs : bool
         If True, will show probability of each amplitude
 
+    do_ZF : bool
+        If True, multi-index in usual order, ZF (Zero bit First) convention.
+        If False, multi-index in reverse of usual order, ZL (Zero bit Last)
+        convention.
+
     Returns
     -------
     None
 
     """
-    for index, x in np.ndenumerate(arr):
+    for ind, x in np.ndenumerate(arr):
+        index = ind
+        label = 'ZF'
+        if not do_ZF:
+            index = ind[::-1]  # this reverses order of tuple
+            label = 'ZL'
+        ind_str = str(index) + label
         mag = np.absolute(x)
         if show_probs:
             if omit_zero_amps:
                 if mag > 1E-6:
-                    print(index, x, 'prob=', mag**2)
+                    print(ind_str, x, ', prob=', mag**2)
             else:
-                print(index, x, 'prob=', mag**2)
+                print(ind_str, x, ', prob=', mag**2)
         else:
             if omit_zero_amps:
                 if mag > 1E-6:
-                    print(index, x)
+                    print(ind_str, x)
             else:
-                print(index, x)
+                print(ind_str, x)
 
 
 

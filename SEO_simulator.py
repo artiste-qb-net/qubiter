@@ -206,7 +206,7 @@ class SEO_simulator(SEO_reader):
 
     def describe_fin_st(
             self, print_st_vec=False, do_pp=False,
-            omit_zero_amps=False, show_probs=False):
+            omit_zero_amps=False, show_probs=False, do_ZF=True):
         """
         Prints a description of the final state vector
 
@@ -230,6 +230,11 @@ class SEO_simulator(SEO_reader):
         show_probs : bool
             If True, will show probability of each standard basis state
 
+        do_ZF : bool
+            If True, multi-index of ket in usual order, ZF (Zero bit First)
+            convention. If False, multi-index of ket in reverse of usual
+            order, ZL (Zero bit Last) convention.
+
         Returns
         -------
         None
@@ -239,8 +244,11 @@ class SEO_simulator(SEO_reader):
         if print_st_vec:
             print('final state vector')
             if do_pp:
-                print('(zero bit first in state tuple)')
-                ut.pp_numpy_arr(fin_st_vec, omit_zero_amps, show_probs)
+                if do_ZF:
+                    print('ZF convention (Zero bit First in state tuple)')
+                else:
+                    print('ZL convention (Zero bit Last in state tuple)')
+                ut.pp_numpy_arr(fin_st_vec, omit_zero_amps, show_probs, do_ZF)
             else:
                 print(fin_st_vec)
         print('total probability of final state vector ' +

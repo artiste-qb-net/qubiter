@@ -54,7 +54,7 @@ class SEO_writer:
         eng_file_examples.pdf
 
     These 2 images give examples of lines in analytic/Picture/English
-    formats. The Picture file png follows the ZL convention.
+    formats. The Picture file pdf follows the ZL convention.
 
     3 kinds (called 0, 1, 2) of measurements MEAS are allowed. A type 0
     measurement inserts a projector |0><0| = n = P_0 at the target bit. A
