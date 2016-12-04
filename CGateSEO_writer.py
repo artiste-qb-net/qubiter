@@ -256,7 +256,7 @@ class CGateSEO_writer(SEO_writer):
                 if err > TOL:
                     print("2 cnot, 3 rots, identity 1")
                     print(diff)
-                    # assert False
+                    assert False
                 diff = mat_id - mat_a*mat_b*mat_c
                 err = np.linalg.norm(diff)
                 if err > TOL:
