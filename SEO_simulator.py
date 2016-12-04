@@ -130,6 +130,31 @@ class SEO_simulator(SEO_reader):
         return mat
 
     @staticmethod
+    def get_random_st(num_bits):
+        """
+        Returns random state \sum_b^n A(b^n)|b^n>, b^n \in {0,1}^n,
+        where n=num-bits and \sum_b^n |A(b^n)|^2 = 1
+
+        Parameters
+        ----------
+        num_bits : int
+
+        Returns
+        -------
+        np.ndarray
+
+        """
+        # returns array of random numbers in [0, 1] interval
+        mat_phi = np.random.rand(1 << num_bits)
+        mat_phi = np.exp(1j*2*np.pi*mat_phi)
+        mat_r = np.random.rand(1 << num_bits)
+        mat = np.multiply(mat_r, mat_phi)
+        magnitude = np.linalg.norm(mat)
+        mat /= magnitude
+        mat = mat.reshape([2]*num_bits)
+        return mat
+
+    @staticmethod
     def get_standard_basis_st(spin_dir_list, zero_last=True):
         """
         If zero_last = True, Returns state ...|s2>|s1>|s0>, where
@@ -653,3 +678,4 @@ if __name__ == "__main__":
         # branches
         sim = SEO_simulator('io_folder/sim_test3', 4, verbose=True)
 
+    print(SEO_simulator.get_random_st(3))

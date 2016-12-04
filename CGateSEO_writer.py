@@ -110,7 +110,9 @@ class CGateSEO_writer(SEO_writer):
         n = s1*c2*n1 + s2*c1*n2 - s1*s2*np.cross(n1, n2)
         mag = np.linalg.norm(n)
         n /= mag
-        theta = np.arctan2(c1*c2, mag)
+        c = c1*c2 - s1*s2*np.dot(n1, n1)
+        s = mag
+        theta = np.arctan2(s, c)
         return [theta, n]
 
     def write_1c_su2(self, tar_bit_pos, trol_bit_pos, rads_list):
