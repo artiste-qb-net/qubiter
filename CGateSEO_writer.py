@@ -45,10 +45,13 @@ class CGateSEO_writer(SEO_writer):
         are expanded into cnots and qubit rotations. If this is False,
         the 1c_u2 are not expanded.
 
+    do_checking : bool
+        Does some checking of algebra
+
     """
 
     def __init__(self, file_prefix, emb,
-                 one_line=True, expand_1c_u2=False, **kwargs):
+            one_line=True, expand_1c_u2=False, do_checking=False, **kwargs):
         """
         Constructor
 
@@ -58,6 +61,7 @@ class CGateSEO_writer(SEO_writer):
         emb : CktEmbedder
         one_line : bool
         expand_1c_u2 : bool
+        do_checking : bool
         kwargs : dict
 
         Returns
@@ -67,6 +71,7 @@ class CGateSEO_writer(SEO_writer):
         """
         self.one_line = one_line
         self.expand_1c_u2 = expand_1c_u2
+        self.do_checking = do_checking
         SEO_writer.__init__(self, file_prefix, emb, **kwargs)
 
     @staticmethod
@@ -110,7 +115,7 @@ class CGateSEO_writer(SEO_writer):
         n = s1*c2*n1 + s2*c1*n2 - s1*s2*np.cross(n1, n2)
         mag = np.linalg.norm(n)
         n /= mag
-        c = c1*c2 - s1*s2*np.dot(n1, n1)
+        c = c1*c2 - s1*s2*np.dot(n1, n2)
         s = mag
         theta = np.arctan2(s, c)
         return [theta, n]
@@ -177,12 +182,24 @@ class CGateSEO_writer(SEO_writer):
                 write_rot(rads_list_a, herm_conj=True)
                 write_cnot()
                 write_rot(rads_list_a)
+
+                if self.do_checking:
+                    mat_w = np.matrix(OneBitGates.rot(*rads_list))
+                    mat_a = np.matrix(OneBitGates.rot(*rads_list_a))
+                    mat_sigx = np.matrix(OneBitGates.sigx())
+                    diff = mat_w - mat_a*mat_sigx*mat_a.getH()
+                    err = np.linalg.norm(diff)
+                    if err > TOL:
+                        print("1 cnot, 2 rots")
+                        print(diff)
+                        assert False
             
         elif abs(wx) < TOL:  # 2 cnots, 2 rots
             # this is the same as the general case (2 cnots, 3 rots)
             # with alp=beta
-            alp = np.arctan2(wz*sw, cw)
-            gamma = np.arccos(cw**2 + (wz*sw)**2)
+            alp = np.arctan2(wz*sw, cw)/2
+            gamma = np.arctan2(sw*wy,
+                               np.sqrt(cw**2 + (wz*sw)**2))
             su2_pair_a = CGateSEO_writer.su2_mat_prod(
                 [alp, np.array([0, 0, 1])],
                 [gamma/2, np.array([0, 1, 0])])
@@ -192,13 +209,24 @@ class CGateSEO_writer(SEO_writer):
             write_rot(rads_list_a, herm_conj=True)
             write_cnot()
             write_rot(rads_list_a)
+            if self.do_checking:
+                mat_w = np.matrix(OneBitGates.rot(*rads_list))
+                mat_a = np.matrix(OneBitGates.rot(*rads_list_a))
+                mat_sigx = np.matrix(OneBitGates.sigx())
+                diff = mat_w - mat_a*mat_sigx*mat_a.getH()*mat_sigx
+                err = np.linalg.norm(diff)
+                if err > TOL:
+                    print("2 cnot, 2 rots", rads_list)
+                    print(diff)
+                    assert False
 
         else:  # 2 cnots, 3 rots
             theta1 = np.arctan2(wz*sw, cw)
             theta2 = np.arctan2(wx, wy)
             alp = (theta1 + theta2)/2
             beta = (theta1 - theta2)/2
-            gamma = np.arccos(cw**2 + (wz*sw)**2)
+            gamma = np.arctan2(sw*np.sqrt(wx**2 + wy**2),
+                               np.sqrt(cw**2 + (wz*sw)**2))
             su2_pair_a = CGateSEO_writer.su2_mat_prod(
                 [alp, np.array([0, 0, 1])],
                 [gamma/2, np.array([0, 1, 0])])
@@ -215,6 +243,27 @@ class CGateSEO_writer(SEO_writer):
             write_rot(rads_list_b)
             write_cnot()
             write_rot(rads_list_a)
+
+            if self.do_checking:
+                mat_id = np.matrix(OneBitGates.phase_fac(0.0))
+                mat_w = np.matrix(OneBitGates.rot(*rads_list))
+                mat_a = np.matrix(OneBitGates.rot(*rads_list_a))
+                mat_b = np.matrix(OneBitGates.rot(*rads_list_b))
+                mat_c = np.matrix(OneBitGates.rot(*rads_list_c))
+                mat_sigx = np.matrix(OneBitGates.sigx())
+                diff = mat_w - mat_a*mat_sigx*mat_b*mat_sigx*mat_c
+                err = np.linalg.norm(diff)
+                if err > TOL:
+                    print("2 cnot, 3 rots, identity 1")
+                    print(diff)
+                    # assert False
+                diff = mat_id - mat_a*mat_b*mat_c
+                err = np.linalg.norm(diff)
+                if err > TOL:
+                    print("2 cnot, 3 rots, identity 2")
+                    print(diff)
+                    assert False
+
 
     def write_gen_n_controlled_su2(self, n_index_list, rads_list):
         """
@@ -417,7 +466,7 @@ if __name__ == "__main__":
     # trol_kinds in ZL convention
     trol_kinds = [True, False, False]
 
-    wr = CGateSEO_writer('io_folder/cgate_expansions', emb)
+    wr = CGateSEO_writer('io_folder/cgate_expansions', emb, do_checking=True)
 
     for u2_fun, fun_arg_list in u2_fun_to_fun_arg_list.items():
         wr.write_NOTA('--------new u2 gate --------------------------')
