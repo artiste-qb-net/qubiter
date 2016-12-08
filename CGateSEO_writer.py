@@ -18,7 +18,9 @@ class CGateSEO_writer(SEO_writer):
 
     References
     ----------
-    1. CktExpander.pdf, by Robert Tucci, included with Qubiter source code.
+
+    1. CGateSEO_writer.pdf, by Robert Tucci, included with Qubiter source
+    code.
 
     Attributes
     ----------
@@ -120,9 +122,9 @@ class CGateSEO_writer(SEO_writer):
         theta = np.arctan2(s, c)
         return [theta, n]
 
-    def write_1c_su2(self, tar_bit_pos, trol_bit_pos, rads_list):
+    def write_1c_u2(self, tar_bit_pos, trol_bit_pos, rads_list, delta=None):
         """
-        Writes an expansion of an 1c_su2 (uni controlled SU(2) matrix). In
+        Writes an expansion of an 1c_u2 (uni controlled U(2) matrix). In
         general, such an expansion will contain 3 cnots, but for special
         cases taken here into account, it's possible to get away with using
         only 2 or 1 cnots.
@@ -133,10 +135,14 @@ class CGateSEO_writer(SEO_writer):
             target bit position
         trol_bit_pos : int
             control bit position
+
         rads_list : list[float]
             list of 3 angles in radians. If it equals [radx, rady, radz],
-            then SU(2) gate given by exp(i*(radx*sigx + rady*sigy +
-            radz*sigz))
+            then U(2) gate given by e^{i*delta} exp(i*(radx*sigx + rady*sigy
+            + radz*sigz))
+
+        delta : float|None
+            U(2) gate being controlled equals e^{i*delta} times SU(2) gate
 
         Returns
         -------
@@ -149,6 +155,11 @@ class CGateSEO_writer(SEO_writer):
             self.write_controlled_one_bit_gate(
                 tar_bit_pos, trols, OneBitGates.rot, rads_list)
             return
+
+        def write_delta_rot():
+            if delta:
+                self.write_one_bit_gate(
+                    trol_bit_pos, OneBitGates.rot_ax, [-delta/2, 3])
 
         def write_cnot():
             self.write_controlled_one_bit_gate(
@@ -168,20 +179,22 @@ class CGateSEO_writer(SEO_writer):
         wx, wy, wz = [rads_x/theta_w, rads_y/theta_w, rads_z/theta_w]
         TOL = 1E-6
 
-        if abs(theta_w - np.pi/2) < TOL or \
-                abs(theta_w - 3*np.pi/2) < TOL:  # 1 cnot, 0 or 2 rots
-            if abs(wy) < TOL and abs(wz) < TOL:  # simple cnot, 0 rots
+        if abs(theta_w - np.pi/2) < TOL:  # 1 cnot, 0 or 2 target rots
+            if abs(wy) < TOL and abs(wz) < TOL and \
+                    abs(delta + np.pi/2) < TOL:  # simple cnot, 0 target rots
                 write_cnot()
-            else:
+            else:  # 1 cnot, 2 target rots
                 theta_a = np.pi/2
                 ax = np.sqrt((wx+1)/2)
                 # ax != 0 or else wy=wz=0, which was already considered
                 ay = wy/(2*ax)
                 az = wz/(2*ax)
                 rads_list_a = list(theta_a*np.array([ax, ay, az]))
+
                 write_rot(rads_list_a, herm_conj=True)
                 write_cnot()
                 write_rot(rads_list_a)
+                write_delta_rot()
 
                 if self.do_checking:
                     mat_w = np.matrix(OneBitGates.rot(*rads_list))
@@ -194,8 +207,8 @@ class CGateSEO_writer(SEO_writer):
                         print(diff)
                         assert False
             
-        elif abs(wx) < TOL:  # 2 cnots, 2 rots
-            # this is the same as the general case (2 cnots, 3 rots)
+        elif abs(wx) < TOL:  # 2 cnots, 2 target rots
+            # this is the same as the general case (2 cnots, 3 target rots)
             # with alp=beta
             alp = np.arctan2(wz*sw, cw)/2
             gamma = np.arctan2(sw*wy,
@@ -209,6 +222,8 @@ class CGateSEO_writer(SEO_writer):
             write_rot(rads_list_a, herm_conj=True)
             write_cnot()
             write_rot(rads_list_a)
+            write_delta_rot()
+
             if self.do_checking:
                 mat_w = np.matrix(OneBitGates.rot(*rads_list))
                 mat_a = np.matrix(OneBitGates.rot(*rads_list_a))
@@ -220,7 +235,7 @@ class CGateSEO_writer(SEO_writer):
                     print(diff)
                     assert False
 
-        else:  # 2 cnots, 3 rots
+        else:  # 2 cnots, 3 target rots
             theta1 = np.arctan2(wz*sw, cw)
             theta2 = np.arctan2(wx, wy)
             alp = (theta1 + theta2)/2
@@ -243,6 +258,7 @@ class CGateSEO_writer(SEO_writer):
             write_rot(rads_list_b)
             write_cnot()
             write_rot(rads_list_a)
+            write_delta_rot()
 
             if self.do_checking:
                 mat_id = np.matrix(OneBitGates.phase_fac(0.0))
@@ -264,22 +280,25 @@ class CGateSEO_writer(SEO_writer):
                     print(diff)
                     assert False
 
-
-    def write_gen_n_controlled_su2(self, n_index_list, rads_list):
+    def write_gen_n_controlled_u2(self, n_index_list, rads_list, delta=None):
         """
-        Writes an expansion for an SU(2) matrix U that is controlled by a
-        "generalized n" equal to n(n_index_list). Thus, U=exp(i*theta*n(
-        n_index_list)) Generalized n's are defined in the reference
-        CktExpander.pdf
+        Writes an expansion for a U(2) matrix W(num_bits-1) that is
+        controlled by a "generalized n" equal to GN = n(n_index_list). Thus,
+        the gate written by this function equals W(num_bits-1)^GN.
+        Generalized n's are defined in the reference CktExpander.pdf
 
         Parameters
         ----------
         n_index_list : list[int]
             indices of the generalized n
+
         rads_list : list[float]
             list of 3 angles in radians. If it equals [radx, rady, radz],
-            then SU(2) gate given by exp(i*(radx*sigx + rady*sigy +
-            radz*sigz))
+            then U(2) gate given by e^{i*delta} exp(i*(radx*sigx + rady*sigy
+            + radz*sigz))
+
+        delta : float|None
+            U(2) gate being controlled equals e^{i*delta} times SU(2) gate
 
         Returns
         -------
@@ -296,7 +315,7 @@ class CGateSEO_writer(SEO_writer):
             self.write_controlled_one_bit_gate(
                 tar_pos, trols, OneBitGates.sigx)
 
-        self.write_1c_su2(num_bits-1, n_index_list[-1], rads_list)
+        self.write_1c_u2(num_bits - 1, n_index_list[-1], rads_list, delta)
 
         for k in reversed(range(len(n_index_list)-1)):
             tar_pos = n_index_list[k+1]
@@ -305,18 +324,21 @@ class CGateSEO_writer(SEO_writer):
             self.write_controlled_one_bit_gate(
                 tar_pos, trols, OneBitGates.sigx)
 
-    def write_mc_su2(self, rads_list):
+    def write_mc_u2_internal(self, rads_list, delta=None):
         """
         This internal function is used in write_mc_u2() and is less general
-        than the latter. It expands an mc_su2 into a product of several
-        "generalized n" controlled SU(2) gates.
+        than the latter. It expands an mc_u2 into a product of several
+        "generalized n" controlled U(2) gates.
 
         Parameters
         ----------
         rads_list : list[float]
             list of 3 angles in radians. If it equals [radx, rady, radz],
-            then SU(2) gate given by exp(i*(radx*sigx + rady*sigy +
-            radz*sigz))
+            then U(2) gate given by e^{i*delta} exp(i*(radx*sigx + rady*sigy
+            + radz*sigz))
+
+        delta : float|None
+            U(2) gate being controlled equals e^{i*delta} times SU(2) gate
 
         Returns
         -------
@@ -332,14 +354,19 @@ class CGateSEO_writer(SEO_writer):
                     sign = -1
                 new_rads_list = list(
                     sign*np.array(rads_list)/(1 << (num_bits-2)))
-                self.write_gen_n_controlled_su2(n_index_list, new_rads_list)
+                if delta:
+                    new_delta = sign*delta/(1 << (num_bits-2))
+                else:
+                    new_delta = None
+                self.write_gen_n_controlled_u2(
+                    n_index_list, new_rads_list, new_delta)
 
     def write_hads(self, trol_kinds, herm_conj=False):
         """
-        Writes a chain of cnots that are useful when some of the controls of
-        the mc_u2 being considered are n_bar = P_0 = |0><0| instead of n =
-        P_1 = |1><1|. We are using the identity H n_bar H = n to convert
-        n_bar's to n's.
+        Writes a chain of cnots that are useful when some of the controls of 
+        the mc_u2 being considered are n_bar = P_0 = |0><0| instead of n = 
+        P_1 = |1><1|. We are using the identity H n H = nbar to convert n's 
+        to nbar's. 
 
         Parameters
         ----------
@@ -405,10 +432,10 @@ class CGateSEO_writer(SEO_writer):
 
         if u2_fun == OneBitGates.P_0_phase_fac:
             rads = fun_arg_list[0]
-            self.write_mc_su2([0, 0, rads/2])
+            self.write_mc_u2_internal([0, 0, rads/2], rads/2)
         elif u2_fun == OneBitGates.P_1_phase_fac:
             rads = fun_arg_list[0]
-            self.write_mc_su2([0, 0, -rads/2])
+            self.write_mc_u2_internal([0, 0, -rads/2], rads/2)
         elif u2_fun == OneBitGates.sigx:
             if num_bits == 2:
                 # If it's a CNOT, no expansion necessary
@@ -418,27 +445,27 @@ class CGateSEO_writer(SEO_writer):
                 self.write_controlled_one_bit_gate(
                     tar_bit_pos, trols1, OneBitGates.sigx)
             else:
-                self.write_mc_su2([np.pi/2, 0, 0])
+                self.write_mc_u2_internal([np.pi/2, 0, 0], -np.pi/2)
         elif u2_fun == OneBitGates.sigy:
-            self.write_mc_su2([0, np.pi/2, 0])
+            self.write_mc_u2_internal([0, np.pi/2, 0], -np.pi/2)
         elif u2_fun == OneBitGates.sigz:
-            self.write_mc_su2([0, 0, np.pi/2])
+            self.write_mc_u2_internal([0, 0, np.pi/2], -np.pi/2)
         elif u2_fun == OneBitGates.had2:
             rads = np.pi/(2*np.sqrt(2))
-            self.write_mc_su2([rads, 0, rads])
+            self.write_mc_u2_internal([rads, 0, rads], -np.pi/2)
         elif u2_fun == OneBitGates.rot_ax:
             rads = fun_arg_list[0]
             axis = fun_arg_list[1]
             if axis == 1:
-                self.write_mc_su2([rads, 0, 0])
+                self.write_mc_u2_internal([rads, 0, 0])
             elif axis == 2:
-                self.write_mc_su2([0, rads, 0])
+                self.write_mc_u2_internal([0, rads, 0])
             elif axis == 3:
-                self.write_mc_su2([0, 0, rads])
+                self.write_mc_u2_internal([0, 0, rads])
             else:
                 assert False
         elif u2_fun == OneBitGates.rot:
-            self.write_mc_su2(fun_arg_list)
+            self.write_mc_u2_internal(fun_arg_list)
         else:
             assert False, "writing an unsupported controlled gate"
 

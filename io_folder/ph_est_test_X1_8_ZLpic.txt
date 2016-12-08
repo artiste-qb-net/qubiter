@@ -180,33 +180,39 @@ NOTA	--------expansion of P1PH
 |   |   |   |   R   |   |   |   
 |   |   |   |   X---@   |   |   
 |   |   |   |   R   |   |   |   
+|   |   |   |   |   Rz  |   |   
 |   |   |   |   |   H   |   |   
 NOTA	--------expansion of P1PH
 |   |   |   |   X---+---@   |   
 |   |   |   |   R   |   |   |   
 |   |   |   |   X---+---@   |   
 |   |   |   |   R   |   |   |   
+|   |   |   |   |   |   Rz  |   
 NOTA	--------expansion of P1PH
 |   |   |   |   |   X---@   |   
 |   |   |   |   |   R   |   |   
 |   |   |   |   |   X---@   |   
 |   |   |   |   |   R   |   |   
+|   |   |   |   |   |   Rz  |   
 |   |   |   |   |   |   H   |   
 NOTA	--------expansion of P1PH
 |   |   |   |   X---+---+---@   
 |   |   |   |   R   |   |   |   
 |   |   |   |   X---+---+---@   
 |   |   |   |   R   |   |   |   
+|   |   |   |   |   |   |   Rz  
 NOTA	--------expansion of P1PH
 |   |   |   |   |   X---+---@   
 |   |   |   |   |   R   |   |   
 |   |   |   |   |   X---+---@   
 |   |   |   |   |   R   |   |   
+|   |   |   |   |   |   |   Rz  
 NOTA	--------expansion of P1PH
 |   |   |   |   |   |   X---@   
 |   |   |   |   |   |   R   |   
 |   |   |   |   |   |   X---@   
 |   |   |   |   |   |   R   |   
+|   |   |   |   |   |   |   Rz  
 |   |   |   |   |   |   |   H   
 NOTA	--------expansion of SWAP
 |   |   |   |   |   |   X---@   
@@ -263,33 +269,39 @@ NOTA	--------expansion of P1PH
 |   |   |   |   |   |   R   |   
 |   |   |   |   |   |   X---@   
 |   |   |   |   |   |   R   |   
+|   |   |   |   |   |   |   Rz  
 NOTA	--------expansion of P1PH
 |   |   |   |   |   X---+---@   
 |   |   |   |   |   R   |   |   
 |   |   |   |   |   X---+---@   
 |   |   |   |   |   R   |   |   
+|   |   |   |   |   |   |   Rz  
 NOTA	--------expansion of P1PH
 |   |   |   |   X---+---+---@   
 |   |   |   |   R   |   |   |   
 |   |   |   |   X---+---+---@   
 |   |   |   |   R   |   |   |   
+|   |   |   |   |   |   |   Rz  
 |   |   |   |   |   |   H   |   
 NOTA	--------expansion of P1PH
 |   |   |   |   |   X---@   |   
 |   |   |   |   |   R   |   |   
 |   |   |   |   |   X---@   |   
 |   |   |   |   |   R   |   |   
+|   |   |   |   |   |   Rz  |   
 NOTA	--------expansion of P1PH
 |   |   |   |   X---+---@   |   
 |   |   |   |   R   |   |   |   
 |   |   |   |   X---+---@   |   
 |   |   |   |   R   |   |   |   
+|   |   |   |   |   |   Rz  |   
 |   |   |   |   |   H   |   |   
 NOTA	--------expansion of P1PH
 |   |   |   |   X---@   |   |   
 |   |   |   |   R   |   |   |   
 |   |   |   |   X---@   |   |   
 |   |   |   |   R   |   |   |   
+|   |   |   |   |   Rz  |   |   
 |   |   |   |   H   |   |   |   
 NOTA	--------expansion of ROTY
 |   H   |   |   |   |   |   |   

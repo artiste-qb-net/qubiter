@@ -4,6 +4,7 @@ NOTA	controlled sigy ( sigy(1)^n(0) )
 |   R   |   
 |   X---@   
 |   R   |   
+|   |   Rz  
 NOTA	controlled Y,Z rotation ( rot(1)^n(0) with radx = 0 )
 |   X---@   
 |   R   |   
@@ -22,17 +23,20 @@ X---+---@
 R   |   |   
 X---+---@   
 R   |   |   
+|   |   Rz  
 R   |   |   
 X---@   |   
 R   |   |   
 X---@   |   
 R   |   |   
+|   Rz  |   
 |   @---X   
 R   |   |   
 X---+---@   
 R   |   |   
 X---+---@   
 R   |   |   
+|   |   Rz  
 |   @---X   
 |   H   |   
 NOTA	swap of 0 and 1
@@ -45,49 +49,58 @@ X---+---@
 R   |   |   
 X---+---@   
 R   |   |   
+|   |   Rz  
 R   |   |   
 X---@   |   
 R   |   |   
 X---@   |   
 R   |   |   
+|   Rz  |   
 |   @---X   
 R   |   |   
 X---+---@   
 R   |   |   
 X---+---@   
 R   |   |   
+|   |   Rz  
 |   @---X   
 |   R   |   
 |   X---@   
 |   R   |   
 |   X---@   
 |   R   |   
+|   |   Rz  
 |   R   |   
 @---X   |   
 |   R   |   
 @---X   |   
 |   R   |   
+Rz  |   |   
 @---+---X   
 |   R   |   
 |   X---@   
 |   R   |   
 |   X---@   
 |   R   |   
+|   |   Rz  
 @---+---X   
 R   |   |   
 X---+---@   
 R   |   |   
 X---+---@   
 R   |   |   
+|   |   Rz  
 R   |   |   
 X---@   |   
 R   |   |   
 X---@   |   
 R   |   |   
+|   Rz  |   
 |   @---X   
 R   |   |   
 X---+---@   
 R   |   |   
 X---+---@   
 R   |   |   
+|   |   Rz  
 |   @---X   
