@@ -45,79 +45,76 @@ def cs_decomp(unitary_mats):
     num_mats = len(unitary_mats)
     for mat in unitary_mats:
         assert mat.shape == (block_size, block_size)
-    # In[2]: import cuncsd
-    # In[3]: print(cuncsd.cuncsd.__doc__)
-    # x11,x12,x21,x22,theta,u1,u2,v1t,v2t,work,rwork,iwork,info =\
-    #  cuncsd(x11,x12,x21,x22,
-    # [jobu1,jobu2,jobv1t,jobv2t,trans,signs,
-    # m,p,q,ldx11,ldx12,ldx21,ldx22,
-    # ldu1,ldu2,ldv1t,ldv2t,lwork,lrwork])
-    #
-    # Wrapper for ``cuncsd``.
-    #
-    # Parameters
-    # ----------
-    # x11 : input rank-2 array('F') with bounds (p,*)
-    # x12 : input rank-2 array('F') with bounds (p,*)
-    # x21 : input rank-2 array('F') with bounds (p,*)
-    # x22 : input rank-2 array('F') with bounds (p,*)
-    #
-    # Other Parameters
-    # ----------------
-    # jobu1 : input string(len=1), optional
-    #     Default: 'Y'
-    # jobu2 : input string(len=1), optional
-    #     Default: 'Y'
-    # jobv1t : input string(len=1), optional
-    #     Default: 'Y'
-    # jobv2t : input string(len=1), optional
-    #     Default: 'Y'
-    # trans : input string(len=1), optional
-    #     Default: 'T'
-    # signs : input string(len=1), optional
-    #     Default: 'O'
-    # m : input int, optional
-    #     Default: 2*p
-    # p : input int, optional
-    #     Default: shape(x11,0)
-    # q : input int, optional
-    #     Default: p
-    # ldx11 : input int, optional
-    #     Default: p
-    # ldx12 : input int, optional
-    #     Default: p
-    # ldx21 : input int, optional
-    #     Default: p
-    # ldx22 : input int, optional
-    #     Default: p
-    # ldu1 : input int, optional
-    #     Default: p
-    # ldu2 : input int, optional
-    #     Default: p
-    # ldv1t : input int, optional
-    #     Default: p
-    # ldv2t : input int, optional
-    #     Default: p
-    # lwork : input int, optional
-    #     Default: -1
-    # lrwork : input int, optional
-    #     Default: -1
-    #
-    # Returns
-    # -------
-    # x11 : rank-2 array('F') with bounds (p,*)
-    # x12 : rank-2 array('F') with bounds (p,*)
-    # x21 : rank-2 array('F') with bounds (p,*)
-    # x22 : rank-2 array('F') with bounds (p,*)
-    # theta : rank-1 array('f') with bounds (*)
-    # u1 : rank-2 array('F') with bounds (ldu1,*)
-    # u2 : rank-2 array('F') with bounds (ldu2,*)
-    # v1t : rank-2 array('F') with bounds (ldv1t,*)
-    # v2t : rank-2 array('F') with bounds (ldv2t,*)
-    # work : rank-1 array('F') with bounds (*)
-    # rwork : rank-1 array('f') with bounds (*)
-    # iwork : rank-1 array('i') with bounds (*)
-    # info : int
+
+        # In[3]: import cuncsd
+        # In[4]: print(cuncsd.cuncsd.__doc__)
+        # x11,x12,x21,x22,theta,u1,u2,v1t,v2t,work,rwork,iwork,info = cuncsd(p,x11,x12,x21,x22,[jobu1,jobu2,jobv1t,jobv2t,trans,signs,m,q,ldx11,ldx12,ldx21,ldx22,ldu1,ldu2,ldv1t,ldv2t,lwork,lrwork])
+        #
+        # Wrapper for ``cuncsd``.
+        #
+        # Parameters
+        # ----------
+        # p : input int
+        # x11 : input rank-2 array('F') with bounds (p,*)
+        # x12 : input rank-2 array('F') with bounds (p,*)
+        # x21 : input rank-2 array('F') with bounds (p,*)
+        # x22 : input rank-2 array('F') with bounds (p,*)
+        #
+        # Other Parameters
+        # ----------------
+        # jobu1 : input string(len=1), optional
+        #     Default: 'Y'
+        # jobu2 : input string(len=1), optional
+        #     Default: 'Y'
+        # jobv1t : input string(len=1), optional
+        #     Default: 'Y'
+        # jobv2t : input string(len=1), optional
+        #     Default: 'Y'
+        # trans : input string(len=1), optional
+        #     Default: 'T'
+        # signs : input string(len=1), optional
+        #     Default: 'O'
+        # m : input int, optional
+        #     Default: 2*p
+        # q : input int, optional
+        #     Default: p
+        # ldx11 : input int, optional
+        #     Default: p
+        # ldx12 : input int, optional
+        #     Default: p
+        # ldx21 : input int, optional
+        #     Default: p
+        # ldx22 : input int, optional
+        #     Default: p
+        # ldu1 : input int, optional
+        #     Default: p
+        # ldu2 : input int, optional
+        #     Default: p
+        # ldv1t : input int, optional
+        #     Default: p
+        # ldv2t : input int, optional
+        #     Default: p
+        # lwork : input int, optional
+        #     Default: -1
+        # lrwork : input int, optional
+        #     Default: -1
+        #
+        # Returns
+        # -------
+        # x11 : rank-2 array('F') with bounds (p,*)
+        # x12 : rank-2 array('F') with bounds (p,*)
+        # x21 : rank-2 array('F') with bounds (p,*)
+        # x22 : rank-2 array('F') with bounds (p,*)
+        # theta : rank-1 array('f') with bounds (*)
+        # u1 : rank-2 array('F') with bounds (ldu1,*)
+        # u2 : rank-2 array('F') with bounds (ldu2,*)
+        # v1t : rank-2 array('F') with bounds (ldv1t,*)
+        # v2t : rank-2 array('F') with bounds (ldv2t,*)
+        # work : rank-1 array('F') with bounds (*)
+        # rwork : rank-1 array('f') with bounds (*)
+        # iwork : rank-1 array('i') with bounds (*)
+        # info : int
+
 
     left_mats = []
     central_mats = []
@@ -140,7 +137,7 @@ def cs_decomp(unitary_mats):
 
         x11, x12, x21, x22, theta, u1, u2, v1t, v2t,\
             work, rwork, iwork, info =\
-                cuncsd.cuncsd(x11, x12, x21, x22, lwork=10, lrwork=10)
+                cuncsd.cuncsd(p=hdim, x11=x11, x12=x12, x21=x21, x22=x22 )
         left_mats.append(u1).append(u2)
         central_mats.append(theta)
         right_mats.append(v1t).append(v2t)
