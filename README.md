@@ -3,9 +3,9 @@
 
 The Qubiter project aims to  provide eventually a full suite of tools, written mostly in Python, for designing and simulating quantum circuits on classical computers. (So it will address only the needs of gate model, not annealer, quantum computer engineers). We or others could start a similar project for annealers.
 
-An earlier C++ computer program also called Qubiter (see http://www.ar-tiste.com/qubiter.html), written by Robert R. Tucci, did only quantum compiling. This newer project will eventually include a quantum compiler similar to the earlier Qubiter, but written in Python. But this new project will also include much more than that.
+An earlier C++ computer program also called Qubiter (see http://www.ar-tiste.com/qubiter.html), written by Robert R. Tucci, did only quantum compiling. This newer project includes a quantum compiler similar to the earlier Qubiter, but written in Python. But this new project also includes much more than that.
 
-On this initial release, we have included classes for reading and writing quantum circuit files. Also for embedding a circuit inside a larger one. And, last but not least, we've included a simulator.
+We've included classes for reading and writing quantum circuit files. Also for expanding circuits with gates that have multiple controls into circuits with only CNOTs and single qubit rotation gates. Also for embedding a circuit inside a larger one. And, last but not least, we've included a simulator.
 
 The simulator hasn't been bench-marked but should be pretty fast, because it relies on Numpy, which is a Python wrapper for C code.
 
@@ -17,7 +17,7 @@ The quantum circuits are draw in ASCII (not in postscript or in a proprietary fo
 
 Quantum Fog at GitHub (see https://github.com/artiste-qb-net/quantum-fog) is a twin project started by the same people. We hope that eventually Quantum Fog will call Qubiter to perform some tasks, like quantum compiling and simulating.
 
-Qubiter at GitHub is licensed under the BSD license (3 clause version) with an added clause at the end, taken almost verbatim from the Apache 2.0 license, granting additional Patent rights. See `LICENSE.md`.
+Most of Qubiter at GitHub is licensed under the BSD license (3 clause version) with an added clause at the end, taken almost verbatim from the Apache 2.0 license, granting additional Patent rights. See `LICENSE.md`.
 
 ##Contributors##
 

@@ -332,7 +332,7 @@ if __name__ == "__main__":
                                 file_prefix="io_folder/ph_est_test",
                                 emb=fin_emb,
                                 zero_bit_first=zf)
-        wr.write_mc_u2()
+        wr.write_c_u2()
         wr.write_NOTA("next write h.c.")
         wr.write_hermitian()
         wr.close_files()

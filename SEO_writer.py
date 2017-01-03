@@ -47,14 +47,12 @@ class SEO_writer:
         http://arxiv.org/abs/1004.2205
         "Quibbs, a Code Generator for Quantum Gibbs Sampling"
 
-    The following images from the above paper are stored in the same folder
-    as this python file.
+    The following pdf is stored in the same folder as this python file.
 
-        ZLpic_file_examples.pdf
-        eng_file_examples.pdf
+        qubiter_rosetta_stone.pdf
 
-    These 2 images give examples of lines in analytic/Picture/English
-    formats. The Picture file pdf follows the ZL convention.
+    This pdf gives examples of lines in analytic/Picture/English formats.
+    The Picture file examples follow the ZL convention.
 
     3 kinds (called 0, 1, 2) of measurements MEAS are allowed. A type 0
     measurement inserts a projector |0><0| = n = P_0 at the target bit. A
@@ -249,7 +247,7 @@ class SEO_writer:
 
         """
 
-        # preamble, same for all 3 controlled gate methods
+        # preamble, same for all controlled gate methods
         self.line_counter += 1
         assert not self.english_out.closed
         assert not self.picture_out.closed
@@ -350,7 +348,7 @@ class SEO_writer:
 
         """
 
-        # preamble, same for all 3 controlled gate methods
+        # preamble, same for all controlled gate methods
         self.line_counter += 1
         assert not self.english_out.closed
         assert not self.picture_out.closed
@@ -506,23 +504,17 @@ class SEO_writer:
         self.write_pic_line(pic_line)
         self.picture_out.write("\n")
 
-    def write_controlled_multiplexor_gate(self, tar_bit_pos,
-            trols, with_minus, rad_angles):
+    def write_controlled_multiplexor_gate(self,
+                tar_bit_pos, trols, rad_angles):
         """
-        Writes a line in eng & pic files for a multiplexor 'MP_Y' with
-        >= 0 controls.
+        Writes a line in eng & pic files for a multiplexor 'MP_Y' with >= 0
+        controls of either int (integer, intrinsic) or True/False kind.
 
-        The definition of multiplexors and how they are specified in both
-        English and Picture files is described in the references given in
-        the docstring of this class.
 
         Parameters
         ----------
         tar_bit_pos : int
         trols : Controls
-        with_minus : bool
-            When this is True, angles are multiplied by -1.
-            Useful if need complex conjugate of multiplexor.
         rad_angles : list[float]
 
         Returns
@@ -531,7 +523,7 @@ class SEO_writer:
 
         """
 
-        # preamble, same for all 3 controlled gate methods
+        # preamble, same for all controlled gate methods
         self.line_counter += 1
         assert not self.english_out.closed
         assert not self.picture_out.closed
@@ -572,7 +564,7 @@ class SEO_writer:
             # int is subclass of bool
             # so isinstance(x, int) will be true for x bool too!
             if not isinstance(x, bool):
-                kind_str = "(" + str(x)
+                kind_str = ":" + str(x)
             elif not x:
                 kind_str = "F"
             elif x:
@@ -583,7 +575,7 @@ class SEO_writer:
         self.english_out.write("\tBY\t")
         for k in range(num_angles):
             self.english_out.write(
-                str((-1 if with_minus else 1)*rad_angles[k]*180/np.pi) +
+                str(rad_angles[k]*180/np.pi) +
                 ("\n" if k == (num_angles-1) else "\t"))
         
         # picture file
@@ -616,7 +608,7 @@ class SEO_writer:
 
             if is_control:
                 if not isinstance(control_kind, bool):
-                    pic_line += "@O" + dos
+                    pic_line += "%" + tres
                 elif not control_kind:
                     pic_line += "O" + tres
                 elif control_kind:
@@ -632,7 +624,114 @@ class SEO_writer:
             
         self.write_pic_line(pic_line)
         self.picture_out.write("\n")
-        
+
+    def write_controlled_diag_unitary_gate(self, trols, rad_angles):
+        """
+        Writes a line in eng & pic files for a diagonal unitary gate 'DIAG'
+        with >= 0 controls of either int (integer, intrinsic) or True/False
+        kind.
+
+        Parameters
+        ----------
+        trols : Controls
+        rad_angles : list[float]
+
+        Returns
+        -------
+        None
+
+        """
+
+        # preamble, same for all controlled gate methods
+        self.line_counter += 1
+        assert not self.english_out.closed
+        assert not self.picture_out.closed
+
+        # num_bits_bef = self.emb.num_bits_bef
+        num_bits_aft = self.emb.num_bits_aft
+        # aft_tar_bit_pos = self.emb.aft(tar_bit_pos)
+
+        aft_trols = trols.new_embedded_self(self.emb)
+        # add extra controls if there are any
+        extra_dict = self.emb.extra_controls.bit_pos_to_kind
+        if extra_dict:
+            aft_trols.bit_pos_to_kind.update(extra_dict)
+            aft_trols.refresh_lists()
+
+        # number of controls may be zero
+        num_controls = len(aft_trols.bit_pos)
+        # end of preamble
+
+        num_int_controls = aft_trols.get_num_int_controls()
+        assert num_int_controls != 0, \
+            "d-unitary with no half-moon controls"
+        num_angles = len(rad_angles)
+        assert num_angles == (1 << num_int_controls),\
+            "wrong number of d-unitary angles"
+
+        # english file
+        self.english_out.write("DIAG\tIF\t")
+
+        # list bit-positions in decreasing order
+        for c in range(num_controls):
+            x = aft_trols.kinds[c]
+            kind_str = ""
+            # int is subclass of bool
+            # so isinstance(x, int) will be true for x bool too!
+            if not isinstance(x, bool):
+                kind_str = ":" + str(x)
+            elif not x:
+                kind_str = "F"
+            elif x:
+                kind_str = "T"
+            self.english_out.write(
+                str(aft_trols.bit_pos[c]) + kind_str + "\t")
+        # use BY to indicate end of controls
+        self.english_out.write("\tBY\t")
+        for k in range(num_angles):
+            self.english_out.write(
+                str(rad_angles[k]*180/np.pi) +
+                ("\n" if k == (num_angles-1) else "\t"))
+
+        # picture file
+        pic_line = ""
+        biggest = aft_trols.bit_pos[0]
+        smallest = aft_trols.bit_pos[num_controls-1]
+
+        # k a bit position
+        for k in range(num_bits_aft-1, biggest, -1):
+            pic_line += "|   "
+
+        c_int = 0
+        for k in range(biggest, smallest-1, -1):
+            is_control = False
+            control_kind = False
+            tres = "   " if (k == smallest) else "---"
+
+            # c_int starts at last value
+            for c in range(c_int, num_controls, +1):
+                if k == aft_trols.bit_pos[c]:
+                    is_control = True
+                    control_kind = aft_trols.kinds[c]
+                    c_int += 1
+                    break
+
+            if is_control:
+                if not isinstance(control_kind, bool):
+                    pic_line += "%" + tres
+                elif not control_kind:
+                    pic_line += "O" + tres
+                elif control_kind:
+                    pic_line += "@" + tres
+            else:  # is not control
+                pic_line += "+" + tres
+
+        for k in range(smallest-1, -1, -1):
+            pic_line += "|   "
+
+        self.write_pic_line(pic_line)
+        self.picture_out.write("\n")
+
     def write_bit_swap(self, bit1, bit2):
         """
         Write a line in eng & pic files for a 'SWAP' with no controls.
@@ -709,8 +808,7 @@ class SEO_writer:
         self.write_controlled_one_bit_gate(
             tar_bit_pos, trols, gate_fun, [ang_rads])
         
-    def write_multiplexor_gate(
-            self, tar_bit_pos, controls, with_minus, rad_angles):
+    def write_multiplexor_gate(self, tar_bit_pos, controls, rad_angles):
         """
         Write a line in eng & pic files for a multiplexor 'MP_Y' with
         no T/F controls.
@@ -719,7 +817,6 @@ class SEO_writer:
         ----------
         tar_bit_pos : int
         controls : Controls
-        with_minus : bool
         rad_angles : list[float]
 
         Returns
@@ -731,7 +828,28 @@ class SEO_writer:
         assert num_controls == controls.get_num_int_controls(),\
             "some of the controls of this multiplexor are not half-moons"
         self.write_controlled_multiplexor_gate(
-            tar_bit_pos, controls, with_minus, rad_angles)
+            tar_bit_pos, controls, rad_angles)
+
+    def write_diag_unitary_gate(self, controls, rad_angles):
+        """
+        Write a line in eng & pic files for a diagonal unitary 'DIAG' with
+        no T/F controls.
+
+        Parameters
+        ----------
+        controls : Controls
+        rad_angles : list[float]
+
+        Returns
+        -------
+        None
+
+        """
+        num_controls = len(controls.bit_pos)
+        assert num_controls == controls.get_num_int_controls(),\
+            "some of the controls of this diagonal unitary are not half-moons"
+        self.write_controlled_diag_unitary_gate(controls, rad_angles)
+
 
 if __name__ == "__main__":
     num_bits = 5
@@ -801,13 +919,13 @@ if __name__ == "__main__":
         trols1 = Controls(num_bits)
         trols1.bit_pos_to_kind = {1: 0, 2: 1, 3: True, 4: False}
         trols1.refresh_lists()
-        wr.write_controlled_multiplexor_gate(tar_bit_pos, trols1, False,
+        wr.write_controlled_multiplexor_gate(tar_bit_pos, trols1,
             [ang_rads/3, ang_rads*2/3, ang_rads, ang_rads*4/3])
 
         trols2 = Controls(num_bits)
         trols2.bit_pos_to_kind = {1: 0, 2: 1}
         trols2.refresh_lists()
-        wr.write_multiplexor_gate(tar_bit_pos, trols2, False,
+        wr.write_multiplexor_gate(tar_bit_pos, trols2,
             [ang_rads/3, ang_rads*2/3, ang_rads, ang_rads*4/3])
 
         wr.close_files()

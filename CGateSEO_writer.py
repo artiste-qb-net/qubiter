@@ -7,11 +7,14 @@ import collections as co
 class CGateSEO_writer(SEO_writer):
     """
     This class is a child of SEO_writer. When one_line=True, it writes a
-    single line for an mc_u2 (multi controlled U(2) gate). When
-    one_line=False, it writes an expansion of that gate. When
-    expand_1c_u2=True, the mc_u2 is expanded so that its sub-component 1c_u2
-    (uni controlled U(2) gates) are expanded into cnots and qubit rotations.
-    If expand_1c_u2=False, the 1c_u2 are not expanded.
+    single line for an c_u2 (controlled U(2) gate).  When one_line=False,
+    it writes an expansion of that gate. When expand_1c_u2=True, the c_u2 is
+    expanded so that its sub-component 1c_u2 (singly controlled U(2) gates)
+    are expanded into cnots and qubit rotations. If expand_1c_u2=False,
+    the 1c_u2 are not expanded.
+
+    If we say a gate is controlled, it may have 1 or more controls (it might
+    be singly or multiply controlled).
 
     Global phase factors are ignored, so expansions equal the original line
     up to a phase factor.
@@ -37,15 +40,14 @@ class CGateSEO_writer(SEO_writer):
     zero_bit_first : bool
 
     one_line : bool
-        When this is True, it writes a single line for the mc_u2 (multi
-        controlled U(2) gate). When False, it writes an expansion of that
-        gate.
+        When this is True, it writes a single line for the c_u2 ( controlled
+        U(2) gate). When False, it writes an expansion of that gate.
 
     expand_1c_u2 : bool
-        When this is True, the mc_u2 (multi controlled U(2) gate) is
-        expanded so that its sub-component 1c_u2 (uni controlled U(2) gates)
-        are expanded into cnots and qubit rotations. If this is False,
-        the 1c_u2 are not expanded.
+        When this is True, the c_u2 (controlled U(2) gate) is expanded so
+        that its sub-component 1c_u2 (uni controlled U(2) gates) are
+        expanded into cnots and qubit rotations. If this is False, the 1c_u2
+        are not expanded.
 
     do_checking : bool
         Does some checking of algebra
@@ -124,7 +126,7 @@ class CGateSEO_writer(SEO_writer):
 
     def write_1c_u2(self, tar_bit_pos, trol_bit_pos, rads_list, delta=None):
         """
-        Writes an expansion of an 1c_u2 (uni controlled U(2) matrix). In
+        Writes an expansion of an 1c_u2 (singly controlled U(2) matrix). In
         general, such an expansion will contain 3 cnots, but for special
         cases taken here into account, it's possible to get away with using
         only 2 or 1 cnots.
@@ -324,10 +326,10 @@ class CGateSEO_writer(SEO_writer):
             self.write_controlled_one_bit_gate(
                 tar_pos, trols, OneBitGates.sigx)
 
-    def write_mc_u2_internal(self, rads_list, delta=None):
+    def write_internal(self, rads_list, delta=None):
         """
-        This internal function is used in write_mc_u2() and is less general
-        than the latter. It expands an mc_u2 into a product of several
+        This internal function is used in write() and is less general than
+        the latter. It expands an c_u2 into a product of several
         "generalized n" controlled U(2) gates.
 
         Parameters
@@ -363,10 +365,10 @@ class CGateSEO_writer(SEO_writer):
 
     def write_hads(self, trol_kinds, herm_conj=False):
         """
-        Writes a chain of cnots that are useful when some of the controls of 
-        the mc_u2 being considered are n_bar = P_0 = |0><0| instead of n = 
-        P_1 = |1><1|. We are using the identity H n H = nbar to convert n's 
-        to nbar's. 
+        Writes a chain of cnots that are useful when some of the controls of
+        the c_u2 being considered are n_bar = P_0 = |0><0| instead of n =
+        P_1 = |1><1|. We are using the identity H n H = nbar to convert n's
+        to nbar's.
 
         Parameters
         ----------
@@ -389,15 +391,15 @@ class CGateSEO_writer(SEO_writer):
             if not trol_kinds[k]:
                 self.write_one_bit_gate(num_trols-k-1, OneBitGates.had2)
 
-    def write_mc_u2(self, trol_kinds, u2_fun, fun_arg_list=None):
+    def write(self, trol_kinds, u2_fun, fun_arg_list=None):
         """
         This is the most general function of this class. All other functions
         of the class are mostly internal and are called by this function.
         This function achieves the main goal of the class, which is to give
-        various expansions of an mc_u2 (multi controlled U(2) matrix). For
+        various expansions of an c_u2 (controlled U(2) matrix). For
         one_line=True, this function just calls
         write_controlled_one_bit_gate() of the parent class. For
-        one_line=False, it gives an expansion of the mc_u2.
+        one_line=False, it gives an expansion of the c_u2.
 
         Parameters
         ----------
@@ -432,10 +434,10 @@ class CGateSEO_writer(SEO_writer):
 
         if u2_fun == OneBitGates.P_0_phase_fac:
             rads = fun_arg_list[0]
-            self.write_mc_u2_internal([0, 0, rads/2], rads/2)
+            self.write_internal([0, 0, rads / 2], rads / 2)
         elif u2_fun == OneBitGates.P_1_phase_fac:
             rads = fun_arg_list[0]
-            self.write_mc_u2_internal([0, 0, -rads/2], rads/2)
+            self.write_internal([0, 0, -rads / 2], rads / 2)
         elif u2_fun == OneBitGates.sigx:
             if num_bits == 2:
                 # If it's a CNOT, no expansion necessary
@@ -445,27 +447,27 @@ class CGateSEO_writer(SEO_writer):
                 self.write_controlled_one_bit_gate(
                     tar_bit_pos, trols1, OneBitGates.sigx)
             else:
-                self.write_mc_u2_internal([np.pi/2, 0, 0], -np.pi/2)
+                self.write_internal([np.pi / 2, 0, 0], -np.pi / 2)
         elif u2_fun == OneBitGates.sigy:
-            self.write_mc_u2_internal([0, np.pi/2, 0], -np.pi/2)
+            self.write_internal([0, np.pi / 2, 0], -np.pi / 2)
         elif u2_fun == OneBitGates.sigz:
-            self.write_mc_u2_internal([0, 0, np.pi/2], -np.pi/2)
+            self.write_internal([0, 0, np.pi / 2], -np.pi / 2)
         elif u2_fun == OneBitGates.had2:
             rads = np.pi/(2*np.sqrt(2))
-            self.write_mc_u2_internal([rads, 0, rads], -np.pi/2)
+            self.write_internal([rads, 0, rads], -np.pi / 2)
         elif u2_fun == OneBitGates.rot_ax:
             rads = fun_arg_list[0]
             axis = fun_arg_list[1]
             if axis == 1:
-                self.write_mc_u2_internal([rads, 0, 0])
+                self.write_internal([rads, 0, 0])
             elif axis == 2:
-                self.write_mc_u2_internal([0, rads, 0])
+                self.write_internal([0, rads, 0])
             elif axis == 3:
-                self.write_mc_u2_internal([0, 0, rads])
+                self.write_internal([0, 0, rads])
             else:
                 assert False
         elif u2_fun == OneBitGates.rot:
-            self.write_mc_u2_internal(fun_arg_list)
+            self.write_internal(fun_arg_list)
         else:
             assert False, "writing an unsupported controlled gate"
 
@@ -500,11 +502,11 @@ if __name__ == "__main__":
         for one_line in [True, False]:
             wr.one_line = one_line
             if one_line:
-                wr.write_mc_u2(trol_kinds, u2_fun, fun_arg_list)
+                wr.write(trol_kinds, u2_fun, fun_arg_list)
             else:
                 for expand_1c_u2 in [False, True]:
                     wr.expand_1c_u2 = expand_1c_u2
                     wr.write_NOTA('--------expand_1c_u2=' + str(expand_1c_u2))
-                    wr.write_mc_u2(trol_kinds, u2_fun, fun_arg_list)
+                    wr.write(trol_kinds, u2_fun, fun_arg_list)
 
     wr.close_files()

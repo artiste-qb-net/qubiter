@@ -7,11 +7,7 @@ class Controls:
     key-value pairs of the form (a control's qubit number: its kind). Kinds
     can be either a bool or a non-negative integer. Kind is True if control
     is P_1 = n = |1><1|. Kind is False if control is P_0 = nbar = |0><0|.
-    Kind is a non-negative integer for multiplexor controls.
-
-    See the docstring of the class SEO_writer to get more info and further
-    references on the meaning of the non-negative numbers used for the
-    multiplexor kind.
+    Kind is a non-negative integer for MP_Y and DIAG controls.
 
     Attributes
     ----------
@@ -21,9 +17,10 @@ class Controls:
         Dictionary matching control bit position with its kind.
         The domain of the map bit_pos_to_kind is a subset of range(num_bits)
     bit_pos : list[int]
-        This is the keys half if you unzip bit_pos_to_kind.
+        This is the key's half if you unzip bit_pos_to_kind, in decreasing
+        order
     kinds : list[bool|int]
-        this is the values half if you unzip bit_pos_to_kind.
+        this is the value's half if you unzip bit_pos_to_kind.
 
     """
     # combines my JAVA classes Control, TFControls, MultiControls
@@ -47,7 +44,7 @@ class Controls:
         self.kinds = []
 
     @staticmethod
-    def new_from_old(old, extra_bits=0):
+    def copy(old, extra_bits=0):
         """
         Create a copy of self but add extra_bit many uncontrolled bits at the
         end.

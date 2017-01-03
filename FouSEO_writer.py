@@ -107,6 +107,35 @@ class FouSEO_writer(SEO_writer):
                 for k in range(r):
                     self.write_bit_swap(r, k)
 
+    @staticmethod
+    def fourier_trans_mat(num_rows, herm_conj=False):
+        """
+        This function returns a numpy array with the quantum Fourier
+        transform in it.
+
+        Parameters
+        ----------
+        num_rows : int
+            number of rows
+        herm_conj : bool
+            If True, changes sign of all phases, which produces the
+            hermitian conjugate of the matrix given when this is False
+
+        Returns
+        -------
+        np.array
+
+        """
+        norma = np.sqrt(num_rows)
+        sign = 1
+        if herm_conj:
+            sign = -1
+        mat = np.empty((num_rows, num_rows), dtype=complex)
+        for r in range(num_rows):
+            for s in range(num_rows):
+                mat[r, s] = np.exp(1j*sign*2*np.pi*r*s/num_rows)/norma
+        return mat
+
 if __name__ == "__main__":
     num_bits_bef = 4
     num_bits_aft = 6
@@ -122,4 +151,5 @@ if __name__ == "__main__":
         wr.write_hermitian()
         wr.close_files()
 
+    print(FouSEO_writer.fourier_trans_mat(3))
 

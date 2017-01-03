@@ -3,7 +3,7 @@ import copy as cp
 import pprint as pp
 from SEO_reader import *
 from OneBitGates import *
-import Utilities as ut
+# import Utilities as ut
 
 
 class SEO_simulator(SEO_reader):
@@ -12,7 +12,7 @@ class SEO_simulator(SEO_reader):
 
     This class has SEO_reader as a parent. Each line of an English file is
     read by the parent class and handed over to the use_ functions of this
-    simulator class. The use functions multiply the current state vector by
+    simulator class. The use_  functions multiply the current state vector by
     the unitary matrix that represents the latest line read.
 
     An initial state vector can be entered via the constructor or else it is
@@ -107,6 +107,76 @@ class SEO_simulator(SEO_reader):
         self.verbose = verbose
 
         SEO_reader.__init__(self, file_prefix, num_bits, verbose)
+
+    @staticmethod
+    def traditional_st_vec(num_bits, st_vec):
+        """
+        Internally, arrays in Qubiter assume ZF convention and state vectors
+        have shape = [2]*num_bits. However, the traditional way of writing a
+        state vector is as a column array of dimension 1<< num_bits in ZL
+        convention. This function returns the traditional view. So it
+        reshapes (flattens) the array and reverses the axes (reversing axes
+        takes it from ZF to ZL).
+
+        Parameters
+        ----------
+        num_bits : int
+        st_vec : np.array
+
+        Returns
+        -------
+        np.array
+
+        """
+        assert st_vec.shape == tuple([2]*num_bits)
+        perm = list(reversed(range(num_bits)))
+        return np.transpose(st_vec, perm).flatten()
+
+    @staticmethod
+    def pp_st_vec(arr, omit_zero_amps=False, show_probs=False, do_ZF=True):
+        """
+        pp=pretty print. Print entries of state vec numpy array as column of
+        ( index, array value) pairs of the form (i, j, k, ...) arr[i, j, k,
+        ...], so zero bit first.
+
+        Parameters
+        ----------
+        arr : numpy.array
+        omit_zero_amps : bool
+            If True, will not list states with zero amplitude
+        show_probs : bool
+            If True, will show probability of each amplitude
+
+        do_ZF : bool
+            If True, multi-index in usual order, ZF (Zero bit First)
+            convention. If False, multi-index in reverse of usual order,
+            ZL (Zero bit Last) convention.
+
+        Returns
+        -------
+        None
+
+        """
+        for ind, x in np.ndenumerate(arr):
+            index = ind
+            label = 'ZF'
+            if not do_ZF:
+                index = ind[::-1]  # this reverses order of tuple
+                label = 'ZL'
+            ind_str = str(index) + label
+            mag = np.absolute(x)
+            if show_probs:
+                if omit_zero_amps:
+                    if mag > 1E-6:
+                        print(ind_str, x, ', prob=', mag**2)
+                else:
+                    print(ind_str, x, ', prob=', mag**2)
+            else:
+                if omit_zero_amps:
+                    if mag > 1E-6:
+                        print(ind_str, x)
+                else:
+                    print(ind_str, x)
 
     @staticmethod
     def get_ground_st(num_bits):
@@ -273,7 +343,7 @@ class SEO_simulator(SEO_reader):
                     print('ZF convention (Zero bit First in state tuple)')
                 else:
                     print('ZL convention (Zero bit Last in state tuple)')
-                ut.pp_numpy_arr(fin_st_vec, omit_zero_amps, show_probs, do_ZF)
+                self.pp_st_vec(fin_st_vec, omit_zero_amps, show_probs, do_ZF)
             else:
                 print(fin_st_vec)
         print('total probability of final state vector ' +
@@ -413,31 +483,36 @@ class SEO_simulator(SEO_reader):
                       SEO_simulator.get_total_prob(self.cur_st_vec_list[br]))
                 print('bit probs = ',
                       SEO_simulator.get_bit_probs(self.cur_st_vec_list[br]))
-        
-    def use_NOTA(self, bla_str):
+
+    def use_DIAG(self, trols, rad_angles):
         """
-        Overrides the parent class use_ function. Does nothing.
+        This method should not be called. If called, it explains why it
+        shouldn't be called.
 
         Parameters
         ----------
-        bla_str : str
+        trols : Controls
+        rad_angles : list[float]
 
         Returns
         -------
-        None
 
         """
-        pass
+        assert False, \
+            "This class cannot simulate a circuit containing " \
+            "raw diagonal unitaries DIAG. Work around: use first our" \
+            "DiagUnitaryExpander class to expand " \
+            "DIAGs into simpler gates."
 
-    def use_SWAP(self, bit1, bit2, controls):
+    def use_HAD2(self, tar_bit_pos, controls):
         """
         Overrides the parent class use_ function. Calls
-        evolve_by_controlled_bit_swap().
+        evolve_by_controlled_one_bit_gate() for had2.
+
 
         Parameters
         ----------
-        bit1 : int
-        bit2 : int
+        tar_bit_pos : int
         controls : Controls
 
         Returns
@@ -445,7 +520,8 @@ class SEO_simulator(SEO_reader):
         None
 
         """
-        self.evolve_by_controlled_bit_swap(bit1, bit2, controls)
+        gate = OneBitGates.had2()
+        self.evolve_by_controlled_one_bit_gate(tar_bit_pos, controls, gate)
 
     def use_MEAS(self, tar_bit_pos, kind):
         """
@@ -501,6 +577,42 @@ class SEO_simulator(SEO_reader):
         else:
             assert False, 'unsupported measurement kind'
 
+    def use_MP_Y(self, tar_bit_pos, trols, rad_angles):
+        """
+        This method should not be called. If called, it explains why it
+        shouldn't be called.
+
+        Parameters
+        ----------
+        tar_bit_pos : int
+        trols : Controls
+        rad_angles : list[float]
+
+        Returns
+        -------
+
+        """
+        assert False, \
+            "This class cannot simulate a circuit containing " \
+            "raw multiplexors MP_Y. Work around: use first our" \
+            "MultiplexorExpander class to expand " \
+            "MP_Ys into simpler gates."
+
+    def use_NOTA(self, bla_str):
+        """
+        Overrides the parent class use_ function. Does nothing.
+
+        Parameters
+        ----------
+        bla_str : str
+
+        Returns
+        -------
+        None
+
+        """
+        pass
+
     def use_PHAS(self, angle_degs, tar_bit_pos, controls):
         """
         Overrides the parent class use_ function. Calls
@@ -545,50 +657,6 @@ class SEO_simulator(SEO_reader):
             1: OneBitGates.P_1_phase_fac
         }
         gate = fun[projection_bit](angle_degs*np.pi/180)
-        self.evolve_by_controlled_one_bit_gate(tar_bit_pos, controls, gate)
-
-    def use_SIG(self, axis, tar_bit_pos, controls):
-        """
-        Overrides the parent class use_ function. Calls
-        evolve_by_controlled_one_bit_gate() for sigx, sigy, sigz.
-
-        Parameters
-        ----------
-        axis : int
-            1, 2, 3 for x, y, z
-        tar_bit_pos : int
-        controls : Controls
-
-        Returns
-        -------
-        None
-
-        """
-        fun = {
-            1: OneBitGates.sigx,
-            2: OneBitGates.sigy,
-            3: OneBitGates.sigz
-        }
-        gate = fun[axis]()
-        self.evolve_by_controlled_one_bit_gate(tar_bit_pos, controls, gate)
-
-    def use_HAD2(self, tar_bit_pos, controls):
-        """
-        Overrides the parent class use_ function. Calls
-        evolve_by_controlled_one_bit_gate() for had2.
-
-
-        Parameters
-        ----------
-        tar_bit_pos : int
-        controls : Controls
-
-        Returns
-        -------
-        None
-
-        """
-        gate = OneBitGates.had2()
         self.evolve_by_controlled_one_bit_gate(tar_bit_pos, controls, gate)
 
     def use_ROT(self, axis,
@@ -639,26 +707,49 @@ class SEO_simulator(SEO_reader):
                     angle_z_degs*np.pi/180)
         self.evolve_by_controlled_one_bit_gate(tar_bit_pos, controls, gate)
 
-    def use_MP_Y(self, tar_bit_pos, trols, rad_angles):
+    def use_SIG(self, axis, tar_bit_pos, controls):
         """
-        This method should not be called. If called, it explains why it
-        shouldn't be called.
+        Overrides the parent class use_ function. Calls
+        evolve_by_controlled_one_bit_gate() for sigx, sigy, sigz.
 
         Parameters
         ----------
+        axis : int
+            1, 2, 3 for x, y, z
         tar_bit_pos : int
-        trols : Controls
-        rad_angles : list[float]
+        controls : Controls
 
         Returns
         -------
+        None
 
         """
-        assert False, \
-            "This class cannot simulate a circuit containing " \
-            "raw multiplexors. Work around: use first our" \
-            "MultiplexorExpander application to expand " \
-            "multiplexors into simpler gates "
+        fun = {
+            1: OneBitGates.sigx,
+            2: OneBitGates.sigy,
+            3: OneBitGates.sigz
+        }
+        gate = fun[axis]()
+        self.evolve_by_controlled_one_bit_gate(tar_bit_pos, controls, gate)
+
+    def use_SWAP(self, bit1, bit2, controls):
+        """
+        Overrides the parent class use_ function. Calls
+        evolve_by_controlled_bit_swap().
+
+        Parameters
+        ----------
+        bit1 : int
+        bit2 : int
+        controls : Controls
+
+        Returns
+        -------
+        None
+
+        """
+        self.evolve_by_controlled_bit_swap(bit1, bit2, controls)
+
 
 if __name__ == "__main__":
 

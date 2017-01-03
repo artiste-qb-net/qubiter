@@ -24,6 +24,23 @@ def centered_rads(ang_rads):
     return ang_rads
 
 
+def centered_rads1(ang_rads_list):
+    """
+    Same as centered_rads() but for list
+
+    Parameters
+    ----------
+    ang_rads_list : list[float]
+
+    Returns
+    -------
+    list[float]
+
+    """
+
+    return [centered_rads(ang) for ang in ang_rads_list]
+
+
 def increment_dict(di, key, inc, initial=0):
     """
     Increments dictionary entry at position 'key' by inc. If item at
@@ -47,50 +64,64 @@ def increment_dict(di, key, inc, initial=0):
     di[key] += inc
 
 
-def pp_numpy_arr(arr, omit_zero_amps=False, show_probs=False, do_ZF=True):
+def is_arr(x):
     """
-    pp=pretty print. Print numpy array as column of (index, array value)
-    pairs of the form (i, j, k, ...) arr[i, j, k, ...], so zero bit first.
+    Returns True iff x is a numpy array.
 
     Parameters
     ----------
-    arr : numpy.array
-    omit_zero_amps : bool
-        If True, will not list states with zero amplitude
-    show_probs : bool
-        If True, will show probability of each amplitude
-
-    do_ZF : bool
-        If True, multi-index in usual order, ZF (Zero bit First) convention.
-        If False, multi-index in reverse of usual order, ZL (Zero bit Last)
-        convention.
+    x :
 
     Returns
     -------
-    None
+    bool
 
     """
-    for ind, x in np.ndenumerate(arr):
-        index = ind
-        label = 'ZF'
-        if not do_ZF:
-            index = ind[::-1]  # this reverses order of tuple
-            label = 'ZL'
-        ind_str = str(index) + label
-        mag = np.absolute(x)
-        if show_probs:
-            if omit_zero_amps:
-                if mag > 1E-6:
-                    print(ind_str, x, ', prob=', mag**2)
-            else:
-                print(ind_str, x, ', prob=', mag**2)
-        else:
-            if omit_zero_amps:
-                if mag > 1E-6:
-                    print(ind_str, x)
-            else:
-                print(ind_str, x)
+    return isinstance(x, np.ndarray)
 
 
+def is_diag_mat(arr):
+    """
+    Returns True iff arr is numpy array for diagonal square matrix
+
+    Parameters
+    ----------
+    arr : np.ndarray
+
+    Returns
+    -------
+    bool
+
+    """
+    assert is_arr(arr)
+
+    num_rows = arr.shape[0]
+    assert arr.shape == (num_rows, num_rows)
+    # this extracts diagonal v, then
+    # creates a diagonal matrix with v as diagonal
+    arr1 = np.diag(np.diag(arr))
+    return np.linalg.norm(arr - arr1) < 1e-6
+
+
+def is_const_mat(arr):
+    """
+    Returns True iff arr is numpy array for constant square matrix.
+
+    Parameters
+    ----------
+    arr : np.ndarray
+
+    Returns
+    -------
+    bool
+
+    """
+
+    if not is_diag_mat(arr):
+        return False
+    num_rows = arr.shape[0]
+    arr1 = arr[0, 0]*np.ones((num_rows,))
+    arr2 = np.diag(arr)
+    return np.linalg.norm(arr1 - arr2) < 1e-6
 
 
