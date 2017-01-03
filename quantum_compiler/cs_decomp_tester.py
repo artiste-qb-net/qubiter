@@ -48,7 +48,9 @@ def cs_decomp(unitary_mats):
 
         # In[3]: import cuncsd
         # In[4]: print(cuncsd.cuncsd.__doc__)
-        # x11,x12,x21,x22,theta,u1,u2,v1t,v2t,work,rwork,iwork,info = cuncsd(p,x11,x12,x21,x22,[jobu1,jobu2,jobv1t,jobv2t,trans,signs,m,q,ldx11,ldx12,ldx21,ldx22,ldu1,ldu2,ldv1t,ldv2t,lwork,lrwork])
+        # x11,x12,x21,x22,theta,u1,u2,v1t,v2t,work,rwork,iwork,info =
+        # cuncsd(p,x11,x12,x21,x22,[jobu1,jobu2,jobv1t,jobv2t,trans,signs,
+        # m,q,ldx11,ldx12,ldx21,ldx22,ldu1,ldu2,ldv1t,ldv2t,lwork,lrwork])
         #
         # Wrapper for ``cuncsd``.
         #
