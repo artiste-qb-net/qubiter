@@ -117,7 +117,6 @@ def cs_decomp(unitary_mats):
         # iwork : rank-1 array('i') with bounds (*)
         # info : int
 
-
     left_mats = []
     central_mats = []
     right_mats = []
