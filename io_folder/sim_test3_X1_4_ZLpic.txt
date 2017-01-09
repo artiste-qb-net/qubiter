@@ -1,16 +1,16 @@
 NOTA	testing MEAS branching. Each kind 2 measurement doubles number of state vectors
-|   H   |   |   
+|   X   |   |   
 |   @---+---X   
-|   H   |   |   
+|   X   |   |   
 |   M0  |   |   
-|   H   |   |   
+|   X   |   |   
 |   @---X   |   
-|   H   |   |   
+|   X   |   |   
 M   |   |   |   
 |   |   X   |   
 M   |   |   |   
 NOTA	--------expansion of SWAP
-|   |   H   |   
+|   |   X   |   
 R   |   |   |   
 X---+---@   |   
 R   |   |   |   
@@ -71,4 +71,4 @@ X---+---@   |
 R   |   |   |   
 |   |   Rz  |   
 |   @---X   |   
-|   |   H   |   
+|   |   X   |   

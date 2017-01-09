@@ -1,18 +1,18 @@
 NOTA	testing embedded loops feature of class SEO_simulator. 14 ops
-|   H   |   |   
+|   X   |   |   
 |   @---+---X   
-|   H   |   |   
+|   X   |   |   
 LOOP	20	REPS:	2
-|   H   |   |   
+|   X   |   |   
 |   @---X   |   
-|   H   |   |   
+|   X   |   |   
 LOOP	10	REPS:	4
 @---X   |   |   
 NEXT	10
-|   H   |   |   
+|   X   |   |   
 |   @---X   |   
-|   H   |   |   
+|   X   |   |   
 NEXT	20
-|   H   |   |   
+|   X   |   |   
 |   @---+---X   
-|   H   |   |   
+|   X   |   |   

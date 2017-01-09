@@ -367,8 +367,8 @@ class CGateSEO_writer(SEO_writer):
         """
         Writes a chain of cnots that are useful when some of the controls of
         the c_u2 being considered are n_bar = P_0 = |0><0| instead of n =
-        P_1 = |1><1|. We are using the identity H n H = nbar to convert n's
-        to nbar's.
+        P_1 = |1><1|. We are using the identity sigx n sigx = nbar to
+        convert n's to nbar's.
 
         Parameters
         ----------
@@ -389,7 +389,7 @@ class CGateSEO_writer(SEO_writer):
             range1 = reversed(range(num_trols))
         for k in range1:
             if not trol_kinds[k]:
-                self.write_one_bit_gate(num_trols-k-1, OneBitGates.had2)
+                self.write_one_bit_gate(num_trols-k-1, OneBitGates.sigx)
 
     def write(self, trol_kinds, u2_fun, fun_arg_list=None):
         """
