@@ -373,20 +373,20 @@ class CGateSEO_writer(SEO_writer):
         the latter. It expands an c_u2 into a product of 1c_u2 with
         intervening cnots.
 
-        In the CktExpander.pdf documentation, we show that any c_u2 can be
-        expanded into a product of several "generalized n" controlled U(2)
-        gates of the form  W(num_bits-1)^GN, wherein U(2) matrix W(
+        In the CGateSEO_writer.pdf documentation, we show that any c_u2 can
+        be expanded into a product of several "generalized n" controlled U(
+        2) gates of the form  W(num_bits-1)^GN, wherein U(2) matrix W(
         num_bits-1) is controlled by a "generalized n" equal to GN = n(
         n_index_list)
 
-        Since the factors W(num_bits-1)^GN in the product are
-        self-commuting, it is possible and convenient to order them in Gray
-        code order (Qubiter knows about Gray Code via its class BitVector).
+        Since the factors W(num_bits-1)^GN in the product commute amongst
+        themselves, it is possible and convenient to order them in Gray code
+        order (Qubiter knows about Gray Code via its class BitVector).
         Ordering them in Gray Code allows this function to cancel some cnots
         from adjacent GN.
 
         An earlier version of this function, now commented, did not use Gray
-        Code and therefore used more cnots than this one.
+        Code and used more cnots than this one.
 
         Parameters
         ----------
