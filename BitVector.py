@@ -266,6 +266,18 @@ class BitVector:
                 bit_str += '0'
         return bit_str
 
+    def __str__(self):
+        """
+        Readable representation of self
+
+        Returns
+        -------
+        str
+
+        """
+
+        return self.get_bit_string() + '=' + str(self.dec_rep)
+
     @staticmethod
     def new_with_T_on_diff(bvec1, bvec2):
         """

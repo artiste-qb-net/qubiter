@@ -1,5 +1,6 @@
 from SEO_writer import *
 from SEO_simulator import *
+from BitVector import *
 import itertools as it
 import collections as co
 
@@ -55,7 +56,8 @@ class CGateSEO_writer(SEO_writer):
     """
 
     def __init__(self, file_prefix, emb,
-            one_line=True, expand_1c_u2=False, do_checking=False, **kwargs):
+            one_line=True, expand_1c_u2=False, do_checking=False,
+                 verbose=False, **kwargs):
         """
         Constructor
 
@@ -66,6 +68,7 @@ class CGateSEO_writer(SEO_writer):
         one_line : bool
         expand_1c_u2 : bool
         do_checking : bool
+        verbose : bool
         kwargs : dict
 
         Returns
@@ -76,6 +79,7 @@ class CGateSEO_writer(SEO_writer):
         self.one_line = one_line
         self.expand_1c_u2 = expand_1c_u2
         self.do_checking = do_checking
+        self.verbose = verbose
         SEO_writer.__init__(self, file_prefix, emb, **kwargs)
 
     @staticmethod
@@ -282,55 +286,107 @@ class CGateSEO_writer(SEO_writer):
                     print(diff)
                     assert False
 
-    def write_gen_n_controlled_u2(self, n_index_list, rads_list, delta=None):
-        """
-        Writes an expansion for a U(2) matrix W(num_bits-1) that is
-        controlled by a "generalized n" equal to GN = n(n_index_list). Thus,
-        the gate written by this function equals W(num_bits-1)^GN.
-        Generalized n's are defined in the reference CktExpander.pdf
-
-        Parameters
-        ----------
-        n_index_list : list[int]
-            indices of the generalized n
-
-        rads_list : list[float]
-            list of 3 angles in radians. If it equals [radx, rady, radz],
-            then U(2) gate given by e^{i*delta} exp(i*(radx*sigx + rady*sigy
-            + radz*sigz))
-
-        delta : float|None
-            U(2) gate being controlled equals e^{i*delta} times SU(2) gate
-
-        Returns
-        -------
-        None
-
-        """
-
-        num_bits = self.emb.num_bits_bef
-        
-        for k in range(len(n_index_list)-1):
-            tar_pos = n_index_list[k+1]
-            trol_pos = n_index_list[k]
-            trols = Controls.new_knob(num_bits, trol_pos, True)
-            self.write_controlled_one_bit_gate(
-                tar_pos, trols, OneBitGates.sigx)
-
-        self.write_1c_u2(num_bits - 1, n_index_list[-1], rads_list, delta)
-
-        for k in reversed(range(len(n_index_list)-1)):
-            tar_pos = n_index_list[k+1]
-            trol_pos = n_index_list[k]
-            trols = Controls.new_knob(num_bits, trol_pos, True)
-            self.write_controlled_one_bit_gate(
-                tar_pos, trols, OneBitGates.sigx)
+    # def write_gen_n_controlled_u2(self, n_index_list, rads_list, delta=None):
+    #     """
+    #     Writes an expansion for a U(2) matrix W(num_bits-1) that is
+    #     controlled by a "generalized n" equal to GN = n(n_index_list). Thus,
+    #     the gate written by this function equals W(num_bits-1)^GN.
+    #     Generalized n's are defined in the reference CktExpander.pdf
+    #
+    #     Parameters
+    #     ----------
+    #     n_index_list : list[int]
+    #         indices of the generalized n
+    #
+    #     rads_list : list[float]
+    #         list of 3 angles in radians. If it equals [radx, rady, radz],
+    #         then U(2) gate given by e^{i*delta} exp(i*(radx*sigx + rady*sigy
+    #         + radz*sigz))
+    #
+    #     delta : float|None
+    #         U(2) gate being controlled equals e^{i*delta} times SU(2) gate
+    #
+    #     Returns
+    #     -------
+    #     None
+    #
+    #     """
+    #
+    #     num_bits = self.emb.num_bits_bef
+    #
+    #     for k in range(len(n_index_list)-1):
+    #         tar_pos = n_index_list[k+1]
+    #         trol_pos = n_index_list[k]
+    #         trols = Controls.new_knob(num_bits, trol_pos, True)
+    #         self.write_controlled_one_bit_gate(
+    #             tar_pos, trols, OneBitGates.sigx)
+    #
+    #     self.write_1c_u2(num_bits - 1, n_index_list[-1], rads_list, delta)
+    #
+    #     for k in reversed(range(len(n_index_list)-1)):
+    #         tar_pos = n_index_list[k+1]
+    #         trol_pos = n_index_list[k]
+    #         trols = Controls.new_knob(num_bits, trol_pos, True)
+    #         self.write_controlled_one_bit_gate(
+    #             tar_pos, trols, OneBitGates.sigx)
+    #
+    # def write_internal(self, rads_list, delta=None):
+    #     """
+    #     This internal function is used in write() and is less general than
+    #     the latter. It expands an c_u2 into a product of several
+    #     "generalized n" controlled U(2) gates.
+    #
+    #     Parameters
+    #     ----------
+    #     rads_list : list[float]
+    #         list of 3 angles in radians. If it equals [radx, rady, radz],
+    #         then U(2) gate given by e^{i*delta} exp(i*(radx*sigx + rady*sigy
+    #         + radz*sigz))
+    #
+    #     delta : float|None
+    #         U(2) gate being controlled equals e^{i*delta} times SU(2) gate
+    #
+    #     Returns
+    #     -------
+    #     None
+    #
+    #     """
+    #     num_bits = self.emb.num_bits_bef
+    #     for num_boxes in range(1, num_bits):
+    #         for comb in it.combinations(range(0, num_bits-1), num_boxes):
+    #             n_index_list = sorted(list(comb), reverse=True)
+    #             sign = 1
+    #             if len(comb) % 2 == 0:
+    #                 sign = -1
+    #             new_rads_list = list(
+    #                 sign*np.array(rads_list)/(1 << (num_bits-2)))
+    #             if delta:
+    #                 new_delta = sign*delta/(1 << (num_bits-2))
+    #             else:
+    #                 new_delta = None
+    #             self.write_gen_n_controlled_u2(
+    #                 n_index_list, new_rads_list, new_delta)
 
     def write_internal(self, rads_list, delta=None):
         """
         This internal function is used in write() and is less general than
-        the latter. It expands an c_u2 into a product of several
-        "generalized n" controlled U(2) gates.
+        the latter. It expands an c_u2 into a product of 1c_u2 with
+        intervening cnots.
+
+        In the CktExpander.pdf documentation, we show that any c_u2 can be
+        expanded into a product of several "generalized n" controlled U(2)
+        gates of the form  W(num_bits-1)^GN, wherein U(2) matrix W(
+        num_bits-1) is controlled by a "generalized n" equal to GN = n(
+        n_index_list)
+
+        Since the factors W(num_bits-1)^GN in the product are
+        self-commuting, it is possible and convenient to order them in Gray
+        code order (Qubiter knows about Gray Code via its class BitVector).
+        Ordering them in Gray Code allows this function to cancel some cnots
+        from adjacent GN.
+
+        An earlier version of this function, now commented, did not use Gray
+        Code and therefore used more cnots than this one.
 
         Parameters
         ----------
@@ -348,20 +404,59 @@ class CGateSEO_writer(SEO_writer):
 
         """
         num_bits = self.emb.num_bits_bef
-        for num_boxes in range(1, num_bits):
-            for comb in it.combinations(range(0, num_bits-1), num_boxes):
-                n_index_list = sorted(list(comb), reverse=True)
-                sign = 1
-                if len(comb) % 2 == 0:
-                    sign = -1
-                new_rads_list = list(
-                    sign*np.array(rads_list)/(1 << (num_bits-2)))
-                if delta:
-                    new_delta = sign*delta/(1 << (num_bits-2))
+        num_trols = num_bits-1
+        max_f = (1 << num_trols)-1
+
+        def write_cnot(tar_bpos, trol_bpos):
+            trol = Controls.new_knob(num_bits, trol_bpos, True)
+            self.write_controlled_one_bit_gate(tar_bpos, trol,
+                                               OneBitGates.sigx)
+        def write_cnot_stair(bvec):
+            tar_bpos = bvec.find_rightmost_T_bit()
+            trol_bpos = tar_bpos
+            while True:
+                trol_bpos = bvec.find_T_bit_to_left_of(trol_bpos)
+                if trol_bpos == -1:
+                    break
+                write_cnot(tar_bpos, trol_bpos)
+
+        cur_bvec = BitVector(num_trols, 0)
+        prev_bvec = BitVector(num_trols, 0)
+        f, lazy = 0, 0
+        f, lazy = BitVector.lazy_advance(f, lazy)
+        cur_bvec.dec_rep = lazy
+        while f <= max_f:
+            if self.verbose:
+                print("\nf, lazy", f, lazy)
+                self.write_NOTA(str(prev_bvec) + "->" + str(cur_bvec))
+            sign = 1
+            if cur_bvec.get_num_T_bits() % 2 == 0:
+                sign = -1
+            new_rads_list = list(
+                sign*np.array(rads_list)/(1 << (num_bits-2)))
+            if delta:
+                new_delta = sign*delta/(1 << (num_bits-2))
+            else:
+                new_delta = None
+
+            diff_bvec = BitVector.new_with_T_on_diff(cur_bvec, prev_bvec)
+            diff_bpos = diff_bvec.find_rightmost_T_bit()
+            min_prev_bpos = prev_bvec.find_rightmost_T_bit()
+            min_cur_bpos = cur_bvec.find_rightmost_T_bit()
+
+            if f > 1:  # first 1c_u2 has not cnots preceding it
+                if min_cur_bpos == min_prev_bpos:
+                    write_cnot(min_cur_bpos, diff_bpos)
                 else:
-                    new_delta = None
-                self.write_gen_n_controlled_u2(
-                    n_index_list, new_rads_list, new_delta)
+                    write_cnot_stair(prev_bvec)
+                    write_cnot_stair(cur_bvec)
+
+            u2_trol_bpos = min_cur_bpos
+            self.write_1c_u2(
+                num_bits - 1, u2_trol_bpos, new_rads_list, new_delta)
+            prev_bvec = BitVector.copy(cur_bvec)
+            f, lazy = BitVector.lazy_advance(f, lazy)
+            cur_bvec.dec_rep = lazy
 
     def write_hads(self, trol_kinds, herm_conj=False):
         """
@@ -476,6 +571,17 @@ class CGateSEO_writer(SEO_writer):
 
 if __name__ == "__main__":
 
+    num_bits_bef = 4
+    num_bits_aft = 5
+    bit_map = list(range(num_bits_bef))
+    emb = CktEmbedder(num_bits_bef, num_bits_aft, bit_map)
+
+    # trol_kinds in ZL convention
+    trol_kinds = [True, False, False]
+
+    wr = CGateSEO_writer('io_folder/cgate_expansions', emb,
+            do_checking=True, verbose=False)
+
     u2_fun_to_fun_arg_list = co.OrderedDict((
         (OneBitGates.P_0_phase_fac, [np.pi/3]),
         (OneBitGates.P_1_phase_fac, [np.pi/3]),
@@ -487,17 +593,8 @@ if __name__ == "__main__":
         (OneBitGates.rot, [np.pi/3, np.pi/6, np.pi/3])
     ))
 
-    num_bits_bef = 4
-    num_bits_aft = 5
-    bit_map = list(range(num_bits_bef))
-    emb = CktEmbedder(num_bits_bef, num_bits_aft, bit_map)
-
-    # trol_kinds in ZL convention
-    trol_kinds = [True, False, False]
-
-    wr = CGateSEO_writer('io_folder/cgate_expansions', emb, do_checking=True)
-
     for u2_fun, fun_arg_list in u2_fun_to_fun_arg_list.items():
+
         wr.write_NOTA('--------new u2 gate --------------------------')
         for one_line in [True, False]:
             wr.one_line = one_line
@@ -507,6 +604,39 @@ if __name__ == "__main__":
                 for expand_1c_u2 in [False, True]:
                     wr.expand_1c_u2 = expand_1c_u2
                     wr.write_NOTA('--------expand_1c_u2=' + str(expand_1c_u2))
+                    print("\n", u2_fun,
+                          "one_line=", one_line, "expand=", expand_1c_u2)
                     wr.write(trol_kinds, u2_fun, fun_arg_list)
 
     wr.close_files()
+
+    # a check that an expansion multiplies to original
+    num_bits = 5
+    emb = CktEmbedder(num_bits, num_bits)
+    # trol_kinds in ZL convention
+    trol_kinds = [True, False, False, False]
+    file_prefix = 'io_folder/cgate_expan_mat_prod'
+
+    wr = CGateSEO_writer(file_prefix, emb)
+
+    u2_fun = OneBitGates.rot_ax
+    rads = np.pi/3
+
+    wr.one_line = True
+    wr.write_NOTA("one line=True-----------")
+    wr.write(trol_kinds, u2_fun, [rads, 2])
+
+    wr.write_NOTA("herm. conj, one line=False-----------")
+    wr.one_line = False
+    wr.write(trol_kinds, u2_fun, [-rads, 2])
+
+    wr.close_files()
+
+    from SEO_MatrixProduct import *
+
+    mp = SEO_MatrixProduct(file_prefix, num_bits)
+    id_mat = np.diag(np.ones((1<<num_bits,)))
+    err = np.linalg.norm(mp.prod_arr - id_mat)
+    print("err=", err)
+
+

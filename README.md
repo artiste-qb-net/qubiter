@@ -17,7 +17,9 @@ The quantum circuits are draw in ASCII (not in postscript or in a proprietary fo
 
 Quantum Fog at GitHub (see https://github.com/artiste-qb-net/quantum-fog) is a twin project started by the same people. We hope that eventually Quantum Fog will call Qubiter to perform some tasks, like quantum compiling and simulating.
 
-Most of Qubiter at GitHub is licensed under the BSD license (3 clause version) with an added clause at the end, taken almost verbatim from the Apache 2.0 license, granting additional Patent rights. See `LICENSE.md`.
+All of Qubiter at GitHub except for the contents of the quantum_compiler folder is licensed under the BSD license (3 clause version) with an added clause at the end, taken almost verbatim from the Apache 2.0 license, granting additional Patent rights. See `LICENSE.md`.
+
+The contents of Qubiter's quantum_compiler folder are licensed under the GPLv2 (Linux) license.
 
 ##Contributors##
 
