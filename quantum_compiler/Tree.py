@@ -9,7 +9,7 @@ class Tree(SEO_writer):
     the attributes of class Node. This class, being a child of class
     SEO_writer, is also capable of writing English & Picture files. After
     creating a binary tree, it proceeds to use that tree to produce a CS
-    decompostion of the unitary matrix init_unitary_mat that is fed into its
+    decomposition of the unitary matrix init_unitary_mat that is fed into its
     constructor. This CS (cosine-sine) decomp consists of a sequence of
     diagonal unitaries (DIAG lines in English file) and multiplexors (MP_Y
     lines in English file) whose product equals init_unitary_mat.
@@ -37,7 +37,7 @@ class Tree(SEO_writer):
     redundancy in the CS decomp used by Qubiter. But, there is hope: the CS
     decomp is not unique, and it might be possible to choose a CS decomp
     that makes zero many of the angles in the DIAG and MP_Y lines. Some of
-    those "compiler optimizations" are considered in Ref.1 below.
+    those "compiler optimizations" are considered in references below.
 
     (b) The CS decomp as used here leads to order N^2 = 2^{2n} cnots and
     qubit rotations so it is impractical for large N. But for small N,
@@ -55,6 +55,10 @@ class Tree(SEO_writer):
     2. Qubiter 1.11, a C++ program whose first version was released together
     with Ref.1 above. Qubiter 1.11 is included in the
     quantum_compiler/LEGACY folder of this newer, pythonic version of Qubiter
+
+    3. R.R. Tucci, Quantum Fast Fourier Transform Viewed as a Special Case
+    of Recursive Application of Cosine-Sine Decomposition,
+    https://arxiv.org/abs/quant-ph/0411097
 
     Attributes
     ----------
@@ -230,7 +234,7 @@ class Tree(SEO_writer):
 
         """
         if self.verbose:
-            self.write_NOTA(str(nd))
+            self.write_NOTA(str(nd) + "next:")
             print('------start writing ', nd)
         if nd.is_barren():
             self.write_NOTA("barren node")
@@ -286,4 +290,4 @@ if __name__ == "__main__":
     init_unitary_mat = FouSEO_writer.fourier_trans_mat(1 << num_bits)
     emb = CktEmbedder(num_bits, num_bits)
     file_prefix = '../io_folder/csd_test'
-    t = Tree(True, file_prefix, emb, init_unitary_mat, verbose=True)
+    t = Tree(True, file_prefix, emb, init_unitary_mat, verbose=False)

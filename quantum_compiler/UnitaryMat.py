@@ -1,8 +1,10 @@
+import math
 import numpy as np
 import Utilities as ut
 from quantum_compiler.MultiplexorSEO_writer import *
-import cuncsd
-import math
+import SQ.cuncsd as csd
+
+from FouSEO_writer import *
 
 
 class UnitaryMat:
@@ -298,7 +300,7 @@ def cs_decomp(unitary_mats):
             # print('x22\n', x22)
             x11, x12, x21, x22, theta, u1, u2, v1t, v2t,\
                 work, rwork, iwork, info =\
-                    cuncsd.cuncsd(p, x11, x12, x21, x22, lwork=-1, lrwork=-1,
+                    csd.cuncsd(p, x11, x12, x21, x22, lwork=-1, lrwork=-1,
                                   trans='F')
             # print('x11\n', x11)
             # print('x12\n', x12)
@@ -311,9 +313,9 @@ def cs_decomp(unitary_mats):
             # print("rwork query:", lrw)
             x11, x12, x21, x22, theta, u1, u2, v1t, v2t,\
                 work, rwork, iwork, info =\
-                    cuncsd.cuncsd(p, x11, x12, x21, x22, lwork=lw, lrwork=lrw,
+                    csd.cuncsd(p, x11, x12, x21, x22, lwork=lw, lrwork=lrw,
                                   trans='F')
-            print('info', info)
+            # print('info', info)
             # print('u1 continguous', u1.flags.contiguous)
             # u1 = np.ascontiguousarray(u1)
             # u2 = np.ascontiguousarray(u2)
