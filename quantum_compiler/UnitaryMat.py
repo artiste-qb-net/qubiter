@@ -2,7 +2,7 @@ import math
 import numpy as np
 import Utilities as ut
 from quantum_compiler.MultiplexorSEO_writer import *
-import SQ.cuncsd as csd
+import cuncsd_sq as csd
 
 from FouSEO_writer import *
 
