@@ -452,6 +452,7 @@ class SEO_reader(SEO_pre_reader):
 
         Returns
         -------
+        None
 
         """
         pass
@@ -518,6 +519,7 @@ class SEO_reader(SEO_pre_reader):
 
         Returns
         -------
+        None
 
         """
         pass

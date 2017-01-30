@@ -1,5 +1,6 @@
 from SEO_writer import *
 from SEO_simulator import *
+from CktEmbedder import *
 from BitVector import *
 import itertools as it
 import collections as co
