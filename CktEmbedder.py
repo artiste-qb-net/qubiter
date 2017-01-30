@@ -1,4 +1,4 @@
-from Controls import *
+from Controls import Controls
 
 
 class CktEmbedder:

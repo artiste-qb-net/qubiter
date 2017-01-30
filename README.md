@@ -25,6 +25,8 @@ The contents of Qubiter's quantum_compiler folder are licensed under the GPLv2 (
 
 (Alphabetical Order)
 * Dekant, Henning
+* Tregillus, Henry
 * Tucci, Robert
+* Yin, Tao
 
 
