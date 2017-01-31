@@ -17,8 +17,8 @@ class Qubiter_to_IBMqasm(SEO_reader):
     The input English file that is read can only have lines of the following
     types or else the program will abort with an error message:
 
-    1. single qubit rotations (HAD2, SIGX, SIGY, SIGZ, ROTX, ROTY, ROTZ. ROTN
-    with no controls)
+    1. single qubit rotations (HAD2, SIGX, SIGY, SIGZ, ROTX, ROTY, ROTZ or 
+    ROTN with no controls) 
 
     2. simple CNOTs (SIGX with a single True control)
 
@@ -39,7 +39,7 @@ class Qubiter_to_IBMqasm(SEO_reader):
     English file circuit can contain CNOTs between any pair of qubits. In
     cases where those qubits are not physically connected, this class will
     express the CNOT as a sequence of gates that satisfy constraints 1, 2,
-    3 above. Next we discuss how CNOTs between unconnected qubits are
+    3 above. Next we discuss how CNOTs between disconnected qubits are
     implemented.
 
     Note that the positions of the target X and control @ of a CNOT can be
@@ -86,8 +86,8 @@ class Qubiter_to_IBMqasm(SEO_reader):
     quantum registers qreg and classical registers creg. Qubiter does not
     use cregs because it uses the classical memory of your Linux PC instead.
     QASM has an intricate set of commands for measurements. Qubiter has a
-    complete set of measurement operations too (see MEAS lines). The QASM
-    and Qubiter measurement operations can obviously be translated into each
+    complete set of measurement commands too (see MEAS lines). The QASM and
+    Qubiter measurement commands can obviously be translated into each
     other. We leave that part of the translation to a future version of this
     class.
 
@@ -146,10 +146,10 @@ class Qubiter_to_IBMqasm(SEO_reader):
             3     1
 
     qasm_out : _io.TextIOWrapper
-        This output stream used to write a qasm file based on input English
-        file.
+        This output stream is used to write a qasm file based on the input
+        English file.
     qbtr_wr : SEO_writer
-        A writer object created iff write_qubiter_files is True.
+        A SEO_writer object created iff write_qubiter_files is True.
     write_qubiter_files : bool
         The class always writes a qasm text file based on the input English
         file that is read. Iff this is True, the class also writes English
@@ -207,7 +207,7 @@ class Qubiter_to_IBMqasm(SEO_reader):
         if write_qubiter_files:
             self.qbtr_wr.close_files()
             
-    def are_not_connected(self, x, y):
+    def are_disconnected(self, x, y):
         """
         This function returns true iff qubits x and y are not connected in
         the hardware.
@@ -238,7 +238,7 @@ class Qubiter_to_IBMqasm(SEO_reader):
         arr : np.array
             the matrix of the rotation
         tar_bit_pos : int
-            target qubit at which rotation occurs.
+            target bit position at which rotation occurs.
 
         Returns
         -------
@@ -519,7 +519,7 @@ class Qubiter_to_IBMqasm(SEO_reader):
             trols = Controls.new_knob(5, c, True)
             self.qbtr_wr.write_controlled_one_bit_gate(t,
                 trols, OneBitGates.sigx)
-            
+
         def h_fun1(t):
             self.qbtr_wr.write_one_bit_gate(t, OneBitGates.had2)
             
@@ -549,7 +549,7 @@ class Qubiter_to_IBMqasm(SEO_reader):
         else:  # num_trols == 1
             tar_pos = tar_bit_pos
             trol_pos = controls.bit_pos[0]
-            if not self.are_not_connected(trol_pos, tar_pos):
+            if not self.are_disconnected(trol_pos, tar_pos):
                 if tar_pos in self.allowed_tars:
                     cx_fun(trol_pos, tar_pos)
                 else:
