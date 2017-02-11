@@ -8,8 +8,8 @@ import Utilities as ut
 class Qubiter_to_IBMqasm(SEO_reader):
     """
     This class is a child of SEO_reader. It reads an input English file and
-    writes an IBM qasm file which is a line by line translation of the input
-    English file into the IBM qasm2 language. If the option
+    writes an IBM qasm2 file which is a line by line translation of the
+    input English file into the IBM qasm2 language. If the option
     write_qubiter_files is set to True, this class will also write new
     English and Picture files that are in 1-1 line correspondence with the
     output qasm file.
@@ -26,21 +26,24 @@ class Qubiter_to_IBMqasm(SEO_reader):
 
     If you have an English file that contains lines that are more
     complicated than this (because, for example, they contain rotations with
-    more than one control attached), you can use the expander classes
-    CktExpander, DiagUnitaryExpander, MultiplexorExpander, to expand the
-    circuit to an equivalent albeit longer circuit that satisfies
-    constraints 1, 2, 3.
+    one or more attached), you can use the expander classes CktExpander,
+    DiagUnitaryExpander, MultiplexorExpander, to expand the circuit to an
+    equivalent albeit longer circuit that satisfies constraints 1, 2, 3.
+
+    This class expects exactly 5 qubits, call them 0, 1, .., 4. The input
+    English file circuit can contain CNOTs between ANY pair of qubits and
+    with any qubit as target.
 
     This class conforms with the most recent IBM qc (IBM Quantum Experience
-    QASM2.0). The class expects exactly 5 qubits. A CNOT can only be
-    realized as a single physical operation if its target and control qubits
-    are physically connected. The current IBM qc is not fully connected (not
-    all pairs of qubits are physically connected). However, the input
-    English file circuit can contain CNOTs between any pair of qubits. In
-    cases where those qubits are not physically connected, this class will
-    express the CNOT as a sequence of gates that satisfy constraints 1, 2,
-    3 above. Next we discuss how CNOTs between disconnected qubits are
-    implemented.
+    QASM2.0). The current IBM qc is not fully connected (not all pairs of
+    qubits are physically connected). Furthermore, not all qubits can be
+    targets of an elementary CNOT: only qubits 1, 2 and 4 can be targets.
+
+    If an elementary CNOT is not allowed because its ends are disconnected
+    or its target is forbidden, this class will replace that elementary CNOT
+    by a compound CNOT; i.e., a sequence of 1 or 4 allowed elementary CNOTs
+    (and a bunch of Hadamards) that is equivalent to the original elementary
+    CNOT. Next we discuss how these compound CNOTs are defined.
 
     Note that the positions of the target X and control @ of a CNOT can be
     swapped with Hadamard matrices H. For example,
@@ -53,12 +56,16 @@ class Qubiter_to_IBMqasm(SEO_reader):
     @---X
     H   H
 
-    Suppose qubits a and b are not connected and we want to implement this:
+    Hence, a CNOT between 2 connected ends but having a disallowed target
+    can be replaced by 4 Hadamards and an elementary CNOT with the same ends
+    and with an allowed target.
+
+    Suppose qubits a and b are disconnected and we want to implement this:
 
     a   2   b
     X---+---@
 
-    This class replaces this problematic CNOT by:
+    This class replaces this problematic elementary CNOT by:
 
     a   2   b
     X---@   |
@@ -86,10 +93,10 @@ class Qubiter_to_IBMqasm(SEO_reader):
     quantum registers qreg and classical registers creg. Qubiter does not
     use cregs because it uses the classical memory of your Linux PC instead.
     QASM has an intricate set of commands for measurements. Qubiter has a
-    complete set of measurement commands too (see MEAS lines). The QASM and
-    Qubiter measurement commands can obviously be translated into each
-    other. We leave that part of the translation to a future version of this
-    class.
+    complete set of measurement commands too (see MEAS in Rosetta stone).
+    The QASM and Qubiter measurement commands can obviously be translated
+    into each other. We leave that part of the translation to a future
+    version of this class.
 
     References
     ----------
@@ -129,15 +136,14 @@ class Qubiter_to_IBMqasm(SEO_reader):
         storage space for a list of strings obtained by splitting a line
 
     verbose : bool
-
     allowed_tars : list[int]
-        Allowed targets. Qubits that are equipped in hardware to be CNOT
-        targets. IBM qc currently has 5 qubits 0, 1, ..., 4. Out of those,
-        1, 2 and 4 can be targets.
+        Allowed targets. Qubits that are equipped in hardware to be targets
+        of an elementary CNOT. IBM qc currently has 5 qubits 0, 1, ...,
+        4. Out of those, only 1, 2 and 4 can be targets.
     missing_connections : list[tuple(int,int)]
-        Pairs of qubits that are not connected so they cannot be the two
-        ends of a CNOT. This picture indicates which qubits of the IBM qc
-        are currently connected:
+        Pairs of qubits that are not physically connected so they cannot be
+        the two ends of an elementary CNOT. This picture indicates which
+        qubits of the current IBM qc are connected:
 
             4     0
             | \ / |
