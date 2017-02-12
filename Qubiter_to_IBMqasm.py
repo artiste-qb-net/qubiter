@@ -26,9 +26,10 @@ class Qubiter_to_IBMqasm(SEO_reader):
 
     If you have an English file that contains lines that are more
     complicated than this (because, for example, they contain rotations with
-    one or more attached), you can use the expander classes CktExpander,
-    DiagUnitaryExpander, MultiplexorExpander, to expand the circuit to an
-    equivalent albeit longer circuit that satisfies constraints 1, 2, 3.
+    one or more controls attached), you can use the expander classes
+    CktExpander, DiagUnitaryExpander, MultiplexorExpander, to expand the
+    circuit to an equivalent albeit longer circuit that satisfies
+    constraints 1, 2, 3.
 
     This class expects exactly 5 qubits, call them 0, 1, .., 4. The input
     English file circuit can contain CNOTs between ANY pair of qubits and
