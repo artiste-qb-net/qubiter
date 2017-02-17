@@ -209,7 +209,7 @@ class MultiplexorSEO_writer(SEO_writer):
         lazy = 0
         while f < num_factors:
             rads = conj_rads[cur_bvec.dec_rep]/norma
-            if abs(rads) < ut.TOL:
+            if abs(rads) < 1e-6:
                 pass
             else:
                 diff_bvec = BitVector.new_with_T_on_diff(cur_bvec, prev_bvec)
@@ -287,7 +287,7 @@ class MultiplexorSEO_writer(SEO_writer):
         None
 
         """
-        if all([abs(ang) < ut.TOL for ang in self.rad_angles]):
+        if all([abs(ang) < 1e-6 for ang in self.rad_angles]):
             print("unit multiplexor detected")
             return None
 

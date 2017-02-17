@@ -206,7 +206,7 @@ class DiagUnitarySEO_writer(SEO_writer):
             cur_rot_bpos = cur_bvec.find_rightmost_T_bit()
             # print(cur_bvec.get_bit_string(), cur_rot_bpos)
             rads = ut.centered_rads(conj_rads[cur_bvec.dec_rep]/norma)
-            if abs(rads) < ut.TOL:
+            if abs(rads) < 1e-6:
                 pass
             else:
                 # If cur_rot_bpos equals (doesn't equal) prev_rot_bpos,
@@ -247,7 +247,7 @@ class DiagUnitarySEO_writer(SEO_writer):
         None
 
         """
-        if all([abs(ang) < ut.TOL for ang in self.rad_angles]):
+        if all([abs(ang) < 1e-6 for ang in self.rad_angles]):
             print("unit d-unitary detected")
             return None
 

@@ -1,9 +1,6 @@
 import numpy as np
 
 
-TOL = 1E-8
-
-
 def centered_rads(ang_rads):
     """
     takes any real number and returns a number between -pi and pi that is
