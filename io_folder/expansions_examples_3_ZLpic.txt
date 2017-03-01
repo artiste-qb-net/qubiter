@@ -6,7 +6,7 @@ NOTA	controlled Y,Z rotation ( rot(1)^n(0) with radx = 0 )
 |   R---@   
 NOTA	controlled rotation ( rot(1)^n(0) )
 |   R---@   
-NOTA	2-controlled not (sigx(2)^(nbar(1)n(0))
+NOTA	2-controlled not ( sigx(2)^(nbar(1)n(0)) )
 X---O---@   
 NOTA	swap of 0 and 1
 |   <--->   
