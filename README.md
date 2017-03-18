@@ -1,6 +1,6 @@
-#Qubiter at GitHub
+# Qubiter at GitHub
 
-##What is Qubiter?
+## What is Qubiter?
 
 The Qubiter project aims to  provide eventually a full suite of tools, written mostly in Python, for designing and simulating quantum circuits on classical computers. (So it will address only the needs of gate model, not annealer, quantum computer engineers). We or others could start a similar project for annealers.
 
@@ -22,7 +22,7 @@ All of Qubiter at GitHub except for the contents of the quantum_compiler folder 
 
 The contents of Qubiter's quantum_compiler folder are licensed under the GPLv2 (Linux) license.
 
-##Contributors
+## Contributors
 
 (Alphabetical Order)
 * Dekant, Henning
