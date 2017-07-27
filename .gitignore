@@ -1,4 +1,6 @@
 .DS_Store
 *.pyc
 .idea
-__pycache__/
+__pycache__
+.ipynb_checkpoints
+.octave-workspace

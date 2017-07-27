@@ -51,11 +51,11 @@ Loop named 5 with 2 repetitions &
 {\tt  LOOP 5 REPS: 2}&{\tt  LOOP 5 REPS:2}
 \\
 \hline
-Measure $\ket{0}\bra{0}$ at qubit 1  &
+Measure $\overline{n}=\ket{0}\bra{0}$ at qubit 1  &
 {\tt  MEAS 0 AT 1 }&{\tt |\ \ \ |\ \ \ M0 \  |}
 \\
 \hline
-Measure $\ket{1}\bra{1}$ at qubit 1  &
+Measure $n=\ket{1}\bra{1}$ at qubit 1  &
 {\tt  MEAS 1 AT 1 }&{\tt |\ \ \ |\ \ \ M1 \  |}
 \\
 \hline
@@ -102,20 +102,20 @@ $e^{i 42.7 \frac{\pi}{180} n(3)n(2)}$ &
 {\tt  P1PH 42.7 AT  3 IF 2T}&{\tt @P--@\ \ \ |\ \ \ |}
 \\
 \hline
-$(e^{\frac{i}{2} \frac{\pi}{180} 23.7 \sigx(1)})^{\nbar(3)n(2)}$ &
+$(e^{i\frac{\pi}{180} 23.7 \sigx(1)})^{\nbar(3)n(2)}$ &
 {\tt  ROTX  23.7  AT  1  IF  3F  2T}&{\tt 0---@---Rx\ \ |}
 \\
 \hline
-$(e^{\frac{i}{2}  \frac{\pi}{180} 23.7 \sigy(1)})^{\nbar(3)n(2)}$ &
+$(e^{i  \frac{\pi}{180} 23.7 \sigy(1)})^{\nbar(3)n(2)}$ &
 {\tt  ROTY  23.7  AT  1  IF  3F  2T} &{\tt 0---@---Ry\ \ |}
 \\
 \hline
-$(e^{\frac{i}{2}  \frac{\pi}{180} 23.7 \sigz(1)})^{\nbar(3)n(2)}$ &
+$(e^{i \frac{\pi}{180} 23.7 \sigz(1)})^{\nbar(3)n(2)}$ &
 {\tt  ROTZ  23.7  AT  1  IF  3F  2T}&{\tt 0---@---Rz\ \ |}
 \\
 \hline
 $(e^{
-\frac{i}{2}  \frac{\pi}{180}
+i  \frac{\pi}{180}
 [30\sigx(1)+ 40\sigy(1) + 11 \sigz(1)]
  })^{\nbar(3)n(2)}$ &
 {\tt  ROTN  30.0 40.0 11.0  AT  1  IF  3F  2T}&{\tt 0---@---R\ \ \ |}
