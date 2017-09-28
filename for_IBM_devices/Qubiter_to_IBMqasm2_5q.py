@@ -5,14 +5,14 @@ from quantum_CSD_compiler.UnitaryMat import *
 import Utilities as ut
 
 
-class Qubiter_to_IBMqasm5q(SEO_reader):
+class Qubiter_to_IBMqasm2_5q(SEO_reader):
     """
     This class is a child of SEO_reader. It reads an input English file and
-    writes an IBM qasm2 file which is a line by line translation of the
-    input English file into the IBM qasm2 language. If the option
-    write_qubiter_files is set to True, this class will also write new
-    English and Picture files that are in 1-1 line correspondence with the
-    output qasm file.
+    writes an IBM qasm2 for 5 qubits file which is a line by line
+    translation of the input English file into the IBM qasm2 language. If
+    the option write_qubiter_files is set to True, this class will also
+    write new English and Picture files that are in 1-1 line correspondence
+    with the output qasm file.
 
     The input English file that is read can only have lines of the following
     types or else the program will abort with an error message:
@@ -428,7 +428,7 @@ class Qubiter_to_IBMqasm5q(SEO_reader):
         rad_ang = angle_degs*np.pi/180
 
         arr = OneBitGates.rot_ax(rad_ang, axis)
-        line_str = Qubiter_to_IBMqasm5q.qasm_line_for_rot(arr, tar_bit_pos)
+        line_str = Qubiter_to_IBMqasm2_5q.qasm_line_for_rot(arr, tar_bit_pos)
         self.qasm_out.write(line_str)
 
         if self.write_qubiter_files:
@@ -460,7 +460,7 @@ class Qubiter_to_IBMqasm5q(SEO_reader):
                                      angle_z_degs])*np.pi/180)
 
         arr = OneBitGates.rot(*rad_ang_list)
-        line_str = Qubiter_to_IBMqasm5q.qasm_line_for_rot(arr, tar_bit_pos)
+        line_str = Qubiter_to_IBMqasm2_5q.qasm_line_for_rot(arr, tar_bit_pos)
         self.qasm_out.write(line_str)
 
         if self.write_qubiter_files:
@@ -608,4 +608,4 @@ class Qubiter_to_IBMqasm5q(SEO_reader):
 
 if __name__ == "__main__":
     file_prefix = "io_folder/qbtr2ibm_test"
-    q2i = Qubiter_to_IBMqasm5q(file_prefix, 5, write_qubiter_files=True)
+    q2i = Qubiter_to_IBMqasm2_5q(file_prefix, 5, write_qubiter_files=True)
