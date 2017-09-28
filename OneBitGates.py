@@ -14,17 +14,6 @@ class OneBitGates:
     ----------
 
     """
-    @staticmethod
-    def meas():
-        """
-        Returns 1. Dummy function used by class SEO_writer.
-
-        Returns
-        -------
-        int
-
-        """
-        return 1
 
     @staticmethod
     def sigx(is_quantum=True):
@@ -307,6 +296,86 @@ class OneBitGates:
 
         return mat
 
+    @staticmethod
+    def mat_S(herm=False):
+        """
+        Returns
+
+        [[1, 0],[0, x*sign]] where x=exp(j*pi/2)=j
+
+        where sign = 1 if herm=False and sign = -1 if herm=True
+
+        Parameters
+        ----------
+        herm : bool
+
+        Returns
+        -------
+        np.ndarray
+
+        """
+        ty = np.complex128
+        mat = np.zeros([2, 2], dtype=ty)
+        mat[0, 0] = 1
+        if not herm:
+            sign = 1
+        else:
+            sign = -1
+        mat[1, 1] = 1j*sign
+        return mat
+
+    @staticmethod
+    def mat_T(herm=False):
+        """
+        Returns
+
+        [[1, 0],[0, exp(j*pi/4*sign)]]
+
+        where sign = 1 if herm=False and sign = -1 if herm=True
+
+        Parameters
+        ----------
+        herm : bool
+
+        Returns
+        -------
+        np.ndarray
+
+        """
+        ty = np.complex128
+        mat = np.zeros([2, 2], dtype=ty)
+        mat[0, 0] = 1
+        if not herm:
+            sign = 1
+        else:
+            sign = -1
+        mat[1, 1] = np.exp(1j*np.pi/4*sign)
+        return mat
+
+    @staticmethod
+    def mat_Tdag():
+        """
+        returns T^\dag
+
+        Returns
+        -------
+        np.ndarray
+
+        """
+        return OneBitGates.mat_T(True)
+
+    @staticmethod
+    def mat_Sdag():
+        """
+        returns S^\dag
+
+        Returns
+        -------
+        np.ndarray
+
+        """
+        return OneBitGates.mat_S(True)
+
 if __name__ == "__main__":
     print('sigx= ', OneBitGates.sigx())
     print('sigy= ', OneBitGates.sigy())
@@ -332,3 +401,8 @@ if __name__ == "__main__":
 
     mat = OneBitGates.rot_ax(10, 3)
     print('rotz*rotz^H= ', np.dot(mat, mat.conj().T))
+
+    print('mat_S=', OneBitGates.mat_S())
+    print('mat_Sdag=', OneBitGates.mat_Sdag())
+    print('mat_T=', OneBitGates.mat_T())
+    print('mat_Tdag=', OneBitGates.mat_Tdag())

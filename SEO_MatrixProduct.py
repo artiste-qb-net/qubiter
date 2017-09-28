@@ -1,4 +1,5 @@
 from SEO_simulator import *
+from StateVec import *
 
 
 class SEO_simulator_sp(SEO_simulator):
@@ -84,14 +85,14 @@ class SEO_MatrixProduct:
         for s in range(num_comps):
             spin_dir_list = [(s >> bpos) & 1 for bpos in
                              reversed(range(num_bits))]
-            init_st_vec = SEO_simulator.get_standard_basis_st(
-                spin_dir_list, zero_last=True)
+            init_st_vec = StateVec.get_standard_basis_st_vec(
+                spin_dir_list, ZL=True)
             # print("---", spin_dir_list)
             # print(init_st_vec)
             sim = SEO_simulator_sp(file_prefix, num_bits,
                     init_st_vec=init_st_vec)
-            fin_st_vec = sim.cur_st_vec_list[0]
-            fin = SEO_simulator.traditional_st_vec(num_bits, fin_st_vec)
+            fin_st_vec = sim.cur_st_vec_dict["pure"]
+            fin = StateVec.get_traditional_st_vec(fin_st_vec)
             fin_list.append(fin)
             # print(fin_st_vec)
             # print(fin)

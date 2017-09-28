@@ -3,20 +3,20 @@
 % table based on table in my paper
 % ``Code Generator for Quantum Simulated Annealing
 
-\renewcommand{\arraystretch}{1.5}
+\renewcommand{\arraystretch}{1.3}
 
 \paperheight=11in
 \topmargin=0in
 \headheight=0in
 \headsep=0in
 \topskip=0in
-\textheight=8.5in
-\footskip=.5in
+\textheight=11in
+\footskip 0in
 
 \paperwidth=8.5in
 \oddsidemargin=0in
 \evensidemargin=0in
-\textwidth=6.0in
+\textwidth=8.0in
 \parindent=.5in
 
 \newcommand{\sigx}[0]{{ \sigma_X} }
@@ -40,29 +40,41 @@ $[e^{i\sum_{b1,b0}\theta_{b_1b_0}P_{b_1b_0}(2,1)}]^{n(0)}$
 &{\tt |\ \ \ \%---\%---@}
 \\
 where $\theta_{b_1b_0}$ same as for {\tt MP\_Y}
-&.&.
+&&
 \\
 \hline
 $H(1)^{\nbar(3)n(2)}$ &
 {\tt  HAD2  AT  1  IF  3F  2T}&{\tt 0---@---H\ \ \ |}
 \\
 \hline
+\footnotesize{Begin ``if measured" 
+block of gates, execute block}
+& {\tt IF\_M( 3F 2T )\{} & {\tt IF\_M( 3F 2T )\{}
+\\
+\footnotesize{if measured 
+that qubit 3 is False and 2 is True} &&
+\\
+\hline
+End ``if measured" block of gates&
+{\tt  \}IF\_M} &{\tt  \}IF\_M }
+\\
+\hline
 Loop named 5 with 2 repetitions &
 {\tt  LOOP 5 REPS: 2}&{\tt  LOOP 5 REPS:2}
 \\
 \hline
-Measure $\overline{n}=\ket{0}\bra{0}$ at qubit 1  &
+Measure $\overline{n}=P_0=\ket{0}\bra{0}$ at qubit 1  &
 {\tt  MEAS 0 AT 1 }&{\tt |\ \ \ |\ \ \ M0 \  |}
 \\
 \hline
-Measure $n=\ket{1}\bra{1}$ at qubit 1  &
+Measure $n=P_1=\ket{1}\bra{1}$ at qubit 1  &
 {\tt  MEAS 1 AT 1 }&{\tt |\ \ \ |\ \ \ M1 \  |}
 \\
 \hline
 Measure both $\ket{0}\bra{0}$
 and $\ket{1}\bra{1}$ at qubit 1  &
 {\tt  MEAS 2 AT 1 }&{\tt |\ \ \ |\ \ \ M\ \ \ |}\\
-New state is mixture. &.&.
+New state is mixture. &&
 \\
 \hline
 $[e^{i\sum_{b1,b0}\theta_{b_1b_0}\sigy(3)P_{b_1b_0}(2,1)}]^{n(0)}$
@@ -70,7 +82,7 @@ $[e^{i\sum_{b1,b0}\theta_{b_1b_0}\sigy(3)P_{b_1b_0}(2,1)}]^{n(0)}$
 {\tt MP\_Y  AT  3 IF 2:1 1:0 0T BY 30.0 10.5 11.0 83.1}}
 & {\tt |\ \ \ Ry--\%---\%---@}
 \\
-where $\left\{\begin{array}{l}
+\footnotesize{where $P_{b1,b0}=P_{b1}P_{b0}$ and} $\left\{\begin{array}{l}
 \theta_{00}=30.0(\frac{\pi}{180})
 \\
 \theta_{01}=10.5(\frac{\pi}{180})
@@ -79,7 +91,7 @@ where $\left\{\begin{array}{l}
 \\
 \theta_{11}=83.1(\frac{\pi}{180})
 \end{array}\right.$
-&.&
+&&
 \\
 \hline
 Next iteration of loop named 5&
@@ -96,6 +108,10 @@ $e^{i 42.7 \frac{\pi}{180} \nbar(3)n(2)}$ &
 \hline
 $e^{i 42.7 \frac{\pi}{180} \nbar(3)n(2)}$ &
 {\tt  P0PH 42.7 AT  3 IF 2T}&{\tt 0P--@\ \ \ |\ \ \ |}
+\\
+\hline
+\footnotesize{Simulator prints the current state vec in style V1} &
+{\tt  PRINT } V1&{\tt  PRINT } V1
 \\
 \hline
 $e^{i 42.7 \frac{\pi}{180} n(3)n(2)}$ &

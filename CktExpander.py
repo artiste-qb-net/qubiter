@@ -29,40 +29,6 @@ class CktExpander(SEO_reader):
 
     Attributes
     ----------
-    num_ops : int
-        number of operations. Lines inside a loop with 'reps' repetitions
-        will count as 'reps' operations
-    loop_to_cur_rep : dict[int, int]
-        a dictionary mapping loop number TO current repetition
-    just_jumped : bool
-        flag used to alert when loop jumps from NEXT to LOOP
-    line_count : int
-
-    english_in : _io.TextIOWrapper
-        file object for input text file that stores English description of
-        circuit
-    file_prefix : str
-        beginning of the name of English file being scanned
-    loop_to_start_line : dict[int, int]
-        a dictionary mapping loop number TO loop line + 1
-    loop_to_start_offset : dict[int, int]
-        a dictionary mapping loop number TO offset of loop's start
-    loop_to_reps : dict[int, int]
-        a dictionary mapping loop number TO total number of repetitions of
-        loop
-    loop_queue : list[int]
-        a queue of loops labelled by their id number
-    num_bits : int
-        number of qubits in whole circuit
-    tot_num_lines : int
-        number of lines in English file
-    split_line : list[str]
-        storage space for a list of strings obtained by splitting a line
-
-    verbose : bool
-        When this is True, the output files have NOTA comment lines
-        announcing the beginning of each expansion
-
     wr : CGateSEO_writer
         This object of CGateSEO_writer, created in the class constructor,
         is called inside every use_  function to do some writing in the output
@@ -256,7 +222,7 @@ class CktExpander(SEO_reader):
         """
         self.wr.emb = CktEmbedder(self.num_bits, self.num_bits)
         # print("----", tar_bit_pos, self.wr.emb.bit_map)
-        self.wr.write_measurement(tar_bit_pos, kind)
+        self.wr.write_MEAS(tar_bit_pos, kind)
 
     def use_MP_Y(self, tar_bit_pos, trols, rad_angles):
         """

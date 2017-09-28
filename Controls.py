@@ -10,16 +10,16 @@ class Controls:
 
     Attributes
     ----------
-    num_bits : int
-        number of qubits in full quantum circuit
-    bit_pos_to_kind : dict[int, bool|int]
-        Dictionary matching control bit position with its kind.
-        The domain of the map bit_pos_to_kind is a subset of range(num_bits)
     bit_pos : list[int]
         This is the key's half if you unzip bit_pos_to_kind, in decreasing
         order
+    bit_pos_to_kind : dict[int, bool|int]
+        Dictionary matching control bit position with its kind.
+        The domain of the map bit_pos_to_kind is a subset of range(num_bits)
     kinds : list[bool|int]
         this is the value's half if you unzip bit_pos_to_kind.
+    num_bits : int
+        number of qubits in full quantum circuit
 
     """
     # combines my JAVA classes Control, TFControls, MultiControls
@@ -64,7 +64,7 @@ class Controls:
         new.kinds = old.kinds
         return new
 
-    def set_control(self, bit_pos, kind):
+    def set_control(self, bit_pos, kind, do_refresh=False):
         """
         Add key-value pair (bit_pos: kind) to self.bit_pos_to_kind dictionary
 
@@ -82,6 +82,8 @@ class Controls:
         assert -1 < bit_pos < self.num_bits, \
             "bit position is out of range"
         self.bit_pos_to_kind[bit_pos] = kind
+        if do_refresh:
+            self.refresh_lists()
 
     def refresh_lists(self):
         """

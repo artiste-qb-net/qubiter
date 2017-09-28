@@ -50,26 +50,14 @@ class DiagUnitarySEO_writer(SEO_writer):
 
     Attributes
     ----------
-    emb : CktEmbedder
-    english_out : _io.TextIOWrapper
-        file object for output text file that stores English description of
-        circuit
-    picture_out : _io.TextIOWrapper
-        file object for output text file that stores ASCII Picture
-        description of circuit
-    file_prefix : str
-        beginning of the name of both English and Picture files
-    line_counter : int
-    zero_bit_first : bool
-
     num_of_F_trols : int
         The number of False controls of the controlled d-unitary.
-    num_of_T_trols : int
-        The number of True controls of the controlled d-unitary.
     num_gbits : int
         number of gbits (grounded bits). This is only needed for the
         oracular approximation. Grounded bits are extra ancilla bits that
         have been initialized to the ground state (state |0>).
+    num_of_T_trols : int
+        The number of True controls of the controlled d-unitary.
     rad_angles : list(float)
         list of angles in radians. These angles are the parameters
         specifying an DIAG gate. If the DIAG has N intrinsic controls,

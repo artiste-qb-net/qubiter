@@ -9,15 +9,15 @@ class CktEmbedder:
 
     Attributes
     ----------
-    num_bits_bef : int
-        number of qubits before circuit embedding
-    num_bits_aft : int
-        number of qubits after circuit embedding
     bit_map : list[int]
         1-1 but not onto map of range(num_bits_bef) into range(num_bits_aft)
     extra_controls : Controls
         When embedding controls, these extra ones will be added to the before
         embedding controls
+    num_bits_aft : int
+        number of qubits after circuit embedding
+    num_bits_bef : int
+        number of qubits before circuit embedding
 
     """
 

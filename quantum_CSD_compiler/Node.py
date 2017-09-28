@@ -1,4 +1,4 @@
-from quantum_compiler.UnitaryMat import *
+from quantum_CSD_compiler.UnitaryMat import *
 import Utilities as ut
 
 
@@ -12,34 +12,35 @@ class Node:
     * its left, central and right matrix lists.
 
     This class also performs the very important task of calling within its
-    constructor the function UnitaryMat:cs_decomp() which fills the
+    constructor the function UnitaryMat.cs_decomp() which fills the
     node's left, central and right matrix lists.
 
     Attributes
     ----------
-    nd_id : int
-        node id, int assigned by Tree, nd_id=0 for first (root) node created
-        by Tree, nd_id=1 for second node created, etc.
+    central_mats : list(np.ndarray)
+        Central matrix list returned by call to UnitaryMat.cs_decomp( ). A
+        central_mats is a list of dmats. A dmat= D matrix  is numpy array
+        containing floats (radian angles).
+    left_mats : list(np.ndarray)
+        Left matrix list returned by call to UnitaryMat.cs_decomp()
+    left_nd : Node
+        Node to left of self.
     level : int
         1<= level <= num_bits+1. level = 1 for root node, level =
         num_of_bits+1 for node whose central_mat is list of 1 dim arrays
+    nd_id : int
+        node id, int assigned by Tree, nd_id=0 for first (root) node created
+        by Tree, nd_id=1 for second node created, etc.
     pa_nd : Node
         parent node
+    right_mats : list(np.ndarray)
+        Right matrix list returned by call to UnitaryMat.cs_decomp()
+    right_nd : Node
+        Node to right of self.
     side : str
         to which side of its parent does self find itself, either 'right' or
         'left'
-    left_nd : Node
-        Node to left of self.
-    right_nd : Node
-        Node to right of self.
-    left_mats : list(np.ndarray)
-        Left matrix list returned by call to UnitaryMat:cs_decomp()
-    central_mats : list(np.ndarray)
-        Central matrix list returned by call to UnitaryMat:cs_decomp( ). A
-        central_mats is a list of dmats. A dmat= D matrix  is numpy array
-        containing floats (radian angles).
-    right_mats : list(np.ndarray)
-        Right matrix list returned by call to UnitaryMat:cs_decomp()
+
 
     """
 
@@ -53,7 +54,7 @@ class Node:
         pa_nd : Node
         side : str
         init_unitary_mat : np.ndarray
-            This is the matrix that is fed to UnitaryMat:cs_decomp() in root
+            This is the matrix that is fed to UnitaryMat.cs_decomp() in root
             node constructor. pa_nd and side are ignored if this is not None.
         Returns
         -------
@@ -82,7 +83,7 @@ class Node:
         if ut.is_arr(init_unitary_mat):
             self.level = 1
             [self.left_mats, self.central_mats, self.right_mats] =\
-                cs_decomp([init_unitary_mat])
+                UnitaryMat.cs_decomp([init_unitary_mat])
             # release memory
             init_unitary_mat = None
         else:
@@ -97,7 +98,7 @@ class Node:
             else:
                 assert False
             [self.left_mats, self.central_mats, self.right_mats] =\
-                cs_decomp(in_mats)
+                UnitaryMat.cs_decomp(in_mats)
             if ut.is_arr(in_mats):
                 # release memory
                 in_mats = None

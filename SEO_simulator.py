@@ -1,8 +1,9 @@
 import numpy as np
 import copy as cp
-import pprint as pp
+# import pprint as pp
 from SEO_reader import *
 from OneBitGates import *
+from StateVec import *
 # import Utilities as ut
 
 
@@ -43,41 +44,14 @@ class SEO_simulator(SEO_reader):
 
     Attributes
     ----------
-    cur_st_vec_list : List[np.ndarray]
-        current state vector list
-    verbose : bool
-        True if want to print a running commentary on console.
-
-    num_ops : int
-        number of operations. Lines inside a loop with 'reps' repetitions
-        will count as 'reps' operations
-    loop_to_cur_rep : dict[int, int]
-        a dictionary mapping loop number TO current repetition
-    just_jumped : bool
-        flag used to alert when loop jumps from NEXT to LOOP
-    line_count : int
-
-    english_in : _io.TextIOWrapper
-        file object for input text file that stores English description of
-        circuit
-    file_prefix : str
-        beginning of the name of English file being scanned
-    loop_to_start_line : dict[int, int]
-        a dictionary mapping loop number TO loop line + 1
-    loop_to_start_offset : dict[int, int]
-        a dictionary mapping loop number TO offset of loop's start
-    loop_to_reps : dict[int, int]
-        a dictionary mapping loop number TO total number of repetitions of
-        loop
-    loop_queue : list[int]
-        a queue of loops labelled by their id number
-    num_bits : int
-        number of qubits in whole circuit
-    tot_num_lines : int
-        number of lines in English file
-    split_line : list[str]
-        storage space for a list of strings obtained by splitting a line
-
+    cur_st_vec_dict : dict(str, np.ndarray)
+        dictionary with key= branch_key and values= numpy array for state
+        vector. If there is a single item in dict, it's a pure state and the
+        key is "pure". If there are more than one items , the state is mixed
+        and the branch key is a string that uniquely characterizes the
+        measured controls. For example, if qubit 2 has been measured True
+        and qubit 4 has been measured False, the branch key will be '4F2T'.
+        This only applies to type 2 measurements.
     """
 
     # rrtucci: combines my java classes:
@@ -93,8 +67,8 @@ class SEO_simulator(SEO_reader):
         file_prefix : str
         num_bits : int
         init_st_vec : np.array
-            get this using the functions get_ground_st() or
-            get_standard_basis_st()
+            get this using the functions get_ground_st_vec() or
+            get_standard_basis_st_vec()
         verbose : bool
 
         Returns
@@ -102,258 +76,111 @@ class SEO_simulator(SEO_reader):
 
         """
         if init_st_vec is None:
-            init_st_vec = SEO_simulator.get_ground_st(num_bits)
-        self.cur_st_vec_list = [init_st_vec]
+            init_st_vec = StateVec.get_ground_st_vec(num_bits)
+        self.cur_st_vec_dict = {"pure": init_st_vec}
         self.verbose = verbose
 
         SEO_reader.__init__(self, file_prefix, num_bits, verbose)
 
     @staticmethod
-    def traditional_st_vec(num_bits, st_vec):
+    def branch_is_part_of_mcase(br_trols, case_trols):
         """
-        Internally, arrays in Qubiter assume ZF convention and state vectors
-        have shape = [2]*num_bits. However, the traditional way of writing a
-        state vector is as a column array of dimension 1<< num_bits in ZL
-        convention. This function returns the traditional view. So it
-        reshapes (flattens) the array and reverses the axes (reversing axes
-        takes it from ZF to ZL).
+        Returns True iff the controls br_trols defining a branch of
+        self.cur_st_vec_dict agree with the controls case_trols defining a
+        case measured.
 
         Parameters
         ----------
-        num_bits : int
-        st_vec : np.array
+        br_trols : Controls
+        case_trols : Controls
 
         Returns
         -------
-        np.array
+        bool
 
         """
-        assert st_vec.shape == tuple([2]*num_bits)
-        perm = list(reversed(range(num_bits)))
-        return np.transpose(st_vec, perm).flatten()
-
-    @staticmethod
-    def pp_st_vec(arr, omit_zero_amps=False, show_probs=False, do_ZF=True):
-        """
-        pp=pretty print. Print entries of state vec numpy array as column of
-        ( index, array value) pairs of the form (i, j, k, ...) arr[i, j, k,
-        ...], so zero bit first.
-
-        Parameters
-        ----------
-        arr : numpy.array
-        omit_zero_amps : bool
-            If True, will not list states with zero amplitude
-        show_probs : bool
-            If True, will show probability of each amplitude
-
-        do_ZF : bool
-            If True, multi-index in usual order, ZF (Zero bit First)
-            convention. If False, multi-index in reverse of usual order,
-            ZL (Zero bit Last) convention.
-
-        Returns
-        -------
-        None
-
-        """
-        for ind, x in np.ndenumerate(arr):
-            index = ind
-            label = 'ZF'
-            if not do_ZF:
-                index = ind[::-1]  # this reverses order of tuple
-                label = 'ZL'
-            ind_str = str(index) + label
-            mag = np.absolute(x)
-            if show_probs:
-                if omit_zero_amps:
-                    if mag > 1E-6:
-                        print(ind_str, x, ', prob=', mag**2)
-                else:
-                    print(ind_str, x, ', prob=', mag**2)
+        assert br_trols is not None
+        assert case_trols is not None
+        br_dict = br_trols.bit_pos_to_kind
+        case_dict = case_trols.bit_pos_to_kind
+        ans = True
+        for bit in case_dict.keys():
+            if bit in br_dict.keys():
+                if case_dict[bit] != br_dict[bit]:
+                    ans = False
+                    break
             else:
-                if omit_zero_amps:
-                    if mag > 1E-6:
-                        print(ind_str, x)
-                else:
-                    print(ind_str, x)
+                ans = False
+                break
+        # print('\n')
+        # print('br_trols', br_trols.bit_pos_to_kind)
+        # print('case_trols', case_trols.bit_pos_to_kind)
+        # print(' is part of case', ans)
+        return ans
 
-    @staticmethod
-    def get_ground_st(num_bits):
+    def get_controls_from_br_key(self, br_key):
         """
-        Returns ground state |0>|0>|0>...|0>, where |0> = [1,0]^t and |1> =
-        [0,1]^t, t = transpose
+        Returns a Controls object built from br_key. br_key is assumed to be
+        a str key for self.cur_st_vec_dict
 
         Parameters
         ----------
-        num_bits : int
+        br_key : str
 
         Returns
         -------
-        np.ndarray
+        Controls
 
         """
-        ty = np.complex128
-        mat = np.zeros([1 << num_bits], dtype=ty)
-        mat[0] = 1
-        mat = mat.reshape([2]*num_bits)
-        return mat
-
-    @staticmethod
-    def get_random_st(num_bits):
-        """
-        Returns random state \sum_b^n A(b^n)|b^n>, b^n \in {0,1}^n,
-        where n=num-bits and \sum_b^n |A(b^n)|^2 = 1
-
-        Parameters
-        ----------
-        num_bits : int
-
-        Returns
-        -------
-        np.ndarray
-
-        """
-        # returns array of random numbers in [0, 1] interval
-        mat_phi = np.random.rand(1 << num_bits)
-        mat_phi = np.exp(1j*2*np.pi*mat_phi)
-        mat_r = np.random.rand(1 << num_bits)
-        mat = np.multiply(mat_r, mat_phi)
-        magnitude = np.linalg.norm(mat)
-        mat /= magnitude
-        mat = mat.reshape([2]*num_bits)
-        return mat
-
-    @staticmethod
-    def get_standard_basis_st(spin_dir_list, zero_last=True):
-        """
-        If zero_last = True, Returns state ...|s2>|s1>|s0>, where
-        spin_dir_list=[...,s2, s1, s0], s_j \in {0, 1} for all j, |0> = [1,
-        0]^t and |1> = [0,1]^t, t = transpose
-
-        Parameters
-        ----------
-        spin_dir_list : list[int]
-        zero_last : bool
-            True(False) if last(first) qubit is at position 0
-
-        Returns
-        -------
-        np.ndarray
-
-        """
-        ty = np.complex128
-        num_bits = len(spin_dir_list)
-        mat = np.zeros([1 << num_bits], dtype=ty)
-        mat = mat.reshape([2]*num_bits)
-        if zero_last:
-            spin_dir_list = reversed(spin_dir_list)
-        mat[tuple(spin_dir_list)] = 1
-        return mat
-
-    @staticmethod
-    def get_total_prob(st_vec):
-        """
-        Returns total probability of state vector st_vec.
-
-        Parameters
-        ----------
-        st_vec : np.ndarray
-            state vector
-
-        Returns
-        -------
-        float
-
-        """
-        return np.sum(np.real(st_vec*st_vec.conj()))
-
-    @staticmethod
-    def get_bit_probs(st_vec):
-        """
-        For a given state vector st_vec over num_qubits qubits, it returns a
-        dictionary that maps each qubit to a pair (p, 1-p), where p is the
-        probability that that particular qubit is 0, if the state of all
-        other qubits is ignored.
-
-        Parameters
-        ----------
-        st_vec : np.ndarray
-            state vector
-
-        Returns
-        -------
-        dict[int, (float, float)]
-
-        """
-        prob_dict = {}
-        num_bits = st_vec.ndim
-        # slicex is a portmanteau of slice index
-        slicex = [slice(None)]*num_bits
-        tot_prob = SEO_simulator.get_total_prob(st_vec)
-        for k in range(num_bits):
-            slicex[k] = 0
-            vec = st_vec[tuple(slicex)]
-            p = np.sum(np.real(vec*vec.conj()))/tot_prob
-            prob_dict[k] = (p, 1-p)
-            slicex[k] = slice(None)  # restore to all entries slice(None)
-        return prob_dict
-
-    def describe_fin_st(
-            self, print_st_vec=False, do_pp=False,
-            omit_zero_amps=False, show_probs=False, do_ZF=True):
-        """
-        Prints a description of the final state vector
-
-        Parameters
-        ----------
-
-        print_st_vec : bool
-            if True, prints the final state vector (which may be huge. For n
-            qubits, it has 2^n components.)
-
-        do_pp : bool
-            pp= pretty print. Only used if print_st_vec=True. For pp=False,
-            it prints final state vector in usual numpy array print style.
-            For pp=True, it prints final state vector as column of (index,
-            array value) pairs.
-
-        omit_zero_amps : bool
-            If print_st_vec=True, pp=True and this parameter is True too,
-            will omit states with zero amplitude
-
-        show_probs : bool
-            If True, will show probability of each standard basis state
-
-        do_ZF : bool
-            If True, multi-index of ket in usual order, ZF (Zero bit First)
-            convention. If False, multi-index of ket in reverse of usual
-            order, ZL (Zero bit Last) convention.
-
-        Returns
-        -------
-        None
-
-        """
-        fin_st_vec = self.cur_st_vec_list[0]
-        if print_st_vec:
-            print('final state vector')
-            if do_pp:
-                if do_ZF:
-                    print('ZF convention (Zero bit First in state tuple)')
-                else:
-                    print('ZL convention (Zero bit Last in state tuple)')
-                self.pp_st_vec(fin_st_vec, omit_zero_amps, show_probs, do_ZF)
+        assert br_key != "pure"
+        x = br_key.replace("T", " T ")
+        x = x.replace("F", " F ")
+        li = x.split()
+        # print("li", li)
+        bit_pos = []
+        kinds = []
+        for s in li:
+            if s.isdigit():
+                bit_pos.append(int(s))
             else:
-                print(fin_st_vec)
-        print('total probability of final state vector ' +
-              '(=one if no measurements)=', self.get_total_prob(fin_st_vec))
-        print('dictionary with key=qubit, value=final (P(0), P(1))')
-        pp.pprint(self.get_bit_probs(fin_st_vec))
+                if s == 'T':
+                    kinds.append(True)
+                else:
+                    kinds.append(False)
+        trols = Controls(self.num_bits)
+        trols.bit_pos_to_kind = dict(zip(bit_pos, kinds))
+        trols.refresh_lists()
+        return trols
+
+    @staticmethod
+    def get_br_key_with_new_link(br_key, new_bit_pos, new_kind):
+        """
+        Say new_bit_pos=2 and new_kind=True. This returns a new branch
+        key that adds the link 2T to the old br_key
+
+        Parameters
+        ----------
+        br_key : str
+        new_bit_pos : int
+        new_kind : bool
+
+        Returns
+        -------
+        str
+
+        """
+        x = str(new_bit_pos) + ("T" if new_kind else "F")
+        if br_key == "pure":
+            new_br_key = x
+        else:
+            new_br_key = br_key + x
+        return new_br_key
 
     def evolve_by_controlled_bit_swap(self, bit1, bit2, controls):
         """
-        Evolve each branch of cur_st_vec_list by controlled bit swap.
+        Evolve each branch of cur_st_vec_dict by controlled bit swap iff the 
+        bit swap line is outside of an if_m block, or if it is inside such a 
+        block, evolve branch if it satisfies self.mcase_trols. 
 
         Parameters
         ----------
@@ -371,7 +198,7 @@ class SEO_simulator(SEO_reader):
         for bit in [bit1, bit2]:
             assert -1 < bit < self.num_bits
             assert bit not in controls.bit_pos
-
+ 
         slicex = [slice(None)]*self.num_bits
         num_controls = len(controls.bit_pos_to_kind)
         for k in range(num_controls):
@@ -380,7 +207,6 @@ class SEO_simulator(SEO_reader):
                 slicex[controls.bit_pos[k]] = 1
             else:  # it's False
                 slicex[controls.bit_pos[k]] = 0
-        slicex = tuple(slicex)
 
         # components that are fixed are no longer axes
         scout = 0
@@ -398,15 +224,30 @@ class SEO_simulator(SEO_reader):
         perm[new1], perm[new2] = perm[new2], perm[new1]
 
         # br = branch
-        for br in range(len(self.cur_st_vec_list)):
-            vec = self.cur_st_vec_list[br][slicex]
-            self.cur_st_vec_list[br][slicex] = vec.transpose(perm)
+        for br_key in self.cur_st_vec_dict.keys():
+            if self.cur_st_vec_dict[br_key] is None:
+                continue
+            evolve_br = False
+            if not self.measured_bits or not self.mcase_trols:
+                evolve_br = True
+            else:
+                br_trols = self.get_controls_from_br_key(br_key)
+                if SEO_simulator.branch_is_part_of_mcase(
+                        br_trols, self.mcase_trols):
+                    evolve_br = True
+            if evolve_br:
+                vec = self.cur_st_vec_dict[br_key][slicex]
+                self.cur_st_vec_dict[br_key][slicex] = \
+                    vec.transpose(perm)
 
     def evolve_by_controlled_one_bit_gate(self,
                 tar_bit_pos, controls, one_bit_gate):
         """
-        Evolve each branch of cur_st_vec_list by controlled one bit gate (
-        from class OneBitGates). Note one_bit_gate is entered as np.ndarray.
+        Evolve each branch of cur_st_vec_dict by controlled one bit gate ( 
+        from class OneBitGates). Note one_bit_gate is entered as np.ndarray. 
+        Evolve each branch of cur_st_vec_dict iff the controlled one bit 
+        gate line is outside of an if_m block, or if it is inside such a 
+        block, evolve branch if it satisfies self.mcase_trols. 
 
         Parameters
         ----------
@@ -420,7 +261,6 @@ class SEO_simulator(SEO_reader):
         None
 
         """
-        assert tar_bit_pos not in controls.bit_pos
         assert -1 < tar_bit_pos < self.num_bits
 
         vec_slicex = [slice(None)]*self.num_bits
@@ -455,34 +295,45 @@ class SEO_simulator(SEO_reader):
         perm += list(range(new_tar+1, perm_len))
 
         # br = branch
-        for br in range(len(self.cur_st_vec_list)):
-            vec = self.cur_st_vec_list[br][vec_slicex]
-            # Axes 1 of one_bit_gate and new_tar of vec are summed over. Axis
-            #  0 of one_bit_gate goes to the front of all the axes of new vec.
-            # Use transpose() to realign axes.
-            vec = np.tensordot(one_bit_gate, vec, ([1], [new_tar]))
-            self.cur_st_vec_list[br][vec_slicex] = np.transpose(vec, axes=perm)
+        assert not(self.mcase_trols and not self.measured_bits)
+        for br_key in self.cur_st_vec_dict.keys():
+            if self.cur_st_vec_dict[br_key] is None:
+                continue
+            evolve_br = False
+            if not self.measured_bits or not self.mcase_trols:
+                evolve_br = True
+            else:
+                br_trols = self.get_controls_from_br_key(br_key)
+                if SEO_simulator.branch_is_part_of_mcase(
+                        br_trols, self.mcase_trols):
+                    evolve_br = True
+            if evolve_br:
+                vec = self.cur_st_vec_dict[br_key][vec_slicex]
+                # Axes 1 of one_bit_gate and new_tar of vec are summed over.
+                #  Axis 0 of one_bit_gate goes to the front of all the axes
+                # of new vec. Use transpose() to realign axes.
+                vec = np.tensordot(one_bit_gate, vec, ([1], [new_tar]))
+                self.cur_st_vec_dict[br_key][vec_slicex] = \
+                    np.transpose(vec, axes=perm)
 
     def finalize_next_line(self):
         """
-        Prints running documentary as the end of the reading of each line.
+        Prints running documentary at the end of the reading of each line.
 
         Returns
         -------
+        None
 
         """
-
         if self.verbose:
             print('\n')
             print(self.split_line)
             print('line number = ', self.line_count)
             print('operation = ', self.num_ops)
-            for br in range(len(self.cur_st_vec_list)):
-                print('#----------- BRANCH ' + str(br) + ':')
-                print('tot_prob = ',
-                      SEO_simulator.get_total_prob(self.cur_st_vec_list[br]))
-                print('bit probs = ',
-                      SEO_simulator.get_bit_probs(self.cur_st_vec_list[br]))
+            st_vecs = self.cur_st_vec_dict
+            StateVec.describe_st_vec_dict(st_vecs,
+                                          # print_st_vec=True,
+                                          show_probs=True)
 
     def use_DIAG(self, trols, rad_angles):
         """
@@ -525,14 +376,13 @@ class SEO_simulator(SEO_reader):
 
     def use_MEAS(self, tar_bit_pos, kind):
         """
-        Overrides the parent class use_ function. Calls
-        evolve_by_controlled_one_bit_gate() for MEAS.
+        Overrides the parent class use_ function.
 
         For kind 0 (resp., 1) measurements, it applies |0><0| (resp.,
-        |1><1|) to each branch of cur_st_vec_list.
+        |1><1|) to each branch of cur_st_vec_dict.
 
-        For kind 3 measurements, it first creates a list concatenating x
-        plus a deep copy of x, where x is the cur_st_vec_list. Next,
+        For kind 2 measurements, it first creates a list concatenating x
+        plus a deep copy of x, where x is the cur_st_vec_dict. Next,
         it applies P_0 to the first half of the list and P_1 to the second
         half.
 
@@ -546,34 +396,56 @@ class SEO_simulator(SEO_reader):
         None
 
         """
-        list_len = len(self.cur_st_vec_list)
         # slicex = slice index
         slicex = [slice(None)]*self.num_bits
         # br = branch
-        if kind == 0:
-            for br in range(list_len):
-                slicex[tar_bit_pos] = 1
-                # set projection |1><1| to zero
-                self.cur_st_vec_list[br][tuple(slicex)] = 0
-                slicex[tar_bit_pos] = slice(None)
-        elif kind == 1:
-            for br in range(list_len):
-                slicex[tar_bit_pos] = 0
-                # set projection |0><0| to zero
-                self.cur_st_vec_list[br][tuple(slicex)] = 0
-                slicex[tar_bit_pos] = slice(None)
+        if kind in [0, 1]:
+            b = 1 if kind == 0 else 0
+            for br_key in self.cur_st_vec_dict:
+                st_vec = self.cur_st_vec_dict[br_key]
+                if st_vec is not None:
+                    slicex[tar_bit_pos] = b
+                    # set projection |b=0><b=0| to zero for kind=1
+                    st_vec[tuple(slicex)] = 0
+                    tot_prob = StateVec.get_total_prob(st_vec)
+                    if tot_prob < 1e-8:
+                        # this didn't work
+                        # st_vec = None
+                        self.cur_st_vec_dict[br_key] = None
+                    slicex[tar_bit_pos] = slice(None)
+                # self.cur_st_vec_dict[br_key] = st_vec
         elif kind == 2:
-            self.cur_st_vec_list += cp.deepcopy(self.cur_st_vec_list)
-            for br in range(list_len):
-                slicex[tar_bit_pos] = 1
-                # set projection |1><1| to zero
-                self.cur_st_vec_list[br][tuple(slicex)] = 0
-                slicex[tar_bit_pos] = slice(None)
-            for br in range(list_len, 2*list_len):
-                slicex[tar_bit_pos] = 0
-                # set projection |0><0| to zero
-                self.cur_st_vec_list[br][tuple(slicex)] = 0
-                slicex[tar_bit_pos] = slice(None)
+            old_st_vec_dict = cp.deepcopy(self.cur_st_vec_dict)
+            self.cur_st_vec_dict = {}
+            for br_key in old_st_vec_dict.keys():
+                new_T_key = self.get_br_key_with_new_link(br_key,
+                        tar_bit_pos, True)
+                new_F_key = self.get_br_key_with_new_link(br_key,
+                        tar_bit_pos, False)
+                # print('new keys=', new_F_key,',', new_T_key)
+
+                self.cur_st_vec_dict[new_T_key] = \
+                    cp.deepcopy(old_st_vec_dict[br_key])
+                self.cur_st_vec_dict[new_F_key] = \
+                    cp.deepcopy(old_st_vec_dict[br_key])
+
+                for b, new_key in enumerate([new_T_key, new_F_key]):
+                    # set projection |b=0><b=0| to zero for T key
+                    st_vec = self.cur_st_vec_dict[new_key]
+                    # print("b, newkey=" + str(b) + "," + new_key)
+                    if st_vec is not None:
+                        slicex[tar_bit_pos] = b
+                        st_vec[tuple(slicex)] = 0
+                        tot_prob = StateVec.get_total_prob(st_vec)
+                        # print('tot_prob=', tot_prob)
+                        if tot_prob < 1e-8:
+                            # this didn't work
+                            # st_vec = None
+                            self.cur_st_vec_dict[new_key] = None
+                        slicex[tar_bit_pos] = slice(None)
+                    # print(st_vec)
+
+            # print(self.cur_st_vec_dict)
         else:
             assert False, 'unsupported measurement kind'
 
@@ -597,21 +469,6 @@ class SEO_simulator(SEO_reader):
             "raw multiplexors MP_Y. Work around: use first our" \
             "MultiplexorExpander class to expand " \
             "MP_Ys into simpler gates."
-
-    def use_NOTA(self, bla_str):
-        """
-        Overrides the parent class use_ function. Does nothing.
-
-        Parameters
-        ----------
-        bla_str : str
-
-        Returns
-        -------
-        None
-
-        """
-        pass
 
     def use_PHAS(self, angle_degs, tar_bit_pos, controls):
         """
@@ -658,6 +515,33 @@ class SEO_simulator(SEO_reader):
         }
         gate = fun[projection_bit](angle_degs*np.pi/180)
         self.evolve_by_controlled_one_bit_gate(tar_bit_pos, controls, gate)
+
+    def use_PRINT(self, style, line_num):
+        """
+        Prints to screen the self.cur_st_vec_dict.
+
+        Parameters
+        ----------
+        style : str
+            style in wwhich to print
+        line_num : int
+            line number in eng & pic files in which PRINT command appears
+
+        Returns
+        -------
+        None
+
+        """
+        print("\n*************************beginning PRINT output")
+        print("PRINT line number=" + str(line_num))
+        if style == "V1":
+            st_vecs = self.cur_st_vec_dict
+            StateVec.describe_st_vec_dict(st_vecs,
+                                        # print_st_vec=True,
+                                        show_probs=True)
+        else:
+            assert False, "unsupported PRINT style"
+        print("****************************ending PRINT output")
 
     def use_ROT(self, axis,
                 angle_degs, tar_bit_pos, controls):
@@ -750,11 +634,11 @@ class SEO_simulator(SEO_reader):
         """
         self.evolve_by_controlled_bit_swap(bit1, bit2, controls)
 
-
 if __name__ == "__main__":
 
     # use test = 0 if want to run all tests at once.
     test = 0
+    # test = 3
     if test in [0, 1]:
         # test on circuit for a quantum fourier transform
         # (no loops, no internal measurements)
@@ -769,4 +653,3 @@ if __name__ == "__main__":
         # branches
         sim = SEO_simulator('io_folder/sim_test3', 4, verbose=True)
 
-    print(SEO_simulator.get_random_st(3))

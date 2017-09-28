@@ -1,11 +1,11 @@
 from Controls import *
 from SEO_reader import *
 from SEO_writer import *
-from quantum_compiler.UnitaryMat import *
+from quantum_CSD_compiler.UnitaryMat import *
 import Utilities as ut
 
 
-class Qubiter_to_IBMqasm(SEO_reader):
+class Qubiter_to_IBMqasm5q(SEO_reader):
     """
     This class is a child of SEO_reader. It reads an input English file and
     writes an IBM qasm2 file which is a line by line translation of the
@@ -106,45 +106,15 @@ class Qubiter_to_IBMqasm(SEO_reader):
 
     Attributes
     ----------
-    num_ops : int
-        number of operations. Lines inside a loop with 'reps' repetitions
-        will count as 'reps' operations
-    loop_to_cur_rep : dict[int, int]
-        a dictionary mapping loop number TO current repetition
-    just_jumped : bool
-        flag used to alert when loop jumps from NEXT to LOOP
-    line_count : int
-
-    english_in : _io.TextIOWrapper
-        file object for input text file that stores English description of
-        circuit
-    file_prefix : str
-        beginning of the name of English file being scanned
-    loop_to_start_line : dict[int, int]
-        a dictionary mapping loop number TO loop line + 1
-    loop_to_start_offset : dict[int, int]
-        a dictionary mapping loop number TO offset of loop's start
-    loop_to_reps : dict[int, int]
-        a dictionary mapping loop number TO total number of repetitions of
-        loop
-    loop_queue : list[int]
-        a queue of loops labelled by their id number
-    num_bits : int
-        number of qubits in whole circuit
-    tot_num_lines : int
-        number of lines in English file
-    split_line : list[str]
-        storage space for a list of strings obtained by splitting a line
-
-    verbose : bool
     allowed_tars : list[int]
         Allowed targets. Qubits that are equipped in hardware to be targets
         of an elementary CNOT. IBM qc currently has 5 qubits 0, 1, ...,
         4. Out of those, only 1, 2 and 4 can be targets.
-    missing_connections : list[tuple(int,int)]
-        Pairs of qubits that are not physically connected so they cannot be
-        the two ends of an elementary CNOT. This picture indicates which
-        qubits of the current IBM qc are connected:
+    connections : list[tuple(int,int)]
+        Pairs of qubits that are physically connected so they can be the two
+        ends of an elementary CNOT. Order of qubits in pairs is irrelevant.
+        This picture indicates which qubits of the current IBM qc are
+        connected:
 
             4     0
             | \ / |
@@ -182,9 +152,13 @@ class Qubiter_to_IBMqasm(SEO_reader):
         None
 
         """
-
         assert num_bits == 5
-        self.missing_connections = [(1, 4), (1, 3), (0, 4), (0, 3)]
+        self.connections = [(4, 3),
+                           (4, 2),
+                           (3, 2),
+                           (0, 2),
+                           (2, 1),
+                           (0, 1)]
         self.allowed_tars = [1, 2, 4]
 
         self.write_qubiter_files = write_qubiter_files
@@ -214,10 +188,10 @@ class Qubiter_to_IBMqasm(SEO_reader):
         if write_qubiter_files:
             self.qbtr_wr.close_files()
             
-    def are_disconnected(self, x, y):
+    def are_connected(self, x, y):
         """
-        This function returns true iff qubits x and y are not connected in
-        the hardware.
+        This function returns true iff qubits x and y are connected in the
+        hardware.
 
         Parameters
         ----------
@@ -229,7 +203,7 @@ class Qubiter_to_IBMqasm(SEO_reader):
         bool
 
         """
-        for a, b in self.missing_connections:
+        for a, b in self.connections:
             if (x, y) == (a, b) or (x, y) == (b, a):
                 return True
         return False
@@ -454,7 +428,7 @@ class Qubiter_to_IBMqasm(SEO_reader):
         rad_ang = angle_degs*np.pi/180
 
         arr = OneBitGates.rot_ax(rad_ang, axis)
-        line_str = Qubiter_to_IBMqasm.qasm_line_for_rot(arr, tar_bit_pos)
+        line_str = Qubiter_to_IBMqasm5q.qasm_line_for_rot(arr, tar_bit_pos)
         self.qasm_out.write(line_str)
 
         if self.write_qubiter_files:
@@ -486,7 +460,7 @@ class Qubiter_to_IBMqasm(SEO_reader):
                                      angle_z_degs])*np.pi/180)
 
         arr = OneBitGates.rot(*rad_ang_list)
-        line_str = Qubiter_to_IBMqasm.qasm_line_for_rot(arr, tar_bit_pos)
+        line_str = Qubiter_to_IBMqasm5q.qasm_line_for_rot(arr, tar_bit_pos)
         self.qasm_out.write(line_str)
 
         if self.write_qubiter_files:
@@ -556,7 +530,7 @@ class Qubiter_to_IBMqasm(SEO_reader):
         else:  # num_trols == 1
             tar_pos = tar_bit_pos
             trol_pos = controls.bit_pos[0]
-            if not self.are_disconnected(trol_pos, tar_pos):
+            if self.are_connected(trol_pos, tar_pos):
                 if tar_pos in self.allowed_tars:
                     cx_fun(trol_pos, tar_pos)
                 else:
@@ -634,4 +608,4 @@ class Qubiter_to_IBMqasm(SEO_reader):
 
 if __name__ == "__main__":
     file_prefix = "io_folder/qbtr2ibm_test"
-    q2i = Qubiter_to_IBMqasm(file_prefix, 5, write_qubiter_files=True)
+    q2i = Qubiter_to_IBMqasm5q(file_prefix, 5, write_qubiter_files=True)

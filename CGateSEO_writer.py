@@ -29,30 +29,16 @@ class CGateSEO_writer(SEO_writer):
 
     Attributes
     ----------
-    emb : CktEmbedder
-    english_out : _io.TextIOWrapper
-        file object for output text file that stores English description of
-        circuit
-    picture_out : _io.TextIOWrapper
-        file object for output text file that stores ASCII Picture
-        description of circuit
-    file_prefix : str
-        beginning of the name of both English and Picture files
-    line_counter : int
-    zero_bit_first : bool
-
-    one_line : bool
-        When this is True, it writes a single line for the c_u2 ( controlled
-        U(2) gate). When False, it writes an expansion of that gate.
-
+    do_checking : bool
+        Does some checking of algebra
     expand_1c_u2 : bool
         When this is True, the c_u2 (controlled U(2) gate) is expanded so
         that its sub-component 1c_u2 (uni controlled U(2) gates) are
         expanded into cnots and qubit rotations. If this is False, the 1c_u2
         are not expanded.
-
-    do_checking : bool
-        Does some checking of algebra
+    one_line : bool
+        When this is True, it writes a single line for the c_u2 ( controlled
+        U(2) gate). When False, it writes an expansion of that gate.
 
     """
 

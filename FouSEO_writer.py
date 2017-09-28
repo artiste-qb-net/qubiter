@@ -11,17 +11,6 @@ class FouSEO_writer(SEO_writer):
 
     Attributes
     ----------
-    emb : CktEmbedder
-    english_out : _io.TextIOWrapper
-        file object for output text file that stores English description of
-        circuit
-    picture_out : _io.TextIOWrapper
-        file object for output text file that stores ASCII Picture
-        description of circuit
-    file_prefix : str
-        beginning of the name of both English and Picture files
-    line_counter : int
-    zero_bit_first : bool
     do_perm : bool
         True if want circuit to include permutation that reverses qbit order
 

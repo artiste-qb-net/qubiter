@@ -1,21 +1,20 @@
 from CktEmbedder import *  # if don't include this, can't find Controls
 from EchoingSEO_reader import *
-from quantum_compiler.DiagUnitarySEO_writer import *
+from quantum_CSD_compiler.MultiplexorSEO_writer import *
 
 
-class DiagUnitaryExpander(EchoingSEO_reader):
+class MultiplexorExpander(EchoingSEO_reader):
     """
     This class is a child of EchoingSEO_reader. The class reads any
     previously created Qubiter English file and it writes new English &
     Picture files wherein every line of the original English file that
-    doesn't start with DIAG (diagonal unitary, aka d-unitary) is echoed
-    faithfully whereas lines which do start with DIAG are expanded via class
-    DiagUnitarySEO_writer into a sequence in the style specified as input to
-    the class constructor.
+    doesn't start with MP_Y (multiplexor) is echoed faithfully whereas lines
+    which do start with MP_Y are expanded via class MultiplexorSEO_writer
+    into a sequence in the style specified as input to the class constructor.
 
     So, to expand English & Picture files that contain DIAG and MP_Y lines
     into just CNOTs and qubit rotations, first use this class and the
-    analogous one for MP_Y, then use class CktExpander.
+    analogous one for DIAG, then use class CktExpander.
 
     If the input English file has in_file_prefix as file prefix, then the
     output English & Picture files have as file prefix in_file_prefix + '_X1',
@@ -26,45 +25,7 @@ class DiagUnitaryExpander(EchoingSEO_reader):
 
     Attributes
     ----------
-    num_ops : int
-        number of operations. Lines inside a loop with 'reps' repetitions
-        will count as 'reps' operations
-    loop_to_cur_rep : dict[int, int]
-        a dictionary mapping loop number TO current repetition
-    just_jumped : bool
-        flag used to alert when loop jumps from NEXT to LOOP
-    line_count : int
 
-    english_in : _io.TextIOWrapper
-        file object for input text file that stores English description of
-        circuit
-    file_prefix : str
-        beginning of the name of English file being scanned
-    loop_to_start_line : dict[int, int]
-        a dictionary mapping loop number TO loop line + 1
-    loop_to_start_offset : dict[int, int]
-        a dictionary mapping loop number TO offset of loop's start
-    loop_to_reps : dict[int, int]
-        a dictionary mapping loop number TO total number of repetitions of
-        loop
-    loop_queue : list[int]
-        a queue of loops labelled by their id number
-    num_bits : int
-        number of qubits in whole circuit
-    tot_num_lines : int
-        number of lines in English file
-    split_line : list[str]
-        storage space for a list of strings obtained by splitting a line
-
-    verbose : bool
-
-    gbit_list : list(int)
-        Only needed if expanding DIAG's in oracular style, this is a list of
-        grounded bits
-    wr : DiagUnitarySEO_writer
-        This object of DiagUnitarySEO_writer, created in the class
-        constructor, is called inside every use_  function to do some writing
-        in the output files.
 
     """
 
@@ -94,7 +55,7 @@ class DiagUnitaryExpander(EchoingSEO_reader):
         emb = CktEmbedder(num_bits, num_bits)
         rad_angles = None
         out_file_prefix = SEO_reader.xed_file_prefix(file_prefix)
-        wr = DiagUnitarySEO_writer(out_file_prefix, emb,
+        wr = MultiplexorSEO_writer(out_file_prefix, emb,
             style, rad_angles, num_gbits=num_gbits)
 
         EchoingSEO_reader.__init__(self, file_prefix, num_bits, wr, style,
@@ -102,19 +63,21 @@ class DiagUnitaryExpander(EchoingSEO_reader):
 
         self.wr.close_files()
 
-    def emb_for_du(self, controls):
+    def emb_for_plexor(self, tar_bit_pos, controls):
         """
-        This is an internal function used inside the function use_DIAG().
-        This function returns emb, nt, nf to be used as arguments of a
-        DiagUnitarySEO_writer that will be used to expand the DIAG line
+        This is an internal function used inside the function use_MP_Y().
+        The function returns emb, nt, nf to be used as arguments of a
+        MultiplexorSEO_writer that will be used to expand the MP_y line
         currently being considered. emb is a circuit embedder, nt is the
         number of T bits and nf is the number of F bits detected in the
         input argument 'controls'.
 
         Parameters
         ----------
+        tar_bit_pos : int
+            target bit position of multiplexor currently being considered.
         controls : Controls
-            controls of the DIAG currently being considered.
+            controls of the MP_Y currently being considered.
 
         Returns
         -------
@@ -141,10 +104,10 @@ class DiagUnitaryExpander(EchoingSEO_reader):
             g_bpos = self.gbit_list.sort()
         else:
             g_bpos = []
-        bit_map = T_bpos + F_bpos + MP_bpos + g_bpos
+        bit_map = T_bpos + F_bpos + MP_bpos + [tar_bit_pos] + g_bpos
         # print("bit_map", bit_map)
         assert len(bit_map) == len(set(bit_map)),\
-            "bits used to define d-unitary are not unique"
+            "bits used to define multiplexor are not unique"
         assert len(bit_map) <= self.num_bits
 
         nt = len(T_bpos)
@@ -152,15 +115,16 @@ class DiagUnitaryExpander(EchoingSEO_reader):
         emb = CktEmbedder(num_bits, num_bits, bit_map)
         return emb, nt, nf
 
-    def use_DIAG(self, controls, rad_angles):
+    def use_MP_Y(self, tar_bit_pos, controls, rad_angles):
         """
         This is an override of a function in the parent class
         EchoingSEO_reader. This is the only use_ function of this class that
         doesn't simply echo its input line. This function does most of its
-        work inside the DiagUnitary_SEO_writer.write() function that it calls.
+        work inside the Multiplexor_SEO_writer.write() function that it calls.
 
         Parameters
         ----------
+        tar_bit_pos : int
         controls : Controls
         rad_angles : list[float]
 
@@ -170,7 +134,7 @@ class DiagUnitaryExpander(EchoingSEO_reader):
 
         """
 
-        emb, nt, nf = self.emb_for_du(controls)
+        emb, nt, nf = self.emb_for_plexor(tar_bit_pos, controls)
         self.wr.emb = emb
         self.wr.rad_angles = rad_angles
         self.wr.num_T_trols = nt
@@ -183,7 +147,6 @@ class DiagUnitaryExpander(EchoingSEO_reader):
 
 if __name__ == "__main__":
     num_bits = 6
-    file_prefix = "../io_folder/d_unitary_test_one_line"
+    file_prefix = "../io_folder/plexor_test_one_line"
     style = 'exact'
-    xer = DiagUnitaryExpander(file_prefix, num_bits, style)
-
+    xer = MultiplexorExpander(file_prefix, num_bits, style)

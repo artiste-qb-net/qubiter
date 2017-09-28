@@ -39,24 +39,12 @@ class PhaseEstSEO_writer(SEO_writer):
     atom_wr : AtomWriter
         An object of a subclass of the class AtomWriter given below. This
         object will write the atom matrix powers.
-
-    num_probe_bits : int
-        Number of probe qubits.
-
-    emb : CktEmbedder
-    english_out : _io.TextIOWrapper
-        file object for output text file that stores English description of
-        circuit
-    picture_out : _io.TextIOWrapper
-        file object for output text file that stores ASCII Picture
-        description of circuit
-    file_prefix : str
-        beginning of the name of both English and Picture files
-    line_counter : int
-    zero_bit_first : bool
     do_perm : bool
         True if want quantum Fourier Transform circuit to include
         permutation that reverses qbit order
+    num_probe_bits : int
+        Number of probe qubits.
+
     """
 
     def __init__(self, do_write, num_probe_bits, atom_writer,

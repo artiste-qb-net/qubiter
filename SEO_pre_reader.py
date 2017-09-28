@@ -17,21 +17,21 @@ class SEO_pre_reader:
         circuit
     file_prefix : str
         beginning of the name of English file being scanned
+    loop_queue : list[int]
+        a queue of loops labelled by their id number
+    loop_to_reps : dict[int, int]
+        a dictionary mapping loop number TO total number of repetitions of
+        loop
     loop_to_start_line : dict[int, int]
         a dictionary mapping loop number TO loop line + 1
     loop_to_start_offset : dict[int, int]
         a dictionary mapping loop number TO offset of loop's start
-    loop_to_reps : dict[int, int]
-        a dictionary mapping loop number TO total number of repetitions of
-        loop
-    loop_queue : list[int]
-        a queue of loops labelled by their id number
     num_bits : int
         number of qubits in whole circuit
-    tot_num_lines : int
-        number of lines in English file
     split_line : list[str]
         storage space for a list of strings obtained by splitting a line
+    tot_num_lines : int
+        number of lines in English file
 
     """
 

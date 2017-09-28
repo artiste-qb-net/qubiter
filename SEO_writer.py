@@ -60,18 +60,24 @@ class SEO_writer:
     bit. A type 2 measurement stores a copy of the state vector after |0><0|
     has been applied, and another copy after |1><1| has been applied.
 
+    If a vertical wire hasn't been measured as type 2 measurement,
+    it is drawn in pic file as "|";  otherwise, it is drawn as ":".
+
     Attributes
     ----------
     emb : CktEmbedder
     english_out : _io.TextIOWrapper
         file object for output text file that stores English description of
         circuit
+    file_prefix : str
+        beginning of the name of both English and Picture files
+    gate_line_counter : int
+    measured_bits : list(int)
+        list of bits that have been measured with type 2 measurement and
+        haven't been reset to |0> or |1>
     picture_out : _io.TextIOWrapper
         file object for output text file that stores ASCII Picture
         description of circuit
-    file_prefix : str
-        beginning of the name of both English and Picture files
-    line_counter : int
     zero_bit_first : bool
 
     """
@@ -94,10 +100,11 @@ class SEO_writer:
 
         """
 
-        self.line_counter = 0
+        self.gate_line_counter = 0
         self.file_prefix = file_prefix
         self.emb = emb
         self.zero_bit_first = zero_bit_first
+        self.measured_bits = []
 
         if english_out is None and file_prefix:
             self.english_out = open(
@@ -125,7 +132,37 @@ class SEO_writer:
         self.english_out.close()
         self.picture_out.close()
 
-    def write_pic_line(self, pic_line):
+    def colonize(self, pic_line):
+        """
+        This function returns new version of pic_line. Every "|" wire is
+        replaced by ":" colon wire and vice versa iff the wire is at a bit
+        position that has been measured (type 2 measurement) in the past and
+        not reset. This function assumes pic_line in ZL convention so must
+        call this function before calling write_ZF_or_ZL_pic_line()
+
+        Parameters
+        ----------
+        pic_line : str
+
+        Returns
+        -------
+        str
+
+        """
+        num_bits = self.emb.num_bits_aft
+        li = list(pic_line)
+        for bit in range(0, num_bits):
+            m = 4*(num_bits - 1 - bit)
+            if bit in self.measured_bits:
+                if li[m] == "|":
+                    li[m] = ":"
+            else:
+                if li[m] == ":":
+                    li[m] = "|"
+
+        return "".join(li)
+
+    def write_ZF_or_ZL_pic_line(self, pic_line):
         """
         Writes a line in the Picture file using either the ZF or ZL
         conventions. pic_line is originally written in ZL format, so this
@@ -171,6 +208,133 @@ class SEO_writer:
 
         self.picture_out.write(new_line)
 
+    def write_IF_M_beg(self, trols):
+        """
+        Writes a 'IF_M( <controls> ){' line in eng & pic files.
+
+        Parameters
+        ----------
+        trols : Controls
+
+        Returns
+        -------
+        None
+
+        """
+        aft_trols = trols.new_embedded_self(self.emb)
+        s = "IF_M(\t"
+        num_controls = len(aft_trols.bit_pos)
+        for c in range(num_controls):
+            s += str(aft_trols.bit_pos[c]) + \
+                 ("T" if aft_trols.kinds[c] == True else "F") + \
+                 ("\t){\n" if (c == num_controls - 1) else "\t")
+
+        self.english_out.write(s)
+        self.picture_out.write(s)
+
+    def write_IF_M_end(self):
+        """
+        Writes an '}IF_M' line in eng and pic files.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+        None
+
+        """
+        s = "}IF_M\n"
+        self.english_out.write(s)
+        self.picture_out.write(s)
+
+    def write_LOOP(self, loop_num, reps):
+        """
+        Writes a 'LOOP' line in eng & pic files. The gates between a LOOP
+        line and its partner NEXT line are to be repeated a number of times
+        called reps.
+
+        Parameters
+        ----------
+        loop_num : int
+        reps : int
+
+        Returns
+        -------
+        None
+
+        """
+        s = "LOOP\t" + str(loop_num) + "\tREPS:\t" + str(reps) + '\n'
+        self.english_out.write(s)
+        self.picture_out.write(s)
+
+    def write_MEAS(self, tar_bit_pos, kind):
+        """
+        Writes a 'MEAS' line in eng & pic files. This denotes a measurement
+        step. We allow 3 kinds of measurements (0, 1, 2) at a target bit.
+
+        Parameters
+        ----------
+        tar_bit_pos : int
+        kind : int
+            either 0, 1 or 2
+
+        Returns
+        -------
+        None
+
+        """
+
+        # num_bits_bef = self.emb.num_bits_bef
+        num_bits_aft = self.emb.num_bits_aft
+        aft_tar_bit_pos = self.emb.aft(tar_bit_pos)
+
+        assert kind in [0, 1, 2], "unsupported measurement kind"
+        if kind == 2:
+            self.measured_bits.append(aft_tar_bit_pos)
+
+        # english file
+        s = 'MEAS\t' + str(kind) + '\tAT\t' + str(aft_tar_bit_pos) + '\n'
+        self.english_out.write(s)
+
+        # picture file
+        pic_line = ""
+        biggest = aft_tar_bit_pos
+        smallest = aft_tar_bit_pos
+        # k a bit position
+        for k in range(num_bits_aft-1, biggest, -1):
+            pic_line += "|   "
+        if kind == 0:
+            pic_line += "M0  "
+        elif kind == 1:
+            pic_line += 'M1  '
+        else:
+            pic_line += 'M   '
+
+        for k in range(smallest-1, -1, -1):
+            pic_line += "|   "
+
+        pic_line = self.colonize(pic_line)
+        self.write_ZF_or_ZL_pic_line(pic_line)
+        self.picture_out.write("\n")
+
+    def write_NEXT(self, loop_num):
+        """
+        Writes a 'NEXT' line in eng & pic files.
+
+        Parameters
+        ----------
+        loop_num : int
+
+        Returns
+        -------
+        None
+
+        """
+        s = "NEXT\t" + str(loop_num) + '\n'
+        self.english_out.write(s)
+        self.picture_out.write(s)
+
     def write_NOTA(self, bla_str, permission=True):
         """
         Writes a 'NOTA' line in eng & pic files. As the name implies,
@@ -193,40 +357,20 @@ class SEO_writer:
             self.english_out.write(s)
             self.picture_out.write(s)
 
-    def write_LOOP(self, loop_num, reps):
+    def write_PRINT(self, style):
         """
-        Writes a 'LOOP' line in eng & pic files. The gates between a LOOP
-        line and its partner NEXT line are to be repeated a number of times
-        called reps.
+        Writes a 'PRINT' line in eng & pic files.
 
         Parameters
         ----------
-        loop_num : int
-        reps : int
+        style : str
 
         Returns
         -------
         None
 
         """
-        s = "LOOP\t" + str(loop_num) + "\tREPS:\t" + str(reps) + '\n'
-        self.english_out.write(s)
-        self.picture_out.write(s)
-
-    def write_NEXT(self, loop_num):
-        """
-        Writes a 'NEXT' line in eng & pic files.
-
-        Parameters
-        ----------
-        loop_num : int
-
-        Returns
-        -------
-        None
-
-        """
-        s = "NEXT\t" + str(loop_num) + '\n'
+        s = "PRINT\t" + style + '\n'
         self.english_out.write(s)
         self.picture_out.write(s)
 
@@ -248,7 +392,7 @@ class SEO_writer:
         """
 
         # preamble, same for all controlled gate methods
-        self.line_counter += 1
+        self.gate_line_counter += 1
         assert not self.english_out.closed
         assert not self.picture_out.closed
 
@@ -325,8 +469,9 @@ class SEO_writer:
 
         for k in range(smallest-1, -1, -1):
             pic_line += "|   "
-            
-        self.write_pic_line(pic_line)
+
+        pic_line = self.colonize(pic_line)
+        self.write_ZF_or_ZL_pic_line(pic_line)
         self.picture_out.write("\n")
 
     def write_controlled_one_bit_gate(
@@ -349,7 +494,7 @@ class SEO_writer:
         """
 
         # preamble, same for all controlled gate methods
-        self.line_counter += 1
+        self.gate_line_counter += 1
         assert not self.english_out.closed
         assert not self.picture_out.closed
 
@@ -376,11 +521,7 @@ class SEO_writer:
             fun_arg_list = []
 
         # english file
-        if one_bit_gate_fun == OneBitGates.meas:
-            kind = fun_arg_list[0]
-            assert kind in [0, 1, 2], "unsupported measurement kind"
-            self.english_out.write('MEAS\t' + str(kind) + '\t')
-        elif one_bit_gate_fun == OneBitGates.phase_fac:
+        if one_bit_gate_fun == OneBitGates.phase_fac:
             self.english_out.write("PHAS\t" +
             str(fun_arg_list[0]*180/np.pi))
         elif one_bit_gate_fun == OneBitGates.P_0_phase_fac:
@@ -461,15 +602,7 @@ class SEO_writer:
                 if not is_target:  # is not control or target
                     pic_line += "+" + tres
                 else:  # is target
-                    if one_bit_gate_fun == OneBitGates.meas:
-                        kind = fun_arg_list[0]
-                        if kind == 0:
-                            pic_line += "M0" + dos
-                        elif kind == 1:
-                            pic_line += 'M1' + dos
-                        else:
-                            pic_line += 'M' + tres
-                    elif one_bit_gate_fun == OneBitGates.phase_fac:
+                    if one_bit_gate_fun == OneBitGates.phase_fac:
                         pic_line += "Ph" + dos
                     elif one_bit_gate_fun == OneBitGates.P_0_phase_fac:
                         pic_line += "OP" + dos
@@ -500,8 +633,9 @@ class SEO_writer:
 
         for k in range(smallest-1, -1, -1):
             pic_line += "|   "
-            
-        self.write_pic_line(pic_line)
+
+        pic_line = self.colonize(pic_line)
+        self.write_ZF_or_ZL_pic_line(pic_line)
         self.picture_out.write("\n")
 
     def write_controlled_multiplexor_gate(self,
@@ -524,7 +658,7 @@ class SEO_writer:
         """
 
         # preamble, same for all controlled gate methods
-        self.line_counter += 1
+        self.gate_line_counter += 1
         assert not self.english_out.closed
         assert not self.picture_out.closed
 
@@ -621,8 +755,9 @@ class SEO_writer:
         
         for k in range(smallest-1, -1, -1):
             pic_line += "|   "
-            
-        self.write_pic_line(pic_line)
+
+        pic_line = self.colonize(pic_line)
+        self.write_ZF_or_ZL_pic_line(pic_line)
         self.picture_out.write("\n")
 
     def write_controlled_diag_unitary_gate(self, trols, rad_angles):
@@ -643,7 +778,7 @@ class SEO_writer:
         """
 
         # preamble, same for all controlled gate methods
-        self.line_counter += 1
+        self.gate_line_counter += 1
         assert not self.english_out.closed
         assert not self.picture_out.closed
 
@@ -729,7 +864,8 @@ class SEO_writer:
         for k in range(smallest-1, -1, -1):
             pic_line += "|   "
 
-        self.write_pic_line(pic_line)
+        pic_line = self.colonize(pic_line)
+        self.write_ZF_or_ZL_pic_line(pic_line)
         self.picture_out.write("\n")
 
     def write_bit_swap(self, bit1, bit2):
@@ -770,23 +906,26 @@ class SEO_writer:
         self.write_controlled_one_bit_gate(
             tar_bit_pos, trols, one_bit_gate_fun, fun_arg_list)
 
-    def write_measurement(self, tar_bit_pos, kind):
+    def write_cnot(self, control_bit, target_bit, kind=True):
         """
-        Writes a 'MEAS' line in eng & pic files. This denotes a measurement
-        step. We allow 3 kinds of measurements (0, 1, 2) at a target bit.
+        Writes a simple singly controlled not. If kind=True (resp. False),
+        cnot fires when control is |1> (resp. |0>)
 
         Parameters
         ----------
-        tar_bit_pos : int
-        kind : int
-            either 0, 1 or 2
+        control_bit : int
+        target_bit : int
+        kind : bool
 
         Returns
         -------
         None
 
         """
-        self.write_one_bit_gate(tar_bit_pos, OneBitGates.meas, [kind])
+        num_bits = self.emb.num_bits_aft
+        trols = Controls.new_knob(num_bits, control_bit, kind)
+        self.write_controlled_one_bit_gate(target_bit, trols,
+            OneBitGates.sigx)
 
     def write_global_phase_fac(self, ang_rads):
         """
@@ -864,17 +1003,21 @@ if __name__ == "__main__":
 
         wr.write_NOTA('zero bit first = ' + str(zf))
 
-        wr.write_LOOP(10, 15)
+        wr.write_IF_M_beg(trols)
+        wr.write_IF_M_end()
 
+        wr.write_LOOP(10, 15)
         wr.write_NEXT(10)
+
+        tar_bit_pos = 1
+        for kind in [0, 1, 2]:
+            wr.write_MEAS(tar_bit_pos, kind)
+
+        wr.write_PRINT('F2')
 
         wr.write_controlled_bit_swap(0, 2, trols)
 
         wr.write_bit_swap(1, 2)
-
-        tar_bit_pos = 2
-        for kind in [0, 1, 2]:
-            wr.write_measurement(tar_bit_pos, kind)
 
         gate = OneBitGates.phase_fac
         wr.write_controlled_one_bit_gate(2, trols, gate, [ang_rads])
@@ -914,6 +1057,8 @@ if __name__ == "__main__":
 
         gate = OneBitGates.sigx
         wr.write_one_bit_gate(2, gate)
+
+        wr.write_cnot(2, 1)
 
         tar_bit_pos = 0
         trols1 = Controls(num_bits)

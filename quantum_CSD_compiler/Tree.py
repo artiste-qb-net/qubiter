@@ -1,5 +1,5 @@
 from SEO_writer import *
-from quantum_compiler.Node import *
+from quantum_CSD_compiler.Node import *
 import collections as co
 
 
@@ -54,7 +54,7 @@ class Tree(SEO_writer):
 
     2. Qubiter 1.11, a C++ program whose first version was released together
     with Ref.1 above. Qubiter 1.11 is included in the
-    quantum_compiler/LEGACY folder of this newer, pythonic version of Qubiter
+    quantum_CSD_compiler/LEGACY folder of this newer, pythonic version of Qubiter
 
     3. R.R. Tucci, Quantum Fast Fourier Transform Viewed as a Special Case
     of Recursive Application of Cosine-Sine Decomposition,
@@ -62,27 +62,14 @@ class Tree(SEO_writer):
 
     Attributes
     ----------
-    emb : CktEmbedder
-    english_out : _io.TextIOWrapper
-        file object for output text file that stores English description of
-        circuit
-    picture_out : _io.TextIOWrapper
-        file object for output text file that stores ASCII Picture
-        description of circuit
-    file_prefix : str
-        beginning of the name of both English and Picture files
-    line_counter : int
-    zero_bit_first : bool
-
-    root_nd : Node
-        The root or starting node of the tree. The only node without parents.
-        Each node remembers its children, so you only need the root_nd to
-        access all other nodes.
     global_phase_rads : float
         If arr is the initial unitary matrix fed to the constructor,
         then this equals delta, where arr = exp(i*delta) arr1, where arr1 is
         a special unitary matrix (det(arr1) = 1)
-    verbose : bool
+    root_nd : Node
+        The root or starting node of the tree. The only node without parents.
+        Each node remembers its children, so you only need the root_nd to
+        access all other nodes.
 
     """
 

@@ -6,7 +6,7 @@ import numpy as np
 class SEO_reader(SEO_pre_reader):
     """
     This class inherits from the class SEO_pre_reader. It's an abstract
-    class because it has a bunch of use_ methods that must be overridden by
+    class because it has a bunch of use_ methods that may be overridden by
     a child class. This class reads each line of an English file, parses it,
     and sends the info obtained to a use_ method for further processing. One
     very important child of this class is SEO_simulator which uses each line
@@ -24,39 +24,22 @@ class SEO_reader(SEO_pre_reader):
 
     Attributes
     ----------
-    num_ops : int
-        number of operations. Lines inside a loop with 'reps' repetitions
-        will count as 'reps' operations
-    loop_to_cur_rep : dict[int, int]
-        a dictionary mapping loop number TO current repetition
     just_jumped : bool
         flag used to alert when loop jumps from NEXT to LOOP
     line_count : int
-
-    english_in : _io.TextIOWrapper
-        file object for input text file that stores English description of
-        circuit
-    file_prefix : str
-        beginning of the name of English file being scanned
-    loop_to_start_line : dict[int, int]
-        a dictionary mapping loop number TO loop line + 1
-    loop_to_start_offset : dict[int, int]
-        a dictionary mapping loop number TO offset of loop's start
-    loop_to_reps : dict[int, int]
-        a dictionary mapping loop number TO total number of repetitions of
-        loop
-    loop_queue : list[int]
-        a queue of loops labelled by their id number
-    num_bits : int
-        number of qubits in whole circuit
-    tot_num_lines : int
-        number of lines in English file
-    split_line : list[str]
-        storage space for a list of strings obtained by splitting a line
-
+    loop_to_cur_rep : dict[int, int]
+        a dictionary mapping loop number TO current repetition
+    mcase_trols if outside if_m block, else a control specifying the current
+        if_m case
+    measured_bits : list(int)
+        list of bits that have been measured with type 2 measurement and
+        haven't been reset to |0> or |1>
+    num_ops : int
+    num_sigx_ops : int
     verbose : bool
+
     """
-    
+
     def __init__(self, file_prefix, num_bits, verbose=False):
         """
         Constructor
@@ -73,6 +56,8 @@ class SEO_reader(SEO_pre_reader):
         """
         SEO_pre_reader.__init__(self, file_prefix, num_bits)
         self.verbose = verbose
+        self.measured_bits = []
+        self.mcase_trols = None
 
         self.english_in = open(
             file_prefix + '_' + str(num_bits) + '_eng.txt', 'rt')
@@ -136,7 +121,7 @@ class SEO_reader(SEO_pre_reader):
         if self.verbose:
             print(s)
 
-        s = "Number of SIGX Ops (Controlled NOTs) = " + \
+        s = "Number of SIGX Ops (Controlled or uncontrolled NOTs) = " + \
             str(self.num_sigx_ops) + '\n'
         log.write(s)
         if self.verbose:
@@ -148,7 +133,6 @@ class SEO_reader(SEO_pre_reader):
         """
         Analyze the inputted line. Send info to abstract use_ methods (
         labelled by first four letters of line) for further use.
-
 
         Parameters
         ----------
@@ -193,6 +177,26 @@ class SEO_reader(SEO_pre_reader):
             controls = self.read_TF_controls(self.split_line[4:])
             self.use_HAD2(tar_bit_pos, controls)
 
+        elif line_name == "IF_M(":
+            # don't count IF_M(<controls>){ as operation
+            self.num_ops -= 1
+
+            # example:
+            # IF_M( 3F 2T ){
+            self.mcase_trols = self.read_TF_controls(
+                self.split_line[1:-1])
+            for bit in self.mcase_trols.bit_pos:
+                assert bit in self.measured_bits, \
+                    "IF_M() argument mentions a qubit that" \
+                    " hasn't been measured yet"
+            self.use_IF_M_beg(self.mcase_trols)
+
+        elif line_name == "}IF_M":
+            # don't count }IF_M as operation
+            self.num_ops -= 1
+            self.mcase_trols = None
+            self.use_IF_M_end()
+
         elif line_name == "LOOP":
             # don't count LOOP as operation
             self.num_ops -= 1
@@ -212,6 +216,11 @@ class SEO_reader(SEO_pre_reader):
 
             kind = int(self.split_line[1])
             tar_bit_pos = int(self.split_line[3])
+            if kind == 2:
+                # don't measure same bit twice
+                assert tar_bit_pos not in self.measured_bits,\
+                    "attempting to measure (kind=2) same qubit twice"
+                self.measured_bits.append(tar_bit_pos)
             self.use_MEAS(tar_bit_pos, kind)
 
         elif line_name == "MP_Y":
@@ -243,10 +252,11 @@ class SEO_reader(SEO_pre_reader):
 
         elif line_name == 'NOTA':
             # don't count NOTA as operation
+            self.num_ops -= 1
 
             # example:
             # NOTA  "I love you Mary."
-            self.num_ops -= 1
+
             self.use_NOTA(line[4:].strip())
 
         elif line_name == "PHAS":
@@ -262,6 +272,15 @@ class SEO_reader(SEO_pre_reader):
             self.read_P_phase_factor(0)
         elif line_name == "P1PH":
             self.read_P_phase_factor(1)
+
+        elif line_name == "PRINT":
+            # don't count PRINT as operation
+            self.num_ops -= 1
+
+            # example:
+            # PRINT V1
+            assert len(self.split_line) == 2, "PRINT line must contain style str"
+            self.use_PRINT(self.split_line[1], self.line_count)
 
         elif line_name == "ROTX":
             self.read_ROT(1)
@@ -372,15 +391,12 @@ class SEO_reader(SEO_pre_reader):
         """
         Collect useful info from P0PH or P1PH split_line and forward it to
         abstract use_ method.
-
         Parameters
         ----------
         projection_bit : int
-
         Returns
         -------
         None
-
         """
         # example:
         # P0PH 42.7 AT 1 IF 3F 2T
@@ -392,30 +408,6 @@ class SEO_reader(SEO_pre_reader):
         assert projection_bit in [0, 1]
         self.use_P_PH(projection_bit,
                           angle_degs, tar_bit_pos, controls)
-
-    def read_SIG(self, axis):
-        """
-        Collect useful info from SIGX, SIGY, or SIGZ split_line and forward
-        it to abstract use_ method.
-
-        Parameters
-        ----------
-        axis : int
-
-        Returns
-        -------
-        None
-
-        """
-        # example:
-        # SIGX AT 1 IF 3F 2T
-        # SIGY AT 1 IF 3F 2T
-        # SIGZ AT 1 IF 3F 2T
-
-        tar_bit_pos = int(self.split_line[2])
-        controls = self.read_TF_controls(self.split_line[4:])
-        assert axis in [1, 2, 3]
-        self.use_SIG(axis, tar_bit_pos, controls)
 
     def read_ROT(self, axis):
         """
@@ -441,9 +433,33 @@ class SEO_reader(SEO_pre_reader):
         controls = self.read_TF_controls(self.split_line[5:])
         self.use_ROT(axis, angle_degs, tar_bit_pos, controls)
 
+    def read_SIG(self, axis):
+        """
+        Collect useful info from SIGX, SIGY, or SIGZ split_line and forward
+        it to abstract use_ method.
+
+        Parameters
+        ----------
+        axis : int
+
+        Returns
+        -------
+        None
+
+        """
+        # example:
+        # SIGX AT 1 IF 3F 2T
+        # SIGY AT 1 IF 3F 2T
+        # SIGZ AT 1 IF 3F 2T
+
+        tar_bit_pos = int(self.split_line[2])
+        controls = self.read_TF_controls(self.split_line[4:])
+        assert axis in [1, 2, 3]
+        self.use_SIG(axis, tar_bit_pos, controls)
+
     def use_DIAG(self, trols, rad_angles):
         """
-        Abstract use_ method that must be overridden by child class.
+        Abstract use_ method that may be overridden by child class.
 
         Parameters
         ----------
@@ -459,12 +475,41 @@ class SEO_reader(SEO_pre_reader):
 
     def use_HAD2(self, tar_bit_pos, controls):
         """
-        Abstract use_ method that must be overridden by child class.
+        Abstract use_ method that may be overridden by child class.
 
         Parameters
         ----------
         tar_bit_pos : int
         controls : Controls
+
+        Returns
+        -------
+        None
+
+        """
+        pass
+
+    def use_IF_M_beg(self, controls):
+        """
+        Abstract use_ method that may be overridden by child class.
+
+        Parameters
+        ----------
+        controls : Controls
+
+        Returns
+        -------
+        None
+
+        """
+        pass
+
+    def use_IF_M_end(self):
+        """
+        Abstract use_ method that may be overridden by child class.
+
+        Parameters
+        ----------
 
         Returns
         -------
@@ -493,7 +538,7 @@ class SEO_reader(SEO_pre_reader):
 
     def use_MEAS(self, tar_bit_pos, kind):
         """
-        Abstract use_ method that must be overridden by child class.
+        Abstract use_ method that may be overridden by child class.
 
         Parameters
         ----------
@@ -509,7 +554,7 @@ class SEO_reader(SEO_pre_reader):
 
     def use_MP_Y(self, tar_bit_pos, trols, rad_angles):
         """
-        Abstract use_ method that must be overridden by child class.
+        Abstract use_ method that may be overridden by child class.
 
         Parameters
         ----------
@@ -548,7 +593,7 @@ class SEO_reader(SEO_pre_reader):
 
     def use_NOTA(self, bla_str):
         """
-        Abstract use_ method that must be overridden by child class.
+        Abstract use_ method that may be overridden by child class.
 
         Parameters
         ----------
@@ -563,7 +608,7 @@ class SEO_reader(SEO_pre_reader):
 
     def use_PHAS(self, angle_degs, tar_bit_pos, controls):
         """
-        Abstract use_ method that must be overridden by child class.
+        Abstract use_ method that may be overridden by child class.
 
         Parameters
         ----------
@@ -580,7 +625,7 @@ class SEO_reader(SEO_pre_reader):
 
     def use_P_PH(self, projection_bit, angle_degs, tar_bit_pos, controls):
         """
-        Abstract use_ method that must be overridden by child class.
+        Abstract use_ method that may be overridden by child class.
 
         Parameters
         ----------
@@ -596,9 +641,25 @@ class SEO_reader(SEO_pre_reader):
         """
         pass
 
+    def use_PRINT(self, style, line_num):
+        """
+        Abstract use_ method that may be overridden by child class.
+
+        Parameters
+        ----------
+        style : str
+        line_num : int
+
+        Returns
+        -------
+        None
+
+        """
+        pass
+
     def use_ROT(self, axis, angle_degs, tar_bit_pos, controls):
         """
-        Abstract use_ method that must be overridden by child class.
+        Abstract use_ method that may be overridden by child class.
 
         Parameters
         ----------
@@ -617,7 +678,7 @@ class SEO_reader(SEO_pre_reader):
     def use_ROTN(self, angle_x_degs, angle_y_degs, angle_z_degs,
                 tar_bit_pos, controls):
         """
-        Abstract use_ method that must be overridden by child class.
+        Abstract use_ method that may be overridden by child class.
 
         Parameters
         ----------
@@ -636,7 +697,7 @@ class SEO_reader(SEO_pre_reader):
 
     def use_SIG(self, axis, tar_bit_pos, controls):
         """
-        Abstract use_ method that must be overridden by child class.
+        Abstract use_ method that may be overridden by child class.
 
         Parameters
         ----------
@@ -653,7 +714,7 @@ class SEO_reader(SEO_pre_reader):
 
     def use_SWAP(self, bit1, bit2, controls):
         """
-        Abstract use_ method that must be overridden by child class.
+        Abstract use_ method that may be overridden by child class.
 
         Parameters
         ----------
