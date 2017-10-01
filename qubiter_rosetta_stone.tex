@@ -47,11 +47,11 @@ $H(1)^{\nbar(3)n(2)}$ &
 {\tt  HAD2  AT  1  IF  3F  2T}&{\tt 0---@---H\ \ \ |}
 \\
 \hline
-\footnotesize{Begin ``if measured" 
+\footnotesize{Begin ``if measured"
 block of gates, execute block}
 & {\tt IF\_M( 3F 2T )\{} & {\tt IF\_M( 3F 2T )\{}
 \\
-\footnotesize{if measured 
+\footnotesize{if measured
 that qubit 3 is False and 2 is True} &&
 \\
 \hline
@@ -103,19 +103,19 @@ A one line comment &
 \\
 \hline
 $e^{i 42.7 \frac{\pi}{180} \nbar(3)n(2)}$ &
-{\tt  PHAS 42.7 IF  3F  2T}&{\tt 0---@---+--Ph}
-\\
-\hline
-$e^{i 42.7 \frac{\pi}{180} \nbar(3)n(2)}$ &
 {\tt  P0PH 42.7 AT  3 IF 2T}&{\tt 0P--@\ \ \ |\ \ \ |}
-\\
-\hline
-\footnotesize{Simulator prints the current state vec in style V1} &
-{\tt  PRINT } V1&{\tt  PRINT } V1
 \\
 \hline
 $e^{i 42.7 \frac{\pi}{180} n(3)n(2)}$ &
 {\tt  P1PH 42.7 AT  3 IF 2T}&{\tt @P--@\ \ \ |\ \ \ |}
+\\
+\hline
+$e^{i 42.7 \frac{\pi}{180} \nbar(3)n(2)}$ &
+{\tt  PHAS 42.7 IF  3F  2T}&{\tt 0---@---+--Ph}
+\\
+\hline
+\footnotesize{Simulator prints the current state vec in style V1} &
+{\tt  PRINT } V1&{\tt  PRINT } V1
 \\
 \hline
 $(e^{i\frac{\pi}{180} 23.7 \sigx(1)})^{\nbar(3)n(2)}$ &

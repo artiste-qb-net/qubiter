@@ -17,7 +17,7 @@ class Plotter:
 
     """
     @staticmethod
-    def get_states(num_bits, use_bin_labels=True):
+    def get_states(num_bits, use_bin_labels=True, ZL=True):
         """
         Returns list of strings ['0', '1', ..] with 2^num_bits entries if
         use_bin_labels=False, or the binary string equivalents if
@@ -27,30 +27,37 @@ class Plotter:
         ----------
         num_bits : int
         use_bin_labels : bool
+        ZL : bool
+            If True, appends "(ZL)" to state labels. Else appends "(ZF)"
 
         Returns
         -------
         list[str]
 
         """
+        if ZL:
+            str1 = "(ZL)"
+        else:
+            str1 = "(ZF)"
         if not use_bin_labels:
             states = [str(x) for x in range(0, 1 << num_bits)]
         else:
-            states = [np.binary_repr(x, width=num_bits)
+            states = [np.binary_repr(x, width=num_bits) + str1
                       for x in range(0, 1 << num_bits)]
         return states
 
     @staticmethod
-    def get_st_vec_df(st_vec, use_bin_labels=True):
+    def get_st_vec_df(trad_st_vec, use_bin_labels=True):
         """
-        Admits as input st_vec which is a complex numpy array with shape [
-        2]*num_bits. Returns a dataframe with a single column with 2^num_bit
-        rows. The rows are labelled by 0, 1, 2, ... or their binary
-        equivalents, depending on the bool value of use_bin_labels.
+        Admits as input trad_st_vec which is a complex numpy array with
+        shape (dim,) where dim= 2^num_bits and ZL convention is assumed.
+        Returns a dataframe with a single column with 2^num_bit rows. The
+        rows are labelled by 0, 1, 2, ... or their binary equivalents,
+        depending on the bool value of use_bin_labels.
 
         Parameters
         ----------
-        st_vec : np.ndarray
+        trad_st_vec : np.ndarray
         use_bin_labels : bool
 
         Returns
@@ -58,19 +65,17 @@ class Plotter:
         pan.DataFrame
 
         """
-        num_bits = st_vec.ndim
         states = Plotter.get_states(num_bits, use_bin_labels)
-        arr = StateVec.get_traditional_st_vec(st_vec)
-        return pan.DataFrame(arr, index=states)
+        return pan.DataFrame(trad_st_vec, index=states)
 
     @staticmethod
     def get_den_mat_df(num_bits, den_mat, use_bin_labels=True):
         """
         Admits as input a numpy array den_mat (a density matrix) of shape (
-        dim, dim), where dim= 2^num_bits. Returns square dataframe with
-        entries of den_mat. The rows and columns are labelled by 0, 1, 2,
-        ... or their binary equivalents, depending on the bool value of
-        use_bin_labels.
+        dim, dim), where dim= 2^num_bits and ZL convention is assumed.
+        Returns square dataframe with entries of den_mat. The rows and
+        columns are labelled by 0, 1, 2, ... or their binary equivalents,
+        depending on the bool value of use_bin_labels.
 
         Parameters
         ----------
@@ -91,9 +96,10 @@ class Plotter:
     def get_pd_df(num_bits, pd, use_bin_labels=True):
         """
         Admits as input a 1-dim numpy array pd (probability distribution)
-        with shape ( 2^num_bits, ). Returns a dataframe with its entries.
-        The rows are labelled by 0, 1, 2, ... or their binary equivalents,
-        depending on the bool value of use_bin_labels.
+        with shape ( 2^num_bits, ) and ZL convention is assumed. Returns a
+        dataframe with its entries. The rows are labelled by 0, 1, 2,
+        ... or their binary equivalents, depending on the bool value of
+        use_bin_labels.
 
         Parameters
         ----------
@@ -114,10 +120,9 @@ class Plotter:
     @staticmethod
     def get_bit_probs_df(bit_probs):
         """
-        Admits as input a list bit_probs containing num_bits pairs of two
-        floats. Returns a dataframe with two columns and num_bits rows. The
-        rows are labelled by 0, 1, 2, ... or their binary equivalents,
-        depending on the bool value of use_bin_labels.
+        Admits as input a list bit_probs with num_bits items consisting of
+        pairs of two floats. Returns a dataframe with two columns and
+        num_bits rows. The rows are labelled by 0, 1, 2, ...
       
         Parameters
         ----------
@@ -139,10 +144,9 @@ class Plotter:
         """
         Admits as input a list of dataframes called 'probs_col_df_list'. The
         names of the dataframes are given by the list of strings 'titles'.
-        The dataframes all have a single column and num_bits rows, and all
-        their entries are floats between 0 and 1. probs_col_df might be
-        st_pd_df or bit_probs_df[0]. This function plots each dataframe in
-        the list as a barplot with num_bits bars.
+        The dataframes all have a single column, and possibly different
+        numbers of rows. All entries of all dataframes are floats between 0
+        and 1. This function plots each dataframe in the list as a barplot.
 
         Parameters
         ----------
@@ -185,13 +189,13 @@ class Plotter:
                      den_mat_df_list=None):
         """
         Admits as input a list of dataframes called 'st_vec_df_list' or one
-        called 'den_mat_df_list'. Exactly one of these lists must be None.
-        The names of the dataframes are given by the list of strings
-        'titles'. Let dim = 2^num_bits. The dataframes in st_vec_df_list
-        have one column with dim rows, whereas those for den_mat_df_list are
-        square with dim rows and columns. This function plots each dataframe
-        in the list as a quiver plot with dim rows and either one column or
-        dim columns.
+        called 'den_mat_df_list' but not both. Exactly one of these lists
+        must be None. The names of the dataframes are given by the list of
+        strings 'titles'. Let dim = 2^num_bits. The dataframes in
+        st_vec_df_list have one column with dim rows, whereas those for
+        den_mat_df_list are square with dim rows and columns. This function
+        plots each dataframe in the list as a quiver plot with dim rows and
+        either one column or dim columns.
 
         Parameters
         ----------
@@ -261,21 +265,23 @@ class Plotter:
 if __name__ == "__main__":
     
     num_bits = 3
-    st_vec0 = StateVec.get_random_st_vec(num_bits)
-    st_vec1 = StateVec.get_random_st_vec(num_bits)
+    st_vec0 = StateVec(num_bits,
+        arr=StateVec.get_random_st_vec(num_bits).arr)
+    st_vec1 = StateVec(num_bits,
+        arr=StateVec.get_random_st_vec(num_bits).arr)
     st_vec_dict = {'br0': st_vec0,
                    'br1': st_vec1,
                    'br3': None}
     
-    trad_st_vec = StateVec.get_traditional_st_vec(st_vec0)
+    trad_st_vec = st_vec0.get_traditional_st_vec()
     den_mat = StateVec.get_den_mat(num_bits, st_vec_dict)
     # print("den_mat", den_mat)
-    st_vec_pd = StateVec.get_st_vec_pd(st_vec0)
+    st_vec_pd = st_vec0.get_pd()
     den_mat_pd = StateVec.get_den_mat_pd(den_mat)
     bit_probs_vec = StateVec.get_bit_probs(num_bits, st_vec_pd)
     bit_probs_dm = StateVec.get_bit_probs(num_bits, den_mat_pd)
 
-    st_vec_df = Plotter.get_st_vec_df(st_vec0)
+    st_vec_df = Plotter.get_st_vec_df(st_vec0.get_traditional_st_vec())
     den_mat_df = Plotter.get_den_mat_df(num_bits, den_mat)
     # print("den_mat_df", den_mat_df)
     st_vec_pd_df = Plotter.get_pd_df(num_bits, st_vec_pd)

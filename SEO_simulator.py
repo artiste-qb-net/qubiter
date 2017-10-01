@@ -25,33 +25,38 @@ class SEO_simulator(SEO_reader):
     bit. A type 2 measurement stores a copy of the state vector after |0><0|
     has been applied, and another copy after |1><1| has been applied.
 
-    cur_st_vec_list is a list of state vectors on num_bits qubits. We will
-    refer to each state vec in the list as a branch. Initially, this list
-    contains a single branch. A measurement MEAS of kinds 0 or 1 does not
-    change the number of branches in the list, but a measurement of kind 2
-    doubles their number.
+    self.cur_st_vec_dict is a dictionary of strings (called branch keys) to
+    state vectors StateVec on num_bits qubits. We will refer to each state
+    vec in the dict as a branch. Initially, this dict contains a single
+    branch with branch key = "pure". A measurement MEAS of kinds 0 or 1 does
+    not change the number of branches in the dict, but a measurement of kind
+    2 doubles their number.
 
     Note that since projectors are not unitary matrices, the branches of
-    cur_st_vec_list are not expected to be normalized except when there is
-    only a single branch.
+    cur_st_vec_dict are not expected have normalized state vectors as values
+    except when there is only a single branch.
 
-    If cur_st_vec_list consists of a list of branches (numpy arrays) denoted
-    by [|br0>, |br1>, |br2>, ...], then one can construct the density matrix
-    of that state as \rho = |br0><br0| + |br1><br1| + |br2><br2| + .... In
-    other words, cur_st_vec_list is just a particular way of storing the
-    density matrix of a state. A state with a single branch is a pure state,
-    but a state with more than one branch may not be.
+    If cur_st_vec_dict contains as values the states |br0>, |br1>, |br2>,
+    ...], then one can construct the density matrix of that state as \rho =
+    |br0><br0| + |br1><br1| + |br2><br2| + ... divided by a number so that
+    trace(rho)=1. In other words, cur_st_vec_dict is just a particular way
+    of storing the density matrix of a state. A state with a single branch
+    is a pure state, but a state with more than one branch may not be.
+
+    An item of cur_st_vec_dict may be key=some string, value=None. This
+    means the state vector of that branch is zero.
 
     Attributes
     ----------
-    cur_st_vec_dict : dict(str, np.ndarray)
-        dictionary with key= branch_key and values= numpy array for state
-        vector. If there is a single item in dict, it's a pure state and the
-        key is "pure". If there are more than one items , the state is mixed
-        and the branch key is a string that uniquely characterizes the
-        measured controls. For example, if qubit 2 has been measured True
-        and qubit 4 has been measured False, the branch key will be '4F2T'.
-        This only applies to type 2 measurements.
+    cur_st_vec_dict : dict(str, StateVec)
+        dictionary with key= branch_key string and value= StateVec|None. If
+        there is a single item in dict, the dict represents a pure state and
+        the key is "pure". If there is more than one item, the dict
+        represents a mixed state and each branch key is a string that
+        uniquely characterizes the measured controls. For example, if it has
+        been measured previously (type 2 measurement only) that qubit 2 is
+        True and qubit 4 is False, the branch key will be '4F2T'.
+
     """
 
     # rrtucci: combines my java classes:
@@ -66,16 +71,16 @@ class SEO_simulator(SEO_reader):
         ----------
         file_prefix : str
         num_bits : int
-        init_st_vec : np.array
-            get this using the functions get_ground_st_vec() or
-            get_standard_basis_st_vec()
+        init_st_vec : StateVec
+            get this using the functions StateVec.get_ground_st_vec() or
+            StateVec.get_standard_basis_st_vec().
         verbose : bool
 
         Returns
         -------
 
         """
-        if init_st_vec is None:
+        if StateVec.is_zero(init_st_vec):
             init_st_vec = StateVec.get_ground_st_vec(num_bits)
         self.cur_st_vec_dict = {"pure": init_st_vec}
         self.verbose = verbose
@@ -155,8 +160,8 @@ class SEO_simulator(SEO_reader):
     @staticmethod
     def get_br_key_with_new_link(br_key, new_bit_pos, new_kind):
         """
-        Say new_bit_pos=2 and new_kind=True. This returns a new branch
-        key that adds the link 2T to the old br_key
+        Say new_bit_pos=2 and new_kind=True. This returns a new branch key
+        with '2T' added to the end of the string br_key
 
         Parameters
         ----------
@@ -178,9 +183,9 @@ class SEO_simulator(SEO_reader):
 
     def evolve_by_controlled_bit_swap(self, bit1, bit2, controls):
         """
-        Evolve each branch of cur_st_vec_dict by controlled bit swap iff the 
-        bit swap line is outside of an if_m block, or if it is inside such a 
-        block, evolve branch if it satisfies self.mcase_trols. 
+        Evolve each branch of cur_st_vec_dict by controlled bit swap iff the
+        bit swap line is (1) outside of any IF_M block, or (2) it is inside
+        such a block, and it satisfies self.mcase_trols.
 
         Parameters
         ----------
@@ -225,7 +230,7 @@ class SEO_simulator(SEO_reader):
 
         # br = branch
         for br_key in self.cur_st_vec_dict.keys():
-            if self.cur_st_vec_dict[br_key] is None:
+            if StateVec.is_zero(self.cur_st_vec_dict[br_key]):
                 continue
             evolve_br = False
             if not self.measured_bits or not self.mcase_trols:
@@ -236,18 +241,18 @@ class SEO_simulator(SEO_reader):
                         br_trols, self.mcase_trols):
                     evolve_br = True
             if evolve_br:
-                vec = self.cur_st_vec_dict[br_key][slicex]
-                self.cur_st_vec_dict[br_key][slicex] = \
-                    vec.transpose(perm)
+                arr = self.cur_st_vec_dict[br_key].arr[slicex]
+                self.cur_st_vec_dict[br_key].arr[slicex] = \
+                    arr.transpose(perm)
 
     def evolve_by_controlled_one_bit_gate(self,
                 tar_bit_pos, controls, one_bit_gate):
         """
-        Evolve each branch of cur_st_vec_dict by controlled one bit gate ( 
-        from class OneBitGates). Note one_bit_gate is entered as np.ndarray. 
-        Evolve each branch of cur_st_vec_dict iff the controlled one bit 
-        gate line is outside of an if_m block, or if it is inside such a 
-        block, evolve branch if it satisfies self.mcase_trols. 
+        Evolve each branch of cur_st_vec_dict by controlled one bit gate (
+        from class OneBitGates) iff the controlled one bit gate line is (1)
+        outside of an IF_M block, or (2) it is inside such a block, and it
+        satisfies self.mcase_trols. Note one_bit_gate is entered as
+        np.ndarray.
 
         Parameters
         ----------
@@ -308,13 +313,13 @@ class SEO_simulator(SEO_reader):
                         br_trols, self.mcase_trols):
                     evolve_br = True
             if evolve_br:
-                vec = self.cur_st_vec_dict[br_key][vec_slicex]
+                arr = self.cur_st_vec_dict[br_key].arr[vec_slicex]
                 # Axes 1 of one_bit_gate and new_tar of vec are summed over.
                 #  Axis 0 of one_bit_gate goes to the front of all the axes
                 # of new vec. Use transpose() to realign axes.
-                vec = np.tensordot(one_bit_gate, vec, ([1], [new_tar]))
-                self.cur_st_vec_dict[br_key][vec_slicex] = \
-                    np.transpose(vec, axes=perm)
+                arr = np.tensordot(one_bit_gate, arr, ([1], [new_tar]))
+                self.cur_st_vec_dict[br_key].arr[vec_slicex] = \
+                    np.transpose(arr, axes=perm)
 
     def finalize_next_line(self):
         """
@@ -381,10 +386,10 @@ class SEO_simulator(SEO_reader):
         For kind 0 (resp., 1) measurements, it applies |0><0| (resp.,
         |1><1|) to each branch of cur_st_vec_dict.
 
-        For kind 2 measurements, it first creates a list concatenating x
-        plus a deep copy of x, where x is the cur_st_vec_dict. Next,
-        it applies P_0 to the first half of the list and P_1 to the second
-        half.
+        For kind 2 measurements, it first doubles the number of branches in
+        cur_st_vec_dict by adding a deep copy of each branch. Next,
+        it applies P_0 to half of the branches of the dict and P_1 to the
+        other half.
 
         Parameters
         ----------
@@ -403,17 +408,17 @@ class SEO_simulator(SEO_reader):
             b = 1 if kind == 0 else 0
             for br_key in self.cur_st_vec_dict:
                 st_vec = self.cur_st_vec_dict[br_key]
-                if st_vec is not None:
+                if not StateVec.is_zero(st_vec):
                     slicex[tar_bit_pos] = b
                     # set projection |b=0><b=0| to zero for kind=1
-                    st_vec[tuple(slicex)] = 0
-                    tot_prob = StateVec.get_total_prob(st_vec)
+                    st_vec.arr[tuple(slicex)] = 0
+                    tot_prob = st_vec.get_total_prob()
                     if tot_prob < 1e-8:
                         # this didn't work
-                        # st_vec = None
-                        self.cur_st_vec_dict[br_key] = None
+                        # st_vec.arr = None
+                        self.cur_st_vec_dict[br_key].arr = None
                     slicex[tar_bit_pos] = slice(None)
-                # self.cur_st_vec_dict[br_key] = st_vec
+                # self.cur_st_vec_dict[br_key].arr = st_vec.arr
         elif kind == 2:
             old_st_vec_dict = cp.deepcopy(self.cur_st_vec_dict)
             self.cur_st_vec_dict = {}
@@ -433,15 +438,15 @@ class SEO_simulator(SEO_reader):
                     # set projection |b=0><b=0| to zero for T key
                     st_vec = self.cur_st_vec_dict[new_key]
                     # print("b, newkey=" + str(b) + "," + new_key)
-                    if st_vec is not None:
+                    if not StateVec.is_zero(st_vec):
                         slicex[tar_bit_pos] = b
-                        st_vec[tuple(slicex)] = 0
-                        tot_prob = StateVec.get_total_prob(st_vec)
+                        st_vec.arr[tuple(slicex)] = 0
+                        tot_prob = st_vec.get_total_prob()
                         # print('tot_prob=', tot_prob)
                         if tot_prob < 1e-8:
                             # this didn't work
-                            # st_vec = None
-                            self.cur_st_vec_dict[new_key] = None
+                            # st_vec.arr = None
+                            self.cur_st_vec_dict[new_key].arr = None
                         slicex[tar_bit_pos] = slice(None)
                     # print(st_vec)
 
@@ -518,12 +523,12 @@ class SEO_simulator(SEO_reader):
 
     def use_PRINT(self, style, line_num):
         """
-        Prints to screen the self.cur_st_vec_dict.
+        Prints to screen a description of self.cur_st_vec_dict.
 
         Parameters
         ----------
         style : str
-            style in wwhich to print
+            style in which to print
         line_num : int
             line number in eng & pic files in which PRINT command appears
 

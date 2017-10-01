@@ -607,5 +607,5 @@ class Qubiter_to_IBMqasm2_5q(SEO_reader):
         assert False, "No SWAP lines allowed"
 
 if __name__ == "__main__":
-    file_prefix = "io_folder/qbtr2ibm_test"
+    file_prefix = "../io_folder/qbtr2ibm_test"
     q2i = Qubiter_to_IBMqasm2_5q(file_prefix, 5, write_qubiter_files=True)
