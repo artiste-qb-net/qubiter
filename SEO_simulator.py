@@ -48,6 +48,9 @@ class SEO_simulator(SEO_reader):
 
     Attributes
     ----------
+    cached_sts : dict[int, dict(str, StateVec)]
+        A dictionary mapping an int to past values of self.cur_st_vec_dict.
+        Used by use_PRINT() sometimes.
     cur_st_vec_dict : dict(str, StateVec)
         dictionary with key= branch_key string and value= StateVec|None. If
         there is a single item in dict, the dict represents a pure state and
@@ -84,6 +87,7 @@ class SEO_simulator(SEO_reader):
             init_st_vec = StateVec.get_ground_st_vec(num_bits)
         self.cur_st_vec_dict = {"pure": init_st_vec}
         self.verbose = verbose
+        self.cached_sts = {}
 
         SEO_reader.__init__(self, file_prefix, num_bits, verbose)
 
@@ -539,11 +543,19 @@ class SEO_simulator(SEO_reader):
         """
         print("\n*************************beginning PRINT output")
         print("PRINT line number=" + str(line_num))
+        st_vecs = self.cur_st_vec_dict
         if style == "V1":
-            st_vecs = self.cur_st_vec_dict
             StateVec.describe_st_vec_dict(st_vecs,
                                         # print_st_vec=True,
                                         show_probs=True)
+        elif style == "ALL":
+            StateVec.describe_st_vec_dict(st_vecs,
+                                        print_st_vec=True,
+                                        do_pp=True,
+                                        omit_zero_amps=True,
+                                        show_probs=True)
+            # must store copy or it will change
+            self.cached_sts[line_num] = cp.deepcopy(st_vecs)
         else:
             assert False, "unsupported PRINT style"
         print("****************************ending PRINT output")

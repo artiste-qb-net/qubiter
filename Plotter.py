@@ -35,10 +35,12 @@ class Plotter:
         list[str]
 
         """
-        if ZL:
-            str1 = "(ZL)"
-        else:
-            str1 = "(ZF)"
+        str1 = ""
+        if num_bits > 1:
+            if ZL:
+                str1 = "ZL"
+            else:
+                str1 = "ZF"
         if not use_bin_labels:
             states = [str(x) for x in range(0, 1 << num_bits)]
         else:
@@ -194,8 +196,8 @@ class Plotter:
         strings 'titles'. Let dim = 2^num_bits. The dataframes in
         st_vec_df_list have one column with dim rows, whereas those for
         den_mat_df_list are square with dim rows and columns. This function
-        plots each dataframe in the list as a quiver plot with dim rows and
-        either one column or dim columns.
+        plots each dataframe in the list as a quiver plot (phasor->arrow)
+        with dim rows and either one column or dim columns.
 
         Parameters
         ----------
@@ -222,14 +224,16 @@ class Plotter:
             df_list = st_vec_df_list
         num_titles = len(titles)
         
-        def single_ax(ax, title, vec_df):
-            states = vec_df.index
+        def single_ax(ax, title, df):
+            states = df.index
             num_sts = len(states)
             y = np.linspace(0, num_sts-1, num_sts)
             if case == 'vec':
+                assert len(df.columns) == 1
                 x = [0]
                 x_num_sts = 1
             else:
+                assert len(df.columns) == num_sts
                 x = y
                 x_num_sts = num_sts
             xx, yy = np.meshgrid(x, y)
@@ -251,8 +255,8 @@ class Plotter:
                 ax.annotate(nom, xy=(x_num_sts+.25, k),
                             annotation_clip=False)
 
-            ax.quiver(xx, yy, vec_df.values.real,
-                      vec_df.values.imag, scale=1, units='x')
+            ax.quiver(xx, yy, df.values.real,
+                      df.values.imag, scale=1, units='x')
         plt.close('all')
         fig, ax_list = plt.subplots(nrows=num_titles, ncols=1)
         if num_titles == 1:
