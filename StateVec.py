@@ -536,7 +536,7 @@ class StateVec:
         """
         for br_key in st_vec_dict.keys():
             print("*********branch= " + br_key)
-            if st_vec_dict[br_key] is None:
+            if StateVec.is_zero(st_vec_dict[br_key]):
                 print("zero state vector")
             else:
                 st_vec_dict[br_key].describe_self(**kwargs)

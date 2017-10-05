@@ -306,7 +306,7 @@ class SEO_simulator(SEO_reader):
         # br = branch
         assert not(self.mcase_trols and not self.measured_bits)
         for br_key in self.cur_st_vec_dict.keys():
-            if self.cur_st_vec_dict[br_key] is None:
+            if StateVec.is_zero(self.cur_st_vec_dict[br_key]):
                 continue
             evolve_br = False
             if not self.measured_bits or not self.mcase_trols:
