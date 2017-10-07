@@ -115,7 +115,7 @@ class StateVec:
         return StateVec(num_bits, arr)
 
     @staticmethod
-    def get_standard_basis_st_vec(spin_dir_list, ZL=False):
+    def get_standard_basis_st_vec(spin_dir_list, ZL=True):
         """
         If ZL = True, returns StateVec for state ...|s2>|s1>|s0>,
         where spin_dir_list=[...,s2, s1, s0], s_j \in {0, 1} for all j,
