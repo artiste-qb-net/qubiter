@@ -241,11 +241,11 @@ class Plotter:
             # print(yy)
 
             ax.set_xlim(-1, x_num_sts)
-            ax.set_xticks(np.arange(-1, x_num_sts+1))
+            ax.set_xticks(np.arange(0, x_num_sts))
             ax.xaxis.tick_top()
 
             ax.set_ylim(-1, num_sts)
-            ax.set_yticks(np.arange(-1, num_sts+1))
+            ax.set_yticks(np.arange(0, num_sts))
             ax.invert_yaxis()
 
             ax.set_aspect('equal', adjustable='box')
@@ -254,9 +254,13 @@ class Plotter:
             for k, nom in enumerate(states):
                 ax.annotate(nom, xy=(x_num_sts+.25, k),
                             annotation_clip=False)
+            max_mag = np.max(np.absolute(df.values))
+            q = ax.quiver(xx, yy, df.values.real,
+                df.values.imag, scale=max_mag, units='x')
 
-            ax.quiver(xx, yy, df.values.real,
-                      df.values.imag, scale=1, units='x')
+            plt.quiverkey(q, 0, num_sts + .2, max_mag,
+                '= {:.2e}'.format(max_mag), labelpos='E', coordinates='data')
+
         plt.close('all')
         fig, ax_list = plt.subplots(nrows=num_titles, ncols=1)
         if num_titles == 1:
