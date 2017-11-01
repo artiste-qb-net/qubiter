@@ -258,7 +258,7 @@ class Plotter:
             q = ax.quiver(xx, yy, df.values.real,
                 df.values.imag, scale=max_mag, units='x')
 
-            plt.quiverkey(q, 0, num_sts + .2, max_mag,
+            plt.quiverkey(q, 0, -2, max_mag,
                 '= {:.2e}'.format(max_mag), labelpos='E', coordinates='data')
 
         plt.close('all')
@@ -267,7 +267,7 @@ class Plotter:
             ax_list = [ax_list]
         for k, tit in enumerate(titles):
             single_ax(ax_list[k], tit, df_list[k])
-        plt.tight_layout()
+        plt.tight_layout(pad=2)
         plt.show()
 
 if __name__ == "__main__":
