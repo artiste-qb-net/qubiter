@@ -35,10 +35,10 @@ class Qubiter_to_IBMqasm2_5q(SEO_reader):
     English file circuit can contain CNOTs between ANY pair of qubits and
     with any qubit as target.
 
-    This class conforms with the 5 qubit chip ibmqx2. This chip is not fully
-    connected (not all pairs of qubits are physically connected).
-    Furthermore, even if two qubits are connected, it may not be possible
-    for one of them to be the target of a CNOT.
+    This class conforms with the 5 qubit chip ibmqx2. This chip is not fully 
+    connected (not all pairs of qubits are physically connected). 
+    Furthermore, even if two qubits are connected, one of them may not be 
+    allowed as a target of a CNOT. 
 
     If an elementary CNOT is not allowed because its ends are disconnected
     or its target is forbidden, this class will replace that elementary CNOT
@@ -99,7 +99,6 @@ class Qubiter_to_IBMqasm2_5q(SEO_reader):
     into each other. We leave that part of the translation to a future
     version of this class.
 
-    
     References
     ----------
     1. https://github.com/IBMResearch/python-sdk-quantum-experience
@@ -111,7 +110,7 @@ class Qubiter_to_IBMqasm2_5q(SEO_reader):
         Pairs of qubits that are physically connected so they can be the two
         ends of an elementary CNOT. Order of qubits matters: first entry of
         tuple is control and second is target of a possible CNOT. Here is an
-        illustration of connections where x marks possible target of
+        illustration of connections where x marks allowed target of
         connection.
 
             4       0
@@ -188,12 +187,12 @@ class Qubiter_to_IBMqasm2_5q(SEO_reader):
         if write_qubiter_files:
             self.qbtr_wr.close_files()
             
-    def is_target_of_link(self, x, y):
+    def is_allowed_target(self, x, y):
         """
-        This function returns (bool_x, bool_y). bool_x (resp. bool_y) is
-        True iff x and y are connected and x (resp., y) is a possible target
-        of a CNOT. bool_x and bool_y are both false if the qubits are
-        disconnected.
+        This function returns (bool_x, bool_y). bool_x (resp. bool_y) is 
+        True if x and y are connected and x (resp., y) is allowed as a 
+        target of a CNOT between x and y. bool_x and bool_y are both false 
+        if the qubits are disconnected. 
 
         Parameters
         ----------
@@ -534,9 +533,9 @@ class Qubiter_to_IBMqasm2_5q(SEO_reader):
         else:  # num_trols == 1
             tar_pos = tar_bit_pos
             trol_pos = controls.bit_pos[0]
-            is_tar = self.is_target_of_link(trol_pos, tar_pos)
-            if is_tar[0] or is_tar[1]:
-                if is_tar[1]:
+            can_be_tar = self.is_allowed_target(trol_pos, tar_pos)
+            if can_be_tar[0] or can_be_tar[1]:
+                if can_be_tar[1]:
                     cx_fun(trol_pos, tar_pos)
                 else:
                     h_fun(tar_pos)
@@ -545,7 +544,7 @@ class Qubiter_to_IBMqasm2_5q(SEO_reader):
                     h_fun(trol_pos)
                     h_fun(tar_pos)                   
                 if self.write_qubiter_files:
-                    if is_tar[1]:
+                    if can_be_tar[1]:
                         cx_fun1(trol_pos, tar_pos)
                     else:
                         h_fun1(tar_pos)
