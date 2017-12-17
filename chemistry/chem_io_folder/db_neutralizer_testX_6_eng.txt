@@ -1,0 +1,26 @@
+NOTA
+NOTA
+NOTA	Neutralized dumbbell
+NOTA	Neutralized dumbbell
+NOTA	Neutralized dumbbell
+SIGZ	AT	3	IF	2T
+NOTA
+NOTA	Neutralized dumbbell
+NOTA	Neutralized dumbbell
+NOTA	Neutralized dumbbell
+NOTA	Neutralized dumbbell
+SIGZ	AT	1	IF	0T
+NOTA	Neutralized dumbbell
+SIGY
+NOTA
+NOTA
+NOTA	Neutralized dumbbell
+NOTA	Neutralized dumbbell
+NOTA	Neutralized dumbbell
+SIGZ	AT	3	IF	2T
+NOTA	Neutralized dumbbell
+NOTA	Neutralized dumbbell
+NOTA	Neutralized dumbbell
+NOTA	Neutralized dumbbell
+SIGZ	AT	1	IF	0T
+NOTA	Neutralized dumbbell

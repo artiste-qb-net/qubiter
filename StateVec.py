@@ -158,11 +158,13 @@ class StateVec:
         representation thereof, regardless of whether ZL or ZF convention.
         One can go from digital to binary labels and vice versa using:
 
-            >>> x = np.binary_repr(3, width=4)
-            >>> x
-            '0011'
-            >>> int(x, 2)
-            3
+        ```
+        >>> x = np.binary_repr(3, width=4)
+        >>> x
+        '0011'
+        >>> int(x, 2)
+        3
+        ```
 
         Parameters
         ----------

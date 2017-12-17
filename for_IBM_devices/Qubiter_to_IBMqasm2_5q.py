@@ -8,11 +8,11 @@ import Utilities as ut
 class Qubiter_to_IBMqasm2_5q(SEO_reader):
     """
     This class is a child of SEO_reader. It reads an input English file and
-    writes an IBM qasm2 for 5 qubits file which is a line by line
-    translation of the input English file into the IBM qasm2 language. If
-    the option write_qubiter_files is set to True, this class will also
-    write new English and Picture files that are in 1-1 line correspondence
-    with the output qasm file.
+    writes an IBM qasm2 file that is a line by line translation of the input
+    English file into the IBM qasm2 language. If the option
+    write_qubiter_files is set to True, this class will also write new
+    English and Picture files that are in 1-1 line correspondence with the
+    output qasm file.
 
     The input English file that is read can only have lines of the following
     types or else the program will abort with an error message:
@@ -35,10 +35,10 @@ class Qubiter_to_IBMqasm2_5q(SEO_reader):
     English file circuit can contain CNOTs between ANY pair of qubits and
     with any qubit as target.
 
-    This class conforms with the most recent IBM qc (IBM Quantum Experience
-    QASM2.0). The current IBM qc is not fully connected (not all pairs of
-    qubits are physically connected). Furthermore, not all qubits can be
-    targets of an elementary CNOT: only qubits 1, 2 and 4 can be targets.
+    This class conforms with the 5 qubit chip ibmqx2. This chip is not fully
+    connected (not all pairs of qubits are physically connected).
+    Furthermore, even if two qubits are connected, it may not be possible
+    for one of them to be the target of a CNOT.
 
     If an elementary CNOT is not allowed because its ends are disconnected
     or its target is forbidden, this class will replace that elementary CNOT
@@ -87,8 +87,8 @@ class Qubiter_to_IBMqasm2_5q(SEO_reader):
     |   X---@
     H   |   |
 
-    (This is allowed because qubit 2 is connected to all other qubits,
-    including a and b).
+    (This is allowed because qubit 2 is connected and a possible target to
+    all other qubits, including a and b).
 
     Footnote: QASM has "measure" operations and distinguishes between
     quantum registers qreg and classical registers creg. Qubiter does not
@@ -106,21 +106,21 @@ class Qubiter_to_IBMqasm2_5q(SEO_reader):
 
     Attributes
     ----------
-    allowed_tars : list[int]
-        Allowed targets. Qubits that are equipped in hardware to be targets
-        of an elementary CNOT. IBM qc currently has 5 qubits 0, 1, ...,
-        4. Out of those, only 1, 2 and 4 can be targets.
-    connections : list[tuple(int,int)]
+    c_to_t : list[tuple(int,int)]
         Pairs of qubits that are physically connected so they can be the two
-        ends of an elementary CNOT. Order of qubits in pairs is irrelevant.
-        This picture indicates which qubits of the current IBM qc are
-        connected:
+        ends of an elementary CNOT. Order of qubits matters: first entry of
+        tuple is control and second is target of a possible CNOT. Here is an
+        illustration of connections where x marks possible target of
+        connection.
 
-            4     0
-            | \ / |
-            |  2  |
-            | / \ |
-            3     1
+            4       0
+            x \   / |
+            |  x x  |
+            |   2   |
+            |  x x  |
+            |/    \ x
+            3       1
+
 
     qasm_out : _io.TextIOWrapper
         This output stream is used to write a qasm file based on the input
@@ -153,13 +153,12 @@ class Qubiter_to_IBMqasm2_5q(SEO_reader):
 
         """
         assert num_bits == 5
-        self.connections = [(4, 3),
-                           (4, 2),
-                           (3, 2),
-                           (0, 2),
-                           (2, 1),
-                           (0, 1)]
-        self.allowed_tars = [1, 2, 4]
+        self.c_to_t = [(0, 2),
+                       (1, 2),
+                       (3, 2),
+                       (4, 2),
+                       (0, 1),
+                       (3, 4)]
 
         self.write_qubiter_files = write_qubiter_files
 
@@ -188,10 +187,12 @@ class Qubiter_to_IBMqasm2_5q(SEO_reader):
         if write_qubiter_files:
             self.qbtr_wr.close_files()
             
-    def are_connected(self, x, y):
+    def is_target_of_link(self, x, y):
         """
-        This function returns true iff qubits x and y are connected in the
-        hardware.
+        This function returns (bool_x, bool_y). bool_x (resp. bool_y) is
+        True iff x and y are connected and x (resp., y) is a possible target
+        of a CNOT. bool_x and bool_y are both false if the qubits are
+        disconnected.
 
         Parameters
         ----------
@@ -200,13 +201,15 @@ class Qubiter_to_IBMqasm2_5q(SEO_reader):
 
         Returns
         -------
-        bool
+        bool, bool
 
         """
-        for a, b in self.connections:
-            if (x, y) == (a, b) or (x, y) == (b, a):
-                return True
-        return False
+        for c, t in self.c_to_t:
+            if (x, y) == (c, t):
+                return False, True
+            elif (x, y) == (t, c):
+                return True, False
+        return False, False
 
     @staticmethod
     def qasm_line_for_rot(arr, tar_bit_pos):
@@ -530,8 +533,9 @@ class Qubiter_to_IBMqasm2_5q(SEO_reader):
         else:  # num_trols == 1
             tar_pos = tar_bit_pos
             trol_pos = controls.bit_pos[0]
-            if self.are_connected(trol_pos, tar_pos):
-                if tar_pos in self.allowed_tars:
+            is_tar = self.is_target_of_link(trol_pos, tar_pos)
+            if is_tar[0] or is_tar[1]:
+                if is_tar[1]:
                     cx_fun(trol_pos, tar_pos)
                 else:
                     h_fun(tar_pos)
@@ -540,7 +544,7 @@ class Qubiter_to_IBMqasm2_5q(SEO_reader):
                     h_fun(trol_pos)
                     h_fun(tar_pos)                   
                 if self.write_qubiter_files:
-                    if tar_pos in self.allowed_tars:
+                    if is_tar[1]:
                         cx_fun1(trol_pos, tar_pos)
                     else:
                         h_fun1(tar_pos)
