@@ -99,6 +99,7 @@ class Qubiter_to_IBMqasm2_5q(SEO_reader):
     into each other. We leave that part of the translation to a future
     version of this class.
 
+    
     References
     ----------
     1. https://github.com/IBMResearch/python-sdk-quantum-experience
