@@ -21,15 +21,13 @@ class EchoingSEO_reader(SEO_reader):
 
     Attributes
     ----------
-    gbit_list : list(int)
-        Only needed for some expansion styles, this is a list of grounded bits
     wr : SEO_writer
         This object of SEO_writer is called inside every use_  function to
         do some writing in the output files.
 
     """
 
-    def __init__(self, file_prefix, num_bits, wr, style, gbit_list=None):
+    def __init__(self, file_prefix, num_bits, wr):
         """
 
         Parameters
@@ -37,16 +35,12 @@ class EchoingSEO_reader(SEO_reader):
         file_prefix : str
         num_bits : int
         wr : SEO_writer
-        style : str
-        gbit_list : list(int)
 
         Returns
         -------
         None
 
         """
-        self.gbit_list = gbit_list
-
         self.wr = wr
 
         SEO_reader.__init__(self, file_prefix, num_bits)

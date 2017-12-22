@@ -2,102 +2,52 @@ from Controls import *
 from SEO_reader import *
 from SEO_writer import *
 from quantum_CSD_compiler.UnitaryMat import *
+from ForbiddenCNotExpander import *
 import Utilities as ut
 
 
-class Qubiter_to_IBMqasm2_5q(SEO_reader):
+class Qubiter_to_IBMqasm2(SEO_reader):
     """
     This class is a child of SEO_reader. It reads an input English file and
-    writes an IBM qasm2 file that is a line by line translation of the input
-    English file into the IBM qasm2 language. If the option
-    write_qubiter_files is set to True, this class will also write new
-    English and Picture files that are in 1-1 line correspondence with the
-    output qasm file.
+    writes an IBM qasm2 file that is a translation of the input English file
+    into the IBM qasm2 language. If the option write_qubiter_files is set to
+    True, this class will also write new English and Picture files that are
+    in 1-1 onto line correspondence with the output IBM qasm file.
 
     The input English file that is read can only have lines of the following
     types or else the program will abort with an error message:
 
-    1. single qubit rotations (HAD2, SIGX, SIGY, SIGZ, ROTX, ROTY, ROTZ or 
-    ROTN with no controls) 
+    1. single qubit rotations (HAD2, SIGX, SIGY, SIGZ, ROTX, ROTY, ROTZ or
+    ROTN with no controls)
 
-    2. simple CNOTs (SIGX with a single True control)
+    2. simple CNOTs (SIGX with a single True control). Call them c->t=(c,
+    t) if c is the control and t the target. (c, t) must be an item of the
+    input 'c_to_t'.
 
     3. NOTA lines
 
     If you have an English file that contains lines that are more
     complicated than this (because, for example, they contain rotations with
-    one or more controls attached), you can use the expander classes
-    CktExpander, DiagUnitaryExpander, MultiplexorExpander, to expand the
-    circuit to an equivalent albeit longer circuit that satisfies
+    one or more controls attached, or because a CNOT is not allowed
+    according to `c_to_t`), you can use the expander classes CktExpander,
+    DiagUnitaryExpander, MultiplexorExpander, and ForbiddenCNotExpander to
+    expand the circuit to an equivalent albeit longer circuit that satisfies
     constraints 1, 2, 3.
 
-    This class expects exactly 5 qubits, call them 0, 1, .., 4. The input
-    English file circuit can contain CNOTs between ANY pair of qubits and
-    with any qubit as target.
+    This class can handle an IBM chip with any number of qubits.
 
-    This class conforms with the 5 qubit chip ibmqx2. This chip is not fully 
-    connected (not all pairs of qubits are physically connected). 
-    Furthermore, even if two qubits are connected, one of them may not be 
-    allowed as a target of a CNOT. 
+    This class halts execution if it encounters a CNOT that is disallowed
+    according to the input `c_to_t`. `c_to_t` varies with IBM chip. Some
+    `c_to_t`s are listed in the file `ibm_chip_couplings.py` found in same
+    folder as this file.
 
-    If an elementary CNOT is not allowed because its ends are disconnected
-    or its target is forbidden, this class will replace that elementary CNOT
-    by a compound CNOT; i.e., a sequence of 1 or 4 allowed elementary CNOTs
-    (and a bunch of Hadamards) that is equivalent to the original elementary
-    CNOT. Next we discuss how these compound CNOTs are defined.
-
-    Note that the positions of the target X and control @ of a CNOT can be
-    swapped with Hadamard matrices H. For example,
-
-    X---@
-
-    can be replaced by:
-
-    H   H
-    @---X
-    H   H
-
-    Hence, a CNOT between 2 connected ends but having a disallowed target
-    can be replaced by 4 Hadamards and an elementary CNOT with the same ends
-    and with an allowed target.
-
-    Suppose qubits a and b are disconnected and we want to implement this:
-
-    a   2   b
-    X---+---@
-
-    This class replaces this problematic elementary CNOT by:
-
-    a   2   b
-    X---@   |
-    |   X---@
-    X---@   |
-    |   X---@
-
-    =
-
-    H   |   |
-    |   H   |
-    @---X
-    |   H   |
-    |   X---@
-    |   H   |
-    @---X
-    |   H   |
-    |   X---@
-    H   |   |
-
-    (This is allowed because qubit 2 is connected and a possible target to
-    all other qubits, including a and b).
-
-    Footnote: QASM has "measure" operations and distinguishes between
-    quantum registers qreg and classical registers creg. Qubiter does not
-    use cregs because it uses the classical memory of your Linux PC instead.
-    QASM has an intricate set of commands for measurements. Qubiter has a
-    complete set of measurement commands too (see MEAS in Rosetta stone).
-    The QASM and Qubiter measurement commands can obviously be translated
-    into each other. We leave that part of the translation to a future
-    version of this class.
+    Footnote: QASM distinguishes between quantum registers qreg and
+    classical registers creg. Qubiter does not use cregs because it uses the
+    classical memory of your Linux PC instead. QASM has an intricate set of
+    commands for measurements. Qubiter has a complete set of measurement
+    commands too (see MEAS in Rosetta stone). The QASM and Qubiter
+    measurement commands can obviously be translated into each other. We
+    leave that part of the translation to a future version of this class.
 
     References
     ----------
@@ -106,22 +56,10 @@ class Qubiter_to_IBMqasm2_5q(SEO_reader):
 
     Attributes
     ----------
-    c_to_t : list[tuple(int,int)]
+    c_to_t : tuple[tuple(int,int)]
         Pairs of qubits that are physically connected so they can be the two
         ends of an elementary CNOT. Order of qubits matters: first entry of
-        tuple is control and second is target of a possible CNOT. Here is an
-        illustration of connections where x marks allowed target of
-        connection.
-
-            4       0
-            x \   / |
-            |  x x  |
-            |   2   |
-            |  x x  |
-            |/    \ x
-            3       1
-
-
+        tuple is control and second is target of a possible CNOT.
     qasm_out : _io.TextIOWrapper
         This output stream is used to write a qasm file based on the input
         English file.
@@ -130,11 +68,11 @@ class Qubiter_to_IBMqasm2_5q(SEO_reader):
     write_qubiter_files : bool
         The class always writes a qasm text file based on the input English
         file that is read. Iff this is True, the class also writes English
-        and Picture files.
+        and Picture files
+
 
     """
-
-    def __init__(self, file_prefix, num_bits, verbose=False,
+    def __init__(self, file_prefix, num_bits, c_to_t, verbose=False,
                  write_qubiter_files=False, **kwargs):
         """
         Constructor
@@ -143,6 +81,7 @@ class Qubiter_to_IBMqasm2_5q(SEO_reader):
         ----------
         file_prefix : str
         num_bits : int
+        c_to_t : tuple(tuple(int, int))
         verbose : bool
         write_qubiter_files : bool
         kwargs : dict[]
@@ -152,13 +91,8 @@ class Qubiter_to_IBMqasm2_5q(SEO_reader):
         None
 
         """
-        assert num_bits == 5
-        self.c_to_t = [(0, 2),
-                       (1, 2),
-                       (3, 2),
-                       (4, 2),
-                       (0, 1),
-                       (3, 4)]
+        self.c_to_t = c_to_t
+        self.targets = ForbiddenCNotExpander.get_targets(num_bits, c_to_t)
 
         self.write_qubiter_files = write_qubiter_files
 
@@ -186,30 +120,6 @@ class Qubiter_to_IBMqasm2_5q(SEO_reader):
         self.qasm_out.close()
         if write_qubiter_files:
             self.qbtr_wr.close_files()
-            
-    def is_allowed_target(self, x, y):
-        """
-        This function returns (bool_x, bool_y). bool_x (resp. bool_y) is 
-        True if x and y are connected and x (resp., y) is allowed as a 
-        target of a CNOT between x and y. bool_x and bool_y are both false 
-        if the qubits are disconnected. 
-
-        Parameters
-        ----------
-        x : int
-        y : int
-
-        Returns
-        -------
-        bool, bool
-
-        """
-        for c, t in self.c_to_t:
-            if (x, y) == (c, t):
-                return False, True
-            elif (x, y) == (t, c):
-                return True, False
-        return False, False
 
     @staticmethod
     def qasm_line_for_rot(arr, tar_bit_pos):
@@ -258,7 +168,7 @@ class Qubiter_to_IBMqasm2_5q(SEO_reader):
 
     def use_DIAG(self, trols, rad_angles):
         """
-        If called, this function will halt execution of program. 
+        If called, this function will halt execution of program.
 
         Parameters
         ----------
@@ -276,7 +186,7 @@ class Qubiter_to_IBMqasm2_5q(SEO_reader):
         """
         Writes line in IBM qasm file corresponding to an English file line
         of type: HAD2 with no controls.
-        
+
         Parameters
         ----------
         tar_bit_pos : int
@@ -295,7 +205,7 @@ class Qubiter_to_IBMqasm2_5q(SEO_reader):
 
     def use_LOOP(self, loop_num, reps):
         """
-        If called, this function will halt execution of program. 
+        If called, this function will halt execution of program.
 
         Parameters
         ----------
@@ -311,8 +221,8 @@ class Qubiter_to_IBMqasm2_5q(SEO_reader):
 
     def use_MEAS(self, tar_bit_pos, kind):
         """
-        If called, this function will halt execution of program. 
-        
+        If called, this function will halt execution of program.
+
         Parameters
         ----------
         kind : int
@@ -327,8 +237,8 @@ class Qubiter_to_IBMqasm2_5q(SEO_reader):
 
     def use_MP_Y(self, tar_bit_pos, trols, rad_angles):
         """
-        If called, this function will halt execution of program. 
-        
+        If called, this function will halt execution of program.
+
         Parameters
         ----------
         tar_bit_pos : int
@@ -344,7 +254,7 @@ class Qubiter_to_IBMqasm2_5q(SEO_reader):
 
     def use_NEXT(self, loop_num):
         """
-        If called, this function will halt execution of program. 
+        If called, this function will halt execution of program.
 
         Parameters
         ----------
@@ -377,7 +287,7 @@ class Qubiter_to_IBMqasm2_5q(SEO_reader):
 
     def use_PHAS(self, angle_degs, tar_bit_pos, controls):
         """
-        If called, this function will halt execution of program. 
+        If called, this function will halt execution of program.
 
         Parameters
         ----------
@@ -394,7 +304,7 @@ class Qubiter_to_IBMqasm2_5q(SEO_reader):
 
     def use_P_PH(self, projection_bit, angle_degs, tar_bit_pos, controls):
         """
-        If called, this function will halt execution of program. 
+        If called, this function will halt execution of program.
 
         Parameters
         ----------
@@ -431,7 +341,7 @@ class Qubiter_to_IBMqasm2_5q(SEO_reader):
         rad_ang = angle_degs*np.pi/180
 
         arr = OneBitGates.rot_ax(rad_ang, axis)
-        line_str = Qubiter_to_IBMqasm2_5q.qasm_line_for_rot(arr, tar_bit_pos)
+        line_str = Qubiter_to_IBMqasm2.qasm_line_for_rot(arr, tar_bit_pos)
         self.qasm_out.write(line_str)
 
         if self.write_qubiter_files:
@@ -463,7 +373,7 @@ class Qubiter_to_IBMqasm2_5q(SEO_reader):
                                      angle_z_degs])*np.pi/180)
 
         arr = OneBitGates.rot(*rad_ang_list)
-        line_str = Qubiter_to_IBMqasm2_5q.qasm_line_for_rot(arr, tar_bit_pos)
+        line_str = Qubiter_to_IBMqasm2.qasm_line_for_rot(arr, tar_bit_pos)
         self.qasm_out.write(line_str)
 
         if self.write_qubiter_files:
@@ -492,21 +402,6 @@ class Qubiter_to_IBMqasm2_5q(SEO_reader):
         if num_trols == 1:
             assert axis == 1
             assert controls.bit_pos_to_kind[controls.bit_pos[0]] == True
-            
-        def cx_fun(c, t):
-            self.qasm_out.write("cx  q[" + str(c) + "], q[" + str(t) + "];\n")
-
-        def h_fun(t):
-            self.qasm_out.write("h   q[" + str(t) + "];\n")
-        
-        def cx_fun1(c, t):
-            trols = Controls.new_knob(5, c, True)
-            self.qbtr_wr.write_controlled_one_bit_gate(t,
-                trols, OneBitGates.sigx)
-
-        def h_fun1(t):
-            self.qbtr_wr.write_one_bit_gate(t, OneBitGates.had2)
-            
         if num_trols == 0:
             prefix = ""
             if axis == 1:
@@ -527,75 +422,28 @@ class Qubiter_to_IBMqasm2_5q(SEO_reader):
                     u2_fun = OneBitGates.sigz
                 else:
                     assert False
-    
+
                 self.qbtr_wr.write_controlled_one_bit_gate(tar_bit_pos,
                                     controls, u2_fun)
         else:  # num_trols == 1
             tar_pos = tar_bit_pos
             trol_pos = controls.bit_pos[0]
-            can_be_tar = self.is_allowed_target(trol_pos, tar_pos)
-            if can_be_tar[0] or can_be_tar[1]:
-                if can_be_tar[1]:
-                    cx_fun(trol_pos, tar_pos)
-                else:
-                    h_fun(tar_pos)
-                    h_fun(trol_pos)
-                    cx_fun(tar_pos, trol_pos)
-                    h_fun(trol_pos)
-                    h_fun(tar_pos)                   
+            if tar_pos in self.targets[trol_pos]:
+                self.qasm_out.write("cx  q[" + str(trol_pos) + "], q[" +
+                                    str(trol_pos) + "];\n")
+
                 if self.write_qubiter_files:
-                    if can_be_tar[1]:
-                        cx_fun1(trol_pos, tar_pos)
-                    else:
-                        h_fun1(tar_pos)
-                        h_fun1(trol_pos)
-                        cx_fun1(tar_pos, trol_pos)
-                        h_fun1(trol_pos)
-                        h_fun1(tar_pos)
+                    self.qbtr_wr.write_cnot(trol_pos, tar_pos)
             else:
-                # a   2   b
-                # X---+---@
-                # replaced by
-
-                # H   |   |
-                # |   H   |
-                # @---X
-                # |   H   |
-                # |   X---@
-                # |   H   |
-                # @---X
-                # |   H   |
-                # |   X---@
-                # H   |   |
-                a = tar_pos
-                b = trol_pos
-
-                h_fun(a)
-                h_fun(2)
-                cx_fun(a, 2)
-                h_fun(2)
-                cx_fun(b, 2)
-                h_fun(2)
-                cx_fun(a, 2)
-                h_fun(2)
-                cx_fun(b, 2)
-                h_fun(a)
-                
-                if self.write_qubiter_files:
-                    h_fun1(a)
-                    h_fun1(2)
-                    cx_fun1(a, 2)
-                    h_fun1(2)
-                    cx_fun1(b, 2)
-                    h_fun1(2)
-                    cx_fun1(a, 2)
-                    h_fun1(2)
-                    cx_fun1(b, 2)
-                    h_fun1(a)
+                assert False, "Forbidden CNOT detected: " \
+                    + str(trol_pos) + "->" + str(tar_pos) \
+                    + " in line " + str(self.line_count) \
+                    + ". Use class ForbiddenCNotExpander " \
+                    + "before attempting translation to IBM qasm."
 
     def use_SWAP(self, bit1, bit2, controls):
         """
-        If called, this function will halt execution of program. 
+        If called, this function will halt execution of program.
 
         Parameters
         ----------
@@ -612,4 +460,8 @@ class Qubiter_to_IBMqasm2_5q(SEO_reader):
 
 if __name__ == "__main__":
     file_prefix = "../io_folder/qbtr2ibm_test"
-    q2i = Qubiter_to_IBMqasm2_5q(file_prefix, 5, write_qubiter_files=True)
+    num_bits = 5
+    import for_IBM_devices.ibm_chip_couplings as ibm
+    c_to_t = ibm.ibmqx2_edges
+    q2i = Qubiter_to_IBMqasm2(file_prefix,
+            num_bits, c_to_t, write_qubiter_files=True)

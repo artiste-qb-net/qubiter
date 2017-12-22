@@ -25,7 +25,9 @@ class MultiplexorExpander(EchoingSEO_reader):
 
     Attributes
     ----------
-
+    gbit_list : list(int)|None
+        Only needed for some expansion styles, this is a list of grounded bits
+    style : str
 
     """
 
@@ -45,7 +47,8 @@ class MultiplexorExpander(EchoingSEO_reader):
         None
 
         """
-
+        self.gbit_list = gbit_list
+        self.style = style
         if gbit_list:
             num_gbits = len(gbit_list)
         else:
@@ -58,8 +61,7 @@ class MultiplexorExpander(EchoingSEO_reader):
         wr = MultiplexorSEO_writer(out_file_prefix, emb,
             style, rad_angles, num_gbits=num_gbits)
 
-        EchoingSEO_reader.__init__(self, file_prefix, num_bits, wr, style,
-                                   gbit_list)
+        EchoingSEO_reader.__init__(self, file_prefix, num_bits, wr)
 
         self.wr.close_files()
 

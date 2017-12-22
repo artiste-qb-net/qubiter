@@ -78,9 +78,11 @@ class SEO_reader(SEO_pre_reader):
     @staticmethod
     def xed_file_prefix(file_prefix):
         """
-        Extended file_prefix. Returns file_prefix + '_X1', assuming that
-        '_X' + str(k) for some integer k is not already the ending of
-        file_prefix. If it is, then the ending is changed to '_X' + str(k+1).
+        Xed file_prefix. Returns file_prefix + '_X1', assuming that '_X' +
+        str(k) for some integer k is not already the ending of file_prefix.
+        If it is, then the ending is changed to '_X' + str( k+1). Classes
+        that use this are called "expanders" throughout Qubiter. The X
+        stands for expanded.
 
         Parameters
         ----------

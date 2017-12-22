@@ -10,42 +10,16 @@ NOTA	creg c[5];
 |   Ry  |   |   |   
 |   Rz  |   |   |   
 R   |   |   |   |   
-NOTA	sigx(0)^n(1) (0-1 connected)
-|   |   |   |   H   
-|   |   |   H   |   
+NOTA	1->0 not allowed
+NOTA	SIGX  AT  0  IF  1T
+NOTA	0->1 allowed
 |   |   |   X---@   
-|   |   |   H   |   
-|   |   |   |   H   
-NOTA	sigx(1)^n(0)
-|   |   |   X---@   
-NOTA	sigx(0)^n(2) (0-2 connected)
-|   |   |   |   H   
-|   |   H   |   |   
+NOTA	2->0 not allowed
+NOTA	SIGX  AT  0  IF  2T
+NOTA	0->2 allowed
 |   |   X---+---@   
-|   |   H   |   |   
-|   |   |   |   H   
-NOTA	sigx(2)^n(0)
-|   |   X---+---@   
-NOTA	sigx(0)^n(3) (0-3 not connected)
-|   |   |   |   H   
-|   |   H   |   |   
-|   |   X---+---@   
-|   |   H   |   |   
-|   @---X   |   |   
-|   |   H   |   |   
-|   |   X---+---@   
-|   |   H   |   |   
-|   @---X   |   |   
-|   |   |   |   H   
-NOTA	sigx(3)^n(0)
-|   H   |   |   |   
-|   |   H   |   |   
-|   @---X   |   |   
-|   |   H   |   |   
-|   |   X---+---@   
-|   |   H   |   |   
-|   @---X   |   |   
-|   |   H   |   |   
-|   |   X---+---@   
-|   H   |   |   |   
+NOTA	3->0 not allowed
+NOTA	SIGX  AT  0  IF  3T
+NOTA	0->3 not allowed
+NOTA	SIGX  AT  3  IF  0T
 NOTA	measure q -> c;
