@@ -13,11 +13,11 @@ u3(-1.44397934949, -1.94358929306, -0.767584085966)  q[4];
 // 1->0 not allowed
 // SIGX  AT  0  IF  1T
 // 0->1 allowed
-cx  q[0], q[0];
+cx  q[0], q[1];
 // 2->0 not allowed
 // SIGX  AT  0  IF  2T
 // 0->2 allowed
-cx  q[0], q[0];
+cx  q[0], q[2];
 // 3->0 not allowed
 // SIGX  AT  0  IF  3T
 // 0->3 not allowed

@@ -403,7 +403,6 @@ class Qubiter_to_IBMqasm2(SEO_reader):
             assert axis == 1
             assert controls.bit_pos_to_kind[controls.bit_pos[0]] == True
         if num_trols == 0:
-            prefix = ""
             if axis == 1:
                 prefix = "x   q["
             elif axis == 2:
@@ -429,9 +428,8 @@ class Qubiter_to_IBMqasm2(SEO_reader):
             tar_pos = tar_bit_pos
             trol_pos = controls.bit_pos[0]
             if tar_pos in self.targets[trol_pos]:
-                self.qasm_out.write("cx  q[" + str(trol_pos) + "], q[" +
-                                    str(trol_pos) + "];\n")
-
+                self.qasm_out.write("cx  q[" + str(trol_pos) + "], "
+                                    "q[" + str(tar_pos) + "];\n")
                 if self.write_qubiter_files:
                     self.qbtr_wr.write_cnot(trol_pos, tar_pos)
             else:
