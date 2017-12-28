@@ -20,12 +20,12 @@ class ForbiddenCNotExpander(EchoingSEO_reader):
     or more controls.
 
     If this class reads a line which is a SIGX with > 1 controls, it outputs
-    an error message. In such a case, you should use the class CktExpander
+    an error message. In such a case, you should use the class CGateExpander
     first to expand such gates into single qubit rotations and simple CNOTs
     with a single control.
 
     If this class reads a line which is a SIGX with a single control,
-    it echoes it if such a CNOT it is allowed according to the input list
+    it echoes it if such a CNOT is allowed according to the input list
     'c_to_t'. Otherwise, it replaces the disallowed (a.k.a., forbidden,
     unphysical, between disconnected qubits) CNOT by a sequence of Hadamards
     and allowed, elementary CNOTs.

@@ -29,7 +29,7 @@ class Qubiter_to_IBMqasm2(SEO_reader):
     If you have an English file that contains lines that are more
     complicated than this (because, for example, they contain rotations with
     one or more controls attached, or because a CNOT is not allowed
-    according to `c_to_t`), you can use the expander classes CktExpander,
+    according to `c_to_t`), you can use the expander classes CGateExpander,
     DiagUnitaryExpander, MultiplexorExpander, and ForbiddenCNotExpander to
     expand the circuit to an equivalent albeit longer circuit that satisfies
     constraints 1, 2, 3.

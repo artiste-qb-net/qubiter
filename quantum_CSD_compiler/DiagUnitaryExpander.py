@@ -15,7 +15,7 @@ class DiagUnitaryExpander(EchoingSEO_reader):
 
     So, to expand English & Picture files that contain DIAG and MP_Y lines
     into just CNOTs and qubit rotations, first use this class and the
-    analogous one for MP_Y, then use class CktExpander.
+    analogous one for MP_Y, then use class CGateExpander.
 
     If the input English file has in_file_prefix as file prefix, then the
     output English & Picture files have as file prefix in_file_prefix + '_X1',

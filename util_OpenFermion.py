@@ -7,10 +7,10 @@ def openfermion_qasm_to_qbtr_files(file_prefix, num_bits, qasm_gates):
     applying quantum computing to quantum chemistry. The file
     openfermion/_utils/_trotter_exp_to_qgates.py contains various functions
     such as pauli_exp_to_qasm() that return a list of strings (or an
-    iterable of such strings) called here `qasm_gates'. Each item in the
+    iterable of such strings) called here `qasm_gates`. Each item in the
     list `qasm_gates` denotes a gate in IBM qasm. This function takes a
     `qasm_gates` string list as input and creates English and Picture files
-    that are translations of `qasm_gates'.
+    that are translations of `qasm_gates`.
 
     References
     ----------

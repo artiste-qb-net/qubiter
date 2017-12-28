@@ -278,7 +278,7 @@ class CGateSEO_writer(SEO_writer):
     #     Writes an expansion for a U(2) matrix W(num_bits-1) that is
     #     controlled by a "generalized n" equal to GN = n(n_index_list). Thus,
     #     the gate written by this function equals W(num_bits-1)^GN.
-    #     Generalized n's are defined in the reference CktExpander.pdf
+    #     Generalized n's are defined in the reference CGateExpander.pdf
     #
     #     Parameters
     #     ----------

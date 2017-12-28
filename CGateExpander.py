@@ -2,7 +2,7 @@ from CGateSEO_writer import *
 from SEO_reader import *
 
 
-class CktExpander(SEO_reader):
+class CGateExpander(SEO_reader):
     """
     Qubiter English and Picture files allow single lines that represent U(2)
     matrices of numerous types with 0, 1 or multiple controls of either the
@@ -483,10 +483,10 @@ class CktExpander(SEO_reader):
         pass
 
 if __name__ == "__main__":
-    xer = CktExpander('io_folder/fou_test', 6, verbose=True)
-    xer = CktExpander('io_folder/fou_test_X1', 6, verbose=True)
-    xer = CktExpander('io_folder/ph_est_test', 8, verbose=True)
-    xer = CktExpander('io_folder/sim_test2', 4, verbose=True)
+    xer = CGateExpander('io_folder/fou_test', 6, verbose=True)
+    xer = CGateExpander('io_folder/fou_test_X1', 6, verbose=True)
+    xer = CGateExpander('io_folder/ph_est_test', 8, verbose=True)
+    xer = CGateExpander('io_folder/sim_test2', 4, verbose=True)
     # write log file for sim_test2
     SEO_reader('io_folder/sim_test2', 4)
-    xer = CktExpander('io_folder/sim_test3', 4, verbose=True)
+    xer = CGateExpander('io_folder/sim_test3', 4, verbose=True)
