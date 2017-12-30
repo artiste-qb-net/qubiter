@@ -210,40 +210,42 @@ class ForbiddenCNotExpander(EchoingSEO_reader):
         list[list[int]]
 
         """
-        targets = [[]]*num_bits
+        # [[]]*num_bits doesn't work here
+        targets = [[] for j in range(num_bits)]
         for c, t in c_to_t:
-            targets[c].append(t)
+            if t not in targets[c]:
+                targets[c].append(t)
+                # print(targets)
         return targets
 
-    def get_weights(self, path):
+    def edge_type(self, x, y):
         """
-        Given a list path=[j0, j1, j2, ...] denoting a path in the
-        undirected graph `self.graph`, this function returns a list [w01, w12,
-        w23, w34, ...] with length one less then the path. w01=+1 (resp.,
-        w01=-1) if j0->j1 = (j0, j1) (resp., (j1, j0)) is an element of
-        `c_to_t`. Execution is aborted if neither (j0, j1) nor (j1, j0) is
-        an element of `c_to_t`.
+        Returns 0 if C(x->y) and C(y->x) are both allowed.
+        Returns 1 if C(x->y) but not C(y->x) are allowed
+        Returns -1 if C(y->x) but not C(x->y) are allowed
+        Returns error message if neither is allowed
 
         Parameters
         ----------
-        path : list[int]
+        x : int
+        y : int
 
         Returns
         -------
-        list[int]
+        int
 
         """
-        weights = []
-        for j in range(len(path)-1):
-            x, y = path[j], path[j+1]
-            # print("path", path)
-            if y in self.targets[x]:
-                weights.append(1)
-            elif x in self.targets[y]:
-                weights.append(-1)
-            else:
-                assert False
-        return weights
+        pos = y in self.targets[x]
+        neg = x in self.targets[y]
+        if pos and neg:
+            ty = 0
+        elif pos:
+            ty = 1
+        elif neg:
+            ty = -1
+        else:
+            assert False
+        return ty
 
     def get_symbolic_vv_expansion(self, trol_pos, targ_pos):
         """
@@ -266,15 +268,17 @@ class ForbiddenCNotExpander(EchoingSEO_reader):
 
         """
         path = nx.shortest_path(self.graph, trol_pos, targ_pos)
-        weights = self.get_weights(path)
 
         expansion = []
-        for start in [1, 0]:  # zero for large v, 1 for small v
-            for j in range(start, len(weights)):
-                if weights[j] == 1:
+
+        def do_v(start_bit, end_bit):
+            for j in range(start_bit, end_bit):
+                ty = self.edge_type(path[j], path[j+1])
+                # print(path[j], '->', path[j+1], 'ty=', ty)
+                if ty in [0, 1]:
                     # CNot(path[j]->path[j+1]) is allowed
                     expansion.append((path[j], path[j+1]))
-                elif weights[j] == -1:
+                else:
                     # CNot(path[j]->path[j+1]) is not allowed so reverse it
                     expansion.extend([
                         (path[j], True),
@@ -282,13 +286,13 @@ class ForbiddenCNotExpander(EchoingSEO_reader):
                         (path[j+1], path[j]),
                         (path[j+1], True),
                         (path[j], True)])
-                else:
-                    assert False
-            for j in reversed(range(start, len(weights)-1)):
-                if weights[j] == 1:
+            for j in reversed(range(start_bit, end_bit-1)):
+                ty = self.edge_type(path[j], path[j+1])
+                # print(path[j], '->', path[j+1], 'ty=', ty)
+                if ty in [0, 1]:
                     # CNot(path[j]->path[j+1]) is allowed
                     expansion.append((path[j], path[j+1]))
-                elif weights[j] == -1:
+                else:
                     # CNot(path[j]->path[j+1]) is not allowed so reverse it
                     expansion.extend([
                         (path[j], True),
@@ -296,8 +300,9 @@ class ForbiddenCNotExpander(EchoingSEO_reader):
                         (path[j+1], path[j]),
                         (path[j+1], True),
                         (path[j], True)])
-                else:
-                    assert False
+
+        do_v(1, len(path)-1)  # small v
+        do_v(0, len(path)-1)  # large v
         # now cancel out (set keep to false)
         # Hadamard pairs that have "air" in between
         for j, ej in enumerate(expansion):
@@ -356,11 +361,13 @@ class ForbiddenCNotExpander(EchoingSEO_reader):
 if __name__ == "__main__":
     import for_IBM_devices.ibm_chip_couplings as ibm
     file_prefix = "io_folder/forbidden_cnots_ibm"
+    print(file_prefix)
     num_bits = 5
     c_to_t = ibm.ibmqx2_edges
     ForbiddenCNotExpander(file_prefix, num_bits, c_to_t)
 
     file_prefix = "io_folder/forbidden_cnots1"
+    print(file_prefix)
     num_bits = 4
     c_to_t = ((0, 1), (1, 2), (2, 3))
     ForbiddenCNotExpander(file_prefix, num_bits, c_to_t)
