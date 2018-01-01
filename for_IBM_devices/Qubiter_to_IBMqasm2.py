@@ -3,7 +3,8 @@ from SEO_reader import *
 from SEO_writer import *
 from quantum_CSD_compiler.UnitaryMat import *
 from ForbiddenCNotExpander import *
-import Utilities as ut
+from ChipCouplingsFitter import *
+import utilities_gen as ut
 
 
 class Qubiter_to_IBMqasm2(SEO_reader):
@@ -92,7 +93,7 @@ class Qubiter_to_IBMqasm2(SEO_reader):
 
         """
         self.c_to_t = c_to_t
-        self.targets = ForbiddenCNotExpander.get_targets(num_bits, c_to_t)
+        self.targets = ForbiddenCNotExpander.get_targets_from_c_to_t(num_bits, c_to_t)
 
         self.write_qubiter_files = write_qubiter_files
 

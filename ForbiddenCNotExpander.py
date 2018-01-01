@@ -1,5 +1,6 @@
 from EchoingSEO_reader import *
 from Controls import *
+from ChipCouplingsFitter import *
 import networkx as nx
 
 
@@ -181,7 +182,7 @@ class ForbiddenCNotExpander(EchoingSEO_reader):
         # print("graph", self.graph.edges())
 
         self.targets = \
-            ForbiddenCNotExpander.get_targets(num_bits, c_to_t)
+            ForbiddenCNotExpander.get_targets_from_c_to_t(num_bits, c_to_t)
         # print("targets", self.targets)
 
         out_file_prefix = SEO_reader.xed_file_prefix(file_prefix)
@@ -193,7 +194,7 @@ class ForbiddenCNotExpander(EchoingSEO_reader):
         self.wr.close_files()
 
     @staticmethod
-    def get_targets(num_bits, c_to_t):
+    def get_targets_from_c_to_t(num_bits, c_to_t):
         """
         Returns `targets', which is a list with num_bits items which are
         themselves lists, call them sublists. Some sublists are possibly the
@@ -203,7 +204,7 @@ class ForbiddenCNotExpander(EchoingSEO_reader):
         Parameters
         ----------
         num_bits : int
-        c_to_t : tuple(tuple(int, int))
+        c_to_t : tuple[tuple[int, int]]
 
         Returns
         -------

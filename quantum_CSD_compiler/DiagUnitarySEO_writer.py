@@ -1,4 +1,4 @@
-import Utilities as ut
+import utilities_gen as ut
 from SEO_writer import *
 from HadamardTransform import *
 from SEO_MatrixProduct import *

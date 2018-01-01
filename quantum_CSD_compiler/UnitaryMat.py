@@ -1,6 +1,6 @@
 import math
 import numpy as np
-import Utilities as ut
+import utilities_gen as ut
 from quantum_CSD_compiler.MultiplexorSEO_writer import *
 import cuncsd_sq as csd
 

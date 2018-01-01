@@ -4,7 +4,7 @@ import copy as cp
 from SEO_reader import *
 from OneBitGates import *
 from StateVec import *
-# import Utilities as ut
+# import utilities_gen as ut
 
 
 class SEO_simulator(SEO_reader):

@@ -1,5 +1,5 @@
 from quantum_CSD_compiler.UnitaryMat import *
-import Utilities as ut
+import utilities_gen as ut
 
 
 class Node:
