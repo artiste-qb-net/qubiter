@@ -3,6 +3,7 @@ from ForbiddenCNotExpander import *
 import networkx as nx
 import itertools as it
 import networkx.algorithms.isomorphism as iso
+import matplotlib.pyplot as plt
 
 
 class ChipCouplingsFitter:
@@ -123,6 +124,41 @@ class ChipCouplingsFitter:
         return tuple(old_cnots)
 
     @staticmethod
+    def draw_phys_and_eng_graphs(file_prefix, num_bits, c_to_t):
+        """
+        Draws the Physical and English undirected graphs. This is useful in
+        case you want to try to "embed by hand" the English graph inside the
+        Physical graph.
+
+        Parameters
+        ----------
+        file_prefix : str
+        num_bits : int
+        c_to_t : tuple[tuple[int,int]]
+
+        Returns
+        -------
+        None
+
+        """
+
+        plt.figure(1)
+        GP = nx.Graph()
+        GP.add_edges_from(c_to_t)
+        plt.title('Physical graph')
+        nx.draw(GP, with_labels=True, node_color='white')
+
+        plt.figure(2)
+        old_cnots = ChipCouplingsFitter.get_cnots_in_file(file_prefix,
+                                                          num_bits)
+        GE = nx.Graph()
+        GE.add_edges_from(old_cnots)
+        plt.title('English graph')
+        nx.draw(GE, with_labels=True, node_color='white')
+
+        plt.show()
+
+    @staticmethod
     def get_bit_map_from_c_to_t(num_bits, old_cnots, c_to_t, verbose=False):
         """
         This function has as inputs `old_cnot` describing the CNots in an
@@ -199,3 +235,10 @@ if __name__ == "__main__":
     verbose = True
     fitter = ChipCouplingsFitter(
         file_prefix, num_bits, c_to_t, verbose=verbose)
+
+    print("Must close or save/close all matplotlib "
+          "windows in order to terminate execution of script.")
+    ChipCouplingsFitter.draw_phys_and_eng_graphs(file_prefix,
+                                                 num_bits,
+                                                 c_to_t)
+
