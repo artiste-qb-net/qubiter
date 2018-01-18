@@ -1,0 +1,354 @@
+\documentclass[12pt]{article}
+\usepackage{Qcircuit_v2, Qcircuit_extension}
+\begin{document}
+
+
+
+last bit on top=False, time dir= $>$
+
+\begin{equation}
+\begin{array}{c}
+\Qcircuit @C=2em @R=.4em {
+% bit 0
+&\lstick{\ket{0}}		% gate 0
+&\qw		% gate 1
+&\qw		% gate 2
+&\gate{H}		% gate 3
+&\qw		% gate 4
+&\meter		% gate 5
+&\Cdotgate		% gate 6
+&\Cdotgate		% gate 7
+&\Cdotgate		% gate 8
+&\cw		% gate 9
+\\  % bit 1
+&\lstick{\ket{1}}		% gate 0
+&\timesgate		% gate 1
+&\gate{Y}		% gate 2
+&\gate{H}		% gate 3
+&\uarrowgate		% gate 4
+&\qw		% gate 5
+&\timesgate\qwx		% gate 6
+&\qw\qwx		% gate 7
+&\qw\qwx		% gate 8
+&\qw		% gate 9
+\\  % bit 2
+&\lstick{\ket{2}}		% gate 0
+&\qw\qwx		% gate 1
+&\qw\qwx		% gate 2
+&\qw		% gate 3
+&\qw\qwx		% gate 4
+&\meter		% gate 5
+&\cw		% gate 6
+&\cw\qwx		% gate 7
+&\cw\qwx		% gate 8
+&\cw		% gate 9
+\\  % bit 3
+&\lstick{\ket{3}}		% gate 0
+&\qw\qwx		% gate 1
+&\ogate\qwx		% gate 2
+&\qw		% gate 3
+&\qw\qwx		% gate 4
+&\qw		% gate 5
+&\qw		% gate 6
+&\qw\qwx		% gate 7
+&\ogate\qwx		% gate 8
+&\qw		% gate 9
+\\  % bit 4
+&\lstick{\ket{4}}		% gate 0
+&\dotgate\qwx		% gate 1
+&\dotgate\qwx		% gate 2
+&\qw		% gate 3
+&\darrowgate\qwx		% gate 4
+&\meter		% gate 5
+&\cw		% gate 6
+&\cw\qwx		% gate 7
+&\cw\qwx		% gate 8
+&\cw		% gate 9
+\\  % bit 5
+&\lstick{\ket{5}}		% gate 0
+&\qw		% gate 1
+&\ogate\qwx		% gate 2
+&\qw		% gate 3
+&\qw		% gate 4
+&\qw		% gate 5
+&\qw		% gate 6
+&\timesgate\qwx		% gate 7
+&\timesgate\qwx		% gate 8
+&\qw		% gate 9
+\\  % bit 6
+&\lstick{\ket{6}}		% gate 0
+&\qw		% gate 1
+&\qw		% gate 2
+&\qw		% gate 3
+&\qw		% gate 4
+&\qw		% gate 5
+&\qw		% gate 6
+&\qw		% gate 7
+&\qw		% gate 8
+&\qw		% gate 9
+}
+\end{array}
+\end{equation}
+
+
+last bit on top=False, time dir= $<$
+
+\begin{equation}
+\begin{array}{c}
+\Qcircuit @C=2em @R=.4em {
+% bit 0
+&\Cdotgate		% gate 0
+&\Cdotgate		% gate 1
+&\Cdotgate		% gate 2
+&\Rmeter		% gate 3
+&\qw		% gate 4
+&\gate{H}		% gate 5
+&\qw		% gate 6
+&\qw		% gate 7
+&\qw		% gate 8
+&{\ket{0}}		% gate 9
+\\  % bit 1
+&\qw\qwx		% gate 0
+&\qw\qwx		% gate 1
+&\timesgate\qwx		% gate 2
+&\qw		% gate 3
+&\uarrowgate		% gate 4
+&\gate{H}		% gate 5
+&\gate{Y}		% gate 6
+&\timesgate		% gate 7
+&\qw		% gate 8
+&{\ket{1}}		% gate 9
+\\  % bit 2
+&\cw\qwx		% gate 0
+&\cw\qwx		% gate 1
+&\cw		% gate 2
+&\Rmeter		% gate 3
+&\qw\qwx		% gate 4
+&\qw		% gate 5
+&\qw\qwx		% gate 6
+&\qw\qwx		% gate 7
+&\qw		% gate 8
+&{\ket{2}}		% gate 9
+\\  % bit 3
+&\ogate\qwx		% gate 0
+&\qw\qwx		% gate 1
+&\qw		% gate 2
+&\qw		% gate 3
+&\qw\qwx		% gate 4
+&\qw		% gate 5
+&\ogate\qwx		% gate 6
+&\qw\qwx		% gate 7
+&\qw		% gate 8
+&{\ket{3}}		% gate 9
+\\  % bit 4
+&\cw\qwx		% gate 0
+&\cw\qwx		% gate 1
+&\cw		% gate 2
+&\Rmeter		% gate 3
+&\darrowgate\qwx		% gate 4
+&\qw		% gate 5
+&\dotgate\qwx		% gate 6
+&\dotgate\qwx		% gate 7
+&\qw		% gate 8
+&{\ket{4}}		% gate 9
+\\  % bit 5
+&\timesgate\qwx		% gate 0
+&\timesgate\qwx		% gate 1
+&\qw		% gate 2
+&\qw		% gate 3
+&\qw		% gate 4
+&\qw		% gate 5
+&\ogate\qwx		% gate 6
+&\qw		% gate 7
+&\qw		% gate 8
+&{\ket{5}}		% gate 9
+\\  % bit 6
+&\qw		% gate 0
+&\qw		% gate 1
+&\qw		% gate 2
+&\qw		% gate 3
+&\qw		% gate 4
+&\qw		% gate 5
+&\qw		% gate 6
+&\qw		% gate 7
+&\qw		% gate 8
+&{\ket{6}}		% gate 9
+}
+\end{array}
+\end{equation}
+
+
+last bit on top=True, time dir= $>$
+
+\begin{equation}
+\begin{array}{c}
+\Qcircuit @C=2em @R=.4em {
+% bit 0
+&\lstick{\ket{0}}		% gate 0
+&\qw		% gate 1
+&\qw		% gate 2
+&\qw		% gate 3
+&\qw		% gate 4
+&\qw		% gate 5
+&\qw		% gate 6
+&\qw		% gate 7
+&\qw		% gate 8
+&\qw		% gate 9
+\\  % bit 1
+&\lstick{\ket{1}}		% gate 0
+&\qw		% gate 1
+&\ogate		% gate 2
+&\qw		% gate 3
+&\qw		% gate 4
+&\qw		% gate 5
+&\qw		% gate 6
+&\timesgate		% gate 7
+&\timesgate		% gate 8
+&\qw		% gate 9
+\\  % bit 2
+&\lstick{\ket{2}}		% gate 0
+&\dotgate		% gate 1
+&\dotgate\qwx		% gate 2
+&\qw		% gate 3
+&\uarrowgate		% gate 4
+&\meter		% gate 5
+&\cw		% gate 6
+&\cw\qwx		% gate 7
+&\cw\qwx		% gate 8
+&\cw		% gate 9
+\\  % bit 3
+&\lstick{\ket{3}}		% gate 0
+&\qw\qwx		% gate 1
+&\ogate\qwx		% gate 2
+&\qw		% gate 3
+&\qw\qwx		% gate 4
+&\qw		% gate 5
+&\qw		% gate 6
+&\qw\qwx		% gate 7
+&\ogate\qwx		% gate 8
+&\qw		% gate 9
+\\  % bit 4
+&\lstick{\ket{4}}		% gate 0
+&\qw\qwx		% gate 1
+&\qw\qwx		% gate 2
+&\qw		% gate 3
+&\qw\qwx		% gate 4
+&\meter		% gate 5
+&\cw		% gate 6
+&\cw\qwx		% gate 7
+&\cw\qwx		% gate 8
+&\cw		% gate 9
+\\  % bit 5
+&\lstick{\ket{5}}		% gate 0
+&\timesgate\qwx		% gate 1
+&\gate{Y}\qwx		% gate 2
+&\gate{H}		% gate 3
+&\darrowgate\qwx		% gate 4
+&\qw		% gate 5
+&\timesgate		% gate 6
+&\qw\qwx		% gate 7
+&\qw\qwx		% gate 8
+&\qw		% gate 9
+\\  % bit 6
+&\lstick{\ket{6}}		% gate 0
+&\qw		% gate 1
+&\qw		% gate 2
+&\gate{H}		% gate 3
+&\qw		% gate 4
+&\meter		% gate 5
+&\Cdotgate\qwx		% gate 6
+&\Cdotgate\qwx		% gate 7
+&\Cdotgate\qwx		% gate 8
+&\cw		% gate 9
+}
+\end{array}
+\end{equation}
+
+
+last bit on top=True, time dir= $<$
+
+\begin{equation}
+\begin{array}{c}
+\Qcircuit @C=2em @R=.4em {
+% bit 0
+&\qw		% gate 0
+&\qw		% gate 1
+&\qw		% gate 2
+&\qw		% gate 3
+&\qw		% gate 4
+&\qw		% gate 5
+&\qw		% gate 6
+&\qw		% gate 7
+&\qw		% gate 8
+&{\ket{0}}		% gate 9
+\\  % bit 1
+&\timesgate		% gate 0
+&\timesgate		% gate 1
+&\qw		% gate 2
+&\qw		% gate 3
+&\qw		% gate 4
+&\qw		% gate 5
+&\ogate		% gate 6
+&\qw		% gate 7
+&\qw		% gate 8
+&{\ket{1}}		% gate 9
+\\  % bit 2
+&\cw\qwx		% gate 0
+&\cw\qwx		% gate 1
+&\cw		% gate 2
+&\Rmeter		% gate 3
+&\uarrowgate		% gate 4
+&\qw		% gate 5
+&\dotgate\qwx		% gate 6
+&\dotgate		% gate 7
+&\qw		% gate 8
+&{\ket{2}}		% gate 9
+\\  % bit 3
+&\ogate\qwx		% gate 0
+&\qw\qwx		% gate 1
+&\qw		% gate 2
+&\qw		% gate 3
+&\qw\qwx		% gate 4
+&\qw		% gate 5
+&\ogate\qwx		% gate 6
+&\qw\qwx		% gate 7
+&\qw		% gate 8
+&{\ket{3}}		% gate 9
+\\  % bit 4
+&\cw\qwx		% gate 0
+&\cw\qwx		% gate 1
+&\cw		% gate 2
+&\Rmeter		% gate 3
+&\qw\qwx		% gate 4
+&\qw		% gate 5
+&\qw\qwx		% gate 6
+&\qw\qwx		% gate 7
+&\qw		% gate 8
+&{\ket{4}}		% gate 9
+\\  % bit 5
+&\qw\qwx		% gate 0
+&\qw\qwx		% gate 1
+&\timesgate		% gate 2
+&\qw		% gate 3
+&\darrowgate\qwx		% gate 4
+&\gate{H}		% gate 5
+&\gate{Y}\qwx		% gate 6
+&\timesgate\qwx		% gate 7
+&\qw		% gate 8
+&{\ket{5}}		% gate 9
+\\  % bit 6
+&\Cdotgate\qwx		% gate 0
+&\Cdotgate\qwx		% gate 1
+&\Cdotgate\qwx		% gate 2
+&\Rmeter		% gate 3
+&\qw		% gate 4
+&\gate{H}		% gate 5
+&\qw		% gate 6
+&\qw		% gate 7
+&\qw		% gate 8
+&{\ket{6}}		% gate 9
+}
+\end{array}
+\end{equation}
+
+\end{document}

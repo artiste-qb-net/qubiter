@@ -127,8 +127,8 @@ class ChipCouplingsFitter:
     def draw_phys_and_eng_graphs(file_prefix, num_bits, c_to_t):
         """
         Draws the Physical and English undirected graphs. This is useful in
-        case you want to try to "embed by hand" the English graph inside the
-        Physical graph.
+        case you want to try to use human pattern recognition to embed the
+        English graph inside the Physical graph.
 
         Parameters
         ----------
@@ -237,7 +237,7 @@ if __name__ == "__main__":
         file_prefix, num_bits, c_to_t, verbose=verbose)
 
     print("Must close or save/close all matplotlib "
-          "windows in order to terminate execution of script.")
+          "windows in order to finish execution of script.")
     ChipCouplingsFitter.draw_phys_and_eng_graphs(file_prefix,
                                                  num_bits,
                                                  c_to_t)
