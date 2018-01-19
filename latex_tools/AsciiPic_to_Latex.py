@@ -197,42 +197,36 @@ class AsciiPic_to_Latex:
                 m_block_controls = Controls(num_bits)
             for vtx in split_line:
                 # print('vtx', vtx)
-                if len(vtx) < 3:
-                    if vtx in ['@', '<', '>', '|', ':', '%', '+',
-                               'H', 'M', 'O',
-                               'Rx', 'Ry', 'Rz', 'R', 'X', 'Y', 'Z']:
-                        ch_list.append(vtx[0])
-                    elif vtx in ['OP', '@P', 'Ph']:
-                        ch_list.append('?')
-                    elif vtx in ['M1', 'M2']:
-                        assert False, "unsupported measurement type"
-                    else:
-                        # print("--", split_line)
-                        assert False, "unexpected circuit node: '" + vtx + "'"
+                if vtx in ['@', '<', '>', '|', ':', '%', '+',
+                           'H', 'M', 'O', 'Ph',
+                           'Rx', 'Ry', 'Rz', 'R', 'X', 'Y', 'Z']:
+                    ch_list.append(vtx[0])
+                elif vtx in ['OP', '@P']:
+                    ch_list.append('?')
+                elif vtx in ['M1', 'M2']:
+                    assert False, "unsupported measurement type"
+                elif vtx in ['LOOP', 'NEXT']:
+                    assert False, "loops not supported by Tiny"
+                elif vtx in ['NOTA', 'PRINT']:
+                    break
+                elif vtx == 'IF_M(':
+                    inside_if_m_block = True
+                    # m_block_controls should be empty at this point
+                    assert not m_block_controls.bit_pos_to_kind
+                    trols = split_line[1:-1]
+                    # print('trols', trols)
+                    trol_bits = [int(x[:-1]) for x in trols]
+                    trol_kinds = \
+                        [True if x[-1] == 'T' else False for x in trols]
+                    for bit, kind in zip(trol_bits, trol_kinds):
+                        m_block_controls.bit_pos_to_kind[bit] = kind
+                    m_block_controls.refresh_lists()
+                    break
+                elif vtx == '}IF_M':
+                    inside_if_m_block = False
+                    break
                 else:
-                    ch4 = vtx[0:4]
-                    if ch4 in ['LOOP', 'NEXT']:
-                        assert False, "loops not supported by Tiny"
-                    elif ch4 in ['NOTA', 'PRIN']:
-                        break
-                    elif ch4 == 'IF_M':
-                        inside_if_m_block = True
-                        # m_block_controls should be empty at this point
-                        assert not m_block_controls.bit_pos_to_kind
-                        trols = split_line[1:-1]
-                        # print('trols', trols)
-                        trol_bits = [int(x[:-1]) for x in trols]
-                        trol_kinds = \
-                            [True if x[-1] == 'T' else False for x in trols]
-                        for bit, kind in zip(trol_bits, trol_kinds):
-                            m_block_controls.bit_pos_to_kind[bit] = kind
-                        m_block_controls.refresh_lists()
-                        break
-                    elif ch4 == '}IF_':
-                        inside_if_m_block = False
-                        break
-                    else:
-                        assert False, "unexpected circuit node: '" + vtx + "'"
+                    assert False, "unexpected circuit node: '" + vtx + "'"
             # print("split_line", split_line)
             # ch_list may be empty in cases where broke out of vtx loop
             if ch_list:
