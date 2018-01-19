@@ -242,14 +242,14 @@ class AsciiPic_to_Latex:
                 ch_list = [ch if ch != ':' else '|' for ch in ch_list]
 
                 # replace | by + when justified
-                gate_has_controls_or_swap = False
+                gate_has_inter_qubit_wires = False
                 for ch in ch_list:
-                    if ch in ['@', 'O', '<', '>']:
-                        gate_has_controls_or_swap = True
+                    if ch in ['@', 'O', '<', '>', '+']:
+                        gate_has_inter_qubit_wires = True
                         break
                 non_vertical_pos = [k for k in range(num_bits)
                                     if ch_list[k] != '|']
-                if gate_has_controls_or_swap:
+                if gate_has_inter_qubit_wires:
                     min_non_vert = min(non_vertical_pos)
                     max_non_vert = max(non_vertical_pos)
                     for k in range(min_non_vert+1, max_non_vert):
