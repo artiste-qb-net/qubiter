@@ -424,14 +424,16 @@ class AsciiPic_to_Latex:
                     bit_range = range(num_bits)
                 gate_ch_list = [self.gb_char_arr[_gate_num, k] for
                                 k in bit_range]
-                gate_has_controls_or_swap = False
+                gate_has_inter_qubit_wires = False
                 for ch in gate_ch_list:
-                    if ch in ['@', 'O', '<', '>']:
-                        gate_has_controls_or_swap = True
+                    # any gate-time with at least one '?' in tiny pic
+                    # will be drawn in latex with inter-qubit wiring
+                    if ch in ['@', 'O', '<', '>', '+', '?']:
+                        gate_has_inter_qubit_wires = True
                         break
                 non_vertical_pos = [k for k in range(num_bits)
                                     if gate_ch_list[k] != '|']
-                if gate_has_controls_or_swap:
+                if gate_has_inter_qubit_wires:
                     min_non_vert = min(non_vertical_pos)
                     max_non_vert = max(non_vertical_pos)
                     for k in range(min_non_vert, max_non_vert):
