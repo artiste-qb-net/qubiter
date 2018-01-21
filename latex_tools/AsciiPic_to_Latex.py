@@ -247,9 +247,9 @@ class AsciiPic_to_Latex:
                     if ch in ['@', 'O', '<', '>', '+']:
                         gate_has_inter_qubit_wires = True
                         break
-                non_vertical_pos = [k for k in range(num_bits)
-                                    if ch_list[k] != '|']
                 if gate_has_inter_qubit_wires:
+                    non_vertical_pos = [k for k in range(num_bits)
+                                        if ch_list[k] != '|']
                     min_non_vert = min(non_vertical_pos)
                     max_non_vert = max(non_vertical_pos)
                     for k in range(min_non_vert+1, max_non_vert):
@@ -428,9 +428,9 @@ class AsciiPic_to_Latex:
                     if ch in ['@', 'O', '<', '>', '+', '?']:
                         gate_has_inter_qubit_wires = True
                         break
-                non_vertical_pos = [k for k in range(num_bits)
-                                    if gate_ch_list[k] != '|']
                 if gate_has_inter_qubit_wires:
+                    non_vertical_pos = [k for k in range(num_bits)
+                                        if gate_ch_list[k] != '|']
                     min_non_vert = min(non_vertical_pos)
                     max_non_vert = max(non_vertical_pos)
                     for k in range(min_non_vert, max_non_vert):
@@ -472,7 +472,8 @@ if __name__ == "__main__":
         "M|M|M||",
         "@X|||||",
         "@++++X|",
-        "@++O+X|"]
+        "@++O+X|",
+        "|A|||B?"]
     init_states = [str(bit) for bit in range(num_bits)]
     # init_states = None
 
