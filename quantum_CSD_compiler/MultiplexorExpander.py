@@ -114,7 +114,7 @@ class MultiplexorExpander(EchoingSEO_reader):
 
         nt = len(T_bpos)
         nf = len(F_bpos)
-        emb = CktEmbedder(num_bits, num_bits, bit_map)
+        emb = CktEmbedder(self.num_bits, self.num_bits, bit_map)
         return emb, nt, nf
 
     def use_MP_Y(self, tar_bit_pos, controls, rad_angles):

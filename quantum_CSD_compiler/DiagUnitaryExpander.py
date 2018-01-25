@@ -113,7 +113,7 @@ class DiagUnitaryExpander(EchoingSEO_reader):
 
         nt = len(T_bpos)
         nf = len(F_bpos)
-        emb = CktEmbedder(num_bits, num_bits, bit_map)
+        emb = CktEmbedder(self.num_bits, self.num_bits, bit_map)
         return emb, nt, nf
 
     def use_DIAG(self, controls, rad_angles):
