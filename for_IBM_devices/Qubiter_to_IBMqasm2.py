@@ -93,7 +93,8 @@ class Qubiter_to_IBMqasm2(SEO_reader):
 
         """
         self.c_to_t = c_to_t
-        self.targets = ForbiddenCNotExpander.get_targets_from_c_to_t(num_bits, c_to_t)
+        self.targets = ForbiddenCNotExpander.get_targets_from_c_to_t(num_bits,
+                                                                     c_to_t)
 
         self.write_qubiter_files = write_qubiter_files
 
@@ -288,7 +289,10 @@ class Qubiter_to_IBMqasm2(SEO_reader):
 
     def use_PHAS(self, angle_degs, tar_bit_pos, controls):
         """
-        If called, this function will halt execution of program.
+        If called for a controlled phase, this function will halt execution
+        of program. If it's just a global phase, it will comment it out in
+        the output files (IBM qasm and output Qubiter English and Picture
+        files.)
 
         Parameters
         ----------
@@ -301,7 +305,13 @@ class Qubiter_to_IBMqasm2(SEO_reader):
         None
 
         """
-        assert False, "No PHAS lines allowed"
+        if controls.bit_pos_to_kind:
+            assert False, "No PHAS lines with controls allowed"
+        else:
+            bla_str = 'PHAS\t' + str(angle_degs) + '\tAT\t' + str(tar_bit_pos)
+            self.qasm_out.write("// " + bla_str + "\n")
+            if self.write_qubiter_files:
+                self.qbtr_wr.write_NOTA(bla_str)
 
     def use_P_PH(self, projection_bit, angle_degs, tar_bit_pos, controls):
         """
