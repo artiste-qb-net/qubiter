@@ -695,8 +695,8 @@ class SEO_writer:
         for c in range(num_controls):
             x = aft_trols.kinds[c]
             kind_str = ""
-            # int is subclass of bool
-            # so isinstance(x, int) will be true for x bool too!
+            # bool is subclass of int
+            # so isinstance(x, int) will be true if x is bool!
             if not isinstance(x, bool):
                 kind_str = ":" + str(x)
             elif not x:
@@ -811,8 +811,8 @@ class SEO_writer:
         for c in range(num_controls):
             x = aft_trols.kinds[c]
             kind_str = ""
-            # int is subclass of bool
-            # so isinstance(x, int) will be true for x bool too!
+            # bool is subclass of int
+            # so isinstance(x, int) will be true if x is bool!
             if not isinstance(x, bool):
                 kind_str = ":" + str(x)
             elif not x:

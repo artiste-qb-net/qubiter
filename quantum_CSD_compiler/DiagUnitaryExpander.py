@@ -89,8 +89,8 @@ class DiagUnitaryExpander(EchoingSEO_reader):
         F_bpos = []
         MP_bpos = []
         for bpos, kind in controls.bit_pos_to_kind.items():
-            # int is subclass of bool
-            # so isinstance(x, int) will be true for x bool too!
+            # bool is subclass of int
+            # so isinstance(x, int) will be true if x is bool!
             if isinstance(kind, bool):
                 if kind:
                     T_bpos.append(bpos)
@@ -113,7 +113,7 @@ class DiagUnitaryExpander(EchoingSEO_reader):
 
         nt = len(T_bpos)
         nf = len(F_bpos)
-        emb = CktEmbedder(num_bits, num_bits, bit_map)
+        emb = CktEmbedder(self.num_bits, self.num_bits, bit_map)
         return emb, nt, nf
 
     def use_DIAG(self, controls, rad_angles):
