@@ -290,9 +290,10 @@ class Qubiter_to_IBMqasm2(SEO_reader):
     def use_PHAS(self, angle_degs, tar_bit_pos, controls):
         """
         If called for a controlled phase, this function will halt execution
-        of program. If it's just a global phase, it will comment it out in
-        the output files (IBM qasm and output Qubiter English and Picture
-        files.)
+        of program. If it's just a global phase with no controls,
+        the function will comment the phase out in the output files (IBM
+        qasm and output Qubiter English and Picture files.) and move on to
+        the next line.
 
         Parameters
         ----------
