@@ -39,5 +39,17 @@ ibmqx5_edges = (
     (15, 2),
     (15, 14))  # 22 edges
 
+# Simulation only --- all CNOT connections are allowed
+def simulator_edges(num_bits):
+    edges = ()
+    for i in range(num_bits):
+        for j in range(num_bits):
+            if i != j:
+                edges += ((i, j),)
+    return edges
+
+
+if __name__ == '__main__':
+    print(simulator_edges(4))
 
 
