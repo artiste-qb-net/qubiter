@@ -109,7 +109,6 @@ class PhaseEstSEO_writer(SEO_writer):
         bit_map = list(range(self.num_probe_bits, num_bits))
         pre_emb = CktEmbedder(num_bits_bef, num_bits_aft, bit_map)
 
-
         for k in range(self.num_probe_bits):
             pre_emb.extra_controls = Controls.new_knob(num_bits, k, True)
             compo_emb = CktEmbedder.composition(self.emb, pre_emb)
@@ -309,18 +308,19 @@ class AtomWriter(SEO_writer):
         self.write_pow_hermitian(1)
 
 if __name__ == "__main__":
-
-    bit_map = list(range(7))
-    fin_emb = CktEmbedder(7, 8, bit_map)
-    atom_wr = AtomWriter(do_write=False, test=True)
-    for zf in [True, False]:
-        wr = PhaseEstSEO_writer(do_write=False,
-                                num_probe_bits=4,
-                                atom_writer = atom_wr,
-                                file_prefix="io_folder/ph_est_test",
-                                emb=fin_emb,
-                                zero_bit_first=zf)
-        wr.write()
-        wr.write_NOTA("next write h.c.")
-        wr.write_hermitian()
-        wr.close_files()
+    def main():
+        bit_map = list(range(7))
+        fin_emb = CktEmbedder(7, 8, bit_map)
+        atom_wr = AtomWriter(do_write=False, test=True)
+        for zf in [True, False]:
+            wr = PhaseEstSEO_writer(do_write=False,
+                                    num_probe_bits=4,
+                                    atom_writer = atom_wr,
+                                    file_prefix="io_folder/ph_est_test",
+                                    emb=fin_emb,
+                                    zero_bit_first=zf)
+            wr.write()
+            wr.write_NOTA("next write h.c.")
+            wr.write_hermitian()
+            wr.close_files()
+    main()

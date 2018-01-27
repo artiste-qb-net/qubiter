@@ -122,6 +122,7 @@ def is_const_mat(arr):
     arr2 = np.diag(arr)
     return np.linalg.norm(arr1 - arr2) < 1e-6
 
+
 def log_print(x):
     """
     Prints file name of log_print() call, then file line of log_print()

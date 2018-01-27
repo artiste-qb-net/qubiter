@@ -1,5 +1,6 @@
 from SEO_simulator import *
 from StateVec import *
+# from Controls import *
 
 
 class SEO_simulator_sp(SEO_simulator):
@@ -101,15 +102,18 @@ class SEO_MatrixProduct:
 
 if __name__ == "__main__":
     from FouSEO_writer import *
-    num_bits = 3
-    emb = CktEmbedder(num_bits, num_bits)
-    file_prefix = 'io_folder/matrix_prod_test'
-    wr = FouSEO_writer(True, file_prefix, emb)
-    wr.close_files()
-    mp = SEO_MatrixProduct(file_prefix, num_bits)
-    prod = mp.prod_arr
-    exact = FouSEO_writer.fourier_trans_mat(1 << num_bits)
-    # print(prod)
-    # print(exact)
-    err = np.linalg.norm(prod - exact)
-    print(err)
+
+    def main():
+        num_bits = 3
+        emb = CktEmbedder(num_bits, num_bits)
+        file_prefix = 'io_folder/matrix_prod_test'
+        wr = FouSEO_writer(True, file_prefix, emb)
+        wr.close_files()
+        mp = SEO_MatrixProduct(file_prefix, num_bits)
+        prod = mp.prod_arr
+        exact = FouSEO_writer.fourier_trans_mat(1 << num_bits)
+        # print(prod)
+        # print(exact)
+        err = np.linalg.norm(prod - exact)
+        print(err)
+    main()

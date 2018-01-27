@@ -333,62 +333,65 @@ class UnitaryMat:
 
 if __name__ == "__main__":
     from FouSEO_writer import *
-    unit_vec = np.array([1, 2, 3])
-    unit_vec = unit_vec/np.linalg.norm(unit_vec)
-    unit_vec = list(unit_vec)
-    delta = 3
-    rot_rads = .3
-    print("delta in=", delta)
-    print("rot_rads in=", rot_rads)
-    print("unit_vec in=", unit_vec)
-    arr_in = UnitaryMat.u2_from_params(delta, rot_rads, unit_vec)
-    print("arr_in:\n", arr_in)
-    delta1, rot_rads1, unit_vec1 = UnitaryMat.u2_to_params(arr_in)
-    print("delta out=", delta1)
-    print("rot_rads out=", rot_rads1)
-    print("unit_vec out=", unit_vec1)
-    arr_out = UnitaryMat.u2_from_params(delta1, rot_rads1, unit_vec1)
-    print("arr_out=\n", arr_out)
 
-    delta, left_rads, center_rads, right_rads =\
-        UnitaryMat.u2_zyz_decomp(arr_in)
-    c = np.cos(center_rads)
-    s = np.sin(center_rads)
-    a = np.exp(1j*left_rads)
-    ah = np.conj(a)
-    b = np.exp(1j*right_rads)
-    bh = np.conj(b)
-    arr = np.empty((2, 2), dtype=complex)
-    arr[0, 0] = c*a*b
-    arr[0, 1] = s*a*bh
-    arr[1, 0] = -s*ah*b
-    arr[1, 1] = c*ah*bh
-    arr = np.exp(1j*delta)*arr
-    print("zyz decomp arr=\n", arr)
+    def main():
+        unit_vec = np.array([1, 2, 3])
+        unit_vec = unit_vec/np.linalg.norm(unit_vec)
+        unit_vec = list(unit_vec)
+        delta = 3
+        rot_rads = .3
+        print("delta in=", delta)
+        print("rot_rads in=", rot_rads)
+        print("unit_vec in=", unit_vec)
+        arr_in = UnitaryMat.u2_from_params(delta, rot_rads, unit_vec)
+        print("arr_in:\n", arr_in)
+        delta1, rot_rads1, unit_vec1 = UnitaryMat.u2_to_params(arr_in)
+        print("delta out=", delta1)
+        print("rot_rads out=", rot_rads1)
+        print("unit_vec out=", unit_vec1)
+        arr_out = UnitaryMat.u2_from_params(delta1, rot_rads1, unit_vec1)
+        print("arr_out=\n", arr_out)
 
-    print("\ncs decomp example-------------")
-    num_bits = 2
-    num_rows = 1 << num_bits
-    mat = FouSEO_writer.fourier_trans_mat(num_rows)
-    assert UnitaryMat.is_unitary(mat)
-    left_mats, central_mats, right_mats = UnitaryMat.cs_decomp([mat])
-    # print('left mats\n', left_mats)
-    # print('central_mats\n', central_mats)
-    # print('right_mats\n', right_mats)
-    
-    left = np.zeros((num_rows, num_rows),  dtype=complex)
-    left[0:num_rows/2, 0:num_rows/2] = left_mats[0]
-    left[num_rows/2:num_rows, num_rows/2:num_rows] = left_mats[1]
-    # print('left', left)
-    
-    right = np.zeros((num_rows, num_rows),  dtype=complex)
-    right[0:num_rows/2, 0:num_rows/2] = right_mats[0]
-    right[num_rows/2:num_rows, num_rows/2:num_rows] = right_mats[1]
-    
-    center = MultiplexorSEO_writer.mp_mat(central_mats[0])
-    # print('center', center)
-    mat_prod = np.dot(np.dot(left, center), right)
-    # print('mat\n', mat)
-    # print('mat_prod\n', mat_prod)
-    err = np.linalg.norm(mat - mat_prod)
-    print('err=', err)
+        delta, left_rads, center_rads, right_rads =\
+            UnitaryMat.u2_zyz_decomp(arr_in)
+        c = np.cos(center_rads)
+        s = np.sin(center_rads)
+        a = np.exp(1j*left_rads)
+        ah = np.conj(a)
+        b = np.exp(1j*right_rads)
+        bh = np.conj(b)
+        arr = np.empty((2, 2), dtype=complex)
+        arr[0, 0] = c*a*b
+        arr[0, 1] = s*a*bh
+        arr[1, 0] = -s*ah*b
+        arr[1, 1] = c*ah*bh
+        arr = np.exp(1j*delta)*arr
+        print("zyz decomp arr=\n", arr)
+
+        print("\ncs decomp example-------------")
+        num_bits = 2
+        num_rows = 1 << num_bits
+        mat = FouSEO_writer.fourier_trans_mat(num_rows)
+        assert UnitaryMat.is_unitary(mat)
+        left_mats, central_mats, right_mats = UnitaryMat.cs_decomp([mat])
+        # print('left mats\n', left_mats)
+        # print('central_mats\n', central_mats)
+        # print('right_mats\n', right_mats)
+
+        left = np.zeros((num_rows, num_rows),  dtype=complex)
+        left[0:num_rows/2, 0:num_rows/2] = left_mats[0]
+        left[num_rows/2:num_rows, num_rows/2:num_rows] = left_mats[1]
+        # print('left', left)
+
+        right = np.zeros((num_rows, num_rows),  dtype=complex)
+        right[0:num_rows/2, 0:num_rows/2] = right_mats[0]
+        right[num_rows/2:num_rows, num_rows/2:num_rows] = right_mats[1]
+
+        center = MultiplexorSEO_writer.mp_mat(central_mats[0])
+        # print('center', center)
+        mat_prod = np.dot(np.dot(left, center), right)
+        # print('mat\n', mat)
+        # print('mat_prod\n', mat_prod)
+        err = np.linalg.norm(mat - mat_prod)
+        print('err=', err)
+    main()

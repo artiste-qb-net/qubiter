@@ -60,13 +60,16 @@ def openfermion_qasm_to_qbtr_files(file_prefix, num_bits, qasm_gates):
     wr.close_files()
 
 if __name__ == "__main__":
-    file_prefix = 'io_folder/openfermion_qasm_to_qbtr'
-    num_bits = 4
-    qasm_gates = ['H 0',
-                  'CNOT 1 3',
-                  'Rx 1.5707963267948966 3',
-                  'Rx -1.5707963267948966 2',
-                  'Rz  .6  2']
-    openfermion_qasm_to_qbtr_files(file_prefix, num_bits, qasm_gates)
+    def main():
+        file_prefix = 'io_folder/openfermion_qasm_to_qbtr'
+        num_bits = 4
+        qasm_gates = ['H 0',
+                      'CNOT 1 3',
+                      'Rx 1.5707963267948966 3',
+                      'Rx -1.5707963267948966 2',
+                      'Rz  .6  2']
+        openfermion_qasm_to_qbtr_files(file_prefix, num_bits, qasm_gates)
+    main()
+
 
 

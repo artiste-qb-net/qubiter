@@ -281,7 +281,8 @@ class SEO_reader(SEO_pre_reader):
 
             # example:
             # PRINT V1
-            assert len(self.split_line) == 2, "PRINT line must contain style str"
+            assert len(self.split_line) == 2, \
+                "PRINT line must contain style str"
             self.use_PRINT(self.split_line[1], self.line_count)
 
         elif line_name == "ROTX":
@@ -732,4 +733,6 @@ class SEO_reader(SEO_pre_reader):
         pass
 
 if __name__ == "__main__":
-    print(5)
+    def main():
+        print(5)
+    main()

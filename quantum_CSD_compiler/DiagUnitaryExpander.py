@@ -146,8 +146,11 @@ class DiagUnitaryExpander(EchoingSEO_reader):
         self.wr.emb = CktEmbedder(self.num_bits, self.num_bits)
 
 if __name__ == "__main__":
-    num_bits = 6
-    file_prefix = "../io_folder/d_unitary_test_one_line"
-    style = 'exact'
-    xer = DiagUnitaryExpander(file_prefix, num_bits, style)
+    def main():
+        num_bits = 6
+        file_prefix = "../io_folder/d_unitary_test_one_line"
+        style = 'exact'
+        xer = DiagUnitaryExpander(file_prefix, num_bits, style)
+    main()
+
 

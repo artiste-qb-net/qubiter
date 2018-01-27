@@ -67,6 +67,7 @@ class Plotter:
         pan.DataFrame
 
         """
+        num_bits = trad_st_vec.shape[0].bit_length() - 1
         states = Plotter.get_states(num_bits, use_bin_labels)
         return pan.DataFrame(trad_st_vec, index=states)
 
@@ -271,34 +272,37 @@ class Plotter:
         plt.show()
 
 if __name__ == "__main__":
-    
-    num_bits = 3
-    st_vec0 = StateVec(num_bits,
-        arr=StateVec.get_random_st_vec(num_bits).arr)
-    st_vec1 = StateVec(num_bits,
-        arr=StateVec.get_random_st_vec(num_bits).arr)
-    st_vec_dict = {'br0': st_vec0,
-                   'br1': st_vec1,
-                   'br3': None}
-    
-    trad_st_vec = st_vec0.get_traditional_st_vec()
-    den_mat = StateVec.get_den_mat(num_bits, st_vec_dict)
-    # print("den_mat", den_mat)
-    st_vec_pd = st_vec0.get_pd()
-    den_mat_pd = StateVec.get_den_mat_pd(den_mat)
-    bit_probs_vec = StateVec.get_bit_probs(num_bits, st_vec_pd)
-    bit_probs_dm = StateVec.get_bit_probs(num_bits, den_mat_pd)
 
-    st_vec_df = Plotter.get_st_vec_df(st_vec0.get_traditional_st_vec())
-    den_mat_df = Plotter.get_den_mat_df(num_bits, den_mat)
-    # print("den_mat_df", den_mat_df)
-    st_vec_pd_df = Plotter.get_pd_df(num_bits, st_vec_pd)
-    den_mat_pd_df = Plotter.get_pd_df(num_bits, den_mat_pd)
-    bit_probs_df1 = Plotter.get_bit_probs_df(bit_probs_vec)
-    bit_probs_df2 = Plotter.get_bit_probs_df(bit_probs_dm)
+    def main():
+        num_bits = 3
+        st_vec0 = StateVec(num_bits,
+            arr=StateVec.get_random_st_vec(num_bits).arr)
+        st_vec1 = StateVec(num_bits,
+            arr=StateVec.get_random_st_vec(num_bits).arr)
+        st_vec_dict = {'br0': st_vec0,
+                       'br1': st_vec1,
+                       'br3': None}
 
-    Plotter.plot_probs_col(['st_vec_pd'], [st_vec_pd_df])
-    # print(bit_probs_df1)
-    Plotter.plot_probs_col(['bit_probs, Prob(0)'], [bit_probs_df1["Prob(0)"]])
-    Plotter.plot_phasors(['st_vec'], st_vec_df_list=[st_vec_df])
-    Plotter.plot_phasors(['den_mat'], den_mat_df_list=[den_mat_df])
+        trad_st_vec = st_vec0.get_traditional_st_vec()
+        den_mat = StateVec.get_den_mat(num_bits, st_vec_dict)
+        # print("den_mat", den_mat)
+        st_vec_pd = st_vec0.get_pd()
+        den_mat_pd = StateVec.get_den_mat_pd(den_mat)
+        bit_probs_vec = StateVec.get_bit_probs(num_bits, st_vec_pd)
+        bit_probs_dm = StateVec.get_bit_probs(num_bits, den_mat_pd)
+
+        st_vec_df = Plotter.get_st_vec_df(st_vec0.get_traditional_st_vec())
+        den_mat_df = Plotter.get_den_mat_df(num_bits, den_mat)
+        # print("den_mat_df", den_mat_df)
+        st_vec_pd_df = Plotter.get_pd_df(num_bits, st_vec_pd)
+        den_mat_pd_df = Plotter.get_pd_df(num_bits, den_mat_pd)
+        bit_probs_df1 = Plotter.get_bit_probs_df(bit_probs_vec)
+        bit_probs_df2 = Plotter.get_bit_probs_df(bit_probs_dm)
+
+        Plotter.plot_probs_col(['st_vec_pd'], [st_vec_pd_df])
+        # print(bit_probs_df1)
+        Plotter.plot_probs_col(
+            ['bit_probs, Prob(0)'], [bit_probs_df1["Prob(0)"]])
+        Plotter.plot_phasors(['st_vec'], st_vec_df_list=[st_vec_df])
+        Plotter.plot_phasors(['den_mat'], den_mat_df_list=[den_mat_df])
+    main()

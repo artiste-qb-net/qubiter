@@ -312,4 +312,6 @@ class EchoingSEO_reader(SEO_reader):
         pass
 
 if __name__ == "__main__":
-    print(5)
+    def main():
+        print(5)
+    main()

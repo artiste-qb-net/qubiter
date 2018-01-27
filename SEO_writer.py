@@ -991,86 +991,88 @@ class SEO_writer:
 
 
 if __name__ == "__main__":
-    num_bits = 5
-    emb = CktEmbedder(num_bits, num_bits)
-    trols = Controls(num_bits)
-    trols.bit_pos_to_kind = {3: True, 4: False}
-    trols.refresh_lists()
-    ang_rads = 30*np.pi/180
+    def main():
+        num_bits = 5
+        emb = CktEmbedder(num_bits, num_bits)
+        trols = Controls(num_bits)
+        trols.bit_pos_to_kind = {3: True, 4: False}
+        trols.refresh_lists()
+        ang_rads = 30*np.pi/180
 
-    for zf in [False, True]:
-        wr = SEO_writer('io_folder/wr_test', emb, zero_bit_first=zf)
+        for zf in [False, True]:
+            wr = SEO_writer('io_folder/wr_test', emb, zero_bit_first=zf)
 
-        wr.write_NOTA('zero bit first = ' + str(zf))
+            wr.write_NOTA('zero bit first = ' + str(zf))
 
-        wr.write_IF_M_beg(trols)
-        wr.write_IF_M_end()
+            wr.write_IF_M_beg(trols)
+            wr.write_IF_M_end()
 
-        wr.write_LOOP(10, 15)
-        wr.write_NEXT(10)
+            wr.write_LOOP(10, 15)
+            wr.write_NEXT(10)
 
-        tar_bit_pos = 1
-        for kind in [0, 1, 2]:
-            wr.write_MEAS(tar_bit_pos, kind)
+            tar_bit_pos = 1
+            for kind in [0, 1, 2]:
+                wr.write_MEAS(tar_bit_pos, kind)
 
-        wr.write_PRINT('F2')
+            wr.write_PRINT('F2')
 
-        wr.write_controlled_bit_swap(0, 2, trols)
+            wr.write_controlled_bit_swap(0, 2, trols)
 
-        wr.write_bit_swap(1, 2)
+            wr.write_bit_swap(1, 2)
 
-        gate = OneBitGates.phase_fac
-        wr.write_controlled_one_bit_gate(2, trols, gate, [ang_rads])
+            gate = OneBitGates.phase_fac
+            wr.write_controlled_one_bit_gate(2, trols, gate, [ang_rads])
 
-        wr.write_global_phase_fac(30*np.pi/180)
+            wr.write_global_phase_fac(30*np.pi/180)
 
-        gate = OneBitGates.P_0_phase_fac
-        wr.write_controlled_one_bit_gate(2, trols, gate, [ang_rads])
+            gate = OneBitGates.P_0_phase_fac
+            wr.write_controlled_one_bit_gate(2, trols, gate, [ang_rads])
 
-        gate = OneBitGates.P_1_phase_fac
-        wr.write_controlled_one_bit_gate(2, trols, gate, [ang_rads])
+            gate = OneBitGates.P_1_phase_fac
+            wr.write_controlled_one_bit_gate(2, trols, gate, [ang_rads])
 
-        gate = OneBitGates.sigx
-        wr.write_controlled_one_bit_gate(2, trols, gate)
+            gate = OneBitGates.sigx
+            wr.write_controlled_one_bit_gate(2, trols, gate)
 
-        gate = OneBitGates.sigy
-        wr.write_controlled_one_bit_gate(2, trols, gate)
+            gate = OneBitGates.sigy
+            wr.write_controlled_one_bit_gate(2, trols, gate)
 
-        gate = OneBitGates.sigz
-        wr.write_controlled_one_bit_gate(2, trols, gate)
+            gate = OneBitGates.sigz
+            wr.write_controlled_one_bit_gate(2, trols, gate)
 
-        gate = OneBitGates.had2
-        wr.write_controlled_one_bit_gate(2, trols, gate)
+            gate = OneBitGates.had2
+            wr.write_controlled_one_bit_gate(2, trols, gate)
 
-        gate = OneBitGates.rot_ax
-        wr.write_controlled_one_bit_gate(2, trols, gate, [ang_rads, 1])
+            gate = OneBitGates.rot_ax
+            wr.write_controlled_one_bit_gate(2, trols, gate, [ang_rads, 1])
 
-        gate = OneBitGates.rot_ax
-        wr.write_controlled_one_bit_gate(2, trols, gate, [ang_rads, 2])
+            gate = OneBitGates.rot_ax
+            wr.write_controlled_one_bit_gate(2, trols, gate, [ang_rads, 2])
 
-        gate = OneBitGates.rot_ax
-        wr.write_controlled_one_bit_gate(2, trols, gate, [ang_rads, 3])
+            gate = OneBitGates.rot_ax
+            wr.write_controlled_one_bit_gate(2, trols, gate, [ang_rads, 3])
 
-        gate = OneBitGates.rot
-        wr.write_controlled_one_bit_gate(2, trols, gate,
-            [ang_rads/3, ang_rads*2/3, ang_rads])
+            gate = OneBitGates.rot
+            wr.write_controlled_one_bit_gate(2, trols, gate,
+                [ang_rads/3, ang_rads*2/3, ang_rads])
 
-        gate = OneBitGates.sigx
-        wr.write_one_bit_gate(2, gate)
+            gate = OneBitGates.sigx
+            wr.write_one_bit_gate(2, gate)
 
-        wr.write_cnot(2, 1)
+            wr.write_cnot(2, 1)
 
-        tar_bit_pos = 0
-        trols1 = Controls(num_bits)
-        trols1.bit_pos_to_kind = {1: 0, 2: 1, 3: True, 4: False}
-        trols1.refresh_lists()
-        wr.write_controlled_multiplexor_gate(tar_bit_pos, trols1,
-            [ang_rads/3, ang_rads*2/3, ang_rads, ang_rads*4/3])
+            tar_bit_pos = 0
+            trols1 = Controls(num_bits)
+            trols1.bit_pos_to_kind = {1: 0, 2: 1, 3: True, 4: False}
+            trols1.refresh_lists()
+            wr.write_controlled_multiplexor_gate(tar_bit_pos, trols1,
+                [ang_rads/3, ang_rads*2/3, ang_rads, ang_rads*4/3])
 
-        trols2 = Controls(num_bits)
-        trols2.bit_pos_to_kind = {1: 0, 2: 1}
-        trols2.refresh_lists()
-        wr.write_multiplexor_gate(tar_bit_pos, trols2,
-            [ang_rads/3, ang_rads*2/3, ang_rads, ang_rads*4/3])
+            trols2 = Controls(num_bits)
+            trols2.bit_pos_to_kind = {1: 0, 2: 1}
+            trols2.refresh_lists()
+            wr.write_multiplexor_gate(tar_bit_pos, trols2,
+                [ang_rads/3, ang_rads*2/3, ang_rads, ang_rads*4/3])
 
-        wr.close_files()
+            wr.close_files()
+    main()

@@ -135,4 +135,6 @@ class SEO_pre_reader:
             assert False, "improperly nested loops"
 
 if __name__ == "__main__":
-    print(5)
+    def main():
+        print(5)
+    main()

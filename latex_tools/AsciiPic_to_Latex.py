@@ -444,58 +444,62 @@ class AsciiPic_to_Latex:
         return latex_str
 
 if __name__ == "__main__":
+    def main():
 
-    def write_latex_file(file_out):
-        latex_str = AsciiPic_to_Latex.get_preface_latex()
-        for rev_bits in [False, True]:
-            last_bit_on_top = rev_bits
-            for rev_gates in [False, True]:
-                # print('case', rev_bits, rev_gates)
-                time_dir = '<' if rev_gates else '>'
-                latex_str += "\nlast bit on top=" + str(last_bit_on_top)
-                latex_str += ", time dir= $" + time_dir + '$\n\n'
-                trans = AsciiPic_to_Latex(rev_bits, rev_gates)
-                latex_str += trans.get_ckt_latex(tiny_word_list, init_states)
-        latex_str += AsciiPic_to_Latex.get_ending_latex()
-        with open(file_out, "w") as fi:
-            fi.write(latex_str)
+        def write_latex_file(file_out1):
+            latex_str = AsciiPic_to_Latex.get_preface_latex()
+            for rev_bits in [False, True]:
+                last_bit_on_top = rev_bits
+                for rev_gates in [False, True]:
+                    # print('case', rev_bits, rev_gates)
+                    time_dir = '<' if rev_gates else '>'
+                    latex_str += "\nlast bit on top=" + str(last_bit_on_top)
+                    latex_str += ", time dir= $" + time_dir + '$\n\n'
+                    trans = AsciiPic_to_Latex(rev_bits, rev_gates)
+                    latex_str += trans.get_ckt_latex(tiny_word_list,
+                                                     init_states)
+            latex_str += AsciiPic_to_Latex.get_ending_latex()
+            with open(file_out1, "w") as fi:
+                fi.write(latex_str)
 
-    # test 1 ---------------
-    print('test 1')
-    num_bits = 7
-    file_out = "latex_test1.tex"
-    tiny_word_list = [
-        "|X++@||",
-        "|Y+O@O|",
-        "HH|||||",
-        "|<++>||",
-        "M|M|M||",
-        "@X|||||",
-        "@++++X|",
-        "@++O+X|",
-        "|A|||B?"]
-    init_states = [str(bit) for bit in range(num_bits)]
-    # init_states = None
+        # test 1 ---------------
+        print('test 1')
+        num_bits = 7
+        file_out = "latex_test1.tex"
+        tiny_word_list = [
+            "|X++@||",
+            "|Y+O@O|",
+            "HH|||||",
+            "|<++>||",
+            "M|M|M||",
+            "@X|||||",
+            "@++++X|",
+            "@++O+X|",
+            "|A|||B?"]
+        init_states = [str(bit) for bit in range(num_bits)]
+        # init_states = None
 
-    print(tiny_word_list)
-    write_latex_file(file_out)
+        print(tiny_word_list)
+        write_latex_file(file_out)
 
-    # test 2 ---------------
-    print("test 2")
-    num_bits = 7
-    file_in = "latex_test_pic.txt"
-    tiny_word_list = AsciiPic_to_Latex.qubiter_pic_file_to_tiny_word_list(
-        file_in, num_bits, ZL=True)
-    print(tiny_word_list)
+        # test 2 ---------------
+        print("test 2")
+        num_bits = 7
+        file_in = "latex_test_pic.txt"
+        tiny_word_list = AsciiPic_to_Latex.qubiter_pic_file_to_tiny_word_list(
+            file_in, num_bits, ZL=True)
+        print(tiny_word_list)
 
-    # test 3 ---------------
-    print('test 3')
-    num_bits = 3
-    file_in = '../io_folder/teleportation-with-ifs_3_ZLpic.txt'
-    file_out = 'latex_test_telep.tex'
-    tiny_word_list = AsciiPic_to_Latex.qubiter_pic_file_to_tiny_word_list(
-        file_in, num_bits, ZL=True)
-    print(tiny_word_list)
-    init_states = ['0']*num_bits
-    write_latex_file(file_out)
+        # test 3 ---------------
+        print('test 3')
+        num_bits = 3
+        file_in = '../io_folder/teleportation-with-ifs_3_ZLpic.txt'
+        file_out = 'latex_test_telep.tex'
+        tiny_word_list = AsciiPic_to_Latex.qubiter_pic_file_to_tiny_word_list(
+            file_in, num_bits, ZL=True)
+        print(tiny_word_list)
+        init_states = ['0']*num_bits
+        write_latex_file(file_out)
+    main()
+
 

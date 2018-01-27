@@ -398,6 +398,7 @@ class CGateSEO_writer(SEO_writer):
             trol = Controls.new_knob(num_bits, trol_bpos, True)
             self.write_controlled_one_bit_gate(tar_bpos, trol,
                                                OneBitGates.sigx)
+
         def write_cnot_stair(bvec):
             tar_bpos = bvec.find_rightmost_T_bit()
             trol_bpos = tar_bpos
@@ -557,73 +558,77 @@ class CGateSEO_writer(SEO_writer):
         self.write_hads(trols.kinds, herm_conj=True)
 
 if __name__ == "__main__":
-
-    num_bits_bef = 4
-    num_bits_aft = 5
-    bit_map = list(range(num_bits_bef))
-    emb = CktEmbedder(num_bits_bef, num_bits_aft, bit_map)
-
-    # trol_kinds in ZL convention
-    trol_kinds = [True, False, False]
-
-    wr = CGateSEO_writer('io_folder/cgate_expansions', emb,
-            do_checking=True, verbose=False)
-
-    u2_fun_to_fun_arg_list = co.OrderedDict((
-        (OneBitGates.P_0_phase_fac, [np.pi/3]),
-        (OneBitGates.P_1_phase_fac, [np.pi/3]),
-        (OneBitGates.sigx, None),
-        (OneBitGates.sigy, None),
-        (OneBitGates.sigz, None),
-        (OneBitGates.had2, None),
-        (OneBitGates.rot_ax, [np.pi/3, 2]),
-        (OneBitGates.rot, [np.pi/3, np.pi/6, np.pi/3])
-    ))
-
-    for u2_fun, fun_arg_list in u2_fun_to_fun_arg_list.items():
-
-        wr.write_NOTA('--------new u2 gate --------------------------')
-        for one_line in [True, False]:
-            wr.one_line = one_line
-            if one_line:
-                wr.write(trol_kinds, u2_fun, fun_arg_list)
-            else:
-                for expand_1c_u2 in [False, True]:
-                    wr.expand_1c_u2 = expand_1c_u2
-                    wr.write_NOTA('--------expand_1c_u2=' + str(expand_1c_u2))
-                    print("\n", u2_fun,
-                          "one_line=", one_line, "expand=", expand_1c_u2)
-                    wr.write(trol_kinds, u2_fun, fun_arg_list)
-
-    wr.close_files()
-
-    # a check that an expansion multiplies to original
-    num_bits = 5
-    emb = CktEmbedder(num_bits, num_bits)
-    # trol_kinds in ZL convention
-    trol_kinds = [True, False, False, False]
-    file_prefix = 'io_folder/cgate_expan_mat_prod'
-
-    wr = CGateSEO_writer(file_prefix, emb)
-
-    u2_fun = OneBitGates.rot_ax
-    rads = np.pi/3
-
-    wr.one_line = True
-    wr.write_NOTA("one line=True-----------")
-    wr.write(trol_kinds, u2_fun, [rads, 2])
-
-    wr.write_NOTA("herm. conj, one line=False-----------")
-    wr.one_line = False
-    wr.write(trol_kinds, u2_fun, [-rads, 2])
-
-    wr.close_files()
-
     from SEO_MatrixProduct import *
+    from OneBitGates import *
 
-    mp = SEO_MatrixProduct(file_prefix, num_bits)
-    id_mat = np.diag(np.ones((1<<num_bits,)))
-    err = np.linalg.norm(mp.prod_arr - id_mat)
-    print("err=", err)
+    def main():
+
+        num_bits_bef = 4
+        num_bits_aft = 5
+        bit_map = list(range(num_bits_bef))
+        emb = CktEmbedder(num_bits_bef, num_bits_aft, bit_map)
+
+        # trol_kinds in ZL convention
+        trol_kinds = [True, False, False]
+
+        wr = CGateSEO_writer('io_folder/cgate_expansions', emb,
+                do_checking=True, verbose=False)
+
+        u2_fun_to_fun_arg_list = co.OrderedDict((
+            (OneBitGates.P_0_phase_fac, [np.pi/3]),
+            (OneBitGates.P_1_phase_fac, [np.pi/3]),
+            (OneBitGates.sigx, None),
+            (OneBitGates.sigy, None),
+            (OneBitGates.sigz, None),
+            (OneBitGates.had2, None),
+            (OneBitGates.rot_ax, [np.pi/3, 2]),
+            (OneBitGates.rot, [np.pi/3, np.pi/6, np.pi/3])
+        ))
+
+        for u2_fun, fun_arg_list in u2_fun_to_fun_arg_list.items():
+
+            wr.write_NOTA('--------new u2 gate --------------------------')
+            for one_line in [True, False]:
+                wr.one_line = one_line
+                if one_line:
+                    wr.write(trol_kinds, u2_fun, fun_arg_list)
+                else:
+                    for expand_1c_u2 in [False, True]:
+                        wr.expand_1c_u2 = expand_1c_u2
+                        wr.write_NOTA(
+                            '--------expand_1c_u2=' + str(expand_1c_u2))
+                        print("\n", u2_fun,
+                              "one_line=", one_line, "expand=", expand_1c_u2)
+                        wr.write(trol_kinds, u2_fun, fun_arg_list)
+
+        wr.close_files()
+
+        # a check that an expansion multiplies to original
+        num_bits = 5
+        emb = CktEmbedder(num_bits, num_bits)
+        # trol_kinds in ZL convention
+        trol_kinds = [True, False, False, False]
+        file_prefix = 'io_folder/cgate_expan_mat_prod'
+
+        wr = CGateSEO_writer(file_prefix, emb)
+
+        u2_fun = OneBitGates.rot_ax
+        rads = np.pi/3
+
+        wr.one_line = True
+        wr.write_NOTA("one line=True-----------")
+        wr.write(trol_kinds, u2_fun, [rads, 2])
+
+        wr.write_NOTA("herm. conj, one line=False-----------")
+        wr.one_line = False
+        wr.write(trol_kinds, u2_fun, [-rads, 2])
+
+        wr.close_files()
+
+        mp = SEO_MatrixProduct(file_prefix, num_bits)
+        id_mat = np.diag(np.ones((1 << num_bits,)))
+        err = np.linalg.norm(mp.prod_arr - id_mat)
+        print("err=", err)
+    main()
 
 

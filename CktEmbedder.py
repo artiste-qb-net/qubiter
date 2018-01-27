@@ -1,4 +1,4 @@
-from Controls import Controls
+# from Controls import Controls
 
 
 class CktEmbedder:
@@ -40,6 +40,7 @@ class CktEmbedder:
         if num_bits_aft > num_bits_bef:
             assert bit_map, "must give a bit_map"
         self.bit_map = bit_map
+        from Controls import Controls
         self.extra_controls = Controls(num_bits_aft)
 
     def get_num_new_bits(self):
@@ -147,4 +148,6 @@ class CktEmbedder:
         return compo_emb
 
 if __name__ == "__main__":
-    print(5)
+    def main():
+        print(5)
+    main()

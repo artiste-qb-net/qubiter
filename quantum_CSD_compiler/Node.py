@@ -51,8 +51,8 @@ class Node:
         Parameters
         ----------
         nd_id : int
-        pa_nd : Node
-        side : str
+        pa_nd : Node|None
+        side : str|None
         init_unitary_mat : np.ndarray
             This is the matrix that is fed to UnitaryMat.cs_decomp() in root
             node constructor. pa_nd and side are ignored if this is not None.
@@ -143,4 +143,6 @@ class Node:
         return str(self.nd_id) + '(L' + str(self.level) + ')'
 
 if __name__ == "__main__":
-    print(5)
+    def main():
+        print(5)
+    main()

@@ -156,15 +156,14 @@ class StateVec:
 
         The rows are always labelled 0, 1, 2, 3, ... or the binary
         representation thereof, regardless of whether ZL or ZF convention.
-        One can go from digital to binary labels and vice versa using:
+        One can go from digital to binary labels and vice versa
+        using::
 
-        ```
-        >>> x = np.binary_repr(3, width=4)
-        >>> x
-        '0011'
-        >>> int(x, 2)
-        3
-        ```
+            >>> x = np.binary_repr(3, width=4)
+            >>> x
+            '0011'
+            >>> int(x, 2)
+            3
 
         Parameters
         ----------
@@ -544,39 +543,40 @@ class StateVec:
                 st_vec_dict[br_key].describe_self(**kwargs)
 
 if __name__ == "__main__":
+    def main():
+        num_bits = 3
+        gs = StateVec(num_bits,
+                      arr=StateVec.get_ground_st_vec(num_bits).arr)
+        print('gs=\n', gs.arr)
+        print("gs_trad=\n", gs.get_traditional_st_vec())
 
-    num_bits = 3
-    gs = StateVec(num_bits,
-                  arr=StateVec.get_ground_st_vec(num_bits).arr)
-    print('gs=\n', gs.arr)
-    print("gs_trad=\n", gs.get_traditional_st_vec())
+        S0100_ZL = StateVec(4,
+            arr=StateVec.get_standard_basis_st_vec([0, 1, 0, 0], ZL=True).arr)
+        print("S0100_ZL=\n", S0100_ZL.get_traditional_st_vec())
 
-    S0100_ZL = StateVec(4,
-        arr=StateVec.get_standard_basis_st_vec([0, 1, 0, 0], ZL=True).arr)
-    print("S0100_ZL=\n", S0100_ZL.get_traditional_st_vec())
+        S0100_ZF = StateVec(4,
+            arr=StateVec.get_standard_basis_st_vec([0, 1, 0, 0], ZL=False).arr)
+        print("S0100_ZF=\n", S0100_ZF.get_traditional_st_vec())
 
-    S0100_ZF = StateVec(4,
-        arr=StateVec.get_standard_basis_st_vec([0, 1, 0, 0], ZL=False).arr)
-    print("S0100_ZF=\n", S0100_ZF.get_traditional_st_vec())
+        st_vec0 = StateVec(num_bits,
+            arr=StateVec.get_random_st_vec(num_bits).arr)
+        st_vec1 = StateVec(num_bits,
+            arr=StateVec.get_random_st_vec(num_bits).arr)
+        st_vec_dict = {'br0': st_vec0,
+                       'br1': st_vec1,
+                       'br3': None}
 
-    st_vec0 = StateVec(num_bits,
-        arr=StateVec.get_random_st_vec(num_bits).arr)
-    st_vec1 = StateVec(num_bits,
-        arr=StateVec.get_random_st_vec(num_bits).arr)
-    st_vec_dict = {'br0': st_vec0,
-                   'br1': st_vec1,
-                   'br3': None}
+        trad_st_vec = st_vec0.get_traditional_st_vec()
+        den_mat = StateVec.get_den_mat(num_bits, st_vec_dict)
+        # print("den_mat", den_mat)
+        st_vec_pd = st_vec0.get_pd()
+        den_mat_pd = StateVec.get_den_mat_pd(den_mat)
+        bit_probs_vec = st_vec0.get_bit_probs(num_bits, st_vec_pd)
+        bit_probs_dm = StateVec.get_bit_probs(num_bits, den_mat_pd)
 
-    trad_st_vec = st_vec0.get_traditional_st_vec()
-    den_mat = StateVec.get_den_mat(num_bits, st_vec_dict)
-    # print("den_mat", den_mat)
-    st_vec_pd = st_vec0.get_pd()
-    den_mat_pd = StateVec.get_den_mat_pd(den_mat)
-    bit_probs_vec = st_vec0.get_bit_probs(num_bits, st_vec_pd)
-    bit_probs_dm = StateVec.get_bit_probs(num_bits, den_mat_pd)
-
-    print("counts_dm=\n", StateVec.sample_bit_probs(bit_probs_dm, 10))
-    print("impurity=", StateVec.get_impurity(den_mat))
-    StateVec.describe_st_vec_dict(st_vec_dict,
-            print_st_vec=True, do_pp=True,
-            omit_zero_amps=False, show_probs=True, ZL=True)
+        print("counts_dm=\n", StateVec.sample_bit_probs(bit_probs_dm, 10))
+        print("impurity=", StateVec.get_impurity(den_mat))
+        StateVec.describe_st_vec_dict(st_vec_dict,
+                print_st_vec=True, do_pp=True,
+                omit_zero_amps=False, show_probs=True, ZL=True)
+    main()

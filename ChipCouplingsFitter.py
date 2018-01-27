@@ -223,22 +223,25 @@ class ChipCouplingsFitter:
         return bit_map
             
 if __name__ == "__main__":
-    import for_IBM_devices.ibm_chip_couplings as ibm
-    c_to_t = ibm.ibmqx2_edges
-    num_bits = 5
-    file_prefix = "io_folder/couplings_fitter"
+    def main():
+        import for_IBM_devices.ibm_chip_couplings as ibm
+        c_to_t = ibm.ibmqx2_edges
+        num_bits = 5
+        file_prefix = "io_folder/couplings_fitter"
 
-    targets = ForbiddenCNotExpander.get_targets_from_c_to_t(num_bits, c_to_t)
-    print("c_to_t=", c_to_t)
-    print("targets=", targets)
+        targets = ForbiddenCNotExpander.get_targets_from_c_to_t(
+            num_bits, c_to_t)
+        print("c_to_t=", c_to_t)
+        print("targets=", targets)
 
-    verbose = True
-    fitter = ChipCouplingsFitter(
-        file_prefix, num_bits, c_to_t, verbose=verbose)
+        verbose = True
+        fitter = ChipCouplingsFitter(
+            file_prefix, num_bits, c_to_t, verbose=verbose)
 
-    print("Must close or save/close all matplotlib "
-          "windows in order to finish execution of script.")
-    ChipCouplingsFitter.draw_phys_and_eng_graphs(file_prefix,
-                                                 num_bits,
-                                                 c_to_t)
+        print("Must close or save/close all matplotlib "
+              "windows in order to finish execution of script.")
+        ChipCouplingsFitter.draw_phys_and_eng_graphs(file_prefix,
+                                                     num_bits,
+                                                     c_to_t)
+    main()
 

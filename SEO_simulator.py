@@ -652,21 +652,22 @@ class SEO_simulator(SEO_reader):
         self.evolve_by_controlled_bit_swap(bit1, bit2, controls)
 
 if __name__ == "__main__":
+    def main():
+        # use test = 0 if want to run all tests at once.
+        test = 0
+        # test = 3
+        if test in [0, 1]:
+            # test on circuit for a quantum fourier transform
+            # (no loops, no internal measurements)
+            sim = SEO_simulator('io_folder/sim_test1', 6, verbose=True)
 
-    # use test = 0 if want to run all tests at once.
-    test = 0
-    # test = 3
-    if test in [0, 1]:
-        # test on circuit for a quantum fourier transform
-        # (no loops, no internal measurements)
-        sim = SEO_simulator('io_folder/sim_test1', 6, verbose=True)
+        if test in [0, 2]:
+            # test embedded loops
+            sim = SEO_simulator('io_folder/sim_test2', 4, verbose=True)
 
-    if test in [0, 2]:
-        # test embedded loops
-        sim = SEO_simulator('io_folder/sim_test2', 4, verbose=True)
+        if test in [0, 3]:
+            # test MEAS branching. Each kind 2 measurement doubles number of
+            # branches
+            sim = SEO_simulator('io_folder/sim_test3', 4, verbose=True)
 
-    if test in [0, 3]:
-        # test MEAS branching. Each kind 2 measurement doubles number of
-        # branches
-        sim = SEO_simulator('io_folder/sim_test3', 4, verbose=True)
-
+    main()

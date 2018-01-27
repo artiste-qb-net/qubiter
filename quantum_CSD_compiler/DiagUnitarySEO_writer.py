@@ -167,10 +167,10 @@ class DiagUnitarySEO_writer(SEO_writer):
         trols1.refresh_lists()
         trols2 = Controls(num_bits)
 
-        def write_cnots(diff_bvec, init_prev_T_bit):
+        def write_cnots(diff_bvec1, init_prev_T_bit):
             prev_T_bit = init_prev_T_bit
             while True:
-                cur_T_bit = diff_bvec.find_T_bit_to_left_of(prev_T_bit)
+                cur_T_bit = diff_bvec1.find_T_bit_to_left_of(prev_T_bit)
                 if cur_T_bit == -1:
                     break
                 trols2.bit_pos_to_kind = TF_dict.copy()
@@ -270,36 +270,39 @@ class DiagUnitarySEO_writer(SEO_writer):
         return np.diag(np.exp(1j*sign*np.array(rad_angles)))
 
 if __name__ == "__main__":
-    nt = 1
-    nf = 2
-    num_MP_trols = 3
-    num_angles = (1 << num_MP_trols)
-    rad_angles = list(np.random.rand(num_angles)*2*np.pi)
+    def main():
+        nt = 1
+        nf = 2
+        num_MP_trols = 3
+        num_angles = (1 << num_MP_trols)
+        rad_angles = list(np.random.rand(num_angles)*2*np.pi)
 
-    for style in ['one_line', 'exact']:
-        num_gbits = 0
-        if style == 'oracular':
-            num_gbits = 3
-        num_bits = nt + nf + num_MP_trols + num_gbits
+        for style in ['one_line', 'exact']:
+            num_gbits = 0
+            if style == 'oracular':
+                num_gbits = 3
+            num_bits = nt + nf + num_MP_trols + num_gbits
+            emb = CktEmbedder(num_bits, num_bits)
+            file_prefix = "../io_folder/d_unitary_test_" + style
+            wr = DiagUnitarySEO_writer(file_prefix, emb, style, rad_angles,
+                num_T_trols=nt, num_F_trols=nf, num_gbits=num_gbits)
+            wr.write()
+            wr.close_files()
+
+        file_prefix = "../io_folder/d_unitary_exact_check"
+        num_bits = 4
+        num_angles = (1 << num_bits)
         emb = CktEmbedder(num_bits, num_bits)
-        file_prefix = "../io_folder/d_unitary_test_" + style
-        wr = DiagUnitarySEO_writer(file_prefix, emb, style, rad_angles,
-            num_T_trols=nt, num_F_trols=nf, num_gbits=num_gbits)
+        rad_angles = list(np.random.rand(num_angles)*2*np.pi)
+        # av = sum(rad_angles)/len(rad_angles)
+        # rad_angles = list(np.array(rad_angles)-av)
+        wr = DiagUnitarySEO_writer(file_prefix, emb, 'exact', rad_angles)
         wr.write()
         wr.close_files()
+        matpro = SEO_MatrixProduct(file_prefix, num_bits)
+        exact_mat = DiagUnitarySEO_writer.du_mat(rad_angles)
+        print(np.linalg.norm(matpro.prod_arr - exact_mat))
+        # print(matpro.prod_arr)
+        # print(np.diag(exact_mat))
+    main()
 
-    file_prefix = "../io_folder/d_unitary_exact_check"
-    num_bits = 4
-    num_angles = (1 << num_bits)
-    emb = CktEmbedder(num_bits, num_bits)
-    rad_angles = list(np.random.rand(num_angles)*2*np.pi)
-    # av = sum(rad_angles)/len(rad_angles)
-    # rad_angles = list(np.array(rad_angles)-av)
-    wr = DiagUnitarySEO_writer(file_prefix, emb, 'exact', rad_angles)
-    wr.write()
-    wr.close_files()
-    matpro = SEO_MatrixProduct(file_prefix, num_bits)
-    exact_mat = DiagUnitarySEO_writer.du_mat(rad_angles)
-    print(np.linalg.norm(matpro.prod_arr - exact_mat))
-    # print(matpro.prod_arr)
-    # print(np.diag(exact_mat))

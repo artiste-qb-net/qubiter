@@ -378,14 +378,16 @@ class BitVector:
         return new_normal, new_lazy
 
 if __name__ == "__main__":
-    for length in [3, 4]:
-        print('\nlength=', length)
-        print('normal, lazy, lazy in binary:')
-        max_normal = (1 << length) - 1
-        normal = 0
-        lazy = 0
-        while normal <= max_normal:
-            lazy_bvec = BitVector(length, lazy)
-            print(normal, lazy, BitVector.get_bit_string(lazy_bvec))
-            normal, lazy = BitVector.lazy_advance(normal, lazy)
+    def main():
+        for length in [3, 4]:
+            print('\nlength=', length)
+            print('normal, lazy, lazy in binary:')
+            max_normal = (1 << length) - 1
+            normal = 0
+            lazy = 0
+            while normal <= max_normal:
+                lazy_bvec = BitVector(length, lazy)
+                print(normal, lazy, BitVector.get_bit_string(lazy_bvec))
+                normal, lazy = BitVector.lazy_advance(normal, lazy)
+    main()
 

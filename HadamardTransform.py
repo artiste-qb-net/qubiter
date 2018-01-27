@@ -82,14 +82,16 @@ class HadamardTransform:
 
 
 if __name__ == "__main__":
-    num_bits = 3
-    length = 1 << num_bits
-    in_arr = np.random.rand(length) - 0.5
-    out_arr = HadamardTransform.ht(num_bits, in_arr)
-    in_arr1 = HadamardTransform.ht(num_bits, out_arr)
-    # print("in_arr=", in_arr)
-    # print("out_arr=", out_arr)
-    err = np.linalg.norm(in_arr-in_arr1)
-    print("error=", err)
+    def main():
+        num_bits = 3
+        length = 1 << num_bits
+        in_arr = np.random.rand(length) - 0.5
+        out_arr = HadamardTransform.ht(num_bits, in_arr)
+        in_arr1 = HadamardTransform.ht(num_bits, out_arr)
+        # print("in_arr=", in_arr)
+        # print("out_arr=", out_arr)
+        err = np.linalg.norm(in_arr-in_arr1)
+        print("error=", err)
 
-    print(HadamardTransform.hadamard_mat(2))
+        print(HadamardTransform.hadamard_mat(2))
+    main()

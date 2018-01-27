@@ -377,32 +377,34 @@ class OneBitGates:
         return OneBitGates.mat_S(True)
 
 if __name__ == "__main__":
-    print('sigx= ', OneBitGates.sigx())
-    print('sigy= ', OneBitGates.sigy())
-    print('sigz= ', OneBitGates.sigz())
+    def main():
+        print('sigx= ', OneBitGates.sigx())
+        print('sigy= ', OneBitGates.sigy())
+        print('sigz= ', OneBitGates.sigz())
 
-    print('had2= ', OneBitGates.had2())
+        print('had2= ', OneBitGates.had2())
 
-    print('P_0= ', OneBitGates.P_0())
-    print('P_1= ', OneBitGates.P_1())
+        print('P_0= ', OneBitGates.P_0())
+        print('P_1= ', OneBitGates.P_1())
 
-    print('P_0_phase_fac= ', OneBitGates.P_0_phase_fac(10))
-    print('P_1_phase_fac= ', OneBitGates.P_1_phase_fac(10))
-    print('phase_fac= ', OneBitGates.phase_fac(10))
+        print('P_0_phase_fac= ', OneBitGates.P_0_phase_fac(10))
+        print('P_1_phase_fac= ', OneBitGates.P_1_phase_fac(10))
+        print('phase_fac= ', OneBitGates.phase_fac(10))
 
-    mat = OneBitGates.rot(10, 20, 30)
-    print('rot*rot^H= ', np.dot(mat, mat.conj().T))
+        mat = OneBitGates.rot(10, 20, 30)
+        print('rot*rot^H= ', np.dot(mat, mat.conj().T))
 
-    mat = OneBitGates.rot_ax(10, 1)
-    print('rotx*rotx^H= ', np.dot(mat, mat.conj().T))
+        mat = OneBitGates.rot_ax(10, 1)
+        print('rotx*rotx^H= ', np.dot(mat, mat.conj().T))
 
-    mat = OneBitGates.rot_ax(10, 2)
-    print('roty*roty^H= ', np.dot(mat, mat.conj().T))
+        mat = OneBitGates.rot_ax(10, 2)
+        print('roty*roty^H= ', np.dot(mat, mat.conj().T))
 
-    mat = OneBitGates.rot_ax(10, 3)
-    print('rotz*rotz^H= ', np.dot(mat, mat.conj().T))
+        mat = OneBitGates.rot_ax(10, 3)
+        print('rotz*rotz^H= ', np.dot(mat, mat.conj().T))
 
-    print('mat_S=', OneBitGates.mat_S())
-    print('mat_Sdag=', OneBitGates.mat_Sdag())
-    print('mat_T=', OneBitGates.mat_T())
-    print('mat_Tdag=', OneBitGates.mat_Tdag())
+        print('mat_S=', OneBitGates.mat_S())
+        print('mat_Sdag=', OneBitGates.mat_Sdag())
+        print('mat_T=', OneBitGates.mat_T())
+        print('mat_Tdag=', OneBitGates.mat_Tdag())
+    main()

@@ -1,4 +1,5 @@
-# from CktEmbedder import *
+from CktEmbedder import *
+
 
 class Controls:
     """
@@ -104,7 +105,6 @@ class Controls:
         li = sorted(
             self.bit_pos_to_kind.items(), key=lambda t: t[0], reverse=True)
         self.bit_pos, self.kinds = zip(*li)
-
 
     @staticmethod
     def new_knob(num_bits, bit_pos, kind):
@@ -219,6 +219,8 @@ class Controls:
         return new
 
 if __name__ == "__main__":
-    print(5)
+    def main():
+        print(5)
+    main()
 
 

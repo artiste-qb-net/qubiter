@@ -6,6 +6,8 @@ from ForbiddenCNotExpander import *
 from ChipCouplingsFitter import *
 import utilities_gen as ut
 
+__all__ = ['Qubiter_to_IBMqasm2']
+
 
 class Qubiter_to_IBMqasm2(SEO_reader):
     """
@@ -449,7 +451,7 @@ class Qubiter_to_IBMqasm2(SEO_reader):
         else:  # num_trols == 1
             tar_pos = tar_bit_pos
             trol_pos = controls.bit_pos[0]
-            if not c_to_t or tar_pos in self.targets[trol_pos]:
+            if not self.c_to_t or tar_pos in self.targets[trol_pos]:
                 self.qasm_out.write("cx  q[" + str(trol_pos) + "], "
                                     "q[" + str(tar_pos) + "];\n")
                 if self.write_qubiter_files:
@@ -479,9 +481,12 @@ class Qubiter_to_IBMqasm2(SEO_reader):
         assert False, "No SWAP lines allowed"
 
 if __name__ == "__main__":
-    file_prefix = "../io_folder/qbtr2ibm_test"
-    num_bits = 5
-    import for_IBM_devices.ibm_chip_couplings as ibm
-    c_to_t = ibm.ibmqx2_edges
-    q2i = Qubiter_to_IBMqasm2(file_prefix,
-            num_bits, c_to_t, write_qubiter_files=True)
+    def main():
+        file_prefix = "../io_folder/qbtr2ibm_test"
+        num_bits = 5
+        import for_IBM_devices.ibm_chip_couplings as ibm
+        c_to_t = ibm.ibmqx2_edges
+        q2i = Qubiter_to_IBMqasm2(file_prefix,
+                num_bits, c_to_t, write_qubiter_files=True)
+
+    main()

@@ -360,18 +360,20 @@ class ForbiddenCNotExpander(EchoingSEO_reader):
                 self.wr.write_cnot(x[0], x[1])
 
 if __name__ == "__main__":
-    import for_IBM_devices.ibm_chip_couplings as ibm
-    file_prefix = "io_folder/forbidden_cnots_ibm"
-    print(file_prefix)
-    num_bits = 5
-    c_to_t = ibm.ibmqx2_edges
-    ForbiddenCNotExpander(file_prefix, num_bits, c_to_t)
+    def main():
+        import for_IBM_devices.ibm_chip_couplings as ibm
+        file_prefix = "io_folder/forbidden_cnots_ibm"
+        print(file_prefix)
+        num_bits = 5
+        c_to_t = ibm.ibmqx2_edges
+        ForbiddenCNotExpander(file_prefix, num_bits, c_to_t)
 
-    file_prefix = "io_folder/forbidden_cnots1"
-    print(file_prefix)
-    num_bits = 4
-    c_to_t = ((0, 1), (1, 2), (2, 3))
-    ForbiddenCNotExpander(file_prefix, num_bits, c_to_t)
+        file_prefix = "io_folder/forbidden_cnots1"
+        print(file_prefix)
+        num_bits = 4
+        c_to_t = ((0, 1), (1, 2), (2, 3))
+        ForbiddenCNotExpander(file_prefix, num_bits, c_to_t)
+    main()
 
 
 

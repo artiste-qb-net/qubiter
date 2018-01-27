@@ -179,10 +179,10 @@ class MultiplexorSEO_writer(SEO_writer):
         trols1.refresh_lists()
         trols2 = Controls(num_bits)
 
-        def write_cnots(diff_bvec):
+        def write_cnots(diff_bvec1):
             prev_T_bit = num_MP_trols
             while True:
-                cur_T_bit = diff_bvec.find_T_bit_to_right_of(prev_T_bit)
+                cur_T_bit = diff_bvec1.find_T_bit_to_right_of(prev_T_bit)
                 if cur_T_bit == -1:
                     break
                 trols2.bit_pos_to_kind = TF_dict.copy()
@@ -234,11 +234,11 @@ class MultiplexorSEO_writer(SEO_writer):
         side_trols = Controls(num_bits)
         center_trols = Controls(num_bits)
 
-        def write_omega(tar_bit_pos, ang_bools):
-            for b in range(num_angles):
-                if ang_bools[b]:
+        def write_omega(tar_bit_pos, ang_bools1):
+            for bit in range(num_angles):
+                if ang_bools1[bit]:
                     side_trols.bit_pos_to_kind = {
-                        c + ntf: ((b >> c) & 1) == 1
+                        c + ntf: ((bit >> c) & 1) == 1
                         for c in range(num_MP_trols)
                     }
                     side_trols.bit_pos_to_kind.update(TF_dict)
@@ -326,32 +326,35 @@ class MultiplexorSEO_writer(SEO_writer):
         return mat
 
 if __name__ == "__main__":
-    nt = 1
-    nf = 2
-    num_MP_trols = 2
-    num_angles = (1 << num_MP_trols)
-    rad_angles = list(np.random.rand(num_angles)*2*np.pi)
+    def main():
+        nt = 1
+        nf = 2
+        num_MP_trols = 2
+        num_angles = (1 << num_MP_trols)
+        rad_angles = list(np.random.rand(num_angles)*2*np.pi)
 
-    for style in ['one_line', 'exact', 'oracular']:
-        num_gbits = 0
-        if style == 'oracular':
-            num_gbits = 3
-        num_bits = nt + nf + num_MP_trols + 1 + num_gbits
+        for style in ['one_line', 'exact', 'oracular']:
+            num_gbits = 0
+            if style == 'oracular':
+                num_gbits = 3
+            num_bits = nt + nf + num_MP_trols + 1 + num_gbits
+            emb = CktEmbedder(num_bits, num_bits)
+            file_prefix = "../io_folder/plexor_test_" + style
+            wr = MultiplexorSEO_writer(file_prefix, emb, style, rad_angles,
+                num_T_trols=nt, num_F_trols=nf, num_gbits=num_gbits)
+            wr.write()
+            wr.close_files()
+
+        file_prefix = "../io_folder/plexor_exact_check"
+        num_bits = 4
+        num_angles = (1 << (num_bits-1))
         emb = CktEmbedder(num_bits, num_bits)
-        file_prefix = "../io_folder/plexor_test_" + style
-        wr = MultiplexorSEO_writer(file_prefix, emb, style, rad_angles,
-            num_T_trols=nt, num_F_trols=nf, num_gbits=num_gbits)
+        rad_angles = list(np.random.rand(num_angles)*2*np.pi)
+        wr = MultiplexorSEO_writer(file_prefix, emb, 'exact', rad_angles)
         wr.write()
         wr.close_files()
+        matpro = SEO_MatrixProduct(file_prefix, num_bits)
+        exact_mat = MultiplexorSEO_writer.mp_mat(rad_angles)
+        print(np.linalg.norm(matpro.prod_arr - exact_mat))
+    main()
 
-    file_prefix = "../io_folder/plexor_exact_check"
-    num_bits = 4
-    num_angles = (1 << (num_bits-1))
-    emb = CktEmbedder(num_bits, num_bits)
-    rad_angles = list(np.random.rand(num_angles)*2*np.pi)
-    wr = MultiplexorSEO_writer(file_prefix, emb, 'exact', rad_angles)
-    wr.write()
-    wr.close_files()
-    matpro = SEO_MatrixProduct(file_prefix, num_bits)
-    exact_mat = MultiplexorSEO_writer.mp_mat(rad_angles)
-    print(np.linalg.norm(matpro.prod_arr - exact_mat))

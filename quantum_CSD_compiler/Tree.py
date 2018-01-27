@@ -9,8 +9,8 @@ class Tree(SEO_writer):
     the attributes of class Node. This class, being a child of class
     SEO_writer, is also capable of writing English & Picture files. After
     creating a binary tree, it proceeds to use that tree to produce a CS
-    decomposition of the unitary matrix init_unitary_mat that is fed into its
-    constructor. This CS (cosine-sine) decomp consists of a sequence of
+    decomposition of the unitary matrix init_unitary_mat that is fed into
+    its constructor. This CS (cosine-sine) decomp consists of a sequence of
     diagonal unitaries (DIAG lines in English file) and multiplexors (MP_Y
     lines in English file) whose product equals init_unitary_mat.
 
@@ -54,7 +54,8 @@ class Tree(SEO_writer):
 
     2. Qubiter 1.11, a C++ program whose first version was released together
     with Ref.1 above. Qubiter 1.11 is included in the
-    quantum_CSD_compiler/LEGACY folder of this newer, pythonic version of Qubiter
+    quantum_CSD_compiler/LEGACY folder of this newer, pythonic version of
+    Qubiter.
 
     3. R.R. Tucci, Quantum Fast Fourier Transform Viewed as a Special Case
     of Recursive Application of Cosine-Sine Decomposition,
@@ -273,8 +274,11 @@ class Tree(SEO_writer):
 
 if __name__ == "__main__":
     from FouSEO_writer import *
-    num_bits = 3
-    init_unitary_mat = FouSEO_writer.fourier_trans_mat(1 << num_bits)
-    emb = CktEmbedder(num_bits, num_bits)
-    file_prefix = '../io_folder/csd_test'
-    t = Tree(True, file_prefix, emb, init_unitary_mat, verbose=False)
+
+    def main():
+        num_bits = 3
+        init_unitary_mat = FouSEO_writer.fourier_trans_mat(1 << num_bits)
+        emb = CktEmbedder(num_bits, num_bits)
+        file_prefix = '../io_folder/csd_test'
+        t = Tree(True, file_prefix, emb, init_unitary_mat, verbose=False)
+    main()

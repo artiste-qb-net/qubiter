@@ -483,10 +483,12 @@ class CGateExpander(SEO_reader):
         pass
 
 if __name__ == "__main__":
-    xer = CGateExpander('io_folder/fou_test', 6, verbose=True)
-    xer = CGateExpander('io_folder/fou_test_X1', 6, verbose=True)
-    xer = CGateExpander('io_folder/ph_est_test', 8, verbose=True)
-    xer = CGateExpander('io_folder/sim_test2', 4, verbose=True)
-    # write log file for sim_test2
-    SEO_reader('io_folder/sim_test2', 4)
-    xer = CGateExpander('io_folder/sim_test3', 4, verbose=True)
+    def main():
+        xer = CGateExpander('io_folder/fou_test', 6, verbose=True)
+        xer = CGateExpander('io_folder/fou_test_X1', 6, verbose=True)
+        xer = CGateExpander('io_folder/ph_est_test', 8, verbose=True)
+        xer = CGateExpander('io_folder/sim_test2', 4, verbose=True)
+        # write log file for sim_test2
+        SEO_reader('io_folder/sim_test2', 4)
+        xer = CGateExpander('io_folder/sim_test3', 4, verbose=True)
+    main()
