@@ -40,7 +40,8 @@ class Qubiter_to_IBMqasm2(SEO_reader):
     This class halts execution if it encounters a CNOT that is disallowed
     according to the input `c_to_t`. `c_to_t` varies with IBM chip. Some
     `c_to_t`s are listed in the file `ibm_chip_couplings.py` found in same
-    folder as this file.
+    folder as this file. If c_to_t = None, the class assumes any CNOT is
+    possible.
 
     Footnote: QASM distinguishes between quantum registers qreg and
     classical registers creg. Qubiter does not use cregs because it uses the
@@ -57,15 +58,21 @@ class Qubiter_to_IBMqasm2(SEO_reader):
 
     Attributes
     ----------
-    c_to_t : tuple[tuple(int,int)]
+    c_to_t : tuple[tuple(int,int)]|None
         Pairs of qubits that are physically connected so they can be the two
         ends of an elementary CNOT. Order of qubits matters: first entry of
-        tuple is control and second is target of a possible CNOT.
+        tuple is control and second is target of a possible CNOT. If c_to_t
+        = None, the class assumes any CNOT is possible.
     qasm_out : _io.TextIOWrapper
         This output stream is used to write a qasm file based on the input
         English file.
     qbtr_wr : SEO_writer
         A SEO_writer object created iff write_qubiter_files is True.
+    targets : list[list[int]]
+        a list with num_bits items which are themselves lists, call them
+        sublists. Some sublists are possibly the empty list. The sublist at
+        position j gives a list of the physically allowed targets of qubit
+        j. `self.targets` is always derived from `self.c_to_t`.
     write_qubiter_files : bool
         The class always writes a qasm text file based on the input English
         file that is read. Iff this is True, the class also writes English
@@ -73,7 +80,7 @@ class Qubiter_to_IBMqasm2(SEO_reader):
 
 
     """
-    def __init__(self, file_prefix, num_bits, c_to_t, verbose=False,
+    def __init__(self, file_prefix, num_bits, c_to_t=None, verbose=False,
                  write_qubiter_files=False, **kwargs):
         """
         Constructor
@@ -82,7 +89,7 @@ class Qubiter_to_IBMqasm2(SEO_reader):
         ----------
         file_prefix : str
         num_bits : int
-        c_to_t : tuple(tuple(int, int))
+        c_to_t : tuple(tuple(int, int))|None
         verbose : bool
         write_qubiter_files : bool
         kwargs : dict[]
@@ -93,8 +100,11 @@ class Qubiter_to_IBMqasm2(SEO_reader):
 
         """
         self.c_to_t = c_to_t
-        self.targets = ForbiddenCNotExpander.get_targets_from_c_to_t(num_bits,
-                                                                     c_to_t)
+        if c_to_t:
+            self.targets = ForbiddenCNotExpander.get_targets_from_c_to_t(
+                num_bits, c_to_t)
+        else:
+            self.targets = None
 
         self.write_qubiter_files = write_qubiter_files
 
@@ -439,7 +449,7 @@ class Qubiter_to_IBMqasm2(SEO_reader):
         else:  # num_trols == 1
             tar_pos = tar_bit_pos
             trol_pos = controls.bit_pos[0]
-            if tar_pos in self.targets[trol_pos]:
+            if not c_to_t or tar_pos in self.targets[trol_pos]:
                 self.qasm_out.write("cx  q[" + str(trol_pos) + "], "
                                     "q[" + str(tar_pos) + "];\n")
                 if self.write_qubiter_files:
