@@ -27,7 +27,7 @@ class ForbiddenCNotExpander(EchoingSEO_reader):
 
     If this class reads a line which is a SIGX with a single control,
     it echoes it if such a CNOT is allowed according to the input list
-    'c_to_t'. Otherwise, it replaces the disallowed (a.k.a., forbidden,
+    'c_to_tars'. Otherwise, it replaces the disallowed (a.k.a., forbidden,
     unphysical, between disconnected qubits) CNOT by a sequence of Hadamards
     and allowed, elementary CNOTs.
 
@@ -144,22 +144,18 @@ class ForbiddenCNotExpander(EchoingSEO_reader):
 
     Attributes
     ----------
-    c_to_t : tuple[tuple[int, int]]
-        a tuple of integer tuples (c, t) of allowed CNots with control c and
-        target t. This can also be an iterator function that returns integer
-        tuples (c, t).
+        c_to_tars : dict[int, list[int]]
+            a dictionary mapping j in range(num_bits) to a list, possibly
+            empty, of the physically allowed targets of qubit j, when j is
+            the control of a CNOT.
     graph : networkx.Graph
-        A networkx undirected graph derived from `c_to_t` by taking all
-        items in `c_to_t` as edges.
-    targets : list[list[int]]
-        a list with num_bits items which are themselves lists, call them
-        sublists. Some sublists are possibly the empty list. The sublist at
-        position j gives a list of the physically allowed targets of qubit
-        j. `self.targets` is always derived from `self.c_to_t`.
+        A networkx undirected graph derived from `c_to_tars` by taking all
+        items in ForbiddenCNotExpander.get_dir_edges_from_c_to_tars(
+        c_to_tars) as edges.
 
     """
 
-    def __init__(self, file_prefix, num_bits, c_to_t):
+    def __init__(self, file_prefix, num_bits, c_to_tars):
         """
         Constructor
 
@@ -167,7 +163,7 @@ class ForbiddenCNotExpander(EchoingSEO_reader):
         ----------
         file_prefix : str
         num_bits : int
-        c_to_t : tuple(tuple(int, int))
+        c_to_tars : dict[int, list[int]]
 
         Returns
         -------
@@ -175,15 +171,13 @@ class ForbiddenCNotExpander(EchoingSEO_reader):
 
         """
 
-        self.c_to_t = c_to_t
+        self.c_to_tars = c_to_tars
 
         self.graph = nx.Graph()
-        self.graph.add_edges_from(list(c_to_t))
+        dir_edges = ForbiddenCNotExpander.get_dir_edges_from_c_to_tars(
+            c_to_tars)
+        self.graph.add_edges_from(dir_edges)
         # print("graph", self.graph.edges())
-
-        self.targets = \
-            ForbiddenCNotExpander.get_targets_from_c_to_t(num_bits, c_to_t)
-        # print("targets", self.targets)
 
         out_file_prefix = SEO_reader.xed_file_prefix(file_prefix)
         emb = CktEmbedder(num_bits, num_bits)
@@ -194,30 +188,30 @@ class ForbiddenCNotExpander(EchoingSEO_reader):
         self.wr.close_files()
 
     @staticmethod
-    def get_targets_from_c_to_t(num_bits, c_to_t):
+    def get_dir_edges_from_c_to_tars(c_to_tars):
         """
-        Returns `targets', which is a list with num_bits items which are
-        themselves lists, call them sublists. Some sublists are possibly the
-        empty list. The sublist at position j gives a list of the physically
-        allowed targets of qubit j. `targets` is derived from `c_to_t`.
+        returns tuple of all allowed directed edges (c, t) where c control
+        and t target.
 
         Parameters
         ----------
-        num_bits : int
-        c_to_t : tuple[tuple[int, int]]
+        c_to_tars : dict[int, list[int]]
+            a dictionary mapping j in range(num_bits) to a list, possibly
+            empty, of the physically allowed targets of qubit j, when j is
+            the control of a CNOT.
 
         Returns
         -------
-        list[list[int]]
+        tuple[tuple[int, int]]
 
         """
-        # [[]]*num_bits doesn't work here
-        targets = [[] for j in range(num_bits)]
-        for c, t in c_to_t:
-            if t not in targets[c]:
-                targets[c].append(t)
-                # print(targets)
-        return targets
+        dir_edges = []
+        # print(c_to_tars)
+        for c, tars in c_to_tars.items():
+            # print('****', c, tars)
+            for t in tars:
+                dir_edges.append((c, t))
+        return tuple(dir_edges)
 
     def edge_type(self, x, y):
         """
@@ -236,8 +230,8 @@ class ForbiddenCNotExpander(EchoingSEO_reader):
         int
 
         """
-        pos = y in self.targets[x]
-        neg = x in self.targets[y]
+        pos = y in self.c_to_tars[x]
+        neg = x in self.c_to_tars[y]
         if pos and neg:
             ty = 0
         elif pos:
@@ -365,14 +359,14 @@ if __name__ == "__main__":
         file_prefix = "io_folder/forbidden_cnots_ibm"
         print(file_prefix)
         num_bits = 5
-        c_to_t = ibm.ibmqx2_edges
-        ForbiddenCNotExpander(file_prefix, num_bits, c_to_t)
+        c_to_tars = ibm.ibmqx2_c_to_tars
+        ForbiddenCNotExpander(file_prefix, num_bits, c_to_tars)
 
         file_prefix = "io_folder/forbidden_cnots1"
         print(file_prefix)
         num_bits = 4
-        c_to_t = ((0, 1), (1, 2), (2, 3))
-        ForbiddenCNotExpander(file_prefix, num_bits, c_to_t)
+        c_to_tars = {0: [1], 1: [2], 2: [3], 3: []}
+        ForbiddenCNotExpander(file_prefix, num_bits, c_to_tars)
     main()
 
 
