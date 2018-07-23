@@ -1,7 +1,8 @@
-from EchoingSEO_reader import *
-from Controls import *
-from ChipCouplingsFitter import *
 import networkx as nx
+
+import device_specific.utilities as dut
+from Controls import *
+from EchoingSEO_reader import *
 
 
 class ForbiddenCNotExpander(EchoingSEO_reader):
@@ -144,10 +145,10 @@ class ForbiddenCNotExpander(EchoingSEO_reader):
 
     Attributes
     ----------
-        c_to_tars : dict[int, list[int]]
-            a dictionary mapping j in range(num_bits) to a list, possibly
-            empty, of the physically allowed targets of qubit j, when j is
-            the control of a CNOT.
+    c_to_tars : dict[int, list[int]]
+        a dictionary mapping j in range(num_bits) to a list, possibly empty,
+        of the physically allowed targets of qubit j, when j is the control
+        of a CNOT.
     graph : networkx.Graph
         A networkx undirected graph derived from `c_to_tars` by taking all
         items in ForbiddenCNotExpander.get_dir_edges_from_c_to_tars(
@@ -174,8 +175,7 @@ class ForbiddenCNotExpander(EchoingSEO_reader):
         self.c_to_tars = c_to_tars
 
         self.graph = nx.Graph()
-        dir_edges = ForbiddenCNotExpander.get_dir_edges_from_c_to_tars(
-            c_to_tars)
+        dir_edges = dut.get_dir_edges_from_c_to_tars(c_to_tars)
         self.graph.add_edges_from(dir_edges)
         # print("graph", self.graph.edges())
 
@@ -186,32 +186,6 @@ class ForbiddenCNotExpander(EchoingSEO_reader):
         EchoingSEO_reader.__init__(self, file_prefix, num_bits, wr)
 
         self.wr.close_files()
-
-    @staticmethod
-    def get_dir_edges_from_c_to_tars(c_to_tars):
-        """
-        returns tuple of all allowed directed edges (c, t) where c control
-        and t target.
-
-        Parameters
-        ----------
-        c_to_tars : dict[int, list[int]]
-            a dictionary mapping j in range(num_bits) to a list, possibly
-            empty, of the physically allowed targets of qubit j, when j is
-            the control of a CNOT.
-
-        Returns
-        -------
-        tuple[tuple[int, int]]
-
-        """
-        dir_edges = []
-        # print(c_to_tars)
-        for c, tars in c_to_tars.items():
-            # print('****', c, tars)
-            for t in tars:
-                dir_edges.append((c, t))
-        return tuple(dir_edges)
 
     def edge_type(self, x, y):
         """
@@ -355,14 +329,14 @@ class ForbiddenCNotExpander(EchoingSEO_reader):
 
 if __name__ == "__main__":
     def main():
-        import for_IBM_devices.ibm_chip_couplings as ibm
-        file_prefix = "io_folder/forbidden_cnots_ibm"
+        import device_specific.chip_couplings_ibm as ibm
+        file_prefix = "../io_folder/forbidden_cnots_ibm"
         print(file_prefix)
         num_bits = 5
         c_to_tars = ibm.ibmqx2_c_to_tars
         ForbiddenCNotExpander(file_prefix, num_bits, c_to_tars)
 
-        file_prefix = "io_folder/forbidden_cnots1"
+        file_prefix = "../io_folder/forbidden_cnots1"
         print(file_prefix)
         num_bits = 4
         c_to_tars = {0: [1], 1: [2], 2: [3], 3: []}

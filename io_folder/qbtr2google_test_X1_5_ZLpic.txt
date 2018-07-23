@@ -1,0 +1,23 @@
+NOTA	import cirq
+NOTA	from cirq.devices import GridQubit
+NOTA	from cirq.ops import X, Y, Z, H, CNOT
+NOTA	from cirq.ops import RotXGate, RotYGate, RotZGate
+NOTA	
+NOTA	
+NOTA	ckt = cirq.Circuit()
+|   H   |   |   |   
+|   |   X   |   |   
+|   |   Y   |   |   
+|   |   Z   |   |   
+|   Rx  |   |   |   
+|   Ry  |   |   |   
+|   Rz  |   |   |   
+Rz  |   |   |   |   
+Ry  |   |   |   |   
+Rz  |   |   |   |   
+NOTA	1->0 allowed
+|   |   |   @---X   
+NOTA	0->1 allowed
+|   |   |   X---@   
+NOTA	2->0 not allowed
+NOTA	SIGX  AT  0  IF  2T

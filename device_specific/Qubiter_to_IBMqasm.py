@@ -1,127 +1,69 @@
-from Controls import *
-from SEO_reader import *
-from SEO_writer import *
-from quantum_CSD_compiler.UnitaryMat import *
-from ForbiddenCNotExpander import *
-from ChipCouplingsFitter import *
-import utilities_gen as ut
+from device_specific.Qubiter_to_AnyQasm import *
 
 
-class Qubiter_to_IBMqasm2(SEO_reader):
+class Qubiter_to_IBMqasm(Qubiter_to_AnyQasm):
     """
-    This class is a child of SEO_reader. It reads an input English file and
-    writes an IBM qasm2 file that is a translation of the input English file
-    into the IBM qasm2 language. If the option write_qubiter_files is set to
-    True, this class will also write new English and Picture files that are
-    in 1-1 onto line correspondence with the output IBM qasm file.
+    See docstring of parent class Qubiter_to_AnyQasm
 
-    The input English file that is read can only have lines of the following
-    types or else the program will abort with an error message:
-
-    1. single qubit rotations (HAD2, SIGX, SIGY, SIGZ, ROTX, ROTY, ROTZ or
-    ROTN with no controls)
-
-    2. simple CNOTs (SIGX with a single True control). Call them c->t=(c,
-    t) if c is the control and t the target. (c, t) must be allowed by
-    'c_to_tars'.
-
-    3. NOTA lines
-
-    If you have an English file that contains lines that are more
-    complicated than this (because, for example, they contain rotations with
-    one or more controls attached, or because a CNOT is not allowed
-    according to `c_to_tars`), you can use the expander classes
-    CGateExpander, DiagUnitaryExpander, MultiplexorExpander,
-    and ForbiddenCNotExpander to expand the circuit to an equivalent albeit
-    longer circuit that satisfies constraints 1, 2, 3.
-
-    This class can handle an IBM chip with any number of qubits.
-
-    This class halts execution if it encounters a CNOT that is disallowed
-    according to the input `c_to_tars`. `c_to_tars` varies with IBM chip.
-    Some `c_to_tars`s are listed in the file `ibm_chip_couplings.py` found
-    in same folder as this file. If c_to_tars = None, the class assumes any
-    CNOT is possible.
-
-    Footnote: QASM distinguishes between quantum registers qreg and
-    classical registers creg. Qubiter does not use cregs because it uses the
-    classical memory of your Linux PC instead. QASM has an intricate set of
-    commands for measurements. Qubiter has a complete set of measurement
-    commands too (see MEAS in Rosetta stone). The QASM and Qubiter
-    measurement commands can obviously be translated into each other. We
-    leave that part of the translation to a future version of this class.
+    If input c_to_tars = None, all CNOTs allowed.
 
     References
     ----------
-    1. https://github.com/IBMResearch/python-sdk-quantum-experience
-    2. https://github.com/IBMQuantum/QASM
+    1. https://github.com/Qiskit
 
     Attributes
     ----------
-    c_to_tars : dict[int, list[int]]
-        a dictionary mapping j in range(num_bits) to a list, possibly empty,
-        of the physically allowed targets of qubit j, when j is the control
-        of a CNOT. If c_to_tars = None, the class assumes any CNOT is
-        possible.
-    qasm_out : _io.TextIOWrapper
-        This output stream is used to write a qasm file based on the input
-        English file.
-    qbtr_wr : SEO_writer
-        A SEO_writer object created iff write_qubiter_files is True.
-    write_qubiter_files : bool
-        The class always writes a qasm text file based on the input English
-        file that is read. Iff this is True, the class also writes English
-        and Picture files
-
 
     """
-    def __init__(self, file_prefix, num_bits, c_to_tars=None, verbose=False,
-                 write_qubiter_files=False, **kwargs):
+    def __init__(self, *args, **kwargs):
         """
         Constructor
 
         Parameters
         ----------
-        file_prefix : str
-        num_bits : int
-        c_to_tars : dict[int, list[int]]|None
-        verbose : bool
-        write_qubiter_files : bool
-        kwargs : dict[]
 
         Returns
         -------
         None
 
         """
-        self.c_to_tars = c_to_tars
+        Qubiter_to_AnyQasm.__init__(self, *args, **kwargs)
 
-        self.write_qubiter_files = write_qubiter_files
+    def write_prelude(self):
+        """
+        Writes IBM qasm's opening statements before calls to write one
+        gate-line at a time.
 
-        self.qasm_out = open(file_prefix + '_qasm2.txt', 'wt')
+        Returns
+        -------
+        None
+
+        """
+
         self.qasm_out.write("IBMQASM 2.0;\n")
         self.qasm_out.write('include "qelib1.inc";\n')
         self.qasm_out.write("qreg q[5];\n")
         self.qasm_out.write("creg c[5];\n")
-        self.qbtr_wr = None
-        if write_qubiter_files:
-            emb = CktEmbedder(num_bits, num_bits)
-            out_file_prefix = SEO_reader.xed_file_prefix(file_prefix)
-            self.qbtr_wr = SEO_writer(out_file_prefix, emb, **kwargs)
+        if self.write_qubiter_files:
             self.qbtr_wr.write_NOTA("IBMQASM 2.0;")
             self.qbtr_wr.write_NOTA('include "qelib1.inc";')
             self.qbtr_wr.write_NOTA("qreg q[5];")
             self.qbtr_wr.write_NOTA("creg c[5];")
 
-        SEO_reader.__init__(self, file_prefix, num_bits, verbose)
+    def write_ending(self):
+        """
+        Writes IBM qasm's ending statements after calls to write one
+        gate-line at a time.
+
+        Returns
+        -------
+        None
+
+        """
 
         self.qasm_out.write("measure q -> c;\n")
-        if write_qubiter_files:
+        if self.write_qubiter_files:
             self.qbtr_wr.write_NOTA("measure q -> c;")
-
-        self.qasm_out.close()
-        if write_qubiter_files:
-            self.qbtr_wr.close_files()
 
     @staticmethod
     def qasm_line_for_rot(arr, tar_bit_pos):
@@ -141,6 +83,10 @@ class Qubiter_to_IBMqasm2(SEO_reader):
         str
 
         """
+        # U(\theta,\phi,\lambda) := R_z(\phi)R_y(\theta)R_z(\lambda)
+        # R_y(\theta)=\mathrm{exp}(-i\theta Y/2)
+        # R_z(\phi)=\mathrm{exp}(-i\phi Z/2)
+
         # excerpt from qelib1.inc
 
         # // 3-parameter 2-pulse single qubit gate
@@ -353,7 +299,7 @@ class Qubiter_to_IBMqasm2(SEO_reader):
         rad_ang = angle_degs*np.pi/180
 
         arr = OneBitGates.rot_ax(rad_ang, axis)
-        line_str = Qubiter_to_IBMqasm2.qasm_line_for_rot(arr, tar_bit_pos)
+        line_str = Qubiter_to_IBMqasm.qasm_line_for_rot(arr, tar_bit_pos)
         self.qasm_out.write(line_str)
 
         if self.write_qubiter_files:
@@ -385,7 +331,7 @@ class Qubiter_to_IBMqasm2(SEO_reader):
                                      angle_z_degs])*np.pi/180)
 
         arr = OneBitGates.rot(*rad_ang_list)
-        line_str = Qubiter_to_IBMqasm2.qasm_line_for_rot(arr, tar_bit_pos)
+        line_str = Qubiter_to_IBMqasm.qasm_line_for_rot(arr, tar_bit_pos)
         self.qasm_out.write(line_str)
 
         if self.write_qubiter_files:
@@ -469,12 +415,14 @@ class Qubiter_to_IBMqasm2(SEO_reader):
         assert False, "No SWAP lines allowed"
 
 if __name__ == "__main__":
+    import device_specific.chip_couplings_ibm as ibm
+
     def main():
         file_prefix = "../io_folder/qbtr2ibm_test"
+        qasm_name = 'IBMqasm2'
         num_bits = 5
-        import for_IBM_devices.ibm_chip_couplings as ibm
         c_to_tars = ibm.ibmqx2_c_to_tars
-        Qubiter_to_IBMqasm2(file_prefix,
-                num_bits, c_to_tars, write_qubiter_files=True)
+        Qubiter_to_IBMqasm(file_prefix, qasm_name,
+                           num_bits, c_to_tars, write_qubiter_files=True)
 
     main()

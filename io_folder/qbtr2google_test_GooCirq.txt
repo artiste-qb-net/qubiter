@@ -1,0 +1,23 @@
+import cirq
+from cirq.devices import GridQubit
+from cirq.ops import X, Y, Z, H, CNOT
+from cirq.ops import RotXGate, RotYGate, RotZGate
+
+
+ckt = cirq.Circuit()
+ckt.append(H(GridQubit(1, 5)))
+ckt.append(X(GridQubit(1, 4)))
+ckt.append(Y(GridQubit(1, 4)))
+ckt.append(Z(GridQubit(1, 4)))
+ckt.append(RotXGate(rads=1.0471975511965976).on(GridQubit(1, 5)))
+ckt.append(RotYGate(rads=1.5707963267948966).on(GridQubit(1, 5)))
+ckt.append(RotZGate(rads=2.0943951023931953).on(GridQubit(1, 5)))
+ckt.append(RotZGate(rads=-0.767584085966).on(GridQubit(1, 6)))
+ckt.append(RotYGate(rads=-1.44397934949).on(GridQubit(1, 6)))
+ckt.append(RotZGate(rads=-1.94358929306).on(GridQubit(1, 6)))
+# 1->0 allowed
+ckt.append(CNOT(GridQubit(0, 6), GridQubit(0, 5)))
+# 0->1 allowed
+ckt.append(CNOT(GridQubit(0, 5), GridQubit(0, 6)))
+# 2->0 not allowed
+# SIGX  AT  0  IF  2T

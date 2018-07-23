@@ -1,9 +1,12 @@
-from CktEmbedder import *
-from ForbiddenCNotExpander import *
-import networkx as nx
 import itertools as it
-import networkx.algorithms.isomorphism as iso
+
 import matplotlib.pyplot as plt
+import networkx as nx
+import networkx.algorithms.isomorphism as iso
+
+import device_specific.utilities as dut
+from CktEmbedder import *
+from EchoingSEO_reader import *
 
 
 class ChipCouplingsFitter:
@@ -145,8 +148,7 @@ class ChipCouplingsFitter:
 
         plt.figure(1)
         GP = nx.Graph()
-        dir_edges = ForbiddenCNotExpander.get_dir_edges_from_c_to_tars(
-            c_to_tars)
+        dir_edges = dut.get_dir_edges_from_c_to_tars(c_to_tars)
         GP.add_edges_from(dir_edges)
 
         plt.title('Physical graph')
@@ -191,8 +193,7 @@ class ChipCouplingsFitter:
 
         """
         GP = nx.Graph()
-        dir_edges = ForbiddenCNotExpander.get_dir_edges_from_c_to_tars(
-            c_to_tars)
+        dir_edges = dut.get_dir_edges_from_c_to_tars(c_to_tars)
         GP.add_edges_from(dir_edges)
         if verbose:
             print("GP=", GP.edges())
@@ -232,10 +233,10 @@ class ChipCouplingsFitter:
             
 if __name__ == "__main__":
     def main():
-        import for_IBM_devices.ibm_chip_couplings as ibm
+        import device_specific.chip_couplings_ibm as ibm
         c_to_tars = ibm.ibmqx2_c_to_tars
         num_bits = 5
-        file_prefix = "io_folder/couplings_fitter"
+        file_prefix = "../io_folder/couplings_fitter"
 
         print("control_to_targets=", c_to_tars)
 

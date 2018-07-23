@@ -1,0 +1,20 @@
+from from pyquil.quil import Program
+from pyquil.gates import import X, Y, Z, H, CNOT
+from pyquil.gates import import RX, RY, RZ
+
+
+pg = Program()
+pg.inst(H(3))
+pg.inst(X(2))
+pg.inst(Y(2))
+pg.inst(Z(2))
+pg.inst(RX(1.0471975511965976, 3))
+pg.inst(RY(1.5707963267948966, 3))
+pg.inst(RZ(2.0943951023931953, 3))
+pg.inst(RZ(-0.767584085966, 4))
+pg.inst(RY(-1.44397934949, 4))
+pg.inst(RZ(-1.94358929306, 4))
+# 0->5 allowed
+pg.inst(CNOT(0, 5))
+# 0->1 not allowed
+# SIGX  AT  1  IF  0T

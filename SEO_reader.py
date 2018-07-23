@@ -145,7 +145,7 @@ class SEO_reader(SEO_pre_reader):
 
         """
         line = self.english_in.readline()
-        if not line:
+        if not line or not line.strip():
             self.english_in.close()
             return
 

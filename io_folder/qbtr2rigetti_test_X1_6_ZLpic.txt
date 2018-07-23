@@ -1,0 +1,20 @@
+NOTA	from from pyquil.quil import Program
+NOTA	from pyquil.gates import import X, Y, Z, H, CNOT
+NOTA	from pyquil.gates import import RX, RY, RZ
+NOTA	
+NOTA	
+NOTA	pg = Program()
+|   |   H   |   |   |   
+|   |   |   X   |   |   
+|   |   |   Y   |   |   
+|   |   |   Z   |   |   
+|   |   Rx  |   |   |   
+|   |   Ry  |   |   |   
+|   |   Rz  |   |   |   
+|   Rz  |   |   |   |   
+|   Ry  |   |   |   |   
+|   Rz  |   |   |   |   
+NOTA	0->5 allowed
+X---+---+---+---+---@   
+NOTA	0->1 not allowed
+NOTA	SIGX  AT  1  IF  0T
