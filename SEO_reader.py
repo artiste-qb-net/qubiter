@@ -5,9 +5,9 @@ import numpy as np
 
 class SEO_reader(SEO_pre_reader):
     """
-    This class inherits from the class SEO_pre_reader. It's an intermediate
-    class because it has a bunch of use_ methods that may be overridden by a
-    child class. This class reads each line of an English file, parses it,
+    This class inherits from the class SEO_pre_reader. It's an abstract
+    class because it has a bunch of use_ methods that must be overridden by
+    a child class. This class reads each line of an English file, parses it,
     and sends the info obtained to a use_ method for further processing. One
     very important child of this class is SEO_simulator which uses each line
     of the English file to evolve by one further step a quantum state vector.
@@ -36,11 +36,13 @@ class SEO_reader(SEO_pre_reader):
         haven't been reset to |0> or |1>
     num_ops : int
     num_sigx_ops : int
+    write_log : bool
     verbose : bool
 
     """
 
-    def __init__(self, file_prefix, num_bits, verbose=False):
+    def __init__(self, file_prefix, num_bits, 
+                 verbose=False, write_log=False):
         """
         Constructor
 
@@ -56,6 +58,7 @@ class SEO_reader(SEO_pre_reader):
         """
         SEO_pre_reader.__init__(self, file_prefix, num_bits)
         self.verbose = verbose
+        self.write_log = write_log
         self.measured_bits = []
         self.mcase_trols = None
 
@@ -73,7 +76,8 @@ class SEO_reader(SEO_pre_reader):
         while not self.english_in.closed:
             self.next_line()
 
-        self.write_log()
+        if write_log:
+            self.do_log()
 
     @staticmethod
     def xed_file_prefix(file_prefix):
@@ -101,7 +105,7 @@ class SEO_reader(SEO_pre_reader):
                               str(int(file_prefix[k+2:])+1)
         return out_file_prefix
 
-    def write_log(self):
+    def do_log(self):
         """
         Write a log file and print info on console too.
 
@@ -463,7 +467,7 @@ class SEO_reader(SEO_pre_reader):
 
     def use_DIAG(self, trols, rad_angles):
         """
-        Empty use_ method that may be overridden by child class.
+        Abstract use_ method that must be overridden by child class. 
 
         Parameters
         ----------
@@ -475,11 +479,13 @@ class SEO_reader(SEO_pre_reader):
         None
 
         """
-        pass
+        if self.write_log:
+            return
+        assert False, 'DIAG not used'
 
     def use_HAD2(self, tar_bit_pos, controls):
         """
-        Empty use_ method that may be overridden by child class.
+        Abstract use_ method that must be overridden by child class.
 
         Parameters
         ----------
@@ -491,11 +497,13 @@ class SEO_reader(SEO_pre_reader):
         None
 
         """
-        pass
+        if self.write_log:
+            return
+        assert False, 'HAD2 not used'
 
     def use_IF_M_beg(self, controls):
         """
-        Empty use_ method that may be overridden by child class.
+        Abstract use_ method that must be overridden by child class.
 
         Parameters
         ----------
@@ -506,11 +514,13 @@ class SEO_reader(SEO_pre_reader):
         None
 
         """
-        pass
+        if self.write_log:
+            re
+        assert False, 'IF_M(){ not used'
 
     def use_IF_M_end(self):
         """
-        Empty use_ method that may be overridden by child class.
+        Abstract use_ method that must be overridden by child class.
 
         Parameters
         ----------
@@ -520,7 +530,9 @@ class SEO_reader(SEO_pre_reader):
         None
 
         """
-        pass
+        if self.write_log:
+            return
+        assert False, '}IF_M not used'
 
     def use_LOOP(self, loop_num, reps):
         """
@@ -542,7 +554,7 @@ class SEO_reader(SEO_pre_reader):
 
     def use_MEAS(self, tar_bit_pos, kind):
         """
-        Empty use_ method that may be overridden by child class.
+        Abstract use_ method that must be overridden by child class.
 
         Parameters
         ----------
@@ -554,11 +566,13 @@ class SEO_reader(SEO_pre_reader):
         None
 
         """
-        pass
+        if self.write_log:
+            return
+        assert False, 'MEAS not used'
 
     def use_MP_Y(self, tar_bit_pos, trols, rad_angles):
         """
-        Empty use_ method that may be overridden by child class.
+        Abstract use_ method that must be overridden by child class.
 
         Parameters
         ----------
@@ -571,7 +585,9 @@ class SEO_reader(SEO_pre_reader):
         None
 
         """
-        pass
+        if self.write_log:
+            return
+        assert False, 'MP_Y not used'
 
     def use_NEXT(self, loop_num):
         """
@@ -597,7 +613,7 @@ class SEO_reader(SEO_pre_reader):
 
     def use_NOTA(self, bla_str):
         """
-        Empty use_ method that may be overridden by child class.
+        Abstract use_ method that must be overridden by child class.
 
         Parameters
         ----------
@@ -608,11 +624,13 @@ class SEO_reader(SEO_pre_reader):
         None
 
         """
-        pass
+        if self.write_log:
+            return
+        assert False, 'NOTA not used'
 
     def use_PHAS(self, angle_degs, tar_bit_pos, controls):
         """
-        Empty use_ method that may be overridden by child class.
+        Abstract use_ method that must be overridden by child class.
 
         Parameters
         ----------
@@ -625,11 +643,13 @@ class SEO_reader(SEO_pre_reader):
         None
 
         """
-        pass
+        if self.write_log:
+            return
+        assert False, 'PHAS not used'
 
     def use_P_PH(self, projection_bit, angle_degs, tar_bit_pos, controls):
         """
-        Empty use_ method that may be overridden by child class.
+        Abstract use_ method that must be overridden by child class.
 
         Parameters
         ----------
@@ -643,11 +663,13 @@ class SEO_reader(SEO_pre_reader):
         None
 
         """
-        pass
+        if self.write_log:
+            return
+        assert False, 'P0PH or P1PH not used'
 
     def use_PRINT(self, style, line_num):
         """
-        Empty use_ method that may be overridden by child class.
+        Abstract use_ method that must be overridden by child class.
 
         Parameters
         ----------
@@ -659,11 +681,13 @@ class SEO_reader(SEO_pre_reader):
         None
 
         """
-        pass
+        if self.write_log:
+            return
+        assert False, 'PRINT not used'
 
     def use_ROT(self, axis, angle_degs, tar_bit_pos, controls):
         """
-        Empty use_ method that may be overridden by child class.
+        Abstract use_ method that must be overridden by child class.
 
         Parameters
         ----------
@@ -677,12 +701,14 @@ class SEO_reader(SEO_pre_reader):
         None
 
         """
-        pass
+        if self.write_log:
+            return
+        assert False, 'ROTX, ROTY or ROTZ not used'
 
     def use_ROTN(self, angle_x_degs, angle_y_degs, angle_z_degs,
                 tar_bit_pos, controls):
         """
-        Empty use_ method that may be overridden by child class.
+        Abstract use_ method that must be overridden by child class.
 
         Parameters
         ----------
@@ -697,11 +723,13 @@ class SEO_reader(SEO_pre_reader):
         None
 
         """
-        pass
+        if self.write_log:
+            return
+        assert False, 'ROTN not used'
 
     def use_SIG(self, axis, tar_bit_pos, controls):
         """
-        Empty use_ method that may be overridden by child class.
+        Abstract use_ method that must be overridden by child class.
 
         Parameters
         ----------
@@ -714,11 +742,13 @@ class SEO_reader(SEO_pre_reader):
         None
 
         """
-        pass
+        if self.write_log:
+            return
+        assert False, 'SIGX, SIGY or SIGZ not used'
 
     def use_SWAP(self, bit1, bit2, controls):
         """
-        Empty use_ method that may be overridden by child class.
+        Abstract use_ method that must be overridden by child class.
 
         Parameters
         ----------
@@ -731,7 +761,9 @@ class SEO_reader(SEO_pre_reader):
         None
 
         """
-        pass
+        if self.write_log:
+            return
+        assert False, 'SWAP not used'
 
 if __name__ == "__main__":
     def main():

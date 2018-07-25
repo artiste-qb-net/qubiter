@@ -82,6 +82,35 @@ class EchoingSEO_reader(SEO_reader):
         self.wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
                            OneBitGates.had2)
 
+    def use_IF_M_beg(self, controls):
+        """
+        This function echoes IF_M_beg line.
+
+        Parameters
+        ----------
+        controls : Controls
+
+        Returns
+        -------
+        None
+
+        """
+        self.wr.write_IF_M_beg(controls)
+
+    def use_IF_M_end(self):
+        """
+        This function echoes IF_M_end line
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+        None
+
+        """
+        self.wr.write_IF_M_end()
+
     def use_LOOP(self, loop_num, reps):
         """
         This function echoes a LOOP line.
@@ -181,6 +210,22 @@ class EchoingSEO_reader(SEO_reader):
         ang_rads = angle_degs*np.pi/180
         self.wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
             OneBitGates.phase_fac, [ang_rads])
+
+    def use_PRINT(self, style, line_num):
+        """
+        This function echoes PRINT line
+
+        Parameters
+        ----------
+        style : str
+        line_num : int
+
+        Returns
+        -------
+        None
+
+        """
+        self.wr.write_PRINT(style)
 
     def use_P_PH(self, projection_bit, angle_degs, tar_bit_pos, controls):
         """
@@ -297,7 +342,7 @@ class EchoingSEO_reader(SEO_reader):
         """
         self.wr.write_controlled_bit_swap(bit1, bit2, controls)
 
-    def write_log(self):
+    def do_log(self):
         """
         This class does a "flat" reading of the input file; i.e.,
         the reading does not respect loop structure. Hence, we won't let it

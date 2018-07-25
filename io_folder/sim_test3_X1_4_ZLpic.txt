@@ -1,7 +1,9 @@
 NOTA	testing MEAS branching. Each kind 2 measurement doubles number of state vectors
+PRINT	V1
 |   X   |   |   
 |   @---+---X   
 |   X   |   |   
+PRINT	V1
 |   |   H   |   
 |   H   |   |   
 H   |   |   |   
@@ -12,4 +14,6 @@ H   |   |   |
 |   |   @---X   
 M   |   |   |   
 :   M   |   |   
+IF_M(	3F	2F	){
 :   :   |   X   
+}IF_M

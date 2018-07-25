@@ -32,8 +32,8 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
 
     def write_prelude(self):
         """
-        Writes Rigetti's PyQuil opening statements before calls to use_
-        methods for gates.
+        Writes PyQuil opening statements before calls to use_ methods for
+        gates.
 
         Returns
         -------
@@ -57,8 +57,7 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
 
     def write_ending(self):
         """
-        Writes Rigetti's PyQuil ending statements after calls to use_
-        methods for gates.
+        Writes PyQuil ending statements after calls to use_ methods for gates.
 
         Returns
         -------
@@ -70,7 +69,7 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
 
     def use_HAD2(self, tar_bit_pos, controls):
         """
-        Writes line in Cirq file corresponding to an English file line
+        Writes line in PyQuil file corresponding to an English file line
         of type: HAD2 with no controls.
 
         Parameters
@@ -91,7 +90,7 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
 
     def use_NOTA(self, bla_str):
         """
-        Writes line in Cirq file corresponding to an English file line
+        Writes line in PyQuil file corresponding to an English file line
         of type: NOTA
 
         Parameters
@@ -111,7 +110,7 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
         """
         If called for a controlled phase, this function will halt execution
         of program. If it's just a global phase with no controls,
-        the function will comment the phase out in the output files (Cirq
+        the function will comment the phase out in the output files (PyQuil
         and output Qubiter English and Picture files.) and move on to the
         next line.
 
@@ -134,9 +133,29 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
             if self.write_qubiter_files:
                 self.qbtr_wr.write_NOTA(bla_str)
 
+    def use_PRINT(self, style, line_num):
+        """
+        Writes line in PyQuil file corresponding to an English file line
+        of type: PRINT
+        
+        Parameters
+        ----------
+        style : str
+        line_num : int
+
+        Returns
+        -------
+        None
+
+        """
+        str1 = 'PRINT\t' + style
+        self.qasm_out.write("# " + str1 + "\n")
+        if self.write_qubiter_files:
+            self.qbtr_wr.write_NOTA(str1)
+            
     def use_ROT(self, axis, angle_degs, tar_bit_pos, controls):
         """
-        Writes line in Cirq file corresponding to an English file line
+        Writes line in PyQuil file corresponding to an English file line
         of type: ROTX, ROTY or ROTZ with no controls.
 
         Parameters
@@ -174,7 +193,7 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
     def use_ROTN(self, angle_x_degs, angle_y_degs, angle_z_degs,
                 tar_bit_pos, controls):
         """
-        Writes line in Cirq file corresponding to an English file line
+        Writes line in PyQuil file corresponding to an English file line
         of type: ROTN with no controls.
 
         Parameters
@@ -222,7 +241,7 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
 
     def use_SIG(self, axis, tar_bit_pos, controls):
         """
-        Writes line in Cirq file corresponding to an English file line
+        Writes line in PyQuil file corresponding to an English file line
         of type: SIGX, SIGY or SIGZ with no controls, or else SIGX with one
         True control (i.e., simple CNOT).
 
@@ -281,7 +300,7 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
                     + str(trol_pos) + "->" + str(tar_pos) \
                     + " in line " + str(self.line_count) \
                     + ". Use class ForbiddenCNotExpander " \
-                    + "before attempting translation to Cirq."
+                    + "before attempting translation to PyQuil."
 
 if __name__ == "__main__":
     import device_specific.chip_couplings_rigetti as rig

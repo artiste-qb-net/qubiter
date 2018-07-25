@@ -180,6 +180,26 @@ class Qubiter_to_IBMqasm(Qubiter_to_AnyQasm):
             if self.write_qubiter_files:
                 self.qbtr_wr.write_NOTA(bla_str)
 
+    def use_PRINT(self, style, line_num):
+        """
+        Writes line in IBM qasm file corresponding to an English file line
+        of type: PRINT
+
+        Parameters
+        ----------
+        style : str
+        line_num : int
+
+        Returns
+        -------
+        None
+
+        """
+        str1 = 'PRINT\t' + style
+        self.qasm_out.write("// " + str1 + "\n")
+        if self.write_qubiter_files:
+            self.qbtr_wr.write_NOTA(str1)
+
     def use_ROT(self, axis, angle_degs, tar_bit_pos, controls):
         """
         Writes line in IBM qasm file corresponding to an English file line

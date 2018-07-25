@@ -188,6 +188,35 @@ class CGateExpander(SEO_reader):
         self.wr.write(controls.kinds,
                       OneBitGates.had2)
 
+    def use_IF_M_beg(self, controls):
+        """
+        This function echoes IF_M_beg line.
+
+        Parameters
+        ----------
+        controls : Controls
+
+        Returns
+        -------
+        None
+
+        """
+        self.wr.write_IF_M_beg(controls)
+
+    def use_IF_M_end(self):
+        """
+        This function echoes IF_M_end line
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+        None
+
+        """
+        self.wr.write_IF_M_end()
+
     def use_LOOP(self, loop_num, reps):
         """
         This function echoes a LOOP line; i.e., it transcribes the line from
@@ -330,6 +359,24 @@ class CGateExpander(SEO_reader):
         ang_rads = angle_degs*np.pi/180
         self.wr.write(controls.kinds, u2_fun, [ang_rads])
 
+
+    def use_PRINT(self, style, line_num):
+        """
+        This function echoes a PRINT line; i.e., it transcribes the line
+        from the input English file to the output English & Picture files.
+
+        Parameters
+        ----------
+        style : str
+        line_num : int
+
+        Returns
+        -------
+        None
+
+        """
+        self.wr.write_PRINT(style)
+
     def use_ROT(self, axis, angle_degs, tar_bit_pos, controls):
         """
         This function expands a ROTX, ROTY or ROTZ line; i.e., it reads the
@@ -468,7 +515,7 @@ class CGateExpander(SEO_reader):
         # insert closing Hadamards for controls equal to n_bar = |0><0|
         self.wr.write_hads(controls.kinds, herm_conj=True)
 
-    def write_log(self):
+    def do_log(self):
         """
         This class does a "flat" reading of the input file; i.e.,
         the reading does not respect loop structure. Hence, we won't let it
@@ -489,6 +536,6 @@ if __name__ == "__main__":
         xer = CGateExpander('io_folder/ph_est_test', 8, verbose=True)
         xer = CGateExpander('io_folder/sim_test2', 4, verbose=True)
         # write log file for sim_test2
-        SEO_reader('io_folder/sim_test2', 4)
+        SEO_reader('io_folder/sim_test2', 4, write_log=True)
         xer = CGateExpander('io_folder/sim_test3', 4, verbose=True)
     main()

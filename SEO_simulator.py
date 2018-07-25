@@ -383,6 +383,35 @@ class SEO_simulator(SEO_reader):
         gate = OneBitGates.had2()
         self.evolve_by_controlled_one_bit_gate(tar_bit_pos, controls, gate)
 
+    def use_IF_M_beg(self, controls):
+        """
+        Do nothing.
+
+        Parameters
+        ----------
+        controls : Controls
+
+        Returns
+        -------
+        None
+
+        """
+        pass
+
+    def use_IF_M_end(self):
+        """
+        Do nothing.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+        None
+
+        """
+        pass
+
     def use_MEAS(self, tar_bit_pos, kind):
         """
         Overrides the parent class use_ function.
@@ -478,6 +507,21 @@ class SEO_simulator(SEO_reader):
             "raw multiplexors MP_Y. Work around: use first our" \
             "MultiplexorExpander class to expand " \
             "MP_Ys into simpler gates."
+
+    def use_NOTA(self, bla_str):
+        """
+        Do nothing.
+
+        Parameters
+        ----------
+        bla_str : str
+
+        Returns
+        -------
+        None
+
+        """
+        pass
 
     def use_PHAS(self, angle_degs, tar_bit_pos, controls):
         """
