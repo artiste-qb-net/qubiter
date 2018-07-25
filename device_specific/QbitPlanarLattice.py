@@ -1,11 +1,12 @@
 class QbitPlanarLattice:
     """
-    This class translates between int and int pair coordinates for a planar
-    qubit array. From a rectangular ascii picture of planar chip (for
-    instance, device_specific.chip_couplings_google._BRISTLECONE_GRID),
+    This class translates between int and int pair coordinates for qubits on
+    a  planar lattice. From a rectangular ascii picture of the planar chip (
+    for instance, device_specific.chip_couplings_google._BRISTLECONE_GRID),
     the class finds neighbors of each qubit. Two qubits are neighbors iff
-    CNOT with either one of the qubits as target and the other as control is
-    physically allowed.
+    they are adjacent and have the same column or row. Two qubits are
+    neighbors also iff a CNOT is physically allowed with either one of the
+    qubits as target and the other as control.
 
     Attributes
     ----------
@@ -47,7 +48,7 @@ class QbitPlanarLattice:
 
     def two2one(self, pair):
         """
-        Translates from pair coords to int coord.
+        Translates from int pair coords to int coord.
 
         Parameters
         ----------
@@ -65,7 +66,7 @@ class QbitPlanarLattice:
 
     def one2two(self, index):
         """
-        Translates from int coord to pair coords.
+        Translates from int coord to int pair coords.
 
         Parameters
         ----------
@@ -123,12 +124,12 @@ class QbitPlanarLattice:
 
         Returns
         -------
-        list[tuple[int, int]]
+        list[int]
 
         """
         r, c = self.one2two(ind)
         nbors = []
-        for r1, c1 in [(r, c+1), (r, c-1), (r-1, c), (r+1, c)]:
+        for r1, c1 in [(r, c+1), (r, c-1), (r+1, c), (r-1, c)]:
                 ind1 = self.two2one((r1, c1))
                 if ind1 is not None:
                     nbors.append(ind1)

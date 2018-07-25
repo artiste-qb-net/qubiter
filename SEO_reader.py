@@ -5,9 +5,9 @@ import numpy as np
 
 class SEO_reader(SEO_pre_reader):
     """
-    This class inherits from the class SEO_pre_reader. It's an abstract
-    class because it has a bunch of use_ methods that may be overridden by
-    a child class. This class reads each line of an English file, parses it,
+    This class inherits from the class SEO_pre_reader. It's an intermediate
+    class because it has a bunch of use_ methods that may be overridden by a
+    child class. This class reads each line of an English file, parses it,
     and sends the info obtained to a use_ method for further processing. One
     very important child of this class is SEO_simulator which uses each line
     of the English file to evolve by one further step a quantum state vector.
@@ -15,12 +15,12 @@ class SEO_reader(SEO_pre_reader):
     See the docstring for the class SEO_writer for more info about English
     files.
 
-    This class is intended to be an abstract class for use as a parent class
-    to a child class. However, one can create an object of it, in which case
-    it will produce a log file about the English file that it reads. That
-    log file will contain useful information about the English file,
-    like its number of lines, its number of elementary ops, its number of
-    SIGX (CNOT) operations, etc.
+    This class is intended to be an intermediate class for use as a parent
+    class to a child class. However, one can create an object of it,
+    in which case it will produce a log file about the English file that it
+    reads. That log file will contain useful information about the English
+    file, like its number of lines, its number of elementary ops, its number
+    of SIGX (CNOT) operations, etc.
 
     Attributes
     ----------
@@ -133,8 +133,8 @@ class SEO_reader(SEO_pre_reader):
 
     def next_line(self):
         """
-        Analyze the inputted line. Send info to abstract use_ methods (
-        labelled by first four letters of line) for further use.
+        Analyze the inputted line. Send info to use_ methods labelled by
+        first four letters of line) for further use.
 
         Parameters
         ----------
@@ -393,7 +393,8 @@ class SEO_reader(SEO_pre_reader):
     def read_P_phase_factor(self, projection_bit):
         """
         Collect useful info from P0PH or P1PH split_line and forward it to
-        abstract use_ method.
+        use_ method.
+
         Parameters
         ----------
         projection_bit : int
@@ -415,7 +416,7 @@ class SEO_reader(SEO_pre_reader):
     def read_ROT(self, axis):
         """
         Collect useful info from ROTX, ROTY, or ROTZ split_line and forward
-        it to abstract use_ method.
+        it to use_ method.
 
         Parameters
         ----------
@@ -439,7 +440,7 @@ class SEO_reader(SEO_pre_reader):
     def read_SIG(self, axis):
         """
         Collect useful info from SIGX, SIGY, or SIGZ split_line and forward
-        it to abstract use_ method.
+        it to use_ method.
 
         Parameters
         ----------
@@ -462,7 +463,7 @@ class SEO_reader(SEO_pre_reader):
 
     def use_DIAG(self, trols, rad_angles):
         """
-        Abstract use_ method that may be overridden by child class.
+        Empty use_ method that may be overridden by child class.
 
         Parameters
         ----------
@@ -478,7 +479,7 @@ class SEO_reader(SEO_pre_reader):
 
     def use_HAD2(self, tar_bit_pos, controls):
         """
-        Abstract use_ method that may be overridden by child class.
+        Empty use_ method that may be overridden by child class.
 
         Parameters
         ----------
@@ -494,7 +495,7 @@ class SEO_reader(SEO_pre_reader):
 
     def use_IF_M_beg(self, controls):
         """
-        Abstract use_ method that may be overridden by child class.
+        Empty use_ method that may be overridden by child class.
 
         Parameters
         ----------
@@ -509,7 +510,7 @@ class SEO_reader(SEO_pre_reader):
 
     def use_IF_M_end(self):
         """
-        Abstract use_ method that may be overridden by child class.
+        Empty use_ method that may be overridden by child class.
 
         Parameters
         ----------
@@ -541,7 +542,7 @@ class SEO_reader(SEO_pre_reader):
 
     def use_MEAS(self, tar_bit_pos, kind):
         """
-        Abstract use_ method that may be overridden by child class.
+        Empty use_ method that may be overridden by child class.
 
         Parameters
         ----------
@@ -557,7 +558,7 @@ class SEO_reader(SEO_pre_reader):
 
     def use_MP_Y(self, tar_bit_pos, trols, rad_angles):
         """
-        Abstract use_ method that may be overridden by child class.
+        Empty use_ method that may be overridden by child class.
 
         Parameters
         ----------
@@ -596,7 +597,7 @@ class SEO_reader(SEO_pre_reader):
 
     def use_NOTA(self, bla_str):
         """
-        Abstract use_ method that may be overridden by child class.
+        Empty use_ method that may be overridden by child class.
 
         Parameters
         ----------
@@ -611,7 +612,7 @@ class SEO_reader(SEO_pre_reader):
 
     def use_PHAS(self, angle_degs, tar_bit_pos, controls):
         """
-        Abstract use_ method that may be overridden by child class.
+        Empty use_ method that may be overridden by child class.
 
         Parameters
         ----------
@@ -628,7 +629,7 @@ class SEO_reader(SEO_pre_reader):
 
     def use_P_PH(self, projection_bit, angle_degs, tar_bit_pos, controls):
         """
-        Abstract use_ method that may be overridden by child class.
+        Empty use_ method that may be overridden by child class.
 
         Parameters
         ----------
@@ -646,7 +647,7 @@ class SEO_reader(SEO_pre_reader):
 
     def use_PRINT(self, style, line_num):
         """
-        Abstract use_ method that may be overridden by child class.
+        Empty use_ method that may be overridden by child class.
 
         Parameters
         ----------
@@ -662,7 +663,7 @@ class SEO_reader(SEO_pre_reader):
 
     def use_ROT(self, axis, angle_degs, tar_bit_pos, controls):
         """
-        Abstract use_ method that may be overridden by child class.
+        Empty use_ method that may be overridden by child class.
 
         Parameters
         ----------
@@ -681,7 +682,7 @@ class SEO_reader(SEO_pre_reader):
     def use_ROTN(self, angle_x_degs, angle_y_degs, angle_z_degs,
                 tar_bit_pos, controls):
         """
-        Abstract use_ method that may be overridden by child class.
+        Empty use_ method that may be overridden by child class.
 
         Parameters
         ----------
@@ -700,7 +701,7 @@ class SEO_reader(SEO_pre_reader):
 
     def use_SIG(self, axis, tar_bit_pos, controls):
         """
-        Abstract use_ method that may be overridden by child class.
+        Empty use_ method that may be overridden by child class.
 
         Parameters
         ----------
@@ -717,7 +718,7 @@ class SEO_reader(SEO_pre_reader):
 
     def use_SWAP(self, bit1, bit2, controls):
         """
-        Abstract use_ method that may be overridden by child class.
+        Empty use_ method that may be overridden by child class.
 
         Parameters
         ----------

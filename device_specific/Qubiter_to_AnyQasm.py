@@ -69,9 +69,10 @@ class Qubiter_to_AnyQasm(SEO_reader):
         A SEO_writer object created iff write_qubiter_files is True.
     verbose : bool
     write_qubiter_files : bool
-        The class always writes a qasm text file based on the input English
-        file that is read. Iff this is True, the class also writes English
-        and Picture files
+        The class always writes an AnyQasm text file based on the input
+        English file that is read. Iff this is True, the class also writes
+        English and Picture files in 1-1 line correspondence with the output
+        AnyQasm file
 
 
     """
@@ -124,7 +125,7 @@ class Qubiter_to_AnyQasm(SEO_reader):
     def write_prelude(self):
         """
         abstract function, writes AnyQasm's opening statements before calls
-        to write one gate-line at a time.
+        to use_ methods for gates.
 
         Returns
         -------
@@ -137,7 +138,7 @@ class Qubiter_to_AnyQasm(SEO_reader):
     def write_ending(self):
         """
         abstract function, writes AnyQasm's ending statements after calls to
-        write one gate-line at a time.
+        use_ methods for gates.
 
         Returns
         -------
@@ -146,3 +147,162 @@ class Qubiter_to_AnyQasm(SEO_reader):
         """
         assert False
 
+    def use_DIAG(self, trols, rad_angles):
+        """
+        If called, this function will halt execution of program.
+
+        Parameters
+        ----------
+        trols : Controls
+        rad_angles : list[float]
+
+        Returns
+        -------
+        None
+
+        """
+        assert False, "No DIAG lines allowed"
+
+    def use_IF_M_beg(self, controls):
+        """
+        If called, this function will halt execution of program.
+
+        Parameters
+        ----------
+        controls : Controls
+
+        Returns
+        -------
+        None
+
+        """
+        assert False, "No IF_M{ lines allowed"
+
+    def use_IF_M_end(self):
+        """
+        If called, this function will halt execution of program.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+        None
+
+        """
+        assert False, "No }IF_M lines allowed"
+
+    def use_LOOP(self, loop_num, reps):
+        """
+        If called, this function will halt execution of program.
+
+        Parameters
+        ----------
+        loop_num : int
+        reps : int
+
+        Returns
+        -------
+        None
+
+        """
+        assert False, "No LOOP lines allowed"
+
+    def use_MEAS(self, tar_bit_pos, kind):
+        """
+        If called, this function will halt execution of program.
+
+        Parameters
+        ----------
+        kind : int
+        tar_bit_pos : int
+
+        Returns
+        -------
+        None
+
+        """
+        assert False, "No MEAS lines allowed"
+
+    def use_MP_Y(self, tar_bit_pos, trols, rad_angles):
+        """
+        If called, this function will halt execution of program.
+
+        Parameters
+        ----------
+        tar_bit_pos : int
+        trols : Controls
+        rad_angles : list[float]
+
+        Returns
+        -------
+        None
+
+        """
+        assert False, "No MP_Y lines allowed"
+
+    def use_NEXT(self, loop_num):
+        """
+        If called, this function will halt execution of program.
+
+        Parameters
+        ----------
+        loop_num : int
+
+        Returns
+        -------
+        None
+
+        """
+        assert False, "No NEXT lines allowed"
+
+    def use_P_PH(self, projection_bit, angle_degs, tar_bit_pos, controls):
+        """
+        If called, this function will halt execution of program.
+
+        Parameters
+        ----------
+        projection_bit : int
+        angle_degs : float
+        tar_bit_pos : int
+        controls : Controls
+
+        Returns
+        -------
+        None
+
+        """
+        assert False, "No P0PH or P1PH lines allowed"
+
+    def use_PRINT(self, style, line_num):
+        """
+        If called, this function will halt execution of program.
+
+        Parameters
+        ----------
+        style : str
+        line_num : int
+
+        Returns
+        -------
+        None
+
+        """
+        assert False, "No PRINT lines allowed"
+
+    def use_SWAP(self, bit1, bit2, controls):
+        """
+        If called, this function will halt execution of program.
+
+        Parameters
+        ----------
+        bit1 : int
+        bit2 : int
+        controls : Controls
+
+        Returns
+        -------
+        None
+
+        """
+        assert False, "No SWAP lines allowed"

@@ -32,8 +32,8 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
 
     def write_prelude(self):
         """
-        Writes Rigetti's PyQuil opening statements before calls to write one
-        gate-line at a time.
+        Writes Rigetti's PyQuil opening statements before calls to use_
+        methods for gates.
 
         Returns
         -------
@@ -57,8 +57,8 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
 
     def write_ending(self):
         """
-        Writes Rigetti's PyQuil ending statements after calls to write one
-        gate-line at a time.
+        Writes Rigetti's PyQuil ending statements after calls to use_
+        methods for gates.
 
         Returns
         -------
@@ -67,22 +67,6 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
         """
 
         pass
-
-    def use_DIAG(self, trols, rad_angles):
-        """
-        If called, this function will halt execution of program.
-
-        Parameters
-        ----------
-        trols : Controls
-        rad_angles : list[float]
-
-        Returns
-        -------
-        None
-
-        """
-        assert False, "No DIAG lines allowed"
 
     def use_HAD2(self, tar_bit_pos, controls):
         """
@@ -104,70 +88,6 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
         if self.write_qubiter_files:
             self.qbtr_wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
                    OneBitGates.had2)
-
-    def use_LOOP(self, loop_num, reps):
-        """
-        If called, this function will halt execution of program.
-
-        Parameters
-        ----------
-        loop_num : int
-        reps : int
-
-        Returns
-        -------
-        None
-
-        """
-        assert False, "No LOOP lines allowed"
-
-    def use_MEAS(self, tar_bit_pos, kind):
-        """
-        If called, this function will halt execution of program.
-
-        Parameters
-        ----------
-        kind : int
-        tar_bit_pos : int
-
-        Returns
-        -------
-        None
-
-        """
-        assert False, "No MEAS lines allowed"
-
-    def use_MP_Y(self, tar_bit_pos, trols, rad_angles):
-        """
-        If called, this function will halt execution of program.
-
-        Parameters
-        ----------
-        tar_bit_pos : int
-        trols : Controls
-        rad_angles : list[float]
-
-        Returns
-        -------
-        None
-
-        """
-        assert False, "No MP_Y lines allowed"
-
-    def use_NEXT(self, loop_num):
-        """
-        If called, this function will halt execution of program.
-
-        Parameters
-        ----------
-        loop_num : int
-
-        Returns
-        -------
-        None
-
-        """
-        assert False, "No NEXT lines allowed"
 
     def use_NOTA(self, bla_str):
         """
@@ -213,24 +133,6 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
             self.qasm_out.write("# " + bla_str + "\n")
             if self.write_qubiter_files:
                 self.qbtr_wr.write_NOTA(bla_str)
-
-    def use_P_PH(self, projection_bit, angle_degs, tar_bit_pos, controls):
-        """
-        If called, this function will halt execution of program.
-
-        Parameters
-        ----------
-        projection_bit : int
-        angle_degs : float
-        tar_bit_pos : int
-        controls : Controls
-
-        Returns
-        -------
-        None
-
-        """
-        assert False, "No P0PH or P1PH lines allowed"
 
     def use_ROT(self, axis, angle_degs, tar_bit_pos, controls):
         """
@@ -380,23 +282,6 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
                     + " in line " + str(self.line_count) \
                     + ". Use class ForbiddenCNotExpander " \
                     + "before attempting translation to Cirq."
-
-    def use_SWAP(self, bit1, bit2, controls):
-        """
-        If called, this function will halt execution of program.
-
-        Parameters
-        ----------
-        bit1 : int
-        bit2 : int
-        controls : Controls
-
-        Returns
-        -------
-        None
-
-        """
-        assert False, "No SWAP lines allowed"
 
 if __name__ == "__main__":
     import device_specific.chip_couplings_rigetti as rig
