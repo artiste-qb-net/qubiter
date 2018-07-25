@@ -515,7 +515,7 @@ class SEO_reader(SEO_pre_reader):
 
         """
         if self.write_log:
-            re
+            return
         assert False, 'IF_M(){ not used'
 
     def use_IF_M_end(self):
