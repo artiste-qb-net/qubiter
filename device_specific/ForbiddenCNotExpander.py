@@ -141,7 +141,7 @@ class ForbiddenCNotExpander(EchoingSEO_reader):
     the python networkx function that yields the shortest path between two
     nodes of an undirected graph G. We let G be the undirected graph that
     has as edges all pairs of qubits that are coupled according to the input
-    `c_to_d`.
+    `c_to_tars`.
 
     Attributes
     ----------
@@ -151,8 +151,7 @@ class ForbiddenCNotExpander(EchoingSEO_reader):
         of a CNOT.
     graph : networkx.Graph
         A networkx undirected graph derived from `c_to_tars` by taking all
-        items in ForbiddenCNotExpander.get_dir_edges_from_c_to_tars(
-        c_to_tars) as edges.
+        items in get_dir_edges_from_c_to_tars(c_to_tars) as edges.
 
     """
 

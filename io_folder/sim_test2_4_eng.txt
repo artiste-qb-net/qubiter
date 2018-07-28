@@ -8,3 +8,4 @@ SIGX	AT	0	IF	2F
     SIGX	AT	1	IF	2F
     NEXT    20
 SIGX	AT	0	IF	2F
+SIGX    AT  1

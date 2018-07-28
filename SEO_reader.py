@@ -35,7 +35,7 @@ class SEO_reader(SEO_pre_reader):
         list of bits that have been measured with type 2 measurement and
         haven't been reset to |0> or |1>
     num_ops : int
-    num_sigx_ops : int
+    num_cnots : int
     write_log : bool
     verbose : bool
 
@@ -69,7 +69,7 @@ class SEO_reader(SEO_pre_reader):
                 loop_num in self.loop_to_reps.keys()}
 
         self.num_ops = 0
-        self.num_sigx_ops = 0
+        self.num_cnots = 0
         self.line_count = 0
         self.just_jumped = False
 
@@ -127,8 +127,8 @@ class SEO_reader(SEO_pre_reader):
         if self.verbose:
             print(s)
 
-        s = "Number of SIGX Ops (Controlled or uncontrolled NOTs) = " + \
-            str(self.num_sigx_ops) + '\n'
+        s = "Number of CNOTS (SIGX with single control) = " + \
+            str(self.num_cnots) + '\n'
         log.write(s)
         if self.verbose:
             print(s)
@@ -308,7 +308,6 @@ class SEO_reader(SEO_pre_reader):
                              tar_bit_pos, controls)
 
         elif line_name == "SIGX":
-            self.num_sigx_ops += 1
             self.read_SIG(1)
         elif line_name == "SIGY":
             self.read_SIG(2)
@@ -463,6 +462,9 @@ class SEO_reader(SEO_pre_reader):
         tar_bit_pos = int(self.split_line[2])
         controls = self.read_TF_controls(self.split_line[4:])
         assert axis in [1, 2, 3]
+        if axis == 1 and len(controls.bit_pos) == 1:
+            self.num_cnots += 1
+
         self.use_SIG(axis, tar_bit_pos, controls)
 
     def use_DIAG(self, trols, rad_angles):

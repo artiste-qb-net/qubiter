@@ -1,3 +1,3 @@
-Number of lines in file = 10
-Number of Elem. Ops = 14
-Number of SIGX Ops (Controlled or uncontrolled NOTs) = 14
+Number of lines in file = 11
+Number of Elem. Ops = 15
+Number of CNOTS (SIGX with single control) = 14
