@@ -219,7 +219,7 @@ class OneBitGates:
         """
         Returns
 
-        exp(1j*(rad_ang_x*sig_x + rad_ang_y*sig_y + rad_ang_z*sig_z)
+        exp(1j*(rad_ang_x*sig_x + rad_ang_y*sig_y + rad_ang_z*sig_z))
 
         where rad_ang_x is an angle in radians and sig_x is the x Pauli
         matrix, etc.

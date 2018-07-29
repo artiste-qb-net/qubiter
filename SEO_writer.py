@@ -1060,7 +1060,7 @@ class SEO_writer:
         """
         writes
 
-        ROTN = exp(1j*(rads_x*sig_x + rads_y*sig_y + rads_z*sig_z)
+        ROTN = exp(1j*(rads_x*sig_x + rads_y*sig_y + rads_z*sig_z))
 
         with no controls
 
