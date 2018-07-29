@@ -906,6 +906,177 @@ class SEO_writer:
         self.write_controlled_one_bit_gate(
             tar_bit_pos, trols, one_bit_gate_fun, fun_arg_list)
 
+    def write_H(self, tar_bit_pos):
+        """
+        writes HAD2 with no controls
+
+        Parameters
+        ----------
+        tar_bit_pos : int
+
+        Returns
+        -------
+        None
+
+        """
+        self.write_one_bit_gate(tar_bit_pos, OneBitGates.had2)
+
+    def write_X(self, tar_bit_pos):
+        """
+        writes SIGX with no controls
+
+        Parameters
+        ----------
+        tar_bit_pos : int
+
+        Returns
+        -------
+        None
+
+        """
+        self.write_one_bit_gate(tar_bit_pos, OneBitGates.sigx)
+
+    def write_Y(self, tar_bit_pos):
+        """
+        writes SIGY with no controls
+
+        Parameters
+        ----------
+        tar_bit_pos : int
+
+        Returns
+        -------
+        None
+
+        """
+        self.write_one_bit_gate(tar_bit_pos, OneBitGates.sigy)
+
+    def write_Z(self, tar_bit_pos):
+        """
+        writes SIGZ with no controls
+
+        Parameters
+        ----------
+        tar_bit_pos : int
+
+        Returns
+        -------
+        None
+
+        """
+        self.write_one_bit_gate(tar_bit_pos, OneBitGates.sigz)
+
+    def write_S(self, tar_bit_pos, herm=False):
+        """
+        writes ROTZ = exp(-1j*pi/4*sig_z) or its Hermitian with no controls
+
+        Parameters
+        ----------
+        tar_bit_pos : int
+        herm : bool
+
+        Returns
+        -------
+        None
+
+        """
+        if not herm:
+            str1 = 'S'
+        else:
+            str1 = 'Sdag'
+        rads = OneBitGates.rotz_rads(str1)
+        self.write_one_bit_gate(tar_bit_pos, OneBitGates.rot_ax, [rads, 3])
+
+    def write_T(self, tar_bit_pos, herm=False):
+        """
+        writes ROTZ = exp(-1j*pi/8*sig_z) or its Hermitian with no controls
+
+        Parameters
+        ----------
+        tar_bit_pos : int
+        herm : bool
+
+        Returns
+        -------
+        None
+
+        """
+        if not herm:
+            str1 = 'T'
+        else:
+            str1 = 'Tdag'
+        rads = OneBitGates.rotz_rads(str1)
+        self.write_one_bit_gate(tar_bit_pos, OneBitGates.rot_ax, [rads, 3])
+
+    def write_Rx(self, tar_bit_pos, rads):
+        """
+        writes ROTX = exp(1j*rads*sig_x) with no controls
+
+        Parameters
+        ----------
+        tar_bit_pos : int
+        rads : float
+
+        Returns
+        -------
+        None
+
+        """
+        self.write_one_bit_gate(tar_bit_pos, OneBitGates.rot_ax, [rads, 1])
+
+    def write_Ry(self, tar_bit_pos, rads):
+        """
+        writes ROTY = exp(1j*rads*sig_y) with no controls
+
+        Parameters
+        ----------
+        tar_bit_pos : int
+        rads : float
+
+        Returns
+        -------
+        None
+
+        """
+        self.write_one_bit_gate(tar_bit_pos, OneBitGates.rot_ax, [rads, 2])
+
+    def write_Rz(self, tar_bit_pos, rads):
+        """
+        writes ROTZ = exp(1j*rads*sig_z) with no controls
+
+        Parameters
+        ----------
+        tar_bit_pos : int
+        rads : float
+
+        Returns
+        -------
+        None
+
+        """
+        self.write_one_bit_gate(tar_bit_pos, OneBitGates.rot_ax, [rads, 3])
+
+    def write_Rn(self, tar_bit_pos, rads_list):
+        """
+        writes
+
+        ROTN = exp(1j*(rads_x*sig_x + rads_y*sig_y + rads_z*sig_z)
+
+        with no controls
+
+        Parameters
+        ----------
+        tar_bit_pos : int
+        rads_list : list[float, float, float]
+            [rads_x, rads_y, rads_z]
+
+        Returns
+        -------
+        None
+
+        """
+        self.write_one_bit_gate(tar_bit_pos, OneBitGates.rot, rads_list)
+
     def write_cnot(self, control_bit, target_bit, kind=True):
         """
         Writes a simple singly controlled not. If kind=True (resp. False),

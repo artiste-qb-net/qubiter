@@ -376,6 +376,36 @@ class OneBitGates:
         """
         return OneBitGates.mat_S(True)
 
+    @staticmethod
+    def rotz_rads(str1):
+        """
+        Returns the rads to be used as argument of rot_ax(rads, 3) in order
+        to get z rotation equal (up to overall phase factor) to matrices S,
+        S^dag, T, T^dag
+
+        Parameters
+        ----------
+        str1 : str
+            must be either 'S', 'Sdag', 'T', 'Tdag'
+
+        Returns
+        -------
+        float
+
+        """
+        rads = -np.pi/4
+        if str1 == 'S':
+            pass
+        elif str1 == 'Sdag':
+            rads = -rads
+        elif str1 == 'T':
+            rads /= 2
+        elif str1 == 'Tdag':
+            rads /= -2
+        else:
+            assert False, 'unsupported rotz_rads argument'
+        return rads
+
 if __name__ == "__main__":
     def main():
         print('sigx= ', OneBitGates.sigx())
