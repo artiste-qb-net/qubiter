@@ -15,12 +15,15 @@ class SEO_reader(SEO_pre_reader):
     See the docstring for the class SEO_writer for more info about English
     files.
 
-    This class is intended to be an intermediate class for use as a parent
-    class to a child class. However, one can create an object of it,
-    in which case it will produce a log file about the English file that it
-    reads. That log file will contain useful information about the English
-    file, like its number of lines, its number of elementary ops, its number
-    of SIGX (CNOT) operations, etc.
+    The main use of this "abstract" class is as an intermediate class that
+    is a parent class to a child class. However, this class is not 100%
+    abstract. An object of it can be created without getting an error
+    message iff the write_log input parameter, which is False by default,
+    is set to True instead. In that case, creating an object of the class
+    will produce a log file about the English file that it reads. That log
+    file will contain useful information about the English file, like its
+    number of lines, its number of elementary ops, its number of CNOT
+    operations (SIGX with one control), etc.
 
     Attributes
     ----------
@@ -769,5 +772,7 @@ class SEO_reader(SEO_pre_reader):
 
 if __name__ == "__main__":
     def main():
-        print(5)
+        file_prefix = 'io_folder/expansions_examples_X1'
+        num_bits = 3
+        SEO_reader(file_prefix, num_bits, write_log=True)
     main()

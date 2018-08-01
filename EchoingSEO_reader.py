@@ -5,19 +5,31 @@ from SEO_writer import *
 
 class EchoingSEO_reader(SEO_reader):
     """
-    This class is a child of SEO_reader. The class reads any previously 
-    created Qubiter English file and it writes new English & Picture files 
-    wherein every line is echoed faithfully. The purpose of this class is to 
-    act as a parent class to the Expander classes MultiplexorExpander and 
-    DiagUnitaryExpander, both of which echo every line except those starting 
-    with MP_Y and DIAG, respectively, and therefore need only override the 
-    functions use_MP_Y() and use_DIAG, respectively, of this class. 
+    This class is a child of SEO_reader. The class reads any previously
+    created Qubiter English file and it writes new English & Picture files
+    wherein every line is echoed faithfully, except maybe the qubits are
+    permuted.
 
     The constructor of this class takes as input wr which should be a
     SEO_writer or child thereof. If wr is a plain SEO_writer writing to a
     file_prefix different to the file_prefix being read, this class will
     generate a Picture File & English file starting from only an English
-    file. So it is an ASCII drawing class with an English file as input.
+    file.
+
+    This class has many uses. Here are some:
+
+    1. If given as input a pictureless English file, it can be used to draw
+    an ASCII picture of the input English file.
+
+    2. If wr permutes the qubits, it can be used to write new Picture File
+    & English files that have permuted qubits with respect to the input
+    English file.
+
+    3. It is the parent class to the Expander classes MultiplexorExpander
+    and DiagUnitaryExpander, both of which echo every line except those
+    starting with MP_Y and DIAG, respectively, and therefore need only
+    override the functions use_MP_Y() and use_DIAG, respectively, of this
+    class.
 
     Attributes
     ----------
@@ -358,5 +370,12 @@ class EchoingSEO_reader(SEO_reader):
 
 if __name__ == "__main__":
     def main():
-        print(5)
+        file_prefix_in = 'io_folder/echo_test'
+        file_prefix_out = 'io_folder/echo_test_perm'
+        num_bits = 6
+        # permute qubits by advancing their positions by 1
+        bit_map = [1, 2, 3, 4, 5, 0]
+        emb = CktEmbedder(num_bits, num_bits, bit_map)
+        wr = SEO_writer(file_prefix_out, emb)
+        EchoingSEO_reader(file_prefix_in, num_bits, wr)
     main()
