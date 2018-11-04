@@ -1,5 +1,6 @@
 import numpy as np
 import pprint as pp
+import scipy as sc
 
 
 class StateVec:
@@ -176,26 +177,9 @@ class StateVec:
         perm = list(reversed(range(self.num_bits)))
         return np.transpose(self.arr, perm).flatten()
 
-    def get_pd(self):
-        """
-        Returns copy of self.get_traditional_st_vec() with amplitudes
-        replaced by probabilities. pd = probability distribution. So returns
-        one column array indexed in ZL convention like the traditional state
-        vec is.
-
-        Parameters
-        ----------
-
-        Returns
-        -------
-        np.ndarray
-
-        """
-        x = self.get_traditional_st_vec()
-        return np.real(x*np.conj(x))
-
     @staticmethod
     def get_den_mat(num_bits, st_vec_dict):
+
         """
         Returns a density matrix (indexed in ZL convention) constructed from
         st_vec_dict which is a dict from strings to StateVec.
@@ -231,10 +215,10 @@ class StateVec:
         return den_mat/tr
 
     @staticmethod
-    def get_partial_tr(num_bits, den_mat, tr_bits_set):
+    def get_partial_tr(num_bits, den_mat, traced_bits_set):
         """
         Returns the partial trace of a density matrix den_mat. Traces over
-        qubits in set tr_bits_set. To get full trace, just do np.trace(
+        qubits in set traced_bits_set. To get full trace, just do np.trace(
         den_mat)
 
         Parameters
@@ -244,7 +228,7 @@ class StateVec:
             if dim=2^num_bits, this function assumes that den_mat has shape
             (dim, dim) and that it's indexed in the ZL convention so qubit 0
             corresponds to axis num_bits-1.
-        tr_bits_set : set[int]
+        traced_bits_set : set[int]
              Set of qubits being traced over
 
         Returns
@@ -254,34 +238,20 @@ class StateVec:
         """
         dim = 1 << num_bits
         assert den_mat.shape == (dim, dim)
-        assert set(range(num_bits)) > tr_bits_set
+        assert set(range(num_bits)) > traced_bits_set
         dm = den_mat.reshape([2]*(2*num_bits))
-        # largest axis must be traced first
         # bit 0 corresponds to axis num_bits - 1
-        traced_axes = \
-            sorted([num_bits - 1 - k for k in tr_bits_set], reverse=True)
-        for k, ax in enumerate(traced_axes):
+        traced_axes = [num_bits - 1 - k for k in traced_bits_set]
+        num_traces = len(traced_axes)
+        for k in range(num_traces):
+            ax = traced_axes.pop(0)
             dm = np.trace(dm, axis1=ax, axis2=ax + num_bits - k)
+            traced_axes = list(map(lambda x: (x if x <= ax else x-1),
+                                           traced_axes))
+        new_num_bits = num_bits - len(traced_bits_set)
+        dim = 1 << new_num_bits
+        dm = dm.reshape((dim, dim))
         return dm
-
-    @staticmethod
-    def get_den_mat_pd(den_mat):
-        """
-        Returns the diagonal of den_mat (so indexed in ZL convention) .
-        den_mat is expected to be a density matrix returned by get_den_mat()
-
-        Parameters
-        ----------
-        den_mat : np.ndarray
-            density matrix, shape=(dim, dim) where dim=2^num_bits, indexed
-            in ZL convention.
-
-        Returns
-        -------
-        np.ndarray
-
-        """
-        return np.real(np.diag(den_mat))
 
     @staticmethod
     def get_impurity(den_mat):
@@ -304,7 +274,7 @@ class StateVec:
         return abs(np.trace(np.dot(den_mat, den_mat)) - 1)
 
     @staticmethod
-    def get_entropy(den_mat):
+    def get_entropy(den_mat, method='eigen'):
         """
         Returns entropy of density matrix den_mat. Uses natural log for
         entropy.
@@ -312,22 +282,66 @@ class StateVec:
         Parameters
         ----------
         den_mat : np.ndarray
-            Density matrix. Real part of eigenvalues must be positive and
-            sum to 1
+            Density matrix. Eigenvalues must be non-negative and sum to 1
+        method : str
+            method used to calculate log of array. Either 'eigen' or 'pade'
 
         Returns
         -------
         float
 
         """
-        evas = np.real(np.linalg.eigvals(den_mat))
-        assert np.all(evas > 0)
-        assert abs(np.sum(evas) - 1) < 1e-6
-        if np.any(evas > 1 - 1e-6):
-            ent = 0.0
+        ent = 0.0
+        if method == 'eigen':
+            evas = np.real(np.linalg.eigvalsh(den_mat))
+            assert np.all(evas > -1e-6), evas
+            assert abs(np.sum(evas) - 1) < 1e-6
+            for val in evas:
+                if val > 1e-6:
+                    ent += - val*np.log(val)
+        elif method == 'pade':
+            ent = - np.trace(np.dot(den_mat, sc.linalg.logm(den_mat)))
         else:
-            ent = - np.sum(evas * np.log(evas))
+            assert False, 'unsupported method for ' + \
+                          'calculating entropy of a density matrix.'
         return ent
+
+    @staticmethod
+    def get_den_mat_pd(den_mat):
+        """
+        Returns the diagonal of den_mat (so indexed in ZL convention) .
+        den_mat is expected to be a density matrix returned by get_den_mat()
+
+        Parameters
+        ----------
+        den_mat : np.ndarray
+            density matrix, shape=(dim, dim) where dim=2^num_bits, indexed
+            in ZL convention.
+
+        Returns
+        -------
+        np.ndarray
+
+        """
+        return np.real(np.diag(den_mat))
+
+    def get_pd(self):
+        """
+        Returns copy of self.get_traditional_st_vec() with amplitudes
+        replaced by probabilities. pd = probability distribution. So returns
+        one column array indexed in ZL convention like the traditional state
+        vec is.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+        np.ndarray
+
+        """
+        x = self.get_traditional_st_vec()
+        return np.real(x*np.conj(x))
 
     def get_total_prob(self):
         """
@@ -567,15 +581,21 @@ if __name__ == "__main__":
                        'br3': None}
 
         trad_st_vec = st_vec0.get_traditional_st_vec()
+
         den_mat = StateVec.get_den_mat(num_bits, st_vec_dict)
-        # print("den_mat", den_mat)
-        st_vec_pd = st_vec0.get_pd()
+        print("den_mat\n", den_mat)
+        print('trace_02 den_mat\n',
+              StateVec.get_partial_tr(num_bits, den_mat, {0, 2}))
+        print("impurity=", StateVec.get_impurity(den_mat))
+        print("entropy=", StateVec.get_entropy(den_mat))
         den_mat_pd = StateVec.get_den_mat_pd(den_mat)
-        bit_probs_vec = st_vec0.get_bit_probs(num_bits, st_vec_pd)
+        print('den_mat_pd=', den_mat_pd)
+
+        st_vec_pd = st_vec0.get_pd()
+        bit_probs_vec = StateVec.get_bit_probs(num_bits, st_vec_pd)
         bit_probs_dm = StateVec.get_bit_probs(num_bits, den_mat_pd)
 
         print("counts_dm=\n", StateVec.sample_bit_probs(bit_probs_dm, 10))
-        print("impurity=", StateVec.get_impurity(den_mat))
         StateVec.describe_st_vec_dict(st_vec_dict,
                 print_st_vec=True, do_pp=True,
                 omit_zero_amps=False, show_probs=True, ZL=True)
