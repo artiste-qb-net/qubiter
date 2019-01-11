@@ -7,7 +7,7 @@ You can install qubiter from the Python package manager `pip` using:
 pip install qubiter --user
 ```
 
-If you are useing JupyterNotebook, use:
+If you are using a JupyterNotebook, use:
 ```
 !pip install qubiter --user
 ```

@@ -353,6 +353,6 @@ if __name__ == "__main__":
         wr.close_files()
         matpro = SEO_MatrixProduct(file_prefix, num_bits)
         exact_mat = MultiplexorSEO_writer.mp_mat(rad_angles)
-        print(np.linalg.norm(matpro.prod_arr - exact_mat))
+        print("error=", np.linalg.norm(matpro.prod_arr - exact_mat))
     main()
 

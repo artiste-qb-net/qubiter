@@ -115,5 +115,5 @@ if __name__ == "__main__":
         # print(prod)
         # print(exact)
         err = np.linalg.norm(prod - exact)
-        print(err)
+        print("error=", err)
     main()
