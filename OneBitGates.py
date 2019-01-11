@@ -314,15 +314,11 @@ class OneBitGates:
         np.ndarray
 
         """
-        ty = np.complex128
-        mat = np.zeros([2, 2], dtype=ty)
-        mat[0, 0] = 1
         if not herm:
             sign = 1
         else:
             sign = -1
-        mat[1, 1] = 1j*sign
-        return mat
+        return OneBitGates.P_1_phase_fac(sign*np.pi/2)
 
     @staticmethod
     def mat_T(herm=False):
@@ -342,15 +338,11 @@ class OneBitGates:
         np.ndarray
 
         """
-        ty = np.complex128
-        mat = np.zeros([2, 2], dtype=ty)
-        mat[0, 0] = 1
         if not herm:
             sign = 1
         else:
             sign = -1
-        mat[1, 1] = np.exp(1j*np.pi/4*sign)
-        return mat
+        return OneBitGates.P_1_phase_fac(sign*np.pi/4)
 
     @staticmethod
     def mat_Tdag():

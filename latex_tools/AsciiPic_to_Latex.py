@@ -142,7 +142,7 @@ class AsciiPic_to_Latex:
 
         Returns
         -------
-        None
+
 
         """
 

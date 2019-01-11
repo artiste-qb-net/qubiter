@@ -1,5 +1,6 @@
 from Controls import *
 from SEO_pre_reader import *
+from PlaceholderManager import *
 import numpy as np
 
 
@@ -27,6 +28,9 @@ class SEO_reader(SEO_pre_reader):
 
     Attributes
     ----------
+    english_in : _io.TextIOWrapper
+        file object for input text file that stores English description of
+        circuit
     just_jumped : bool
         flag used to alert when loop jumps from NEXT to LOOP
     line_count : int
@@ -37,14 +41,16 @@ class SEO_reader(SEO_pre_reader):
     measured_bits : list(int)
         list of bits that have been measured with type 2 measurement and
         haven't been reset to |0> or |1>
-    num_ops : int
     num_cnots : int
-    write_log : bool
+    num_ops : int
+    vars_manager : PlaceholderManager
+        handles variables indicated by #int in the English file being read
     verbose : bool
+    write_log : bool
 
     """
 
-    def __init__(self, file_prefix, num_bits, 
+    def __init__(self, file_prefix, num_bits, vars_manager=None,
                  verbose=False, write_log=False):
         """
         Constructor
@@ -53,6 +59,7 @@ class SEO_reader(SEO_pre_reader):
         ----------
         file_prefix : str
         num_bits : int
+        vars_manager : PlaceholderManager
         verbose : bool
 
         Returns
@@ -60,8 +67,13 @@ class SEO_reader(SEO_pre_reader):
 
         """
         SEO_pre_reader.__init__(self, file_prefix, num_bits)
+        self.vars_manager = vars_manager
+        if vars_manager is None:
+            self.vars_manager = PlaceholderManager()
         self.verbose = verbose
         self.write_log = write_log
+        if write_log:
+            self.vars_manager.eval_all_vars = False
         self.measured_bits = []
         self.mcase_trols = None
 
@@ -133,6 +145,11 @@ class SEO_reader(SEO_pre_reader):
         s = "Number of CNOTS (SIGX with single control) = " + \
             str(self.num_cnots) + '\n'
         log.write(s)
+
+        s = "Number of gate variables = " + \
+            str(self.vars_manager.num_vars) + '\n'
+        log.write(s)
+
         if self.verbose:
             print(s)
 
@@ -161,6 +178,7 @@ class SEO_reader(SEO_pre_reader):
         self.num_ops += 1
         self.line_count += 1
         self.just_jumped = False
+        vman = self.vars_manager
 
         if line_name == "DIAG":
             # example:
@@ -174,8 +192,8 @@ class SEO_reader(SEO_pre_reader):
             trol_tokens = self.split_line[2: BY_pos]
             ang_tokens = self.split_line[BY_pos + 1: len(self.split_line)]
             trols = self.read_multi_controls(trol_tokens)
-            rad_angles = [float(ang_tokens[k])*np.pi/180
-                for k in range(len(ang_tokens))]
+            rad_angles = [vman.degs_str_to_rads(ang_tokens[k])
+                          for k in range(len(ang_tokens))]
             self.use_DIAG(trols, rad_angles)
 
         elif line_name == "HAD2":
@@ -245,7 +263,7 @@ class SEO_reader(SEO_pre_reader):
             trol_tokens = self.split_line[4: BY_pos]
             ang_tokens = self.split_line[BY_pos + 1: len(self.split_line)]
             trols = self.read_multi_controls(trol_tokens)
-            rad_angles = [float(ang_tokens[k])*np.pi/180
+            rad_angles = [vman.degs_str_to_rads(ang_tokens[k])
                 for k in range(len(ang_tokens))]
             self.use_MP_Y(tar_bit_pos, trols, rad_angles)
 
@@ -272,10 +290,10 @@ class SEO_reader(SEO_pre_reader):
             # example:
             # PHAS 42.7 AT 1 IF 3F 2T
 
-            angle_degs = float(self.split_line[1])
+            angle_rads = vman.degs_str_to_rads(self.split_line[1])
             tar_bit_pos = int(self.split_line[3])
             controls = self.read_TF_controls(self.split_line[5:])
-            self.use_PHAS(angle_degs, tar_bit_pos, controls)
+            self.use_PHAS(angle_rads, tar_bit_pos, controls)
 
         elif line_name == "P0PH":
             self.read_P_phase_factor(0)
@@ -302,12 +320,12 @@ class SEO_reader(SEO_pre_reader):
             # example:
             # ROTN 42.7 30.2 78.5 AT 1 IF 3F 2T
 
-            angle_x_degs = float(self.split_line[1])
-            angle_y_degs = float(self.split_line[2])
-            angle_z_degs = float(self.split_line[3])
+            angle_x_rads = vman.degs_str_to_rads(self.split_line[1])
+            angle_y_rads = vman.degs_str_to_rads(self.split_line[2])
+            angle_z_rads = vman.degs_str_to_rads(self.split_line[3])
             tar_bit_pos = int(self.split_line[5])
             controls = self.read_TF_controls(self.split_line[7:])
-            self.use_ROTN(angle_x_degs, angle_y_degs, angle_z_degs,
+            self.use_ROTN(angle_x_rads, angle_y_rads, angle_z_rads,
                              tar_bit_pos, controls)
 
         elif line_name == "SIGX":
@@ -412,12 +430,13 @@ class SEO_reader(SEO_pre_reader):
         # P0PH 42.7 AT 1 IF 3F 2T
         # P1PH 42.7 AT 1 IF 3F 2T
 
-        angle_degs = float(self.split_line[1])
+        vman = self.vars_manager
+        angle_rads = vman.degs_str_to_rads(self.split_line[1])
         tar_bit_pos = int(self.split_line[3])
         controls = self.read_TF_controls(self.split_line[5:])
         assert projection_bit in [0, 1]
         self.use_P_PH(projection_bit,
-                          angle_degs, tar_bit_pos, controls)
+                          angle_rads, tar_bit_pos, controls)
 
     def read_ROT(self, axis):
         """
@@ -438,10 +457,11 @@ class SEO_reader(SEO_pre_reader):
         # ROTY 42.7 AT 1 IF 3F 2T
         # ROTZ 42.7 AT 1 IF 3F 2T
 
-        angle_degs = float(self.split_line[1])
+        vman = self.vars_manager
+        angle_rads = vman.degs_str_to_rads(self.split_line[1])
         tar_bit_pos = int(self.split_line[3])
         controls = self.read_TF_controls(self.split_line[5:])
-        self.use_ROT(axis, angle_degs, tar_bit_pos, controls)
+        self.use_ROT(axis, angle_rads, tar_bit_pos, controls)
 
     def read_SIG(self, axis):
         """
@@ -633,13 +653,13 @@ class SEO_reader(SEO_pre_reader):
             return
         assert False, 'NOTA not used'
 
-    def use_PHAS(self, angle_degs, tar_bit_pos, controls):
+    def use_PHAS(self, angle_rads, tar_bit_pos, controls):
         """
         Abstract use_ method that must be overridden by child class.
 
         Parameters
         ----------
-        angle_degs : float
+        angle_rads : float
         tar_bit_pos : int
         controls : Controls
 
@@ -652,14 +672,14 @@ class SEO_reader(SEO_pre_reader):
             return
         assert False, 'PHAS not used'
 
-    def use_P_PH(self, projection_bit, angle_degs, tar_bit_pos, controls):
+    def use_P_PH(self, projection_bit, angle_rads, tar_bit_pos, controls):
         """
         Abstract use_ method that must be overridden by child class.
 
         Parameters
         ----------
         projection_bit : int
-        angle_degs : float
+        angle_rads : float
         tar_bit_pos : int
         controls : Controls
 
@@ -690,14 +710,14 @@ class SEO_reader(SEO_pre_reader):
             return
         assert False, 'PRINT not used'
 
-    def use_ROT(self, axis, angle_degs, tar_bit_pos, controls):
+    def use_ROT(self, axis, angle_rads, tar_bit_pos, controls):
         """
         Abstract use_ method that must be overridden by child class.
 
         Parameters
         ----------
         axis : int
-        angle_degs : float
+        angle_rads : float
         tar_bit_pos : int
         controls : Controls
 
@@ -710,16 +730,16 @@ class SEO_reader(SEO_pre_reader):
             return
         assert False, 'ROTX, ROTY or ROTZ not used'
 
-    def use_ROTN(self, angle_x_degs, angle_y_degs, angle_z_degs,
+    def use_ROTN(self, angle_x_rads, angle_y_rads, angle_z_rads,
                 tar_bit_pos, controls):
         """
         Abstract use_ method that must be overridden by child class.
 
         Parameters
         ----------
-        angle_x_degs : float
-        angle_y_degs : float
-        angle_z_degs : float
+        angle_x_rads : float
+        angle_y_rads : float
+        angle_z_rads : float
         tar_bit_pos : int
         controls : Controls
 

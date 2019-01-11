@@ -39,8 +39,9 @@ class EchoingSEO_reader(SEO_reader):
 
     """
 
-    def __init__(self, file_prefix, num_bits, wr):
+    def __init__(self, file_prefix, num_bits, wr, **kwargs):
         """
+        Constructor
 
         Parameters
         ----------
@@ -50,12 +51,11 @@ class EchoingSEO_reader(SEO_reader):
 
         Returns
         -------
-        None
 
         """
         self.wr = wr
 
-        SEO_reader.__init__(self, file_prefix, num_bits)
+        SEO_reader.__init__(self, file_prefix, num_bits, **kwargs)
 
         self.wr.close_files()
 
@@ -204,13 +204,13 @@ class EchoingSEO_reader(SEO_reader):
         """
         self.wr.write_NOTA(bla_str)
 
-    def use_PHAS(self, angle_degs, tar_bit_pos, controls):
+    def use_PHAS(self, angle_rads, tar_bit_pos, controls):
         """
         This function echoes a PHAS line.
 
         Parameters
         ----------
-        angle_degs : float
+        angle_rads : float
         tar_bit_pos : int
         controls : Controls
 
@@ -219,9 +219,8 @@ class EchoingSEO_reader(SEO_reader):
         None
 
         """
-        ang_rads = angle_degs*np.pi/180
         self.wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
-            OneBitGates.phase_fac, [ang_rads])
+            OneBitGates.phase_fac, [angle_rads])
 
     def use_PRINT(self, style, line_num):
         """
@@ -239,14 +238,14 @@ class EchoingSEO_reader(SEO_reader):
         """
         self.wr.write_PRINT(style)
 
-    def use_P_PH(self, projection_bit, angle_degs, tar_bit_pos, controls):
+    def use_P_PH(self, projection_bit, angle_rads, tar_bit_pos, controls):
         """
         This function echoes a P0PH or P1PH line.
 
         Parameters
         ----------
         projection_bit : int
-        angle_degs : float
+        angle_rads : float
         tar_bit_pos : int
         controls : Controls
 
@@ -262,18 +261,17 @@ class EchoingSEO_reader(SEO_reader):
         else:
             assert False
 
-        ang_rads = angle_degs*np.pi/180
         self.wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
-                                              u2_fun, [ang_rads])
+                                              u2_fun, [angle_rads])
 
-    def use_ROT(self, axis, angle_degs, tar_bit_pos, controls):
+    def use_ROT(self, axis, angle_rads, tar_bit_pos, controls):
         """
         This function echoes a ROTX, ROTY or ROTZ line.
 
         Parameters
         ----------
         axis : int
-        angle_degs : float
+        angle_rads : float
         tar_bit_pos : int
         controls : Controls
 
@@ -282,20 +280,19 @@ class EchoingSEO_reader(SEO_reader):
         None
 
         """
-        rad_ang = angle_degs*np.pi/180
         self.wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
-                           OneBitGates.rot_ax, [rad_ang, axis])
+                           OneBitGates.rot_ax, [angle_rads, axis])
 
-    def use_ROTN(self, angle_x_degs, angle_y_degs, angle_z_degs,
+    def use_ROTN(self, angle_x_rads, angle_y_rads, angle_z_rads,
                 tar_bit_pos, controls):
         """
         This function echoes a ROTN line.
 
         Parameters
         ----------
-        angle_x_degs : float
-        angle_y_degs : float
-        angle_z_degs : float
+        angle_x_rads : float
+        angle_y_rads : float
+        angle_z_rads : float
         tar_bit_pos : int
         controls : Controls
 
@@ -304,9 +301,7 @@ class EchoingSEO_reader(SEO_reader):
         None
 
         """
-        rad_ang_list = list(np.array([angle_x_degs,
-                                     angle_y_degs,
-                                     angle_z_degs])*np.pi/180)
+        rad_ang_list = [angle_x_rads, angle_y_rads, angle_z_rads]
         self.wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
                            OneBitGates.rot, rad_ang_list)
 

@@ -75,7 +75,7 @@ class SEO_MatrixProduct:
 
         Returns
         -------
-        None
+
 
         """
 

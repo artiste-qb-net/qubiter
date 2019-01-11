@@ -81,11 +81,10 @@ class DiagUnitarySEO_writer(SEO_writer):
         num_T_trols : int
         num_F_trols : int
         num_gbits : int
-        kwargs : dict()
 
         Returns
         -------
-        None
+
 
         """
         self.style = style

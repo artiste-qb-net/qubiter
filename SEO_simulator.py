@@ -66,7 +66,7 @@ class SEO_simulator(SEO_reader):
     # LineList, UnitaryMat, SEO_readerMu
 
     def __init__(self, file_prefix, num_bits,
-                 init_st_vec=None, verbose=False):
+                 init_st_vec=None, **kwargs):
         """
         Constructor
 
@@ -77,7 +77,6 @@ class SEO_simulator(SEO_reader):
         init_st_vec : StateVec
             get this using the functions StateVec.get_ground_st_vec() or
             StateVec.get_standard_basis_st_vec().
-        verbose : bool
 
         Returns
         -------
@@ -86,10 +85,9 @@ class SEO_simulator(SEO_reader):
         if StateVec.is_zero(init_st_vec):
             init_st_vec = StateVec.get_ground_st_vec(num_bits)
         self.cur_st_vec_dict = {"pure": init_st_vec}
-        self.verbose = verbose
         self.cached_sts = {}
 
-        SEO_reader.__init__(self, file_prefix, num_bits, verbose)
+        SEO_reader.__init__(self, file_prefix, num_bits, **kwargs)
 
     @staticmethod
     def branch_is_part_of_mcase(br_trols, case_trols):
@@ -523,14 +521,14 @@ class SEO_simulator(SEO_reader):
         """
         pass
 
-    def use_PHAS(self, angle_degs, tar_bit_pos, controls):
+    def use_PHAS(self, angle_rads, tar_bit_pos, controls):
         """
         Overrides the parent class use_ function. Calls
         evolve_by_controlled_one_bit_gate() for PHAS.
 
         Parameters
         ----------
-        angle_degs : float
+        angle_rads : float
         tar_bit_pos : int
         controls : Controls
 
@@ -539,11 +537,11 @@ class SEO_simulator(SEO_reader):
         None
 
         """
-        gate = OneBitGates.phase_fac(angle_degs * np.pi/180)
+        gate = OneBitGates.phase_fac(angle_rads)
         self.evolve_by_controlled_one_bit_gate(tar_bit_pos, controls, gate)
 
     def use_P_PH(self, projection_bit,
-                angle_degs, tar_bit_pos, controls):
+                angle_rads, tar_bit_pos, controls):
         """
         Overrides the parent class use_ function. Calls
         evolve_by_controlled_one_bit_gate() for P_0 and P_1 phase factors.
@@ -553,7 +551,7 @@ class SEO_simulator(SEO_reader):
         ----------
         projection_bit : int
             0 (resp. 1) for P_0 (resp. P_1) projection
-        angle_degs : float
+        angle_rads : float
         tar_bit_pos : int
         controls : Controls
 
@@ -566,7 +564,7 @@ class SEO_simulator(SEO_reader):
             0: OneBitGates.P_0_phase_fac,
             1: OneBitGates.P_1_phase_fac
         }
-        gate = fun[projection_bit](angle_degs*np.pi/180)
+        gate = fun[projection_bit](angle_rads)
         self.evolve_by_controlled_one_bit_gate(tar_bit_pos, controls, gate)
 
     def use_PRINT(self, style, line_num):
@@ -605,7 +603,7 @@ class SEO_simulator(SEO_reader):
         print("****************************ending PRINT output")
 
     def use_ROT(self, axis,
-                angle_degs, tar_bit_pos, controls):
+                angle_rads, tar_bit_pos, controls):
         """
         Overrides the parent class use_ function. Calls
         evolve_by_controlled_one_bit_gate() for rot along axes x, y, or z.
@@ -614,7 +612,7 @@ class SEO_simulator(SEO_reader):
         ----------
         axis : int
             1, 2, 3 for x, y, z
-        angle_degs : float
+        angle_rads : float
         tar_bit_pos : int
         controls : Controls
 
@@ -623,10 +621,10 @@ class SEO_simulator(SEO_reader):
         None
 
         """
-        gate = OneBitGates.rot_ax(angle_degs * np.pi / 180, axis)
+        gate = OneBitGates.rot_ax(angle_rads, axis)
         self.evolve_by_controlled_one_bit_gate(tar_bit_pos, controls, gate)
 
-    def use_ROTN(self, angle_x_degs, angle_y_degs, angle_z_degs,
+    def use_ROTN(self, angle_x_rads, angle_y_rads, angle_z_rads,
                 tar_bit_pos, controls):
         """
         Overrides the parent class use_ function. Calls
@@ -635,9 +633,9 @@ class SEO_simulator(SEO_reader):
 
         Parameters
         ----------
-        angle_x_degs : float
-        angle_y_degs : float
-        angle_z_degs : float
+        angle_x_rads : float
+        angle_y_rads : float
+        angle_z_rads : float
         tar_bit_pos : int
         controls : Controls
 
@@ -646,10 +644,7 @@ class SEO_simulator(SEO_reader):
         None
 
         """
-        gate = OneBitGates.rot(
-                    angle_x_degs*np.pi/180,
-                    angle_y_degs*np.pi/180,
-                    angle_z_degs*np.pi/180)
+        gate = OneBitGates.rot(angle_x_rads, angle_y_rads, angle_z_rads)
         self.evolve_by_controlled_one_bit_gate(tar_bit_pos, controls, gate)
 
     def use_SIG(self, axis, tar_bit_pos, controls):

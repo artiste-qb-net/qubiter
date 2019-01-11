@@ -28,7 +28,6 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
 
         Returns
         -------
-        None
 
         """
         self.lattice = QbitPlanarLattice(cc.BRISTLECONE_GRID)

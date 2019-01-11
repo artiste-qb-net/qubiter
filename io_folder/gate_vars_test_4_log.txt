@@ -1,0 +1,4 @@
+Number of lines in file = 3
+Number of Elem. Ops = 3
+Number of CNOTS (SIGX with single control) = 1
+Number of gate variables = 3

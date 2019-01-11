@@ -27,9 +27,9 @@ class FouSEO_writer(SEO_writer):
             being asked.
         emb : CktEmbedder
         do_perm : bool
-        True if want circuit to include permutation that reverses qbit order
+            True if want circuit to include permutation that reverses qbit
+            order
 
-        kwargs :
 
         Returns
         -------

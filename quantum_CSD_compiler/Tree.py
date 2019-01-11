@@ -88,11 +88,10 @@ class Tree(SEO_writer):
             This is the matrix that is fed to cs_decomp() in root node
             constructor.
         verbose : bool
-        kwargs : dict()
 
         Returns
         -------
-        None
+
 
         """
         self.verbose = verbose

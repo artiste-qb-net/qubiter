@@ -1,3 +1,4 @@
 Number of lines in file = 106
 Number of Elem. Ops = 99
 Number of CNOTS (SIGX with single control) = 41
+Number of gate variables = 0

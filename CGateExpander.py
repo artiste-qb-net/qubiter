@@ -36,7 +36,7 @@ class CGateExpander(SEO_reader):
 
     """
 
-    def __init__(self, file_prefix, num_bits, verbose=False):
+    def __init__(self, file_prefix, num_bits, **kwargs):
         """
         Constructor
 
@@ -44,14 +44,11 @@ class CGateExpander(SEO_reader):
         ----------
         file_prefix : str
         num_bits : int
-        verbose : bool
 
         Returns
         -------
-        None
 
         """
-        self.verbose = verbose
 
         # temporary embedder
         emb = CktEmbedder(num_bits, num_bits)
@@ -59,7 +56,7 @@ class CGateExpander(SEO_reader):
         self.wr = CGateSEO_writer(out_file_prefix, emb,
             one_line=False, expand_1c_u2=True)
 
-        SEO_reader.__init__(self, file_prefix, num_bits, verbose)
+        SEO_reader.__init__(self, file_prefix, num_bits, **kwargs)
 
         self.wr.close_files()
 
@@ -302,7 +299,7 @@ class CGateExpander(SEO_reader):
         """
         self.wr.write_NOTA(bla_str)
 
-    def use_PHAS(self, angle_degs, tar_bit_pos, controls):
+    def use_PHAS(self, angle_rads, tar_bit_pos, controls):
         """
         This function expands a PHAS line; i.e., it reads the line from the
         input English file and writes an expansion of it in the output
@@ -310,7 +307,7 @@ class CGateExpander(SEO_reader):
 
         Parameters
         ----------
-        angle_degs : float
+        angle_rads : float
         tar_bit_pos : int
         controls : Controls
 
@@ -322,11 +319,10 @@ class CGateExpander(SEO_reader):
         self.write_gate_name("PHAS", len(controls.kinds))
 
         self.wr.emb = self.emb_for_c_u2(tar_bit_pos, controls)
-        ang_rads = angle_degs*np.pi/180
         self.wr.write(controls.kinds,
-                      OneBitGates.phase_fac, [ang_rads])
+                      OneBitGates.phase_fac, [angle_rads])
 
-    def use_P_PH(self, projection_bit, angle_degs, tar_bit_pos, controls):
+    def use_P_PH(self, projection_bit, angle_rads, tar_bit_pos, controls):
         """
         This function expands a P0PH or P1PH line; i.e., it reads the line
         from the input English file and writes an expansion of it in the
@@ -335,7 +331,7 @@ class CGateExpander(SEO_reader):
         Parameters
         ----------
         projection_bit : int
-        angle_degs : float
+        angle_rads : float
         tar_bit_pos : int
         controls : Controls
 
@@ -356,9 +352,7 @@ class CGateExpander(SEO_reader):
         self.write_gate_name(name, len(controls.kinds))
 
         self.wr.emb = self.emb_for_c_u2(tar_bit_pos, controls)
-        ang_rads = angle_degs*np.pi/180
-        self.wr.write(controls.kinds, u2_fun, [ang_rads])
-
+        self.wr.write(controls.kinds, u2_fun, [angle_rads])
 
     def use_PRINT(self, style, line_num):
         """
@@ -377,7 +371,7 @@ class CGateExpander(SEO_reader):
         """
         self.wr.write_PRINT(style)
 
-    def use_ROT(self, axis, angle_degs, tar_bit_pos, controls):
+    def use_ROT(self, axis, angle_rads, tar_bit_pos, controls):
         """
         This function expands a ROTX, ROTY or ROTZ line; i.e., it reads the
         line from the input English file and writes an expansion of it in
@@ -386,7 +380,7 @@ class CGateExpander(SEO_reader):
         Parameters
         ----------
         axis : int
-        angle_degs : float
+        angle_rads : float
         tar_bit_pos : int
         controls : Controls
 
@@ -408,11 +402,10 @@ class CGateExpander(SEO_reader):
 
         self.wr.emb = self.emb_for_c_u2(tar_bit_pos, controls)
 
-        rad_ang = angle_degs*np.pi/180
         self.wr.write(controls.kinds,
-                      OneBitGates.rot_ax, [rad_ang, axis])
+                      OneBitGates.rot_ax, [angle_rads, axis])
 
-    def use_ROTN(self, angle_x_degs, angle_y_degs, angle_z_degs,
+    def use_ROTN(self, angle_x_rads, angle_y_rads, angle_z_rads,
                 tar_bit_pos, controls):
         """
         This function expands a ROTN line; i.e., it reads the line from the
@@ -421,9 +414,9 @@ class CGateExpander(SEO_reader):
 
         Parameters
         ----------
-        angle_x_degs : float
-        angle_y_degs : float
-        angle_z_degs : float
+        angle_x_rads : float
+        angle_y_rads : float
+        angle_z_rads : float
         tar_bit_pos : int
         controls : Controls
 
@@ -436,9 +429,7 @@ class CGateExpander(SEO_reader):
 
         self.wr.emb = self.emb_for_c_u2(tar_bit_pos, controls)
 
-        rad_ang_list = list(np.array([angle_x_degs,
-                                     angle_y_degs,
-                                     angle_z_degs])*np.pi/180)
+        rad_ang_list = [angle_x_rads, angle_y_rads, angle_z_rads]
         self.wr.write(controls.kinds,
                       OneBitGates.rot,
                       rad_ang_list)

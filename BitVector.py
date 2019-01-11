@@ -30,7 +30,6 @@ class BitVector:
 
         Returns
         -------
-        None
 
         """
         self.len = length

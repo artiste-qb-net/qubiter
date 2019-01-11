@@ -34,7 +34,7 @@ class QbitPlanarLattice:
 
         Returns
         -------
-        None
+
 
         """
 

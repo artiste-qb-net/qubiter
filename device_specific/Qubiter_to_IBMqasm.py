@@ -24,7 +24,6 @@ class Qubiter_to_IBMqasm(Qubiter_to_AnyQasm):
 
         Returns
         -------
-        None
 
         """
         Qubiter_to_AnyQasm.__init__(self, *args, **kwargs)
@@ -326,7 +325,7 @@ if __name__ == "__main__":
         file_prefix = "../io_folder/qbtr2ibm_test"
         qasm_name = 'IBMqasm2'
         num_bits = 5
-        c_to_tars = ibm.ibmqx2_c_to_tars
+        c_to_tars = ibm.ibmq5X2_c_to_tars
         Qubiter_to_IBMqasm(file_prefix, qasm_name,
                            num_bits, c_to_tars, write_qubiter_files=True)
 

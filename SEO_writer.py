@@ -65,6 +65,10 @@ class SEO_writer:
 
     Attributes
     ----------
+    cur_var_num : int
+        the current variable number. Used when circuit contains unevaluated
+        variables denoted by '#' + str(self.cur_var_num). Variables are
+        placeholders for gate angles.
     emb : CktEmbedder
     english_out : _io.TextIOWrapper
         file object for output text file that stores English description of
@@ -99,7 +103,7 @@ class SEO_writer:
         -------
 
         """
-
+        self.cur_var_num = 0
         self.gate_line_counter = 0
         self.file_prefix = file_prefix
         self.emb = emb
@@ -474,6 +478,37 @@ class SEO_writer:
         self.write_ZF_or_ZL_pic_line(pic_line)
         self.picture_out.write("\n")
 
+    def rads_to_degs_str(self, rads):
+        """
+        This method returns
+            str(rads*180/pi) if rads is float
+            '#' + str(self.cur_var_num) if rads is None
+            rads if isinstance(rads, str)
+
+        The method also advances self.cur_var_num by one each time
+        self.cur_var_num is used.
+
+        Parameters
+        ----------
+        rads : float | str | None
+
+        Returns
+        -------
+        str
+
+        """
+        if rads is None:
+            out = '#' + str(self.cur_var_num)
+            self.cur_var_num += 1
+        elif isinstance(rads, float):
+            out = str(rads*180/np.pi)
+        elif isinstance(rads, str):
+            out = rads
+        else:
+            assert False
+
+        return out
+
     def write_controlled_one_bit_gate(
             self, tar_bit_pos, trols, one_bit_gate_fun, fun_arg_list=None):
         """
@@ -523,13 +558,13 @@ class SEO_writer:
         # english file
         if one_bit_gate_fun == OneBitGates.phase_fac:
             self.english_out.write("PHAS\t" +
-            str(fun_arg_list[0]*180/np.pi))
+            self.rads_to_degs_str(fun_arg_list[0]))
         elif one_bit_gate_fun == OneBitGates.P_0_phase_fac:
             self.english_out.write("P0PH\t" +
-                str(fun_arg_list[0]*180/np.pi))
+                self.rads_to_degs_str(fun_arg_list[0]))
         elif one_bit_gate_fun == OneBitGates.P_1_phase_fac:
             self.english_out.write("P1PH\t" +
-                str(fun_arg_list[0]*180/np.pi))
+                self.rads_to_degs_str(fun_arg_list[0]))
         elif one_bit_gate_fun == OneBitGates.sigx:
             self.english_out.write("SIGX")
         elif one_bit_gate_fun == OneBitGates.sigy:
@@ -541,20 +576,21 @@ class SEO_writer:
         elif one_bit_gate_fun == OneBitGates.rot_ax:
             ang_rads = fun_arg_list[0]
             axis = fun_arg_list[1]
+            degs_str = self.rads_to_degs_str(ang_rads)
             if axis == 1:
-                self.english_out.write("ROTX\t" + str(ang_rads*180/np.pi))
+                self.english_out.write("ROTX\t" + degs_str)
             elif axis == 2:
-                self.english_out.write("ROTY\t" + str(ang_rads*180/np.pi))
+                self.english_out.write("ROTY\t" + degs_str)
             elif axis == 3:
-                self.english_out.write("ROTZ\t" + str(ang_rads*180/np.pi))
+                self.english_out.write("ROTZ\t" + degs_str)
             else:
                 assert False
         elif one_bit_gate_fun == OneBitGates.rot:
-            x_degs = fun_arg_list[0]*180/np.pi
-            y_degs = fun_arg_list[1]*180/np.pi
-            z_degs = fun_arg_list[2]*180/np.pi
+            x_degs = self.rads_to_degs_str(fun_arg_list[0])
+            y_degs = self.rads_to_degs_str(fun_arg_list[1])
+            z_degs = self.rads_to_degs_str(fun_arg_list[2])
             self.english_out.write("ROTN\t" +
-                str(x_degs) + "\t" + str(y_degs) + "\t" + str(z_degs))
+                x_degs + "\t" + y_degs + "\t" + z_degs)
         else:
             assert False, "writing an unsupported controlled gate"
 
@@ -709,7 +745,7 @@ class SEO_writer:
         self.english_out.write("\tBY\t")
         for k in range(num_angles):
             self.english_out.write(
-                str(rad_angles[k]*180/np.pi) +
+                self.rads_to_degs_str(rad_angles[k]) +
                 ("\n" if k == (num_angles-1) else "\t"))
         
         # picture file
@@ -825,7 +861,7 @@ class SEO_writer:
         self.english_out.write("\tBY\t")
         for k in range(num_angles):
             self.english_out.write(
-                str(rad_angles[k]*180/np.pi) +
+                self.rads_to_degs_str(rad_angles[k]) +
                 ("\n" if k == (num_angles-1) else "\t"))
 
         # picture file
@@ -1246,4 +1282,6 @@ if __name__ == "__main__":
                 [ang_rads/3, ang_rads*2/3, ang_rads, ang_rads*4/3])
 
             wr.close_files()
+
+
     main()

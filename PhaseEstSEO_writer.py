@@ -65,8 +65,6 @@ class PhaseEstSEO_writer(SEO_writer):
             True if want quantum Fourier Transform circuit to include
             permutation that reverses qbit order
 
-        kwargs : dict[]
-
         Returns
         -------
 
@@ -218,8 +216,6 @@ class AtomWriter(SEO_writer):
         file_prefix : str
         emb : CktEmbedder
 
-        kwargs : dict[]
-
         Returns
         -------
 
@@ -315,7 +311,7 @@ if __name__ == "__main__":
         for zf in [True, False]:
             wr = PhaseEstSEO_writer(do_write=False,
                                     num_probe_bits=4,
-                                    atom_writer = atom_wr,
+                                    atom_writer=atom_wr,
                                     file_prefix="io_folder/ph_est_test",
                                     emb=fin_emb,
                                     zero_bit_first=zf)

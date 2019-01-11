@@ -45,6 +45,7 @@ class ChipCouplingsFitter:
     """
     def __init__(self, file_prefix, num_bits, c_to_tars, verbose=False):
         """
+        Constructor
 
         Parameters
         ----------
@@ -68,7 +69,7 @@ class ChipCouplingsFitter:
 
         Returns
         -------
-        None
+
 
         """
 
@@ -234,7 +235,7 @@ class ChipCouplingsFitter:
 if __name__ == "__main__":
     def main():
         import device_specific.chip_couplings_ibm as ibm
-        c_to_tars = ibm.ibmqx2_c_to_tars
+        c_to_tars = ibm.ibmq5X2_c_to_tars
         num_bits = 5
         file_prefix = "../io_folder/couplings_fitter"
 

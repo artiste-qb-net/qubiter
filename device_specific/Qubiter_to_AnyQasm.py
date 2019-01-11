@@ -90,11 +90,10 @@ class Qubiter_to_AnyQasm(SEO_reader):
         c_to_tars : dict[int, list[int]]|None
         verbose : bool
         write_qubiter_files : bool
-        kwargs : dict[]
 
         Returns
         -------
-        None
+
 
         """
         self.file_prefix = file_prefix

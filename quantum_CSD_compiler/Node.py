@@ -58,7 +58,7 @@ class Node:
             node constructor. pa_nd and side are ignored if this is not None.
         Returns
         -------
-        None
+
 
         """
 

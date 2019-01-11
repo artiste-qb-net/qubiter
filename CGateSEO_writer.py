@@ -56,11 +56,9 @@ class CGateSEO_writer(SEO_writer):
         expand_1c_u2 : bool
         do_checking : bool
         verbose : bool
-        kwargs : dict
 
         Returns
         -------
-        None
 
         """
         self.one_line = one_line

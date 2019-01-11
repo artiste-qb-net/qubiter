@@ -25,7 +25,6 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
 
         Returns
         -------
-        None
 
         """
         Qubiter_to_AnyQasm.__init__(self, *args, **kwargs)

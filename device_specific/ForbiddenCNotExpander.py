@@ -167,7 +167,7 @@ class ForbiddenCNotExpander(EchoingSEO_reader):
 
         Returns
         -------
-        None
+
 
         """
 
@@ -332,7 +332,7 @@ if __name__ == "__main__":
         file_prefix = "../io_folder/forbidden_cnots_ibm"
         print(file_prefix)
         num_bits = 5
-        c_to_tars = ibm.ibmqx2_c_to_tars
+        c_to_tars = ibm.ibmq5X2_c_to_tars
         ForbiddenCNotExpander(file_prefix, num_bits, c_to_tars)
 
         file_prefix = "../io_folder/forbidden_cnots1"
