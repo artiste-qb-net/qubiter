@@ -1,5 +1,18 @@
 # Qubiter at GitHub
 
+## Installation
+
+You can install qubiter from the Python package manager `pip` using:
+```
+pip install qubiter --user
+```
+
+If you are useing JupyterNotebook, use:
+```
+!pip install qubiter --user
+```
+and restart the kernel.
+
 ## What is Qubiter?
 
 The Qubiter project aims to  provide eventually a full suite of tools, written mostly in Python, for designing and simulating quantum circuits on classical computers. (So it will address only the needs of gate model, not annealer, quantum computer engineers). We or others could start a similar project for annealers.
@@ -29,5 +42,3 @@ The contents of Qubiter's quantum_CSD_compiler folder are licensed under the GPL
 * Tregillus, Henry
 * Tucci, Robert
 * Yin, Tao
-
-
