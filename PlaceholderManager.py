@@ -128,6 +128,10 @@ if __name__ == "__main__":
     from SEO_simulator import *
 
     def main():
+        # This produces English and Picture files as usual.
+        # Note that 3 angles have been entered as None.
+        # In the English file, you will see #0, #1, #2 where
+        # the numerical values of those angles would have been.
         num_bits = 4
         file_prefix = 'io_folder/gate_vars_test'
         emb = CktEmbedder(num_bits, num_bits)
@@ -137,11 +141,12 @@ if __name__ == "__main__":
         wr.write_cnot(2, 3)
         wr.close_files()
 
-        # this counts the number of gate variables
+        # this produces a log file with the given file prefix,
+        # wherein the number of gate variables is reported
         SEO_reader(file_prefix, num_bits, write_log=True)
 
-        # partial substitution, this creates new file with #0=30, #1=60
-        # but #2 still undecided
+        # partial substitution, this creates new files
+        # with #0=30, #1=60 but #2 still undecided
         vman = PlaceholderManager(eval_all_vars=False,
                                   var_nums_to_degs={0: 30, 1: 60})
         wr = SEO_writer(file_prefix + '_eval01', emb)

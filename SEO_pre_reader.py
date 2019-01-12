@@ -19,7 +19,7 @@ class SEO_pre_reader:
         beginning of the name of English file being scanned
     loop_queue : list[int]
         a queue of loops labelled by their id number
-    loop_to_reps : dict[int, int]
+    loop_to_nreps : dict[int, int]
         a dictionary mapping loop number TO total number of repetitions of
         loop
     loop_to_start_line : dict[int, int]
@@ -59,7 +59,7 @@ class SEO_pre_reader:
         self.tot_num_lines = 0
         self.loop_to_start_offset = {}
         self.loop_to_start_line = {}
-        self.loop_to_reps = {}
+        self.loop_to_nreps = {}
         self.loop_queue = []
 
         while not self.english_in.closed:
@@ -103,15 +103,15 @@ class SEO_pre_reader:
 
         """
         # example:
-        # LOOP 5 REPS: 2
+        # LOOP 5 NREPS= 2
         loop_num = int(self.split_line[1])
-        reps = int(self.split_line[3])
+        nreps = int(self.split_line[3])
         # print(self.split_line)
-        assert loop_num not in self.loop_to_reps.keys(),\
+        assert loop_num not in self.loop_to_nreps.keys(),\
             "this loop number has occurred before"
         self.loop_to_start_offset[loop_num] = self.english_in.tell()
         self.loop_to_start_line[loop_num] = self.tot_num_lines + 1
-        self.loop_to_reps[loop_num] = reps
+        self.loop_to_nreps[loop_num] = nreps
         self.loop_queue += [loop_num]
 
     def scan_NEXT(self):

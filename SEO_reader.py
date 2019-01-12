@@ -81,7 +81,7 @@ class SEO_reader(SEO_pre_reader):
             file_prefix + '_' + str(num_bits) + '_eng.txt', 'rt')
 
         self.loop_to_cur_rep = {loop_num: 0 for
-                loop_num in self.loop_to_reps.keys()}
+                                loop_num in self.loop_to_nreps.keys()}
 
         self.num_ops = 0
         self.num_cnots = 0
@@ -229,11 +229,11 @@ class SEO_reader(SEO_pre_reader):
             self.num_ops -= 1
 
             # example:
-            # LOOP 5 REPS: 2
+            # LOOP 5 NREPS= 2
 
             loop_num = int(self.split_line[1])
-            reps = int(self.split_line[3])
-            self.use_LOOP(loop_num, reps)
+            nreps = int(self.split_line[3])
+            self.use_LOOP(loop_num, nreps)
 
         elif line_name == "MEAS":
             # example:
@@ -559,7 +559,7 @@ class SEO_reader(SEO_pre_reader):
             return
         assert False, '}IF_M not used'
 
-    def use_LOOP(self, loop_num, reps):
+    def use_LOOP(self, loop_num, nreps):
         """
         Don't override this unless you know what you are doing and have very
         good reasons. It has been carefully set up to deal properly with
@@ -568,7 +568,7 @@ class SEO_reader(SEO_pre_reader):
         Parameters
         ----------
         loop_num : int
-        reps : int
+        nreps : int
 
         Returns
         -------
@@ -629,7 +629,7 @@ class SEO_reader(SEO_pre_reader):
         None
 
         """
-        if self.loop_to_cur_rep[loop_num] < self.loop_to_reps[loop_num]-1:
+        if self.loop_to_cur_rep[loop_num] < self.loop_to_nreps[loop_num]-1:
             self.english_in.seek(self.loop_to_start_offset[loop_num])
             self.just_jumped = True
             self.loop_to_cur_rep[loop_num] += 1

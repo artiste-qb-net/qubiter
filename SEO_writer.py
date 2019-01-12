@@ -38,7 +38,7 @@ class SEO_writer:
     argument is set to True (resp., False), the Picture file shows the zero
     qubit first (resp., last), and the remaining qubits in consecutive
     order. Picture files written with zero bit first (resp., last) are
-    labelled prefix + '_ZFpict.text' (reps., prefix + '_ZLpict.txt'). The
+    labelled prefix + '_ZFpict.text' (resp., prefix + '_ZLpict.txt'). The
     zero_bit_first choice does not affect the English file.
 
     See the following and earlier arXiv papers by R.R.Tucci for more info on
@@ -252,23 +252,23 @@ class SEO_writer:
         self.english_out.write(s)
         self.picture_out.write(s)
 
-    def write_LOOP(self, loop_num, reps):
+    def write_LOOP(self, loop_num, nreps):
         """
         Writes a 'LOOP' line in eng & pic files. The gates between a LOOP
         line and its partner NEXT line are to be repeated a number of times
-        called reps.
+        called nreps.
 
         Parameters
         ----------
         loop_num : int
-        reps : int
+        nreps : int
 
         Returns
         -------
         None
 
         """
-        s = "LOOP\t" + str(loop_num) + "\tREPS:\t" + str(reps) + '\n'
+        s = "LOOP\t" + str(loop_num) + "\tNREPS=\t" + str(nreps) + '\n'
         self.english_out.write(s)
         self.picture_out.write(s)
 

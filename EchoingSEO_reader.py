@@ -123,21 +123,21 @@ class EchoingSEO_reader(SEO_reader):
         """
         self.wr.write_IF_M_end()
 
-    def use_LOOP(self, loop_num, reps):
+    def use_LOOP(self, loop_num, nreps):
         """
         This function echoes a LOOP line.
 
         Parameters
         ----------
         loop_num : int
-        reps : int
+        nreps : int
 
         Returns
         -------
         None
 
         """
-        self.wr.write_LOOP(loop_num, reps)
+        self.wr.write_LOOP(loop_num, nreps)
 
     def use_MEAS(self, tar_bit_pos, kind):
         """
