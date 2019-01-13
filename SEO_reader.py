@@ -155,6 +155,56 @@ class SEO_reader(SEO_pre_reader):
 
         log.close()
 
+    @staticmethod
+    def eng_file_to_line_list(file_prefix, num_bits):
+        """
+        In programs like PyQuil (Rigetti) and Cirq (Google), circuits are
+        stored in memory basically as lists of gates. This static method
+        reads an English file with file prefix `file_prefix` and it returns
+        a list of its line strings. Lists of this type can be sliced,
+        combined, etc. They are convenient, for instance, for doing circuit
+        optimizations (i.e., replacing the circuit by an equivalent but
+        hopefully shorter one, what IBM qiskit calls "transpiling").
+
+        Parameters
+        ----------
+        file_prefix : str
+        num_bits : int
+
+        Returns
+        -------
+        list[str]
+
+        """
+        path = file_prefix + '_' + str(num_bits) + '_eng.txt'
+        with open(path, 'r') as f:
+            line_list = [line.rstrip('\n') for line in f]
+        return line_list
+
+    @staticmethod
+    def line_list_to_eng_and_pic_files(file_prefix, num_bits, line_list):
+        """
+        This method does the reverse of eng_file_to_line_list(). It writes
+        both an English file and a Picture file with file prefix=file_prefix.
+
+        Parameters
+        ----------
+        file_prefix : str
+        num_bits : int
+        line_list : list[str]
+
+        Returns
+        -------
+        None
+
+        """
+        with open(file_prefix, 'w') as f:
+            for line in line_list:
+                f.write(line + '\n')
+
+        # this writes a Picture file from the English file just created
+        EchoingSEO_reader.pic_file_from_eng_file(file_prefix, num_bits)
+
     def next_line(self):
         """
         Analyze the inputted line. Send info to use_ methods labelled by

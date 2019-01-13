@@ -363,14 +363,47 @@ class EchoingSEO_reader(SEO_reader):
         """
         pass
 
+    @staticmethod
+    def pic_file_from_eng_file(file_prefix, num_bits):
+        """
+        This function reads an English file with file prefix = file_prefix
+        and it writes a Picture file for it with the same file prefix.
+
+        Parameters
+        ----------
+        file_prefix : str
+        num_bits : int
+
+        Returns
+        -------
+        None
+
+        """
+        end_str = '_' + str(num_bits) + '_eng.txt'
+        file_prefix_tempo = file_prefix + '_tempo'
+        from shutil import copyfile
+        copyfile(file_prefix + end_str, file_prefix_tempo + end_str)
+
+        emb = CktEmbedder(num_bits, num_bits)
+        # English out file must different from English in file because one
+        # can't read a file at the same time one is writing to it
+        wr = SEO_writer(file_prefix, emb)
+        EchoingSEO_reader(file_prefix_tempo, num_bits, wr)
+
+        import os
+        os.remove(file_prefix_tempo + end_str)
+
 if __name__ == "__main__":
     def main():
         file_prefix_in = 'io_folder/echo_test'
         file_prefix_out = 'io_folder/echo_test_perm'
         num_bits = 6
+
         # permute qubits by advancing their positions by 1
         bit_map = [1, 2, 3, 4, 5, 0]
         emb = CktEmbedder(num_bits, num_bits, bit_map)
         wr = SEO_writer(file_prefix_out, emb)
         EchoingSEO_reader(file_prefix_in, num_bits, wr)
+
+        EchoingSEO_reader.pic_file_from_eng_file(file_prefix_in, num_bits)
     main()
