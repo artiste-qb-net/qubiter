@@ -203,6 +203,7 @@ class SEO_reader(SEO_pre_reader):
                 f.write(line + '\n')
 
         # this writes a Picture file from the English file just created
+        from EchoingSEO_reader import EchoingSEO_reader
         EchoingSEO_reader.pic_file_from_eng_file(file_prefix, num_bits)
 
     def next_line(self):
