@@ -136,6 +136,33 @@ class SEO_writer:
         self.english_out.close()
         self.picture_out.close()
 
+    def print_eng_file(self):
+        """
+        Prints English file
+
+        Returns
+        -------
+        None
+
+        """
+        end_str = '_' + str(self.emb.num_bits_aft) + '_eng.txt'
+        with open(self.file_prefix + end_str) as f:
+            print(f.read())
+
+    def print_pic_file(self):
+        """
+        Prints Picture file
+
+        Returns
+        -------
+        None
+
+        """
+        end_str = '_' + str(self.emb.num_bits_aft) +\
+                ('_ZF' if self.zero_bit_first else '_ZL') + 'pic.txt'
+        with open(self.file_prefix + end_str) as f:
+            print(f.read())
+
     def colonize(self, pic_line):
         """
         This function returns new version of pic_line. Every "|" wire is

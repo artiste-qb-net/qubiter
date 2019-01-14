@@ -14,9 +14,9 @@ class EngLineList:
     (i.e., replacing the circuit by an equivalent but hopefully shorter one,
     what IBM qiskit calls "transpiling").
 
-    In this class, we support Qubiter's version of PyQuil's and Cirq's
-    circuit lists. In Qubiter, we use simply a Python list of the lines,
-    stored as strings, of the circuit's English file.
+    In this class, we support Qubiter's version of PyQuil's and Cirq's gate
+    lists. In Qubiter, we use simply a Python list of the lines, stored as
+    strings, of the circuit's English file.
 
     """
     def __init__(self, line_list, num_bits):
@@ -32,7 +32,7 @@ class EngLineList:
 
     def print(self):
         """
-        prints list, one item per line
+        prints self.line_list, one item per line
 
         Returns
         -------
