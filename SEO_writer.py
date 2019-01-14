@@ -1103,7 +1103,7 @@ class SEO_writer:
         Parameters
         ----------
         tar_bit_pos : int
-        rads_list : list[float, float, float]
+        rads_list : list[float]
             [rads_x, rads_y, rads_z]
 
         Returns

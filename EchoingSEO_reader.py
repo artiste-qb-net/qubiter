@@ -364,7 +364,7 @@ class EchoingSEO_reader(SEO_reader):
         pass
 
     @staticmethod
-    def pic_file_from_eng_file(file_prefix, num_bits):
+    def pic_file_from_eng_file(file_prefix, num_bits, zero_bit_first=False):
         """
         This function reads an English file with file prefix = file_prefix
         and it writes a Picture file for it with the same file prefix.
@@ -373,6 +373,7 @@ class EchoingSEO_reader(SEO_reader):
         ----------
         file_prefix : str
         num_bits : int
+        zero_bit_first : bool
 
         Returns
         -------
@@ -387,7 +388,7 @@ class EchoingSEO_reader(SEO_reader):
         emb = CktEmbedder(num_bits, num_bits)
         # English out file must different from English in file because one
         # can't read a file at the same time one is writing to it
-        wr = SEO_writer(file_prefix, emb)
+        wr = SEO_writer(file_prefix, emb, zero_bit_first=zero_bit_first)
         EchoingSEO_reader(file_prefix_tempo, num_bits, wr)
 
         import os
