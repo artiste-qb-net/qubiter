@@ -403,17 +403,17 @@ class StateVec:
         return probs
 
     @staticmethod
-    def sample_bit_probs(bit_probs, num_samples, rand_seed=None):
+    def get_bit_counts(bit_probs, num_trials, rand_seed=None):
         """
         Returns a list whose jth item is, for the jth qubit, the pair (
-        count0, count1), where count0 + count1 = num_samples, and as
-        num_samples ->infinity, (count0, count1)/num_samples tends to the
+        count0, count1), where count0 + count1 = num_trials, and as
+        num_trials ->infinity, (count0, count1)/num_trials tends to the
         probability pair bit_probs[j].
 
         Parameters
         ----------
         bit_probs : list[tuple[float, float]]
-        num_samples : int
+        num_trials : int
         rand_seed : int
 
         Returns
@@ -426,13 +426,39 @@ class StateVec:
         num_bits = len(bit_probs)
         counts = []
         for bit in range(num_bits):
-            x = np.random.choice(
-                np.arange(0, 2), size=num_samples,
-                p=bit_probs[bit])
-            sum1 = np.sum(x)
-            sum0 = num_samples - sum1
-            counts.append((sum0, sum1))
+            x1 = np.random.binomial(n=num_trials, p=bit_probs[bit][1])
+            x0 = num_trials - x1
+            counts.append((x0, x1))
         return counts
+
+    @staticmethod
+    def sample_bit_pd(num_bits, pd, num_samples, rand_seed=None):
+        """
+        For num_samples=1, this method returns an int in range(1<<num_bits)
+        chosen according to the probability distribution pd for num_bits
+        qubits. If the output int is expressed in binary notation, its last
+        bit is the measurement of the 0th qubit.
+
+        For num_samples>1, the method returns an np.ndarray with the result
+        of doing num_sample repetitions of what was done for num_samples=1
+
+        Parameters
+        ----------
+        num_bits : int
+        pd : np.ndarray[float]
+        num_samples : int
+        rand_seed : int
+
+        Returns
+        -------
+        int | np.ndarray
+
+        """
+        if rand_seed:
+            np.random.seed(rand_seed)
+        len_pd = 1 << num_bits
+        assert len(pd) == len_pd
+        return np.random.choice(np.arange(0, len_pd), size=num_samples, p=pd)
 
     def pp_arr_entries(self, omit_zero_amps=False,
                           show_probs=False, ZL=True):
@@ -595,7 +621,9 @@ if __name__ == "__main__":
         bit_probs_vec = StateVec.get_bit_probs(num_bits, st_vec_pd)
         bit_probs_dm = StateVec.get_bit_probs(num_bits, den_mat_pd)
 
-        print("counts_dm=\n", StateVec.sample_bit_probs(bit_probs_dm, 10))
+        print("counts_dm=\n", StateVec.get_bit_counts(bit_probs_dm, 10))
+        print('sample_st_vec_pd, ' + str(num_bits) + ' qubits\n',
+              StateVec.sample_bit_pd(num_bits, st_vec_pd, num_samples=20))
         StateVec.describe_st_vec_dict(st_vec_dict,
                 print_st_vec=True, do_pp=True,
                 omit_zero_amps=False, show_probs=True, ZL=True)
