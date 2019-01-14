@@ -75,6 +75,8 @@ class SEO_writer:
         circuit
     file_prefix : str
         beginning of the name of both English and Picture files
+    first_var_num :
+        variable numbers start with this one
     gate_line_counter : int
     measured_bits : list(int)
         list of bits that have been measured with type 2 measurement and
@@ -87,23 +89,26 @@ class SEO_writer:
     """
 
     def __init__(self, file_prefix, emb, zero_bit_first=False,
-                english_out=None, picture_out=None):
+                english_out=None, picture_out=None, first_var_num=0):
         """
         Constructor
 
         Parameters
         ----------
         file_prefix : str
+        emb : CktEmbedder
         zero_bit_first : bool
         english_out : _io.TextIOWrapper
         picture_out : _io.TextIOWrapper
-        emb : CktEmbedder
+        first_var_num : int
+
 
         Returns
         -------
 
         """
-        self.cur_var_num = 0
+        self.first_var_num = first_var_num
+        self.cur_var_num = first_var_num
         self.gate_line_counter = 0
         self.file_prefix = file_prefix
         self.emb = emb

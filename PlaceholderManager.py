@@ -16,14 +16,14 @@ class PlaceholderManager:
 
     Attributes
     ----------
-    no_vars : bool
-        will abort if this is True and a variable is detected
-    eval_all_vars : bool
-        will abort if this is True and a variable can't be evaluated
-    num_vars : int
-        number of variables
     cur_var_num : int
         latest variable number encountered
+    eval_all_vars : bool
+        will abort if this is True and a variable can't be evaluated
+    no_vars : bool
+        will abort if this is True and a variable is detected
+    num_vars : int
+        number of variables
     var_num_to_degs : dict[int, float]
         a dict mapping variable numbers to a float for degrees. Used for
         evaluating gate variables in a SEO_reader or its sub classes.
