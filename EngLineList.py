@@ -30,17 +30,6 @@ class EngLineList:
         self.line_list = line_list
         self.num_bits = num_bits
 
-    def print(self):
-        """
-        prints self.line_list, one item per line
-
-        Returns
-        -------
-        None
-
-        """
-        print('\n'.join(self.line_list))
-
     @staticmethod
     def eng_file_to_line_list(file_prefix, num_bits):
         """
@@ -87,6 +76,17 @@ class EngLineList:
         # this writes a Picture file from the English file just created
         EchoingSEO_reader.pic_file_from_eng_file(file_prefix, num_bits)
 
+    def print(self):
+        """
+        prints self.line_list, one item per line
+
+        Returns
+        -------
+        None
+
+        """
+        print('\n'.join(self.line_list))
+
     def write_eng_and_pic_files(self, file_prefix):
         """
         This method does the same as line_list_to_eng_and_pic_files(),
@@ -105,21 +105,102 @@ class EngLineList:
         EngLineList.line_list_to_eng_and_pic_files(
             self.line_list, file_prefix, self.num_bits)
 
+    def get_min_max_tot_num_vars(self):
+        """
+        This method returns the minimum variable number, the maximum
+        variable number, and the total number of variables in the circuit
+
+        Returns
+        -------
+        int, int, int
+
+        """
+        cur_var_num = -1
+        min_var_num = -1
+        max_var_num = -1
+        num_vars = 0
+        for line in self.line_list:
+            split_line = line.split()
+            for token in split_line:
+                if token[0] == '#':
+                    num_vars += 1
+                    cur_var_num = int(token[1:])
+                    if cur_var_num > max_var_num:
+                        max_var_num = cur_var_num
+                    if min_var_num == -1 or cur_var_num < min_var_num:
+                        min_var_num = cur_var_num
+        return min_var_num, max_var_num, num_vars
+
+    def __add__(self, other):
+        """
+        override +
+
+        Parameters
+        ----------
+        other : EngLineList
+
+        Returns
+        -------
+        EngLineList
+
+        """
+        assert self.num_bits == other.num_bits
+        _, self_max, _ = self.get_min_max_tot_num_vars()
+        other_min, _, _ = other.get_min_max_tot_num_vars()
+        assert self_max < other_min
+        return EngLineList(self.line_list + other.line_list,
+                           self.num_bits)
+
+    def __getitem__(self, item):
+        """
+        Override self[item]
+
+        Parameters
+        ----------
+        item :
+
+        Returns
+        -------
+
+        """
+        return EngLineList(self.line_list[item], self.num_bits)
 
 if __name__ == "__main__":
     def main():
         num_bits = 4
+
         file_prefix = 'io_folder/eng_line_list_test'
         emb = CktEmbedder(num_bits, num_bits)
         wr = SEO_writer(file_prefix, emb)
         wr.write_Rx(2, rads=np.pi)
-        wr.write_Rn(3, rads_list=[np.pi/2, np.pi/2, np.pi/2])
+        wr.write_Rn(3, rads_list=[None, np.pi/2, None])
         wr.write_cnot(2, 3)
         wr.close_files()
 
-        list1 = EngLineList.eng_file_to_line_list(file_prefix, num_bits)
-        list2 = list1 + list1[1:]
-        ell = EngLineList(list2, num_bits)
-        ell.print()
-        ell.write_eng_and_pic_files(file_prefix + '_sum')
+        file_prefix2 = 'io_folder/eng_line_list2_test'
+        emb = CktEmbedder(num_bits, num_bits)
+        wr = SEO_writer(file_prefix2, emb, first_var_num=5)
+        wr.write_Rx(2, rads=np.pi)
+        wr.write_Rn(3, rads_list=[None, np.pi/2, None])
+        wr.write_cnot(2, 3)
+        wr.close_files()
+
+        list_1 = EngLineList.eng_file_to_line_list(file_prefix, num_bits)
+        ell_1 = EngLineList(list_1, num_bits)
+        print("\nell_1 print")
+        ell_1.print()
+        ell_1.write_eng_and_pic_files(file_prefix + '_ditto')
+        print("ell_1 min, max, tot num_vars= ",
+              ell_1.get_min_max_tot_num_vars())
+        print("\nell_1[1:] print")
+        ell_1[1:].print()
+
+        list_2 = EngLineList.eng_file_to_line_list(file_prefix2, num_bits)
+        ell_2 = EngLineList(list_2, num_bits)
+
+        ell_sum = ell_1 + ell_2
+        print("\nell_sum print")
+        ell_sum.print()
+        print("ell_sum min, max, tot num_vars= ",
+              ell_sum.get_min_max_tot_num_vars())
     main()

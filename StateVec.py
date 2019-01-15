@@ -1,6 +1,7 @@
 import numpy as np
 import pprint as pp
 import scipy as sc
+import utilities_gen as ut
 
 
 class StateVec:
@@ -338,6 +339,8 @@ class StateVec:
         Returns
         -------
         np.ndarray
+            probability distribution of shape (2^num_bits,) IMP: will
+            be indexed in ZL convention
 
         """
         x = self.get_traditional_st_vec()
@@ -356,6 +359,48 @@ class StateVec:
 
         """
         return np.sum(np.real(self.arr*self.arr.conj()))
+
+    @staticmethod
+    def sample_pd(num_bits, pd, num_samples, rand_seed=None,
+                  normalize=False):
+        """
+        For num_samples=1, this method returns an int (actually, a 1 X 1
+        array with an int in it) in range(1<<num_bits) chosen according to
+        the probability distribution pd for num_bits qubits. If the output
+        int is expressed in binary notation, its last, rightmost bit is the
+        measurement of the 0th qubit (because pd is assumed to be in ZL
+        convention).
+
+        For num_samples>1, the method returns an np.ndarray of length
+        num_samples with the result of doing num_samples repetitions of what
+        was done for num_samples=1
+
+        Parameters
+        ----------
+        num_bits : int
+        pd : np.ndarray
+            probability distribution of shape (2^num_bits,) IMP: assumed to
+            be indexed in ZL convention
+        num_samples : int
+        rand_seed : int
+        normalize : bool
+
+        Returns
+        -------
+        np.ndarray
+            shape (num_samples,)
+
+        """
+        if rand_seed:
+            np.random.seed(rand_seed)
+        len_pd = 1 << num_bits
+        assert pd.shape == (len_pd,)
+        if not normalize:
+            assert ut.is_prob_dist(pd)
+            p = pd
+        else:
+            p = pd/np.sum(pd)
+        return np.random.choice(np.arange(0, len_pd), size=num_samples, p=p)
 
     @staticmethod
     def get_bit_probs(num_bits, pd, normalize=False):
@@ -379,7 +424,9 @@ class StateVec:
         list[tuple[float, float]]
 
         """
-        assert 1 << num_bits == pd.shape[0]
+        assert pd.shape == (1 << num_bits,)
+        if not normalize:
+            assert ut.is_prob_dist(pd)
         probs = []
         arr = pd.reshape([2] * num_bits)
         # p_total may not be one
@@ -430,35 +477,6 @@ class StateVec:
             x0 = num_trials - x1
             counts.append((x0, x1))
         return counts
-
-    @staticmethod
-    def sample_bit_pd(num_bits, pd, num_samples, rand_seed=None):
-        """
-        For num_samples=1, this method returns an int in range(1<<num_bits)
-        chosen according to the probability distribution pd for num_bits
-        qubits. If the output int is expressed in binary notation, its last
-        bit is the measurement of the 0th qubit.
-
-        For num_samples>1, the method returns an np.ndarray with the result
-        of doing num_sample repetitions of what was done for num_samples=1
-
-        Parameters
-        ----------
-        num_bits : int
-        pd : np.ndarray[float]
-        num_samples : int
-        rand_seed : int
-
-        Returns
-        -------
-        int | np.ndarray
-
-        """
-        if rand_seed:
-            np.random.seed(rand_seed)
-        len_pd = 1 << num_bits
-        assert len(pd) == len_pd
-        return np.random.choice(np.arange(0, len_pd), size=num_samples, p=pd)
 
     def pp_arr_entries(self, omit_zero_amps=False,
                           show_probs=False, ZL=True):
@@ -623,7 +641,7 @@ if __name__ == "__main__":
 
         print("counts_dm=\n", StateVec.get_bit_counts(bit_probs_dm, 10))
         print('sample_st_vec_pd, ' + str(num_bits) + ' qubits\n',
-              StateVec.sample_bit_pd(num_bits, st_vec_pd, num_samples=20))
+              StateVec.sample_pd(num_bits, st_vec_pd, num_samples=20))
         StateVec.describe_st_vec_dict(st_vec_dict,
                 print_st_vec=True, do_pp=True,
                 omit_zero_amps=False, show_probs=True, ZL=True)

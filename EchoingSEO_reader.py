@@ -389,7 +389,9 @@ class EchoingSEO_reader(SEO_reader):
         # English out file must different from English in file because one
         # can't read a file at the same time one is writing to it
         wr = SEO_writer(file_prefix, emb, zero_bit_first=zero_bit_first)
-        EchoingSEO_reader(file_prefix_tempo, num_bits, wr)
+        vman = PlaceholderManager()
+        vman.eval_all_vars = False
+        EchoingSEO_reader(file_prefix_tempo, num_bits, wr, vars_manager=vman)
 
         import os
         os.remove(file_prefix_tempo + end_str)

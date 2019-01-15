@@ -39,6 +39,22 @@ def centered_rads1(ang_rads_list):
     return [centered_rads(ang) for ang in ang_rads_list]
 
 
+def is_prob_dist(pd):
+    """
+    Returns True iff pd is a probability distribution
+
+    Parameters
+    ----------
+    pd : np.ndarray
+
+    Returns
+    -------
+    bool
+
+    """
+    return abs(np.sum(pd)-1) < 1e-5
+
+
 def increment_dict(di, key, inc, initial=0):
     """
     Increments dictionary entry at position 'key' by inc. If item at
