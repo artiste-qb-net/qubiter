@@ -39,7 +39,8 @@ class EchoingSEO_reader(SEO_reader):
 
     """
 
-    def __init__(self, file_prefix, num_bits, wr, **kwargs):
+    def __init__(self, file_prefix, num_bits, wr,
+                 vars_manager=None, **kwargs):
         """
         Constructor
 
@@ -48,6 +49,7 @@ class EchoingSEO_reader(SEO_reader):
         file_prefix : str
         num_bits : int
         wr : SEO_writer
+        vars_manager : PlaceholderManager
 
         Returns
         -------
@@ -55,7 +57,8 @@ class EchoingSEO_reader(SEO_reader):
         """
         self.wr = wr
 
-        SEO_reader.__init__(self, file_prefix, num_bits, **kwargs)
+        SEO_reader.__init__(self, file_prefix, num_bits,
+                            vars_manager=vars_manager, **kwargs)
 
         self.wr.close_files()
 
@@ -389,8 +392,7 @@ class EchoingSEO_reader(SEO_reader):
         # English out file must different from English in file because one
         # can't read a file at the same time one is writing to it
         wr = SEO_writer(file_prefix, emb, zero_bit_first=zero_bit_first)
-        vman = PlaceholderManager()
-        vman.eval_all_vars = False
+        vman = PlaceholderManager(eval_all_vars = False)
         EchoingSEO_reader(file_prefix_tempo, num_bits, wr, vars_manager=vman)
 
         import os

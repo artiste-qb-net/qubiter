@@ -95,7 +95,7 @@ class EngLineList:
 
         Parameters
         ----------
-        file_prefix :
+        file_prefix : str
 
         Returns
         -------
@@ -133,7 +133,7 @@ class EngLineList:
 
     def __add__(self, other):
         """
-        override +
+        define + of two EngFileList objects
 
         Parameters
         ----------
@@ -153,14 +153,15 @@ class EngLineList:
 
     def __getitem__(self, item):
         """
-        Override self[item]
+        define self[item]
 
         Parameters
         ----------
-        item :
+        item : slice
 
         Returns
         -------
+        EngLineList
 
         """
         return EngLineList(self.line_list[item], self.num_bits)

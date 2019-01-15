@@ -31,7 +31,8 @@ class MultiplexorExpander(EchoingSEO_reader):
 
     """
 
-    def __init__(self, file_prefix, num_bits, style, gbit_list=None, **kwargs):
+    def __init__(self, file_prefix, num_bits, style, gbit_list=None,
+                 vars_manager=None, **kwargs):
         """
         Constructor
 
@@ -41,6 +42,7 @@ class MultiplexorExpander(EchoingSEO_reader):
         num_bits : int
         style : str
         gbit_list : list(int)
+        vars_manager : PlaceholderManager
 
         Returns
         -------
@@ -61,10 +63,11 @@ class MultiplexorExpander(EchoingSEO_reader):
         wr = MultiplexorSEO_writer(out_file_prefix, emb,
             style, rad_angles, num_gbits=num_gbits)
 
-        EchoingSEO_reader.__init__(self, file_prefix, num_bits, wr, **kwargs)
         # We set the flag eval_all_vars to False but check inside use_ method
         # that it has non-string arguments
-        self.vars_manager.eval_all_vars = False
+        vman = PlaceholderManager(eval_all_vars=False)
+        EchoingSEO_reader.__init__(self, file_prefix, num_bits, wr,
+                                   vars_manager=vman, **kwargs)
 
         self.wr.close_files()
 

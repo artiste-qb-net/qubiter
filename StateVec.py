@@ -331,7 +331,7 @@ class StateVec:
         Returns copy of self.get_traditional_st_vec() with amplitudes
         replaced by probabilities. pd = probability distribution. So returns
         one column array indexed in ZL convention like the traditional state
-        vec is.
+        vec is. Doesn't check that the resulting array sums to 1.
 
         Parameters
         ----------
@@ -361,8 +361,7 @@ class StateVec:
         return np.sum(np.real(self.arr*self.arr.conj()))
 
     @staticmethod
-    def sample_pd(num_bits, pd, num_samples, rand_seed=None,
-                  normalize=False):
+    def sample_pd(num_bits, pd, num_samples, rand_seed=None):
         """
         For num_samples=1, this method returns an int (actually, a 1 X 1
         array with an int in it) in range(1<<num_bits) chosen according to
@@ -373,7 +372,9 @@ class StateVec:
 
         For num_samples>1, the method returns an np.ndarray of length
         num_samples with the result of doing num_samples repetitions of what
-        was done for num_samples=1
+        was done for num_samples=1.
+
+        Does not assume that pd is normalized to 1.
 
         Parameters
         ----------
@@ -383,7 +384,6 @@ class StateVec:
             be indexed in ZL convention
         num_samples : int
         rand_seed : int
-        normalize : bool
 
         Returns
         -------
@@ -395,20 +395,20 @@ class StateVec:
             np.random.seed(rand_seed)
         len_pd = 1 << num_bits
         assert pd.shape == (len_pd,)
-        if not normalize:
-            assert ut.is_prob_dist(pd)
-            p = pd
-        else:
-            p = pd/np.sum(pd)
+        tot_prob = np.sum(pd)
+        p = pd
+        if abs(tot_prob-1) > 1e-5:
+            p = pd/tot_prob
         return np.random.choice(np.arange(0, len_pd), size=num_samples, p=p)
 
     @staticmethod
-    def get_bit_probs(num_bits, pd, normalize=False):
+    def get_bit_probs(num_bits, pd):
         """
         Returns a list whose jth item is, for the jth qubit, the pair (p,
-        p_tot-p)/norm, where p is the probability that the jth qubit is 0,
-        if the state of all other qubits is ignored. p_tot = np.sum( pd).
-        norm=1 if normalize=False and norm=p_tot otherwise.
+        1-p), where p is the probability that the jth qubit is 0, if the
+        state of all other qubits is ignored.
+
+        Does not assume that pd is normalized to 1.
 
         Parameters
         ----------
@@ -417,21 +417,19 @@ class StateVec:
             probability distribution of shape (2^num_bits,) IMP: assumed to
             be indexed in ZL convention
 
-        normalize : bool
-
         Returns
         -------
         list[tuple[float, float]]
 
         """
         assert pd.shape == (1 << num_bits,)
-        if not normalize:
-            assert ut.is_prob_dist(pd)
         probs = []
         arr = pd.reshape([2] * num_bits)
-        # p_total may not be one
+        # tot_prob may not be one
         # if a measurement has been done
-        p_total = np.sum(arr)
+        tot_prob = np.sum(arr)
+        if abs(tot_prob-1) > 1e-5:
+            arr /= tot_prob
         # slicex is a portmanteau of slice index
         # print("state_vec_pd=\n", vec)
         slicex = [slice(None)]*num_bits
@@ -441,10 +439,7 @@ class StateVec:
             k_axis = num_bits - 1 - k
             slicex[k_axis] = 0
             p = np.sum(arr[tuple(slicex)])
-            norm = 1.0
-            if normalize:
-                norm = p_total
-            probs.append((p/norm, (p_total-p)/norm))
+            probs.append((p, 1-p))
             slicex[k_axis] = slice(None)  # restore to all entries slice(None)
         # print(probs)
         return probs

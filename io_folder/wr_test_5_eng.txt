@@ -1,7 +1,7 @@
 NOTA	zero bit first = True
 IF_M(	4F	3T	){
 }IF_M
-LOOP	10	REPS:	15
+LOOP	10	NREPS=	15
 NEXT	10
 MEAS	0	AT	1
 MEAS	1	AT	1
