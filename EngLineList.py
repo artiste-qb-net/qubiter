@@ -1,4 +1,5 @@
 from EchoingSEO_reader import *
+import copy as cp
 
 
 class EngLineList:
@@ -164,6 +165,82 @@ class EngLineList:
         """
         return EngLineList(self.line_list[item], self.num_bits)
 
+    def herm(self):
+        """
+        This method returns an EngLineList which is the Hermitian
+        conjugate of self.
+
+        Returns
+        -------
+        EngLineList
+
+        """
+        rev_li = list(reversed(self.line_list))
+        ell = EngLineList(rev_li, self.num_bits)
+
+        def minus(float_str):
+            if float_str[0] == '-':
+                new_str = cp.copy(float_str[1:])
+            else:
+                new_str = '-' + float_str
+            return new_str
+
+        for line_pos, line in enumerate(ell.line_list):
+            split_line = line.split('\t')
+            line_name = split_line[0]
+            if line_name == 'DIAG':
+                by_pos = split_line.index('BY')
+                for k, token in enumerate(line[by_pos+1:]):
+                    line[by_pos+1+k] = minus(token)
+            elif line_name == "HAD2":
+                pass
+            elif line_name == "IF_M(":
+                pass
+            elif line_name == "}IF_M":
+                pass
+            elif line_name == "LOOP":
+                pass
+            elif line_name == "MEAS":
+                pass
+            elif line_name == "MP_Y":
+                by_pos = split_line.index('BY')
+                for k, token in enumerate(line[by_pos+1:]):
+                    line[by_pos+1+k] = minus(token)
+            elif line_name == "NEXT":
+                pass
+            elif line_name == 'NOTA':
+                pass
+            elif line_name == "PHAS":
+                split_line[1] = minus(split_line[1])
+            elif line_name == "P0PH":
+                split_line[1] = minus(split_line[1])
+            elif line_name == "P1PH":
+                split_line[1] = minus(split_line[1])
+            elif line_name == "PRINT":
+                pass
+            elif line_name == "ROTX":
+                split_line[1] = minus(split_line[1])
+            elif line_name == "ROTY":
+                split_line[1] = minus(split_line[1])
+            elif line_name == "ROTZ":
+                split_line[1] = minus(split_line[1])
+            elif line_name == "ROTN":
+                for k in range(1, 4):
+                    split_line[k] = minus(split_line[k])
+            elif line_name == "SIGX":
+                pass
+            elif line_name == "SIGY":
+                pass
+            elif line_name == "SIGZ":
+                pass
+            elif line_name == "SWAP":
+                pass
+            else:
+                assert False, \
+                    "reading an unsupported line kind: " + line_name
+            ell.line_list[line_pos] = '\t'.join(split_line)
+        return ell
+
 if __name__ == "__main__":
     def main():
         num_bits = 4
@@ -193,4 +270,8 @@ if __name__ == "__main__":
         print("\nell_sum print")
         ell_sum.print()
         print('ell_sum var_nums_list=\n', ell_sum.get_var_nums_list())
+
+        ell_herm = ell.herm()
+        print('\nell_herm print')
+        ell_herm.print()
     main()
