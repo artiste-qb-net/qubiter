@@ -65,18 +65,12 @@ class SEO_writer:
 
     Attributes
     ----------
-    cur_var_num : int
-        the current variable number. Used when circuit contains unevaluated
-        variables denoted by '#' + str(self.cur_var_num). Variables are
-        placeholders for gate angles.
     emb : CktEmbedder
     english_out : _io.TextIOWrapper
         file object for output text file that stores English description of
         circuit
     file_prefix : str
         beginning of the name of both English and Picture files
-    first_var_num :
-        variable numbers start with this one
     gate_line_counter : int
     measured_bits : list(int)
         list of bits that have been measured with type 2 measurement and
@@ -89,7 +83,7 @@ class SEO_writer:
     """
 
     def __init__(self, file_prefix, emb, zero_bit_first=False,
-                english_out=None, picture_out=None, first_var_num=0):
+                english_out=None, picture_out=None):
         """
         Constructor
 
@@ -100,15 +94,12 @@ class SEO_writer:
         zero_bit_first : bool
         english_out : _io.TextIOWrapper
         picture_out : _io.TextIOWrapper
-        first_var_num : int
 
 
         Returns
         -------
 
         """
-        self.first_var_num = first_var_num
-        self.cur_var_num = first_var_num
         self.gate_line_counter = 0
         self.file_prefix = file_prefix
         self.emb = emb
@@ -509,37 +500,67 @@ class SEO_writer:
         pic_line = self.colonize(pic_line)
         self.write_ZF_or_ZL_pic_line(pic_line)
         self.picture_out.write("\n")
+        
+    @staticmethod   
+    def is_legal_var_name(name):
+        """
+        Variable names must be of form '#3' or '-#3' with 3 replaced by any
+        other non-negative int. This method returns True iff name is legal.
+        
+        Parameters
+        ----------
+        name : str
+
+        Returns
+        -------
+        bool
+
+        """
+        if not isinstance(name, str):
+            return False
+        if len(name) < 2:
+            return False
+        if name[0] not in ["-", "#"]:
+            return False
+        if name[0] == "-":
+            if len(name) < 3 or name[1] != '#':
+                return False
+            else:
+                if not name[2:].isdigit():
+                    return False
+                else:
+                    return True
+        else:  # name[1]=="#"
+            if not name[1:].isdigit():
+                return False
+            else:
+                return True
 
     def rads_to_degs_str(self, rads):
         """
         This method returns
-            str(rads*180/pi) if rads is float
-            '#' + str(self.cur_var_num) if rads is None
-            rads if isinstance(rads, str)
 
-        The method also advances self.cur_var_num by one each time
-        self.cur_var_num is used.
+        str(rads*180/pi) if isinstance(rads, float)
+        rads if is_legal_var_name(rads) (this implies rads is str)
+        aborts otherwise.
+
+        The method is only used inside this class so i am making it
+        non-static even though it doesn't use self.
 
         Parameters
         ----------
-        rads : float | str | None
+        rads : float | str 
 
         Returns
         -------
         str
 
         """
-        if rads is None:
-            out = '#' + str(self.cur_var_num)
-            self.cur_var_num += 1
-        elif isinstance(rads, float):
-            out = str(rads*180/np.pi)
-        elif isinstance(rads, str):
-            out = rads
+        if isinstance(rads, float):
+            return str(rads*180/np.pi)
         else:
-            assert False
-
-        return out
+            assert SEO_writer.is_legal_var_name(rads)
+            return rads
 
     def write_controlled_one_bit_gate(
             self, tar_bit_pos, trols, one_bit_gate_fun, fun_arg_list=None):

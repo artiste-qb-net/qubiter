@@ -90,7 +90,7 @@ class DiagUnitarySEO_writer(SEO_writer):
         self.style = style
         self.rad_angles = rad_angles
         if rad_angles:
-            self.rad_angles = ut.centered_rads1(rad_angles)
+            self.rad_angles = rad_angles
         self.num_T_trols = num_T_trols
         self.num_F_trols = num_F_trols
         self.num_gbits = 0
@@ -146,7 +146,7 @@ class DiagUnitarySEO_writer(SEO_writer):
         nf = self.num_F_trols
         ntf = nt + nf
         num_MP_trols = num_bits - ntf - self.num_gbits
-        rads_arr = np.array(ut.centered_rads1(self.rad_angles))
+        rads_arr = np.array(self.rad_angles)
         if np.linalg.norm(rads_arr) < 1e-6:
             print("unit d-unitary")
             return
@@ -192,7 +192,7 @@ class DiagUnitarySEO_writer(SEO_writer):
             # Since we have excluded f=0, f always has at least one T bit.
             cur_rot_bpos = cur_bvec.find_rightmost_T_bit()
             # print(cur_bvec.get_bit_string(), cur_rot_bpos)
-            rads = ut.centered_rads(conj_rads[cur_bvec.dec_rep]/norma)
+            rads = conj_rads[cur_bvec.dec_rep]/norma
             if abs(rads) < 1e-6:
                 pass
             else:

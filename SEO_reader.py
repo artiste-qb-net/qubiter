@@ -43,6 +43,7 @@ class SEO_reader(SEO_pre_reader):
         haven't been reset to |0> or |1>
     num_cnots : int
     num_ops : int
+    split_line : list[str]
     vars_manager : PlaceholderManager
         handles variables indicated by #int in the English file being read
     verbose : bool
@@ -67,6 +68,7 @@ class SEO_reader(SEO_pre_reader):
 
         """
         SEO_pre_reader.__init__(self, file_prefix, num_bits)
+        self.split_line = None
         self.vars_manager = vars_manager
         if vars_manager is None:
             self.vars_manager = PlaceholderManager()
@@ -131,25 +133,20 @@ class SEO_reader(SEO_pre_reader):
         """
         log = open(
             self.file_prefix + '_' + str(self.num_bits) + '_log.txt', 'wt')
-
-        s = "Number of lines in file = " + str(self.tot_num_lines) + '\n'
-        log.write(s)
-        if self.verbose:
-            print(s)
-
-        s = "Number of Elem. Ops = " + str(self.num_ops) + '\n'
-        log.write(s)
-        if self.verbose:
-            print(s)
-
-        s = "Number of CNOTS (SIGX with single control) = " + \
+        s = ''
+        s += "Number of lines in file = " + str(self.tot_num_lines) + '\n'
+        s += "Number of Elem. Ops = " + str(self.num_ops) + '\n'
+        s += "Number of CNOTS (SIGX with single control) = " + \
             str(self.num_cnots) + '\n'
+        s += "Number of distinct gate variables = " + \
+            str(len(self.vars_manager.var_nums_list)) + '\n'
         log.write(s)
+        if self.verbose:
+            print(s)
 
-        s = "Number of gate variables = " + \
-            str(self.vars_manager.num_vars) + '\n'
+        s = "List of distinct variable numbers encountered =\n" + \
+            str(self.vars_manager.var_nums_list)
         log.write(s)
-
         if self.verbose:
             print(s)
 

@@ -1,6 +1,6 @@
 import networkx as nx
 
-import device_specific.utilities as dut
+import device_specific.utilities_ds as uds
 from Controls import *
 from EchoingSEO_reader import *
 
@@ -174,7 +174,7 @@ class ForbiddenCNotExpander(EchoingSEO_reader):
         self.c_to_tars = c_to_tars
 
         self.graph = nx.Graph()
-        dir_edges = dut.get_dir_edges_from_c_to_tars(c_to_tars)
+        dir_edges = uds.get_dir_edges_from_c_to_tars(c_to_tars)
         self.graph.add_edges_from(dir_edges)
         # print("graph", self.graph.edges())
 

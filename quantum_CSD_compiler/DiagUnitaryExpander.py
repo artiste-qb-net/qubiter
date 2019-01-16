@@ -1,6 +1,7 @@
 from CktEmbedder import *  # if don't include this, can't find Controls
 from EchoingSEO_reader import *
 from quantum_CSD_compiler.DiagUnitarySEO_writer import *
+import utilities_gen as utg
 
 
 class DiagUnitaryExpander(EchoingSEO_reader):
@@ -137,7 +138,8 @@ class DiagUnitaryExpander(EchoingSEO_reader):
         None
 
         """
-        PlaceholderManager.assert_no_vars_in(rad_angles)
+        # the flag eval_all_vars = False so should check this
+        assert utg.all_floats(rad_angles)
 
         emb, nt, nf = self.emb_for_du(controls)
         self.wr.emb = emb

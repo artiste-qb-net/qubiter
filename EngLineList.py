@@ -5,23 +5,28 @@ class EngLineList:
     """
     Eng=English File
 
-    In programs like PyQuil (Rigetti) and Cirq (Google), circuits (aka
+    In programs like PyQuil (by Rigetti) and Cirq (by Google), circuits (aka
     programs) are stored in memory essentially as Python lists of gates.
     Lists of this type can be sliced, combined, etc. They are very
     convenient, more flexible than English files, when one wants to load the
-    whole circuit into memory, so as to be able to access any gate of it at
-    will. This is convenient, for instance, when doing circuit optimizations
-    (i.e., replacing the circuit by an equivalent but hopefully shorter one,
-    what IBM qiskit calls "transpiling").
+    whole circuit into memory, so as to be able to randomly access any gate
+    of it at will. This is convenient, for instance, when doing circuit
+    optimizations (i.e., replacing the circuit by an equivalent but
+    hopefully shorter one, what IBM qiskit calls "transpiling").
 
     In this class, we support Qubiter's version of PyQuil's and Cirq's gate
     lists. In Qubiter, we use simply a Python list of the lines, stored as
     strings, of the circuit's English file.
 
+    Attributes
+    ----------
+    line_list : list[str]
+    num_bits : int
+
     """
     def __init__(self, line_list, num_bits):
         """
-        Costructor
+        Constructor
 
         Returns
         -------
@@ -105,31 +110,28 @@ class EngLineList:
         EngLineList.line_list_to_eng_and_pic_files(
             self.line_list, file_prefix, self.num_bits)
 
-    def get_min_max_tot_num_vars(self):
+    def get_var_nums_list(self):
         """
-        This method returns the minimum variable number, the maximum
-        variable number, and the total number of variables in the circuit
+        This method returns a list of all the distinct variable numbers
+        encountered.
 
         Returns
         -------
-        int, int, int
+        list[int]
 
         """
-        cur_var_num = -1
-        min_var_num = -1
-        max_var_num = -1
-        num_vars = 0
+        var_nums_list = []
         for line in self.line_list:
             split_line = line.split()
             for token in split_line:
-                if token[0] == '#':
-                    num_vars += 1
-                    cur_var_num = int(token[1:])
-                    if cur_var_num > max_var_num:
-                        max_var_num = cur_var_num
-                    if min_var_num == -1 or cur_var_num < min_var_num:
-                        min_var_num = cur_var_num
-        return min_var_num, max_var_num, num_vars
+                if SEO_writer.is_legal_var_name(token):
+                    if token[0] == '#':
+                        var_num = int(token[1:])
+                    else:  # starts with '-#':
+                        var_num = int(token[2:])
+                    if var_num not in var_nums_list:
+                        var_nums_list.append(var_num)
+        return var_nums_list
 
     def __add__(self, other):
         """
@@ -145,11 +147,7 @@ class EngLineList:
 
         """
         assert self.num_bits == other.num_bits
-        _, self_max, _ = self.get_min_max_tot_num_vars()
-        other_min, _, _ = other.get_min_max_tot_num_vars()
-        assert self_max < other_min
-        return EngLineList(self.line_list + other.line_list,
-                           self.num_bits)
+        return EngLineList(self.line_list + other.line_list, self.num_bits)
 
     def __getitem__(self, item):
         """
@@ -169,39 +167,30 @@ class EngLineList:
 if __name__ == "__main__":
     def main():
         num_bits = 4
-
         file_prefix = 'io_folder/eng_line_list_test'
         emb = CktEmbedder(num_bits, num_bits)
         wr = SEO_writer(file_prefix, emb)
-        wr.write_Rx(2, rads=np.pi)
-        wr.write_Rn(3, rads_list=[None, np.pi/2, None])
+        wr.write_Rx(2, rads=np.pi/7)
+        wr.write_Rx(1, rads='#2')
+        wr.write_Rn(3, rads_list=['#1', '-#1', '#3'])
         wr.write_cnot(2, 3)
         wr.close_files()
 
-        file_prefix2 = 'io_folder/eng_line_list2_test'
-        emb = CktEmbedder(num_bits, num_bits)
-        wr = SEO_writer(file_prefix2, emb, first_var_num=5)
-        wr.write_Rx(2, rads=np.pi)
-        wr.write_Rn(3, rads_list=[None, np.pi/2, None])
-        wr.write_cnot(2, 3)
-        wr.close_files()
+        li = EngLineList.eng_file_to_line_list(file_prefix, num_bits)
+        ell = EngLineList(li, num_bits)
 
-        list_1 = EngLineList.eng_file_to_line_list(file_prefix, num_bits)
-        ell_1 = EngLineList(list_1, num_bits)
-        print("\nell_1 print")
-        ell_1.print()
-        ell_1.write_eng_and_pic_files(file_prefix + '_ditto')
-        print("ell_1 min, max, tot num_vars= ",
-              ell_1.get_min_max_tot_num_vars())
-        print("\nell_1[1:] print")
-        ell_1[1:].print()
+        print("\nell print")
+        ell.print()
+        print('ell var_nums_list=\n', ell.get_var_nums_list())
 
-        list_2 = EngLineList.eng_file_to_line_list(file_prefix2, num_bits)
-        ell_2 = EngLineList(list_2, num_bits)
+        ell.write_eng_and_pic_files(file_prefix + '_ditto')
 
-        ell_sum = ell_1 + ell_2
+        print("\nell[1:] print")
+        ell[1:].print()
+
+        ell_sum = ell + ell
+
         print("\nell_sum print")
         ell_sum.print()
-        print("ell_sum min, max, tot num_vars= ",
-              ell_sum.get_min_max_tot_num_vars())
+        print('ell_sum var_nums_list=\n', ell_sum.get_var_nums_list())
     main()

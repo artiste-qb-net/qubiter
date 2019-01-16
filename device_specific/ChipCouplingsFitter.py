@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import networkx as nx
 import networkx.algorithms.isomorphism as iso
 
-import device_specific.utilities as dut
+import device_specific.utilities_ds as uds
 from CktEmbedder import *
 from EchoingSEO_reader import *
 
@@ -149,7 +149,7 @@ class ChipCouplingsFitter:
 
         plt.figure(1)
         GP = nx.Graph()
-        dir_edges = dut.get_dir_edges_from_c_to_tars(c_to_tars)
+        dir_edges = uds.get_dir_edges_from_c_to_tars(c_to_tars)
         GP.add_edges_from(dir_edges)
 
         plt.title('Physical graph')
@@ -194,7 +194,7 @@ class ChipCouplingsFitter:
 
         """
         GP = nx.Graph()
-        dir_edges = dut.get_dir_edges_from_c_to_tars(c_to_tars)
+        dir_edges = uds.get_dir_edges_from_c_to_tars(c_to_tars)
         GP.add_edges_from(dir_edges)
         if verbose:
             print("GP=", GP.edges())

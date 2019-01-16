@@ -102,7 +102,7 @@ class MultiplexorSEO_writer(SEO_writer):
         self.style = style
         self.rad_angles = rad_angles
         if rad_angles:
-            self.rad_angles = ut.centered_rads1(rad_angles)
+            self.rad_angles = rad_angles
         self.num_T_trols = num_T_trols
         self.num_F_trols = num_F_trols
         self.num_gbits = 0
@@ -160,7 +160,7 @@ class MultiplexorSEO_writer(SEO_writer):
         nf = self.num_F_trols
         ntf = nt + nf
         num_MP_trols = num_bits - ntf - self.num_gbits - 1
-        rads_arr = np.array(ut.centered_rads1(self.rad_angles))
+        rads_arr = np.array(self.rad_angles)
         if np.linalg.norm(rads_arr) < 1e-6:
             print("unit multiplexor")
             return

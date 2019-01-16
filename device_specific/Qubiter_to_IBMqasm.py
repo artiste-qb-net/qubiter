@@ -15,7 +15,7 @@ class Qubiter_to_IBMqasm(Qubiter_to_AnyQasm):
     ----------
 
     """
-    def __init__(self, *args, **kwargs):
+    def __init__(self, file_prefix, num_bits, **kwargs):
         """
         Constructor
 
@@ -26,7 +26,7 @@ class Qubiter_to_IBMqasm(Qubiter_to_AnyQasm):
         -------
 
         """
-        Qubiter_to_AnyQasm.__init__(self, *args, **kwargs)
+        Qubiter_to_AnyQasm.__init__(self, file_prefix, num_bits, **kwargs)
 
     def write_prelude(self):
         """
@@ -101,9 +101,9 @@ class Qubiter_to_IBMqasm(Qubiter_to_AnyQasm):
 
         delta, left_rads, center_rads, right_rads = \
             UnitaryMat.u2_zyz_decomp(arr)
-        phi = ut.centered_rads(-2*left_rads)
-        theta = ut.centered_rads(-2*center_rads)
-        lam = ut.centered_rads(-2*right_rads)
+        phi = -2*left_rads
+        theta = -2*center_rads
+        lam = -2*right_rads
         if abs(phi) < 1e-6 and abs(theta) < 1e-6:
             line_str = "u1(" + str(lam)
         elif abs(theta - np.pi/2) < 1e-6:
@@ -152,7 +152,7 @@ class Qubiter_to_IBMqasm(Qubiter_to_AnyQasm):
         if self.write_qubiter_files:
             self.qbtr_wr.write_NOTA(bla_str)
 
-    def use_PHAS(self, angle_degs, tar_bit_pos, controls):
+    def use_PHAS(self, angle_rads, tar_bit_pos, controls):
         """
         If called for a controlled phase, this function will halt execution
         of program. If it's just a global phase with no controls,
@@ -162,7 +162,7 @@ class Qubiter_to_IBMqasm(Qubiter_to_AnyQasm):
 
         Parameters
         ----------
-        angle_degs : float
+        angle_rads : float
         tar_bit_pos : int
         controls : Controls
 
@@ -171,10 +171,14 @@ class Qubiter_to_IBMqasm(Qubiter_to_AnyQasm):
         None
 
         """
+        def degs_str(x):
+            return x if isinstance(x, str) else str(x*180/np.pi)
+
         if controls.bit_pos_to_kind:
             assert False, "No PHAS lines with controls allowed"
         else:
-            bla_str = 'PHAS\t' + str(angle_degs) + '\tAT\t' + str(tar_bit_pos)
+            bla_str = 'PHAS\t' + degs_str(angle_rads) +\
+                      '\tAT\t' + str(tar_bit_pos)
             self.qasm_out.write("// " + bla_str + "\n")
             if self.write_qubiter_files:
                 self.qbtr_wr.write_NOTA(bla_str)
@@ -199,7 +203,7 @@ class Qubiter_to_IBMqasm(Qubiter_to_AnyQasm):
         if self.write_qubiter_files:
             self.qbtr_wr.write_NOTA(str1)
 
-    def use_ROT(self, axis, angle_degs, tar_bit_pos, controls):
+    def use_ROT(self, axis, angle_rads, tar_bit_pos, controls):
         """
         Writes line in IBM qasm file corresponding to an English file line
         of type: ROTX, ROTY or ROTZ with no controls.
@@ -207,7 +211,7 @@ class Qubiter_to_IBMqasm(Qubiter_to_AnyQasm):
         Parameters
         ----------
         axis : int
-        angle_degs : float
+        angle_rads : float
         tar_bit_pos : int
         controls : Controls
 
@@ -217,17 +221,16 @@ class Qubiter_to_IBMqasm(Qubiter_to_AnyQasm):
 
         """
         assert len(controls.bit_pos) == 0
-        rad_ang = angle_degs*np.pi/180
 
-        arr = OneBitGates.rot_ax(rad_ang, axis)
+        arr = OneBitGates.rot_ax(angle_rads, axis)
         line_str = Qubiter_to_IBMqasm.qasm_line_for_rot(arr, tar_bit_pos)
         self.qasm_out.write(line_str)
 
         if self.write_qubiter_files:
             self.qbtr_wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
-                               OneBitGates.rot_ax, [rad_ang, axis])
+                               OneBitGates.rot_ax, [angle_rads, axis])
 
-    def use_ROTN(self, angle_x_degs, angle_y_degs, angle_z_degs,
+    def use_ROTN(self, angle_x_rads, angle_y_rads, angle_z_rads,
                 tar_bit_pos, controls):
         """
         Writes line in IBM qasm file corresponding to an English file line
@@ -235,9 +238,9 @@ class Qubiter_to_IBMqasm(Qubiter_to_AnyQasm):
 
         Parameters
         ----------
-        angle_x_degs : float
-        angle_y_degs : float
-        angle_z_degs : float
+        angle_x_rads : float
+        angle_y_rads : float
+        angle_z_rads : float
         tar_bit_pos : int
         controls : Controls
 
@@ -247,9 +250,7 @@ class Qubiter_to_IBMqasm(Qubiter_to_AnyQasm):
 
         """
         assert len(controls.bit_pos) == 0
-        rad_ang_list = list(np.array([angle_x_degs,
-                                     angle_y_degs,
-                                     angle_z_degs])*np.pi/180)
+        rad_ang_list = [angle_x_rads, angle_y_rads, angle_z_rads]
 
         arr = OneBitGates.rot(*rad_ang_list)
         line_str = Qubiter_to_IBMqasm.qasm_line_for_rot(arr, tar_bit_pos)
@@ -325,8 +326,8 @@ if __name__ == "__main__":
         file_prefix = "../io_folder/qbtr2ibm_test"
         qasm_name = 'IBMqasm2'
         num_bits = 5
-        c_to_tars = ibm.ibmq5X2_c_to_tars
-        Qubiter_to_IBMqasm(file_prefix, qasm_name,
-                           num_bits, c_to_tars, write_qubiter_files=True)
+        c_to_tars = ibm.ibmq5YorktownTenerife_c_to_tars
+        Qubiter_to_IBMqasm(file_prefix, num_bits, qasm_name=qasm_name,
+                           c_to_tars=c_to_tars, write_qubiter_files=True)
 
     main()

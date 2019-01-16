@@ -67,7 +67,10 @@ class Qubiter_to_AnyQasm(SEO_reader):
         English file.
     qbtr_wr : SEO_writer
         A SEO_writer object created iff write_qubiter_files is True.
-    verbose : bool
+    var_nums_list : list[int]
+        list of all the distinct variable numbers encountered
+    vname : str
+        all variables in qasm file will be called vname + an int
     write_qubiter_files : bool
         The class always writes an AnyQasm text file based on the input
         English file that is read. Iff this is True, the class also writes
@@ -76,31 +79,34 @@ class Qubiter_to_AnyQasm(SEO_reader):
 
 
     """
-    def __init__(self, file_prefix, qasm_name,
-                 num_bits, c_to_tars=None, verbose=False,
-                 write_qubiter_files=False, **kwargs):
+    def __init__(self, file_prefix, num_bits, qasm_name='',
+                 c_to_tars=None, write_qubiter_files=False, **kwargs):
         """
         Constructor
 
         Parameters
         ----------
         file_prefix : str
-        qasm_name : str
         num_bits : int
+        qasm_name : str
         c_to_tars : dict[int, list[int]]|None
-        verbose : bool
         write_qubiter_files : bool
 
         Returns
         -------
 
-
         """
         self.file_prefix = file_prefix
-        self.qasm_name = qasm_name
         self.num_bits = num_bits
+
+        vman = PlaceholderManager(eval_all_vars=False)
+        re = SEO_reader(file_prefix, num_bits, vars_manager=vman,
+                        write_log=True)
+        self.var_nums_list = re.vars_manager.var_nums_list
+
+        self.qasm_name = qasm_name
+        self.vname = 'rads_'
         self.c_to_tars = c_to_tars
-        self.verbose = verbose
         self.write_qubiter_files = write_qubiter_files
 
         self.qasm_out = open(file_prefix + '_' + qasm_name + '.txt', 'wt')
@@ -109,11 +115,11 @@ class Qubiter_to_AnyQasm(SEO_reader):
         if write_qubiter_files:
             emb = CktEmbedder(num_bits, num_bits)
             out_file_prefix = SEO_reader.xed_file_prefix(file_prefix)
-            self.qbtr_wr = SEO_writer(out_file_prefix, emb, **kwargs)
+            self.qbtr_wr = SEO_writer(out_file_prefix, emb)
 
         self.write_prelude()
 
-        SEO_reader.__init__(self, file_prefix, num_bits, verbose)
+        SEO_reader.__init__(self, file_prefix, num_bits, **kwargs)
 
         self.write_ending()
 

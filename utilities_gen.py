@@ -1,42 +1,42 @@
 import numpy as np
 
 
-def centered_rads(ang_rads):
-    """
-    takes any real number and returns a number between -pi and pi that is
-    equal to the original one mod 2pi
-
-    Parameters
-    ----------
-    ang_rads : float
-        angle in radians
-
-    Returns
-    -------
-    float
-
-    """
-    ang_rads = np.fmod(ang_rads, 2*np.pi)
-    if ang_rads > np.pi:
-        ang_rads -= 2*np.pi
-    return ang_rads
-
-
-def centered_rads1(ang_rads_list):
-    """
-    Same as centered_rads() but for list
-
-    Parameters
-    ----------
-    ang_rads_list : list[float]
-
-    Returns
-    -------
-    list[float]
-
-    """
-
-    return [centered_rads(ang) for ang in ang_rads_list]
+# def centered_rads(ang_rads):
+#     """
+#     takes any real number and returns a number between -pi and pi that is
+#     equal to the original one mod 2pi
+#
+#     Parameters
+#     ----------
+#     ang_rads : float
+#         angle in radians
+#
+#     Returns
+#     -------
+#     float
+#
+#     """
+#     ang_rads = np.fmod(ang_rads, 2*np.pi)
+#     if ang_rads > np.pi:
+#         ang_rads -= 2*np.pi
+#     return ang_rads
+#
+#
+# def centered_rads1(ang_rads_list):
+#     """
+#     Same as centered_rads() but for list
+#
+#     Parameters
+#     ----------
+#     ang_rads_list : list[float]
+#
+#     Returns
+#     -------
+#     list[float]
+#
+#     """
+#
+#     return [centered_rads(ang) for ang in ang_rads_list]
 
 
 def is_prob_dist(pd):
@@ -157,3 +157,34 @@ def log_print(x):
     caller = getframeinfo(stack()[1][0])
     print(caller.filename, "line=", caller.lineno, ":\n", x)
 
+
+def all_strings(li):
+    """
+    Returns True iff all items in list are strings
+
+    Parameters
+    ----------
+    li : list
+
+    Returns
+    -------
+    bool
+
+    """
+    return all([isinstance(x, str) for x in li])
+
+
+def all_floats(li):
+    """
+    Returns True iff all items in list are floats
+
+    Parameters
+    ----------
+    li : list
+
+    Returns
+    -------
+    bool
+
+    """
+    return all([isinstance(x, float) for x in li])

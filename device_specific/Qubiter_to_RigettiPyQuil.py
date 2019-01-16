@@ -1,5 +1,6 @@
 from device_specific.Qubiter_to_AnyQasm import *
 import device_specific.chip_couplings_rigetti as cc
+import utilities_gen as ug
 
 
 class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
@@ -16,18 +17,20 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
     ----------
 
     """
-    def __init__(self, *args, **kwargs):
+    def __init__(self, file_prefix, num_bits, **kwargs):
         """
         Constructor
 
         Parameters
         ----------
+        file_prefix : str
+        num_bits : int
 
         Returns
         -------
 
         """
-        Qubiter_to_AnyQasm.__init__(self, *args, **kwargs)
+        Qubiter_to_AnyQasm.__init__(self, file_prefix, num_bits, **kwargs)
 
     def write_prelude(self):
         """
@@ -40,19 +43,26 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
 
         """
 
-        str_list = []
-        str_list.append('from from pyquil.quil import Program\n')
-        str_list.append('from pyquil.gates import import X, Y, Z, H, CNOT\n')
-        str_list.append('from pyquil.gates import import RX, RY, RZ\n')
-        str_list.append('\n')
-        str_list.append('\n')
-        str_list.append('pg = Program()\n')
+        s = ''
+        s += 'from from pyquil import Program, get_qc\n'
+        s += 'from pyquil.gates import *\n\n\n'
+        s += 'pg = Program()\n'
+        for var_num in self.var_nums_list:
+            s += 'pg.declare("'
+            s += self.vname
+            s += str(var_num)
+            s += '", memory_type="REAL")\n'
+        s += 'pg.declare("ro", memory_type="BIT", memory_size='
+        s += str(self.num_bits)
+        s += ')'
+        self.qasm_out.write(s)
+        self.qasm_out.write('\n')
 
-        for st in str_list:
-            self.qasm_out.write(st)
         if self.write_qubiter_files:
-            for st in str_list:
-                self.qbtr_wr.write_NOTA(st[:-1])
+            lines = s.split('\n')
+            for line in lines:
+                self.qbtr_wr.write_NOTA(line)
+        self.qbtr_wr.write_NOTA('')
 
     def write_ending(self):
         """
@@ -64,7 +74,19 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
 
         """
 
-        pass
+        s = ''
+        for k in range(self.num_bits):
+            s += 'pg.MEASURE('
+            s += str(k)
+            s += 'ro['
+            s += str(k)
+            s += '])\n'
+        self.qasm_out.write(s)
+
+        if self.write_qubiter_files:
+            lines = s.split('\n')
+            for line in lines:
+                self.qbtr_wr.write_NOTA(line)
 
     def use_HAD2(self, tar_bit_pos, controls):
         """
@@ -105,7 +127,7 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
         if self.write_qubiter_files:
             self.qbtr_wr.write_NOTA(bla_str)
 
-    def use_PHAS(self, angle_degs, tar_bit_pos, controls):
+    def use_PHAS(self, angle_rads, tar_bit_pos, controls):
         """
         If called for a controlled phase, this function will halt execution
         of program. If it's just a global phase with no controls,
@@ -115,7 +137,7 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
 
         Parameters
         ----------
-        angle_degs : float
+        angle_rads : float
         tar_bit_pos : int
         controls : Controls
 
@@ -124,10 +146,14 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
         None
 
         """
+        def degs_str(x):
+            return x if isinstance(x, str) else str(x*180/np.pi)
+
         if controls.bit_pos_to_kind:
             assert False, "No PHAS lines with controls allowed"
         else:
-            bla_str = 'PHAS\t' + str(angle_degs) + '\tAT\t' + str(tar_bit_pos)
+            bla_str = 'PHAS\t' + degs_str(angle_rads) +\
+                      '\tAT\t' + str(tar_bit_pos)
             self.qasm_out.write("# " + bla_str + "\n")
             if self.write_qubiter_files:
                 self.qbtr_wr.write_NOTA(bla_str)
@@ -151,8 +177,26 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
         self.qasm_out.write("# " + str1 + "\n")
         if self.write_qubiter_files:
             self.qbtr_wr.write_NOTA(str1)
+
+    @staticmethod
+    def use_ROT_rads_map(rads):
+        """
+        Asserts that rads is a float. This method maps a qubiter rads to a 
+        pyquil rads 
+        
+        Parameters
+        ----------
+        rads : float
+
+        Returns
+        -------
+        float
+
+        """
+        assert isinstance(rads, float)
+        return 2*rads
             
-    def use_ROT(self, axis, angle_degs, tar_bit_pos, controls):
+    def use_ROT(self, axis, angle_rads, tar_bit_pos, controls):
         """
         Writes line in PyQuil file corresponding to an English file line
         of type: ROTX, ROTY or ROTZ with no controls.
@@ -160,7 +204,7 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
         Parameters
         ----------
         axis : int
-        angle_degs : float
+        angle_rads : float
         tar_bit_pos : int
         controls : Controls
 
@@ -170,7 +214,6 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
 
         """
         assert len(controls.bit_pos) == 0
-        rad_ang = angle_degs*np.pi/180
 
         line_str = "pg.inst("
         if axis == 1:
@@ -181,15 +224,54 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
             line_str += "RZ("
         else:
             assert False
-        line_str += str(2*rad_ang) + ', '
+      
+        if isinstance(angle_rads, float):
+            quil_rads = \
+                Qubiter_to_RigettiPyQuil.use_ROT_rads_map(angle_rads)
+        elif isinstance(angle_rads, str):
+            if angle_rads[0] == '#':
+                quil_rads = self.vname + angle_rads[1:]
+            else:  # starts with -#
+                quil_rads = '-' + self.vname + angle_rads[2:]
+        else:
+            assert False
+
+        line_str += str(quil_rads) + ', '
         line_str += str(tar_bit_pos) + "))\n"
         self.qasm_out.write(line_str)
 
         if self.write_qubiter_files:
             self.qbtr_wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
-                               OneBitGates.rot_ax, [rad_ang, axis])
+                               OneBitGates.rot_ax, [angle_rads, axis])
+            
+    @staticmethod
+    def use_ROTN_rads_map(rad_ang_list):
+        """
+        Asserts that rad_ang_list is list of floats. This method maps a 
+        qubiter rad_ang_list to a pyquil rad_ang_list 
+        
+        Parameters
+        ----------
+        rad_ang_list : list[float]
 
-    def use_ROTN(self, angle_x_degs, angle_y_degs, angle_z_degs,
+        Returns
+        -------
+        list[float]
+
+        """
+
+        assert ug.all_floats(rad_ang_list)
+
+        arr = OneBitGates.rot(*rad_ang_list)
+        delta, left_rads, center_rads, right_rads = \
+            UnitaryMat.u2_zyz_decomp(arr)
+        quil_rads_L = -2*left_rads
+        quil_rads_C = -2*center_rads
+        quil_rads_R = -2*right_rads
+        return quil_rads_L, quil_rads_C, quil_rads_R
+
+
+    def use_ROTN(self, angle_x_rads, angle_y_rads, angle_z_rads,
                 tar_bit_pos, controls):
         """
         Writes line in PyQuil file corresponding to an English file line
@@ -197,9 +279,9 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
 
         Parameters
         ----------
-        angle_x_degs : float
-        angle_y_degs : float
-        angle_z_degs : float
+        angle_x_rads : float
+        angle_y_rads : float
+        angle_z_rads : float
         tar_bit_pos : int
         controls : Controls
 
@@ -209,34 +291,36 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
 
         """
         assert len(controls.bit_pos) == 0
-        rad_ang_list = list(np.array([angle_x_degs,
-                                     angle_y_degs,
-                                     angle_z_degs])*np.pi/180)
-
-        arr = OneBitGates.rot(*rad_ang_list)
-        delta, left_rads, center_rads, right_rads = \
-            UnitaryMat.u2_zyz_decomp(arr)
-        phi_le = ut.centered_rads(-2*left_rads)
-        phi_ce = ut.centered_rads(-2*center_rads)
-        phi_ri = ut.centered_rads(-2*right_rads)
+        
+        rad_ang_list = [angle_x_rads, angle_y_rads, angle_z_rads]       
+        if ug.all_floats(rad_ang_list):
+            quil_rads_L, quil_rads_C, quil_rads_R = \
+                Qubiter_to_RigettiPyQuil.use_ROTN_rads_map(rad_ang_list)
+        elif ug.all_strings(rad_ang_list):
+            quil_rads_L, quil_rads_C, quil_rads_R = \
+                    ['rads_' + x[1:] for x in rad_ang_list]
+        else:
+            assert False, "For PyQuil, angles of ROTN must " \
+                          "all be either floats or variables"
+                  
         end_str = ', ' + str(tar_bit_pos) + '))\n'
 
-        line_str = 'pg.inst(RZ(' + str(phi_ri) + end_str
+        line_str = 'pg.inst(RZ(' + str(quil_rads_R) + end_str
         self.qasm_out.write(line_str)
 
-        line_str = 'pg.inst(RY(' + str(phi_ce) + end_str
+        line_str = 'pg.inst(RY(' + str(quil_rads_C) + end_str
         self.qasm_out.write(line_str)
 
-        line_str = 'pg.inst(RZ(' + str(phi_le) + end_str
+        line_str = 'pg.inst(RZ(' + str(quil_rads_L) + end_str
         self.qasm_out.write(line_str)
 
         if self.write_qubiter_files:
             self.qbtr_wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
-                               OneBitGates.rot_ax, [right_rads, 3])
+                               OneBitGates.rot_ax, [-quil_rads_R/2, 3])
             self.qbtr_wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
-                               OneBitGates.rot_ax, [center_rads, 2])
+                               OneBitGates.rot_ax, [-quil_rads_C/2, 2])
             self.qbtr_wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
-                               OneBitGates.rot_ax, [left_rads, 3])
+                               OneBitGates.rot_ax, [-quil_rads_L/2, 3])
 
     def use_SIG(self, axis, tar_bit_pos, controls):
         """
@@ -309,7 +393,7 @@ if __name__ == "__main__":
         qasm_name = 'RigPyQuil'
         num_bits = 6
         c_to_tars = rig.rigetti20_c_to_tars
-        Qubiter_to_RigettiPyQuil(file_prefix, qasm_name,
-                num_bits, c_to_tars, write_qubiter_files=True)
+        Qubiter_to_RigettiPyQuil(file_prefix, num_bits, qasm_name=qasm_name,
+                c_to_tars=c_to_tars, write_qubiter_files=True)
 
     main()
