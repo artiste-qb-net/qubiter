@@ -2,9 +2,9 @@ from EchoingSEO_reader import *
 import copy as cp
 
 
-class EngLineList:
+class EngFileLineList:
     """
-    Eng=English File
+    Eng=English
 
     In programs like PyQuil (by Rigetti) and Cirq (by Google), circuits (aka
     programs) are stored in memory essentially as Python lists of gates.
@@ -108,7 +108,7 @@ class EngLineList:
         None
 
         """
-        EngLineList.line_list_to_eng_and_pic_files(
+        EngFileLineList.line_list_to_eng_and_pic_files(
             self.line_list, file_prefix, self.num_bits)
 
     def get_var_nums_list(self):
@@ -140,15 +140,15 @@ class EngLineList:
 
         Parameters
         ----------
-        other : EngLineList
+        other : EngFileLineList
 
         Returns
         -------
-        EngLineList
+        EngFileLineList
 
         """
         assert self.num_bits == other.num_bits
-        return EngLineList(self.line_list + other.line_list, self.num_bits)
+        return EngFileLineList(self.line_list + other.line_list, self.num_bits)
 
     def __getitem__(self, item):
         """
@@ -160,10 +160,10 @@ class EngLineList:
 
         Returns
         -------
-        EngLineList
+        EngFileLineList
 
         """
-        return EngLineList(self.line_list[item], self.num_bits)
+        return EngFileLineList(self.line_list[item], self.num_bits)
 
     def herm(self):
         """
@@ -172,11 +172,11 @@ class EngLineList:
 
         Returns
         -------
-        EngLineList
+        EngFileLineList
 
         """
         rev_li = list(reversed(self.line_list))
-        ell = EngLineList(rev_li, self.num_bits)
+        ell = EngFileLineList(rev_li, self.num_bits)
 
         def minus(float_str):
             if float_str[0] == '-':
@@ -253,8 +253,8 @@ if __name__ == "__main__":
         wr.write_cnot(2, 3)
         wr.close_files()
 
-        li = EngLineList.eng_file_to_line_list(file_prefix, num_bits)
-        ell = EngLineList(li, num_bits)
+        li = EngFileLineList.eng_file_to_line_list(file_prefix, num_bits)
+        ell = EngFileLineList(li, num_bits)
 
         print("\nell print")
         ell.print()
