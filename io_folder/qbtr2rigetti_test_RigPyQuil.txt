@@ -1,15 +1,17 @@
-from from pyquil import Program, get_qc
+from pyquil import Program, get_qc
 from pyquil.gates import *
 
 
 pg = Program()
-pg.declare("ro", memory_type="BIT", memory_size=6)
+rads_1 = pg.declare("rads_1", memory_type="REAL")
+ro = pg.declare("ro", memory_type="BIT", memory_size=6)
+
 pg.inst(H(3))
 pg.inst(X(2))
 pg.inst(Y(2))
 pg.inst(Z(2))
-pg.inst(RX(1.0471975511965976, 3))
-pg.inst(RY(1.5707963267948966, 3))
+pg.inst(RX(rads_1, 3))
+pg.inst(RY(-rads_1, 3))
 pg.inst(RZ(2.0943951023931953, 3))
 pg.inst(RZ(-0.767584085966, 4))
 pg.inst(RY(-1.44397934949, 4))
@@ -18,9 +20,9 @@ pg.inst(RZ(-1.94358929306, 4))
 pg.inst(CNOT(0, 5))
 # 0->1 not allowed
 # SIGX  AT  1  IF  0T
-pg.MEASURE(0ro[0])
-pg.MEASURE(1ro[1])
-pg.MEASURE(2ro[2])
-pg.MEASURE(3ro[3])
-pg.MEASURE(4ro[4])
-pg.MEASURE(5ro[5])
+pg.MEASURE(0, ro[0])
+pg.MEASURE(1, ro[1])
+pg.MEASURE(2, ro[2])
+pg.MEASURE(3, ro[3])
+pg.MEASURE(4, ro[4])
+pg.MEASURE(5, ro[5])

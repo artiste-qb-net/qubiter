@@ -1,16 +1,17 @@
-NOTA	from from pyquil import Program, get_qc
+NOTA	from pyquil import Program, get_qc
 NOTA	from pyquil.gates import *
 NOTA	
 NOTA	
 NOTA	pg = Program()
-NOTA	pg.declare("ro", memory_type="BIT", memory_size=6)
+NOTA	rads_1 = pg.declare("rads_1", memory_type="REAL")
+NOTA	ro = pg.declare("ro", memory_type="BIT", memory_size=6)
 NOTA	
 HAD2	AT	3
 SIGX	AT	2
 SIGY	AT	2
 SIGZ	AT	2
-ROTX	29.999999999999996	AT	3
-ROTY	45.0	AT	3
+ROTX	#1	AT	3
+ROTY	-#1	AT	3
 ROTZ	59.99999999999999	AT	3
 ROTZ	21.9896642736	AT	4
 ROTY	41.3669612149	AT	4
@@ -19,10 +20,9 @@ NOTA	0->5 allowed
 SIGX	AT	5	IF	0T
 NOTA	0->1 not allowed
 NOTA	SIGX  AT  1  IF  0T
-NOTA	pg.MEASURE(0ro[0])
-NOTA	pg.MEASURE(1ro[1])
-NOTA	pg.MEASURE(2ro[2])
-NOTA	pg.MEASURE(3ro[3])
-NOTA	pg.MEASURE(4ro[4])
-NOTA	pg.MEASURE(5ro[5])
-NOTA	
+NOTA	pg.MEASURE(0, ro[0])
+NOTA	pg.MEASURE(1, ro[1])
+NOTA	pg.MEASURE(2, ro[2])
+NOTA	pg.MEASURE(3, ro[3])
+NOTA	pg.MEASURE(4, ro[4])
+NOTA	pg.MEASURE(5, ro[5])

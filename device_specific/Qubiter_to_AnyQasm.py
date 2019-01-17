@@ -69,8 +69,8 @@ class Qubiter_to_AnyQasm(SEO_reader):
         A SEO_writer object created iff write_qubiter_files is True.
     var_nums_list : list[int]
         list of all the distinct variable numbers encountered
-    vname : str
-        all variables in qasm file will be called vname + an int
+    vprefix : str
+        all variables in qasm file will be called vprefix + an int
     write_qubiter_files : bool
         The class always writes an AnyQasm text file based on the input
         English file that is read. Iff this is True, the class also writes
@@ -80,7 +80,8 @@ class Qubiter_to_AnyQasm(SEO_reader):
 
     """
     def __init__(self, file_prefix, num_bits, qasm_name='',
-                 c_to_tars=None, write_qubiter_files=False, **kwargs):
+                 c_to_tars=None, write_qubiter_files=False,
+                 vars_manager=None, **kwargs):
         """
         Constructor
 
@@ -91,6 +92,7 @@ class Qubiter_to_AnyQasm(SEO_reader):
         qasm_name : str
         c_to_tars : dict[int, list[int]]|None
         write_qubiter_files : bool
+        vars_manager : PlaceholderManager
 
         Returns
         -------
@@ -100,12 +102,12 @@ class Qubiter_to_AnyQasm(SEO_reader):
         self.num_bits = num_bits
 
         vman = PlaceholderManager(eval_all_vars=False)
-        re = SEO_reader(file_prefix, num_bits, vars_manager=vman,
+        rdr = SEO_reader(file_prefix, num_bits, vars_manager=vman,
                         write_log=True)
-        self.var_nums_list = re.vars_manager.var_nums_list
+        self.var_nums_list = rdr.vars_manager.var_nums_list
 
         self.qasm_name = qasm_name
-        self.vname = 'rads_'
+        self.vprefix = 'rads_'
         self.c_to_tars = c_to_tars
         self.write_qubiter_files = write_qubiter_files
 
@@ -119,13 +121,35 @@ class Qubiter_to_AnyQasm(SEO_reader):
 
         self.write_prelude()
 
-        SEO_reader.__init__(self, file_prefix, num_bits, **kwargs)
+        vman1 = PlaceholderManager(eval_all_vars=False)
+        SEO_reader.__init__(self, file_prefix, num_bits,
+                            vars_manager=vman1, **kwargs)
 
         self.write_ending()
 
         self.qasm_out.close()
         if write_qubiter_files:
             self.qbtr_wr.close_files()
+
+    def new_var_name(self, var_name):
+        """
+        Asserts that var_name is a str. This method replaces # in var_name
+        by self.vprefix
+
+        Parameters
+        ----------
+        var_name : str
+
+        Returns
+        -------
+        str
+
+        """
+        assert isinstance(var_name, str)
+        if var_name[0] == "#":
+            return self.vprefix + var_name[1:]
+        else:  # starts with -#
+            return "-" + self.vprefix + var_name[2:]
 
     def write_prelude(self):
         """

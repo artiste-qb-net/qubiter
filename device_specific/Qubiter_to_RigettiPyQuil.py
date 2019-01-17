@@ -42,21 +42,20 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
         None
 
         """
-
-        s = ''
-        s += 'from from pyquil import Program, get_qc\n'
+        s = 'from pyquil import Program, get_qc\n'
         s += 'from pyquil.gates import *\n\n\n'
         s += 'pg = Program()\n'
         for var_num in self.var_nums_list:
-            s += 'pg.declare("'
-            s += self.vname
-            s += str(var_num)
+            vname = self.vprefix + str(var_num)
+            s += vname
+            s += ' = pg.declare("'
+            s += vname
             s += '", memory_type="REAL")\n'
-        s += 'pg.declare("ro", memory_type="BIT", memory_size='
+        s += 'ro = pg.declare("ro", memory_type="BIT", memory_size='
         s += str(self.num_bits)
         s += ')'
         self.qasm_out.write(s)
-        self.qasm_out.write('\n')
+        self.qasm_out.write('\n\n')
 
         if self.write_qubiter_files:
             lines = s.split('\n')
@@ -78,13 +77,15 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
         for k in range(self.num_bits):
             s += 'pg.MEASURE('
             s += str(k)
-            s += 'ro['
+            s += ', ro['
             s += str(k)
             s += '])\n'
+        s = s.strip()
         self.qasm_out.write(s)
 
         if self.write_qubiter_files:
             lines = s.split('\n')
+            # print(',,', lines)
             for line in lines:
                 self.qbtr_wr.write_NOTA(line)
 
@@ -182,7 +183,8 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
     def use_ROT_rads_map(rads):
         """
         Asserts that rads is a float. This method maps a qubiter rads to a 
-        pyquil rads 
+        pyquil rads. This function is useful when converting
+        var_num_to_degs dictionary to equivalent one in Pyquil
         
         Parameters
         ----------
@@ -229,10 +231,7 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
             quil_rads = \
                 Qubiter_to_RigettiPyQuil.use_ROT_rads_map(angle_rads)
         elif isinstance(angle_rads, str):
-            if angle_rads[0] == '#':
-                quil_rads = self.vname + angle_rads[1:]
-            else:  # starts with -#
-                quil_rads = '-' + self.vname + angle_rads[2:]
+            quil_rads = self.new_var_name(angle_rads)
         else:
             assert False
 
@@ -243,33 +242,6 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
         if self.write_qubiter_files:
             self.qbtr_wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
                                OneBitGates.rot_ax, [angle_rads, axis])
-            
-    @staticmethod
-    def use_ROTN_rads_map(rad_ang_list):
-        """
-        Asserts that rad_ang_list is list of floats. This method maps a 
-        qubiter rad_ang_list to a pyquil rad_ang_list 
-        
-        Parameters
-        ----------
-        rad_ang_list : list[float]
-
-        Returns
-        -------
-        list[float]
-
-        """
-
-        assert ug.all_floats(rad_ang_list)
-
-        arr = OneBitGates.rot(*rad_ang_list)
-        delta, left_rads, center_rads, right_rads = \
-            UnitaryMat.u2_zyz_decomp(arr)
-        quil_rads_L = -2*left_rads
-        quil_rads_C = -2*center_rads
-        quil_rads_R = -2*right_rads
-        return quil_rads_L, quil_rads_C, quil_rads_R
-
 
     def use_ROTN(self, angle_x_rads, angle_y_rads, angle_z_rads,
                 tar_bit_pos, controls):
@@ -293,15 +265,16 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
         assert len(controls.bit_pos) == 0
         
         rad_ang_list = [angle_x_rads, angle_y_rads, angle_z_rads]       
-        if ug.all_floats(rad_ang_list):
-            quil_rads_L, quil_rads_C, quil_rads_R = \
-                Qubiter_to_RigettiPyQuil.use_ROTN_rads_map(rad_ang_list)
-        elif ug.all_strings(rad_ang_list):
-            quil_rads_L, quil_rads_C, quil_rads_R = \
-                    ['rads_' + x[1:] for x in rad_ang_list]
-        else:
-            assert False, "For PyQuil, angles of ROTN must " \
-                          "all be either floats or variables"
+        assert ug.all_floats(rad_ang_list), \
+            "With Pyquil, ROTN with any of its 3 angles variable is " +\
+            "not allowed. Workaround: can use 3 rotations of type " +\
+            "Rx, Ry or Rz with variable angles."
+        arr = OneBitGates.rot(*rad_ang_list)
+        delta, left_rads, center_rads, right_rads = \
+            UnitaryMat.u2_zyz_decomp(arr)
+        quil_rads_L = -2*left_rads
+        quil_rads_C = -2*center_rads
+        quil_rads_R = -2*right_rads
                   
         end_str = ', ' + str(tar_bit_pos) + '))\n'
 
@@ -315,12 +288,12 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
         self.qasm_out.write(line_str)
 
         if self.write_qubiter_files:
-            self.qbtr_wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
-                               OneBitGates.rot_ax, [-quil_rads_R/2, 3])
-            self.qbtr_wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
-                               OneBitGates.rot_ax, [-quil_rads_C/2, 2])
-            self.qbtr_wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
-                               OneBitGates.rot_ax, [-quil_rads_L/2, 3])
+            self.qbtr_wr.write_controlled_one_bit_gate(tar_bit_pos,
+                    controls, OneBitGates.rot_ax, [right_rads, 3])
+            self.qbtr_wr.write_controlled_one_bit_gate(tar_bit_pos,
+                    controls, OneBitGates.rot_ax, [center_rads, 2])
+            self.qbtr_wr.write_controlled_one_bit_gate(tar_bit_pos,
+                    controls, OneBitGates.rot_ax, [left_rads, 3])
 
     def use_SIG(self, axis, tar_bit_pos, controls):
         """

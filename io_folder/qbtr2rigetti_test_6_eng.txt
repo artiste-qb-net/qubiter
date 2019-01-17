@@ -2,8 +2,8 @@ HAD2  AT  3
 SIGX  AT  2
 SIGY  AT  2
 SIGZ  AT  2
-ROTX  30.0  AT  3
-ROTY  45.0  AT  3
+ROTX  #1  AT  3
+ROTY  -#1  AT  3
 ROTZ  60.0  AT  3
 ROTN  30.0  45.0  60.0  AT 4
 NOTA  0->5 allowed
