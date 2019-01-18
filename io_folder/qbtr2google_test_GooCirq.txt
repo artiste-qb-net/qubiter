@@ -6,6 +6,7 @@ from cirq.ops import RotXGate, RotYGate, RotZGate
 
 ckt = cirq.Circuit()
 rads1 = cirq.Symbol("rads1")
+
 ckt.append(H(GridQubit(1, 5)))
 ckt.append(X(GridQubit(1, 4)))
 ckt.append(Y(GridQubit(1, 4)))

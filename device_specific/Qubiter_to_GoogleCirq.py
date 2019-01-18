@@ -59,7 +59,7 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
             s += '")\n'
         s = s.strip()
         self.qasm_out.write(s)
-        self.qasm_out.write('\n')
+        self.qasm_out.write('\n\n')
 
         if self.write_qubiter_files:
             lines = s.split('\n')
