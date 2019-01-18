@@ -14,7 +14,7 @@ class PlaceholderManager:
     An object of this class is owned by SEO_reader and subclasses thereof.
     When a circuit is read, the methods owned by this class are called to
     try to replace the pound (#) prefixed gate variables by values. This
-    class owns a dictionary var_num_to_degs that is used to store values of
+    class owns a dictionary var_num_to_rads that is used to store values of
     gate variables.
 
     Attributes
@@ -23,8 +23,8 @@ class PlaceholderManager:
         will abort if this is True and a variable can't be evaluated
     no_vars : bool
         will abort if this is True and a variable is detected
-    var_num_to_degs : dict[int, float]
-        a dict mapping variable numbers to a float for degrees. Used for
+    var_num_to_rads : dict[int, float]
+        a dict mapping variable numbers to a float for radians. Used for
         evaluating gate variables in a SEO_reader or its child classes.
     var_nums_list : list[int]
         a list of all distinct numbers of the variables encountered
@@ -32,7 +32,7 @@ class PlaceholderManager:
     """
 
     def __init__(self, no_vars=False, eval_all_vars=True,
-                 var_num_to_degs=None):
+                 var_num_to_rads=None):
         """
         Constructor
 
@@ -40,7 +40,7 @@ class PlaceholderManager:
         ----------
         no_vars : bool
         eval_all_vars : bool
-        var_num_to_degs : dict[int, float]
+        var_num_to_rads : dict[int, float]
 
         Returns
         -------
@@ -50,7 +50,7 @@ class PlaceholderManager:
         
         self.no_vars = no_vars
         self.eval_all_vars = eval_all_vars
-        self.var_num_to_degs = var_num_to_degs
+        self.var_num_to_rads = var_num_to_rads
         self.var_nums_list = []
         
     def degs_str_to_rads(self, degs_str):
@@ -64,7 +64,7 @@ class PlaceholderManager:
         deg_str)*pi/180.
 
         If degs_str is a legal variable name, the method tries to find a
-        value for that variable in the self.var_num_to_degs dictionary. If
+        value for that variable in the self.var_num_to_rads dictionary. If
         it finds a value there, the method returns value*pi/180. If no value
         can be found, the method outputs the input string unchanged (unless
         eval_all_vars=True in which case the method aborts).
@@ -88,18 +88,18 @@ class PlaceholderManager:
                 sign = -1
             if var_num not in self.var_nums_list:
                 self.var_nums_list.append(var_num)
-            if self.var_num_to_degs:
-                key_exists = var_num in self.var_num_to_degs.keys()
+            if self.var_num_to_rads:
+                key_exists = var_num in self.var_num_to_rads.keys()
                 if key_exists:
-                    return sign*self.var_num_to_degs[var_num]*np.pi/180
+                    return sign*self.var_num_to_rads[var_num]
                 else:  # key doesn't exist
                     if self.eval_all_vars:
                         assert False, 'no value for variable #' + str(var_num)
                     else:
                         return degs_str
-            else:  # no self.var_num_to_degs dict
+            else:  # no self.var_num_to_rads dict
                 if self.eval_all_vars:
-                    assert False, 'no self.var_num_to_degs dict'
+                    assert False, 'no self.var_num_to_rads dict'
                 else:
                     return degs_str
         else:
@@ -134,7 +134,7 @@ if __name__ == "__main__":
         # partial substitution, this creates new files
         # with #1=30, #2=60 but #3 still undecided
         vman = PlaceholderManager(eval_all_vars=False,
-                                  var_num_to_degs={1: 30, 2: 60})
+                    var_num_to_rads={1: np.pi/6, 2: np.pi/3})
         wr = SEO_writer(file_prefix + '_eval01', emb)
         EchoingSEO_reader(file_prefix, num_bits, wr,
                           vars_manager=vman)
@@ -142,7 +142,7 @@ if __name__ == "__main__":
         # this runs the simulator after substituting
         # #1=30, #2=60, #3=90
         vman = PlaceholderManager(
-            var_num_to_degs={1: 30, 2: 60, 3: 90})
+            var_num_to_rads={1: np.pi/6, 2: np.pi/3, 3: np.pi/2})
         sim = SEO_simulator(file_prefix, num_bits, verbose=True,
                             vars_manager=vman)
         print("\n----------------------------------------")

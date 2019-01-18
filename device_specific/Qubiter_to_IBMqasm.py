@@ -1,4 +1,5 @@
 from device_specific.Qubiter_to_AnyQasm import *
+import utilities_gen as ug
 
 
 class Qubiter_to_IBMqasm(Qubiter_to_AnyQasm):
@@ -30,28 +31,7 @@ class Qubiter_to_IBMqasm(Qubiter_to_AnyQasm):
 
     def write_prelude(self):
         """
-        Writes IBM qasm's opening statements before calls to use_ methods
-        for gates.
-
-        Returns
-        -------
-        None
-
-        """
-
-        self.qasm_out.write("IBMQASM 2.0;\n")
-        self.qasm_out.write('include "qelib1.inc";\n')
-        self.qasm_out.write("qreg q[5];\n")
-        self.qasm_out.write("creg c[5];\n")
-        if self.write_qubiter_files:
-            self.qbtr_wr.write_NOTA("IBMQASM 2.0;")
-            self.qbtr_wr.write_NOTA('include "qelib1.inc";')
-            self.qbtr_wr.write_NOTA("qreg q[5];")
-            self.qbtr_wr.write_NOTA("creg c[5];")
-
-    def write_ending(self):
-        """
-        Writes IBM qasm's ending statements after calls to use_ methods for
+        Writes IBM qasm opening statements before calls to use_ methods for
         gates.
 
         Returns
@@ -59,10 +39,35 @@ class Qubiter_to_IBMqasm(Qubiter_to_AnyQasm):
         None
 
         """
+        s = "import numpy as np\n"
+        s += 'from qiskit import QuantumCircuit\n'
+        s += 'from qiskit import ClassicalRegister, QuantumRegister\n'
+        s += 'from qiskit import execute\n\n\n'
+        s += "q = QuantumRegister(" + str(self.num_bits) + ", 'q')\n"
+        s += 'ckt = QuantumCircuit(q)'
+        self.qasm_out.write(s)
+        self.qasm_out.write('\n\n')
 
-        self.qasm_out.write("measure q -> c;\n")
         if self.write_qubiter_files:
-            self.qbtr_wr.write_NOTA("measure q -> c;")
+            lines = s.split('\n')
+            for line in lines:
+                self.qbtr_wr.write_NOTA(line)
+        self.qbtr_wr.write_NOTA('')
+
+    def write_ending(self):
+        """
+        Writes IBM qasm ending statements after calls to use_ methods for
+        gates.
+
+        Returns
+        -------
+        None
+
+        """
+        s = 'ckt.draw()'
+        self.qasm_out.write(s+'\n')
+        if self.write_qubiter_files:
+            self.qbtr_wr.write_NOTA(s)
 
     @staticmethod
     def qasm_line_for_rot(arr, tar_bit_pos):
@@ -105,12 +110,13 @@ class Qubiter_to_IBMqasm(Qubiter_to_AnyQasm):
         theta = -2*center_rads
         lam = -2*right_rads
         if abs(phi) < 1e-6 and abs(theta) < 1e-6:
-            line_str = "u1(" + str(lam)
+            line_str = "ckt.u1(" + str(lam)
         elif abs(theta - np.pi/2) < 1e-6:
-            line_str = "u2(" + str(phi) + ", " + str(lam)
+            line_str = "ckt.u2(" + str(phi) + ", " + str(lam)
         else:
-            line_str = "u3(" + str(theta) + ", " + str(phi) + ", " + str(lam)
-        line_str += ")  q[" + str(tar_bit_pos) + "];\n"
+            line_str = "ckt.u3(" + str(theta) + ", " + \
+                       str(phi) + ", " + str(lam)
+        line_str += "), q[" + str(tar_bit_pos) + "])\n"
         return line_str
 
     def use_HAD2(self, tar_bit_pos, controls):
@@ -129,7 +135,7 @@ class Qubiter_to_IBMqasm(Qubiter_to_AnyQasm):
 
         """
         assert len(controls.bit_pos) == 0
-        self.qasm_out.write("h   q[" + str(tar_bit_pos) + "];\n")
+        self.qasm_out.write("ckt.h(q[" + str(tar_bit_pos) + "])\n")
         if self.write_qubiter_files:
             self.qbtr_wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
                    OneBitGates.had2)
@@ -148,7 +154,7 @@ class Qubiter_to_IBMqasm(Qubiter_to_AnyQasm):
         None
 
         """
-        self.qasm_out.write("// " + bla_str + "\n")
+        self.qasm_out.write("# " + bla_str + "\n")
         if self.write_qubiter_files:
             self.qbtr_wr.write_NOTA(bla_str)
 
@@ -179,7 +185,7 @@ class Qubiter_to_IBMqasm(Qubiter_to_AnyQasm):
         else:
             bla_str = 'PHAS\t' + degs_str(angle_rads) +\
                       '\tAT\t' + str(tar_bit_pos)
-            self.qasm_out.write("// " + bla_str + "\n")
+            self.qasm_out.write("# " + bla_str + "\n")
             if self.write_qubiter_files:
                 self.qbtr_wr.write_NOTA(bla_str)
 
@@ -199,7 +205,7 @@ class Qubiter_to_IBMqasm(Qubiter_to_AnyQasm):
 
         """
         str1 = 'PRINT\t' + style
-        self.qasm_out.write("// " + str1 + "\n")
+        self.qasm_out.write("# " + str1 + "\n")
         if self.write_qubiter_files:
             self.qbtr_wr.write_NOTA(str1)
 
@@ -220,6 +226,8 @@ class Qubiter_to_IBMqasm(Qubiter_to_AnyQasm):
         None
 
         """
+        assert isinstance(angle_rads, float),\
+            'At present, IBM qasm does not support variable angles'
         assert len(controls.bit_pos) == 0
 
         arr = OneBitGates.rot_ax(angle_rads, axis)
@@ -250,8 +258,10 @@ class Qubiter_to_IBMqasm(Qubiter_to_AnyQasm):
 
         """
         assert len(controls.bit_pos) == 0
-        rad_ang_list = [angle_x_rads, angle_y_rads, angle_z_rads]
 
+        rad_ang_list = [angle_x_rads, angle_y_rads, angle_z_rads]
+        assert ug.all_floats(rad_ang_list), \
+            'At present, IBM qasm does not support variable angles'
         arr = OneBitGates.rot(*rad_ang_list)
         line_str = Qubiter_to_IBMqasm.qasm_line_for_rot(arr, tar_bit_pos)
         self.qasm_out.write(line_str)
@@ -284,14 +294,14 @@ class Qubiter_to_IBMqasm(Qubiter_to_AnyQasm):
             assert controls.bit_pos_to_kind[controls.bit_pos[0]] == True
         if num_trols == 0:
             if axis == 1:
-                prefix = "x   q["
+                prefix = "ckt.x(q["
             elif axis == 2:
-                prefix = "y   q["
+                prefix = "ckt.y(q["
             elif axis == 3:
-                prefix = "z   q["
+                prefix = "ckt.z(q["
             else:
                 assert False
-            self.qasm_out.write(prefix + str(tar_bit_pos) + "];\n")
+            self.qasm_out.write(prefix + str(tar_bit_pos) + "])\n")
             if self.write_qubiter_files:
                 if axis == 1:
                     u2_fun = OneBitGates.sigx
@@ -308,8 +318,8 @@ class Qubiter_to_IBMqasm(Qubiter_to_AnyQasm):
             tar_pos = tar_bit_pos
             trol_pos = controls.bit_pos[0]
             if not self.c_to_tars or tar_pos in self.c_to_tars[trol_pos]:
-                self.qasm_out.write("cx  q[" + str(trol_pos) + "], "
-                                    "q[" + str(tar_pos) + "];\n")
+                self.qasm_out.write("ckt.cx(q[" + str(trol_pos) + "], "
+                                    "q[" + str(tar_pos) + "])\n")
                 if self.write_qubiter_files:
                     self.qbtr_wr.write_cnot(trol_pos, tar_pos)
             else:
@@ -319,12 +329,39 @@ class Qubiter_to_IBMqasm(Qubiter_to_AnyQasm):
                     + ". Use class ForbiddenCNotExpander " \
                     + "before attempting translation to IBM qasm."
 
+    def use_SWAP(self, bit1, bit2, controls):
+        """
+        Writes line in IBM qasm file corresponding to an English file line
+        of type: SWAP with no controls.
+
+
+        Parameters
+        ----------
+        bit1 : int
+        bit2 : int
+        controls : Controls
+
+        Returns
+        -------
+        None
+
+        """
+        assert not self.strict_mode
+        assert len(controls.bit_pos) == 0
+
+        line_str = 'ckt.swap(q[' + \
+                   str(bit1) + "], q[" + str(bit2) + "])\n"
+        self.qasm_out.write(line_str)
+
+        if self.write_qubiter_files:
+            self.qbtr_wr.write_controlled_bit_swap(bit1, bit2, controls)
+
 if __name__ == "__main__":
     import device_specific.chip_couplings_ibm as ibm
 
     def main():
         file_prefix = "../io_folder/qbtr2ibm_test"
-        qasm_name = 'IBMqasm2'
+        qasm_name = 'IBMqasm'
         num_bits = 5
         c_to_tars = ibm.ibmq5YorktownTenerife_c_to_tars
         Qubiter_to_IBMqasm(file_prefix, num_bits, qasm_name=qasm_name,

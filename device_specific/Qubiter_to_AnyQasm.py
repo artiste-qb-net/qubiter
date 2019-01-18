@@ -9,20 +9,40 @@ class Qubiter_to_AnyQasm(SEO_reader):
     """
     This abstract class is a child of SEO_reader. It reads an input English
     file and writes an AnyQasm file that is a translation of the input
-    English file into the AnyQasm language. If the option
-    write_qubiter_files is set to True, this class will also write new
-    English and Picture files that are in 1-1 onto line correspondence with
-    the output AnyQasm file.
+    English file into the AnyQasm language. If the flag write_qubiter_files
+    is set to True, this class will also write new English and Picture files
+    that are in 1-1 onto line correspondence with the output AnyQasm file.
 
-    The input English file that is read can only have lines of the following
-    types or else the program will abort with an error message:
+    Footnote: Some AnyQasm's distinguish between quantum registers qreg and
+    classical registers creg. Qubiter does not use cregs because it uses the
+    classical memory of your Linux PC instead. AnyQasm has an intricate set
+    of commands for measurements. Qubiter has a complete set of measurement
+    commands too (see MEAS in Rosetta stone). The AnyQasm and Qubiter
+    measurement commands can obviously be translated into each other. We
+    leave that part of the translation to a future version of this class.
 
-    1. single qubit rotations (HAD2, SIGX, SIGY, SIGZ, ROTX, ROTY, ROTZ or
-    ROTN with no controls)
+    This class can run in either a strict or a non-strict mode depending on
+    the flag `strict_mode`, with the non-strict mode as default. In the
+    strict mode, the set of gates allowed is constrained to a small but
+    universal set that specified below, and that is allowed in any target
+    qasm. In the non-strict mode, more gates are allowed that depend on the
+    target qasm. In the strict mode, the program will end if you try to use
+    gates that are not allowed. In the non-strict mode, the program will end
+    if you try to use gates that have not been implement by the children of
+    this class that address a specific target qasm.
 
-    2. simple CNOTs (SIGX with a single True control). Call them c->t=(c,
-    t) if c is the control and t the target. (c, t) must be allowed by
-    'c_to_tars'.
+    Next we give a description of the strict_mode:
+
+    In the strict mode, the input English file that is read can only have
+    lines of the following types or else the program will abort with an
+    error message:
+
+    1. single qubit rotations (HAD2, SIGX, SIGY, SIGZ, ROTX, ROTY,
+    ROTZ or ROTN with no controls)
+
+    2. simple CNOTs (SIGX with a single True control). Call them c->t=(
+    c, t) if c is the control and t the target. (c, t) must be allowed
+    by 'c_to_tars'.
 
     3. NOTA or PRINT lines. PRINT lines are commented out.
 
@@ -42,13 +62,6 @@ class Qubiter_to_AnyQasm(SEO_reader):
     folder as this file. If c_to_tars = None, the class assumes any CNOT is
     possible.
 
-    Footnote: Some AnyQasm's distinguish between quantum registers qreg and
-    classical registers creg. Qubiter does not use cregs because it uses the
-    classical memory of your Linux PC instead. AnyQasm has an intricate set
-    of commands for measurements. Qubiter has a complete set of measurement
-    commands too (see MEAS in Rosetta stone). The AnyQasm and Qubiter
-    measurement commands can obviously be translated into each other. We
-    leave that part of the translation to a future version of this class.
 
     Attributes
     ----------
@@ -67,6 +80,7 @@ class Qubiter_to_AnyQasm(SEO_reader):
         English file.
     qbtr_wr : SEO_writer
         A SEO_writer object created iff write_qubiter_files is True.
+    strict_mode : bool
     var_nums_list : list[int]
         list of all the distinct variable numbers encountered
     vprefix : str
@@ -80,7 +94,7 @@ class Qubiter_to_AnyQasm(SEO_reader):
 
     """
     def __init__(self, file_prefix, num_bits, qasm_name='',
-                 c_to_tars=None, write_qubiter_files=False,
+            strict_mode=False, c_to_tars=None, write_qubiter_files=False,
                  vars_manager=None, **kwargs):
         """
         Constructor
@@ -90,6 +104,7 @@ class Qubiter_to_AnyQasm(SEO_reader):
         file_prefix : str
         num_bits : int
         qasm_name : str
+        strict_mode : bool
         c_to_tars : dict[int, list[int]]|None
         write_qubiter_files : bool
         vars_manager : PlaceholderManager
@@ -107,7 +122,8 @@ class Qubiter_to_AnyQasm(SEO_reader):
         self.var_nums_list = rdr.vars_manager.var_nums_list
 
         self.qasm_name = qasm_name
-        self.vprefix = 'rads_'
+        self.strict_mode = strict_mode
+        self.vprefix = 'rads'
         self.c_to_tars = c_to_tars
         self.write_qubiter_files = write_qubiter_files
 
@@ -130,26 +146,6 @@ class Qubiter_to_AnyQasm(SEO_reader):
         self.qasm_out.close()
         if write_qubiter_files:
             self.qbtr_wr.close_files()
-
-    def new_var_name(self, var_name):
-        """
-        Asserts that var_name is a str. This method replaces # in var_name
-        by self.vprefix
-
-        Parameters
-        ----------
-        var_name : str
-
-        Returns
-        -------
-        str
-
-        """
-        assert isinstance(var_name, str)
-        if var_name[0] == "#":
-            return self.vprefix + var_name[1:]
-        else:  # starts with -#
-            return "-" + self.vprefix + var_name[2:]
 
     def write_prelude(self):
         """
@@ -175,6 +171,28 @@ class Qubiter_to_AnyQasm(SEO_reader):
 
         """
         assert False
+
+    def new_var_name(self, var_name, appendix):
+        """
+        Asserts that var_name is a str. This method replaces # in var_name
+        by self.vprefix and adds the str `appendix` to end of string.
+
+        Parameters
+        ----------
+        var_name : str
+        appendix : str
+
+        Returns
+        -------
+        str
+
+        """
+        assert isinstance(var_name, str)
+        if var_name[0] == "#":
+            return self.vprefix + var_name[1:] + appendix
+        else:  # starts with -#
+            return "-" + self.vprefix + var_name[2:] + appendix
+
 
 if __name__ == "__main__":
     def main():

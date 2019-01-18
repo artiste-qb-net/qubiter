@@ -73,6 +73,9 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
 
         """
 
+        self.qasm_out.write('\n')
+        self.qbtr_wr.write_NOTA("")
+
         s = ''
         for k in range(self.num_bits):
             s += 'pg.MEASURE('
@@ -105,7 +108,7 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
 
         """
         assert len(controls.bit_pos) == 0
-        self.qasm_out.write("pg.inst(H(" + str(tar_bit_pos) + "))\n")
+        self.qasm_out.write("pg += H(" + str(tar_bit_pos) + ")\n")
         if self.write_qubiter_files:
             self.qbtr_wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
                    OneBitGates.had2)
@@ -179,24 +182,73 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
         if self.write_qubiter_files:
             self.qbtr_wr.write_NOTA(str1)
 
-    @staticmethod
-    def use_ROT_rads_map(rads):
+    def use_P_PH(self, projection_bit, angle_rads, tar_bit_pos, controls):
         """
-        Asserts that rads is a float. This method maps a qubiter rads to a 
-        pyquil rads. This function is useful when converting
-        var_num_to_degs dictionary to equivalent one in Pyquil
-        
+        This function echoes a P0PH or P1PH line.
+
         Parameters
         ----------
-        rads : float
+        projection_bit : int
+        angle_rads : float
+        tar_bit_pos : int
+        controls : Controls
 
         Returns
         -------
-        float
+        None
 
         """
-        assert isinstance(rads, float)
-        return 2*rads
+        assert not self.strict_mode
+        num_trols = len(controls.bit_pos)
+        assert num_trols in [0, 1]
+
+        line_str = "pg += "
+        if num_trols == 0:
+            assert projection_bit == 1, \
+                'exp(j*P_0*alp) not implemented in pyquil'
+            line_str += 'PHASE('
+
+        else:  # num_trols == 1
+            trol_bit_pos = controls.bit_pos[0]
+            trol_type = controls.bit_pos_to_kind[trol_bit_pos]
+            second_bit = 1 if trol_type else 0
+            if projection_bit == 0:
+                if second_bit == 0:
+                    line_str += 'CPHASE00('
+                else:
+                    line_str += 'CPHASE01('
+            elif projection_bit == 1:
+                if second_bit == 0:
+                    line_str += 'CPHASE10('
+                else:
+                    line_str += 'CPHASE('
+            else:
+                assert False
+        if isinstance(angle_rads, float):
+            quil_rads = angle_rads
+        elif isinstance(angle_rads, str):
+            quil_rads = self.new_var_name(angle_rads, "")
+        else:
+            assert False
+        line_str += str(quil_rads)
+        if num_trols == 0:
+            line_str += ', ' + str(tar_bit_pos)
+        else:  # num_trols == 1:
+            line_str += ', ' + str(controls.bit_pos[0])
+            line_str += ', ' + str(tar_bit_pos)
+        line_str += ")\n"
+        self.qasm_out.write(line_str)
+
+        if self.write_qubiter_files:
+            if projection_bit == 0:
+                u2_fun = OneBitGates.P_0_phase_fac
+            elif projection_bit == 1:
+                u2_fun = OneBitGates.P_1_phase_fac
+            else:
+                assert False
+
+            self.qbtr_wr.write_controlled_one_bit_gate(
+                tar_bit_pos, controls, u2_fun, [angle_rads])
             
     def use_ROT(self, axis, angle_rads, tar_bit_pos, controls):
         """
@@ -217,7 +269,7 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
         """
         assert len(controls.bit_pos) == 0
 
-        line_str = "pg.inst("
+        line_str = "pg += "
         if axis == 1:
             line_str += "RX("
         elif axis == 2:
@@ -228,15 +280,14 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
             assert False
       
         if isinstance(angle_rads, float):
-            quil_rads = \
-                Qubiter_to_RigettiPyQuil.use_ROT_rads_map(angle_rads)
+            quil_rads = angle_rads*(-2)
         elif isinstance(angle_rads, str):
-            quil_rads = self.new_var_name(angle_rads)
+            quil_rads = self.new_var_name(angle_rads, "*(-2)")
         else:
             assert False
 
         line_str += str(quil_rads) + ', '
-        line_str += str(tar_bit_pos) + "))\n"
+        line_str += str(tar_bit_pos) + ")\n"
         self.qasm_out.write(line_str)
 
         if self.write_qubiter_files:
@@ -272,19 +323,16 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
         arr = OneBitGates.rot(*rad_ang_list)
         delta, left_rads, center_rads, right_rads = \
             UnitaryMat.u2_zyz_decomp(arr)
-        quil_rads_L = -2*left_rads
-        quil_rads_C = -2*center_rads
-        quil_rads_R = -2*right_rads
                   
-        end_str = ', ' + str(tar_bit_pos) + '))\n'
+        end_str = ', ' + str(tar_bit_pos) + ')\n'
 
-        line_str = 'pg.inst(RZ(' + str(quil_rads_R) + end_str
+        line_str = 'pg += RZ(' + str(-2*right_rads) + end_str
         self.qasm_out.write(line_str)
 
-        line_str = 'pg.inst(RY(' + str(quil_rads_C) + end_str
+        line_str = 'pg += RY(' + str(-2*center_rads) + end_str
         self.qasm_out.write(line_str)
 
-        line_str = 'pg.inst(RZ(' + str(quil_rads_L) + end_str
+        line_str = 'pg += RZ(' + str(-2*left_rads) + end_str
         self.qasm_out.write(line_str)
 
         if self.write_qubiter_files:
@@ -318,7 +366,7 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
             assert axis == 1
             assert controls.bit_pos_to_kind[controls.bit_pos[0]] == True
         if num_trols == 0:
-            line_str = "pg.inst("
+            line_str = "pg += "
             if axis == 1:
                 line_str += "X("
             elif axis == 2:
@@ -327,7 +375,7 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
                 line_str += "Z("
             else:
                 assert False
-            line_str += str(tar_bit_pos) + "))\n"
+            line_str += str(tar_bit_pos) + ")\n"
             self.qasm_out.write(line_str)
             if self.write_qubiter_files:
                 if axis == 1:
@@ -345,9 +393,9 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
             tar_pos = tar_bit_pos
             trol_pos = controls.bit_pos[0]
             if not self.c_to_tars or tar_pos in self.c_to_tars[trol_pos]:
-                line_str = 'pg.inst(CNOT('
+                line_str = 'pg += CNOT('
                 line_str += str(trol_pos) + ', '
-                line_str += str(tar_pos) + '))\n'
+                line_str += str(tar_pos) + ')\n'
                 self.qasm_out.write(line_str)
                 if self.write_qubiter_files:
                     self.qbtr_wr.write_cnot(trol_pos, tar_pos)
@@ -357,6 +405,33 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
                     + " in line " + str(self.line_count) \
                     + ". Use class ForbiddenCNotExpander " \
                     + "before attempting translation to PyQuil."
+
+    def use_SWAP(self, bit1, bit2, controls):
+        """
+        Writes line in PyQuil file corresponding to an English file line
+        of type: SWAP with no controls.
+
+
+        Parameters
+        ----------
+        bit1 : int
+        bit2 : int
+        controls : Controls
+
+        Returns
+        -------
+        None
+
+        """
+        assert not self.strict_mode
+        assert len(controls.bit_pos) == 0
+
+        line_str = 'pg += SWAP(' + \
+                   str(bit1) + ", " + str(bit2) + ")\n"
+        self.qasm_out.write(line_str)
+
+        if self.write_qubiter_files:
+            self.qbtr_wr.write_controlled_bit_swap(bit1, bit2, controls)
 
 if __name__ == "__main__":
     import device_specific.chip_couplings_rigetti as rig

@@ -1,10 +1,12 @@
 NOTA	import cirq
 NOTA	from cirq.devices import GridQubit
-NOTA	from cirq.ops import X, Y, Z, H, CNOT
+NOTA	from cirq.ops import X, Y, Z, H, CNOT, SWAP
 NOTA	from cirq.ops import RotXGate, RotYGate, RotZGate
 NOTA	
 NOTA	
 NOTA	ckt = cirq.Circuit()
+NOTA	rads1 = cirq.Symbol("rads1")
+NOTA	
 |   H   |   |   |   
 |   |   X   |   |   
 |   |   Y   |   |   
@@ -15,9 +17,11 @@ NOTA	ckt = cirq.Circuit()
 Rz  |   |   |   |   
 Ry  |   |   |   |   
 Rz  |   |   |   |   
-NOTA	1->0 allowed
+NOTA	1->0 allowed by c_to_tars
 |   |   |   @---X   
-NOTA	0->1 allowed
+NOTA	0->1 allowed by c_to_tars
 |   |   |   X---@   
-NOTA	2->0 not allowed
-NOTA	SIGX  AT  0  IF  2T
+NOTA	1->2 not allowed by c_to_tars
+NOTA	SIGX  AT  2  IF  1T
+NOTA	not allowed in strict mode
+|   |   <---+--->   

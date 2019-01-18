@@ -1,7 +1,12 @@
-NOTA	IBMQASM 2.0;
-NOTA	include "qelib1.inc";
-NOTA	qreg q[5];
-NOTA	creg c[5];
+NOTA	import numpy as np
+NOTA	from qiskit import QuantumCircuit
+NOTA	from qiskit import ClassicalRegister, QuantumRegister
+NOTA	from qiskit import execute
+NOTA	
+NOTA	
+NOTA	q = QuantumRegister(5, 'q')
+NOTA	ckt = QuantumCircuit(q)
+NOTA	
 |   H   |   |   |   
 |   |   X   |   |   
 |   |   Y   |   |   
@@ -10,16 +15,10 @@ NOTA	creg c[5];
 |   Ry  |   |   |   
 |   Rz  |   |   |   
 R   |   |   |   |   
-NOTA	1->0 not allowed
-NOTA	SIGX  AT  0  IF  1T
-NOTA	0->1 allowed
+NOTA	0->1 allowed by c_to_tars
 |   |   |   X---@   
-NOTA	2->0 not allowed
-NOTA	SIGX  AT  0  IF  2T
-NOTA	0->2 allowed
-|   |   X---+---@   
-NOTA	3->0 not allowed
-NOTA	SIGX  AT  0  IF  3T
-NOTA	0->3 not allowed
-NOTA	SIGX  AT  3  IF  0T
-NOTA	measure q -> c;
+NOTA	1->0 not allowed by c_to_tars
+NOTA	SIGX  AT  0  IF  1T
+NOTA	not allowed in strict mode
+|   |   <---+--->   
+NOTA	ckt.draw()

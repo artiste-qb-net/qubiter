@@ -1,6 +1,7 @@
 from device_specific.Qubiter_to_AnyQasm import *
 from device_specific.QbitPlanarLattice import *
 import device_specific.chip_couplings_google as cc
+import utilities_gen as ug
 
 
 class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
@@ -35,8 +36,7 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
 
     def write_prelude(self):
         """
-        Writes Google's cirq opening statements before calls to use_ methods
-        for gates.
+        Writes Cirq opening statements before calls to use_ methods for gates.
 
         Returns
         -------
@@ -46,25 +46,30 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
         if self.c_to_tars == 'do_fill':
             self.c_to_tars = self.lattice.get_c_to_tars()
 
-        str_list = []
-        str_list.append('import cirq\n')
-        str_list.append('from cirq.devices import GridQubit\n')
-        str_list.append('from cirq.ops import X, Y, Z, H, CNOT\n')
-        str_list.append('from cirq.ops import RotXGate, RotYGate, RotZGate\n')
-        str_list.append('\n')
-        str_list.append('\n')
-        str_list.append('ckt = cirq.Circuit()\n')
+        s = 'import cirq\n'
+        s += 'from cirq.devices import GridQubit\n'
+        s += 'from cirq.ops import X, Y, Z, H, CNOT, SWAP\n'
+        s += 'from cirq.ops import RotXGate, RotYGate, RotZGate\n\n\n'
+        s += 'ckt = cirq.Circuit()\n'
+        for var_num in self.var_nums_list:
+            vname = self.vprefix + str(var_num)
+            s += vname
+            s += ' = cirq.Symbol("'
+            s += vname
+            s += '")\n'
+        s = s.strip()
+        self.qasm_out.write(s)
+        self.qasm_out.write('\n')
 
-        for st in str_list:
-            self.qasm_out.write(st)
         if self.write_qubiter_files:
-            for st in str_list:
-                self.qbtr_wr.write_NOTA(st[:-1])
+            lines = s.split('\n')
+            for line in lines:
+                self.qbtr_wr.write_NOTA(line)
+        self.qbtr_wr.write_NOTA('')
 
     def write_ending(self):
         """
-        Writes Google's cirq ending statements after calls to use_ methods
-        for gates.
+        Writes Cirq ending statements after calls to use_ methods for gates.
 
         Returns
         -------
@@ -73,6 +78,23 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
         """
 
         pass
+
+    def bit2str(self, bit_pos):
+        """
+        Returns a string of form 'GridQubit(' ... ')'
+
+        Parameters
+        ----------
+        bit_pos : int
+
+        Returns
+        -------
+        str
+
+        """
+
+        row, col = self.lattice.one2two(bit_pos)
+        return 'GridQubit(' + str(row) + ', ' + str(col) + ')'
 
     def use_HAD2(self, tar_bit_pos, controls):
         """
@@ -90,10 +112,8 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
 
         """
         assert len(controls.bit_pos) == 0
-        row, col = self.lattice.one2two(tar_bit_pos)
-        self.qasm_out.write("ckt.append(H(GridQubit(" +
-                            str(row) + ', ' +
-                            str(col) + ")))\n")
+        self.qasm_out.write("ckt.append(H(" +
+                            self.bit2str(tar_bit_pos) + "))\n")
         if self.write_qubiter_files:
             self.qbtr_wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
                    OneBitGates.had2)
@@ -186,7 +206,6 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
         """
         assert len(controls.bit_pos) == 0
 
-        row, col = self.lattice.one2two(tar_bit_pos)
         line_str = "ckt.append("
         if axis == 1:
             line_str += "RotXGate("
@@ -196,10 +215,16 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
             line_str += "RotZGate("
         else:
             assert False
-        def rads_str(rads):
-            return 'rads_'+rads[1:] if isinstance(rads, str) else str(rads)
-        line_str += 'rads=' + rads_str(2*angle_rads) + ').on('
-        line_str += 'GridQubit(' + str(row) + ', ' + str(col) + ")))\n"
+
+        if isinstance(angle_rads, float):
+            cirq_rads = angle_rads*(-2)
+        elif isinstance(angle_rads, str):
+            cirq_rads = self.new_var_name(angle_rads, "*(-2)")
+        else:
+            assert False
+
+        line_str += 'rads=' + str(cirq_rads) + ', '
+        line_str += self.bit2str(tar_bit_pos) + "))\n"
         self.qasm_out.write(line_str)
 
         if self.write_qubiter_files:
@@ -226,27 +251,25 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
 
         """
         assert len(controls.bit_pos) == 0
-        rad_ang_list = [angle_x_rads, angle_y_rads, angle_z_rads]
 
+        rad_ang_list = [angle_x_rads, angle_y_rads, angle_z_rads]
+        assert ug.all_floats(rad_ang_list), \
+            "With Cirq, ROTN with any of its 3 angles variable is " +\
+            "not allowed. Workaround: can use 3 rotations of type " +\
+            "Rx, Ry or Rz with variable angles."
         arr = OneBitGates.rot(*rad_ang_list)
         delta, left_rads, center_rads, right_rads = \
             UnitaryMat.u2_zyz_decomp(arr)
-        phi_le = -2*left_rads
-        phi_ce = -2*center_rads
-        phi_ri = -2*right_rads
-        row, col = self.lattice.one2two(tar_bit_pos)
-        end_str = ').on(GridQubit(' + str(row) + ', ' + str(col) + ')))\n'
 
-        def rads_str(rads):
-            return 'rads_'+rads[1:] if isinstance(rads, str) else str(rads)
+        end_str = ', ' + self.bit2str(tar_bit_pos) + '))\n'
 
-        line_str = 'ckt.append(RotZGate(rads=' + rads_str(phi_ri) + end_str
+        line_str = 'ckt.append(RotZGate(rads=' + str(-2*right_rads) + end_str
         self.qasm_out.write(line_str)
 
-        line_str = 'ckt.append(RotYGate(rads=' + rads_str(phi_ce) + end_str
+        line_str = 'ckt.append(RotYGate(rads=' + str(-2*center_rads) + end_str
         self.qasm_out.write(line_str)
 
-        line_str = 'ckt.append(RotZGate(rads=' + rads_str(phi_le) + end_str
+        line_str = 'ckt.append(RotZGate(rads=' + str(-2*left_rads) + end_str
         self.qasm_out.write(line_str)
 
         if self.write_qubiter_files:
@@ -280,7 +303,6 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
             assert axis == 1
             assert controls.bit_pos_to_kind[controls.bit_pos[0]] == True
         if num_trols == 0:
-            row, col = self.lattice.one2two(tar_bit_pos)
             line_str = "ckt.append("
             if axis == 1:
                 line_str += "X("
@@ -290,7 +312,7 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
                 line_str += "Z("
             else:
                 assert False
-            line_str += 'GridQubit(' + str(row) + ', ' + str(col) + ")))\n"
+            line_str += self.bit2str(tar_bit_pos) + "))\n"
             self.qasm_out.write(line_str)
             if self.write_qubiter_files:
                 if axis == 1:
@@ -308,13 +330,9 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
             tar_pos = tar_bit_pos
             trol_pos = controls.bit_pos[0]
             if not self.c_to_tars or tar_pos in self.c_to_tars[trol_pos]:
-                row_tar, col_tar = self.lattice.one2two(tar_pos)
-                row_trol, col_trol = self.lattice.one2two(trol_pos)
                 line_str = 'ckt.append(CNOT('
-                line_str += 'GridQubit(' +\
-                            str(row_trol) + ', ' + str(col_trol) + '), '
-                line_str += 'GridQubit(' +\
-                            str(row_tar) + ', ' + str(col_tar) + ')))\n'
+                line_str += self.bit2str(trol_pos) + ', '
+                line_str += self.bit2str(tar_pos) + '))\n'
                 self.qasm_out.write(line_str)
                 if self.write_qubiter_files:
                     self.qbtr_wr.write_cnot(trol_pos, tar_pos)
@@ -324,6 +342,34 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
                     + " in line " + str(self.line_count) \
                     + ". Use class ForbiddenCNotExpander " \
                     + "before attempting translation to Cirq."
+
+    def use_SWAP(self, bit1, bit2, controls):
+        """
+        Writes line in PyQuil file corresponding to an English file line
+        of type: SWAP with no controls.
+
+
+        Parameters
+        ----------
+        bit1 : int
+        bit2 : int
+        controls : Controls
+
+        Returns
+        -------
+        None
+
+        """
+        assert not self.strict_mode
+        assert len(controls.bit_pos) == 0
+
+        line_str = 'ckt.append(SWAP('
+        line_str += self.bit2str(bit1)
+        line_str += ", " + self.bit2str(bit2) + "))\n"
+        self.qasm_out.write(line_str)
+
+        if self.write_qubiter_files:
+            self.qbtr_wr.write_controlled_bit_swap(bit1, bit2, controls)
 
 if __name__ == "__main__":
 
