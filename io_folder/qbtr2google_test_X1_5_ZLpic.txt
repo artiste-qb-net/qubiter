@@ -1,7 +1,7 @@
 NOTA	import cirq
 NOTA	from cirq.devices import GridQubit
 NOTA	from cirq.ops import X, Y, Z, H, CNOT, SWAP
-NOTA	from cirq.ops import RotXGate, RotYGate, RotZGate
+NOTA	from cirq.ops import Rx, Ry, Rz
 NOTA	
 NOTA	
 NOTA	ckt = cirq.Circuit()

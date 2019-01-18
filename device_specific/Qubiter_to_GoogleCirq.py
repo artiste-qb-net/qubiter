@@ -49,7 +49,7 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
         s = 'import cirq\n'
         s += 'from cirq.devices import GridQubit\n'
         s += 'from cirq.ops import X, Y, Z, H, CNOT, SWAP\n'
-        s += 'from cirq.ops import RotXGate, RotYGate, RotZGate\n\n\n'
+        s += 'from cirq.ops import Rx, Ry, Rz\n\n\n'
         s += 'ckt = cirq.Circuit()\n'
         for var_num in self.var_nums_list:
             vname = self.vprefix + str(var_num)
@@ -208,11 +208,11 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
 
         line_str = "ckt.append("
         if axis == 1:
-            line_str += "RotXGate("
+            line_str += "Rx("
         elif axis == 2:
-            line_str += "RotYGate("
+            line_str += "Ry("
         elif axis == 3:
-            line_str += "RotZGate("
+            line_str += "Rz("
         else:
             assert False
 
@@ -223,7 +223,7 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
         else:
             assert False
 
-        line_str += 'rads=' + str(cirq_rads) + ', '
+        line_str += 'rads=' + str(cirq_rads) + ').on('
         line_str += self.bit2str(tar_bit_pos) + "))\n"
         self.qasm_out.write(line_str)
 
@@ -261,15 +261,15 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
         delta, left_rads, center_rads, right_rads = \
             UnitaryMat.u2_zyz_decomp(arr)
 
-        end_str = ', ' + self.bit2str(tar_bit_pos) + '))\n'
+        end_str = ').on(' + self.bit2str(tar_bit_pos) + '))\n'
 
-        line_str = 'ckt.append(RotZGate(rads=' + str(-2*right_rads) + end_str
+        line_str = 'ckt.append(Rz(rads=' + str(-2*right_rads) + end_str
         self.qasm_out.write(line_str)
 
-        line_str = 'ckt.append(RotYGate(rads=' + str(-2*center_rads) + end_str
+        line_str = 'ckt.append(Ry(rads=' + str(-2*center_rads) + end_str
         self.qasm_out.write(line_str)
 
-        line_str = 'ckt.append(RotZGate(rads=' + str(-2*left_rads) + end_str
+        line_str = 'ckt.append(Rz(rads=' + str(-2*left_rads) + end_str
         self.qasm_out.write(line_str)
 
         if self.write_qubiter_files:

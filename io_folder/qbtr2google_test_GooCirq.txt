@@ -1,7 +1,7 @@
 import cirq
 from cirq.devices import GridQubit
 from cirq.ops import X, Y, Z, H, CNOT, SWAP
-from cirq.ops import RotXGate, RotYGate, RotZGate
+from cirq.ops import Rx, Ry, Rz
 
 
 ckt = cirq.Circuit()
@@ -11,12 +11,12 @@ ckt.append(H(GridQubit(1, 5)))
 ckt.append(X(GridQubit(1, 4)))
 ckt.append(Y(GridQubit(1, 4)))
 ckt.append(Z(GridQubit(1, 4)))
-ckt.append(RotXGate(rads=rads1*(-2), GridQubit(1, 5)))
-ckt.append(RotYGate(rads=-rads1*(-2), GridQubit(1, 5)))
-ckt.append(RotZGate(rads=-2.0943951023931953, GridQubit(1, 5)))
-ckt.append(RotZGate(rads=-0.767584085966, GridQubit(1, 6)))
-ckt.append(RotYGate(rads=-1.44397934949, GridQubit(1, 6)))
-ckt.append(RotZGate(rads=-1.94358929306, GridQubit(1, 6)))
+ckt.append(Rx(rads=rads1*(-2)).on(GridQubit(1, 5)))
+ckt.append(Ry(rads=-rads1*(-2)).on(GridQubit(1, 5)))
+ckt.append(Rz(rads=-2.0943951023931953).on(GridQubit(1, 5)))
+ckt.append(Rz(rads=-0.767584085966).on(GridQubit(1, 6)))
+ckt.append(Ry(rads=-1.44397934949).on(GridQubit(1, 6)))
+ckt.append(Rz(rads=-1.94358929306).on(GridQubit(1, 6)))
 # 1->0 allowed by c_to_tars
 ckt.append(CNOT(GridQubit(0, 6), GridQubit(0, 5)))
 # 0->1 allowed by c_to_tars
