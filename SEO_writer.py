@@ -134,7 +134,7 @@ class SEO_writer:
 
     def print_eng_file(self):
         """
-        Prints English file
+        Prints English file, if it exists
 
         Returns
         -------
@@ -147,7 +147,7 @@ class SEO_writer:
 
     def print_pic_file(self):
         """
-        Prints Picture file
+        Prints Picture file, if it exists
 
         Returns
         -------

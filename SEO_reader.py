@@ -152,6 +152,19 @@ class SEO_reader(SEO_pre_reader):
 
         log.close()
 
+    def print_log_file(self):
+        """
+        Prints log file, if it exists
+
+        Returns
+        -------
+        None
+
+        """
+        path = self.file_prefix + '_' + str(self.num_bits) + '_log.txt'
+        with open(path) as f:
+            print(f.read())
+
     def next_line(self):
         """
         Analyze the inputted line. Send info to use_ methods labelled by
