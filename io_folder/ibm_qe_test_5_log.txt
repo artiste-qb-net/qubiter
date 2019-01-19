@@ -1,3 +1,6 @@
 Number of lines in file = 9
 Number of Elem. Ops = 9
-Number of SIGX Ops (Controlled NOTs) = 2
+Number of CNOTS (SIGX with single control) = 1
+Number of distinct gate variables = 0
+List of distinct variable numbers encountered =
+[]
