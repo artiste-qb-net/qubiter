@@ -22,14 +22,15 @@ class Qubiter_to_AnyQasm(SEO_reader):
     leave that part of the translation to a future version of this class.
 
     This class can run in either a strict or a non-strict mode depending on
-    the flag `strict_mode`, with the non-strict mode as default. In the
+    the flag `strict_mode`, which equals False in default mode. In the
     strict mode, the set of gates allowed is constrained to a small but
-    universal set that specified below, and that is allowed in any target
-    qasm. In the non-strict mode, more gates are allowed that depend on the
-    target qasm. In the strict mode, the program will end if you try to use
-    gates that are not allowed. In the non-strict mode, the program will end
-    if you try to use gates that have not been implement by the children of
-    this class that address a specific target qasm.
+    universal set that is specified below, and that is allowed in any target
+    qasm. In the non-strict mode, more gates are allowed that depend on
+    specific target qasm. In the strict mode, the program will end if you
+    try to use gates that are not allowed. In the non-strict mode,
+    the program will end if you try to use gates for a target language that
+    have not been implemented yet in the Qubiter class targeting that
+    language, often because the target language doesn't support those gates.
 
     Next we give a description of the strict_mode:
 
