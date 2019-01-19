@@ -20,5 +20,8 @@ NOTA	0->1 allowed by c_to_tars
 NOTA	1->0 not allowed by c_to_tars
 NOTA	SIGX  AT  0  IF  1T
 NOTA	not allowed in strict mode
+|   |   @P  |   |   
+|   |   @P--+---@   
 |   |   <---+--->   
+NOTA	
 NOTA	ckt.draw()

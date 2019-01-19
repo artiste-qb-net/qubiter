@@ -64,6 +64,9 @@ class Qubiter_to_IBMqasm(Qubiter_to_AnyQasm):
         None
 
         """
+        self.qasm_out.write('\n')
+        self.qbtr_wr.write_NOTA('')
+
         s = 'ckt.draw()'
         self.qasm_out.write(s+'\n')
         if self.write_qubiter_files:
@@ -188,6 +191,81 @@ class Qubiter_to_IBMqasm(Qubiter_to_AnyQasm):
             self.qasm_out.write("# " + bla_str + "\n")
             if self.write_qubiter_files:
                 self.qbtr_wr.write_NOTA(bla_str)
+
+    def use_P_PH(self, projection_bit, angle_rads, tar_bit_pos, controls):
+        """
+        Writes line in IBM qasm file corresponding to an English file line
+        of type: P0PH or P1PH with 0 or 1 controls.
+
+        Parameters
+        ----------
+        projection_bit : int
+        angle_rads : float
+        tar_bit_pos : int
+        controls : Controls
+
+        Returns
+        -------
+        None
+
+        """
+        assert isinstance(angle_rads, float),\
+            'At present, IBM qasm does not support variable angles'
+        assert not self.strict_mode
+        num_trols = len(controls.bit_pos)
+        assert num_trols in [0, 1]
+
+        line_str = "ckt."
+        if num_trols == 0:
+            assert projection_bit == 1, \
+                'exp(j*P_0*alp) not implemented in IBM qasm. ' +\
+                'You  can use exp(j*P_0*alp)=sig_x*exp(j*P_1*alp)*sig_x'
+            line_str += 'u1('
+
+        else:  # num_trols == 1
+            trol_bit_pos = controls.bit_pos[0]
+            trol_type = controls.bit_pos_to_kind[trol_bit_pos]
+            second_bit = 1 if trol_type else 0
+            if projection_bit == 0:
+                if second_bit == 0:
+                    line_str += 'CPHASE00('
+                    assert False, 'this gate not implemented in IBM qasm'
+                else:
+                    line_str += 'CPHASE01('
+                    assert False, 'this gate not implemented in IBM qasm'
+            elif projection_bit == 1:
+                if second_bit == 0:
+                    line_str += 'CPHASE10('
+                    assert False, 'this gate not implemented in IBM qasm'
+                else:
+                    line_str += 'cu1('
+            else:
+                assert False
+        if isinstance(angle_rads, float):
+            ibm_rads = angle_rads
+        elif isinstance(angle_rads, str):
+            ibm_rads = self.new_var_name(angle_rads, "")
+        else:
+            assert False
+        line_str += str(ibm_rads)
+        if num_trols == 0:
+            line_str += ', q[' + str(tar_bit_pos)
+        else:  # num_trols == 1:
+            line_str += ', q[' + str(controls.bit_pos[0])
+            line_str += '], q[' + str(tar_bit_pos)
+        line_str += "])\n"
+        self.qasm_out.write(line_str)
+
+        if self.write_qubiter_files:
+            if projection_bit == 0:
+                u2_fun = OneBitGates.P_0_phase_fac
+            elif projection_bit == 1:
+                u2_fun = OneBitGates.P_1_phase_fac
+            else:
+                assert False
+
+            self.qbtr_wr.write_controlled_one_bit_gate(
+                tar_bit_pos, controls, u2_fun, [angle_rads])
 
     def use_PRINT(self, style, line_num):
         """

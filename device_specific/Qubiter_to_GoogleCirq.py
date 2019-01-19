@@ -48,8 +48,8 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
 
         s = 'import cirq\n'
         s += 'from cirq.devices import GridQubit\n'
-        s += 'from cirq.ops import X, Y, Z, H, CNOT, SWAP\n'
-        s += 'from cirq.ops import Rx, Ry, Rz\n\n\n'
+        s += 'from cirq.ops import X, Y, Z, H, Rx, Ry, Rz\n'
+        s += 'from cirq.ops import CNOT, CZ, SWAP\n\n\n'
         s += 'ckt = cirq.Circuit()\n'
         for var_num in self.var_nums_list:
             vname = self.vprefix + str(var_num)
@@ -166,6 +166,80 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
             self.qasm_out.write("# " + bla_str + "\n")
             if self.write_qubiter_files:
                 self.qbtr_wr.write_NOTA(bla_str)
+
+
+    def use_P_PH(self, projection_bit, angle_rads, tar_bit_pos, controls):
+        """
+        0Writes line in Cirq file corresponding to an English file line of
+        type: P0PH or P1PH with 0 or 1 controls.
+
+        Parameters
+        ----------
+        projection_bit : int
+        angle_rads : float
+        tar_bit_pos : int
+        controls : Controls
+
+        Returns
+        -------
+        None
+
+        """
+        assert not self.strict_mode
+        num_trols = len(controls.bit_pos)
+        assert num_trols in [0, 1]
+
+        line_str = "ckt.append("
+        if num_trols == 0:
+            assert projection_bit == 1, \
+                'exp(j*P_0*alp) not implemented in Cirq. ' +\
+                'You  can use exp(j*P_0*alp)=sig_x*exp(j*P_1*alp)*sig_x'
+            line_str += 'Z'
+
+        else:  # num_trols == 1
+            trol_bit_pos = controls.bit_pos[0]
+            trol_type = controls.bit_pos_to_kind[trol_bit_pos]
+            second_bit = 1 if trol_type else 0
+            if projection_bit == 0:
+                if second_bit == 0:
+                    line_str += 'CPHASE00('
+                    assert False, 'this gate not implemented in Cirq'
+                else:
+                    line_str += 'CPHASE01('
+                    assert False, 'this gate not implemented in Cirq'
+            elif projection_bit == 1:
+                if second_bit == 0:
+                    line_str += 'CPHASE10('
+                    assert False, 'this gate not implemented in Cirq'
+                else:
+                    line_str += 'CZ'
+            else:
+                assert False
+        if isinstance(angle_rads, float):
+            cirq_turns = angle_rads/np.pi
+        elif isinstance(angle_rads, str):
+            cirq_turns = self.new_var_name(angle_rads, "/np.pi")
+        else:
+            assert False
+        line_str += "**" + str(cirq_turns)
+        if num_trols == 0:
+            line_str += '.on(' + self.bit2str(tar_bit_pos)
+        else:  # num_trols == 1:
+            line_str += '.on(' + self.bit2str(controls.bit_pos[0])
+            line_str += ', ' + self.bit2str(tar_bit_pos)
+        line_str += "))\n"
+        self.qasm_out.write(line_str)
+
+        if self.write_qubiter_files:
+            if projection_bit == 0:
+                u2_fun = OneBitGates.P_0_phase_fac
+            elif projection_bit == 1:
+                u2_fun = OneBitGates.P_1_phase_fac
+            else:
+                assert False
+
+            self.qbtr_wr.write_controlled_one_bit_gate(
+                tar_bit_pos, controls, u2_fun, [angle_rads])
 
     def use_PRINT(self, style, line_num):
         """

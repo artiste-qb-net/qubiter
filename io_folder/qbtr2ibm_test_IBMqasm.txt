@@ -20,5 +20,8 @@ ckt.cx(q[0], q[1])
 # 1->0 not allowed by c_to_tars
 # SIGX  AT  0  IF  1T
 # not allowed in strict mode
+ckt.u1(0.7853981633974483, q[2])
+ckt.cu1(0.7853981633974483, q[0], q[2])
 ckt.swap(q[2], q[0])
+
 ckt.draw()

@@ -162,29 +162,10 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
             if self.write_qubiter_files:
                 self.qbtr_wr.write_NOTA(bla_str)
 
-    def use_PRINT(self, style, line_num):
-        """
-        Writes line in PyQuil file corresponding to an English file line
-        of type: PRINT
-        
-        Parameters
-        ----------
-        style : str
-        line_num : int
-
-        Returns
-        -------
-        None
-
-        """
-        str1 = 'PRINT\t' + style
-        self.qasm_out.write("# " + str1 + "\n")
-        if self.write_qubiter_files:
-            self.qbtr_wr.write_NOTA(str1)
-
     def use_P_PH(self, projection_bit, angle_rads, tar_bit_pos, controls):
         """
-        This function echoes a P0PH or P1PH line.
+        Writes line in PyQuil file corresponding to an English file line of
+        type: P0PH or P1PH with 0 or 1 controls.
 
         Parameters
         ----------
@@ -205,7 +186,8 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
         line_str = "pg += "
         if num_trols == 0:
             assert projection_bit == 1, \
-                'exp(j*P_0*alp) not implemented in pyquil'
+                'exp(j*P_0*alp) not implemented in pyquil. ' +\
+                'You  can use exp(j*P_0*alp)=sig_x*exp(j*P_1*alp)*sig_x'
             line_str += 'PHASE('
 
         else:  # num_trols == 1
@@ -249,7 +231,27 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
 
             self.qbtr_wr.write_controlled_one_bit_gate(
                 tar_bit_pos, controls, u2_fun, [angle_rads])
-            
+
+    def use_PRINT(self, style, line_num):
+        """
+        Writes line in PyQuil file corresponding to an English file line
+        of type: PRINT
+        
+        Parameters
+        ----------
+        style : str
+        line_num : int
+
+        Returns
+        -------
+        None
+
+        """
+        str1 = 'PRINT\t' + style
+        self.qasm_out.write("# " + str1 + "\n")
+        if self.write_qubiter_files:
+            self.qbtr_wr.write_NOTA(str1)
+
     def use_ROT(self, axis, angle_rads, tar_bit_pos, controls):
         """
         Writes line in PyQuil file corresponding to an English file line

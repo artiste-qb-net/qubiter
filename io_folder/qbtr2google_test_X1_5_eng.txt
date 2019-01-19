@@ -1,7 +1,7 @@
 NOTA	import cirq
 NOTA	from cirq.devices import GridQubit
-NOTA	from cirq.ops import X, Y, Z, H, CNOT, SWAP
-NOTA	from cirq.ops import Rx, Ry, Rz
+NOTA	from cirq.ops import X, Y, Z, H, Rx, Ry, Rz
+NOTA	from cirq.ops import CNOT, CZ, SWAP
 NOTA	
 NOTA	
 NOTA	ckt = cirq.Circuit()
@@ -24,4 +24,6 @@ SIGX	AT	1	IF	0T
 NOTA	1->2 not allowed by c_to_tars
 NOTA	SIGX  AT  2  IF  1T
 NOTA	not allowed in strict mode
+P1PH	#1	AT	2
+P1PH	-#1	AT	2	IF	0T
 SWAP	2	0
