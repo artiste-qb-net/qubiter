@@ -504,11 +504,15 @@ class SEO_writer:
     @staticmethod   
     def is_legal_var_name(name):
         """
-        Variable names must be of form `#3` or `-#3` or `#3*.5` or `-#3*.5` 
+        Variable names must be of form `#3` or `-#3` or `#3*.5` or `-#3*.5`
         where 3 can be replaced by any non-negative int, and .5 can be
         replaced by anything that can be an argument of float() without
         throwing an exception. This method returns True iff name is legal.
-        
+
+        *Actually, the 3 can be replaced by any string s that gives True to
+        s.isdigit(). For example, '0', '1', '001' all give True, but '-1',
+        '1.' all give False
+
         Parameters
         ----------
         name : str

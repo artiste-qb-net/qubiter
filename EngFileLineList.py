@@ -154,6 +154,23 @@ class EngFileLineList:
         assert self.num_bits == other.num_bits
         return EngFileLineList(self.line_list + other.line_list, self.num_bits)
 
+    def __iadd__(self, other):
+        """
+        define += for inplace addition of an EngFileList object to self
+
+        Parameters
+        ----------
+        other : EngFileLineList
+
+        Returns
+        -------
+        EngFileLineList
+
+        """
+        assert self.num_bits == other.num_bits
+        self.line_list += other.line_list
+        return self
+
     def __getitem__(self, item):
         """
         define self[item]
