@@ -1057,7 +1057,7 @@ class SEO_writer:
 
     def write_S(self, tar_bit_pos, herm=False):
         """
-        writes ROTZ = exp(-1j*pi/4*sig_z) or its Hermitian with no controls
+        writes P1PH = exp(1j*P_1*pi/2) or its Hermitian with no controls
 
         Parameters
         ----------
@@ -1069,16 +1069,15 @@ class SEO_writer:
         None
 
         """
-        if not herm:
-            str1 = 'S'
-        else:
-            str1 = 'Sdag'
-        rads = OneBitGates.rotz_rads(str1)
-        self.write_one_bit_gate(tar_bit_pos, OneBitGates.rot_ax, [rads, 3])
+        sign = +1
+        if herm:
+            sign = -1
+        self.write_one_bit_gate(tar_bit_pos, OneBitGates.P_1_phase_fac,
+                                [sign*np.pi/2])
 
     def write_T(self, tar_bit_pos, herm=False):
         """
-        writes ROTZ = exp(-1j*pi/8*sig_z) or its Hermitian with no controls
+        writes P1PH = exp(1j*P_1*pi/4) or its Hermitian with no controls
 
         Parameters
         ----------
@@ -1090,12 +1089,11 @@ class SEO_writer:
         None
 
         """
-        if not herm:
-            str1 = 'T'
-        else:
-            str1 = 'Tdag'
-        rads = OneBitGates.rotz_rads(str1)
-        self.write_one_bit_gate(tar_bit_pos, OneBitGates.rot_ax, [rads, 3])
+        sign = +1
+        if herm:
+            sign = -1
+        self.write_one_bit_gate(tar_bit_pos, OneBitGates.P_1_phase_fac,
+                                [sign*np.pi/4])
 
     def write_Rx(self, tar_bit_pos, rads):
         """
