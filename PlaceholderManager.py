@@ -80,18 +80,25 @@ class PlaceholderManager:
         """
         if SEO_writer.is_legal_var_name(degs_str):
             assert not self.no_vars, 'no circuit variables allowed'
+            # this gives -1 if "*" not found
+            star_ind = degs_str.find("*")
+            if star_ind < 0:
+                star_ind = len(degs_str)
+                scale_fac = 1
+            else:
+                scale_fac = float(degs_str[star_ind+1:])
             if degs_str[0] == '#':
-                var_num = int(degs_str[1:])
+                var_num = int(degs_str[1:star_ind])
                 sign = +1
             else:
-                var_num = int(degs_str[2:])
+                var_num = int(degs_str[2:star_ind])
                 sign = -1
             if var_num not in self.var_nums_list:
                 self.var_nums_list.append(var_num)
             if self.var_num_to_rads:
                 key_exists = var_num in self.var_num_to_rads.keys()
                 if key_exists:
-                    return sign*self.var_num_to_rads[var_num]
+                    return sign*self.var_num_to_rads[var_num]*scale_fac
                 else:  # key doesn't exist
                     if self.eval_all_vars:
                         assert False, 'no value for variable #' + str(var_num)
@@ -112,18 +119,21 @@ if __name__ == "__main__":
     from SEO_simulator import *
 
     def main():
-        # This produces English and Picture files as usual. Note that 4
-        # angles have been entered as '#1', '-#1', '#2', '#3', all legal
-        # variable names . In the English file, you will see those legal
-        # names where the numerical values of those angles would have been.
+        # We begin by writing a simple circuit with 4 qubits.
+        # As usual, the following code will write an English
+        # and a Picture file in the io_folder directory. Note that
+        # some angles have been entered into the write()
+        # Python functions as legal variable names instead of floats.
+        # In the English file, you will see those legal names
+        # where the numerical values of those angles would have been.
 
         num_bits = 4
         file_prefix = 'io_folder/gate_vars_test'
         emb = CktEmbedder(num_bits, num_bits)
         wr = SEO_writer(file_prefix, emb)
         wr.write_Rx(2, rads=np.pi/7)
-        wr.write_Rx(1, rads='#2')
-        wr.write_Rn(3, rads_list=['#1', '-#1', '#3'])
+        wr.write_Rx(1, rads='#2*.5')
+        wr.write_Rn(3, rads_list=['#1', '-#1*3', '#3'])
         wr.write_cnot(2, 3)
         wr.close_files()
 

@@ -126,10 +126,14 @@ class EngFileLineList:
             split_line = line.split()
             for token in split_line:
                 if SEO_writer.is_legal_var_name(token):
+                    # this gives -1 if "*" not found
+                    star_ind = token.find("*")
+                    if star_ind < 0:
+                        star_ind = len(token)
                     if token[0] == '#':
-                        var_num = int(token[1:])
+                        var_num = int(token[1:star_ind])
                     else:  # starts with '-#':
-                        var_num = int(token[2:])
+                        var_num = int(token[2:star_ind])
                     if var_num not in var_nums_list:
                         var_nums_list.append(var_num)
         return var_nums_list
@@ -248,8 +252,8 @@ if __name__ == "__main__":
         emb = CktEmbedder(num_bits, num_bits)
         wr = SEO_writer(file_prefix, emb)
         wr.write_Rx(2, rads=np.pi/7)
-        wr.write_Rx(1, rads='#2')
-        wr.write_Rn(3, rads_list=['#1', '-#1', '#3'])
+        wr.write_Rx(1, rads='#2*.5')
+        wr.write_Rn(3, rads_list=['#1', '-#1*.3', '#3'])
         wr.write_cnot(2, 3)
         wr.close_files()
 

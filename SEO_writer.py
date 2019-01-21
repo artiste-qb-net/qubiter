@@ -504,8 +504,10 @@ class SEO_writer:
     @staticmethod   
     def is_legal_var_name(name):
         """
-        Variable names must be of form '#3' or '-#3' with 3 replaced by any
-        other non-negative int. This method returns True iff name is legal.
+        Variable names must be of form `#3` or `-#3` or `#3*.5` or `-#3*.5` 
+        where 3 can be replaced by any non-negative int, and .5 can be
+        replaced by anything that can be an argument of float() without
+        throwing an exception. This method returns True iff name is legal.
         
         Parameters
         ----------
@@ -518,23 +520,31 @@ class SEO_writer:
         """
         if not isinstance(name, str):
             return False
-        if len(name) < 2:
+        if len(name) < 2 or name[0] not in ["-", "#"]:
             return False
-        if name[0] not in ["-", "#"]:
-            return False
+        nom = name
         if name[0] == "-":
-            if len(name) < 3 or name[1] != '#':
+            nom = name[1:]
+        if len(nom) < 2 or nom[0] != '#':
+            return False
+        else:
+            # this gives -1 if "*" not found
+            star_ind = nom.find("*")
+            if star_ind < 0:
+                star_ind = len(nom)
+            if not nom[1:star_ind].isdigit():
                 return False
             else:
-                if not name[2:].isdigit():
-                    return False
-                else:
+                # print('...was here')
+                if star_ind == len(nom):
                     return True
-        else:  # name[1]=="#"
-            if not name[1:].isdigit():
-                return False
-            else:
-                return True
+                else:
+                    try:
+                        # print(',,', nom[star_ind+1:])
+                        x = float(nom[star_ind+1:])
+                    except ValueError:
+                        return False
+                    return True
 
     def rads_to_degs_str(self, rads):
         """
