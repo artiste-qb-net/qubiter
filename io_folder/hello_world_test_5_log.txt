@@ -1,0 +1,6 @@
+Number of lines in file = 13
+Number of Elem. Ops = 13
+Number of CNOTS (SIGX with single control) = 1
+Number of distinct gate variables = 0
+List of distinct variable numbers encountered =
+[]
