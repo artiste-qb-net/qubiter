@@ -188,3 +188,26 @@ def all_floats(li):
 
     """
     return all([isinstance(x, float) for x in li])
+
+
+def is_non_neg_int(s):
+    """
+    Returns True iff string s is a non-negative number
+
+    Parameters
+    ----------
+    s : str
+
+    Returns
+    -------
+    bool
+
+    """
+    # s.isdigit() with s equal to
+    # '0', '1', '001' gives True,
+    # '-1', '1.' gives False
+    if not s.isdigit():
+        return False
+    if s[0] == '0' and len(s) > 1:
+        return False
+    return True

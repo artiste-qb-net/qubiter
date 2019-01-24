@@ -51,7 +51,7 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
         s += 'from cirq.ops import X, Y, Z, H, Rx, Ry, Rz\n'
         s += 'from cirq.ops import CNOT, CZ, SWAP\n\n\n'
         s += 'ckt = cirq.Circuit()\n'
-        for var_num in self.var_nums_list:
+        for var_num in self.ckt_var_nums:
             vname = self.vprefix + str(var_num)
             s += vname
             s += ' = cirq.Symbol("'

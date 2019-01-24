@@ -1,38 +1,49 @@
 import numpy as np
-from SEO_writer import *
+# from SEO_writer import *
+import utilities_gen as ug
 
 
 class PlaceholderManager:
     """
     The word "placeholder" (as used here and in Tensorflow) refers to a
-    variable whose evaluation is postponed until a later date. In this
+    variable whose evaluation is postponed until a later time. In this
     class, we consider gate angle variables/placeholders.
 
-    Variable names must be of form '#3' or '-#3' with 3 replaced by any
-    other non-negative int. The 3 is called the variable number.
+    Legal variable names are described in the docstring of the function
+    is_legal_var_name() in this class.
 
     An object of this class is owned by SEO_reader and subclasses thereof.
     When a circuit is read, the methods owned by this class are called to
-    try to replace the pound (#) prefixed gate variables by values. This
-    class owns a dictionary var_num_to_rads that is used to store values of
-    gate variables.
+    try to replace the placeholders by values. This class owns a dictionary
+    `var_num_to_rads` that is used to store values of all angle variables
+    used in all placeholders. The class also owns a dictionary
+    `fun_name_to_fun` that is used to store functions used in "functional"
+    type placeholders. Together, these 2 dictionaries are used to find a
+    value ("resolve") each placeholder.
 
     Attributes
     ----------
+    ckt_fun_names : list[str]
+        a list of all the distinct function names encountered in circuit
+    ckt_var_nums : list[int]
+        a list of all distinct numbers of the variables encountered in circuit
     eval_all_vars : bool
         will abort if this is True and a variable can't be evaluated
+    fun_name_to_fun : dict[str, function]
+        a dictionary mapping each function name to a function that returns a
+        float that stands for radians. Used by a SEO_reader or its children
+        to evaluate function names in a functional placeholder.
     no_vars : bool
         will abort if this is True and a variable is detected
     var_num_to_rads : dict[int, float]
-        a dict mapping variable numbers to a float for radians. Used for
-        evaluating gate variables in a SEO_reader or its child classes.
-    var_nums_list : list[int]
-        a list of all distinct numbers of the variables encountered
+        a dict mapping variable numbers to a float for radians. Used by a
+        SEO_reader or its children to evaluate hash prefixed angle
+        variables in a placeholder.
 
     """
 
     def __init__(self, no_vars=False, eval_all_vars=True,
-                 var_num_to_rads=None):
+                 var_num_to_rads=None, fun_name_to_fun=None):
         """
         Constructor
 
@@ -41,6 +52,7 @@ class PlaceholderManager:
         no_vars : bool
         eval_all_vars : bool
         var_num_to_rads : dict[int, float]
+        fun_name_to_fun : dict[str, function]
 
         Returns
         -------
@@ -51,23 +63,234 @@ class PlaceholderManager:
         self.no_vars = no_vars
         self.eval_all_vars = eval_all_vars
         self.var_num_to_rads = var_num_to_rads
-        self.var_nums_list = []
-        
+        self.fun_name_to_fun = fun_name_to_fun
+
+        # will be filled by this class
+        self.ckt_var_nums = []
+        self.ckt_fun_names = []
+
+    @staticmethod
+    def is_legal_var_name(name):
+        """
+        This method returns True iff name is a legal variable name.
+
+        Legal variable names must be of form `#3` or `-#3` or `#3*.5` or
+        `-#3*.5` where 3 can be replaced by any non-negative int, and .5 can
+        be replaced by anything that can be an argument of float() without
+        throwing an exception. In this example, the 3 that follows the hash
+        character is called the variable number
+
+        NEW! (functional placeholder variables)
+
+        Now legal variable names can ALSO be of the form `my_fun#1#2` or
+        `-my_fun#1#2`, where
+
+        * the 1 and 2 can be replaced by any non-negative integers and there
+        might be any number > 0 of hash variables. Thus, there need not
+        always be precisely 2 hash variables as in the example.
+
+        * `my_fun` can be replaced by the name of any function with one or
+        more input floats (2 inputs in the example), as long as the first
+        character of the function's name is a lower case letter.
+
+        The strings `my_fun#1#2` or `-my_fun#1#2` indicate than one wants to
+        use for the angle being replaced, the values of `my_fun(#1, #2)` or
+        `-my_fun(#1, #2)`, respectively, where the inputs #1 and #2 are
+        floats standing for radians and the output is also a float standing
+        for radians.
+
+        Parameters
+        ----------
+        name : str
+
+        Returns
+        -------
+        bool
+
+        """
+        if not isinstance(name, str) or len(name) < 2:
+            return False
+        nom = name
+        if name[0] == "-":
+            nom = name[1:]
+        if len(nom) < 2:
+            return False
+
+        if nom[0] == "#":
+            tokens = nom[1:].split('*')
+            if len(tokens) > 2:
+                return False
+            if not ug.is_non_neg_int(tokens[0]):
+                return False
+            if len(tokens) == 2:
+                try:
+                    # print(',,', nom[star_ind+1:])
+                    x = float(tokens[1])
+                except ValueError:
+                    return False
+
+        elif nom[0].islower():
+            tokens = nom.split('#')
+            if len(tokens) < 2:
+                return False
+            for t in tokens[1:]:
+                if not ug.is_non_neg_int(t):
+                    return False
+        else:
+            return False
+        return True
+
+    @staticmethod
+    def is_functional_var(var_name):
+        """
+        Assumes var_name is a legal variable name (doesn't check). Returns
+        True iff var_name is a functional variable name
+
+        Parameters
+        ----------
+        var_name : str
+
+        Returns
+        -------
+        bool
+
+        """
+        assert isinstance(var_name, str) and len(var_name) >= 2
+        if var_name[0] == '-':
+            if not var_name[1].islower():
+                return False
+        else:
+            if not var_name[0].islower():
+                return False
+        return True
+
+    @staticmethod
+    def get_sign(var_name):
+        """
+        Assumes var_name is a legal variable name (doesn't check). Returns
+        sign of variable, either +1 or -1
+
+        Parameters
+        ----------
+        var_name : str
+
+        Returns
+        -------
+        int
+
+        """
+        return -1 if var_name[0] == '-' else 1
+
+    @staticmethod
+    def get_var_num_list(var_name):
+        """
+        Assumes var_name is a legal variable name (doesn't check). Returns a
+        list of the variable numbers
+
+        Parameters
+        ----------
+        var_name : str
+
+        Returns
+        -------
+        list[int]
+
+        """
+        is_fun_var = PlaceholderManager.is_functional_var(var_name)
+
+        sign = PlaceholderManager.get_sign(var_name)
+
+        # this gives -1 if "*" not found
+        star_ind = var_name.find("*")
+        if star_ind < 0:
+            star_ind = len(var_name)
+
+        # this excludes sign char and scale factor if there is one
+        tokens = var_name[(0 if sign == 1 else 1): star_ind].split("#")
+        # if var_name starts with # or -#, first token will be
+        # empty string so remove it
+        if tokens[0] == '':
+            tokens = tokens[1:]
+
+        # create list of variable number strings
+        # this excludes function name if there is one
+        var_num_tokens = tokens
+        if is_fun_var:
+            var_num_tokens = tokens[1:]
+        # print("--", var_num_tokens)
+        return [int(t) for t in var_num_tokens]
+
+    @staticmethod
+    def get_fun_name(var_name):
+        """
+        Assumes var_name is a legal variable name (doesn't check). Returns
+        the function name if there is one or None otherwise.
+
+        Parameters
+        ----------
+        var_name : str
+
+        Returns
+        -------
+        str | None
+
+        """
+        is_fun_var = PlaceholderManager.is_functional_var(var_name)
+        if not is_fun_var:
+            return None
+
+        sign = PlaceholderManager.get_sign(var_name)
+
+        # this finds index of first "#"
+        hash_ind = var_name.find("#")
+
+        return var_name[0 if sign == 1 else 1: hash_ind]
+
+    @staticmethod
+    def get_scale_fac(var_name):
+        """
+        Assumes var_name is a legal variable name (doesn't check). If it's a
+        functional variable, it returns None. If it's not a functional
+        variable, it returns the scale factor if there is a * or a 1 if
+        there is no *
+
+        Parameters
+        ----------
+        var_name : str
+
+        Returns
+        -------
+        float | None
+
+        """
+        is_fun_var = PlaceholderManager.is_functional_var(var_name)
+        if is_fun_var:
+            return None
+
+        # this finds index of first "*", returns -1 if there is none
+        star_ind = var_name.find("*")
+
+        if star_ind < 0:
+            return 1
+
+        return float(var_name[star_ind+1:])
+
     def degs_str_to_rads(self, degs_str):
         """
         This method takes in a string degs_str which might represent either
-        a str(float) expressing degrees or a legal var name.
+        a str() of a float expressing degrees or a legal var name.
 
         If degs_str is not a legal_var_name, the method assumes (This
         assumption is okay because the file was written by SEO_writer so it
-        is always well formed) it's a str( float) and returns float(
+        is always well formed) it's a str() of a float and returns float(
         deg_str)*pi/180.
 
-        If degs_str is a legal variable name, the method tries to find a
-        value for that variable in the self.var_num_to_rads dictionary. If
-        it finds a value there, the method returns value*pi/180. If no value
-        can be found, the method outputs the input string unchanged (unless
-        eval_all_vars=True in which case the method aborts).
+        If degs_str is a legal variable name, the method tries to resolve it
+        into a rads_value using the 2 dictionaries: self.var_num_to_rads and
+        self.fun_name_to_fun. If it finds a rads_value, the method returns
+        rads_value. If no rads_value can be found, the method outputs the
+        input string unchanged (unless eval_all_vars=True in which case the
+        method aborts).
 
         Parameters
         ----------
@@ -78,39 +301,77 @@ class PlaceholderManager:
         float | str
 
         """
-        if SEO_writer.is_legal_var_name(degs_str):
+        if not PlaceholderManager.is_legal_var_name(degs_str):
+            return float(degs_str)*np.pi/180
+        else:  # is a legal variable name
             assert not self.no_vars, 'no circuit variables allowed'
-            # this gives -1 if "*" not found
-            star_ind = degs_str.find("*")
-            if star_ind < 0:
-                star_ind = len(degs_str)
-                scale_fac = 1
-            else:
-                scale_fac = float(degs_str[star_ind+1:])
-            if degs_str[0] == '#':
-                var_num = int(degs_str[1:star_ind])
-                sign = +1
-            else:
-                var_num = int(degs_str[2:star_ind])
-                sign = -1
-            if var_num not in self.var_nums_list:
-                self.var_nums_list.append(var_num)
+
+            is_fun_var = PlaceholderManager.is_functional_var(degs_str)
+            sign = PlaceholderManager.get_sign(degs_str)
+            scale_fac = PlaceholderManager.get_scale_fac(degs_str)
+            fun_name = PlaceholderManager.get_fun_name(degs_str)
+            var_num_list = PlaceholderManager.get_var_num_list(degs_str)
+
+            # store function name
+            if fun_name and fun_name not in self.ckt_fun_names:
+                    self.ckt_fun_names.append(fun_name)
+
+            # store var numbers
+            for var_num in var_num_list:
+                if var_num not in self.ckt_var_nums:
+                    self.ckt_var_nums.append(var_num)
+
             if self.var_num_to_rads:
-                key_exists = var_num in self.var_num_to_rads.keys()
-                if key_exists:
-                    return sign*self.var_num_to_rads[var_num]*scale_fac
-                else:  # key doesn't exist
-                    if self.eval_all_vars:
-                        assert False, 'no value for variable #' + str(var_num)
-                    else:
-                        return degs_str
-            else:  # no self.var_num_to_rads dict
+                if not is_fun_var:
+                    var_num = var_num_list[0]
+                    key_exists = var_num in self.var_num_to_rads.keys()
+                    if key_exists:
+                        return sign*self.var_num_to_rads[var_num]*scale_fac
+                    else:  # key doesn't exist
+                        if self.eval_all_vars:
+                            assert False, "eval_all_vars is True and " +\
+                                'var_num_to_rads has no value for ' + \
+                                'variable #' + str(var_num)
+                        else:
+                            return degs_str
+                else:  # is_fun_var
+                    if self.fun_name_to_fun:
+                        var_keys_exist = \
+                            all([var_num in self.var_num_to_rads.keys()
+                                          for var_num in var_num_list])
+                        fun_key_exists = \
+                            fun_name in self.fun_name_to_fun.keys()
+
+                        if var_keys_exist and fun_key_exists:
+                            arg_float_list = [self.var_num_to_rads[var_num]
+                                              for var_num in var_num_list]
+                            fun = self.fun_name_to_fun[fun_name]
+                            return sign*fun(*arg_float_list)
+
+                        else:
+                            if self.eval_all_vars:
+                                assert False, "eval_all_vars is True and " +\
+                                    "can't resolve the function " +\
+                                    fun_name + \
+                                    " acting on variables " + \
+                                    str(var_num_list)
+                            else:
+                                return degs_str
+                    else:  # no fun_name_to_fun
+                        if self.eval_all_vars:
+                            assert False, 'eval_all_vars is True and ' \
+                                'there is no fun_name_to_fun dict' + \
+                                " so can't evaluate " + degs_str
+                        else:
+                            return degs_str
+
+            else:  # no self.var_num_to_rads
                 if self.eval_all_vars:
-                    assert False, 'no self.var_num_to_rads dict'
+                    assert False, 'eval_all_vars is True and ' \
+                        'there is no var_num_to_rads dict' + \
+                        " so can't evaluate " + degs_str
                 else:
                     return degs_str
-        else:
-            return float(degs_str)*np.pi/180
 
 if __name__ == "__main__":
     from SEO_writer import *
@@ -119,40 +380,55 @@ if __name__ == "__main__":
     from SEO_simulator import *
 
     def main():
-        # We begin by writing a simple circuit with 4 qubits.
-        # As usual, the following code will write an English
-        # and a Picture file in the io_folder directory. Note that
-        # some angles have been entered into the write()
-        # Python functions as legal variable names instead of floats.
-        # In the English file, you will see those legal names
-        # where the numerical values of those angles would have been.
+        # We begin by writing a simple circuit with 4 qubits. As usual,
+        # the following code will write an English and a Picture file in the
+        #  io_folder directory. Note that some rotation angles have been
+        # entered into the write() Python functions as legal variable names
+        # instead of floats. In the English file, you will see those legal
+        # names where the numerical values of those angles would have been.
 
         num_bits = 4
-        file_prefix = 'io_folder/gate_vars_test'
+        file_prefix = 'io_folder/placeholder_test'
         emb = CktEmbedder(num_bits, num_bits)
         wr = SEO_writer(file_prefix, emb)
         wr.write_Rx(2, rads=np.pi/7)
         wr.write_Rx(1, rads='#2*.5')
+        wr.write_Rx(1, rads='my_fun1#2')
         wr.write_Rn(3, rads_list=['#1', '-#1*3', '#3'])
+        wr.write_Rx(1, rads='-my_fun2#2#1')
         wr.write_cnot(2, 3)
         wr.close_files()
 
-        # this produces a log file with the given file prefix,
-        # wherein the a list of distinct gate numbers encountered is reported
+        # Simply by creating an object of the class SEO_reader with the flag
+        #  `write_log` set equal to True, you can create a log file which
+        # contains
+        # (1)a list of distinct variable numbers
+        # (2)a list of distinct function names
+        # encountered in the English file
         SEO_reader(file_prefix, num_bits, write_log=True)
 
+        def my_fun1(x):
+            return x*.5
+
+        def my_fun2(x, y):
+            return x + y
+
         # partial substitution, this creates new files
-        # with #1=30, #2=60 but #3 still undecided
+        # with #1=30, #2=60, 'my_fun1'->my_fun1,
+        # but #3  and 'my_fun2' still undecided
         vman = PlaceholderManager(eval_all_vars=False,
-                    var_num_to_rads={1: np.pi/6, 2: np.pi/3})
+                    var_num_to_rads={1: np.pi/6, 2: np.pi/3},
+                    fun_name_to_fun={'my_fun1': my_fun1})
         wr = SEO_writer(file_prefix + '_eval01', emb)
         EchoingSEO_reader(file_prefix, num_bits, wr,
                           vars_manager=vman)
 
         # this runs the simulator after substituting
-        # #1=30, #2=60, #3=90
+        # #1=30, #2=60, #3=90, 'my_fun1'->my_fun1, 'my_fun2'->my_fun2
         vman = PlaceholderManager(
-            var_num_to_rads={1: np.pi/6, 2: np.pi/3, 3: np.pi/2})
+            var_num_to_rads={1: np.pi/6, 2: np.pi/3, 3: np.pi/2},
+            fun_name_to_fun={'my_fun1': my_fun1, 'my_fun2': my_fun2}
+        )
         sim = SEO_simulator(file_prefix, num_bits, verbose=True,
                             vars_manager=vman)
         print("\n----------------------------------------")

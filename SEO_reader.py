@@ -138,14 +138,15 @@ class SEO_reader(SEO_pre_reader):
         s += "Number of Elem. Ops = " + str(self.num_ops) + '\n'
         s += "Number of CNOTS (SIGX with single control) = " + \
             str(self.num_cnots) + '\n'
-        s += "Number of distinct gate variables = " + \
-            str(len(self.vars_manager.var_nums_list)) + '\n'
-        log.write(s)
-        if self.verbose:
-            print(s)
 
-        s = "List of distinct variable numbers encountered =\n" + \
-            str(self.vars_manager.var_nums_list)
+        s += "List of distinct variable numbers encountered "
+        s += "(length=" + str(len(self.vars_manager.ckt_var_nums)) + ')=\n'
+        s += str(self.vars_manager.ckt_var_nums) + "\n"
+
+        s += "List of distinct function names encountered "
+        s += "(length=" + str(len(self.vars_manager.ckt_fun_names)) + ')=\n'
+        s += str(self.vars_manager.ckt_fun_names) + "\n"
+
         log.write(s)
         if self.verbose:
             print(s)

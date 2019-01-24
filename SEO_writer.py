@@ -2,6 +2,8 @@ from CktEmbedder import *
 from Controls import *
 from OneBitGates import *
 import re
+import utilities_gen as ug
+from  PlaceholderManager import *
 
 
 class SEO_writer:
@@ -500,55 +502,6 @@ class SEO_writer:
         pic_line = self.colonize(pic_line)
         self.write_ZF_or_ZL_pic_line(pic_line)
         self.picture_out.write("\n")
-        
-    @staticmethod   
-    def is_legal_var_name(name):
-        """
-        Variable names must be of form `#3` or `-#3` or `#3*.5` or `-#3*.5`
-        where 3 can be replaced by any non-negative int, and .5 can be
-        replaced by anything that can be an argument of float() without
-        throwing an exception. This method returns True iff name is legal.
-
-        *Actually, the 3 can be replaced by any string s that gives True to
-        s.isdigit(). For example, '0', '1', '001' all give True, but '-1',
-        '1.' all give False
-
-        Parameters
-        ----------
-        name : str
-
-        Returns
-        -------
-        bool
-
-        """
-        if not isinstance(name, str):
-            return False
-        if len(name) < 2 or name[0] not in ["-", "#"]:
-            return False
-        nom = name
-        if name[0] == "-":
-            nom = name[1:]
-        if len(nom) < 2 or nom[0] != '#':
-            return False
-        else:
-            # this gives -1 if "*" not found
-            star_ind = nom.find("*")
-            if star_ind < 0:
-                star_ind = len(nom)
-            if not nom[1:star_ind].isdigit():
-                return False
-            else:
-                # print('...was here')
-                if star_ind == len(nom):
-                    return True
-                else:
-                    try:
-                        # print(',,', nom[star_ind+1:])
-                        x = float(nom[star_ind+1:])
-                    except ValueError:
-                        return False
-                    return True
 
     def rads_to_degs_str(self, rads):
         """
@@ -573,7 +526,8 @@ class SEO_writer:
         if isinstance(rads, float):
             return str(rads*180/np.pi)
         else:
-            assert SEO_writer.is_legal_var_name(rads)
+            assert PlaceholderManager.is_legal_var_name(rads), \
+                "attempting to write an illegal variable name: '" + rads + "'"
             return rads
 
     def write_controlled_one_bit_gate(
@@ -586,7 +540,8 @@ class SEO_writer:
         ----------
         tar_bit_pos : int
         trols : Controls
-        one_bit_gate_fun : function mapping Any->np.ndarray
+        one_bit_gate_fun : function
+            maps Any->np.ndarray
         fun_arg_list : list[]
 
         Returns

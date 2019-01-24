@@ -1,5 +1,5 @@
 from EchoingSEO_reader import *
-import copy as cp
+# from PlaceholderManager import *
 
 
 class EngFileLineList:
@@ -25,7 +25,7 @@ class EngFileLineList:
     num_bits : int
 
     """
-    def __init__(self, line_list, num_bits):
+    def __init__(self, num_bits, line_list=[]):
         """
         Constructor
 
@@ -33,8 +33,8 @@ class EngFileLineList:
         -------
 
         """
-        self.line_list = line_list
         self.num_bits = num_bits
+        self.line_list = line_list
 
     @staticmethod
     def eng_file_to_line_list(file_prefix, num_bits):
@@ -111,32 +111,33 @@ class EngFileLineList:
         EngFileLineList.line_list_to_eng_and_pic_files(
             self.line_list, file_prefix, self.num_bits)
 
-    def get_var_nums_list(self):
+    def get_ckt_var_nums_and_ckt_fun_names(self):
         """
-        This method returns a list of all the distinct variable numbers
-        encountered.
+        This method returns 2 lists:
+        * a list of all the distinct variable numbers
+        * a list of all the distinct function names
+        encountered in the circuit.
 
         Returns
         -------
-        list[int]
+        list[int], list[str]
 
         """
-        var_nums_list = []
+        ckt_var_nums = []
+        ckt_fun_names = []
         for line in self.line_list:
             split_line = line.split()
             for token in split_line:
-                if SEO_writer.is_legal_var_name(token):
-                    # this gives -1 if "*" not found
-                    star_ind = token.find("*")
-                    if star_ind < 0:
-                        star_ind = len(token)
-                    if token[0] == '#':
-                        var_num = int(token[1:star_ind])
-                    else:  # starts with '-#':
-                        var_num = int(token[2:star_ind])
-                    if var_num not in var_nums_list:
-                        var_nums_list.append(var_num)
-        return var_nums_list
+                if PlaceholderManager.is_legal_var_name(token):
+                    var_nums_list = PlaceholderManager.get_var_num_list(token)
+                    fun_name = PlaceholderManager.get_fun_name(token)
+                    for var_num in var_nums_list:
+                        if var_num not in ckt_var_nums:
+                            ckt_var_nums.append(var_num)
+                    if fun_name and fun_name not in ckt_fun_names:
+                        ckt_fun_names.append(fun_name)
+
+        return ckt_var_nums, ckt_fun_names
 
     def __add__(self, other):
         """
@@ -152,7 +153,8 @@ class EngFileLineList:
 
         """
         assert self.num_bits == other.num_bits
-        return EngFileLineList(self.line_list + other.line_list, self.num_bits)
+        return EngFileLineList(self.num_bits,
+                               self.line_list + other.line_list)
 
     def __iadd__(self, other):
         """
@@ -184,7 +186,7 @@ class EngFileLineList:
         EngFileLineList
 
         """
-        return EngFileLineList(self.line_list[item], self.num_bits)
+        return EngFileLineList(self.num_bits, self.line_list[item])
 
     def herm(self):
         """
@@ -197,16 +199,16 @@ class EngFileLineList:
 
         """
         rev_li = list(reversed(self.line_list))
-        ell = EngFileLineList(rev_li, self.num_bits)
+        efill = EngFileLineList(self.num_bits, rev_li)
 
-        def minus(float_str):
-            if float_str[0] == '-':
-                new_str = cp.copy(float_str[1:])
+        def minus(in_str):
+            if in_str[0] == '-':
+                new_str = in_str[1:]
             else:
-                new_str = '-' + float_str
+                new_str = '-' + in_str
             return new_str
 
-        for line_pos, line in enumerate(ell.line_list):
+        for line_pos, line in enumerate(efill.line_list):
             split_line = line.split('\t')
             line_name = split_line[0]
             if line_name == 'DIAG':
@@ -259,40 +261,52 @@ class EngFileLineList:
             else:
                 assert False, \
                     "reading an unsupported line kind: " + line_name
-            ell.line_list[line_pos] = '\t'.join(split_line)
-        return ell
+            efill.line_list[line_pos] = '\t'.join(split_line)
+        return efill
 
 if __name__ == "__main__":
     def main():
         num_bits = 4
-        file_prefix = 'io_folder/eng_line_list_test'
+        file_prefix = 'io_folder/eng_file_line_list_test'
         emb = CktEmbedder(num_bits, num_bits)
         wr = SEO_writer(file_prefix, emb)
         wr.write_Rx(2, rads=np.pi/7)
         wr.write_Rx(1, rads='#2*.5')
-        wr.write_Rn(3, rads_list=['#1', '-#1*.3', '#3'])
+        wr.write_Rx(1, rads='my_fun1#2')
+        wr.write_Rn(3, rads_list=['#1', '-#1*3', '#3'])
+        wr.write_Rx(1, rads='-my_fun2#2#1')
         wr.write_cnot(2, 3)
         wr.close_files()
 
         li = EngFileLineList.eng_file_to_line_list(file_prefix, num_bits)
-        ell = EngFileLineList(li, num_bits)
+        efill = EngFileLineList(num_bits, li)
 
-        print("\nell print")
-        ell.print()
-        print('ell var_nums_list=\n', ell.get_var_nums_list())
+        print("\nefill print")
+        efill.print()
+        nums, names = efill.get_ckt_var_nums_and_ckt_fun_names()
+        print('efill ckt_var_nums=\n', nums)
+        print('efill ckt_fun_names=\n', names)
 
-        ell.write_eng_and_pic_files(file_prefix + '_ditto')
+        efill.write_eng_and_pic_files(file_prefix + '_ditto')
 
-        print("\nell[1:] print")
-        ell[1:].print()
+        print("\nefill[1:] print")
+        efill[1:].print()
 
-        ell_sum = ell + ell
+        efill_twice = efill + efill
 
-        print("\nell_sum print")
-        ell_sum.print()
-        print('ell_sum var_nums_list=\n', ell_sum.get_var_nums_list())
+        print("\nefill_twice print")
+        efill_twice.print()
+        nums, names = efill_twice.get_ckt_var_nums_and_ckt_fun_names()
+        print('efill_twice ckt_var_nums=\n', nums)
+        print('efill_twice ckt_fun_names=\n', names)
 
-        ell_herm = ell.herm()
-        print('\nell_herm print')
-        ell_herm.print()
+        efill_0 = EngFileLineList(num_bits)
+        efill_0 += efill
+
+        print("\nefill_0 print")
+        efill_0.print()
+
+        efill_herm = efill.herm()
+        print('\nefill_herm print')
+        efill_herm.print()
     main()

@@ -71,6 +71,10 @@ class Qubiter_to_AnyQasm(SEO_reader):
         of the physically allowed targets of qubit j, when j is the control
         of a CNOT. If c_to_tars = None, the class assumes any CNOT is
         possible.
+    ckt_fun_names : list[str]
+        a list of all the distinct function names encountered in circuit
+    ckt_var_nums : list[int]
+        a list of all distinct numbers of the variables encountered in circuit
     file_prefix : str
     num_bits : int
     qasm_name : str
@@ -82,8 +86,6 @@ class Qubiter_to_AnyQasm(SEO_reader):
     qbtr_wr : SEO_writer
         A SEO_writer object created iff write_qubiter_files is True.
     strict_mode : bool
-    var_nums_list : list[int]
-        list of all the distinct variable numbers encountered
     vprefix : str
         all variables in qasm file will be called vprefix + an int
     write_qubiter_files : bool
@@ -120,7 +122,8 @@ class Qubiter_to_AnyQasm(SEO_reader):
         vman = PlaceholderManager(eval_all_vars=False)
         rdr = SEO_reader(file_prefix, num_bits, vars_manager=vman,
                         write_log=True)
-        self.var_nums_list = rdr.vars_manager.var_nums_list
+        self.ckt_var_nums = rdr.vars_manager.ckt_var_nums
+        self.ckt_fun_names = rdr.vars_manager.ckt_fun_names
 
         self.qasm_name = qasm_name
         self.strict_mode = strict_mode
