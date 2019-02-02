@@ -45,7 +45,7 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
         s = 'from pyquil import Program, get_qc\n'
         s += 'from pyquil.gates import *\n\n\n'
         s += 'pg = Program()\n'
-        for var_num in self.ckt_var_nums:
+        for var_num in self.all_var_nums:
             vname = self.vprefix + str(var_num)
             s += vname
             s += ' = pg.declare("'

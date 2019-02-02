@@ -621,6 +621,7 @@ class SEO_simulator(SEO_reader):
         None
 
         """
+        # print('//////', angle_rads, axis)
         gate = OneBitGates.rot_ax(angle_rads, axis)
         self.evolve_by_controlled_one_bit_gate(tar_bit_pos, controls, gate)
 

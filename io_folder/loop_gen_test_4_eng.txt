@@ -1,0 +1,10 @@
+ROTX	#1	AT	0	IF	2F
+LOOP	20	NREPS=	2
+    ROTY	-my_fun1#1#2	AT	1	IF	2F
+    LOOP	10	NREPS=	4
+        ROTN	-#1*.5	#2	-my_fun3#3	AT	2	IF	3T
+    NEXT	10
+    ROTY	my_fun1#1#2	AT	1	IF	2F
+NEXT	20
+ROTX	#1*.3	AT	0	IF	2F
+ROTX	my_fun#1	AT	1

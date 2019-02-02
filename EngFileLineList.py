@@ -111,7 +111,7 @@ class EngFileLineList:
         EngFileLineList.line_list_to_eng_and_pic_files(
             self.line_list, file_prefix, self.num_bits)
 
-    def get_ckt_var_nums_and_ckt_fun_names(self):
+    def get_var_nums_and_fun_names(self):
         """
         This method returns 2 lists:
         * a list of all the distinct variable numbers
@@ -123,21 +123,21 @@ class EngFileLineList:
         list[int], list[str]
 
         """
-        ckt_var_nums = []
-        ckt_fun_names = []
+        var_nums = []
+        fun_names = []
         for line in self.line_list:
             split_line = line.split()
             for token in split_line:
                 if PlaceholderManager.is_legal_var_name(token):
-                    var_nums_list = PlaceholderManager.get_var_num_list(token)
-                    fun_name = PlaceholderManager.get_fun_name(token)
-                    for var_num in var_nums_list:
-                        if var_num not in ckt_var_nums:
-                            ckt_var_nums.append(var_num)
-                    if fun_name and fun_name not in ckt_fun_names:
-                        ckt_fun_names.append(fun_name)
+                    token_var_nums = PlaceholderManager.get_leg_var_var_nums(token)
+                    fun_name = PlaceholderManager.get_leg_var_fun_name(token)
+                    for var_num in token_var_nums:
+                        if var_num not in var_nums:
+                            var_nums.append(var_num)
+                    if fun_name and fun_name not in fun_names:
+                        fun_names.append(fun_name)
 
-        return ckt_var_nums, ckt_fun_names
+        return var_nums, fun_names
 
     def __add__(self, other):
         """
@@ -283,9 +283,9 @@ if __name__ == "__main__":
 
         print("\nefill print")
         efill.print()
-        nums, names = efill.get_ckt_var_nums_and_ckt_fun_names()
-        print('efill ckt_var_nums=\n', nums)
-        print('efill ckt_fun_names=\n', names)
+        nums, names = efill.get_var_nums_and_fun_names()
+        print('efill all_var_nums=\n', nums)
+        print('efill all_fun_names=\n', names)
 
         efill.write_eng_and_pic_files(file_prefix + '_ditto')
 
@@ -296,9 +296,9 @@ if __name__ == "__main__":
 
         print("\nefill_twice print")
         efill_twice.print()
-        nums, names = efill_twice.get_ckt_var_nums_and_ckt_fun_names()
-        print('efill_twice ckt_var_nums=\n', nums)
-        print('efill_twice ckt_fun_names=\n', names)
+        nums, names = efill_twice.get_var_nums_and_fun_names()
+        print('efill_twice all_var_nums=\n', nums)
+        print('efill_twice all_fun_names=\n', names)
 
         efill_0 = EngFileLineList(num_bits)
         efill_0 += efill

@@ -3,7 +3,7 @@ from Controls import *
 from OneBitGates import *
 import re
 import utilities_gen as ug
-from  PlaceholderManager import *
+from PlaceholderManager import *
 
 
 class SEO_writer:
@@ -74,6 +74,9 @@ class SEO_writer:
     file_prefix : str
         beginning of the name of both English and Picture files
     gate_line_counter : int
+    indentation : int
+        Starts at 0, Grows by 4 at end of each write_LOOP and decrease by 4
+        at beginning of each write_NEXT
     measured_bits : list(int)
         list of bits that have been measured with type 2 measurement and
         haven't been reset to |0> or |1>
@@ -121,6 +124,8 @@ class SEO_writer:
                 ('_ZF' if zero_bit_first else '_ZL') + 'pic.txt', 'wt')
         else:
             self.picture_out = picture_out
+
+        self.indentation = 0
 
     def close_files(self):
         """
@@ -258,8 +263,8 @@ class SEO_writer:
                  ("T" if aft_trols.kinds[c] == True else "F") + \
                  ("\t){\n" if (c == num_controls - 1) else "\t")
 
-        self.english_out.write(s)
-        self.picture_out.write(s)
+        self.english_out.write(' '*self.indentation + s)
+        self.picture_out.write(' '*self.indentation + s)
 
     def write_IF_M_end(self):
         """
@@ -274,8 +279,8 @@ class SEO_writer:
 
         """
         s = "}IF_M\n"
-        self.english_out.write(s)
-        self.picture_out.write(s)
+        self.english_out.write(' '*self.indentation + s)
+        self.picture_out.write(' '*self.indentation + s)
 
     def write_LOOP(self, loop_num, nreps):
         """
@@ -294,8 +299,9 @@ class SEO_writer:
 
         """
         s = "LOOP\t" + str(loop_num) + "\tNREPS=\t" + str(nreps) + '\n'
-        self.english_out.write(s)
-        self.picture_out.write(s)
+        self.english_out.write(' '*self.indentation + s)
+        self.picture_out.write(' '*self.indentation + s)
+        self.indentation += 4
 
     def write_MEAS(self, tar_bit_pos, kind):
         """
@@ -324,7 +330,7 @@ class SEO_writer:
 
         # english file
         s = 'MEAS\t' + str(kind) + '\tAT\t' + str(aft_tar_bit_pos) + '\n'
-        self.english_out.write(s)
+        self.english_out.write(' '*self.indentation + s)
 
         # picture file
         pic_line = ""
@@ -360,9 +366,10 @@ class SEO_writer:
         None
 
         """
+        self.indentation -= 4
         s = "NEXT\t" + str(loop_num) + '\n'
-        self.english_out.write(s)
-        self.picture_out.write(s)
+        self.english_out.write(' '*self.indentation + s)
+        self.picture_out.write(' '*self.indentation + s)
 
     def write_NOTA(self, bla_str, permission=True):
         """
@@ -383,8 +390,8 @@ class SEO_writer:
         """
         if permission:
             s = "NOTA\t" + bla_str.rstrip() + '\n'
-            self.english_out.write(s)
-            self.picture_out.write(s)
+            self.english_out.write(' '*self.indentation + s)
+            self.picture_out.write(' '*self.indentation + s)
 
     def write_PRINT(self, style):
         """
@@ -400,8 +407,8 @@ class SEO_writer:
 
         """
         s = "PRINT\t" + style + '\n'
-        self.english_out.write(s)
-        self.picture_out.write(s)
+        self.english_out.write(' '*self.indentation + s)
+        self.picture_out.write(' '*self.indentation + s)
 
     def write_controlled_bit_swap(self, bit1, bit2, trols):
         """
@@ -448,7 +455,8 @@ class SEO_writer:
         small = min(x)
 
         # english file
-        self.english_out.write("SWAP\t" + str(big) + "\t" + str(small))
+        self.english_out.write(' '*self.indentation +
+                               "SWAP\t" + str(big) + "\t" + str(small))
         self.english_out.write("\tIF\t" if num_controls != 0 else "\n")
 
         # list bit-positions in decreasing order
@@ -578,6 +586,7 @@ class SEO_writer:
             fun_arg_list = []
 
         # english file
+        self.english_out.write(' '*self.indentation)
         if one_bit_gate_fun == OneBitGates.phase_fac:
             self.english_out.write("PHAS\t" +
             self.rads_to_degs_str(fun_arg_list[0]))
@@ -746,7 +755,7 @@ class SEO_writer:
             "wrong number of multiplexor angles"
         
         # english file
-        self.english_out.write(
+        self.english_out.write(' '*self.indentation +
             "MP_Y\tAT\t" + str(aft_tar_bit_pos) + "\tIF\t")
         
         # list bit-positions in decreasing order
@@ -863,7 +872,8 @@ class SEO_writer:
             "wrong number of d-unitary angles"
 
         # english file
-        self.english_out.write("DIAG\tIF\t")
+        self.english_out.write(' '*self.indentation +
+                               "DIAG\tIF\t")
 
         # list bit-positions in decreasing order
         for c in range(num_controls):

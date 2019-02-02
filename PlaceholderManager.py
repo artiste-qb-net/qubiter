@@ -1,13 +1,14 @@
 import numpy as np
 # from SEO_writer import *
 import utilities_gen as ug
+from collections import defaultdict
 
 
 class PlaceholderManager:
     """
     The word "placeholder" (as used here and in Tensorflow) refers to a
     variable whose evaluation is postponed until a later time. In this
-    class, we consider gate angle variables/placeholders.
+    class, we consider gate angle variables-placeholders.
 
     Legal variable names are described in the docstring of the function
     is_legal_var_name() in this class.
@@ -19,26 +20,40 @@ class PlaceholderManager:
     used in all placeholders. The class also owns a dictionary
     `fun_name_to_fun` that is used to store functions used in "functional"
     type placeholders. Together, these 2 dictionaries are used to find a
-    value ("resolve") each placeholder.
+    float value ("resolve") each placeholder.
 
     Attributes
     ----------
-    ckt_fun_names : list[str]
+    all_fun_names : list[str]
         a list of all the distinct function names encountered in circuit
-    ckt_var_nums : list[int]
-        a list of all distinct numbers of the variables encountered in circuit
+    all_var_nums : list[int]
+        a list of all distinct variable numbers encountered in circuit
     eval_all_vars : bool
         will abort if this is True and a variable can't be evaluated
     fun_name_to_fun : dict[str, function]
-        a dictionary mapping each function name to a function that returns a
-        float that stands for radians. Used by a SEO_reader or its children
-        to evaluate function names in a functional placeholder.
+        dictionary mapping a function name to a function
+    fun_name_to_hist : dict[str, list[function|None]]
+        dictionary mapping a function name to its history (a list of
+        function or None). This is only used when using loops in the English
+        file. See LoopFileGenerator and LoopyPlaceholder classes for more
+        info about this variable.
+    fun_name_to_use_count: dict[str, int]
+        dictionary mapping a function name to its current use count (the
+        number of times it has been used. Repeat appearances inside a loop
+        or nested loops are considered as different uses.)
     no_vars : bool
         will abort if this is True and a variable is detected
+    var_num_to_hist : dict[int, list[float|None]]
+        dictionary mapping a variable number to its history (a list of float
+        or None). This is only used when using loops in the English file. See
+        LoopFileGenerator and LoopyPlaceholder classes for more info about
+        this variable.
     var_num_to_rads : dict[int, float]
-        a dict mapping variable numbers to a float for radians. Used by a
-        SEO_reader or its children to evaluate hash prefixed angle
-        variables in a placeholder.
+        dictionary mapping a variable number to its value in radians
+    var_num_to_use_count : dict[int, int]
+        dictionary mapping a variable number to its current use count (the
+        number of times it has been used. Repeat appearances inside a loop
+        or nested loops are considered as different uses.)
 
     """
 
@@ -52,7 +67,14 @@ class PlaceholderManager:
         no_vars : bool
         eval_all_vars : bool
         var_num_to_rads : dict[int, float]
+            a dict mapping variable numbers to a float for radians. Used by
+            a SEO_reader or its children to evaluate hash prefixed angle
+            variables in a placeholder.
         fun_name_to_fun : dict[str, function]
+            a dictionary mapping each function name to a function that
+            returns a float that stands for radians. Used by a SEO_reader or
+            its children to evaluate function names in a functional
+            placeholder.
 
         Returns
         -------
@@ -66,8 +88,12 @@ class PlaceholderManager:
         self.fun_name_to_fun = fun_name_to_fun
 
         # will be filled by this class
-        self.ckt_var_nums = []
-        self.ckt_fun_names = []
+        self.all_var_nums = []
+        self.all_fun_names = []
+        self.var_num_to_hist = defaultdict(list)
+        self.fun_name_to_hist = defaultdict(list)
+        self.var_num_to_use_count = {}
+        self.fun_name_to_use_count = {}
 
     @staticmethod
     def is_legal_var_name(name):
@@ -165,7 +191,7 @@ class PlaceholderManager:
         return True
 
     @staticmethod
-    def get_sign(var_name):
+    def get_leg_var_sign(var_name):
         """
         Assumes var_name is a legal variable name (doesn't check). Returns
         sign of variable, either +1 or -1
@@ -182,7 +208,7 @@ class PlaceholderManager:
         return -1 if var_name[0] == '-' else 1
 
     @staticmethod
-    def get_var_num_list(var_name):
+    def get_leg_var_var_nums(var_name):
         """
         Assumes var_name is a legal variable name (doesn't check). Returns a
         list of the variable numbers
@@ -198,7 +224,7 @@ class PlaceholderManager:
         """
         is_fun_var = PlaceholderManager.is_functional_var(var_name)
 
-        sign = PlaceholderManager.get_sign(var_name)
+        sign = PlaceholderManager.get_leg_var_sign(var_name)
 
         # this gives -1 if "*" not found
         star_ind = var_name.find("*")
@@ -221,7 +247,7 @@ class PlaceholderManager:
         return [int(t) for t in var_num_tokens]
 
     @staticmethod
-    def get_fun_name(var_name):
+    def get_leg_var_fun_name(var_name):
         """
         Assumes var_name is a legal variable name (doesn't check). Returns
         the function name if there is one or None otherwise.
@@ -239,7 +265,7 @@ class PlaceholderManager:
         if not is_fun_var:
             return None
 
-        sign = PlaceholderManager.get_sign(var_name)
+        sign = PlaceholderManager.get_leg_var_sign(var_name)
 
         # this finds index of first "#"
         hash_ind = var_name.find("#")
@@ -247,12 +273,12 @@ class PlaceholderManager:
         return var_name[0 if sign == 1 else 1: hash_ind]
 
     @staticmethod
-    def get_scale_fac(var_name):
+    def get_leg_var_scale_fac(var_name):
         """
         Assumes var_name is a legal variable name (doesn't check). If it's a
         functional variable, it returns None. If it's not a functional
-        variable, it returns the scale factor if there is a * or a 1 if
-        there is no *
+        variable, it returns the scale factor, the float after the *,
+        if there is a * or a 1 if there is no *
 
         Parameters
         ----------
@@ -275,7 +301,7 @@ class PlaceholderManager:
 
         return float(var_name[star_ind+1:])
 
-    def degs_str_to_rads(self, degs_str):
+    def degs_str_to_rads(self, degs_str, line_count):
         """
         This method takes in a string degs_str which might represent either
         a str() of a float expressing degrees or a legal var name.
@@ -295,6 +321,10 @@ class PlaceholderManager:
         Parameters
         ----------
         degs_str : str
+        line_count : int
+            this is the line_count in the English file being read. This is
+            not used by this function but is used by overrides of it like
+            the one in LoopyPlaceholderManager
 
         Returns
         -------
@@ -307,26 +337,61 @@ class PlaceholderManager:
             assert not self.no_vars, 'no circuit variables allowed'
 
             is_fun_var = PlaceholderManager.is_functional_var(degs_str)
-            sign = PlaceholderManager.get_sign(degs_str)
-            scale_fac = PlaceholderManager.get_scale_fac(degs_str)
-            fun_name = PlaceholderManager.get_fun_name(degs_str)
-            var_num_list = PlaceholderManager.get_var_num_list(degs_str)
+            sign = PlaceholderManager.get_leg_var_sign(degs_str)
+            scale_fac = PlaceholderManager.get_leg_var_scale_fac(degs_str)
+            fun_name = PlaceholderManager.get_leg_var_fun_name(degs_str)
+            token_var_nums = PlaceholderManager.get_leg_var_var_nums(degs_str)
 
-            # store function name
-            if fun_name and fun_name not in self.ckt_fun_names:
-                    self.ckt_fun_names.append(fun_name)
+            # store var numbers and update their use_count
+            for var_num in token_var_nums:
+                if var_num not in self.all_var_nums:
+                    self.all_var_nums.append(var_num)
+                if var_num not in self.var_num_to_use_count:
+                    self.var_num_to_use_count[var_num] = 1
+                else:
+                    self.var_num_to_use_count[var_num] += 1
 
-            # store var numbers
-            for var_num in var_num_list:
-                if var_num not in self.ckt_var_nums:
-                    self.ckt_var_nums.append(var_num)
+            # store function name and update its use_count
+            if fun_name:
+                if fun_name not in self.all_fun_names:
+                    self.all_fun_names.append(fun_name)
+                if fun_name not in self.fun_name_to_use_count.keys():
+                    self.fun_name_to_use_count[fun_name] = 1
+                else:
+                    self.fun_name_to_use_count[fun_name] += 1
 
-            if self.var_num_to_rads:
+            if self.var_num_to_rads is None:
+                self.var_num_to_rads = {}
+            if self.fun_name_to_fun is None:
+                self.fun_name_to_fun = {}
+
+            var_num_to_rads = self.var_num_to_rads
+            fun_name_to_fun = self.fun_name_to_fun
+
+            # if there's a var_num_to_hist, ignore input value of
+            # self.var_num_to_rads. Refill it using the history
+            if self.var_num_to_hist:
+                for var_num in token_var_nums:
+                    var_num_to_rads[var_num] = \
+                        self.var_num_to_hist[var_num][
+                            self.var_num_to_use_count[var_num] - 1]
+
+            # if there's a fun_name_to_hist, ignore input value of
+            # self.fun_name_to_rads. Refill it using the history
+            if self.fun_name_to_hist:
+                if fun_name:
+                    fun_name_to_fun[fun_name] = \
+                        self.fun_name_to_hist[fun_name][
+                            self.fun_name_to_use_count[fun_name] - 1]
+
+            if var_num_to_rads:
                 if not is_fun_var:
-                    var_num = var_num_list[0]
-                    key_exists = var_num in self.var_num_to_rads.keys()
+                    # if its not a functional placeholder,
+                    # there is only one fun var
+                    var_num = token_var_nums[0]
+                    key_exists = var_num in var_num_to_rads.keys()
                     if key_exists:
-                        return sign*self.var_num_to_rads[var_num]*scale_fac
+                        return sign*var_num_to_rads[var_num]*scale_fac
                     else:  # key doesn't exist
                         if self.eval_all_vars:
                             assert False, "eval_all_vars is True and " +\
@@ -335,17 +400,17 @@ class PlaceholderManager:
                         else:
                             return degs_str
                 else:  # is_fun_var
-                    if self.fun_name_to_fun:
-                        var_keys_exist = \
-                            all([var_num in self.var_num_to_rads.keys()
-                                          for var_num in var_num_list])
+                    if fun_name_to_fun:
+                        all_var_keys_exist = \
+                            all([var_num in var_num_to_rads.keys()
+                                          for var_num in token_var_nums])
                         fun_key_exists = \
-                            fun_name in self.fun_name_to_fun.keys()
+                            fun_name in fun_name_to_fun.keys()
 
-                        if var_keys_exist and fun_key_exists:
-                            arg_float_list = [self.var_num_to_rads[var_num]
-                                              for var_num in var_num_list]
-                            fun = self.fun_name_to_fun[fun_name]
+                        if all_var_keys_exist and fun_key_exists:
+                            arg_float_list = [var_num_to_rads[var_num]
+                                              for var_num in token_var_nums]
+                            fun = fun_name_to_fun[fun_name]
                             return sign*fun(*arg_float_list)
 
                         else:
@@ -354,24 +419,77 @@ class PlaceholderManager:
                                     "can't resolve the function " +\
                                     fun_name + \
                                     " acting on variables " + \
-                                    str(var_num_list)
+                                    str(token_var_nums)
                             else:
                                 return degs_str
                     else:  # no fun_name_to_fun
                         if self.eval_all_vars:
                             assert False, 'eval_all_vars is True and ' \
-                                'there is no fun_name_to_fun dict' + \
+                                'there is no fun_name_to_fun dictionary' + \
                                 " so can't evaluate " + degs_str
                         else:
                             return degs_str
 
-            else:  # no self.var_num_to_rads
+            else:  # no var_num_to_rads
                 if self.eval_all_vars:
                     assert False, 'eval_all_vars is True and ' \
-                        'there is no var_num_to_rads dict' + \
+                        'there is no var_num_to_rads dictionary' + \
                         " so can't evaluate " + degs_str
                 else:
                     return degs_str
+
+    @staticmethod
+    def have_resolved_history(hist):
+        """
+        This function tries to resolve a history. It returns True iff it
+        succeeds.
+
+        A history of a variable is a list of all the values it will assume
+        all the times it is used in the circuit (each repetition in a loop
+        or nested loops is counted as a different use.) For a hash
+        placeholder, a history is a list of floats or None's. For a
+        functional placeholder, a history is a list of functions or None's.
+
+        Resolving a history successfully means replacing all None's by a
+        value that is not a None. This is accomplished by moving in order of
+        ascending index on the list and replacing each None by its
+        predecessor. The very first use cannot be a None.
+
+        Parameters
+        ----------
+        hist : list[float | function | None]
+
+        Returns
+        -------
+        bool
+
+        """
+        for time, event in enumerate(hist):
+            if event is None:
+                if time == 0:
+                    return False
+                else:
+                    hist[time] = hist[time-1]
+        return True
+
+    def resolve_all_histories(self):
+        """
+        This function tries to resolve the histories of all hash and
+        functional placeholder variables. It aborts if it fails to resolve
+        any of those histories.
+
+        Returns
+        -------
+        None
+
+        """
+        for val_num in self.all_var_nums:
+            assert PlaceholderManager.have_resolved_history(
+                self.var_num_to_hist[val_num])
+
+        for fun_name in self.all_fun_names:
+            assert PlaceholderManager.have_resolved_history(
+                self.fun_name_to_hist[fun_name])
 
 if __name__ == "__main__":
     from SEO_writer import *
@@ -402,8 +520,8 @@ if __name__ == "__main__":
         # Simply by creating an object of the class SEO_reader with the flag
         #  `write_log` set equal to True, you can create a log file which
         # contains
-        # (1)a list of distinct variable numbers
-        # (2)a list of distinct function names
+        # (1) a list of distinct variable numbers
+        # (2) a list of distinct function names
         # encountered in the English file
         SEO_reader(file_prefix, num_bits, write_log=True)
 

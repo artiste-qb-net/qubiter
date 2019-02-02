@@ -1,0 +1,7 @@
+Number of lines in file = 10
+Number of Elem. Ops = 15
+Number of CNOTS (SIGX with single control) = 0
+List of distinct variable numbers encountered (length=3)=
+[1, 2, 3]
+List of distinct function names encountered (length=3)=
+['my_fun1', 'my_fun3', 'my_fun']

@@ -1,0 +1,10 @@
+|   O---+---Rx  
+LOOP	20	NREPS=	2
+|   O---Ry  |   
+    LOOP	10	NREPS=	4
+@---R   |   |   
+    NEXT	10
+|   O---Ry  |   
+NEXT	20
+|   O---+---Rx  
+|   |   Rx  |   
