@@ -1164,6 +1164,31 @@ class SEO_writer:
         self.write_controlled_one_bit_gate(target_bit, trols,
             OneBitGates.sigx)
 
+    def write_c_P1PH(self, control_bit, target_bit, rads=np.pi/2, kind=True):
+        """
+        Writes a simple singly controlled P1PH. If kind=True (resp. False),
+        c_P1PH fires when control is |1> (resp. |0>). When kind= True and
+        rads=p1/2, c_P1PH equals (-1)^{n(t)n(c)} = sigz(t)^{n(c)} where c is
+        the control and t is the target. This is often called a controlled
+        Z, and denoted by Cz.
+
+        Parameters
+        ----------
+        control_bit : int
+        target_bit : int
+        rads : float
+        kind : bool
+
+        Returns
+        -------
+        None
+
+        """
+        num_bits = self.emb.num_bits_aft
+        trols = Controls.new_knob(num_bits, control_bit, kind)
+        self.write_controlled_one_bit_gate(target_bit, trols,
+            OneBitGates.P_1_phase_fac, [rads])
+
     def write_global_phase_fac(self, ang_rads):
         """
         Write a line in eng & pic files for a global phase factor 'PHAS'

@@ -17,7 +17,7 @@ class EngFileLineList:
 
     In this class, we support Qubiter's version of PyQuil's and Cirq's gate
     lists. In Qubiter, we use simply a Python list of the lines, stored as
-    strings, of the circuit's English file.
+    strings, with the ending '\n' removed, of the circuit's English file.
 
     Attributes
     ----------
@@ -37,10 +37,59 @@ class EngFileLineList:
         self.line_list = line_list
 
     @staticmethod
+    def new_one_liner(num_bits, fun_name, param_list):
+        """
+        This method returns a new EngFileLineList with a single line for a
+        single gate. fun_name is the name of any function in SEO_writer
+        whose name starts with the string 'write_' and param_list is a list
+        containing values for the arguments of fun_name. This method creates
+        an object of SEO_writer called `wr` and calls
+
+        eval('wr.' + fun_name + '(*param_list)').
+
+        This will create one-line temporary English and Picture files. The
+        line in the temporary English file is read and used to create a
+        one-line EngFileLineList which is what this method returns. The
+        temporary English and Picture files are deleted after they serve
+        their purpose.
+
+        Parameters
+        ----------
+        num_bits : int
+        fun_name : str
+        param_list : list
+
+        Returns
+        -------
+        EngFileLineList
+
+        """
+        assert fun_name[:6] == 'write_'
+        file_prefix = 'tempo970361432226978'
+        eng_end_str = '_' + str(num_bits) + '_eng.txt'
+        pic_end_str = '_' + str(num_bits) + '_ZLpic.txt'
+        emb = CktEmbedder(num_bits, num_bits)
+
+        wr = SEO_writer(file_prefix, emb)
+        eval('wr.' + fun_name + '(*param_list)')
+        wr.close_files()
+
+        with open(file_prefix + eng_end_str) as fi:
+            line = fi.readline().strip('\n')
+
+        import os
+        os.remove(file_prefix + eng_end_str)
+        os.remove(file_prefix + pic_end_str)
+
+        return EngFileLineList(num_bits, [line])
+
+    @staticmethod
     def eng_file_to_line_list(file_prefix, num_bits):
         """
         This static method reads an English file with file prefix
-        `file_prefix` and it returns a list of its line strings.
+        `file_prefix` and it returns a list of its line strings. Note that
+        the '\n' at the end of each line in the English file is removed
+        before adding it to the line list.
 
         Parameters
         ----------
@@ -61,7 +110,9 @@ class EngFileLineList:
     def line_list_to_eng_and_pic_files(line_list, file_prefix, num_bits):
         """
         This method does the reverse of eng_file_to_line_list(). It writes
-        both an English file and a Picture file with file prefix=file_prefix.
+        both an English file and a Picture file with file
+        prefix=file_prefix. Note that an '\n' is added at the end of each
+        line in the line list before writing the line to the English file.
 
         Parameters
         ----------
@@ -309,4 +360,15 @@ if __name__ == "__main__":
         efill_herm = efill.herm()
         print('\nefill_herm print')
         efill_herm.print()
+
+        one_liner = EngFileLineList.new_one_liner(4,
+            'write_cnot', [0, 1])
+        print('\none_liner print')
+        one_liner.print()
+
+        one_liner = EngFileLineList.new_one_liner(4,
+            'write_Rn', [2, [np.pi/2, -np.pi/2, np.pi/3]])
+        print('\none_liner print')
+        one_liner.print()
+
     main()
