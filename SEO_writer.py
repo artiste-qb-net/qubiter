@@ -1164,11 +1164,11 @@ class SEO_writer:
         self.write_controlled_one_bit_gate(target_bit, trols,
             OneBitGates.sigx)
 
-    def write_c_P1PH(self, control_bit, target_bit, rads=np.pi/2, kind=True):
+    def write_c_P1PH(self, control_bit, target_bit, rads=np.pi, kind=True):
         """
         Writes a simple singly controlled P1PH. If kind=True (resp. False),
         c_P1PH fires when control is |1> (resp. |0>). When kind= True and
-        rads=p1/2, c_P1PH equals (-1)^{n(t)n(c)} = sigz(t)^{n(c)} where c is
+        rads=p1, c_P1PH equals (-1)^{n(t)n(c)} = sigz(t)^{n(c)} where c is
         the control and t is the target. This is often called a controlled
         Z, and denoted by Cz.
 
