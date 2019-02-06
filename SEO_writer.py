@@ -4,6 +4,7 @@ from OneBitGates import *
 import re
 import utilities_gen as ug
 from PlaceholderManager import *
+import numpy as np
 
 
 class SEO_writer:
@@ -531,7 +532,10 @@ class SEO_writer:
         str
 
         """
-        if isinstance(rads, float):
+        # print("--nnn", type(rads))
+        # np.float types are different from float!!!
+        if isinstance(rads, (float, np.floating)):
+            # print("--nnn", str(rads*180/np.pi))
             return str(rads*180/np.pi)
         else:
             assert PlaceholderManager.is_legal_var_name(rads), \
@@ -892,6 +896,7 @@ class SEO_writer:
         # use BY to indicate end of controls
         self.english_out.write("\tBY\t")
         for k in range(num_angles):
+            # print('nmnmkkk', k, num_angles, rad_angles[k])
             self.english_out.write(
                 self.rads_to_degs_str(rad_angles[k]) +
                 ("\n" if k == (num_angles-1) else "\t"))
