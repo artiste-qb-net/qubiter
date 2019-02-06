@@ -2,6 +2,9 @@ import numpy as np
 import pprint as pp
 import scipy as sc
 import utilities_gen as ut
+from collections import OrderedDict
+import pandas as pan
+from Plotter import *
 
 
 class StateVec:
@@ -14,6 +17,9 @@ class StateVec:
     SEO_simulation. This class also provides a function for constructing
     from such dictionaries of state vectors, a density matrix which is a 2
     dim square numpy array of dimension 2^num_bits.
+
+    IMPORTANT: See docstring of method get_traditional_st_vec() for
+    explanation of qubit ordering conventions and shape of self.arr
     
     Attributes
     ----------
@@ -149,12 +155,15 @@ class StateVec:
 
     def get_traditional_st_vec(self):
         """
-        Internally, self.arr in Qubiter has shape [2]*num_bits and assumes
-        ZF convention for axes indexes. However, the traditional way of
-        writing a state vector is as a column array of dimension 1<<
-        num_bits in the ZL convention. This function returns the traditional
-        view. So it reshapes (flattens) the array and it reverses the axes (
-        reversing axes takes it from ZF to ZL).
+        **IMPORTANT: Internally, self.arr in Qubiter has shape [2]*num_bits
+        and assumes ZF convention because that way a numpy axis and a qubit
+        number are the same thing. However, the traditional way of writing a
+        state vector is as a column array of dimension 1<< num_bits in the
+        ZL convention.**
+
+        This function returns the traditional view. So it reshapes (
+        flattens) the array and it reverses the axes (reversing axes takes
+        it from ZF to ZL).
 
         The rows are always labelled 0, 1, 2, 3, ... or the binary
         representation thereof, regardless of whether ZL or ZF convention.
@@ -361,18 +370,23 @@ class StateVec:
         return np.sum(np.real(self.arr*self.arr.conj()))
 
     @staticmethod
-    def sample_pd(num_bits, pd, num_samples, rand_seed=None):
+    def get_observations_vec(num_bits, pd, num_shots, rand_seed=None):
         """
-        For num_samples=1, this method returns an int (actually, a 1 X 1
-        array with an int in it) in range(1<<num_bits) chosen according to
-        the probability distribution pd for num_bits qubits. If the output
-        int is expressed in binary notation, its last, rightmost bit is the
-        measurement of the 0th qubit (because pd is assumed to be in ZL
-        convention).
+        vec = vector
 
-        For num_samples>1, the method returns an np.ndarray of length
-        num_samples with the result of doing num_samples repetitions of what
-        was done for num_samples=1.
+        num_shots (number of shots) is often called number of trials or
+        number of samples.
+
+        For num_shots=1, this method returns an int (actually, a 1 X 1 array
+        with an int in it) in range(1<<num_bits) chosen according to the
+        probability distribution pd for num_bits qubits. If the output int
+        were to be expressed in binary notation, its last, rightmost bit
+        would be the measurement of the 0th qubit (because pd is assumed to
+        be in ZL convention).
+
+        For num_shots>1, the method returns an np.ndarray of shape (
+        num_shots,) with the result of doing num_shots repetitions of what
+        was done for num_shots=1.
 
         Does not assume that pd is normalized to 1.
 
@@ -382,13 +396,13 @@ class StateVec:
         pd : np.ndarray
             probability distribution of shape (2^num_bits,) IMP: assumed to
             be indexed in ZL convention
-        num_samples : int
+        num_shots : int
         rand_seed : int
 
         Returns
         -------
         np.ndarray
-            shape (num_samples,)
+            shape (num_shots,)
 
         """
         if rand_seed:
@@ -399,7 +413,45 @@ class StateVec:
         p = pd
         if abs(tot_prob-1) > 1e-5:
             p = pd/tot_prob
-        return np.random.choice(np.arange(0, len_pd), size=num_samples, p=p)
+        return np.random.choice(np.arange(0, len_pd), size=num_shots, p=p)
+
+    @staticmethod
+    def get_counts_from_obs_vec(num_bits, obs_vec,
+                    use_bin_labels=True, omit_zero_counts=True):
+        """
+        This method returns an OrderedDict called state_name_to_counts that
+        maps the names of states to the number of times they occur in the
+        observations vector obs_vec. If use_bin_labels=True, state names are
+        a string composed of a binary number that is num_bits long, followed
+        by 'ZL' because ZL convention is assumed. If use_bin_labels=False,
+        state names are '0', '1', '2', etc.
+
+        Parameters
+        ----------
+        num_bits : int
+        obs_vec : np.ndarray
+        use_bin_labels : bool
+        omit_zero_counts : bool
+
+        Returns
+        -------
+        OrderedDict[str, int]
+
+        """
+        obs_list = list(obs_vec)
+        num_states = 1 << num_bits
+        state_name_to_counts = OrderedDict()
+        for s in range(num_states):
+            s_count = obs_list.count(s)
+            if use_bin_labels:
+                # this returns string
+                key = np.binary_repr(s, width=num_bits)
+                key += 'ZL'
+            else:
+                key = str(s)
+            if s_count > 0 or not omit_zero_counts:
+                state_name_to_counts[key] = s_count
+        return state_name_to_counts
 
     @staticmethod
     def get_bit_probs(num_bits, pd):
@@ -444,34 +496,38 @@ class StateVec:
         # print(probs)
         return probs
 
-    @staticmethod
-    def get_bit_counts(bit_probs, num_trials, rand_seed=None):
-        """
-        Returns a list whose jth item is, for the jth qubit, the pair (
-        count0, count1), where count0 + count1 = num_trials, and as
-        num_trials ->infinity, (count0, count1)/num_trials tends to the
-        probability pair bit_probs[j].
-
-        Parameters
-        ----------
-        bit_probs : list[tuple[float, float]]
-        num_trials : int
-        rand_seed : int
-
-        Returns
-        -------
-        list[tuple[int, int]]
-
-        """
-        if rand_seed:
-            np.random.seed(rand_seed)
-        num_bits = len(bit_probs)
-        counts = []
-        for bit in range(num_bits):
-            x1 = np.random.binomial(n=num_trials, p=bit_probs[bit][1])
-            x0 = num_trials - x1
-            counts.append((x0, x1))
-        return counts
+    # this method is correct but superfluous, I think
+    # @staticmethod
+    # def get_bit_counts(bit_probs, num_shots, rand_seed=None):
+    #     """
+    #     num_shots (number of shots) is often called number of trials or
+    #     number of samples.
+    #
+    #     Returns a list whose jth item is, for the jth qubit, the pair (
+    #     count0, count1), where count0 + count1 = num_shots, and as num_shots
+    #     ->infinity, (count0, count1)/num_shots tends to the probability pair
+    #     bit_probs[j].
+    #
+    #     Parameters
+    #     ----------
+    #     bit_probs : list[tuple[float, float]]
+    #     num_shots : int
+    #     rand_seed : int
+    #
+    #     Returns
+    #     -------
+    #     list[tuple[int, int]]
+    #
+    #     """
+    #     if rand_seed:
+    #         np.random.seed(rand_seed)
+    #     num_bits = len(bit_probs)
+    #     counts = []
+    #     for bit in range(num_bits):
+    #         x1 = np.random.binomial(n=num_shots, p=bit_probs[bit][1])
+    #         x0 = num_shots - x1
+    #         counts.append((x0, x1))
+    #     return counts
 
     def pp_arr_entries(self, omit_zero_amps=False,
                           show_probs=False, ZL=True):
@@ -634,9 +690,14 @@ if __name__ == "__main__":
         bit_probs_vec = StateVec.get_bit_probs(num_bits, st_vec_pd)
         bit_probs_dm = StateVec.get_bit_probs(num_bits, den_mat_pd)
 
-        print("counts_dm=\n", StateVec.get_bit_counts(bit_probs_dm, 10))
-        print('sample_st_vec_pd, ' + str(num_bits) + ' qubits\n',
-              StateVec.sample_pd(num_bits, st_vec_pd, num_samples=20))
+        # print("counts_dm=\n", StateVec.get_bit_counts(bit_probs_dm, 10))
+
+        obs_vec = StateVec.get_observations_vec(
+            num_bits, st_vec_pd, num_shots=20)
+        print('observations vec\n', obs_vec)
+        counts = StateVec.get_counts_from_obs_vec(num_bits, obs_vec)
+        print('counts from obs_vec\n', counts)
+
         StateVec.describe_st_vec_dict(st_vec_dict,
                 print_st_vec=True, do_pp=True,
                 omit_zero_amps=False, show_probs=True, ZL=True)

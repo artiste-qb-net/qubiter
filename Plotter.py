@@ -174,9 +174,21 @@ class Plotter:
                 ax.set_xticks([0, .25, .5, .75, 1])
                 ax.set_xlim(0, 1)
 
+                for row in range(len(y_pos)):
+                    val = pd_df.values[row]
+                    if isinstance(val, np.ndarray):
+                        val = val[0]
+                    ax.text(val, y_pos[row], '{:.3f}'.format(val))
+
                 ax.grid(True)
                 ax.set_title(title)
-                ax.barh(y_pos, pd_df.values, align='center')
+                # new version of python/matplotlib has bug here.
+                # The following used to work but no longer does.
+                # ax.barh(y_pos, pd_df.values, align='center')
+                # work around
+                for b in range(len(y_pos)):
+                    ax.barh(y_pos[b], pd_df.values[b],
+                            align='center', color='blue')
         plt.close('all')
         fig, ax_list = plt.subplots(nrows=num_titles, ncols=1)
         # print("***", ax_list[0])
@@ -252,8 +264,8 @@ class Plotter:
             ax.set_aspect('equal', adjustable='box')
             ax.set_title(title, y=1.2)
 
-            for k, nom in enumerate(states):
-                ax.annotate(nom, xy=(x_num_sts+.25, k),
+            for st, nom in enumerate(states):
+                ax.annotate(nom, xy=(x_num_sts+.25, st),
                             annotation_clip=False)
             max_mag = np.max(np.absolute(df.values))
             q = ax.quiver(xx, yy, df.values.real,
@@ -270,6 +282,28 @@ class Plotter:
             single_ax(ax_list[k], tit, df_list[k])
         plt.tight_layout(pad=2)
         plt.show()
+
+    @staticmethod
+    def plot_counts(state_name_to_counts):
+        """
+        Plots an OrderedDict[str, int] called state_name_to_counts as a bar
+        graph. Divides counts by their sum before plotting.
+
+        Parameters
+        ----------
+        state_name_to_counts : OrderedDict[str, int]
+
+        Returns
+        -------
+        None
+
+        """
+        dictio = state_name_to_counts
+        data = np.array(list(dictio.values()), dtype=float)
+        data /= np.sum(data)
+        df = pan.DataFrame(data, index=dictio.keys())
+        Plotter.plot_probs_col(['count prob'], [df])
+
 
 if __name__ == "__main__":
 

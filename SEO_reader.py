@@ -94,6 +94,10 @@ class SEO_reader(SEO_pre_reader):
             self.vars_manager.eval_all_vars = False
         self.xfile_num = xfile_num
         if xfile_num >= 0:
+            assert not self.vars_manager.var_num_to_rads, "we don't "\
+                "allow a var_num_to_rads and a loop xfile simultaneously"
+            assert not self.vars_manager.fun_name_to_fun, "we don't "\
+                "allow a fun_name_to_fun and a loop xfile simultaneously"
             self.fill_history_lists_by_executing_loop_xfile()
         self.measured_bits = []
         self.mcase_trols = None
@@ -228,13 +232,13 @@ class SEO_reader(SEO_pre_reader):
             print("Expected to find but didn't find a file named\n" +
                   xfile_name)
             exit()
-        var_dict = \
-            {
-                'all_var_nums': all_var_nums,
-                'all_fun_names': all_fun_names,
-                'var_num_to_hist': var_num_to_hist,
-                'fun_name_to_hist': fun_name_to_hist
-            }
+        # var_dict = \
+        #     {
+        #         'all_var_nums': all_var_nums,
+        #         'all_fun_names': all_fun_names,
+        #         'var_num_to_hist': var_num_to_hist,
+        #         'fun_name_to_hist': fun_name_to_hist
+        #     }
         exec(loopx_in.read())
         self.vars_manager.all_var_nums = all_var_nums
         self.vars_manager.all_fun_names = all_fun_names

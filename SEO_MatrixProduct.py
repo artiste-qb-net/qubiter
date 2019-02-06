@@ -3,13 +3,13 @@ from StateVec import *
 # from Controls import *
 
 
-class SEO_simulator_sp(SEO_simulator):
+class SEO_simulator_mp(SEO_simulator):
     """
-    This class is a sp (special) child of class SEO_simulator. An object of
-    this class is created inside class SEO_MatrixProduct. The purpose of
-    this class is to override the use_MEAS() function of its parent class
-    SEO_simulator. The new use_MEAS() returns an error message if an English
-    file with a MEAS line is being read.
+    This class is a mp (matrix product) child of class SEO_simulator. An
+    object of this class is created inside class SEO_MatrixProduct. The
+    purpose of this class is to override the use_MEAS() function of its
+    parent class SEO_simulator. The new use_MEAS() returns an error message
+    if an English file with a MEAS line is being read.
     """
 
     def use_MEAS(self, tar_bit_pos, kind):
@@ -30,6 +30,22 @@ class SEO_simulator_sp(SEO_simulator):
         assert False, "this lightweight class cannot handle MEAS"\
             "or its concomitant branches"
 
+    def use_PRINT(self, style, line_num):
+        """
+        If circuit has any PRINT statements, skip them
+
+        Parameters
+        ----------
+        style : str
+        line_num : int
+
+        Returns
+        -------
+        None
+
+        """
+        pass
+
 
 class SEO_MatrixProduct:
     """
@@ -40,7 +56,7 @@ class SEO_MatrixProduct:
     product of the matrices corresponding to each line (gate) of an English
     file.
 
-    In order to accomplish this goal, this class calls SEO_simulalor_sp
+    In order to accomplish this goal, this class calls SEO_simulalor_mp
     repeatedly using as initial state vector all the standard basis vectors
     (2^num_bits of them). Then the class assembles the product matrix that
     we seek by stacking on top of each other all the 2^num_bits final
@@ -90,8 +106,8 @@ class SEO_MatrixProduct:
                 spin_dir_list, ZL=True)
             # print("---", spin_dir_list)
             # print(init_st_vec)
-            sim = SEO_simulator_sp(file_prefix, num_bits,
-                    init_st_vec=init_st_vec)
+            sim = SEO_simulator_mp(file_prefix, num_bits,
+                                   init_st_vec=init_st_vec)
             fin_st_vec = sim.cur_st_vec_dict["pure"]
             fin = StateVec.get_traditional_st_vec(fin_st_vec)
             fin_list.append(fin)

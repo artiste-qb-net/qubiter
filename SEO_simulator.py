@@ -342,6 +342,65 @@ class SEO_simulator(SEO_reader):
                                           # print_st_vec=True,
                                           show_probs=True)
 
+    def describe_st_vec_dict(self, **kwargs):
+        """
+        Calls method with same name in class StateVec. It prints a
+        description of the current state vector dictionary. Can call this at
+        the end, after running through whole circuit.
+
+        Parameters
+        ----------
+        kwargs : dict
+
+        Returns
+        -------
+        None
+
+        """
+
+        return StateVec.describe_st_vec_dict(self.cur_st_vec_dict,
+                                             **kwargs)
+
+    def get_counts(self, num_shots, omit_zero_counts=True,
+                   use_bin_labels=True, rand_seed=None):
+        """
+        This method calculates a probability distribution that we call pd
+        from the current state vector if it is pure. (If the state vec is
+        not pure, it calculates a density matrix from the
+        self.cur_st_vec_dict. Then it extracts the diagonal of that density
+        matrix. That diagonal must be a probability distribution that we
+        call pd.) Then the method samples pd, num_shot times. The method
+        returns the result of that sampling as an OrderedDict
+        state_name_to_counts. Depending on the value of the flag
+        use_bin_labels, the state names are a string '0', '1', '2', etc,
+        or their binary representations followed by 'ZL', because the ZL
+        convention is assumed.
+
+        Parameters
+        ----------
+        num_shots : int
+        omit_zero_counts : bool
+        use_bin_labels : bool
+        rand_seed : int
+
+        Returns
+        -------
+        OrderedDict[str, int]
+
+        """
+        if len(self.cur_st_vec_dict) == 1:
+            # print('..,,mm', 'was here')
+            pd = self.cur_st_vec_dict['pure'].get_pd()
+        else:
+            den_mat = StateVec.get_den_mat(self.num_bits, self.cur_st_vec_dict)
+            pd = StateVec.get_den_mat_pd(den_mat)
+        # print('....,,,', pd.shape)
+        obs_vec = StateVec.get_observations_vec(
+            self.num_bits, pd, num_shots, rand_seed)
+
+        return StateVec.get_counts_from_obs_vec(self.num_bits, obs_vec,
+                        use_bin_labels, omit_zero_counts)
+
     def use_DIAG(self, trols, rad_angles):
         """
         This method should not be called. If called, it explains why it
