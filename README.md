@@ -1,13 +1,28 @@
 # Qubiter at GitHub
 
+## Tutorial
+
+The following Jupyter notebook is a 
+good introduction to Qubiter's basic features. Other notebooks
+in the jupyter notebook folder
+ of Qubiter deal with more advanced features:
+
+* https://github.com/artiste-qb-net/qubiter/blob/master/jupyter-notebooks/Say_Hello_World_With_Qubiter.ipynb
+
 ## Installation
 
-You can install qubiter from the Python package manager `pip` using:
+You can get latest version or update
+an older version of Qubiter on your computer
+from this repo by using Git commands.
+
+Alternatively, you can install an older but more stable version
+ of Qubiter from the Python package
+ manager `pip` using:
 ```
 pip install qubiter --user
 ```
 
-If you are using a JupyterNotebook, use:
+If you are using a Jupyter notebook, use:
 ```
 !pip install qubiter --user
 ```

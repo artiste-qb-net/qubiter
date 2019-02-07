@@ -243,9 +243,9 @@ class SEO_simulator(SEO_reader):
                         br_trols, self.mcase_trols):
                     evolve_br = True
             if evolve_br:
-                arr = self.cur_st_vec_dict[br_key].arr[slicex]
-                self.cur_st_vec_dict[br_key].arr[slicex] = \
-                    arr.transpose(perm)
+                arr = self.cur_st_vec_dict[br_key].arr[tuple(slicex)]
+                self.cur_st_vec_dict[br_key].arr[tuple(slicex)] = \
+                    arr.transpose(tuple(perm))
 
     def evolve_by_controlled_one_bit_gate(self,
                 tar_bit_pos, controls, one_bit_gate):
