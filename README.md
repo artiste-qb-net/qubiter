@@ -4,14 +4,25 @@
 
 The following Jupyter notebook is a 
 good introduction to Qubiter's basic features. Other notebooks
-in the jupyter notebook folder
- of Qubiter deal with more advanced features:
+in Qubiter's jupyter notebook folder
+discuss more advanced features:
 
 * https://github.com/artiste-qb-net/qubiter/blob/master/jupyter-notebooks/Say_Hello_World_With_Qubiter.ipynb
 
 ## Installation
 
-You can get latest version or update
+The simplest thing that avoids 
+many of the installation hassles is to get an account 
+on our Amazon cloud service
+www.bayesforge.com. It's free for one year. 
+ Bayesforge already has 
+all of Python and Qubiter installed (although you may need to 
+update Qubiter using Git).
+ Bayesforge is also available on the Tencent cloud.
+ 
+
+
+Of  course, you can also clone the latest version or update
 an older version of Qubiter on your computer
 from this repo by using Git commands.
 
