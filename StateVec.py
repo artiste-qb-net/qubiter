@@ -358,26 +358,29 @@ class StateVec:
         x = self.get_traditional_st_vec()
         return np.real(x*np.conj(x))
 
-    def get_mean_value_of_real_diag_mat(self, real_diag_mat):
+    def get_mean_value_of_real_diag_mat(self, real_vec):
         """
         In Quantum Mechanics, one often needs to calculate the mean value of
         a Hermitian operator H, mean= <psi|H|psi>. Let H = U^\dag D U,
         where U is unitary and D is real diagonal matrix. If self = U|psi>,
-        and real_diag_mat = D, then this reduces to finding mean=
-        <self|real_diag_mat|self>. So must decompose U into a SEO and
-        evolve, using SEO_simulator, to the state U|psi>.
+        then this reduces to finding mean= <self|D|self>. So must decompose
+        U into a SEO and evolve, using SEO_simulator, to the state U|psi>.
 
         Parameters
         ----------
-        real_diag_mat : np.ndarray
-            shape [2]^num_bits
+        real_vec : np.ndarray              
+             a real vector of shape=[2]^num_bits (same shape as self.arr).
+             If flattened, real_vec contains the diagonal of the matrix D.
+             If U is a Kronecker prod of 2-dim unitary matrices, real_vec
+             can be obtained as Kronecker product of spinors, i.e., shape=(
+             2, ) arrays.
 
         Returns
         -------
         float
 
         """
-        return np.sum(np.real(self.arr.conj()*real_diag_mat*self.arr))
+        return np.sum(np.real(self.arr.conj()*real_vec*self.arr))
 
     def get_total_prob(self):
         """
