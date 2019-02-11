@@ -114,8 +114,8 @@ class StateVec:
         if rand_seed:
             np.random.seed(rand_seed)
         # returns array of random numbers in [0, 1] interval
-        mat_phi = 2*np.pi*np.random.rand(1 << num_bits)
-        mat_r = np.random.rand(1 << num_bits)
+        mat_phi = 2*np.pi*np.random.random(1 << num_bits)
+        mat_r = np.random.random(1 << num_bits)
         arr = mat_r*(np.cos(mat_phi) + 1j*np.sin(mat_phi))
         magnitude = np.linalg.norm(arr)
         arr /= magnitude
@@ -155,6 +155,7 @@ class StateVec:
 
     def get_traditional_st_vec(self):
         """
+
         **IMPORTANT: Internally, self.arr in Qubiter has shape [2]*num_bits
         and assumes ZF convention because that way a numpy axis and a qubit
         number are the same thing. However, the traditional way of writing a
@@ -170,11 +171,13 @@ class StateVec:
         One can go from digital to binary labels and vice versa
         using::
 
-            >>> x = np.binary_repr(3, width=4)
-            >>> x
+            # this didn't pass sphinx if used >>> instead of $
+            $ x = np.binary_repr(3, width=4)
+            $ x
             '0011'
-            >>> int(x, 2)
+            $ int(x, 2)
             3
+
 
         Parameters
         ----------
@@ -355,6 +358,27 @@ class StateVec:
         x = self.get_traditional_st_vec()
         return np.real(x*np.conj(x))
 
+    def get_mean_value_of_real_diag_mat(self, real_diag_mat):
+        """
+        In Quantum Mechanics, one often needs to calculate the mean value of
+        a Hermitian operator H, mean= <psi|H|psi>. Let H = U^\dag D U,
+        where U is unitary and D is real diagonal matrix. If self = U|psi>,
+        and real_diag_mat = D, then this reduces to finding mean=
+        <self|real_diag_mat|self>. So must decompose U into a SEO and
+        evolve, using SEO_simulator, to the state U|psi>.
+
+        Parameters
+        ----------
+        real_diag_mat : np.ndarray
+            shape [2]^num_bits
+
+        Returns
+        -------
+        float
+
+        """
+        return np.sum(np.real(self.arr.conj()*real_diag_mat*self.arr))
+
     def get_total_prob(self):
         """
         Returns total probability of self.
@@ -367,7 +391,7 @@ class StateVec:
         float
 
         """
-        return np.sum(np.real(self.arr*self.arr.conj()))
+        return np.sum(np.real(self.arr.conj()*self.arr))
 
     @staticmethod
     def get_observations_vec(num_bits, pd, num_shots, rand_seed=None):
