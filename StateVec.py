@@ -368,7 +368,7 @@ class StateVec:
 
         Parameters
         ----------
-        real_vec : np.ndarray              
+        real_vec : np.ndarray
              a real vector of shape=[2]^num_bits (same shape as self.arr).
              If flattened, real_vec contains the diagonal of the matrix D.
              If U is a Kronecker prod of 2-dim unitary matrices, real_vec
