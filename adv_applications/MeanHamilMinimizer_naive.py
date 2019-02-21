@@ -19,13 +19,15 @@ class MeanHamilMinimizer_naive(MeanHamilMinimizer):
     realized, heck, rather than trying to estimate the eigenvalues of a
     Hamiltonian by estimating the phase changes it causes, we can estimate
     those eigenvalues more efficiently by estimating the mean value of that
-    Hamiltonian as measured empirically on a qc. One of the first papers to
-    propose this mean idea is https://arxiv.org/abs/1304.3061 Their algo is
-    commonly referred to by the ungainly name VQE (Variational Quantum
-    Eigensolver) VQE was originally applied to do quantum chemistry with a
-    qc. But now Rigetti and others have renamed it hybrid quantum-classical
-    quantum computing and pointed out that it's an algo that has wide
-    applicability, not just to quantum chemistry.
+    Hamiltonian as measured empirically on a qc. Basically, just the
+    Rayleigh-Ritz method, one of the oldest tricks in the book. One of the
+    first papers to propose this mean idea is
+    https://arxiv.org/abs/1304.3061 Their algo is commonly referred to by
+    the ungainly name VQE (Variational Quantum Eigensolver) VQE was
+    originally applied to do quantum chemistry with a qc. But now Rigetti
+    and others have renamed it hybrid quantum-classical quantum computing
+    and pointed out that it's an algo that has wide applicability, not just
+    to quantum chemistry.
 
     The idea behind hybrid quantum-classical is very simple. One has a
     classical box CBox and a quantum box QBox. The gates of QBox depend on N
@@ -39,7 +41,7 @@ class MeanHamilMinimizer_naive(MeanHamilMinimizer):
     methods like simulated annealing that do not require calculating
     derivatives, or one can use methods that do use derivatives.
 
-    The family of steepest descent methods (e.g., those that use auto
+    The family of gradient descent methods (e.g., those that use auto
     differentiation and back-propagation) use only first derivatives.
 
     Other methods use both first (Jacobian) and second (Hessian)
