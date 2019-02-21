@@ -446,9 +446,11 @@ class StateVec:
     def get_counts_from_obs_vec(num_bits, obs_vec,
                     use_bin_labels=True, omit_zero_counts=True):
         """
-        This method returns an OrderedDict called state_name_to_counts that
-        maps the names of states to the number of times they occur in the
-        observations vector obs_vec. If use_bin_labels=True, state names are
+        This method takes as input an observations vector obs_vec such as
+        returned by another method in this class, namely
+        get_observations_vec(). This method returns an OrderedDict called
+        state_name_to_count that maps the names of states to the number of
+        times they occur in obs_vec. If use_bin_labels=True, state names are
         a string composed of a binary number that is num_bits long, followed
         by 'ZL' because ZL convention is assumed. If use_bin_labels=False,
         state names are '0', '1', '2', etc.
@@ -467,7 +469,7 @@ class StateVec:
         """
         obs_list = list(obs_vec)
         num_states = 1 << num_bits
-        state_name_to_counts = OrderedDict()
+        state_name_to_count = OrderedDict()
         for s in range(num_states):
             s_count = obs_list.count(s)
             if use_bin_labels:
@@ -477,8 +479,67 @@ class StateVec:
             else:
                 key = str(s)
             if s_count > 0 or not omit_zero_counts:
-                state_name_to_counts[key] = s_count
-        return state_name_to_counts
+                state_name_to_count[key] = s_count
+        return state_name_to_count
+
+    @staticmethod
+    def get_empirical_pd_from_counts(num_bits, state_name_to_count):
+        """
+        This method takes as input "the counts dict" (i.e., an OrderedDict
+        called state_name_to_count which is produced by another method in
+        this class, namely get_counts_from_obs_vec()). This method returns
+        an empirical probability distribution emp_pd calculated from the
+        counts dict. emp_pd indices are ints referring to qubit states
+        labelled in the ZL convention.
+
+        Parameters
+        ----------
+        num_bits : int
+        state_name_to_count : OrderedDict[str, int]
+
+        Returns
+        -------
+        emp_pd : np.ndarray
+            its shape is (1<<num_bits,)
+
+        """
+        emp_pd = np.zeros(shape=(1 << num_bits,), dtype=float)
+        tot_counts = 0
+        for st_name, count in state_name_to_count.items():
+            # state name ends in ZL so trim last two chars
+            pos = int(st_name[:-2], 2)
+            emp_pd[pos] = count
+            tot_counts += count
+        return emp_pd/tot_counts
+
+    @staticmethod
+    def get_emp_state_vec_from_emp_pd(num_bits, emp_pd):
+        """
+        This method takes as input an empirical probability distribution
+        emp_pd and it returns an empirical state vector calculated from
+        emp_pd. This requires reshaping emp_pd to the shape [2]*num_bits,
+        permuting its indices from the ZL to the ZF convention, and then
+        taking the sqrt of the components to get an amplitude instead of a
+        probability. All amplitudes of the output state vector are real
+        though.
+
+        Parameters
+        ----------
+        num_bits : int
+        emp_pd : np.ndarray
+            its shape is (1<<num_bits,)
+
+        Returns
+        -------
+        StateVec
+
+        """
+        assert emp_pd.shape == (1 << num_bits,)
+        arr = emp_pd.reshape(tuple([2]*num_bits))
+        perm = list(reversed(range(num_bits)))
+        arr = np.transpose(arr, perm)
+        sqrt_probs = np.sqrt(arr)
+        return StateVec(num_bits, sqrt_probs)
 
     @staticmethod
     def get_bit_probs(num_bits, pd):

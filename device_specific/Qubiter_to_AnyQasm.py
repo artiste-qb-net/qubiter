@@ -98,7 +98,7 @@ class Qubiter_to_AnyQasm(SEO_reader):
     """
     def __init__(self, file_prefix, num_bits, qasm_name='',
             strict_mode=False, c_to_tars=None, write_qubiter_files=False,
-                 vars_manager=None, **kwargs):
+                 vars_manager=None, qasm_ftype='txt',  **kwargs):
         """
         Constructor
 
@@ -111,6 +111,9 @@ class Qubiter_to_AnyQasm(SEO_reader):
         c_to_tars : dict[int, list[int]]|None
         write_qubiter_files : bool
         vars_manager : PlaceholderManager
+        qasm_ftype : str
+            file type of output qasm file. If this equals 'txt', name of
+            qasm file will end in '.txt'
 
         Returns
         -------
@@ -131,7 +134,8 @@ class Qubiter_to_AnyQasm(SEO_reader):
         self.c_to_tars = c_to_tars
         self.write_qubiter_files = write_qubiter_files
 
-        self.qasm_out = open(file_prefix + '_' + qasm_name + '.txt', 'wt')
+        self.qasm_out = open(file_prefix +
+                             '_' + qasm_name + '.' + qasm_ftype, 'wt')
 
         self.qbtr_wr = None
         if write_qubiter_files:
@@ -176,15 +180,15 @@ class Qubiter_to_AnyQasm(SEO_reader):
         """
         assert False
 
-    def new_var_name(self, var_name, appendix):
+    def new_var_name(self, var_name, surname):
         """
         Asserts that var_name is a str. This method replaces # in var_name
-        by self.vprefix and adds the str `appendix` to end of string.
+        by self.vprefix and adds surname to end of string.
 
         Parameters
         ----------
         var_name : str
-        appendix : str
+        surname : str
 
         Returns
         -------
@@ -193,9 +197,9 @@ class Qubiter_to_AnyQasm(SEO_reader):
         """
         assert isinstance(var_name, str)
         if var_name[0] == "#":
-            return self.vprefix + var_name[1:] + appendix
+            return self.vprefix + var_name[1:] + surname
         else:  # starts with -#
-            return "-" + self.vprefix + var_name[2:] + appendix
+            return "-" + self.vprefix + var_name[2:] + surname
 
 
 if __name__ == "__main__":

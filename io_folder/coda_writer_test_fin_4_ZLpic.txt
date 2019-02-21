@@ -1,0 +1,24 @@
+|   X   |   |   
+|   Y   |   |   
+|   Z   |   |   
+H   |   |   |   
+|   Rx  |   |   
+|   Ry  |   |   
+|   Rz  |   |   
+|   |   R   |   
+|   @P  |   |   
+|   @P  |   |   
+|   @P  |   |   
+|   @P  |   |   
+@---+---X   |   
+PRINT	ALL
+<---+--->   |   
+@---+---@P  |   
+@---+---@P  |   
+NOTA	the coda follows
+|   H   |   |   
+|   |   X---@   
+NOTA	X measurement from |0>, |1>
+|   |   Ry  |   
+NOTA	Y measurement from |0>, |1>
+Rx  |   |   |   

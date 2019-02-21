@@ -968,7 +968,7 @@ class SEO_writer:
         ----------
         tar_bit_pos : int
         one_bit_gate_fun : function
-        fun_arg_list : list[]
+        fun_arg_list : list
 
         Returns
         -------

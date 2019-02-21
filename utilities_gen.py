@@ -1,4 +1,5 @@
 import numpy as np
+from functools import reduce
 
 
 # def centered_rads(ang_rads):
@@ -211,3 +212,42 @@ def is_non_neg_int(s):
     if s[0] == '0' and len(s) > 1:
         return False
     return True
+
+def scalar_prod(scalars_list):
+    """
+    This method returns the product of the list of scalars which it has as
+    input.
+
+    Parameters
+    ----------
+    scalars_list : list[int|float|complex] | tuple[int|float|complex]
+
+    Returns
+    -------
+    complex|float|int
+
+    """
+    if len(scalars_list) == 1:
+        return scalars_list[0]
+    else:
+        return reduce(lambda x, y: x*y, scalars_list)
+
+def kron_prod(mat_list):
+    """
+    This method returns the Kronecker product of the list of matrices which
+    is has as input.
+
+    Parameters
+    ----------
+    mat_list : list[np.ndarray]
+
+    Returns
+    -------
+    np.ndarray
+
+    """
+    num_mats = len(mat_list)
+    prod = mat_list[0]
+    for k in range(1, num_mats, 1):
+        prod = np.kron(prod, mat_list[k])
+    return prod
