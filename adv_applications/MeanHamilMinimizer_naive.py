@@ -38,29 +38,45 @@ class MeanHamilMinimizer_naive(MeanHamilMinimizer):
     empirically on a qc which resides inside the QBox.
 
     To minimize a function of N continuous parameters, one can use some
-    methods like simulated annealing that do not require calculating
-    derivatives, or one can use methods that do use derivatives.
+    methods like simulated annealing and Powell that do not require
+    calculating derivatives, or one can use methods that do use derivatives.
+    Another possible separation is between methods that don't care which
+    local minimum they find, as long as they find one of them, and those
+    methods that try to find the best local minimum of them all, the so
+    called global minimum. Yet another separation is between methods that
+    allow constraints and those that don't.
 
-    The family of gradient descent methods (e.g., those that use auto
-    differentiation and back-propagation) use only first derivatives.
+    Among the methods that do use derivatives, the so called gradient based
+    methods only use the 1st derivative, whereas other methods use both
+    first (Jacobian) and second (Hessian) derivatives. The performance of
+    those that use both 1st and 2nd derivatives degrades quickly as N grows.
+    Besides, calculating 2nd derivatives is very expensive. Hence, methods
+    that use the 2nd derivatives are practically useless in the neural
+    network field where N is usually very large. In that field, gradient
+    based methods rule.
 
-    Other methods use both first (Jacobian) and second (Hessian)
-    derivatives. Powell and Nelder-Mead are two methods of this kind. They
-    are both implemented in the Numpy function `scipy.optimize.minimize`.
-
-    Among the methods that do use derivatives, the performance of those that
-    use both 1st and 2nd derivatives degrades quickly as N grows. Besides,
-    calculating 2nd derivatives is very expensive. Hence, methods that use
-    the 2nd derivatives are practically useless in the neural network field
-    where N is usually very large. In that field, back-propagation rules.
+    A method that uses no derivatives is Powell. A gradient based method
+    that is designed to have a fast convergence rate is the Conjugate
+    Gradient (CG) method. Another gradient based method is back-propagation
+    (BP). BP can be implemented as distributed computing much more easily
+    than other gradient based methods so it is favored by the most popular
+    computer programs for doing distributed AI, such as PyTorch and
+    Tensorflow.
 
     Qubiter's class `MeanHamilMinimizer_naive` is a wrapper class designed
-    mainly around `scipy.optimize.minimize`. This scipy umbrella method
-    implements many of those methods that use 1st and 2nd derivatives. That
-    is why I call this class naive. So why write and study this class at
-    all? Because it is pedagogical and allows one to set up some of the
-    structures used to implement more advanced methods that do use
-    back-propagation.
+    around `scipy.optimize.minimize`. This scipy umbrella method implements
+    many minimization methods, including Powell and CG.
+
+    https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html
+
+    `MeanHamilMinimizer_naive` does not take advantage of distributed
+    computing or BP. Furthermore, it does not call real physical hardware to
+    do the simulation. Instead, it uses Qubiter's built-in simulator,
+    `SEO_simulator`. That is why I call this class naive. So why write and
+    study this class at all? Because it is pedagogical and allows one to
+    build some of the data structures that will be used to implement more
+    advanced methods that do use distributed computing/BP and physical
+    hardware.
 
     """
 
@@ -195,8 +211,8 @@ class MeanHamilMinimizer_naive(MeanHamilMinimizer):
         
         self.cur_x_val = x_val
         self.cur_cost = cost
-        self.iter_count += 1
         self.broadcast_cost_fun_call()
+        self.iter_count += 1
             
         return cost
 
