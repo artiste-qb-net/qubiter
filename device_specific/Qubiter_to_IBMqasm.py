@@ -244,7 +244,7 @@ class Qubiter_to_IBMqasm(Qubiter_to_AnyQasm):
         if isinstance(angle_rads, float):
             ibm_rads = angle_rads
         elif isinstance(angle_rads, str):
-            ibm_rads = self.new_var_name(angle_rads, "")
+            ibm_rads = self.new_var_name(angle_rads)
         else:
             assert False
         line_str += str(ibm_rads)
@@ -287,7 +287,7 @@ class Qubiter_to_IBMqasm(Qubiter_to_AnyQasm):
         if self.write_qubiter_files:
             self.qbtr_wr.write_NOTA(str1)
 
-    def use_ROT(self, axis, angle_rads, tar_bit_pos, controls):
+    def use_ROTA(self, axis, angle_rads, tar_bit_pos, controls):
         """
         Writes line in IBM qasm file corresponding to an English file line
         of type: ROTX, ROTY or ROTZ with no controls.

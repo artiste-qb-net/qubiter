@@ -261,7 +261,7 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
         if self.write_qubiter_files:
             self.qbtr_wr.write_NOTA(str1)
 
-    def use_ROT(self, axis, angle_rads, tar_bit_pos, controls):
+    def use_ROTA(self, axis, angle_rads, tar_bit_pos, controls):
         """
         Writes line in Cirq file corresponding to an English file line
         of type: ROTX, ROTY or ROTZ with no controls.

@@ -267,7 +267,7 @@ class EchoingSEO_reader(SEO_reader):
         self.wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
                                               u2_fun, [angle_rads])
 
-    def use_ROT(self, axis, angle_rads, tar_bit_pos, controls):
+    def use_ROTA(self, axis, angle_rads, tar_bit_pos, controls):
         """
         This function echoes a ROTX, ROTY or ROTZ line.
 

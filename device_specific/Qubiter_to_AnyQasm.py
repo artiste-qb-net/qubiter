@@ -180,26 +180,73 @@ class Qubiter_to_AnyQasm(SEO_reader):
         """
         assert False
 
-    def new_var_name(self, var_name, surname):
+    def new_var_name(self, var_name, coda='', strict=False):
         """
-        Asserts that var_name is a str. This method replaces # in var_name
-        by self.vprefix and adds surname to end of string.
+        Starts by asserting that var_name is a legal variable name.
+
+        If var_name is not functional, this method replaces # in var_name by
+        self.vprefix and adds coda to end of string.  For example,
+        if self.vprefix='rads' and var_name='-#2*.5", then output is
+        '-rads2*.5' + coda
+
+        If var_name is functional, this method replaces each # in var_name
+        by self.vprefix, adds commas and parenthesis, and adds coda to end
+        of string. For example, if self.vprefix='rads' and
+        var_name='-fun#1#2', then output is '-fun(rads1, rads2)' + coda
+
+        The above applies only if strict=False. In the strict mode, only an
+        empty coda is allowed for functional placeholders. For
+        non-functional placeholders, if var_name contains an *, then the str
+        after the * and the coda are merged using eval().
 
         Parameters
         ----------
         var_name : str
-        surname : str
+        coda : str
 
         Returns
         -------
         str
 
         """
-        assert isinstance(var_name, str)
-        if var_name[0] == "#":
-            return self.vprefix + var_name[1:] + surname
-        else:  # starts with -#
-            return "-" + self.vprefix + var_name[2:] + surname
+        assert PlaceholderManager.is_legal_var_name(var_name)
+        if not PlaceholderManager.is_functional_var(var_name):
+            new_coda = coda
+            if coda:
+                assert len(coda) > 1, "illegal coda: " + coda
+            star_pos = var_name.find("*")
+            if strict and star_pos != -1 and coda:
+                assert coda[0] == '*', "A coda must start with * " +\
+                    "in strict mode. Got coda: " + coda
+                fac1 = var_name[star_pos+1:]
+                fac2 = coda[1:]
+                fac12 = fac1 + '*' + fac2
+                try:
+                    new_coda = '*' + str(eval(fac12))
+                except:
+                    assert False, 'cannot eval "' +\
+                                  fac12 + '" to merge "' +\
+                            var_name + '" and "' + coda + '"'
+            end_pos = len(var_name)
+            if strict and star_pos != -1:
+                end_pos = star_pos
+
+            if var_name[0] == "#":
+                return self.vprefix + var_name[1:end_pos] + new_coda
+            else:  # starts with -#
+                return "-" + self.vprefix + var_name[2:end_pos] + new_coda
+
+        else:
+            if strict:
+                assert not coda, "functional placeholders cannot " +\
+                    'have scaling factors in strict mode'
+            first_hash_pos = var_name.find('#')
+            nums_strings = var_name[first_hash_pos+1:].split('#')
+            arg_str = '('
+            for num_str in nums_strings:
+                arg_str += self.vprefix + num_str + ', '
+            arg_str = arg_str[:-2] + ')'
+            return var_name[:first_hash_pos] + arg_str + coda
 
 
 if __name__ == "__main__":

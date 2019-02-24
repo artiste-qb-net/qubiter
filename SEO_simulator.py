@@ -661,8 +661,8 @@ class SEO_simulator(SEO_reader):
             assert False, "unsupported PRINT style"
         print("****************************ending PRINT output")
 
-    def use_ROT(self, axis,
-                angle_rads, tar_bit_pos, controls):
+    def use_ROTA(self, axis,
+                 angle_rads, tar_bit_pos, controls):
         """
         Overrides the parent class use_ function. Calls
         evolve_by_controlled_one_bit_gate() for rot along axes x, y, or z.

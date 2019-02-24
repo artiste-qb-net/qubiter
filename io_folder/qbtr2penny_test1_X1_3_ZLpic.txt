@@ -1,0 +1,19 @@
+NOTA	import pennylane as qml
+NOTA	
+NOTA	
+NOTA	def Turing():
+NOTA	    # distinct fun names in functional placeholders=
+NOTA	    # []
+|   |   H   
+|   X   |   
+|   Y   |   
+|   Z   |   
+|   X---@   
+|   Z---@   
+|   <--->   
+Rx  |   |   
+Ry  |   |   
+Rz  |   |   
+|   @P  |   
+|   |   R   
+NOTA	    return qml.expval.Hermitian(hamil)

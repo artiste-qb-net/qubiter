@@ -554,7 +554,7 @@ class SEO_reader(SEO_pre_reader):
         angle_rads = self.degs_str_to_rads(self.split_line[1])
         tar_bit_pos = int(self.split_line[3])
         controls = self.read_TF_controls(self.split_line[5:])
-        self.use_ROT(axis, angle_rads, tar_bit_pos, controls)
+        self.use_ROTA(axis, angle_rads, tar_bit_pos, controls)
 
     def read_SIG(self, axis):
         """
@@ -805,7 +805,7 @@ class SEO_reader(SEO_pre_reader):
             return
         assert False, 'PRINT not used'
 
-    def use_ROT(self, axis, angle_rads, tar_bit_pos, controls):
+    def use_ROTA(self, axis, angle_rads, tar_bit_pos, controls):
         """
         Abstract use_ method that must be overridden by child class.
 

@@ -70,10 +70,10 @@ class UnitaryMat:
         i*rot_rads*sig_w) such that unit_vec = [wx, wy, wz] is a unit vector
         and sig_w = wx*sigx + wy*sigy + wz*sigz.
 
-        u2_to_params() maps arr -> (delta, rot_rads, unit_vec). This 
-        function maps (delta, rot_rads, unit_vec) -> arr so it is the 
-        inverse of u2_to_params(). But be careful, because delta, rot_rads 
-        are not single valued, they are only valid mod 2*pi. 
+        params_from_u2() maps arr -> (delta, rot_rads, unit_vec). This
+        function maps (delta, rot_rads, unit_vec) -> arr so it is the
+        inverse of params_from_u2(). But be careful, because delta, rot_rads
+        are not single valued, they are only valid mod 2*pi.
 
         Parameters
         ----------
@@ -93,7 +93,7 @@ class UnitaryMat:
         return arr
 
     @staticmethod
-    def u2_to_params(arr):
+    def params_from_u2(arr):
         """
         Assuming that arr is a U(2) matrix, this function returns the
         parameters (delta, rot_rads, unit_vec) such that arr = exp(
@@ -148,7 +148,7 @@ class UnitaryMat:
         float, float, float, float
 
         """
-        delta, rot_rads, unit_vec = UnitaryMat.u2_to_params(arr)
+        delta, rot_rads, unit_vec = UnitaryMat.params_from_u2(arr)
         [wx, wy, wz] = unit_vec
         sw = np.sin(rot_rads)
         cw = np.cos(rot_rads)
@@ -345,7 +345,7 @@ if __name__ == "__main__":
         print("unit_vec in=", unit_vec)
         arr_in = UnitaryMat.u2_from_params(delta, rot_rads, unit_vec)
         print("arr_in:\n", arr_in)
-        delta1, rot_rads1, unit_vec1 = UnitaryMat.u2_to_params(arr_in)
+        delta1, rot_rads1, unit_vec1 = UnitaryMat.params_from_u2(arr_in)
         print("delta out=", delta1)
         print("rot_rads out=", rot_rads1)
         print("unit_vec out=", unit_vec1)

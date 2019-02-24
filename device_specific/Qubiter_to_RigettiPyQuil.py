@@ -209,7 +209,7 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
         if isinstance(angle_rads, float):
             quil_rads = angle_rads
         elif isinstance(angle_rads, str):
-            quil_rads = self.new_var_name(angle_rads, "")
+            quil_rads = self.new_var_name(angle_rads)
         else:
             assert False
         line_str += str(quil_rads)
@@ -252,7 +252,7 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
         if self.write_qubiter_files:
             self.qbtr_wr.write_NOTA(str1)
 
-    def use_ROT(self, axis, angle_rads, tar_bit_pos, controls):
+    def use_ROTA(self, axis, angle_rads, tar_bit_pos, controls):
         """
         Writes line in PyQuil file corresponding to an English file line
         of type: ROTX, ROTY or ROTZ with no controls.

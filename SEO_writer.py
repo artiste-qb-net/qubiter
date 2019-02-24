@@ -520,7 +520,7 @@ class SEO_writer:
         rads if is_legal_var_name(rads) (this implies rads is str)
         aborts otherwise.
 
-        The method is only used inside this class so i am making it
+        The method is only used inside this class so I am making it
         non-static even though it doesn't use self.
 
         Parameters
@@ -1168,6 +1168,27 @@ class SEO_writer:
         trols = Controls.new_knob(num_bits, control_bit, kind)
         self.write_controlled_one_bit_gate(target_bit, trols,
             OneBitGates.sigx)
+
+    def write_cz(self, control_bit, target_bit, kind=True):
+        """
+        Writes a simple singly controlled Z. If kind=True (resp. False),
+        cz fires when control is |1> (resp. |0>)
+
+        Parameters
+        ----------
+        control_bit : int
+        target_bit : int
+        kind : bool
+
+        Returns
+        -------
+        None
+
+        """
+        num_bits = self.emb.num_bits_aft
+        trols = Controls.new_knob(num_bits, control_bit, kind)
+        self.write_controlled_one_bit_gate(target_bit, trols,
+            OneBitGates.sigz)
 
     def write_c_P1PH(self, control_bit, target_bit, rads=np.pi, kind=True):
         """

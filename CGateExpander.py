@@ -371,7 +371,7 @@ class CGateExpander(SEO_reader):
         """
         self.wr.write_PRINT(style)
 
-    def use_ROT(self, axis, angle_rads, tar_bit_pos, controls):
+    def use_ROTA(self, axis, angle_rads, tar_bit_pos, controls):
         """
         This function expands a ROTX, ROTY or ROTZ line; i.e., it reads the
         line from the input English file and writes an expansion of it in
