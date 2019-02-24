@@ -1,4 +1,7 @@
 Number of lines in file = 11
 Number of Elem. Ops = 15
 Number of CNOTS (SIGX with single control) = 14
-Number of gate variables = 0
+List of distinct variable numbers encountered (length=0)=
+[]
+List of distinct function names encountered (length=0)=
+[]

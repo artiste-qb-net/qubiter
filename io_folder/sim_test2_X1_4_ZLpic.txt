@@ -6,9 +6,9 @@ LOOP	20	NREPS=	2
 |   X   |   |   
 |   @---X   |   
 |   X   |   |   
-LOOP	10	NREPS=	4
+    LOOP	10	NREPS=	4
 @---X   |   |   
-NEXT	10
+    NEXT	10
 |   X   |   |   
 |   @---X   |   
 |   X   |   |   
