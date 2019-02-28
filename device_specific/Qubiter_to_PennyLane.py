@@ -311,7 +311,7 @@ class Qubiter_to_PennyLane(Qubiter_to_AnyQasm):
         assert len(controls.bit_pos) == 0
 
         rad_ang_list = [angle_x_rads, angle_y_rads, angle_z_rads]
-        if not ug.all_floats(rad_ang_list) and not self.rotn_has_been_defined:
+        if not self.rotn_has_been_defined:
             import inspect
             # gives tuple of list so need 0th component
             # first line is @staticmethod, omit it
