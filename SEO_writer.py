@@ -1325,7 +1325,7 @@ if __name__ == "__main__":
         for ZL in [False, True]:
             wr = SEO_writer('io_folder/wr_test', emb, ZL=ZL)
 
-            wr.write_NOTA('zero bit first = ' + str(ZL))
+            wr.write_NOTA('zero bit last = ' + str(ZL))
 
             wr.write_IF_M_beg(trols)
             wr.write_IF_M_end()
