@@ -184,7 +184,7 @@ class MeanHamilMinimizer_naive(MeanHamilMinimizer):
 
         # create this coda writer in order to delete final files
         wr1 = CodaSEO_writer(file_prefix, fin_file_prefix, num_bits)
-        wr1.close_and_del_fin_files()
+        wr1.delete_fin_files()
 
         return mean_val
 

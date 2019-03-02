@@ -92,14 +92,15 @@ class CodaSEO_writer(SEO_writer):
             emb = fin_emb
 
         SEO_writer.__init__(self, fin_file_prefix, emb,
-                            zero_bit_first=not ZL,
+                            ZL=ZL,
                             english_out=fin_eng_out,
                             picture_out=fin_pic_out)
 
-    def close_and_del_fin_files(self):
+    def delete_fin_files(self):
         """
-        This method will close and then delete the final English and Picture
-        files, in case those files were intended to live only temporarily.
+        This method will delete the final English and Picture files. The
+        files are closed before being deleted in case that hasn't been done
+        yet. Closing a file a second time does nothing.
 
         Returns
         -------

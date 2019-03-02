@@ -1,4 +1,4 @@
-NOTA	zero bit first = False
+NOTA	zero bit first = True
 IF_M(	4F	3T	){
 }IF_M
 LOOP	10	NREPS=	15

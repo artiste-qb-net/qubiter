@@ -37,12 +37,12 @@ class SEO_writer:
 
     In English and Picture files, time flows downward.
 
-    The class SEO_writer gives the bool option zero_bit_first. When this
-    argument is set to True (resp., False), the Picture file shows the zero
-    qubit first (resp., last), and the remaining qubits in consecutive
-    order. Picture files written with zero bit first (resp., last) are
-    labelled prefix + '_ZFpict.text' (resp., prefix + '_ZLpict.txt'). The
-    zero_bit_first choice does not affect the English file.
+    The class SEO_writer gives the bool option ZL. When this argument is set
+    to True (resp., False), the Picture file shows the zero qubit last (
+    resp., first), and the remaining qubits in consecutive order. Picture
+    files written with zero bit last (resp., first) are labelled prefix +
+    '_ZLpict.text' (resp., prefix + '_ZFpict.txt'). The ZL choice does not
+    affect the English file.
 
     See the following and earlier arXiv papers by R.R.Tucci for more info on
     English and Picture files.
@@ -84,11 +84,11 @@ class SEO_writer:
     picture_out : _io.TextIOWrapper
         file object for output text file that stores ASCII Picture
         description of circuit
-    zero_bit_first : bool
+    ZL : bool
 
     """
 
-    def __init__(self, file_prefix, emb, zero_bit_first=False,
+    def __init__(self, file_prefix, emb, ZL=True,
                 english_out=None, picture_out=None):
         """
         Constructor
@@ -97,7 +97,7 @@ class SEO_writer:
         ----------
         file_prefix : str
         emb : CktEmbedder
-        zero_bit_first : bool
+        ZL : bool
         english_out : _io.TextIOWrapper
         picture_out : _io.TextIOWrapper
 
@@ -109,24 +109,46 @@ class SEO_writer:
         self.gate_line_counter = 0
         self.file_prefix = file_prefix
         self.emb = emb
-        self.zero_bit_first = zero_bit_first
+        self.ZL = ZL
         self.measured_bits = []
 
         if english_out is None and file_prefix:
-            self.english_out = open(
-                file_prefix + '_' +
-                str(self.emb.num_bits_aft) + '_eng.txt', 'wt')
+            self.english_out = open(self.get_eng_file_path(), 'wt')
         else:
             self.english_out = english_out
 
         if picture_out is None and file_prefix:
-            self.picture_out = open(
-                file_prefix + '_' + str(self.emb.num_bits_aft) +
-                ('_ZF' if zero_bit_first else '_ZL') + 'pic.txt', 'wt')
+            self.picture_out = open(self.get_pic_file_path(), 'wt')
         else:
             self.picture_out = picture_out
 
         self.indentation = 0
+
+    def get_eng_file_path(self):
+        """
+        Returns path to English file
+
+        Returns
+        -------
+        str
+
+        """
+
+        return self.file_prefix + '_' + str(self.emb.num_bits_aft) +\
+               '_eng.txt'
+
+    def get_pic_file_path(self):
+        """
+        Returns path to Picture file
+
+        Returns
+        -------
+        str
+
+        """
+
+        return self.file_prefix + '_' + str(self.emb.num_bits_aft) +\
+                ('_ZL' if self.ZL else '_ZF') + 'pic.txt'
 
     def close_files(self):
         """
@@ -140,6 +162,22 @@ class SEO_writer:
         self.english_out.close()
         self.picture_out.close()
 
+    def delete_files(self):
+        """
+        This method will delete the English and Picture files. The files are
+        closed before being deleted in case that hasn't been done yet.
+        Closing a file a second time does nothing.
+
+        Returns
+        -------
+        None
+
+        """
+        self.close_files()
+        import os
+        os.remove(self.get_eng_file_path())
+        os.remove(self.get_pic_file_path())
+
     def print_eng_file(self):
         """
         Prints English file, if it exists
@@ -149,8 +187,7 @@ class SEO_writer:
         None
 
         """
-        end_str = '_' + str(self.emb.num_bits_aft) + '_eng.txt'
-        with open(self.file_prefix + end_str) as f:
+        with open(self.get_eng_file_path()) as f:
             print(f.read())
 
     def print_pic_file(self):
@@ -162,9 +199,7 @@ class SEO_writer:
         None
 
         """
-        end_str = '_' + str(self.emb.num_bits_aft) +\
-                ('_ZF' if self.zero_bit_first else '_ZL') + 'pic.txt'
-        with open(self.file_prefix + end_str) as f:
+        with open(self.get_pic_file_path()) as f:
             print(f.read())
 
     def colonize(self, pic_line):
@@ -215,7 +250,7 @@ class SEO_writer:
         """
         # example:
         # Ry--R---<--->---Rz
-        if self.zero_bit_first:
+        if not self.ZL:
             pic_line = pic_line.strip()
             # delimiter is -- or --- or 2 spaces or 3 spaces
             nodes = re.split('-{2,3}| {2,3}', pic_line)
@@ -485,8 +520,8 @@ class SEO_writer:
             is_small = (k == small)
             is_control = False
             control_kind = False
-            tres = "   " if (k == smallest) else "---"
-            # dos = "  " if (k == smallest) else "--"
+            tres = ' '*3 if (k == smallest) else "---"
+            # dos = ' '*2 if (k == smallest) else "--"
 
             for c in range(c_int, num_controls, +1):
                 if k == aft_trols.bit_pos[c]:
@@ -656,8 +691,8 @@ class SEO_writer:
             is_target = (k == aft_tar_bit_pos)
             is_control = False
             control_kind = False
-            tres = "   " if (k == smallest) else "---"
-            dos = "  " if (k == smallest) else "--"
+            tres = ' '*3 if (k == smallest) else "---"
+            dos = ' '*2 if (k == smallest) else "--"
 
             # c_int starts at last value
             for c in range(c_int, num_controls, +1):
@@ -800,8 +835,8 @@ class SEO_writer:
             is_target = (k == tar_bit_pos)
             is_control = False
             control_kind = False
-            tres = "   " if (k == smallest) else "---"
-            dos = "  " if (k == smallest) else "--"
+            tres = ' '*3 if (k == smallest) else "---"
+            dos = ' '*2 if (k == smallest) else "--"
 
             # c_int starts at last value
             for c in range(c_int, num_controls, +1):
@@ -914,7 +949,7 @@ class SEO_writer:
         for k in range(biggest, smallest-1, -1):
             is_control = False
             control_kind = False
-            tres = "   " if (k == smallest) else "---"
+            tres = ' '*3 if (k == smallest) else "---"
 
             # c_int starts at last value
             for c in range(c_int, num_controls, +1):
@@ -1287,10 +1322,10 @@ if __name__ == "__main__":
         trols.refresh_lists()
         ang_rads = 30*np.pi/180
 
-        for zf in [False, True]:
-            wr = SEO_writer('io_folder/wr_test', emb, zero_bit_first=zf)
+        for ZL in [False, True]:
+            wr = SEO_writer('io_folder/wr_test', emb, ZL=ZL)
 
-            wr.write_NOTA('zero bit first = ' + str(zf))
+            wr.write_NOTA('zero bit first = ' + str(ZL))
 
             wr.write_IF_M_beg(trols)
             wr.write_IF_M_end()

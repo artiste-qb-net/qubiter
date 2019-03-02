@@ -132,11 +132,11 @@ if __name__ == "__main__":
         bit_map = list(range(num_bits_bef))
         emb = CktEmbedder(num_bits_bef, num_bits_aft, bit_map)
 
-        for zf in [True, False]:
+        for ZL in [True, False]:
             wr = FouSEO_writer(True,
                                'io_folder/fou_test',
                                emb,
-                               zero_bit_first=zf)
+                               ZL=ZL)
             wr.write_NOTA('do h.c. next')
             wr.write_hermitian()
             wr.close_files()

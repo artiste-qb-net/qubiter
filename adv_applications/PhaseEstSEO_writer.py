@@ -76,7 +76,7 @@ class PhaseEstSEO_writer(SEO_writer):
         self.atom_wr = atom_writer
         self.atom_wr.english_out = self.english_out
         self.atom_wr.picture_out = self.picture_out
-        self.atom_wr.zero_bit_first = self.zero_bit_first
+        self.atom_wr.ZL = self.ZL
 
         if do_write:
             self.write()
@@ -129,7 +129,7 @@ class PhaseEstSEO_writer(SEO_writer):
             do_perm=self.do_perm,
             english_out=self.english_out,
             picture_out=self.picture_out,
-            zero_bit_first=self.zero_bit_first)
+            ZL=self.ZL)
         fou_writer.write_hermitian()
 
     def write_hermitian(self):
@@ -162,7 +162,7 @@ class PhaseEstSEO_writer(SEO_writer):
             do_perm=self.do_perm,
             english_out=self.english_out,
             picture_out=self.picture_out,
-            zero_bit_first=self.zero_bit_first)
+            ZL=self.ZL)
         fou_writer.write()
 
         # next write the probe controlled atoms
@@ -308,13 +308,13 @@ if __name__ == "__main__":
         bit_map = list(range(7))
         fin_emb = CktEmbedder(7, 8, bit_map)
         atom_wr = AtomWriter(do_write=False, test=True)
-        for zf in [True, False]:
+        for ZL in [True, False]:
             wr = PhaseEstSEO_writer(do_write=False,
                                     num_probe_bits=4,
                                     atom_writer=atom_wr,
                                     file_prefix="../io_folder/ph_est_test",
                                     emb=fin_emb,
-                                    zero_bit_first=zf)
+                                    ZL=ZL)
             wr.write()
             wr.write_NOTA("next write h.c.")
             wr.write_hermitian()
