@@ -1,17 +1,18 @@
 from EchoingSEO_reader import *
 # from PlaceholderManager import *
+import os
 
 
 class EngFileLineList:
     """
     Eng=English
 
-    In programs like PyQuil (by Rigetti) and Cirq (by Google), circuits (aka
-    programs) are stored in memory essentially as Python lists of gates.
-    Lists of this type can be sliced, combined, etc. They are very
-    convenient, more flexible than English files, when one wants to load the
-    whole circuit into memory, so as to be able to randomly access any gate
-    of it at will. This is convenient, for instance, when doing circuit
+    Whereas with Qubiter, the main way of storing circuits is **in files**,
+    with programs like PyQuil (by Rigetti) and Cirq (by Google), circuits (
+    aka programs) are stored **entirely in memory**, essentially as Python
+    lists of gates. Lists of this type can be sliced, combined, etc. When
+    using such lists, it is easy to randomly access any gate of the circuit
+    at will. This is convenient, for instance, when doing circuit
     optimizations (i.e., replacing the circuit by an equivalent but
     hopefully shorter one, what IBM qiskit calls "transpiling").
 
@@ -25,7 +26,7 @@ class EngFileLineList:
     num_bits : int
 
     """
-    def __init__(self, num_bits, line_list=[]):
+    def __init__(self, num_bits, line_list=None):
         """
         Constructor
 
@@ -35,6 +36,8 @@ class EngFileLineList:
         """
         self.num_bits = num_bits
         self.line_list = line_list
+        if not line_list:
+            self.line_list = []
 
     @staticmethod
     def new_one_liner(num_bits, fun_name, param_list):
@@ -77,7 +80,6 @@ class EngFileLineList:
         with open(file_prefix + eng_end_str) as fi:
             line = fi.readline().strip('\n')
 
-        import os
         os.remove(file_prefix + eng_end_str)
         os.remove(file_prefix + pic_end_str)
 
@@ -180,7 +182,8 @@ class EngFileLineList:
             split_line = line.split()
             for token in split_line:
                 if PlaceholderManager.is_legal_var_name(token):
-                    token_var_nums = PlaceholderManager.get_leg_var_var_nums(token)
+                    token_var_nums = \
+                        PlaceholderManager.get_leg_var_var_nums(token)
                     fun_name = PlaceholderManager.get_leg_var_fun_name(token)
                     for var_num in token_var_nums:
                         if var_num not in var_nums:
