@@ -750,6 +750,31 @@ class SEO_simulator(SEO_reader):
         """
         self.evolve_by_controlled_bit_swap(bit1, bit2, controls)
 
+
+    def use_U_2_(self, rads0, rads1, rads2, rads3,
+                tar_bit_pos, controls):
+        """
+        Overrides the parent class use_ function. Calls
+        evolve_by_controlled_one_bit_gate() for arbitrary unitary 2-dim
+        matrix.
+
+        Parameters
+        ----------
+        rads0 : float
+        rads1 : float
+        rads2 : float
+        rads3 : float
+        tar_bit_pos : int
+        controls : Controls
+
+        Returns
+        -------
+        None
+
+        """
+        gate = OneBitGates.u2(rads0, rads1, rads2, rads3)
+        self.evolve_by_controlled_one_bit_gate(tar_bit_pos, controls, gate)
+
 if __name__ == "__main__":
     def main():
         # use test = 0 if want to run all tests at once.

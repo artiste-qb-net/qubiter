@@ -14,69 +14,6 @@ class OneBitGates:
     ----------
 
     """
-
-    @staticmethod
-    def sigx(is_quantum=True):
-        """
-        Returns \sigma_x Pauli matrix.
-
-        Parameters
-        ----------
-        is_quantum : bool
-
-        Returns
-        -------
-        np.ndarray
-
-        """
-        if not is_quantum:
-            ty = np.float64
-        else:
-            ty = np.complex128
-        mat = np.zeros([2, 2], dtype=ty)
-        mat[0, 1] = 1
-        mat[1, 0] = 1
-        return mat
-
-    @staticmethod
-    def sigy():
-        """
-        Returns \sigma_y Pauli matrix.
-
-        Returns
-        -------
-        np.ndarray
-
-        """
-        ty = np.complex128
-        mat = np.zeros([2, 2], dtype=ty)
-        mat[0, 1] = -1j
-        mat[1, 0] = 1j
-        return mat
-
-    @staticmethod
-    def sigz(is_quantum=True):
-        """
-        Returns \sigma_z Pauli matrix.
-
-        Parameters
-        ----------
-        is_quantum : bool
-
-        Returns
-        -------
-        np.ndarray
-
-        """
-        if not is_quantum:
-            ty = np.float64
-        else:
-            ty = np.complex128
-        mat = np.zeros([2, 2], dtype=ty)
-        mat[0, 0] = 1
-        mat[1, 1] = -1
-        return mat
-
     @staticmethod
     def had2(is_quantum=True):
         """
@@ -296,6 +233,69 @@ class OneBitGates:
 
         return mat
 
+
+    @staticmethod
+    def sigx(is_quantum=True):
+        """
+        Returns \sigma_x Pauli matrix.
+
+        Parameters
+        ----------
+        is_quantum : bool
+
+        Returns
+        -------
+        np.ndarray
+
+        """
+        if not is_quantum:
+            ty = np.float64
+        else:
+            ty = np.complex128
+        mat = np.zeros([2, 2], dtype=ty)
+        mat[0, 1] = 1
+        mat[1, 0] = 1
+        return mat
+
+    @staticmethod
+    def sigy():
+        """
+        Returns \sigma_y Pauli matrix.
+
+        Returns
+        -------
+        np.ndarray
+
+        """
+        ty = np.complex128
+        mat = np.zeros([2, 2], dtype=ty)
+        mat[0, 1] = -1j
+        mat[1, 0] = 1j
+        return mat
+
+    @staticmethod
+    def sigz(is_quantum=True):
+        """
+        Returns \sigma_z Pauli matrix.
+
+        Parameters
+        ----------
+        is_quantum : bool
+
+        Returns
+        -------
+        np.ndarray
+
+        """
+        if not is_quantum:
+            ty = np.float64
+        else:
+            ty = np.complex128
+        mat = np.zeros([2, 2], dtype=ty)
+        mat[0, 0] = 1
+        mat[1, 1] = -1
+        return mat
+
     @staticmethod
     def mat_S(herm=False):
         """
@@ -319,6 +319,18 @@ class OneBitGates:
         else:
             sign = -1
         return OneBitGates.P_1_phase_fac(sign*np.pi/2)
+
+    @staticmethod
+    def mat_Sdag():
+        """
+        returns S^\dag
+
+        Returns
+        -------
+        np.ndarray
+
+        """
+        return OneBitGates.mat_S(True)
 
     @staticmethod
     def mat_T(herm=False):
@@ -357,16 +369,31 @@ class OneBitGates:
         return OneBitGates.mat_T(True)
 
     @staticmethod
-    def mat_Sdag():
+    def u2(rads0, rads1, rads2, rads3):
         """
-        returns S^\dag
+        Returns arbitrary 2-dim unitary matrix (U(2) group) parametrized as
+        follows:
+
+        exp(1j*(rads0 + rads1*sig_x + rads2*sig_y + rads3*sig_z))
+
+        where rads1 is an angle in radians and sig_x is the x Pauli
+        matrix, etc.
+
+
+        Parameters
+        ----------
+        rads0 : float
+        rads1 : float
+        rads2 : float
+        rads3 : float
 
         Returns
         -------
         np.ndarray
 
         """
-        return OneBitGates.mat_S(True)
+        return np.exp(1j*rads0)*OneBitGates.rot(rads1, rads2, rads3)
+
 
 if __name__ == "__main__":
     def main():
@@ -399,4 +426,6 @@ if __name__ == "__main__":
         print('mat_Sdag=', OneBitGates.mat_Sdag())
         print('mat_T=', OneBitGates.mat_T())
         print('mat_Tdag=', OneBitGates.mat_Tdag())
+
+        print('u2(5, 10, 20, 30)=', OneBitGates.u2(5, 10, 20, 30))
     main()

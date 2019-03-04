@@ -424,7 +424,6 @@ class SEO_reader(SEO_pre_reader):
             controls = self.read_TF_controls(self.split_line[7:])
             self.use_ROTN(angle_x_rads, angle_y_rads, angle_z_rads,
                              tar_bit_pos, controls)
-
         elif line_name == "SIGX":
             self.read_SIG(1)
         elif line_name == "SIGY":
@@ -440,7 +439,18 @@ class SEO_reader(SEO_pre_reader):
             bit2 = int(self.split_line[2])
             controls = self.read_TF_controls(self.split_line[4:])
             self.use_SWAP(bit1, bit2, controls)
+        elif line_name == "U_2_":
+            # example:
+            # U_2_  25.1 42.7 30.2 78.5 AT 1 IF 3F 2T
 
+            rads0 = self.degs_str_to_rads(self.split_line[0])
+            rads1 = self.degs_str_to_rads(self.split_line[1])
+            rads2 = self.degs_str_to_rads(self.split_line[2])
+            rads3 = self.degs_str_to_rads(self.split_line[3])
+            tar_bit_pos = int(self.split_line[6])
+            controls = self.read_TF_controls(self.split_line[8:])
+            self.use_U_2_(rads0, rads1, rads2, rads3,
+                             tar_bit_pos, controls)
         else:
             assert False, \
                 "reading an unsupported line kind: " + line_name
@@ -884,6 +894,29 @@ class SEO_reader(SEO_pre_reader):
         if self.write_log:
             return
         assert False, 'SWAP not used'
+
+    def use_U_2_(self, rads0, rads1, rads2, rads3,
+                tar_bit_pos, controls):
+        """
+        Abstract use_ method that must be overridden by child class.
+
+        Parameters
+        ----------
+        rads0 : float
+        rads1 : float
+        rads2 : float
+        rads3 : float
+        tar_bit_pos : int
+        controls : Controls
+
+        Returns
+        -------
+        None
+
+        """
+        if self.write_log:
+            return
+        assert False, 'U_2_ not used'
 
 if __name__ == "__main__":
     def main():

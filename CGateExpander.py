@@ -506,6 +506,36 @@ class CGateExpander(SEO_reader):
         # insert closing Hadamards for controls equal to n_bar = |0><0|
         self.wr.write_hads(controls.kinds, herm_conj=True)
 
+    def use_U_2_(self, rads0, rads1, rads2, rads3,
+                tar_bit_pos, controls):
+        """
+        This function expands a U_2_ line; i.e., it reads the line from the
+        input English file and writes an expansion of it in the output
+        English & Picture files.
+
+        Parameters
+        ----------
+        rads0 : float
+        rads1 : float
+        rads2 : float
+        rads3 : float
+        tar_bit_pos : int
+        controls : Controls
+
+        Returns
+        -------
+        None
+
+        """
+        self.write_gate_name("U_2_", len(controls.kinds))
+
+        self.wr.emb = self.emb_for_c_u2(tar_bit_pos, controls)
+
+        rad_ang_list = [rads0, rads1, rads2, rads3]
+        self.wr.write(controls.kinds,
+                      OneBitGates.u2,
+                      rad_ang_list)
+
     def do_log(self):
         """
         This class does a "flat" reading of the input file; i.e.,

@@ -352,6 +352,29 @@ class EchoingSEO_reader(SEO_reader):
         """
         self.wr.write_controlled_bit_swap(bit1, bit2, controls)
 
+    def use_U_2_(self, rads0, rads1, rads2, rads3,
+                tar_bit_pos, controls):
+        """
+        This function echoes a U_2_ line.
+
+        Parameters
+        ----------
+        rads0 : float
+        rads1 : float
+        rads2 : float
+        rads3 : float
+        tar_bit_pos : int
+        controls : Controls
+
+        Returns
+        -------
+        None
+
+        """
+        rad_ang_list = [rads0, rads1, rads2, rads3]
+        self.wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
+                           OneBitGates.u2, rad_ang_list)
+
     def do_log(self):
         """
         This class does a "flat" reading of the input file; i.e.,

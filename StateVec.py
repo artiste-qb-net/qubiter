@@ -169,15 +169,15 @@ class StateVec:
         The rows are always labelled 0, 1, 2, 3, ... or the binary
         representation thereof, regardless of whether ZL or ZF convention.
         One can go from digital to binary labels and vice versa
-        using::
+        using
 
-            # this didn't pass sphinx if used >>> instead of $
-            $ x = np.binary_repr(3, width=4)
-            $ x
-            '0011'
-            $ int(x, 2)
-            3
-
+        Examples
+        --------
+        >>> x = np.binary_repr(3, width=4)
+        >>> x
+        '0011'
+        >>> int(x, 2)
+        3
 
         Parameters
         ----------
@@ -790,3 +790,5 @@ if __name__ == "__main__":
                 print_st_vec=True, do_pp=True,
                 omit_zero_amps=False, show_probs=True, ZL=True)
     main()
+    import doctest
+    doctest.testmod(verbose=True)

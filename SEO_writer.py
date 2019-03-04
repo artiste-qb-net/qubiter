@@ -589,7 +589,7 @@ class SEO_writer:
         trols : Controls
         one_bit_gate_fun : function
             maps Any->np.ndarray
-        fun_arg_list : list[]
+        fun_arg_list : list
 
         Returns
         -------
@@ -626,7 +626,9 @@ class SEO_writer:
 
         # english file
         self.english_out.write(' '*self.indentation)
-        if one_bit_gate_fun == OneBitGates.phase_fac:
+        if one_bit_gate_fun == OneBitGates.had2:
+            self.english_out.write("HAD2")
+        elif one_bit_gate_fun == OneBitGates.phase_fac:
             self.english_out.write("PHAS\t" +
             self.rads_to_degs_str(fun_arg_list[0]))
         elif one_bit_gate_fun == OneBitGates.P_0_phase_fac:
@@ -635,14 +637,6 @@ class SEO_writer:
         elif one_bit_gate_fun == OneBitGates.P_1_phase_fac:
             self.english_out.write("P1PH\t" +
                 self.rads_to_degs_str(fun_arg_list[0]))
-        elif one_bit_gate_fun == OneBitGates.sigx:
-            self.english_out.write("SIGX")
-        elif one_bit_gate_fun == OneBitGates.sigy:
-            self.english_out.write("SIGY")
-        elif one_bit_gate_fun == OneBitGates.sigz:
-            self.english_out.write("SIGZ")
-        elif one_bit_gate_fun == OneBitGates.had2:
-            self.english_out.write("HAD2")
         elif one_bit_gate_fun == OneBitGates.rot_ax:
             ang_rads = fun_arg_list[0]
             axis = fun_arg_list[1]
@@ -660,6 +654,19 @@ class SEO_writer:
             y_degs = self.rads_to_degs_str(fun_arg_list[1])
             z_degs = self.rads_to_degs_str(fun_arg_list[2])
             self.english_out.write("ROTN\t" +
+                x_degs + "\t" + y_degs + "\t" + z_degs)
+        elif one_bit_gate_fun == OneBitGates.sigx:
+            self.english_out.write("SIGX")
+        elif one_bit_gate_fun == OneBitGates.sigy:
+            self.english_out.write("SIGY")
+        elif one_bit_gate_fun == OneBitGates.sigz:
+            self.english_out.write("SIGZ")
+        elif one_bit_gate_fun == OneBitGates.u2:
+            ph_degs = self.rads_to_degs_str(fun_arg_list[0])
+            x_degs = self.rads_to_degs_str(fun_arg_list[1])
+            y_degs = self.rads_to_degs_str(fun_arg_list[2])
+            z_degs = self.rads_to_degs_str(fun_arg_list[3])
+            self.english_out.write("U_2_\t" + ph_degs + "\t" +
                 x_degs + "\t" + y_degs + "\t" + z_degs)
         else:
             assert False, "writing an unsupported controlled gate"
@@ -708,20 +715,14 @@ class SEO_writer:
                 if not is_target:  # is not control or target
                     pic_line += "+" + tres
                 else:  # is target
+                    if one_bit_gate_fun == OneBitGates.had2:
+                        pic_line += "H" + tres
                     if one_bit_gate_fun == OneBitGates.phase_fac:
                         pic_line += "Ph" + dos
                     elif one_bit_gate_fun == OneBitGates.P_0_phase_fac:
                         pic_line += "OP" + dos
                     elif one_bit_gate_fun == OneBitGates.P_1_phase_fac:
                         pic_line += "@P" + dos
-                    elif one_bit_gate_fun == OneBitGates.sigx:
-                        pic_line += "X" + tres
-                    elif one_bit_gate_fun == OneBitGates.sigy:
-                        pic_line += "Y" + tres
-                    elif one_bit_gate_fun == OneBitGates.sigz:
-                        pic_line += "Z" + tres
-                    elif one_bit_gate_fun == OneBitGates.had2:
-                        pic_line += "H" + tres
                     elif one_bit_gate_fun == OneBitGates.rot_ax:
                         axis = fun_arg_list[1]
                         if axis == 1:
@@ -734,6 +735,14 @@ class SEO_writer:
                             assert False
                     elif one_bit_gate_fun == OneBitGates.rot:
                         pic_line += "R" + tres
+                    elif one_bit_gate_fun == OneBitGates.sigx:
+                        pic_line += "X" + tres
+                    elif one_bit_gate_fun == OneBitGates.sigy:
+                        pic_line += "Y" + tres
+                    elif one_bit_gate_fun == OneBitGates.sigz:
+                        pic_line += "Z" + tres
+                    elif one_bit_gate_fun == OneBitGates.u2:
+                        pic_line += "U" + tres
                     else:
                         assert False, "writing an unsupported controlled gate"
 
@@ -1182,6 +1191,27 @@ class SEO_writer:
 
         """
         self.write_one_bit_gate(tar_bit_pos, OneBitGates.rot, rads_list)
+
+    def write_U2(self, tar_bit_pos, rads_list):
+        """
+        writes
+
+        UN_2= exp(1j*(rads0 + rads1*sig_x + rads2*sig_y + rads3*sig_z))
+
+        with no controls
+
+        Parameters
+        ----------
+        tar_bit_pos : int
+        rads_list : list[float]
+            [rads0, rads1, rads2, rads3]
+
+        Returns
+        -------
+        None
+
+        """
+        self.write_one_bit_gate(tar_bit_pos, OneBitGates.u2, rads_list)
 
     def write_cnot(self, control_bit, target_bit, kind=True):
         """
