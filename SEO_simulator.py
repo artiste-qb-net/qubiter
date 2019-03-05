@@ -782,9 +782,12 @@ class SEO_simulator(SEO_reader):
         """
         controls1 = Controls.copy(controls)
         controls1.set_control(bit1, True, do_refresh=True)
+        # print('m,m,', bit1, bit2)
+        # print(",m,m", controls1.bit_pos_to_kind)
 
         controls2 = Controls.copy(controls)
         controls2.set_control(bit2, True, do_refresh=True)
+        # print(",m,m", controls2.bit_pos_to_kind)
 
         self.evolve_by_controlled_one_bit_gate(
             bit2, controls1, OneBitGates.sigx())

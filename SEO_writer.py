@@ -472,12 +472,13 @@ class SEO_writer:
         """
         # print("--nnn", type(rads))
         # np.float types are different from float!!!
-        if isinstance(rads, (float, np.floating)):
+        if isinstance(rads, (int, float, np.floating)):
             # print("--nnn", str(rads*180/np.pi))
             return str(rads*180/np.pi)
         else:
             assert PlaceholderManager.is_legal_var_name(rads), \
-                "attempting to write an illegal variable name: '" + rads + "'"
+                "attempting to write an illegal variable name: '" +\
+                str(rads) + "'"
             return rads
 
     def write_controlled_preamble(self, trols):
@@ -696,7 +697,7 @@ class SEO_writer:
         If rads_list=None, this method writes a line in eng & pic files for
         a 'SWAP' with >= 0 controls
 
-        NOTE: SWAP is qbit symmetric (SWAP(0,1) = SWAP(1,0))
+        NOTE: SWAP is qbit symmetric: SWAP(0,1) = SWAP(1,0)
 
         If rads_list is not None, this method writes a generalization of
         SWAP that I call SWAY (just to have a verb that is close to swap)

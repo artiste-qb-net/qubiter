@@ -1,4 +1,5 @@
 from CktEmbedder import *
+import copy as cp
 
 
 class Controls:
@@ -60,9 +61,9 @@ class Controls:
 
         """
         new = Controls(old.num_bits + extra_bits)
-        new.bit_pos_to_kind = old.bit_pos_to_kind
-        new.bit_pos = old.bit_pos
-        new.kinds = old.kinds
+        new.bit_pos_to_kind = cp.copy(old.bit_pos_to_kind)
+        new.bit_pos = cp.copy(old.bit_pos)
+        new.kinds = cp.copy(old.kinds)
         return new
 
     def set_control(self, bit_pos, kind, do_refresh=False):
