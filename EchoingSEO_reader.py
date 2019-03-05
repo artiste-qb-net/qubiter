@@ -350,7 +350,25 @@ class EchoingSEO_reader(SEO_reader):
         None
 
         """
-        self.wr.write_controlled_bit_swap(bit1, bit2, controls)
+        self.wr.write_controlled_bit_swa_(bit1, bit2, controls)
+
+    def use_SWAY(self, bit1, bit2, controls, rads_list):
+        """
+        This function echoes a SWAY line.
+
+        Parameters
+        ----------
+        bit1 : int
+        bit2 : int
+        controls : Controls
+        rads_list : list[float | str]
+
+        Returns
+        -------
+        None
+
+        """
+        self.wr.write_controlled_bit_swa_(bit1, bit2, controls, rads_list)
 
     def use_U_2_(self, rads0, rads1, rads2, rads3,
                 tar_bit_pos, controls):
@@ -415,7 +433,7 @@ class EchoingSEO_reader(SEO_reader):
         # English out file must different from English in file because one
         # can't read a file at the same time one is writing to it
         wr = SEO_writer(file_prefix, emb, ZL=ZL)
-        vman = PlaceholderManager(eval_all_vars = False)
+        vman = PlaceholderManager(eval_all_vars=False)
         EchoingSEO_reader(file_prefix_tempo, num_bits, wr, vars_manager=vman)
 
         import os

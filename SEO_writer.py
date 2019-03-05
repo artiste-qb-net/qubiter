@@ -260,8 +260,12 @@ class SEO_writer:
             for kk in range(len(nodes)):
                 if nodes[kk] == '<':
                     nodes[kk] = '>'
+                elif nodes[kk] == '<<':
+                    nodes[kk] = '>>'
                 elif nodes[kk] == '>':
                     nodes[kk] = '<'
+                elif nodes[kk] == '>>':
+                    nodes[kk] = '<<'
             new_line = ''
             k = 0
             for nd in nodes:
@@ -446,107 +450,6 @@ class SEO_writer:
         self.english_out.write(' '*self.indentation + s)
         self.picture_out.write(' '*self.indentation + s)
 
-    def write_controlled_bit_swap(self, bit1, bit2, trols):
-        """
-        Writes a line in eng & pic files for a 'SWAP' with >= 0 controls. 
-
-        Parameters
-        ----------
-        bit1 : int
-        bit2 : int
-            bit1 and bit2 are the positions of the swapped bits.
-        trols : Controls
-
-        Returns
-        -------
-        None
-
-        """
-
-        # preamble, same for all controlled gate methods
-        self.gate_line_counter += 1
-        assert not self.english_out.closed
-        assert not self.picture_out.closed
-
-        num_bits_bef = self.emb.num_bits_bef
-        num_bits_aft = self.emb.num_bits_aft
-        # aft_tar_bit_pos = self.emb.aft(tar_bit_pos)
-
-        aft_trols = trols.new_embedded_self(self.emb)
-        # add extra controls if there are any
-        extra_dict = self.emb.extra_controls.bit_pos_to_kind
-        if extra_dict:
-            aft_trols.bit_pos_to_kind.update(extra_dict)
-            aft_trols.refresh_lists()
-
-        # number of controls may be zero
-        num_controls = len(aft_trols.bit_pos)
-        # end of preamble
-
-        assert bit1 != bit2, "swapped bits must be different"
-        assert -1 < bit1 < num_bits_bef
-        assert -1 < bit2 < num_bits_bef
-        x = [self.emb.aft(bit1), self.emb.aft(bit2)]
-        big = max(x)
-        small = min(x)
-
-        # english file
-        self.english_out.write(' '*self.indentation +
-                               "SWAP\t" + str(big) + "\t" + str(small))
-        self.english_out.write("\tIF\t" if num_controls != 0 else "\n")
-
-        # list bit-positions in decreasing order
-        for c in range(num_controls):
-            self.english_out.write(
-                str(aft_trols.bit_pos[c]) +
-                ("T" if aft_trols.kinds[c] == True else "F") +
-                ("\n" if (c == num_controls - 1) else "\t"))
-
-        # picture file
-        pic_line = ""
-        biggest = big
-        smallest = small
-        if num_controls != 0:
-            biggest = max(aft_trols.bit_pos[0], big)
-            smallest = min(aft_trols.bit_pos[num_controls-1], small)
-
-        # k a bit position
-        for k in range(num_bits_aft-1, biggest, -1):
-            pic_line += "|   "
-
-        c_int = 0
-        for k in range(biggest, smallest-1, -1):
-            is_big = (k == big)
-            is_small = (k == small)
-            is_control = False
-            control_kind = False
-            tres = ' '*3 if (k == smallest) else "---"
-            # dos = ' '*2 if (k == smallest) else "--"
-
-            for c in range(c_int, num_controls, +1):
-                if k == aft_trols.bit_pos[c]:
-                    is_control = True
-                    control_kind = aft_trols.kinds[c]
-                    c_int += 1
-                    break
-
-            if is_control:
-                pic_line += ('@' if control_kind else 'O') + tres
-            else:  # control not found
-                if is_big:
-                    pic_line += "<" + tres
-                elif is_small:
-                    pic_line += ">" + tres
-                else:
-                    pic_line += "+" + tres
-
-        for k in range(smallest-1, -1, -1):
-            pic_line += "|   "
-
-        pic_line = self.colonize(pic_line)
-        self.write_ZF_or_ZL_pic_line(pic_line)
-        self.picture_out.write("\n")
-
     def rads_to_degs_str(self, rads):
         """
         This method returns
@@ -577,6 +480,33 @@ class SEO_writer:
                 "attempting to write an illegal variable name: '" + rads + "'"
             return rads
 
+    def write_controlled_preamble(self, trols):
+        """
+        This is an internal function, used as preamble to all methods that
+        are named write_controlled_...()
+
+        Parameters
+        ----------
+        trols : Controls
+
+        Returns
+        -------
+        Controls
+
+        """
+        self.gate_line_counter += 1
+        assert not self.english_out.closed
+        assert not self.picture_out.closed
+
+        aft_trols = trols.new_embedded_self(self.emb)
+        # add extra controls if there are any
+        extra_dict = self.emb.extra_controls.bit_pos_to_kind
+        if extra_dict:
+            aft_trols.bit_pos_to_kind.update(extra_dict)
+            aft_trols.refresh_lists()
+
+        return aft_trols
+
     def write_controlled_one_bit_gate(
             self, tar_bit_pos, trols, one_bit_gate_fun, fun_arg_list=None):
         """
@@ -596,27 +526,14 @@ class SEO_writer:
         None
 
         """
-
-        # preamble, same for all controlled gate methods
-        self.gate_line_counter += 1
-        assert not self.english_out.closed
-        assert not self.picture_out.closed
+        aft_trols = self.write_controlled_preamble(trols)
 
         # num_bits_bef = self.emb.num_bits_bef
         num_bits_aft = self.emb.num_bits_aft
         aft_tar_bit_pos = self.emb.aft(tar_bit_pos)
 
-        aft_trols = trols.new_embedded_self(self.emb)
-
-        # add extra controls if there are any
-        extra_dict = self.emb.extra_controls.bit_pos_to_kind
-        if extra_dict:
-            aft_trols.bit_pos_to_kind.update(extra_dict)
-            aft_trols.refresh_lists()
-
         # number of controls may be zero
         num_controls = len(aft_trols.bit_pos)
-        # end of preamble
 
         assert aft_tar_bit_pos not in aft_trols.bit_pos,\
             "target bit cannot be a control bit"
@@ -669,7 +586,8 @@ class SEO_writer:
             self.english_out.write("U_2_\t" + ph_degs + "\t" +
                 x_degs + "\t" + y_degs + "\t" + z_degs)
         else:
-            assert False, "writing an unsupported controlled gate"
+            assert False, "writing an unsupported controlled gate\n" +\
+                            one_bit_gate_fun.__name__
 
         self.english_out.write("\tAT\t" + str(aft_tar_bit_pos) +
                                ("\tIF\t" if num_controls != 0 else "\n"))
@@ -717,7 +635,7 @@ class SEO_writer:
                 else:  # is target
                     if one_bit_gate_fun == OneBitGates.had2:
                         pic_line += "H" + tres
-                    if one_bit_gate_fun == OneBitGates.phase_fac:
+                    elif one_bit_gate_fun == OneBitGates.phase_fac:
                         pic_line += "Ph" + dos
                     elif one_bit_gate_fun == OneBitGates.P_0_phase_fac:
                         pic_line += "OP" + dos
@@ -742,9 +660,168 @@ class SEO_writer:
                     elif one_bit_gate_fun == OneBitGates.sigz:
                         pic_line += "Z" + tres
                     elif one_bit_gate_fun == OneBitGates.u2:
-                        pic_line += "U" + tres
+                        rads1 = fun_arg_list[1]
+                        rads2 = fun_arg_list[2]
+                        rads3 = fun_arg_list[3]
+
+                        def both_are_small(r1, r2):
+                            if isinstance(r1, str) or isinstance(r2, str):
+                                return False
+                            if abs(r1) > 1e-6 or abs(r2) > 1e-6:
+                                return False
+                            return True
+
+                        if both_are_small(rads2, rads3):
+                            pic_line += "Ux" + dos
+                        elif both_are_small(rads1, rads3):
+                            pic_line += "Uy" + dos
+                        elif both_are_small(rads1, rads2):
+                            pic_line += "Uz" + dos
+                        else:
+                            pic_line += "U" + tres
                     else:
-                        assert False, "writing an unsupported controlled gate"
+                        assert False, \
+                            "writing an unsupported controlled gate\n" +\
+                            one_bit_gate_fun.__name__
+
+        for k in range(smallest-1, -1, -1):
+            pic_line += "|   "
+
+        pic_line = self.colonize(pic_line)
+        self.write_ZF_or_ZL_pic_line(pic_line)
+        self.picture_out.write("\n")
+
+    def write_controlled_bit_swa_(self, bit1, bit2, trols, rads_list=None):
+        """
+        If rads_list=None, this method writes a line in eng & pic files for
+        a 'SWAP' with >= 0 controls
+
+        NOTE: SWAP is qbit symmetric (SWAP(0,1) = SWAP(1,0))
+
+        If rads_list is not None, this method writes a generalization of
+        SWAP that I call SWAY (just to have a verb that is close to swap)
+
+        SWAY  =
+        [1  0  0]
+        [0  U2 0]
+        [0  0  1]
+
+        where U2 is the most general (symmetric) 2-dim unitary matrix
+        parametrized as
+
+        U2 = exp(j*(rads0 + rads1*sigx + rads2*sigy + rads3*sigz))
+
+        where rads_list = [rads0, rads1, rads2=0, rads3] is a list of 4 angles
+        in radians, and where sig_x, sig_y, sig_z are the Pauli matrices.
+
+        NOTE: SWAY is qbit symmetric (SWAY(0,1)=SWAY(1,0)) iff U2 is a
+        symmetric matrix (U2^T = U2) iff rads2=0. An error message is
+        emitted if abs(rads2) > 1e-6
+
+        SWAY includes SWAP, sqrt(SWAP), iSWAP, sqrt(iSWAP), PWAP,
+        sqrt(PSWAP) etc.
+
+
+        Parameters
+        ----------
+        bit1 : int
+        bit2 : int
+            bit1 and bit2 are the positions of the swapped bits.
+        trols : Controls
+        rads_list : list[float | str ] | None
+
+        Returns
+        -------
+        None
+
+        """
+        aft_trols = self.write_controlled_preamble(trols)
+
+        num_bits_bef = self.emb.num_bits_bef
+        num_bits_aft = self.emb.num_bits_aft
+        # aft_tar_bit_pos = self.emb.aft(tar_bit_pos)
+
+        # number of controls may be zero
+        num_controls = len(aft_trols.bit_pos)
+
+        assert bit1 != bit2, "swapped bits must be different"
+        assert -1 < bit1 < num_bits_bef
+        assert -1 < bit2 < num_bits_bef
+        x = [self.emb.aft(bit1), self.emb.aft(bit2)]
+        big = max(x)
+        small = min(x)
+
+        if rads_list is not None:
+            assert abs(rads_list[2]) < 1e-6,\
+                "coefficient of sig_y must be zero but is\n" + \
+                str(rads_list[2])
+
+        use_sway = False
+        if rads_list is not None:
+            use_sway = True
+
+        # english file
+        gate_name = 'SWAP'
+        if use_sway:
+            gate_name = 'SWAY'
+        self.english_out.write(' '*self.indentation + gate_name +
+                               '\t' + str(big) + "\t" + str(small))
+        if use_sway:
+            self.english_out.write('\tBY')
+            for k in range(4):
+                self.english_out.write('\t' + str(rads_list[k]))
+        self.english_out.write("\tIF\t" if num_controls != 0 else "\n")
+
+        # list bit-positions in decreasing order
+        for c in range(num_controls):
+            self.english_out.write(
+                str(aft_trols.bit_pos[c]) +
+                ("T" if aft_trols.kinds[c] == True else "F") +
+                ("\n" if (c == num_controls - 1) else "\t"))
+
+        # picture file
+        pic_line = ""
+        biggest = big
+        smallest = small
+        if num_controls != 0:
+            biggest = max(aft_trols.bit_pos[0], big)
+            smallest = min(aft_trols.bit_pos[num_controls-1], small)
+
+        # k a bit position
+        for k in range(num_bits_aft-1, biggest, -1):
+            pic_line += "|   "
+
+        c_int = 0
+        for k in range(biggest, smallest-1, -1):
+            is_big = (k == big)
+            is_small = (k == small)
+            is_control = False
+            control_kind = False
+            tres = ' '*3 if (k == smallest) else "---"
+            dos = ' '*2 if (k == smallest) else "--"
+
+            for c in range(c_int, num_controls, +1):
+                if k == aft_trols.bit_pos[c]:
+                    is_control = True
+                    control_kind = aft_trols.kinds[c]
+                    c_int += 1
+                    break
+
+            if is_control:
+                pic_line += ('@' if control_kind else 'O') + tres
+            else:  # control not found
+                if is_big:
+                    if use_sway:
+                        pic_line += "<<" + dos
+                    else:
+                        pic_line += "<" + tres
+                elif is_small:
+                    if use_sway:
+                        pic_line += ">>" + dos
+                    else:
+                        pic_line += ">" + tres
+                else:
+                    pic_line += "+" + tres
 
         for k in range(smallest-1, -1, -1):
             pic_line += "|   "
@@ -771,26 +848,14 @@ class SEO_writer:
         None
 
         """
-
-        # preamble, same for all controlled gate methods
-        self.gate_line_counter += 1
-        assert not self.english_out.closed
-        assert not self.picture_out.closed
+        aft_trols = self.write_controlled_preamble(trols)
 
         # num_bits_bef = self.emb.num_bits_bef
         num_bits_aft = self.emb.num_bits_aft
         aft_tar_bit_pos = self.emb.aft(tar_bit_pos)
 
-        aft_trols = trols.new_embedded_self(self.emb)
-        # add extra controls if there are any
-        extra_dict = self.emb.extra_controls.bit_pos_to_kind
-        if extra_dict:
-            aft_trols.bit_pos_to_kind.update(extra_dict)
-            aft_trols.refresh_lists()
-
         # number of controls may be zero
         num_controls = len(aft_trols.bit_pos)
-        # end of preamble
         
         assert aft_tar_bit_pos not in aft_trols.bit_pos,\
             "target bit cannot be a control bit"
@@ -891,26 +956,14 @@ class SEO_writer:
         None
 
         """
-
-        # preamble, same for all controlled gate methods
-        self.gate_line_counter += 1
-        assert not self.english_out.closed
-        assert not self.picture_out.closed
+        aft_trols = self.write_controlled_preamble(trols)
 
         # num_bits_bef = self.emb.num_bits_bef
         num_bits_aft = self.emb.num_bits_aft
         # aft_tar_bit_pos = self.emb.aft(tar_bit_pos)
 
-        aft_trols = trols.new_embedded_self(self.emb)
-        # add extra controls if there are any
-        extra_dict = self.emb.extra_controls.bit_pos_to_kind
-        if extra_dict:
-            aft_trols.bit_pos_to_kind.update(extra_dict)
-            aft_trols.refresh_lists()
-
         # number of controls may be zero
         num_controls = len(aft_trols.bit_pos)
-        # end of preamble
 
         num_int_controls = aft_trols.get_num_int_controls()
         assert num_int_controls != 0, \
@@ -985,23 +1038,6 @@ class SEO_writer:
         self.write_ZF_or_ZL_pic_line(pic_line)
         self.picture_out.write("\n")
 
-    def write_bit_swap(self, bit1, bit2):
-        """
-        Write a line in eng & pic files for a 'SWAP' with no controls.
-
-        Parameters
-        ----------
-        bit1 : int
-        bit2 : int
-
-        Returns
-        -------
-        None
-
-        """
-        trols = Controls(2)  # dummy with zero controls
-        self.write_controlled_bit_swap(bit1, bit2, trols)
-
     def write_one_bit_gate(
             self, tar_bit_pos, one_bit_gate_fun, fun_arg_list=None):
         """
@@ -1023,6 +1059,25 @@ class SEO_writer:
         self.write_controlled_one_bit_gate(
             tar_bit_pos, trols, one_bit_gate_fun, fun_arg_list)
 
+    def write_bit_swa_(self, bit1, bit2, rads_list=None):
+        """
+        Write a line in eng & pic files for a 'SWAP' if rads_list=None or
+        'SWAY' if rads_list!=None, with no controls.
+
+        Parameters
+        ----------
+        bit1 : int
+        bit2 : int
+        rads_list : list[float | str] | None
+
+        Returns
+        -------
+        None
+
+        """
+        trols = Controls(2)  # dummy with zero controls
+        self.write_controlled_bit_swa_(bit1, bit2, trols, rads_list)
+
     def write_H(self, tar_bit_pos):
         """
         writes HAD2 with no controls
@@ -1037,91 +1092,6 @@ class SEO_writer:
 
         """
         self.write_one_bit_gate(tar_bit_pos, OneBitGates.had2)
-
-    def write_X(self, tar_bit_pos):
-        """
-        writes SIGX with no controls
-
-        Parameters
-        ----------
-        tar_bit_pos : int
-
-        Returns
-        -------
-        None
-
-        """
-        self.write_one_bit_gate(tar_bit_pos, OneBitGates.sigx)
-
-    def write_Y(self, tar_bit_pos):
-        """
-        writes SIGY with no controls
-
-        Parameters
-        ----------
-        tar_bit_pos : int
-
-        Returns
-        -------
-        None
-
-        """
-        self.write_one_bit_gate(tar_bit_pos, OneBitGates.sigy)
-
-    def write_Z(self, tar_bit_pos):
-        """
-        writes SIGZ with no controls
-
-        Parameters
-        ----------
-        tar_bit_pos : int
-
-        Returns
-        -------
-        None
-
-        """
-        self.write_one_bit_gate(tar_bit_pos, OneBitGates.sigz)
-
-    def write_S(self, tar_bit_pos, herm=False):
-        """
-        writes P1PH = exp(1j*P_1*pi/2) or its Hermitian with no controls
-
-        Parameters
-        ----------
-        tar_bit_pos : int
-        herm : bool
-
-        Returns
-        -------
-        None
-
-        """
-        sign = +1
-        if herm:
-            sign = -1
-        self.write_one_bit_gate(tar_bit_pos, OneBitGates.P_1_phase_fac,
-                                [sign*np.pi/2])
-
-    def write_T(self, tar_bit_pos, herm=False):
-        """
-        writes P1PH = exp(1j*P_1*pi/4) or its Hermitian with no controls
-
-        Parameters
-        ----------
-        tar_bit_pos : int
-        herm : bool
-
-        Returns
-        -------
-        None
-
-        """
-        sign = +1
-        if herm:
-            sign = -1
-        self.write_one_bit_gate(tar_bit_pos, OneBitGates.P_1_phase_fac,
-                                [sign*np.pi/4])
 
     def write_Rx(self, tar_bit_pos, rads):
         """
@@ -1192,6 +1162,46 @@ class SEO_writer:
         """
         self.write_one_bit_gate(tar_bit_pos, OneBitGates.rot, rads_list)
 
+    def write_S(self, tar_bit_pos, herm=False):
+        """
+        writes P1PH = exp(1j*P_1*pi/2) or its Hermitian with no controls
+
+        Parameters
+        ----------
+        tar_bit_pos : int
+        herm : bool
+
+        Returns
+        -------
+        None
+
+        """
+        sign = +1
+        if herm:
+            sign = -1
+        self.write_one_bit_gate(tar_bit_pos, OneBitGates.P_1_phase_fac,
+                                [sign*np.pi/2])
+
+    def write_T(self, tar_bit_pos, herm=False):
+        """
+        writes P1PH = exp(1j*P_1*pi/4) or its Hermitian with no controls
+
+        Parameters
+        ----------
+        tar_bit_pos : int
+        herm : bool
+
+        Returns
+        -------
+        None
+
+        """
+        sign = +1
+        if herm:
+            sign = -1
+        self.write_one_bit_gate(tar_bit_pos, OneBitGates.P_1_phase_fac,
+                                [sign*np.pi/4])
+
     def write_U2(self, tar_bit_pos, rads_list):
         """
         writes
@@ -1212,6 +1222,51 @@ class SEO_writer:
 
         """
         self.write_one_bit_gate(tar_bit_pos, OneBitGates.u2, rads_list)
+
+    def write_X(self, tar_bit_pos):
+        """
+        writes SIGX with no controls
+
+        Parameters
+        ----------
+        tar_bit_pos : int
+
+        Returns
+        -------
+        None
+
+        """
+        self.write_one_bit_gate(tar_bit_pos, OneBitGates.sigx)
+
+    def write_Y(self, tar_bit_pos):
+        """
+        writes SIGY with no controls
+
+        Parameters
+        ----------
+        tar_bit_pos : int
+
+        Returns
+        -------
+        None
+
+        """
+        self.write_one_bit_gate(tar_bit_pos, OneBitGates.sigy)
+
+    def write_Z(self, tar_bit_pos):
+        """
+        writes SIGZ with no controls
+
+        Parameters
+        ----------
+        tar_bit_pos : int
+
+        Returns
+        -------
+        None
+
+        """
+        self.write_one_bit_gate(tar_bit_pos, OneBitGates.sigz)
 
     def write_cnot(self, control_bit, target_bit, kind=True):
         """
@@ -1369,9 +1424,9 @@ if __name__ == "__main__":
 
             wr.write_PRINT('F2')
 
-            wr.write_controlled_bit_swap(0, 2, trols)
+            wr.write_controlled_bit_swa_(0, 2, trols)
 
-            wr.write_bit_swap(1, 2)
+            wr.write_bit_swa_(1, 2)
 
             gate = OneBitGates.phase_fac
             wr.write_controlled_one_bit_gate(2, trols, gate, [ang_rads])

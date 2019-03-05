@@ -55,7 +55,7 @@ class FouSEO_writer(SEO_writer):
         if self.do_perm:
             for r in range(num_bits-1, 0, -1):
                 for k in range(r-1, -1, -1):
-                    self.write_bit_swap(r, k)
+                    self.write_bit_swa_(r, k)
 
         for k in range(num_bits):
             self.write_one_bit_gate(k, OneBitGates.had2)
@@ -94,7 +94,7 @@ class FouSEO_writer(SEO_writer):
         if self.do_perm:
             for r in range(1, num_bits):
                 for k in range(r):
-                    self.write_bit_swap(r, k)
+                    self.write_bit_swa_(r, k)
 
     @staticmethod
     def fourier_trans_mat(num_rows, herm_conj=False):

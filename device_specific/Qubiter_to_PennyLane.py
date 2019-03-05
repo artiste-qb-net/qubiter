@@ -444,7 +444,7 @@ class Qubiter_to_PennyLane(Qubiter_to_AnyQasm):
         self.qasm_out.write(line_str)
 
         if self.write_qubiter_files:
-            self.qbtr_wr.write_controlled_bit_swap(bit1, bit2, controls)
+            self.qbtr_wr.write_controlled_bit_swa_(bit1, bit2, controls)
 
 if __name__ == "__main__":
 
@@ -459,7 +459,7 @@ if __name__ == "__main__":
         wr.write_Z(1)
         wr.write_cnot(0, 1)
         wr.write_cz(0, 1)
-        wr.write_bit_swap(1, 0)
+        wr.write_bit_swa_(1, 0)
         wr.write_Rx(2, rads=np.pi)
         wr.write_Ry(2, rads=np.pi)
         wr.write_Rz(2, rads=np.pi)

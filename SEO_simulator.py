@@ -750,6 +750,48 @@ class SEO_simulator(SEO_reader):
         """
         self.evolve_by_controlled_bit_swap(bit1, bit2, controls)
 
+    def use_SWAY(self, bit1, bit2, controls, rads_list):
+        """
+        Overrides the parent class use_ function. Calls
+        evolve_by_controlled_one_bit_gate() 3 times.
+
+        This relies on the fact that
+
+        SWAY(0, 1) = SWAY(1, 0) =
+        X---@
+        @---U2
+        X---@
+
+        U2 is a symmetric matrix (U2^T = U2)
+
+        U2 = exp(j*(rads0 + rads1*sig_x + 0*sig_y + rads3*sig_z))
+
+        rads_list = [rads0, rads1, 0.0, rads3]
+
+        Parameters
+        ----------
+        bit1 : int
+        bit2 : int
+        controls : Controls
+        rads_list : list[float]
+
+        Returns
+        -------
+        None
+
+        """
+        controls1 = Controls.copy(controls)
+        controls1.set_control(bit1, True, do_refresh=True)
+
+        controls2 = Controls.copy(controls)
+        controls2.set_control(bit2, True, do_refresh=True)
+
+        self.evolve_by_controlled_one_bit_gate(
+            bit2, controls1, OneBitGates.sigx())
+        self.evolve_by_controlled_one_bit_gate(
+            bit1, controls2, OneBitGates.u2(*rads_list))
+        self.evolve_by_controlled_one_bit_gate(
+            bit2, controls1, OneBitGates.sigx())
 
     def use_U_2_(self, rads0, rads1, rads2, rads3,
                 tar_bit_pos, controls):

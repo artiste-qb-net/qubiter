@@ -1,23 +1,10 @@
 \documentclass[10pt]{article}
+\usepackage[left=1cm, right=1cm, top=2cm]{geometry}
 \begin{document}
 % table based on table in my paper
 % ``Code Generator for Quantum Simulated Annealing
-
 \renewcommand{\arraystretch}{1.3}
-
-\paperheight=11in
-\topmargin=0in
-\headheight=0in
-\headsep=0in
-\topskip=0in
-\textheight=11in
-\footskip 0in
-
-\paperwidth=8.5in
-\oddsidemargin=0in
-\evensidemargin=0in
-\textwidth=8.0in
-\parindent=.5in
+\thispagestyle{empty} % this suppresses page numbers
 
 \newcommand{\sigx}[0]{{ \sigma_X} }
 \newcommand{\sigy}[0]{{ \sigma_Y} }
@@ -149,8 +136,18 @@ $\sigz(1)^{\nbar(3)n(2)}$ &
 {\tt  SIGZ  AT  1  IF  3F  2T}&{\tt 0---@---Z\ \ \ |}
 \\
 \hline
-$E(1,0)^{\nbar(3)n(2)}$ &
+$SWAP(1,0)^{\nbar(3)n(2)}$
+where $\scriptstyle SWAP=diag(1,\sigma_X, 1)$ &
 {\tt SWAP  1  0  IF  3F  2T}&{\tt 0---@---<--->}
+\\
+\hline
+$\scriptstyle diag(1, U2, 1)(1, 0)^{\nbar(3)n(2)}$&
+{\tt \scriptsize SWAY 1 0 BY 5.0 30.0 0.0 11.0 IF  3F  2T}&
+{\tt 0---@---<<->>}
+\\
+where
+$\scriptstyle U2= e^{i\frac{\pi}{180}
+[5 + 30\sigx+ 0.0\sigy + 11 \sigz]}$&&
 \\
 \hline
 $(e^{

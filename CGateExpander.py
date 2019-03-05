@@ -468,24 +468,34 @@ class CGateExpander(SEO_reader):
         self.wr.emb = self.emb_for_c_u2(tar_bit_pos, controls)
         self.wr.write(controls.kinds, u2_fun)
 
-    def use_SWAP(self, bit1, bit2, controls):
+    def use_SWA_(self, bit1, bit2, controls, rads_list=None):
         """
-        This function expands a SWAP line; i.e., it reads the line from the
-        input English file and writes an expansion of it in the output
-        English & Picture files.
+        This internal function expands a SWAP or SWAY line; i.e., it reads
+        the line from the input English file and writes an expansion of it
+        in the output English & Picture files.
 
         Parameters
         ----------
         bit1 : int
         bit2 : int
         controls : Controls
+        rads_list : list[float]
+            list of 4 floats
 
         Returns
         -------
         None
 
         """
-        self.write_gate_name("SWAP", len(controls.kinds))
+        if rads_list is not None:
+            assert len(rads_list) == 4
+            assert abs(rads_list[2]) < 1e-6
+        use_sway = False
+        if rads_list is not None:
+            use_sway = True
+
+        self.write_gate_name("SWAP" if not use_sway else 'SWAY',
+                             len(controls.kinds))
 
         emb0, emb1 = self.two_embs_for_c_bit_swap(bit1, bit2, controls)
         num_trols = len(controls.kinds)
@@ -498,13 +508,57 @@ class CGateExpander(SEO_reader):
         self.wr.write([True] * (num_trols + 1), OneBitGates.sigx)
 
         self.wr.emb = emb1  # change emb
-        self.wr.write([True] * (num_trols + 1), OneBitGates.sigx)
+        if not use_sway:
+            self.wr.write([True] * (num_trols + 1),
+                          OneBitGates.sigx)
+        else:
+            self.wr.write([True] * (num_trols + 1),
+                         OneBitGates.u2, rads_list)
         self.wr.emb = emb0  # restore emb
 
         self.wr.write([True] * (num_trols + 1), OneBitGates.sigx)
 
         # insert closing Hadamards for controls equal to n_bar = |0><0|
         self.wr.write_hads(controls.kinds, herm_conj=True)
+
+    def use_SWAP(self, bit1, bit2, controls):
+        """
+        This function expands a SWAP; i.e., it reads the line from the input
+        English file and writes an expansion of it in the output English &
+        Picture files.
+
+        Parameters
+        ----------
+        bit1 : int
+        bit2 : int
+        controls : Controls
+
+        Returns
+        -------
+        None
+
+        """
+        self.use_SWA_(bit1, bit2, controls)
+
+    def use_SWAY(self, bit1, bit2, controls, rads_list):
+        """
+        This function expands a SWAY line; i.e., it reads the line from the
+        input English file and writes an expansion of it in the output
+        English & Picture files.
+
+        Parameters
+        ----------
+        bit1 : int
+        bit2 : int
+        controls : Controls
+        rads_list : list[float]
+
+        Returns
+        -------
+        None
+
+        """
+        self.use_SWA_(bit1, bit2, controls, rads_list)
 
     def use_U_2_(self, rads0, rads1, rads2, rads3,
                 tar_bit_pos, controls):

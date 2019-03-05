@@ -439,14 +439,24 @@ class SEO_reader(SEO_pre_reader):
             bit2 = int(self.split_line[2])
             controls = self.read_TF_controls(self.split_line[4:])
             self.use_SWAP(bit1, bit2, controls)
+        elif line_name == "SWAY":
+            # example:
+            # SWAY 0 1 BY 25.1 42.7 0.0 78.5 IF 3F 2T
+
+            bit1 = int(self.split_line[1])
+            bit2 = int(self.split_line[2])
+            rads_list = [self.degs_str_to_rads(self.split_line[k])
+                                               for k in range(4, 8)]
+            controls = self.read_TF_controls(self.split_line[9:])
+            self.use_SWAY(bit1, bit2, controls, rads_list)
         elif line_name == "U_2_":
             # example:
             # U_2_  25.1 42.7 30.2 78.5 AT 1 IF 3F 2T
 
-            rads0 = self.degs_str_to_rads(self.split_line[0])
-            rads1 = self.degs_str_to_rads(self.split_line[1])
-            rads2 = self.degs_str_to_rads(self.split_line[2])
-            rads3 = self.degs_str_to_rads(self.split_line[3])
+            rads0 = self.degs_str_to_rads(self.split_line[1])
+            rads1 = self.degs_str_to_rads(self.split_line[2])
+            rads2 = self.degs_str_to_rads(self.split_line[3])
+            rads3 = self.degs_str_to_rads(self.split_line[4])
             tar_bit_pos = int(self.split_line[6])
             controls = self.read_TF_controls(self.split_line[8:])
             self.use_U_2_(rads0, rads1, rads2, rads3,
@@ -894,6 +904,26 @@ class SEO_reader(SEO_pre_reader):
         if self.write_log:
             return
         assert False, 'SWAP not used'
+
+    def use_SWAY(self, bit1, bit2, controls, rads_list):
+        """
+        Abstract use_ method that must be overridden by child class.
+
+        Parameters
+        ----------
+        bit1 : int
+        bit2 : int
+        controls : Controls
+        rads_list: list[float | str]
+
+        Returns
+        -------
+        None
+
+        """
+        if self.write_log:
+            return
+        assert False, 'SWAY not used'
 
     def use_U_2_(self, rads0, rads1, rads2, rads3,
                 tar_bit_pos, controls):
