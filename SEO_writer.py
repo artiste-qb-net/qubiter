@@ -672,11 +672,17 @@ class SEO_writer:
                                 return False
                             return True
 
-                        if both_are_small(rads2, rads3):
+                        small_12 = both_are_small(rads1, rads2)
+                        small_23 = both_are_small(rads2, rads3)
+                        small_13 = both_are_small(rads1, rads3)
+
+                        if small_12 and small_23:
+                            pic_line += "Ph" + dos
+                        elif small_23:
                             pic_line += "Ux" + dos
-                        elif both_are_small(rads1, rads3):
+                        elif small_13:
                             pic_line += "Uy" + dos
-                        elif both_are_small(rads1, rads2):
+                        elif small_12:
                             pic_line += "Uz" + dos
                         else:
                             pic_line += "U" + tres
