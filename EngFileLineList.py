@@ -1,6 +1,6 @@
 from EchoingSEO_reader import *
 # from PlaceholderManager import *
-import os
+from io import StringIO
 
 
 class EngFileLineList:
@@ -50,11 +50,10 @@ class EngFileLineList:
 
         eval('wr.' + fun_name + '(*param_list)').
 
-        This will create one-line temporary English and Picture files. The
-        line in the temporary English file is read and used to create a
-        one-line EngFileLineList which is what this method returns. The
-        temporary English and Picture files are deleted after they serve
-        their purpose.
+        Instead of creating temporary English and Picture files as was done
+        in a previous version of this function, wr now writes into
+        in-streams which are StringIO that live purely in memory. This is
+        much more efficient because it involves no files at any time.
 
         Parameters
         ----------
@@ -69,19 +68,17 @@ class EngFileLineList:
         """
         assert fun_name[:6] == 'write_'
         file_prefix = 'tempo970361432226978'
-        eng_end_str = '_' + str(num_bits) + '_eng.txt'
-        pic_end_str = '_' + str(num_bits) + '_ZLpic.txt'
         emb = CktEmbedder(num_bits, num_bits)
+        eng_out = StringIO()
+        pic_out = StringIO()
 
-        wr = SEO_writer(file_prefix, emb)
+        wr = SEO_writer(file_prefix, emb,
+                        english_out=eng_out, picture_out=pic_out)
+
         eval('wr.' + fun_name + '(*param_list)')
-        wr.close_files()
-
-        with open(file_prefix + eng_end_str) as fi:
-            line = fi.readline().strip('\n')
-
-        os.remove(file_prefix + eng_end_str)
-        os.remove(file_prefix + pic_end_str)
+        line = eng_out.getvalue().strip('\n')
+        eng_out.close()
+        pic_out.close()
 
         return EngFileLineList(num_bits, [line])
 
