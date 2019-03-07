@@ -487,11 +487,9 @@ class CGateExpander(SEO_reader):
         None
 
         """
-        if rads_list is not None:
-            assert len(rads_list) == 4
-            assert abs(rads_list[2]) < 1e-6
         use_sway = False
         if rads_list is not None:
+            assert len(rads_list) == 2
             use_sway = True
 
         self.write_gate_name("SWAP" if not use_sway else 'SWAY',
@@ -512,8 +510,9 @@ class CGateExpander(SEO_reader):
             self.wr.write([True] * (num_trols + 1),
                           OneBitGates.sigx)
         else:
+            rads0, rads1 = rads_list
             self.wr.write([True] * (num_trols + 1),
-                         OneBitGates.u2, rads_list)
+                         OneBitGates.u2, [rads0, rads1, 0.0, 0.0])
         self.wr.emb = emb0  # restore emb
 
         self.wr.write([True] * (num_trols + 1), OneBitGates.sigx)

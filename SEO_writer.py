@@ -705,25 +705,25 @@ class SEO_writer:
 
         NOTE: SWAP is qbit symmetric: SWAP(0,1) = SWAP(1,0)
 
-        If rads_list is not None, this method writes a generalization of
-        SWAP that I call SWAY (just to have a verb that is close to swap)
+        If rads_list is not None and equals a list of 2 angles, rads_list=[
+        rads0, rads1], this method writes a generalization of SWAP that I
+        call SWAY (just to have a verb that is close to swap)
 
         SWAY  =
         [1  0  0]
         [0  U2 0]
         [0  0  1]
 
-        where U2 is the most general (symmetric) 2-dim unitary matrix
-        parametrized as
+        where U2 is the most general 2-dim unitary matrix satisfying
+
+        sigx U2 sigx = U2.
+
+        If U2 is parametrized as
 
         U2 = exp(j*(rads0 + rads1*sigx + rads2*sigy + rads3*sigz))
 
-        where rads_list = [rads0, rads1, rads2=0, rads3] is a list of 4 angles
-        in radians, and where sig_x, sig_y, sig_z are the Pauli matrices.
-
-        NOTE: SWAY is qbit symmetric (SWAY(0,1)=SWAY(1,0)) iff U2 is a
-        symmetric matrix (U2^T = U2) iff rads2=0. An error message is
-        emitted if abs(rads2) > 1e-6
+        then SWAY is qbit symmetric (SWAY(0,1)=SWAY(1,0)) iff sigx U2 sigx
+        = U2 iff rads2=rads3=0.
 
         SWAY includes SWAP, sqrt(SWAP), iSWAP, sqrt(iSWAP), PWAP,
         sqrt(PSWAP) etc.
@@ -758,13 +758,9 @@ class SEO_writer:
         big = max(x)
         small = min(x)
 
-        if rads_list is not None:
-            assert abs(rads_list[2]) < 1e-6,\
-                "coefficient of sig_y must be zero but is\n" + \
-                str(rads_list[2])
-
         use_sway = False
         if rads_list is not None:
+            assert len(rads_list) == 2
             use_sway = True
 
         # english file
@@ -775,7 +771,7 @@ class SEO_writer:
                                '\t' + str(big) + "\t" + str(small))
         if use_sway:
             self.english_out.write('\tBY')
-            for k in range(4):
+            for k in range(2):
                 self.english_out.write('\t' + str(rads_list[k]))
         self.english_out.write("\tIF\t" if num_controls != 0 else "\n")
 

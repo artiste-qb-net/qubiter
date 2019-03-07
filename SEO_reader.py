@@ -441,13 +441,13 @@ class SEO_reader(SEO_pre_reader):
             self.use_SWAP(bit1, bit2, controls)
         elif line_name == "SWAY":
             # example:
-            # SWAY 0 1 BY 25.1 42.7 0.0 78.5 IF 3F 2T
+            # SWAY 0 1 BY 25.1 42.7 IF 3F 2T
 
             bit1 = int(self.split_line[1])
             bit2 = int(self.split_line[2])
             rads_list = [self.degs_str_to_rads(self.split_line[k])
-                                               for k in range(4, 8)]
-            controls = self.read_TF_controls(self.split_line[9:])
+                                               for k in range(4, 6)]
+            controls = self.read_TF_controls(self.split_line[7:])
             self.use_SWAY(bit1, bit2, controls, rads_list)
         elif line_name == "U_2_":
             # example:

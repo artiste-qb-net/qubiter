@@ -762,11 +762,9 @@ class SEO_simulator(SEO_reader):
         @---U2
         X---@
 
-        U2 is a symmetric matrix (U2^T = U2)
+        U2 = exp(j*(rads0 + rads1*sig_x))
 
-        U2 = exp(j*(rads0 + rads1*sig_x + 0*sig_y + rads3*sig_z))
-
-        rads_list = [rads0, rads1, 0.0, rads3]
+        rads_list = [rads0, rads1]
 
         Parameters
         ----------
@@ -789,10 +787,13 @@ class SEO_simulator(SEO_reader):
         controls2.set_control(bit2, True, do_refresh=True)
         # print(",m,m", controls2.bit_pos_to_kind)
 
+        assert len(rads_list) == 2
+        rads0, rads1 = rads_list
+
         self.evolve_by_controlled_one_bit_gate(
             bit2, controls1, OneBitGates.sigx())
         self.evolve_by_controlled_one_bit_gate(
-            bit1, controls2, OneBitGates.u2(*rads_list))
+            bit1, controls2, OneBitGates.u2(rads0, rads1, 0.0, 0.0))
         self.evolve_by_controlled_one_bit_gate(
             bit2, controls1, OneBitGates.sigx())
 
