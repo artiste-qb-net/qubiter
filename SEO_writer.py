@@ -1062,7 +1062,7 @@ class SEO_writer:
         self.write_controlled_one_bit_gate(
             tar_bit_pos, trols, one_bit_gate_fun, fun_arg_list)
 
-    def write_bit_swa_(self, bit1, bit2, rads_list=None):
+    def write_bit_swap(self, bit1, bit2, rads_list=None):
         """
         Write a line in eng & pic files for a 'SWAP' if rads_list=None or
         'SWAY' if rads_list!=None, with no controls.
@@ -1429,7 +1429,7 @@ if __name__ == "__main__":
 
             wr.write_controlled_bit_swap(0, 2, trols)
 
-            wr.write_bit_swa_(1, 2)
+            wr.write_bit_swap(1, 2)
 
             gate = OneBitGates.phase_fac
             wr.write_controlled_one_bit_gate(2, trols, gate, [ang_rads])

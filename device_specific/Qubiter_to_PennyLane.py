@@ -452,7 +452,7 @@ if __name__ == "__main__":
         wr.write_Z(1)
         wr.write_cnot(0, 1)
         wr.write_cz(0, 1)
-        wr.write_bit_swa_(1, 0)
+        wr.write_bit_swap(1, 0)
         wr.write_Rx(2, rads=np.pi)
         wr.write_Ry(2, rads=np.pi)
         wr.write_Rz(2, rads=np.pi)
