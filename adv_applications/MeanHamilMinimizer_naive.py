@@ -138,8 +138,11 @@ class MeanHamilMinimizer_naive(MeanHamilMinimizer):
             vman = PlaceholderManager(
                 var_num_to_rads=var_num_to_rads,
                 fun_name_to_fun=self.fun_name_to_fun)
+            # simulator will change init_st_vec so use
+            # fresh copy of it each time
+            init_st_vec = cp.deepcopy(self.init_st_vec)
             sim = SEO_simulator(fin_file_prefix, self.num_bits,
-                                self.init_st_vec, vars_manager=vman)
+                                init_st_vec, vars_manager=vman)
             fin_st_vec = sim.cur_st_vec_dict['pure']
 
             # get effective state vec
