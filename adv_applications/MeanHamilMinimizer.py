@@ -10,13 +10,13 @@ class MeanHamilMinimizer(CostMinimizer):
     this class embodies the essence of an object specifically designed to
     minimize a cost function which equals the mean value of a Hamiltonian.
      
-    file_prefix identifies the location of an English file that specifies a 
-    quantum circuit. Assuming that the initial state of that quantum circuit 
-    is the ground state (all qubits in state |0>), let |psi> be the final 
-    state vector that evolves from that circuit. Let hamil be a Hamiltonian 
-    suitable for that circuit and stored as an object of QubitOperator, 
-    which is a class of the open-source lib OpenFermion. Then the cost 
-    function to be minimized is <psi|hamil|psi>. 
+    file_prefix identifies the location of an English file that specifies a
+    quantum circuit. If init_st_vec=None, we assume that the initial state
+    of that quantum circuit is the ground state (all qubits in state |0>).
+    Let |psi> be the final state vector that evolves from that circuit. Let
+    hamil be a Hamiltonian suitable for that circuit and stored as an object
+    of QubitOperator, which is a class of the open-source lib OpenFermion.
+    Then the cost function to be minimized is <psi|hamil|psi>.
     
     Attributes
     ----------
@@ -31,6 +31,7 @@ class MeanHamilMinimizer(CostMinimizer):
          are only decided at a later time. These functions do not vary
          during the minimization process.
     hamil : QubitOperator
+    init_st_vec : StateVec
     init_var_num_to_rads : dict[int, float]
         this dictionary gives the initial values for the cost function being
         minimized. The dict maps variable numbers (int) to radians (float)
@@ -47,7 +48,7 @@ class MeanHamilMinimizer(CostMinimizer):
 
     def __init__(self, file_prefix, num_bits, hamil,
             init_var_num_to_rads, fun_name_to_fun,
-            minimizer_fun, num_samples=0, rand_seed=None,
+            minimizer_fun, init_st_vec=None, num_samples=0, rand_seed=None,
             print_hiatus=0, verbose=False, **mfun_kwargs):
         """
         Constructor
@@ -77,6 +78,7 @@ class MeanHamilMinimizer(CostMinimizer):
         self.init_var_num_to_rads = init_var_num_to_rads
         self.all_var_nums, init_x_val = zip(*init_var_num_to_rads.items())
         self.fun_name_to_fun = fun_name_to_fun
+        self.init_st_vec = init_st_vec
         self.num_samples = num_samples
         self.rand_seed = rand_seed
 
@@ -105,3 +107,63 @@ class MeanHamilMinimizer(CostMinimizer):
                     "isn't. After being simplified by the " +\
                     'BosonOperator constructor, ' +\
                     'the coefficient of every term must be real.'
+
+    def hamil_mean_val(self, var_num_to_rads):
+        """
+        This abstract method calculates the mean value of the Hamiltonian
+        hamil.
+
+        Parameters
+        ----------
+        var_num_to_rads : dict[int, float]
+
+        Returns
+        -------
+        float
+
+        """
+        assert False
+
+    def cost_fun(self, x_val):
+        """
+        This method wraps the static method hamil_mean_val() defined
+        elsewhere in this class. This method will also print out whenever it
+        is asked a report of the current values in x and cost.
+
+        Parameters
+        ----------
+        x_val : tuple[float]
+
+        Returns
+        -------
+        float
+
+        """
+        var_num_to_rads = dict(zip(self.all_var_nums, x_val))
+        cost = self.hamil_mean_val(var_num_to_rads)
+
+        self.cur_x_val = x_val
+        self.cur_cost = cost
+        self.broadcast_cost_fun_call()
+        self.iter_count += 1
+
+        return cost
+
+    def find_min(self):
+        """
+        This method wraps the method scipy.optimize.minimize
+
+        Returns
+        -------
+        OptimizeResult
+            OptimizeResult is a class (basically an enum) defined in
+            scipy.optimize to hold the output results of
+            scipy.optimize.minimize
+
+        """
+        opt_result = self.minimizer_fun(self.cost_fun,
+            self.init_x_val, **self.mfun_kwargs)
+        if self.verbose:
+            print('*********final optimum result'
+                  ' (final iter=' + str(self.iter_count) + '):\n', opt_result)
+        return opt_result

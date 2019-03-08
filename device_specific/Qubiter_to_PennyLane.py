@@ -54,7 +54,7 @@ class Qubiter_to_PennyLane(Qubiter_to_AnyQasm):
         self.rotn_has_been_defined = False
         self.indentation = 0
         Qubiter_to_AnyQasm.__init__(self, file_prefix, num_bits,
-                                    qasm_ftype='py', **kwargs)
+                                    aqasm_ftype='py', **kwargs)
 
     def write_prelude(self):
         """
@@ -84,12 +84,7 @@ class Qubiter_to_PennyLane(Qubiter_to_AnyQasm):
             for line in fi_lines:
                 s += ' '*self.indentation + line
         s = s.rstrip()
-        self.qasm_out.write(s + '\n')
-        
-        if self.write_qubiter_files:
-            lines = s.split('\n')
-            for line in lines:
-                self.qbtr_wr.write_NOTA(line)
+        self.write(s)
 
     def write_ending(self):
         """
@@ -101,9 +96,7 @@ class Qubiter_to_PennyLane(Qubiter_to_AnyQasm):
 
         """
         s = ' '*self.indentation + 'return qml.expval.Hermitian(hamil)'
-        self.qasm_out.write(s + '\n')
-
-        self.qbtr_wr.write_NOTA(s)
+        self.write(s)
 
     def use_HAD2(self, tar_bit_pos, controls):
         """
@@ -121,7 +114,7 @@ class Qubiter_to_PennyLane(Qubiter_to_AnyQasm):
 
         """
         assert len(controls.bit_pos) == 0
-        self.qasm_out.write(' '*self.indentation +
+        self.aqasm_out.write(' '*self.indentation +
             "qml.Hadamard(" + str(tar_bit_pos) + ")\n")
         if self.write_qubiter_files:
             self.qbtr_wr.write_H(tar_bit_pos)
@@ -140,7 +133,7 @@ class Qubiter_to_PennyLane(Qubiter_to_AnyQasm):
         None
 
         """
-        self.qasm_out.write(' '*self.indentation +
+        self.aqasm_out.write(' '*self.indentation +
                             "# " + bla_str + "\n")
         if self.write_qubiter_files:
             self.qbtr_wr.write_NOTA(bla_str)
@@ -172,7 +165,7 @@ class Qubiter_to_PennyLane(Qubiter_to_AnyQasm):
         else:
             bla_str = 'PHAS\t' + degs_str(angle_rads) +\
                       '\tAT\t' + str(tar_bit_pos)
-            self.qasm_out.write("# " + bla_str + "\n")
+            self.aqasm_out.write("# " + bla_str + "\n")
             if self.write_qubiter_files:
                 self.qbtr_wr.write_NOTA(bla_str)
 
@@ -211,7 +204,7 @@ class Qubiter_to_PennyLane(Qubiter_to_AnyQasm):
         line_str += str(penny_rads)
         line_str += ', wires=' + str(tar_bit_pos)
         line_str += ")\n"
-        self.qasm_out.write(line_str)
+        self.aqasm_out.write(line_str)
 
         if self.write_qubiter_files:
             if projection_bit == 0:
@@ -240,7 +233,7 @@ class Qubiter_to_PennyLane(Qubiter_to_AnyQasm):
 
         """
         str1 = 'PRINT\t' + style
-        self.qasm_out.write(' '*self.indentation +
+        self.aqasm_out.write(' '*self.indentation +
                             "# " + str1 + "\n")
         if self.write_qubiter_files:
             self.qbtr_wr.write_NOTA(str1)
@@ -283,7 +276,7 @@ class Qubiter_to_PennyLane(Qubiter_to_AnyQasm):
 
         line_str += str(penny_rads) + ', wires='
         line_str += str(tar_bit_pos) + ")\n"
-        self.qasm_out.write(line_str)
+        self.aqasm_out.write(line_str)
 
         if self.write_qubiter_files:
             self.qbtr_wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
@@ -323,7 +316,7 @@ class Qubiter_to_PennyLane(Qubiter_to_AnyQasm):
                 line = line[4:] if line != '\n' else line
                 s += ' '*self.indentation + str(line)
             self.rotn_has_been_defined = True
-            self.qasm_out.write(s)
+            self.aqasm_out.write(s)
             s = s.rstrip()
             if self.write_qubiter_files:
                 lines = s.split('\n')
@@ -344,7 +337,7 @@ class Qubiter_to_PennyLane(Qubiter_to_AnyQasm):
             line_str += str(rads) + ', '
         line_str = line_str[:-2] + '), '
         line_str += 'wires=' + str(tar_bit_pos) + ')\n'
-        self.qasm_out.write(line_str)
+        self.aqasm_out.write(line_str)
 
         if self.write_qubiter_files:
             self.qbtr_wr.write_controlled_one_bit_gate(tar_bit_pos,
@@ -391,7 +384,7 @@ class Qubiter_to_PennyLane(Qubiter_to_AnyQasm):
             else:
                 assert False
             line_str += str(tar_bit_pos) + ")\n"
-            self.qasm_out.write(line_str)
+            self.aqasm_out.write(line_str)
             if self.write_qubiter_files:
                 self.qbtr_wr.write_controlled_one_bit_gate(
                     tar_bit_pos, controls, u2_fun)
@@ -408,7 +401,7 @@ class Qubiter_to_PennyLane(Qubiter_to_AnyQasm):
                     assert False, 'unsupported axis'
                 line_str += str(trol_pos) + ', '
                 line_str += str(tar_pos) + '])\n'
-                self.qasm_out.write(line_str)
+                self.aqasm_out.write(line_str)
                 if self.write_qubiter_files:
                     self.qbtr_wr.write_controlled_one_bit_gate(
                         tar_bit_pos, controls, u2_fun)
@@ -441,7 +434,7 @@ class Qubiter_to_PennyLane(Qubiter_to_AnyQasm):
         line_str = ' '*self.indentation + \
                    'qml.SWAP(wires=[' + \
                    str(bit1) + ", " + str(bit2) + "])\n"
-        self.qasm_out.write(line_str)
+        self.aqasm_out.write(line_str)
 
         if self.write_qubiter_files:
             self.qbtr_wr.write_controlled_bit_swa_(bit1, bit2, controls)
@@ -471,7 +464,7 @@ if __name__ == "__main__":
         qnode_name = 'Turing'
         Qubiter_to_PennyLane(file_prefix, num_bits,
                 qnode_name,
-                qasm_name=qasm_name,
+                aqasm_name=qasm_name,
                 write_qubiter_files=True)
 
     def main2():
@@ -486,13 +479,13 @@ if __name__ == "__main__":
         wr.write_cnot(2, 3)
         wr.close_files()
 
-        qasm_name = 'PennyL'
+        aqasm_name = 'PennyL'
         fun_defs_path = '../io_folder/qbtr2penny_test2_fun_defs.py'
         qnode_name = 'Feynman'
         Qubiter_to_PennyLane(file_prefix, num_bits,
                 qnode_name,
                 fun_defs_path,
-                qasm_name=qasm_name,
+                aqasm_name=aqasm_name,
                 write_qubiter_files=True)
     main1()
     main2()

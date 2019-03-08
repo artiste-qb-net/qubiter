@@ -23,5 +23,3 @@ NOTA	not allowed in strict mode
 |   |   @P  |   |   
 |   |   @P--+---@   
 |   |   <---+--->   
-NOTA	
-NOTA	ckt.draw()

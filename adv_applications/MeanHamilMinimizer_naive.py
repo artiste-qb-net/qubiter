@@ -94,43 +94,13 @@ class MeanHamilMinimizer_naive(MeanHamilMinimizer):
         """
         MeanHamilMinimizer.__init__(self, *args, **kwargs)
 
-    def find_min(self):
+    def hamil_mean_val(self, var_num_to_rads):
         """
-        This method wraps the method scipy.optimize.minimize
-
-        Returns
-        -------
-        OptimizeResult
-            OptimizeResult is a class (basically an enum) defined in
-            scipy.optimize to hold the output results of
-            scipy.optimize.minimize
-
-        """
-        opt_result = self.minimizer_fun(self.cost_fun,
-            self.init_x_val, **self.mfun_kwargs)
-        if self.verbose:
-            print('*********final optimum result'
-                  ' (final iter=' + str(self.iter_count) + '):\n', opt_result)
-        return opt_result
-
-    @staticmethod
-    def hamil_mean_val(var_num_to_rads, fun_name_to_fun, 
-                       file_prefix, num_bits, hamil,
-                       num_samples=0, rand_seed=None):
-        """
-        This method calculates the mean value of the Hamiltonian hamil. See
-        docstrings of class MeanHamilMinimizer for explanations of the
-        various arguments of this method
+        This method calculates the mean value of the Hamiltonian hamil.
 
         Parameters
         ----------
         var_num_to_rads : dict[int, float]
-        fun_name_to_fun : dict[str, function]
-        file_prefix : str
-        num_bits : int
-        hamil : QubitOperator
-        num_samples : int
-        rand_seed : int
 
         Returns
         -------
@@ -138,83 +108,68 @@ class MeanHamilMinimizer_naive(MeanHamilMinimizer):
 
         """
         # give it name unlikely to exist already
-        fin_file_prefix = file_prefix + '99345125047'
-        init_st_vec = StateVec.get_ground_st_vec(num_bits)
+        fin_file_prefix = self.file_prefix + '99345125047'
+        if self.init_st_vec is None:
+            self.init_st_vec = StateVec.get_ground_st_vec(self.num_bits)
+
+        # hamil loop
         arr_1 = np.array([1., 1.])
         arr_z = np.array([1., -1.])
         mean_val = 0
-        for term, coef in hamil.terms.items():
+        for term, coef in self.hamil.terms.items():
             # we have checked before that coef is real
             coef = complex(coef).real
+
+            # add measurement coda for this term of hamil
+            # build real_vec from arr_list.
+            # real_vec will be used at end of loop
+            arr_list = [arr_1]*self.num_bits
             bit_pos_to_xy_str = {}
-            arr_list = [arr_1]*num_bits
             for bit_pos, action in term:
                 arr_list[bit_pos] = arr_z
                 if action != 'Z':
                     bit_pos_to_xy_str[bit_pos] = action
-            wr = CodaSEO_writer(file_prefix, fin_file_prefix, num_bits)
+            real_vec = utg.kron_prod(arr_list)
+            real_vec = np.reshape(real_vec, tuple([2]*self.num_bits))
+            wr = CodaSEO_writer(self.file_prefix,
+                                fin_file_prefix, self.num_bits)
             wr.write_xy_measurements(bit_pos_to_xy_str)
             wr.close_files()
-            
+
+            # run simulation. get fin state vec
             vman = PlaceholderManager(
                 var_num_to_rads=var_num_to_rads,
-                fun_name_to_fun=fun_name_to_fun)
-            sim = SEO_simulator(fin_file_prefix, num_bits, init_st_vec,
-                                vars_manager=vman)
+                fun_name_to_fun=self.fun_name_to_fun)
+            sim = SEO_simulator(fin_file_prefix, self.num_bits,
+                                self.init_st_vec, vars_manager=vman)
             fin_st_vec = sim.cur_st_vec_dict['pure']
-            real_vec = utg.kron_prod(arr_list)
-            real_vec = np.reshape(real_vec, tuple([2]*num_bits))
-            if not num_samples:
-                mean_val += coef*fin_st_vec.\
-                        get_mean_value_of_real_diag_mat(real_vec).real
+
+            # get effective state vec
+            if not self.num_samples:
+                effective_st_vec = fin_st_vec
             else:  # if num_samples !=0, then
                 # sample qubiter-generated empirical prob dist
                 pd = fin_st_vec.get_pd()
-                obs_vec = StateVec.get_observations_vec(num_bits,
-                        pd, num_samples, rand_seed=rand_seed)
-                counts_dict = StateVec.get_counts_from_obs_vec(num_bits,
+                obs_vec = StateVec.get_observations_vec(self.num_bits,
+                        pd, self.num_samples, rand_seed=self.rand_seed)
+                counts_dict = StateVec.get_counts_from_obs_vec(self.num_bits,
                                                                obs_vec)
-                emp_pd = StateVec.get_empirical_pd_from_counts(num_bits,
+                emp_pd = StateVec.get_empirical_pd_from_counts(self.num_bits,
                                                                counts_dict)
                 # print('mmmmmmmm,,,', np.linalg.norm(pd-emp_pd))
                 emp_st_vec = StateVec.get_emp_state_vec_from_emp_pd(
-                        num_bits, emp_pd)
-                mean_val += coef*emp_st_vec.\
-                        get_mean_value_of_real_diag_mat(real_vec).real
+                        self.num_bits, emp_pd)
+                effective_st_vec = emp_st_vec
+
+            # add contribution to mean
+            mean_val += coef*effective_st_vec.\
+                    get_mean_value_of_real_diag_mat(real_vec).real
 
         # create this coda writer in order to delete final files
-        wr1 = CodaSEO_writer(file_prefix, fin_file_prefix, num_bits)
+        wr1 = CodaSEO_writer(self.file_prefix, fin_file_prefix, self.num_bits)
         wr1.delete_fin_files()
 
         return mean_val
-
-    def cost_fun(self, x_val):
-        """
-        This method wraps the static method hamil_mean_val() defined
-        elsewhere in this class. This method will also print out whenever it
-        is asked a report of the current values in x and cost.
-
-        Parameters
-        ----------
-        x_val : tuple[float]
-
-        Returns
-        -------
-        float
-
-        """
-        var_num_to_rads = dict(zip(self.all_var_nums, x_val))
-        cost = MeanHamilMinimizer_naive.hamil_mean_val(
-            var_num_to_rads, self.fun_name_to_fun,
-            self.file_prefix, self.num_bits, self.hamil,
-            self.num_samples, self.rand_seed)
-        
-        self.cur_x_val = x_val
-        self.cur_cost = cost
-        self.broadcast_cost_fun_call()
-        self.iter_count += 1
-            
-        return cost
 
 if __name__ == "__main__":
     def main():

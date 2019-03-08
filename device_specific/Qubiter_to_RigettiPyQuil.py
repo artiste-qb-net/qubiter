@@ -54,14 +54,7 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
         s += 'ro = pg.declare("ro", memory_type="BIT", memory_size='
         s += str(self.num_bits)
         s += ')'
-        self.qasm_out.write(s)
-        self.qasm_out.write('\n\n')
-
-        if self.write_qubiter_files:
-            lines = s.split('\n')
-            for line in lines:
-                self.qbtr_wr.write_NOTA(line)
-        self.qbtr_wr.write_NOTA('')
+        self.write(s + '\n')
 
     def write_ending(self):
         """
@@ -73,8 +66,7 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
 
         """
 
-        self.qasm_out.write('\n')
-        self.qbtr_wr.write_NOTA("")
+        self.write('\n')
 
         s = ''
         for k in range(self.num_bits):
@@ -84,13 +76,7 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
             s += str(k)
             s += '])\n'
         s = s.strip()
-        self.qasm_out.write(s)
-
-        if self.write_qubiter_files:
-            lines = s.split('\n')
-            # print(',,', lines)
-            for line in lines:
-                self.qbtr_wr.write_NOTA(line)
+        self.write(s)
 
     def use_HAD2(self, tar_bit_pos, controls):
         """
@@ -108,7 +94,7 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
 
         """
         assert len(controls.bit_pos) == 0
-        self.qasm_out.write("pg += H(" + str(tar_bit_pos) + ")\n")
+        self.aqasm_out.write("pg += H(" + str(tar_bit_pos) + ")\n")
         if self.write_qubiter_files:
             self.qbtr_wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
                    OneBitGates.had2)
@@ -127,7 +113,7 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
         None
 
         """
-        self.qasm_out.write("# " + bla_str + "\n")
+        self.aqasm_out.write("# " + bla_str + "\n")
         if self.write_qubiter_files:
             self.qbtr_wr.write_NOTA(bla_str)
 
@@ -158,7 +144,7 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
         else:
             bla_str = 'PHAS\t' + degs_str(angle_rads) +\
                       '\tAT\t' + str(tar_bit_pos)
-            self.qasm_out.write("# " + bla_str + "\n")
+            self.aqasm_out.write("# " + bla_str + "\n")
             if self.write_qubiter_files:
                 self.qbtr_wr.write_NOTA(bla_str)
 
@@ -219,7 +205,7 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
             line_str += ', ' + str(controls.bit_pos[0])
             line_str += ', ' + str(tar_bit_pos)
         line_str += ")\n"
-        self.qasm_out.write(line_str)
+        self.aqasm_out.write(line_str)
 
         if self.write_qubiter_files:
             if projection_bit == 0:
@@ -248,7 +234,7 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
 
         """
         str1 = 'PRINT\t' + style
-        self.qasm_out.write("# " + str1 + "\n")
+        self.aqasm_out.write("# " + str1 + "\n")
         if self.write_qubiter_files:
             self.qbtr_wr.write_NOTA(str1)
 
@@ -290,7 +276,7 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
 
         line_str += str(quil_rads) + ', '
         line_str += str(tar_bit_pos) + ")\n"
-        self.qasm_out.write(line_str)
+        self.aqasm_out.write(line_str)
 
         if self.write_qubiter_files:
             self.qbtr_wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
@@ -329,13 +315,13 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
         end_str = ', ' + str(tar_bit_pos) + ')\n'
 
         line_str = 'pg += RZ(' + str(-2*right_rads) + end_str
-        self.qasm_out.write(line_str)
+        self.aqasm_out.write(line_str)
 
         line_str = 'pg += RY(' + str(-2*center_rads) + end_str
-        self.qasm_out.write(line_str)
+        self.aqasm_out.write(line_str)
 
         line_str = 'pg += RZ(' + str(-2*left_rads) + end_str
-        self.qasm_out.write(line_str)
+        self.aqasm_out.write(line_str)
 
         if self.write_qubiter_files:
             self.qbtr_wr.write_controlled_one_bit_gate(tar_bit_pos,
@@ -378,7 +364,7 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
             else:
                 assert False
             line_str += str(tar_bit_pos) + ")\n"
-            self.qasm_out.write(line_str)
+            self.aqasm_out.write(line_str)
             if self.write_qubiter_files:
                 if axis == 1:
                     u2_fun = OneBitGates.sigx
@@ -398,7 +384,7 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
                 line_str = 'pg += CNOT('
                 line_str += str(trol_pos) + ', '
                 line_str += str(tar_pos) + ')\n'
-                self.qasm_out.write(line_str)
+                self.aqasm_out.write(line_str)
                 if self.write_qubiter_files:
                     self.qbtr_wr.write_cnot(trol_pos, tar_pos)
             else:
@@ -430,7 +416,7 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
 
         line_str = 'pg += SWAP(' + \
                    str(bit1) + ", " + str(bit2) + ")\n"
-        self.qasm_out.write(line_str)
+        self.aqasm_out.write(line_str)
 
         if self.write_qubiter_files:
             self.qbtr_wr.write_controlled_bit_swa_(bit1, bit2, controls)
@@ -440,10 +426,10 @@ if __name__ == "__main__":
 
     def main():
         file_prefix = "../io_folder/qbtr2rigetti_test"
-        qasm_name = 'RigPyQuil'
+        aqasm_name = 'RigPyQuil'
         num_bits = 6
         c_to_tars = rig.rigetti20_c_to_tars
-        Qubiter_to_RigettiPyQuil(file_prefix, num_bits, qasm_name=qasm_name,
+        Qubiter_to_RigettiPyQuil(file_prefix, num_bits, aqasm_name=aqasm_name,
                 c_to_tars=c_to_tars, write_qubiter_files=True)
 
     main()

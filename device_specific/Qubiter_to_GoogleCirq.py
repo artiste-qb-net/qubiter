@@ -58,14 +58,7 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
             s += vname
             s += '")\n'
         s = s.strip()
-        self.qasm_out.write(s)
-        self.qasm_out.write('\n\n')
-
-        if self.write_qubiter_files:
-            lines = s.split('\n')
-            for line in lines:
-                self.qbtr_wr.write_NOTA(line)
-        self.qbtr_wr.write_NOTA('')
+        self.write(s + '\n')
 
     def write_ending(self):
         """
@@ -112,7 +105,7 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
 
         """
         assert len(controls.bit_pos) == 0
-        self.qasm_out.write("ckt.append(H(" +
+        self.aqasm_out.write("ckt.append(H(" +
                             self.bit2str(tar_bit_pos) + "))\n")
         if self.write_qubiter_files:
             self.qbtr_wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
@@ -132,7 +125,7 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
         None
 
         """
-        self.qasm_out.write("# " + bla_str + "\n")
+        self.aqasm_out.write("# " + bla_str + "\n")
         if self.write_qubiter_files:
             self.qbtr_wr.write_NOTA(bla_str)
 
@@ -163,10 +156,9 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
         else:
             bla_str = 'PHAS\t' + degs_str(angle_rads) +\
                       '\tAT\t' + str(tar_bit_pos)
-            self.qasm_out.write("# " + bla_str + "\n")
+            self.aqasm_out.write("# " + bla_str + "\n")
             if self.write_qubiter_files:
                 self.qbtr_wr.write_NOTA(bla_str)
-
 
     def use_P_PH(self, projection_bit, angle_rads, tar_bit_pos, controls):
         """
@@ -228,7 +220,7 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
             line_str += '.on(' + self.bit2str(controls.bit_pos[0])
             line_str += ', ' + self.bit2str(tar_bit_pos)
         line_str += "))\n"
-        self.qasm_out.write(line_str)
+        self.aqasm_out.write(line_str)
 
         if self.write_qubiter_files:
             if projection_bit == 0:
@@ -257,7 +249,7 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
 
         """
         str1 = 'PRINT\t' + style
-        self.qasm_out.write("# " + str1 + "\n")
+        self.aqasm_out.write("# " + str1 + "\n")
         if self.write_qubiter_files:
             self.qbtr_wr.write_NOTA(str1)
 
@@ -299,7 +291,7 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
 
         line_str += 'rads=' + str(cirq_rads) + ').on('
         line_str += self.bit2str(tar_bit_pos) + "))\n"
-        self.qasm_out.write(line_str)
+        self.aqasm_out.write(line_str)
 
         if self.write_qubiter_files:
             self.qbtr_wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
@@ -338,13 +330,13 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
         end_str = ').on(' + self.bit2str(tar_bit_pos) + '))\n'
 
         line_str = 'ckt.append(Rz(rads=' + str(-2*right_rads) + end_str
-        self.qasm_out.write(line_str)
+        self.aqasm_out.write(line_str)
 
         line_str = 'ckt.append(Ry(rads=' + str(-2*center_rads) + end_str
-        self.qasm_out.write(line_str)
+        self.aqasm_out.write(line_str)
 
         line_str = 'ckt.append(Rz(rads=' + str(-2*left_rads) + end_str
-        self.qasm_out.write(line_str)
+        self.aqasm_out.write(line_str)
 
         if self.write_qubiter_files:
             self.qbtr_wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
@@ -387,7 +379,7 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
             else:
                 assert False
             line_str += self.bit2str(tar_bit_pos) + "))\n"
-            self.qasm_out.write(line_str)
+            self.aqasm_out.write(line_str)
             if self.write_qubiter_files:
                 if axis == 1:
                     u2_fun = OneBitGates.sigx
@@ -407,7 +399,7 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
                 line_str = 'ckt.append(CNOT('
                 line_str += self.bit2str(trol_pos) + ', '
                 line_str += self.bit2str(tar_pos) + '))\n'
-                self.qasm_out.write(line_str)
+                self.aqasm_out.write(line_str)
                 if self.write_qubiter_files:
                     self.qbtr_wr.write_cnot(trol_pos, tar_pos)
             else:
@@ -440,7 +432,7 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
         line_str = 'ckt.append(SWAP('
         line_str += self.bit2str(bit1)
         line_str += ", " + self.bit2str(bit2) + "))\n"
-        self.qasm_out.write(line_str)
+        self.aqasm_out.write(line_str)
 
         if self.write_qubiter_files:
             self.qbtr_wr.write_controlled_bit_swa_(bit1, bit2, controls)
@@ -449,10 +441,10 @@ if __name__ == "__main__":
 
     def main():
         file_prefix = "../io_folder/qbtr2google_test"
-        qasm_name = 'GooCirq'
+        aqasm_name = 'GooCirq'
         num_bits = 5
         c_to_tars = 'do_fill'  # filled by constructor
-        Qubiter_to_GoogleCirq(file_prefix, num_bits, qasm_name=qasm_name,
+        Qubiter_to_GoogleCirq(file_prefix, num_bits, aqasm_name=aqasm_name,
                               c_to_tars=c_to_tars, write_qubiter_files=True)
 
     main()

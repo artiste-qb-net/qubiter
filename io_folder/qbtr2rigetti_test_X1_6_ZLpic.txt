@@ -28,6 +28,7 @@ NOTA	not allowed in strict mode
 |   |   |   @P--+---@   
 |   |   |   <---+--->   
 NOTA	
+NOTA	
 NOTA	pg.MEASURE(0, ro[0])
 NOTA	pg.MEASURE(1, ro[1])
 NOTA	pg.MEASURE(2, ro[2])

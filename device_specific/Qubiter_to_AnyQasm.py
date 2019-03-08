@@ -31,6 +31,8 @@ class Qubiter_to_AnyQasm(SEO_reader):
     the program will end if you try to use gates for a target language that
     have not been implemented yet in the Qubiter class targeting that
     language, often because the target language doesn't support those gates.
+    
+    Will refer to target qasm as AnyQasm or aqasm
 
     Next we give a description of the strict_mode:
 
@@ -66,28 +68,30 @@ class Qubiter_to_AnyQasm(SEO_reader):
 
     Attributes
     ----------
+    all_fun_names : list[str]
+        a list of all the distinct function names encountered in circuit
+    all_var_nums : list[int]
+        a list of all distinct numbers of the variables encountered in circuit
+    aqasm_name : str
+        the name of the aqasm language, for example, IBMqasm. Used as ending
+        of file name, between '_' and '.txt'
+    aqasm_path : str
+        path to aqasm file
+    aqasm_out : _io.TextIOWrapper
+        This output stream is used to write an aqasm file based on the input
+        English file.
     c_to_tars : dict[int, list[int]]
         a dictionary mapping j in range(num_bits) to a list, possibly empty,
         of the physically allowed targets of qubit j, when j is the control
         of a CNOT. If c_to_tars = None, the class assumes any CNOT is
         possible.
-    all_fun_names : list[str]
-        a list of all the distinct function names encountered in circuit
-    all_var_nums : list[int]
-        a list of all distinct numbers of the variables encountered in circuit
     file_prefix : str
     num_bits : int
-    qasm_name : str
-        the name of the qasm language, for example, IBMqasm. Used as ending
-        of file name, between '_' and '.txt'
-    qasm_out : _io.TextIOWrapper
-        This output stream is used to write a qasm file based on the input
-        English file.
     qbtr_wr : SEO_writer
         A SEO_writer object created iff write_qubiter_files is True.
     strict_mode : bool
     vprefix : str
-        all variables in qasm file will be called vprefix + an int
+        all variables in aqasm file will be called vprefix + an int
     write_qubiter_files : bool
         The class always writes an AnyQasm text file based on the input
         English file that is read. Iff this is True, the class also writes
@@ -96,9 +100,10 @@ class Qubiter_to_AnyQasm(SEO_reader):
 
 
     """
-    def __init__(self, file_prefix, num_bits, qasm_name='',
+    def __init__(self, file_prefix, num_bits, aqasm_name='',
             strict_mode=False, c_to_tars=None, write_qubiter_files=False,
-                 vars_manager=None, qasm_ftype='txt',  **kwargs):
+                 vars_manager=None, aqasm_ftype='txt',
+                 prelude_str=None, ending_str=None, **kwargs):
         """
         Constructor
 
@@ -106,14 +111,20 @@ class Qubiter_to_AnyQasm(SEO_reader):
         ----------
         file_prefix : str
         num_bits : int
-        qasm_name : str
+        aqasm_name : str
         strict_mode : bool
         c_to_tars : dict[int, list[int]]|None
         write_qubiter_files : bool
         vars_manager : PlaceholderManager
-        qasm_ftype : str
-            file type of output qasm file. If this equals 'txt', name of
-            qasm file will end in '.txt'
+        aqasm_ftype : str
+            file type of output aqasm file. If this equals 'txt', name of
+            aqasm file will end in '.txt'
+        prelude_str : str | None
+            string to write as prelude to aqasm file. If None, then the
+            override method of self.write_prelude() is called
+        ending_str : str | None
+            string to write as ending to aqasm file. If None, then the
+            override method of self.write_ending() is called
 
         Returns
         -------
@@ -128,14 +139,15 @@ class Qubiter_to_AnyQasm(SEO_reader):
         self.all_var_nums = rdr.vars_manager.all_var_nums
         self.all_fun_names = rdr.vars_manager.all_fun_names
 
-        self.qasm_name = qasm_name
+        self.aqasm_name = aqasm_name
         self.strict_mode = strict_mode
         self.vprefix = 'rads'
         self.c_to_tars = c_to_tars
         self.write_qubiter_files = write_qubiter_files
 
-        self.qasm_out = open(file_prefix +
-                             '_' + qasm_name + '.' + qasm_ftype, 'wt')
+        self.aqasm_path = file_prefix +\
+                          '_' + aqasm_name + '.' + aqasm_ftype
+        self.aqasm_out = open(self.aqasm_path, 'wt')
 
         self.qbtr_wr = None
         if write_qubiter_files:
@@ -143,17 +155,43 @@ class Qubiter_to_AnyQasm(SEO_reader):
             out_file_prefix = SEO_reader.xed_file_prefix(file_prefix)
             self.qbtr_wr = SEO_writer(out_file_prefix, emb)
 
-        self.write_prelude()
+        if prelude_str is not None:
+            self.write(prelude_str)
+        else:
+            self.write_prelude()
 
         vman1 = PlaceholderManager(eval_all_vars=False)
         SEO_reader.__init__(self, file_prefix, num_bits,
                             vars_manager=vman1, **kwargs)
 
-        self.write_ending()
+        if ending_str is not None:
+            self.write(ending_str)
+        else:
+            self.write_ending()
 
-        self.qasm_out.close()
+        self.aqasm_out.close()
         if write_qubiter_files:
             self.qbtr_wr.close_files()
+
+    def write(self, s):
+        """
+        Writes string s to aqasm and qubiter out files
+
+        Parameters
+        ----------
+        s : str
+
+        Returns
+        -------
+        None
+
+        """
+        self.aqasm_out.write(s + '\n')
+
+        if self.write_qubiter_files:
+            lines = s.split('\n')
+            for line in lines:
+                self.qbtr_wr.write_NOTA(line)
 
     def write_prelude(self):
         """
@@ -203,6 +241,7 @@ class Qubiter_to_AnyQasm(SEO_reader):
         ----------
         var_name : str
         coda : str
+        strict : bool
 
         Returns
         -------

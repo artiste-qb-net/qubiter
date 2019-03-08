@@ -55,19 +55,24 @@ class CostMinimizer:
         self.cur_cost = None
         self.iter_count = 0
 
-    def find_min(self):
+    def broadcast_cost_fun_call(self):
         """
-        Find the minimum of the cost function
 
         Returns
         -------
+        None
 
         """
-        assert False
+        if self.print_hiatus < 1:
+            return
+        if self.iter_count % self.print_hiatus == 0:
+            print('iter=', self.iter_count,
+                  ', cost=', self.cur_cost,
+                  ', x_val=', self.cur_x_val)
 
     def cost_fun(self, x_val):
         """
-        cost function
+        Abstract method. Given x_val, return float for cost.
 
         Parameters
         ----------
@@ -80,20 +85,15 @@ class CostMinimizer:
         """
         assert False
 
-    def broadcast_cost_fun_call(self):
+    def find_min(self):
         """
+        Abstract method. Returns the minimum (float) of the cost function
 
         Returns
         -------
-        None
 
         """
-        if self.print_hiatus < 1:
-            return          
-        if self.iter_count % self.print_hiatus == 0:
-            print('iter=', self.iter_count,
-                  ', cost=', self.cur_cost,
-                  ', x_val=', self.cur_x_val)
+        assert False
 
 if __name__ == "__main__":
     def main():
