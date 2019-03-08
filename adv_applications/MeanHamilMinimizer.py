@@ -1,4 +1,5 @@
 from adv_applications.CostMinimizer import *
+from StateVec import *
 
 
 class MeanHamilMinimizer(CostMinimizer):
@@ -79,6 +80,8 @@ class MeanHamilMinimizer(CostMinimizer):
         self.all_var_nums, init_x_val = zip(*init_var_num_to_rads.items())
         self.fun_name_to_fun = fun_name_to_fun
         self.init_st_vec = init_st_vec
+        if self.init_st_vec is None:
+            self.init_st_vec = StateVec.get_ground_st_vec(self.num_bits)
         self.num_samples = num_samples
         self.rand_seed = rand_seed
 

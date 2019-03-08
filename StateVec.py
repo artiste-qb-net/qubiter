@@ -90,6 +90,7 @@ class StateVec:
 
         """
         ty = np.complex128
+        assert num_bits > 0
         arr = np.zeros([1 << num_bits], dtype=ty)
         arr[0] = 1
         arr = arr.reshape([2]*num_bits)

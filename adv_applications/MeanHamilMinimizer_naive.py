@@ -109,8 +109,6 @@ class MeanHamilMinimizer_naive(MeanHamilMinimizer):
         """
         # give it name unlikely to exist already
         fin_file_prefix = self.file_prefix + '99345125047'
-        if self.init_st_vec is None:
-            self.init_st_vec = StateVec.get_ground_st_vec(self.num_bits)
 
         # hamil loop
         arr_1 = np.array([1., 1.])
@@ -203,8 +201,9 @@ if __name__ == "__main__":
         def case():
             return MeanHamilMinimizer_naive(file_prefix, num_bits, hamil,
                 init_var_num_to_rads, fun_name_to_fun,
-                minimizer_fun, num_samples, rand_seed,
-                print_hiatus, verbose, method=min_method).find_min()
+                minimizer_fun, num_samples=num_samples, rand_seed=rand_seed,
+                print_hiatus=print_hiatus, verbose=verbose,
+                                            method=min_method).find_min()
         num_samples = 0
         case()
         print("*************************************")
