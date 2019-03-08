@@ -350,7 +350,7 @@ class EchoingSEO_reader(SEO_reader):
         None
 
         """
-        self.wr.write_controlled_bit_swa_(bit1, bit2, controls)
+        self.wr.write_controlled_bit_swap(bit1, bit2, controls)
 
     def use_SWAY(self, bit1, bit2, controls, rads_list):
         """
@@ -368,7 +368,7 @@ class EchoingSEO_reader(SEO_reader):
         None
 
         """
-        self.wr.write_controlled_bit_swa_(bit1, bit2, controls, rads_list)
+        self.wr.write_controlled_bit_swap(bit1, bit2, controls, rads_list)
 
     def use_U_2_(self, rads0, rads1, rads2, rads3,
                 tar_bit_pos, controls):

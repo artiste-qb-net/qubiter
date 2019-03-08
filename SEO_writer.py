@@ -698,7 +698,7 @@ class SEO_writer:
         self.write_ZF_or_ZL_pic_line(pic_line)
         self.picture_out.write("\n")
 
-    def write_controlled_bit_swa_(self, bit1, bit2, trols, rads_list=None):
+    def write_controlled_bit_swap(self, bit1, bit2, trols, rads_list=None):
         """
         If rads_list=None, this method writes a line in eng & pic files for
         a 'SWAP' with >= 0 controls
@@ -1079,7 +1079,7 @@ class SEO_writer:
 
         """
         trols = Controls(2)  # dummy with zero controls
-        self.write_controlled_bit_swa_(bit1, bit2, trols, rads_list)
+        self.write_controlled_bit_swap(bit1, bit2, trols, rads_list)
 
     def write_H(self, tar_bit_pos):
         """
@@ -1427,7 +1427,7 @@ if __name__ == "__main__":
 
             wr.write_PRINT('F2')
 
-            wr.write_controlled_bit_swa_(0, 2, trols)
+            wr.write_controlled_bit_swap(0, 2, trols)
 
             wr.write_bit_swa_(1, 2)
 
