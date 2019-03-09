@@ -1,4 +1,4 @@
-# from pyquil import Program, get_qc
+# from pyquil import get_qc
 # from pyquil.api._base_connection import ForestConnection
 import numpy as np
 
@@ -42,42 +42,17 @@ class Cloud_rigetti:
         return qc
 
     @staticmethod
-    def get_bitstrings(pg, qc, var_name_to_rads, num_shots):
-        """
-        Given PyQuil native objects pg and qc, this method calls several
-        PyQuil methods and returns what PyQuil calls a `bitstrings` which is
-        a dictionary that maps qubit number to a 1-dim numpy array,
-        of length num_shots, with 0,1 entries.
-
-        Parameters
-        ----------
-        pg : Program
-        qc : QuantunComputer
-        var_name_to_rads : dict[str, float]
-        num_shots : int
-
-        Returns
-        -------
-        dict[int, np.ndarray]
-
-        """
-        pg.wrap_in_numshots_loop(shots=num_shots)
-        executable = qc.compile(pg)
-        bitstrings = qc.run(executable, memory_map=var_name_to_rads)
-        return bitstrings
-
-    @staticmethod
     def obs_vec_from_bitstrings(bitstrings, num_qbits):
         """
-        This method converts a PyQuil `bitstrings` into a a Qubiter
+        This method converts a PyQuil `bitstrings` into a Qubiter
         observation vector which it then returns.
 
         Qubiter likes to state the results of an experiment repeated
         num_shot times by what I call an observation vector. An obs vec is a
         1-dim array, num_shots long, whose entries are integers which are
-        the decimal rep of a string, num_qbits long, of zeros and ones. This
-        string of zeros and ones gives the state of each qubit in the ZL
-        convention
+        the decimal representation of a string, num_qbits long, of zeros and
+        ones. This string of zeros and ones gives the state of each qubit in
+        the ZL convention
 
         The PyQuil authors like to state the results of an experiment
         repeated num_shot times by what they call bitstrings. A bitstrings
