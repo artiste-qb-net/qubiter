@@ -175,7 +175,7 @@ class MeanHamilMinimizer_naive(MeanHamilMinimizer):
 if __name__ == "__main__":
     def main():
         num_bits = 4
-        file_prefix = 'io_folder/mean_hamil_naive_test'
+        file_prefix = '../io_folder/mean_hamil_naive_test'
         emb = CktEmbedder(num_bits, num_bits)
         wr = SEO_writer(file_prefix, emb)
         wr.write_Rx(2, rads=np.pi/7)
@@ -187,9 +187,9 @@ if __name__ == "__main__":
 
         def my_fun(x, y):
             return x + .5*y
-
-        init_var_num_to_rads = {1: np.pi/6, 2: np.pi/3}
         fun_name_to_fun = {'my_fun': my_fun}
+
+        init_var_num_to_rads = {1: 2.1, 2: 3.4}
 
         hamil = QubitOperator('X1 Y3 X1 Y1', .4) + QubitOperator('Y2 X1', .7)
         print('hamil=\n', hamil)
@@ -201,15 +201,14 @@ if __name__ == "__main__":
         print_hiatus = 25
         verbose = False
 
-        def case():
+        def case(**mfun_kwargs):
             return MeanHamilMinimizer_naive(file_prefix, num_bits, hamil,
                 init_var_num_to_rads, fun_name_to_fun,
                 minimizer_fun, num_samples=num_samples, rand_seed=rand_seed,
                 print_hiatus=print_hiatus, verbose=verbose,
-                                            method=min_method).find_min()
-        num_samples = 0
-        case()
+                method=min_method, **mfun_kwargs).find_min()
         print("*************************************")
-        num_samples = 1000
+        min_method = 'Powell'
+        num_samples = 0
         case()
     main()
