@@ -57,6 +57,8 @@ class CostMinimizer:
 
     def broadcast_cost_fun_call(self):
         """
+        This method prints current cost and x_val each time cost function is
+        called.
 
         Returns
         -------

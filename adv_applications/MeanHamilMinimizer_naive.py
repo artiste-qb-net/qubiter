@@ -35,7 +35,7 @@ class MeanHamilMinimizer_naive(MeanHamilMinimizer):
     gate parameters that will lower some cost function. This feedback
     process between CBox and QBox continues until the cost is minimized. The
     cost function is the mean value of a Hamiltonian which is estimated
-    empirically on a qc which resides inside the QBox.
+    empirically from data obtained from the qc which resides inside the QBox.
 
     To minimize a function of N continuous parameters, one can use some
     methods like simulated annealing and Powell that do not require
@@ -86,7 +86,9 @@ class MeanHamilMinimizer_naive(MeanHamilMinimizer):
         Parameters
         ----------
         args : list
+            arguments of MeanHamilMinimizer
         kwargs : dict
+            key-word arguments of MeanHamilMinimizer
 
         Returns
         -------

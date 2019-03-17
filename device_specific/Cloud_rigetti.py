@@ -10,54 +10,53 @@ class Cloud_rigetti:
 
     """
 
+    # @staticmethod
+    # def get_qc(device_name, noisy=False, **kwargs):
+    #     """
+    #     This method creates ForestConnection object and calls PyQuil get_qc()
+    #     method.
+    #
+    #     Parameters
+    #     ----------
+    #     device_name : str
+    #     noisy : bool
+    #     kwargs : dict
+    #
+    #     Returns
+    #     -------
+    #     QuantumComputer
+    #
+    #     """
+    #
+    #     qvm_url = "http://127.0.0.1:5000"
+    #     compiler_url = "http://127.0.0.1:6000"
+    #     forest_url = "https://forest-server.qcs.rigetti.com"
+    #
+    #     con = ForestConnection(
+    #         sync_endpoint=qvm_url,
+    #         compiler_endpoint=compiler_url,
+    #         forest_cloud_endpoint=forest_url)
+    #     qc = get_qc(device_name, connection=con,
+    #               noisy=noisy, **kwargs)
+    #     return qc
+
     @staticmethod
-    def get_qc(device_name, as_qvm=False, noisy=False, **kwargs):
-        """
-        This method creates ForestConnection object and calls PyQuil get_qc()
-        method.
-
-        Parameters
-        ----------
-        device_name : str
-        as_qvm : bool
-        noisy : bool
-        kwargs : dict
-
-        Returns
-        -------
-        QuantumComputer
-
-        """
-
-        qvm_url = "http://127.0.0.1:5000"
-        compiler_url = "http://127.0.0.1:6000"
-        forest_url = "https://forest-server.qcs.rigetti.com"
-
-        con = ForestConnection(
-            sync_endpoint=qvm_url,
-            compiler_endpoint=compiler_url,
-            forest_cloud_endpoint=forest_url)
-        qc = get_qc(device_name, connection=con,
-                as_qvm=as_qvm, noisy=noisy, **kwargs)
-        return qc
-
-    @staticmethod
-    def obs_vec_from_bitstrings(bitstrings, num_qbits):
+    def obs_vec_from_bitstrings(bitstrings, num_qbits, bs_is_array):
         """
         This method converts a PyQuil `bitstrings` into a Qubiter
         observation vector which it then returns.
 
         Qubiter likes to state the results of an experiment repeated
-        num_shot times by what I call an observation vector. An obs vec is a
-        1-dim array, num_shots long, whose entries are integers which are
+        num_shot times by what it calls an observation vector. An obs vec is
+        a 1-dim array, num_shots long, whose entries are integers which are
         the decimal representation of a string, num_qbits long, of zeros and
         ones. This string of zeros and ones gives the state of each qubit in
         the ZL convention
 
-        The PyQuil authors like to state the results of an experiment
-        repeated num_shot times by what they call bitstrings. A bitstrings
-        is a dict that maps qubit number to a 1-dim array, num_shots long,
-        of zeros and ones. Here is an example:
+        PyQuil likes to state the results of an experiment repeated num_shot
+        times by what it calls bitstrings. A bitstrings is a dict that maps
+        qubit number to a 1-dim array, num_shots long, of zeros and ones.
+        Here is an example:
 
         # [1]:
         #
@@ -70,21 +69,39 @@ class Cloud_rigetti:
         #  1: array([1, 0, 0, 1, 1, 1, 1, 0, 1, 0]),
         #  2: array([1, 0, 0, 1, 1, 1, 1, 0, 1, 0])}
 
+        However, qc.run() returns a numpy array of zeros and ones and shape
+        (num_shots, num_qbits), formed from the bitstrings dict just
+        described. If bs_is_array=False, we assume the input bitstrings is a
+        dict, and if True, we assume it is an array.
+
+
         Parameters
         ----------
         bitstrings : dict[int, np.ndarray]
         num_qbits : int
+        bs_is_array : bool
+            stands for: bitstrings is array
 
         Returns
         -------
         np.ndarray
-            num_shots = bitstrings[0].shape[0], shape = (num_shots,)
+            shape = (num_shots,)
 
         """
-        assert len(bitstrings) == num_qbits
-        num_shots = bitstrings[0].shape[0]
+        if not bs_is_array:
+            assert isinstance(bitstrings, dict)
+            assert len(bitstrings) == num_qbits,\
+                "for num_qbits = " + str(num_qbits) + ' got bitstrings=\n' +\
+                str(bitstrings)
+            num_shots = bitstrings[0].shape[0]
+            bs_array = np.vstack([bitstrings[q] for q in range(num_qbits)])
+        else:
+            assert isinstance(bitstrings, np.ndarray)
+            assert bitstrings.shape[1] == num_qbits
+            num_shots = bitstrings.shape[0]
+            bs_array = bitstrings.T
+
         obs_vec = np.zeros((num_shots,), dtype=int)
-        bs_array = np.vstack([bitstrings[q] for q in range(num_qbits)])
         for shot in range(num_shots):
             shot_array = bs_array[:, shot]
             s = ''.join([str(shot_array[q])
@@ -93,13 +110,24 @@ class Cloud_rigetti:
         return obs_vec
 
 if __name__ == "__main__":
-    def main():
+    def main1():
         bitstrings = {
             0: np.array([1, 0, 1, 1, 1, 1, 0, 1, 1, 0]),
             1: np.array([1, 1, 0, 0, 1, 0, 1, 0, 1, 0]),
             2: np.array([0, 0, 0, 1, 1, 1, 1, 0, 1, 1])}
         num_qbits = 3
         obs_vec = Cloud_rigetti.obs_vec_from_bitstrings(
-            bitstrings, num_qbits)
+            bitstrings, num_qbits, bs_is_array=False)
         print(obs_vec)
-    main()
+
+    def main2():
+        bitstrings = np.vstack([
+            [1,1,0], [0,1,0], [1,0,0], [1,0,1], [1,1,1],
+            [1,0,1], [0,1,1], [1,0,0], [1,1,1], [0,0,1]
+        ])
+        num_qbits = 3
+        obs_vec = Cloud_rigetti.obs_vec_from_bitstrings(
+            bitstrings, num_qbits, bs_is_array=True)
+        print(obs_vec)
+    main1()
+    main2()

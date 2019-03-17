@@ -1,4 +1,5 @@
 import copy as cp
+import scipy
 
 from adv_applications.MeanHamilMinimizer import *
 from device_specific.Qubiter_to_RigettiPyQuil import *
@@ -7,7 +8,7 @@ import utilities_gen as utg
 
 from openfermion.ops import QubitOperator
 
-from pyquil import Program, Pragma
+from pyquil.quil import Program, Pragma
 from pyquil.gates import *
 
 
@@ -16,6 +17,7 @@ class MeanHamilMinimizer_rigetti(MeanHamilMinimizer):
     
     Attributes
     ----------
+    pg : Program
     qc : QuantumComputer
         get from CloudRigetti.get_qc()
     do_resets : bool
@@ -27,43 +29,55 @@ class MeanHamilMinimizer_rigetti(MeanHamilMinimizer):
     
     """
 
-    def __init__(self, qc, do_resets=True,
-                 *args, **kwargs):
+    def __init__(self, qc, file_prefix, num_bits, hamil,
+                init_var_num_to_rads, fun_name_to_fun,
+                minimizer_fun, do_resets=True, **kwargs):
         """
         Constructor
 
-        Do in constructor as much hamil indep stuff as possible so don't 
-        have to redo it with every call to cost fun. Also, an executable ( 
-        output of Rigetti compile() function) is stored for each term in the 
-        hamiltonian hamil. 
+        Do in constructor as much hamil indep stuff as possible so don't
+        have to redo it with every call to cost fun. Also, an executable (
+        output of Rigetti compile() function) is stored for each term in the
+        hamiltonian hamil.
 
         Parameters
         ----------
+        Parameters
+        ----------
         qc : QuantumComputer
+        file_prefix : str
+        num_bits : int
+        hamil : QubitOperator
+        init_var_num_to_rads : dict[int, float]
+        fun_name_to_fun : dict[str, function]
+        minimizer_fun : function
         do_resets : bool
-        args : list
         kwargs : dict
+            key word arguments of MeanHamilMinimizer
 
         Returns
         -------
 
         """
-        MeanHamilMinimizer.__init__(self, *args, **kwargs)
+
+        MeanHamilMinimizer.__init__(self, file_prefix, num_bits, hamil,
+            init_var_num_to_rads, fun_name_to_fun,
+            minimizer_fun, **kwargs)
         self.qc = qc
         self.do_resets = do_resets
 
         # this creates a file with all Pyquil gates that
         # are independent of hamil. Gates may contain free parameters
         self.translator = Qubiter_to_RigettiPyQuil(
-            self.file_prefix, self.num_bits, prelude_str='', ending_str='')
+            self.file_prefix, self.num_bits,
+            aqasm_name='RigPyQuil', prelude_str='', ending_str='')
 
         # pg prelude
         pg = Program()
+        self.pg = pg
         pg += Pragma('INITIAL_REWIRING', ['"PARTIAL"'])
         if self.do_resets:
             pg += RESET()
-        qubits = list(pg.get_qubits())
-        assert len(qubits) == self.num_bits
         ro = pg.declare('ro', 'BIT', self.num_bits)
         s = ''
         for var_num in self.all_var_nums:
@@ -72,7 +86,7 @@ class MeanHamilMinimizer_rigetti(MeanHamilMinimizer):
             s += ' = pg.declare("'
             s += vname
             s += '", memory_type="REAL")\n'
-        eval(s)
+        exec(s)
 
         # add to pg the operations that are independent of hamil
         with open(self.translator.aqasm_path, 'r') as fi:
@@ -80,10 +94,10 @@ class MeanHamilMinimizer_rigetti(MeanHamilMinimizer):
         for line in lines:
             line = line.strip('\n')
             if line:
-                eval(line)
+                exec(line)
 
         len_pg_in = len(pg)
-        
+
         # hamil loop to store executables for each term in hamil
         self.term_to_exec = {}
         for term, coef in self.hamil.terms.items():
@@ -91,21 +105,28 @@ class MeanHamilMinimizer_rigetti(MeanHamilMinimizer):
             for bit_pos, action in term:
                 if action != 'Z':
                     bit_pos_to_xy_str[bit_pos] = action
-                    
+
             # reset pg to initial length
-            pg = pg[:len_pg_in]
-            
+
+            # Temporary work-around to bug
+            # in Pyquil ver 2.5.0.
+            # Slicing was changing
+            # pg from type Program to type list
+            pg = Program(pg[:len_pg_in])
+            self.pg = pg
+
             # add xy measurements coda to pg
             MeanHamilMinimizer_rigetti.add_xy_meas_coda_to_program(
                 pg, bit_pos_to_xy_str)
-            
+
             # request measurements
-            for i, q in enumerate(qubits):
-                pg += MEASURE(q, ro[i])
+            for i in range(self.num_bits):
+                pg += MEASURE(i, ro[i])
 
             pg.wrap_in_numshots_loop(shots=self.num_samples)
-            
+
             executable = self.qc.compile(pg)
+            # print(",,,...", executable)
             self.term_to_exec[term] = executable
             
     @staticmethod
@@ -168,12 +189,13 @@ class MeanHamilMinimizer_rigetti(MeanHamilMinimizer):
 
             # send and receive from cloud, get obs_vec
             vprefix = self.translator.vprefix
-            var_name_to_rads = {vprefix + str(vnum): rads
+            var_name_to_rads = {vprefix + str(vnum): [rads]
                 for vnum, rads in var_num_to_rads.items()}
+            # print(',mmnnb', var_name_to_rads)
             bitstrings = self.qc.run(self.term_to_exec[term], 
                                      memory_map=var_name_to_rads)
             obs_vec = Cloud_rigetti.obs_vec_from_bitstrings(
-                    bitstrings, self.num_bits)
+                    bitstrings, self.num_bits, bs_is_array=True)
             
             # go from obs_vec to effective state vec
             counts_dict = StateVec.get_counts_from_obs_vec(self.num_bits,

@@ -287,6 +287,16 @@ class Qubiter_to_AnyQasm(SEO_reader):
             arg_str = arg_str[:-2] + ')'
             return var_name[:first_hash_pos] + arg_str + coda
 
+    def print_aqasm_file(self):
+        """
+        Prints aqasm file created by constructor.
+
+        Returns
+        -------
+
+        """
+        with open(self.aqasm_path) as f:
+            print(f.read())
 
 if __name__ == "__main__":
     def main():

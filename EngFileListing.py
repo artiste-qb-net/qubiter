@@ -3,7 +3,7 @@ from EchoingSEO_reader import *
 from io import StringIO
 
 
-class EngFileLineList:
+class EngFileListing:
     """
     Eng=English
 
@@ -42,7 +42,7 @@ class EngFileLineList:
     @staticmethod
     def new_one_liner(num_bits, fun_name, param_list):
         """
-        This method returns a new EngFileLineList with a single line for a
+        This method returns a new EngFileListing with a single line for a
         single gate. fun_name is the name of any function in SEO_writer
         whose name starts with the string 'write_' and param_list is a list
         containing values for the arguments of fun_name. This method creates
@@ -63,7 +63,7 @@ class EngFileLineList:
 
         Returns
         -------
-        EngFileLineList
+        EngFileListing
 
         """
         assert fun_name[:6] == 'write_'
@@ -80,7 +80,7 @@ class EngFileLineList:
         eng_out.close()
         pic_out.close()
 
-        return EngFileLineList(num_bits, [line])
+        return EngFileListing(num_bits, [line])
 
     @staticmethod
     def eng_file_to_line_list(file_prefix, num_bits):
@@ -158,7 +158,7 @@ class EngFileLineList:
         None
 
         """
-        EngFileLineList.line_list_to_eng_and_pic_files(
+        EngFileListing.line_list_to_eng_and_pic_files(
             self.line_list, file_prefix, self.num_bits)
 
     def get_var_nums_and_fun_names(self):
@@ -196,16 +196,16 @@ class EngFileLineList:
 
         Parameters
         ----------
-        other : EngFileLineList
+        other : EngFileListing
 
         Returns
         -------
-        EngFileLineList
+        EngFileListing
 
         """
         assert self.num_bits == other.num_bits
-        return EngFileLineList(self.num_bits,
-                               self.line_list + other.line_list)
+        return EngFileListing(self.num_bits,
+                             self.line_list + other.line_list)
 
     def __iadd__(self, other):
         """
@@ -213,11 +213,11 @@ class EngFileLineList:
 
         Parameters
         ----------
-        other : EngFileLineList
+        other : EngFileListing
 
         Returns
         -------
-        EngFileLineList
+        EngFileListing
 
         """
         assert self.num_bits == other.num_bits
@@ -234,10 +234,10 @@ class EngFileLineList:
 
         Returns
         -------
-        EngFileLineList
+        EngFileListing
 
         """
-        return EngFileLineList(self.num_bits, self.line_list[item])
+        return EngFileListing(self.num_bits, self.line_list[item])
 
     def herm(self):
         """
@@ -246,11 +246,11 @@ class EngFileLineList:
 
         Returns
         -------
-        EngFileLineList
+        EngFileListing
 
         """
         rev_li = list(reversed(self.line_list))
-        efill = EngFileLineList(self.num_bits, rev_li)
+        listing = EngFileListing(self.num_bits, rev_li)
 
         def minus(in_str):
             if in_str[0] == '-':
@@ -259,7 +259,7 @@ class EngFileLineList:
                 new_str = '-' + in_str
             return new_str
 
-        for line_pos, line in enumerate(efill.line_list):
+        for line_pos, line in enumerate(listing.line_list):
             split_line = line.split('\t')
             line_name = split_line[0]
             if line_name == 'DIAG':
@@ -312,8 +312,8 @@ class EngFileLineList:
             else:
                 assert False, \
                     "reading an unsupported line kind: " + line_name
-            efill.line_list[line_pos] = '\t'.join(split_line)
-        return efill
+            listing.line_list[line_pos] = '\t'.join(split_line)
+        return listing
 
 if __name__ == "__main__":
     def main():
@@ -329,44 +329,44 @@ if __name__ == "__main__":
         wr.write_cnot(2, 3)
         wr.close_files()
 
-        li = EngFileLineList.eng_file_to_line_list(file_prefix, num_bits)
-        efill = EngFileLineList(num_bits, li)
+        lili = EngFileListing.eng_file_to_line_list(file_prefix, num_bits)
+        listing = EngFileListing(num_bits, lili)
 
-        print("\nefill print")
-        efill.print()
-        nums, names = efill.get_var_nums_and_fun_names()
-        print('efill all_var_nums=\n', nums)
-        print('efill all_fun_names=\n', names)
+        print("\nlisting print")
+        listing.print()
+        nums, names = listing.get_var_nums_and_fun_names()
+        print("listing's all_var_nums=\n", nums)
+        print("listing's all_fun_names=\n", names)
 
-        efill.write_eng_and_pic_files(file_prefix + '_ditto')
+        listing.write_eng_and_pic_files(file_prefix + '_ditto')
 
-        print("\nefill[1:] print")
-        efill[1:].print()
+        print("\nlisting[1:] print")
+        listing[1:].print()
 
-        efill_twice = efill + efill
+        listing_twice = listing + listing
 
-        print("\nefill_twice print")
-        efill_twice.print()
-        nums, names = efill_twice.get_var_nums_and_fun_names()
-        print('efill_twice all_var_nums=\n', nums)
-        print('efill_twice all_fun_names=\n', names)
+        print("\nlisting_twice print")
+        listing_twice.print()
+        nums, names = listing_twice.get_var_nums_and_fun_names()
+        print("listing_twice's all_var_nums=\n", nums)
+        print("listing_twice's all_fun_names=\n", names)
 
-        efill_0 = EngFileLineList(num_bits)
-        efill_0 += efill
+        listing_0 = EngFileListing(num_bits)
+        listing_0 += listing
 
-        print("\nefill_0 print")
-        efill_0.print()
+        print("\nlisting_0 print")
+        listing_0.print()
 
-        efill_herm = efill.herm()
-        print('\nefill_herm print')
-        efill_herm.print()
+        listing_herm = listing.herm()
+        print('\nlisting_herm print')
+        listing_herm.print()
 
-        one_liner = EngFileLineList.new_one_liner(4,
+        one_liner = EngFileListing.new_one_liner(4,
             'write_cnot', [0, 1])
         print('\none_liner print')
         one_liner.print()
 
-        one_liner = EngFileLineList.new_one_liner(4,
+        one_liner = EngFileListing.new_one_liner(4,
             'write_Rn', [2, [np.pi/2, -np.pi/2, np.pi/3]])
         print('\none_liner print')
         one_liner.print()

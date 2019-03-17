@@ -177,7 +177,7 @@ class SEO_reader(SEO_pre_reader):
 
     def print_log_file(self):
         """
-        Prints log file, if it exists
+        Prints log file.
 
         Returns
         -------

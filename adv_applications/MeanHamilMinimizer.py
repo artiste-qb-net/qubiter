@@ -62,11 +62,13 @@ class MeanHamilMinimizer(CostMinimizer):
         init_var_num_to_rads : dict[int, float]
         fun_name_to_fun : dict[str, function]
         minimizer_fun : function
+        init_st_vec : StateVec
         num_samples : int
         rand_seed : int
         print_hiatus : int
         verbose : bool
         mfun_kwargs : dict
+            keyword arguments of minimizer function `minimizer_fun`
 
         Returns
         -------
@@ -131,7 +133,7 @@ class MeanHamilMinimizer(CostMinimizer):
         """
         This method wraps the static method hamil_mean_val() defined
         elsewhere in this class. This method will also print out whenever it
-        is asked a report of the current values in x and cost.
+        is called a report of the current values in x and cost.
 
         Parameters
         ----------
@@ -154,7 +156,8 @@ class MeanHamilMinimizer(CostMinimizer):
 
     def find_min(self):
         """
-        This method wraps the method scipy.optimize.minimize
+        This method wraps the method scipy.optimize.minimize or any
+        minimizing function with same argument pattern.
 
         Returns
         -------
@@ -164,6 +167,8 @@ class MeanHamilMinimizer(CostMinimizer):
             scipy.optimize.minimize
 
         """
+        print('x_val~ (' +\
+              ', '.join(['#' + str(k) for k in self.all_var_nums]) + ')')
         opt_result = self.minimizer_fun(self.cost_fun,
             self.init_x_val, **self.mfun_kwargs)
         if self.verbose:

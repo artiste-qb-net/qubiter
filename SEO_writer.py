@@ -180,7 +180,7 @@ class SEO_writer:
 
     def print_eng_file(self):
         """
-        Prints English file, if it exists
+        Prints English file.
 
         Returns
         -------
@@ -192,7 +192,7 @@ class SEO_writer:
 
     def print_pic_file(self):
         """
-        Prints Picture file, if it exists
+        Prints Picture file.
 
         Returns
         -------
