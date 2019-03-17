@@ -15,10 +15,6 @@ class CostMinimizer:
     iter_count : int
         iteration count. An iteration is every time the cost function is
         called
-    mfun_kwargs : dict
-        mimimizer function's key-word arguments
-    minimizer_fun : function
-        the minimizer function. For example, scipy.optimizer.minimizer
     print_hiatus : int
         the current values of x_val and cost are printed when iter_count %
         print_hiatus == 0  iff print_hiatus > 0
@@ -26,30 +22,25 @@ class CostMinimizer:
 
     """
 
-    def __init__(self, minimizer_fun, init_x_val, 
-                 print_hiatus=0, verbose=False, **mfun_kwargs):
+    def __init__(self, init_x_val, print_hiatus=0, verbose=False):
         """
         Constructor
 
         Parameters
         ----------
-        minimizer_fun : function
         init_x_val : tuple[float]
         print_hiatus : int
         verbose : bool
-        mfun_kwargs : dict
 
         Returns
         -------
 
         """
-        self.minimizer_fun = minimizer_fun
         self.init_x_val = init_x_val
         self.print_hiatus = print_hiatus
         if not print_hiatus:
             self.print_hiatus = 0
         self.verbose = verbose
-        self.mfun_kwargs = mfun_kwargs
         
         self.cur_x_val = init_x_val
         self.cur_cost = None
@@ -87,9 +78,14 @@ class CostMinimizer:
         """
         assert False
 
-    def find_min(self):
+    def find_min(self, interface, **kwargs):
         """
         Abstract method. Returns the minimum (float) of the cost function
+
+        Parameters
+        ----------
+        interface : str
+        kwargs: dict
 
         Returns
         -------

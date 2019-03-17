@@ -49,8 +49,8 @@ class MeanHamilMinimizer(CostMinimizer):
 
     def __init__(self, file_prefix, num_bits, hamil,
             init_var_num_to_rads, fun_name_to_fun,
-            minimizer_fun, init_st_vec=None, num_samples=0, rand_seed=None,
-            print_hiatus=0, verbose=False, **mfun_kwargs):
+            init_st_vec=None, num_samples=0, rand_seed=None,
+            print_hiatus=0, verbose=False):
         """
         Constructor
 
@@ -61,14 +61,11 @@ class MeanHamilMinimizer(CostMinimizer):
         hamil : QubitOperator
         init_var_num_to_rads : dict[int, float]
         fun_name_to_fun : dict[str, function]
-        minimizer_fun : function
         init_st_vec : StateVec
         num_samples : int
         rand_seed : int
         print_hiatus : int
         verbose : bool
-        mfun_kwargs : dict
-            keyword arguments of minimizer function `minimizer_fun`
 
         Returns
         -------
@@ -87,8 +84,7 @@ class MeanHamilMinimizer(CostMinimizer):
         self.num_samples = num_samples
         self.rand_seed = rand_seed
 
-        CostMinimizer.__init__(self, minimizer_fun, init_x_val,
-                print_hiatus, verbose, **mfun_kwargs)
+        CostMinimizer.__init__(self, init_x_val, print_hiatus, verbose)
 
     @staticmethod
     def check_hamil_is_herm(hamil):
@@ -133,7 +129,7 @@ class MeanHamilMinimizer(CostMinimizer):
         """
         This method wraps the static method hamil_mean_val() defined
         elsewhere in this class. This method will also print out whenever it
-        is called a report of the current values in x and cost.
+        is called, a report of the current values of x and cost.
 
         Parameters
         ----------
@@ -154,14 +150,20 @@ class MeanHamilMinimizer(CostMinimizer):
 
         return cost
 
-    def find_min(self):
+    def find_min(self, interface, **kwargs):
         """
-        This method wraps the method scipy.optimize.minimize or any
-        minimizing function with same argument pattern.
+        This method finds min of cost function. It allows user to choose
+        among several possible interfaces, namely, 'scipy', 'autograd',
+        'pytorch', 'tflow'. Interface parameters can be passed in via kwargs.
+
+        Parameters
+        ----------
+        interface : str
+        kwargs : dict
 
         Returns
         -------
-        OptimizeResult
+        OptimizeResult | None
             OptimizeResult is a class (basically an enum) defined in
             scipy.optimize to hold the output results of
             scipy.optimize.minimize
@@ -169,9 +171,21 @@ class MeanHamilMinimizer(CostMinimizer):
         """
         print('x_val~ (' +\
               ', '.join(['#' + str(k) for k in self.all_var_nums]) + ')')
-        opt_result = self.minimizer_fun(self.cost_fun,
-            self.init_x_val, **self.mfun_kwargs)
-        if self.verbose:
-            print('*********final optimum result'
-                  ' (final iter=' + str(self.iter_count) + '):\n', opt_result)
-        return opt_result
+        if interface == 'scipy':
+            import scipy
+            minimizer_fun = scipy.optimize.minimize
+            opt_result = minimizer_fun(self.cost_fun,
+                self.init_x_val, **kwargs)
+            if self.verbose:
+                print('*********final optimum result'
+                      ' (final iter=' + str(self.iter_count) +\
+                      '):\n', opt_result)
+            return opt_result
+        elif interface == 'autograd':
+            assert False, 'not yet'
+        elif interface == 'tflow':
+            assert False, 'not yet'
+        elif interface == 'pytorch':
+            assert False, 'not yet'
+        else:
+            assert False, 'unsupported fin_min() interface'

@@ -1,5 +1,4 @@
 import copy as cp
-import scipy
 
 from adv_applications.MeanHamilMinimizer import *
 from device_specific.Qubiter_to_RigettiPyQuil import *
@@ -31,7 +30,7 @@ class MeanHamilMinimizer_rigetti(MeanHamilMinimizer):
 
     def __init__(self, qc, file_prefix, num_bits, hamil,
                 init_var_num_to_rads, fun_name_to_fun,
-                minimizer_fun, do_resets=True, **kwargs):
+                do_resets=True, **kwargs):
         """
         Constructor
 
@@ -50,10 +49,9 @@ class MeanHamilMinimizer_rigetti(MeanHamilMinimizer):
         hamil : QubitOperator
         init_var_num_to_rads : dict[int, float]
         fun_name_to_fun : dict[str, function]
-        minimizer_fun : function
         do_resets : bool
         kwargs : dict
-            key word arguments of MeanHamilMinimizer
+            key-words args of MeanHamilMinimizer constructor
 
         Returns
         -------
@@ -61,8 +59,7 @@ class MeanHamilMinimizer_rigetti(MeanHamilMinimizer):
         """
 
         MeanHamilMinimizer.__init__(self, file_prefix, num_bits, hamil,
-            init_var_num_to_rads, fun_name_to_fun,
-            minimizer_fun, **kwargs)
+            init_var_num_to_rads, fun_name_to_fun, **kwargs)
         self.qc = qc
         self.do_resets = do_resets
 

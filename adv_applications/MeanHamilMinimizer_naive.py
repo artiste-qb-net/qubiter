@@ -86,7 +86,7 @@ class MeanHamilMinimizer_naive(MeanHamilMinimizer):
         Parameters
         ----------
         args : list
-            arguments of MeanHamilMinimizer
+            positional arguments of MeanHamilMinimizer
         kwargs : dict
             key-word arguments of MeanHamilMinimizer
 
@@ -203,14 +203,14 @@ if __name__ == "__main__":
         print_hiatus = 25
         verbose = False
 
-        def case(**mfun_kwargs):
+        def case(**kwargs):
             return MeanHamilMinimizer_naive(file_prefix, num_bits, hamil,
                 init_var_num_to_rads, fun_name_to_fun,
-                minimizer_fun, num_samples=num_samples, rand_seed=rand_seed,
-                print_hiatus=print_hiatus, verbose=verbose,
-                method=min_method, **mfun_kwargs).find_min()
+                num_samples=num_samples, rand_seed=rand_seed,
+                print_hiatus=print_hiatus,
+                verbose=verbose).find_min(interface='scipy', **kwargs)
         print("*************************************")
         min_method = 'Powell'
         num_samples = 0
-        case()
+        case(method=min_method)
     main()
