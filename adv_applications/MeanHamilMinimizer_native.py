@@ -58,7 +58,7 @@ class MeanHamilMinimizer_native(MeanHamilMinimizer):
     computer programs for doing distributed AI, such as PyTorch and
     Tensorflow.
 
-    Qubiter's class `MeanHamilMinimizer_native can perform minimization via
+    Qubiter's class `MeanHamilMinimizer_native` can perform minimization via
     `scipy.optimize.minimize`. This scipy umbrella method implements many
     minimization methods, including Powell and CG.
 
