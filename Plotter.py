@@ -1,5 +1,7 @@
 import pandas as pan
-import numpy as np
+import sys
+if 'autograd.numpy' not in sys.modules:
+    import numpy as np
 import matplotlib.pyplot as plt
 from StateVec import *
 

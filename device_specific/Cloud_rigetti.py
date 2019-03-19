@@ -1,6 +1,8 @@
 # from pyquil import get_qc
 # from pyquil.api._base_connection import ForestConnection
-import numpy as np
+import sys
+if 'autograd.numpy' not in sys.modules:
+    import numpy as np
 
 
 class Cloud_rigetti:
@@ -47,13 +49,13 @@ class Cloud_rigetti:
         observation vector which it then returns.
 
         Qubiter likes to state the results of an experiment repeated
-        num_shot times by what it calls an observation vector. An obs vec is
-        a 1-dim array, num_shots long, whose entries are integers which are
-        the decimal representation of a string, num_qbits long, of zeros and
-        ones. This string of zeros and ones gives the state of each qubit in
-        the ZL convention
+        num_shots (aka num_samples) times by what it calls an observation
+        vector. An obs vec is a 1-dim array, num_shots long, whose entries
+        are integers which are the decimal representation of a string,
+        num_qbits long, of zeros and ones. This string of zeros and ones
+        gives the state of each qubit in the ZL convention
 
-        PyQuil likes to state the results of an experiment repeated num_shot
+        PyQuil likes to state the results of an experiment repeated num_shots
         times by what it calls bitstrings. A bitstrings is a dict that maps
         qubit number to a 1-dim array, num_shots long, of zeros and ones.
         Here is an example:

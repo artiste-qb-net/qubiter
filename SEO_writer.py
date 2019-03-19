@@ -4,7 +4,9 @@ from OneBitGates import *
 import re
 import utilities_gen as ug
 from PlaceholderManager import *
-import numpy as np
+import sys
+if 'autograd.numpy' not in sys.modules:
+    import numpy as np
 
 
 class SEO_writer:

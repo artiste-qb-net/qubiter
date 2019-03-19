@@ -8,9 +8,11 @@ class CostMinimizer:
     ----------
     cur_cost : float
         current cost
-    cur_x_val : tuple[float]
+    cur_pred_cost : float
+        current predicted cost
+    cur_x_val : np.ndarray
         current x value
-    init_x_val : tuple[float]
+    init_x_val : np.ndarray
         initial x value
     iter_count : int
         iteration count. An iteration is every time the cost function is
@@ -22,13 +24,13 @@ class CostMinimizer:
 
     """
 
-    def __init__(self, init_x_val, print_hiatus=0, verbose=False):
+    def __init__(self, init_x_val, print_hiatus=1, verbose=False):
         """
         Constructor
 
         Parameters
         ----------
-        init_x_val : tuple[float]
+        init_x_val : np.ndarray
         print_hiatus : int
         verbose : bool
 
@@ -38,12 +40,11 @@ class CostMinimizer:
         """
         self.init_x_val = init_x_val
         self.print_hiatus = print_hiatus
-        if not print_hiatus:
-            self.print_hiatus = 0
         self.verbose = verbose
         
         self.cur_x_val = init_x_val
         self.cur_cost = None
+        self.cur_pred_cost = None
         self.iter_count = 0
 
     def broadcast_cost_fun_call(self):
@@ -59,9 +60,12 @@ class CostMinimizer:
         if self.print_hiatus < 1:
             return
         if self.iter_count % self.print_hiatus == 0:
-            print('iter=', self.iter_count,
-                  ', cost=', self.cur_cost,
-                  ', x_val=', self.cur_x_val)
+            s = 'iter=' + str(self.iter_count)
+            s += ', cost=' + str(self.cur_cost)
+            if self.cur_pred_cost:
+                s += ', pred_cost=' + str(self.cur_pred_cost)
+            s += ', x_val=' + str(tuple(self.cur_x_val))
+            print(s)
 
     def cost_fun(self, x_val):
         """
@@ -69,7 +73,7 @@ class CostMinimizer:
 
         Parameters
         ----------
-        x_val : tuple[float]
+        x_val : np.ndarray
 
         Returns
         -------

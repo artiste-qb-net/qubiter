@@ -1,4 +1,8 @@
-import numpy as np
+import sys
+if 'autograd.numpy' not in sys.modules:
+    import numpy as np
+else:
+    from adv_applications.setup_autograd import pu2
 
 
 class OneBitGates:
@@ -33,8 +37,8 @@ class OneBitGates:
         else:
             ty = np.complex128
         x = 1/np.sqrt(2)
-        mat = np.zeros([2, 2], dtype=ty) + x
-        mat[1, 1] = - mat[1, 1]
+        mat = np.full((2, 2), x, dtype=ty)
+        mat[1, 1] = -x
         return mat
 
     @staticmethod
@@ -99,6 +103,11 @@ class OneBitGates:
         np.ndarray
 
         """
+        if 'autograd.numpy' in sys.modules:
+            tlist = [0.]*4
+            tlist[0] = ang_rads/2
+            tlist[3] = -ang_rads/2
+            return np.exp(1j*ang_rads/2)*pu2(*tlist)
         ty = np.complex128
         mat = np.zeros([2, 2], dtype=ty)
         mat[0, 0] = np.exp(1j*ang_rads)
@@ -121,6 +130,11 @@ class OneBitGates:
         np.ndarray
 
         """
+        if 'autograd.numpy' in sys.modules:
+            tlist = [0.]*4
+            tlist[0] = -ang_rads/2
+            tlist[3] = -ang_rads/2
+            return np.exp(1j*ang_rads/2)*pu2(*tlist)
         ty = np.complex128
         mat = np.zeros([2, 2], dtype=ty)
         mat[1, 1] = np.exp(1j*ang_rads)
@@ -144,6 +158,10 @@ class OneBitGates:
         np.ndarray
 
         """
+        if 'autograd.numpy' in sys.modules:
+            tlist = [0.]*4
+            tlist[0] = ang_rads
+            return pu2(*tlist)
         ty = np.complex128
         mat = np.zeros([2, 2], dtype=ty)
         x = np.exp(1j*ang_rads)
@@ -172,6 +190,10 @@ class OneBitGates:
         np.ndarray
 
         """
+        if 'autograd.numpy' in sys.modules:
+            tlist = [0., rad_ang_x, rad_ang_y, rad_ang_z]
+            return pu2(*tlist)
+                
         ty = np.complex128
         mat = np.zeros([2, 2], dtype=ty)
         vec = np.array([rad_ang_x, rad_ang_y, rad_ang_z])
@@ -210,6 +232,11 @@ class OneBitGates:
         np.ndarray
 
         """
+        if 'autograd.numpy' in sys.modules:
+            tlist = [0.]*4
+            tlist[axis] = rad_ang
+            return pu2(*tlist)
+        
         ty = np.complex128
         mat = np.zeros([2, 2], dtype=ty)
         c = np.cos(rad_ang)
@@ -232,7 +259,6 @@ class OneBitGates:
             assert False, "axis not in [1,2,3]"
 
         return mat
-
 
     @staticmethod
     def sigx(is_quantum=True):
@@ -392,6 +418,9 @@ class OneBitGates:
         np.ndarray
 
         """
+        if 'autograd.numpy' in sys.modules:
+            tlist = [rads0, rads1, rads2, rads3]
+            return pu2(*tlist)
         return np.exp(1j*rads0)*OneBitGates.rot(rads1, rads2, rads3)
 
 
@@ -428,4 +457,5 @@ if __name__ == "__main__":
         print('mat_Tdag=', OneBitGates.mat_Tdag())
 
         print('u2(5, 10, 20, 30)=', OneBitGates.u2(5, 10, 20, 30))
+
     main()

@@ -1,6 +1,8 @@
-import numpy as np
 from functools import reduce
 
+import sys
+if 'autograd.numpy' not in sys.modules:
+    import numpy as np
 
 # def centered_rads(ang_rads):
 #     """

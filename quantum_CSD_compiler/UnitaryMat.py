@@ -330,11 +330,57 @@ class UnitaryMat:
                 right_mats.append(v2t)
         return left_mats, central_mats, right_mats
 
+    @staticmethod
+    def sig_all():
+        """
+        This method returns a numpy array of shape=(2,3,3) which contains
+        the  3 Pauli matrices in it. sigx = sig_all[:, :, 0], sigy =
+        sig_all[:, :, 1], sigz = sig_all[:, :, 2],
+
+        Returns
+        -------
+        np.ndarray
+
+        """
+        sigx = np.array([[0, 1], [1, 0]])
+        sigy = np.array([[0, -1j], [1j, 0]])
+        sigz = np.array([[1, 0], [0, -1]])
+        all_paulis = np.vstack([sigx,
+                         sigy,
+                         sigz])
+        all_paulis = np.reshape(all_paulis, (3, 2, 2)).transpose(1, 2, 0)
+        return all_paulis
+
+    @staticmethod
+    def u2_alt(*tlist):
+        """
+        An alternative to u2(). Both should return identical 2-dim matrices
+        for identical arguments.
+
+        Parameters
+        ----------
+        tlist : list[float]
+            tlist = [rads0, rads1, rads2, rads3]
+
+        Returns
+        -------
+        np.ndarray
+
+        """
+        assert len(tlist) == 4
+        t = np.sqrt(tlist[1]**2 + tlist[2]**2 + tlist[3]**2)
+        if abs(t) > 1e-6:
+            tvec = np.array([tlist[1], tlist[2], tlist[3]])/t
+        else:
+            tvec = np.zeros((3,))
+        out = np.eye(2)*np.cos(t) + 1j*np.dot(UnitaryMat.sig_all(),
+                                              tvec)*np.sin(t)
+        return np.exp(1j*tlist[0])*out
 
 if __name__ == "__main__":
     from FouSEO_writer import *
 
-    def main():
+    def main1():
         unit_vec = np.array([1, 2, 3])
         unit_vec = unit_vec/np.linalg.norm(unit_vec)
         unit_vec = list(unit_vec)
@@ -394,4 +440,23 @@ if __name__ == "__main__":
         # print('mat_prod\n', mat_prod)
         err = np.linalg.norm(mat - mat_prod)
         print('err=', err)
-    main()
+
+    def main2():
+        print("\nu2_alt example-------------")
+        ex = np.array([1, 0, 0])
+        ey = np.array([0, 1, 0])
+        ez = np.array([0, 0, 1])
+        all_paulis = UnitaryMat.sig_all()
+        sigx_ = np.dot(all_paulis, ex)
+        sigy_ = np.dot(all_paulis, ey)
+        sigz_ = np.dot(all_paulis, ez)
+        print('sigx_=\n', sigx_)
+        print('sigy_=\n', sigy_)
+        print('sigz_=\n', sigz_)
+
+        rads_list = [.1, .2, .3, .4]
+        err = np.linalg.norm(OneBitGates.u2(*rads_list) -
+                       UnitaryMat.u2_alt(*rads_list))
+        print('err=', err)
+    main2()
+    main1()

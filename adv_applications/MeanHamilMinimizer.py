@@ -1,12 +1,16 @@
 from adv_applications.CostMinimizer import *
 from StateVec import *
-
+from openfermion.ops import QubitOperator
+import utilities_gen as utg
+from CodaSEO_writer import *
+from SEO_simulator import *
+import sys
 
 class MeanHamilMinimizer(CostMinimizer):
     """
     This class is a child of class CostMinimizer. Like its parent,
     this class is also intended to be abstract and to be subclassed. For
-    example, class MeanHamilMinimizer_naive is a child of this class.
+    example, class MeanHamilMinimizer_native is a child of this class.
     Whereas its parent embodies the essence of any cost minimizing object,
     this class embodies the essence of an object specifically designed to
     minimize a cost function which equals the mean value of a Hamiltonian.
@@ -50,7 +54,7 @@ class MeanHamilMinimizer(CostMinimizer):
     def __init__(self, file_prefix, num_bits, hamil,
             init_var_num_to_rads, fun_name_to_fun,
             init_st_vec=None, num_samples=0, rand_seed=None,
-            print_hiatus=0, verbose=False):
+            print_hiatus=1, verbose=False):
         """
         Constructor
 
@@ -77,6 +81,7 @@ class MeanHamilMinimizer(CostMinimizer):
         MeanHamilMinimizer.check_hamil_is_herm(hamil)
         self.init_var_num_to_rads = init_var_num_to_rads
         self.all_var_nums, init_x_val = zip(*init_var_num_to_rads.items())
+        init_x_val = np.array(init_x_val)
         self.fun_name_to_fun = fun_name_to_fun
         self.init_st_vec = init_st_vec
         if self.init_st_vec is None:
@@ -109,10 +114,10 @@ class MeanHamilMinimizer(CostMinimizer):
                     'BosonOperator constructor, ' +\
                     'the coefficient of every term must be real.'
 
-    def hamil_mean_val(self, var_num_to_rads):
+    def emp_hamil_mean_val(self, var_num_to_rads):
         """
-        This abstract method calculates the mean value of the Hamiltonian
-        hamil.
+        This abstract method returns the empirically determined Hamiltonian
+        mean value. Takes as input the values of placeholder variables.
 
         Parameters
         ----------
@@ -125,23 +130,105 @@ class MeanHamilMinimizer(CostMinimizer):
         """
         assert False
 
-    def cost_fun(self, x_val):
+    def pred_hamil_mean_val(self, var_num_to_rads, num_fake_samples=0):
         """
-        This method wraps the static method hamil_mean_val() defined
-        elsewhere in this class. This method will also print out whenever it
-        is called, a report of the current values of x and cost.
+        This method predicts the mean value of the Hamiltonian hamil using
+        only Qubiter simulators and not data
 
         Parameters
         ----------
-        x_val : tuple[float]
+        var_num_to_rads : dict[int, float]
+        num_fake_samples : int
 
         Returns
         -------
         float
 
         """
-        var_num_to_rads = dict(zip(self.all_var_nums, x_val))
-        cost = self.hamil_mean_val(var_num_to_rads)
+        # give it name unlikely to exist already
+        fin_file_prefix = self.file_prefix + '99345125047'
+
+        # hamil loop
+        arr_1 = np.array([1., 1.])
+        arr_z = np.array([1., -1.])
+        mean_val = 0
+        for term, coef in self.hamil.terms.items():
+            # we have checked before that coef is real
+            coef = complex(coef).real
+
+            # add measurement coda for this term of hamil
+            # build real_vec from arr_list.
+            # real_vec will be used at end of loop
+            arr_list = [arr_1]*self.num_bits
+            bit_pos_to_xy_str = {}
+            for bit_pos, action in term:
+                arr_list[bit_pos] = arr_z
+                if action != 'Z':
+                    bit_pos_to_xy_str[bit_pos] = action
+            real_vec = utg.kron_prod(arr_list)
+            real_vec = np.reshape(real_vec, tuple([2]*self.num_bits))
+            wr = CodaSEO_writer(self.file_prefix,
+                                fin_file_prefix, self.num_bits)
+            wr.write_xy_measurements(bit_pos_to_xy_str)
+            wr.close_files()
+
+            # run simulation. get fin state vec
+            vman = PlaceholderManager(
+                var_num_to_rads=var_num_to_rads,
+                fun_name_to_fun=self.fun_name_to_fun)
+            # simulator will change init_st_vec so use
+            # fresh copy of it each time
+            init_st_vec = cp.deepcopy(self.init_st_vec)
+            sim = SEO_simulator(fin_file_prefix, self.num_bits,
+                                init_st_vec, vars_manager=vman)
+            fin_st_vec = sim.cur_st_vec_dict['pure']
+
+            # get effective state vec
+            if not num_fake_samples:
+                effective_st_vec = fin_st_vec
+            else:  # if num_fake_samples !=0, then
+                # sample qubiter-generated empirical prob dist
+                pd = fin_st_vec.get_pd()
+                obs_vec = StateVec.get_observations_vec(self.num_bits,
+                        pd, num_fake_samples, rand_seed=self.rand_seed)
+                counts_dict = StateVec.get_counts_from_obs_vec(self.num_bits,
+                                                               obs_vec)
+                emp_pd = StateVec.get_empirical_pd_from_counts(self.num_bits,
+                                                               counts_dict)
+                # print('mmmmmmmm,,,', np.linalg.norm(pd-emp_pd))
+                emp_st_vec = StateVec.get_emp_state_vec_from_emp_pd(
+                        self.num_bits, emp_pd)
+                effective_st_vec = emp_st_vec
+
+            # add contribution to mean
+            mean_val += coef*effective_st_vec.\
+                    get_mean_value_of_real_diag_mat(real_vec).real
+
+        # create this coda writer in order to delete final files
+        wr1 = CodaSEO_writer(self.file_prefix, fin_file_prefix, self.num_bits)
+        wr1.delete_fin_files()
+
+        return mean_val
+
+    def cost_fun(self, x_val):
+        """
+        This method wraps the abstract method emp_hamil_mean_val() defined
+        in a child class. This method will also print out, whenever it is
+        called, a report of the current values of x and cost (and pred_cost
+        if it is calculated).
+
+        Parameters
+        ----------
+        x_val : np.ndarray
+
+        Returns
+        -------
+        float
+
+        """
+
+        var_num_to_rads = dict(zip(self.all_var_nums, tuple(x_val)))
+        cost = self.emp_hamil_mean_val(var_num_to_rads)
 
         self.cur_x_val = x_val
         self.cur_cost = cost
@@ -150,11 +237,47 @@ class MeanHamilMinimizer(CostMinimizer):
 
         return cost
 
+    def pred_cost_fun(self, xtuple):
+        """
+        Returns the cost, predicted from analytical tools, rather than
+        estimated from data. This method mimics the method cost_fun(),
+        but that one wraps the abstract method emp_hamil_mean_val(). This
+        one wraps the non-abstract method pred_hamil_mean_val() which is
+        defined right in this class.
+
+        Parameters
+        ----------
+        xtuple : tuple[float]
+
+        Returns
+        -------
+        float
+
+        """
+        var_num_to_rads = dict(zip(self.all_var_nums, xtuple))
+        return self.pred_hamil_mean_val(var_num_to_rads)
+
     def find_min(self, interface, **kwargs):
         """
         This method finds min of cost function. It allows user to choose
         among several possible interfaces, namely, 'scipy', 'autograd',
         'pytorch', 'tflow'. Interface parameters can be passed in via kwargs.
+
+        keyword arguments kwargs
+        interface = scipy
+            the keyword args of scipy.optimize.minimize
+        interface = autograd
+            num_inter : float
+                number of iterations (an iteration is every time call
+                cost_fun)
+            descent_rate : float
+                positive float, constant that multiplies gradient of
+                pred_cost_fun(). Often denoted as eta
+            do_pred_cost : bool
+                default=True, The gradient of the pred_cost_fun() is always
+                calculated, but calculating the pred_cost_fun() itself is
+                optional. This is increasingly more expensive the larger the
+                circuit.
 
         Parameters
         ----------
@@ -182,10 +305,39 @@ class MeanHamilMinimizer(CostMinimizer):
                       '):\n', opt_result)
             return opt_result
         elif interface == 'autograd':
-            assert False, 'not yet'
+            # import adv_applications.setup_autograd
+            from autograd import grad
+
+            assert 'num_iter' in kwargs, \
+                "must pass-in keyword 'num_iter=' " \
+                "if using autograd interface"
+            num_iter = kwargs['num_iter']
+            assert 'descent_rate' in kwargs, \
+                "must pass-in keyword 'descent_rate=' " \
+                "if using autograd interface"
+            rate = kwargs['descent_rate']
+            self.cur_x_val = self.init_x_val
+            if 'do_pred_cost' in kwargs:
+                do_pred_cost = kwargs['do_pred_cost']
+            else:
+                do_pred_cost = True
+            for iter in range(num_iter):
+                self.cur_cost = self.cost_fun(self.cur_x_val)
+                self.cur_x_val -= rate*grad(self.pred_cost_fun)(
+                    tuple(self.cur_x_val))
+                if do_pred_cost:
+                    self.cur_pred_cost = \
+                        self.pred_cost_fun(tuple(self.cur_x_val))
+
         elif interface == 'tflow':
             assert False, 'not yet'
         elif interface == 'pytorch':
             assert False, 'not yet'
         else:
-            assert False, 'unsupported fin_min() interface'
+            assert False, 'unsupported find_min() interface'
+
+
+if __name__ == "__main__":
+    def main():
+        print(5)
+    main()

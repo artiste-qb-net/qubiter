@@ -2,8 +2,10 @@ from Controls import *
 from SEO_pre_reader import *
 from PlaceholderManager import *
 from LoopyPlaceholderManager import *
-import numpy as np
 
+import sys
+if 'autograd.numpy' not in sys.modules:
+    import numpy as np
 
 class SEO_reader(SEO_pre_reader):
     """

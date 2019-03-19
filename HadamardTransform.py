@@ -1,4 +1,6 @@
-import numpy as np
+import sys
+if 'autograd.numpy' not in sys.modules:
+    import numpy as np
 from BitVector import *
 
 

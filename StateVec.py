@@ -1,4 +1,3 @@
-import numpy as np
 import pprint as pp
 import scipy as sc
 import utilities_gen as ut
@@ -6,6 +5,9 @@ from collections import OrderedDict
 import pandas as pan
 from Plotter import *
 
+import sys
+if 'autograd.numpy' not in sys.modules:
+    import numpy as np
 
 class StateVec:
     """

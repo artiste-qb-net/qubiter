@@ -40,7 +40,7 @@ class EngFileListing:
             self.line_list = []
 
     @staticmethod
-    def new_one_liner(num_bits, fun_name, param_list):
+    def new_line(num_bits, fun_name, param_list):
         """
         This method returns a new EngFileListing with a single line for a
         single gate. fun_name is the name of any function in SEO_writer
@@ -361,12 +361,12 @@ if __name__ == "__main__":
         print('\nlisting_herm print')
         listing_herm.print()
 
-        one_liner = EngFileListing.new_one_liner(4,
+        one_liner = EngFileListing.new_line(4,
             'write_cnot', [0, 1])
         print('\none_liner print')
         one_liner.print()
 
-        one_liner = EngFileListing.new_one_liner(4,
+        one_liner = EngFileListing.new_line(4,
             'write_Rn', [2, [np.pi/2, -np.pi/2, np.pi/3]])
         print('\none_liner print')
         one_liner.print()

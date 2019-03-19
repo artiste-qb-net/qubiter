@@ -1,4 +1,8 @@
-import numpy as np
+import sys
+if 'autograd.numpy' not in sys.modules:
+    import numpy as np
+else:
+    import autograd.numpy as np
 # from SEO_writer import *
 import utilities_gen as ug
 from collections import defaultdict
@@ -332,7 +336,13 @@ class PlaceholderManager:
 
         """
         if not PlaceholderManager.is_legal_var_name(degs_str):
-            return float(degs_str)*np.pi/180
+            try:
+                y = float(degs_str)*np.pi/180
+            except:
+                assert False, 'tried to convert ' + str(degs_str)\
+                 + ' to a float'
+
+            return y
         else:  # is a legal variable name
             assert not self.no_vars, 'no circuit variables allowed'
 

@@ -1,6 +1,6 @@
 import copy as cp
 
-from adv_applications.MeanHamilMinimizer import *
+from adv_applications.MeanHamilMinimizer_native import *
 from device_specific.Qubiter_to_RigettiPyQuil import *
 from device_specific.Cloud_rigetti import *
 import utilities_gen as utg
@@ -16,10 +16,10 @@ class MeanHamilMinimizer_rigetti(MeanHamilMinimizer):
     
     Attributes
     ----------
+    do_resets : bool
     pg : Program
     qc : QuantumComputer
         get from CloudRigetti.get_qc()
-    do_resets : bool
     term_to_exec : dict[]  
         maps a term to an executable. QubitOperator from OpenFermion has 
         attribute `terms` which is a dict from a term to a coefficient. An 
@@ -153,11 +153,12 @@ class MeanHamilMinimizer_rigetti(MeanHamilMinimizer):
                 assert False, "Unsupported qbit measurement. '" + \
                             xy_str + "' Should be either 'X' or 'Y'"
 
-    def hamil_mean_val(self, var_num_to_rads):
+    def emp_hamil_mean_val(self, var_num_to_rads):
         """
-        This method calculates the mean value of the Hamiltonian hamil. It
-        passes parameter values (contained in input var_num_to_rads) into
-        the Rigetti method run().
+        This method returns the empirically determined Hamiltonian mean
+        value. Takes as input the values of placeholder variables. It passes
+        parameter values ( contained in input var_num_to_rads) into the
+        Rigetti method run().
 
         Parameters
         ----------

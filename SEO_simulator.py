@@ -1,4 +1,3 @@
-import numpy as np
 import copy as cp
 # import pprint as pp
 from SEO_reader import *
@@ -6,6 +5,9 @@ from OneBitGates import *
 from StateVec import *
 # import utilities_gen as ut
 
+import sys
+if 'autograd.numpy' not in sys.modules:
+    import numpy as np
 
 class SEO_simulator(SEO_reader):
     """
@@ -214,6 +216,7 @@ class SEO_simulator(SEO_reader):
                 slicex[controls.bit_pos[k]] = 1
             else:  # it's False
                 slicex[controls.bit_pos[k]] = 0
+        slicex = tuple(slicex)
 
         # components that are fixed are no longer axes
         scout = 0
@@ -243,9 +246,16 @@ class SEO_simulator(SEO_reader):
                         br_trols, self.mcase_trols):
                     evolve_br = True
             if evolve_br:
-                arr = self.cur_st_vec_dict[br_key].arr[tuple(slicex)]
-                self.cur_st_vec_dict[br_key].arr[tuple(slicex)] = \
-                    arr.transpose(tuple(perm))
+                sub_arr = self.cur_st_vec_dict[br_key].arr[slicex]
+                sub_arr = sub_arr.transpose(tuple(perm))
+
+                # can't do array assignments with autograd so
+                # achieve same result with other allowed tensor ops
+                if 'autograd.numpy' in sys.modules:
+                    self.do_autograd_ruse(br_key, sub_arr, slicex)
+                    return
+
+                self.cur_st_vec_dict[br_key].arr[tuple(slicex)] = sub_arr
 
     def evolve_by_controlled_one_bit_gate(self,
                 tar_bit_pos, controls, one_bit_gate):
@@ -315,13 +325,55 @@ class SEO_simulator(SEO_reader):
                         br_trols, self.mcase_trols):
                     evolve_br = True
             if evolve_br:
-                arr = self.cur_st_vec_dict[br_key].arr[vec_slicex]
+                sub_arr = self.cur_st_vec_dict[br_key].arr[vec_slicex]
                 # Axes 1 of one_bit_gate and new_tar of vec are summed over.
                 #  Axis 0 of one_bit_gate goes to the front of all the axes
                 # of new vec. Use transpose() to realign axes.
-                arr = np.tensordot(one_bit_gate, arr, ([1], [new_tar]))
-                self.cur_st_vec_dict[br_key].arr[vec_slicex] = \
-                    np.transpose(arr, axes=perm)
+                sub_arr = np.tensordot(one_bit_gate, sub_arr, ([1], [new_tar]))
+                sub_arr = np.transpose(sub_arr, axes=perm)
+
+                # can't do array assignments with autograd so
+                # achieve same result with other allowed tensor ops
+                if 'autograd.numpy' in sys.modules:
+                    self.do_autograd_ruse(br_key, sub_arr, vec_slicex)
+                    return
+
+                # original, if autograd is not being used
+                self.cur_st_vec_dict[br_key].arr[vec_slicex] = sub_arr
+
+    def do_autograd_ruse(self, br_key, sub_arr, slicex):
+        """
+        internal function only used in evolve_ methods, when autograd is on.
+        Should have same effect as
+
+        self.cur_st_vec_dict[br_key].arr[slicex] = sub_arr
+
+        Parameters
+        ----------
+        br_key : str
+        sub_arr : np.ndarray
+        slicex : tuple
+
+        Returns
+        -------
+        None
+
+        """
+
+        arr = self.cur_st_vec_dict[br_key].arr
+        on_slicex = np.full_like(arr, False)
+        on_slicex[slicex] = True
+        bigger_shape = [1]*self.num_bits # slicex is num_bits long
+        k = 0
+        # print('wwwww', sub_arr.shape, slicex)
+        for bit, type in enumerate(slicex):
+            if type not in [0, 1]:
+                bigger_shape[bit] = sub_arr.shape[k]
+                k += 1
+        np.reshape(sub_arr, tuple(bigger_shape))
+        arr = \
+            arr*np.logical_not(on_slicex).astype(int)\
+            + sub_arr*on_slicex.astype(int)
 
     def finalize_next_line(self):
         """
@@ -369,7 +421,7 @@ class SEO_simulator(SEO_reader):
         not pure, it calculates a density matrix from the
         self.cur_st_vec_dict. Then it extracts the diagonal of that density
         matrix. That diagonal must be a probability distribution that we
-        call pd.) Then the method samples pd, num_shot times. The method
+        call pd.) Then the method samples pd, num_shots times. The method
         returns the result of that sampling as an OrderedDict
         state_name_to_counts. Depending on the value of the flag
         use_bin_labels, the state names are a string '0', '1', '2', etc,
