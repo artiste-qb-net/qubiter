@@ -1,6 +1,6 @@
 import copy as cp
 
-from adv_applications.MeanHamilMinimizer_native import *
+from adv_applications.MeanHamilMinimizer import *
 from device_specific.Qubiter_to_RigettiPyQuil import *
 from device_specific.Cloud_rigetti import *
 import utilities_gen as utg
@@ -18,12 +18,13 @@ class MeanHamilMinimizer_rigetti(MeanHamilMinimizer):
     ----------
     do_resets : bool
     pg : Program
+        object of PyQuil class Program
     qc : QuantumComputer
-        get from CloudRigetti.get_qc()
+        returned by PyQuil method get_qc()
     term_to_exec : dict[]  
         maps a term to an executable. QubitOperator from OpenFermion has 
         attribute `terms` which is a dict from a term to a coefficient. An 
-        executable is the output of PyQuil compile() method.
+        executable is the output of PyQuil's compile() method.
     translator : Qubiter_to_RigettiPyQuil
     
     """
@@ -63,7 +64,7 @@ class MeanHamilMinimizer_rigetti(MeanHamilMinimizer):
         self.qc = qc
         self.do_resets = do_resets
 
-        # this creates a file with all Pyquil gates that
+        # this creates a file with all PyQuil gates that
         # are independent of hamil. Gates may contain free parameters
         self.translator = Qubiter_to_RigettiPyQuil(
             self.file_prefix, self.num_bits,
@@ -106,7 +107,7 @@ class MeanHamilMinimizer_rigetti(MeanHamilMinimizer):
             # reset pg to initial length
 
             # Temporary work-around to bug
-            # in Pyquil ver 2.5.0.
+            # in PyQuil ver 2.5.0.
             # Slicing was changing
             # pg from type Program to type list
             pg = Program(pg[:len_pg_in])

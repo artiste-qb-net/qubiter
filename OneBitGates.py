@@ -1,8 +1,13 @@
 import sys
 if 'autograd.numpy' not in sys.modules:
     import numpy as np
+    print('loaded OneBitGates, WITHOUT autograd.numpy')
 else:
+    print('loaded OneBitGates, WITH autograd.numpy')
     from adv_applications.setup_autograd import pu2
+    print('pu2 in dir', 'pu2' in dir())
+    print('pu2 in sys.modules', 'pu2' in sys.modules)
+    import autograd.numpy as np
 
 
 class OneBitGates:
@@ -12,7 +17,6 @@ class OneBitGates:
     array). In cases where the entries of the matrix are all real,
     an is_quantum bool option is given to choose between a float64 or
     complex128 array.
-
 
     Attributes
     ----------
@@ -106,7 +110,7 @@ class OneBitGates:
         if 'autograd.numpy' in sys.modules:
             tlist = [0.]*4
             tlist[0] = ang_rads/2
-            tlist[3] = -ang_rads/2
+            tlist[3] = ang_rads/2
             return np.exp(1j*ang_rads/2)*pu2(*tlist)
         ty = np.complex128
         mat = np.zeros([2, 2], dtype=ty)
@@ -233,8 +237,10 @@ class OneBitGates:
 
         """
         if 'autograd.numpy' in sys.modules:
+            assert axis in [1, 2, 3]
             tlist = [0.]*4
             tlist[axis] = rad_ang
+            # print('mmbbvv', axis, pu2(*tlist))
             return pu2(*tlist)
         
         ty = np.complex128

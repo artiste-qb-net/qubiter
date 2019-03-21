@@ -3,6 +3,8 @@ from functools import reduce
 import sys
 if 'autograd.numpy' not in sys.modules:
     import numpy as np
+else:
+    import autograd.numpy as np
 
 # def centered_rads(ang_rads):
 #     """

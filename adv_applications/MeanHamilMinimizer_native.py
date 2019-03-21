@@ -59,6 +59,11 @@ class MeanHamilMinimizer_native(MeanHamilMinimizer):
     Tensorflow.
 
     Qubiter's class `MeanHamilMinimizer_native` can perform minimization via
+    various interfaces ('scipy', 'autograd', 'pytorch', 'tflow').
+
+    Non-scipy interfaces implement backprop.
+
+    The 'scipy' interface is a wrapper for the scipy function
     `scipy.optimize.minimize`. This scipy umbrella method implements many
     minimization methods, including Powell and CG.
 
@@ -67,6 +72,9 @@ class MeanHamilMinimizer_native(MeanHamilMinimizer):
     `MeanHamilMinimizer_native` does not call real physical hardware to do
     the simulation. Instead, it uses Qubiter's built-in simulator,
     `SEO_simulator`. That is why we call this class native.
+
+    Attributes
+    ----------
 
     """
 
@@ -91,7 +99,7 @@ class MeanHamilMinimizer_native(MeanHamilMinimizer):
         """
         This method returns the empirically determined Hamiltonian mean
         value. Takes as input the values of placeholder variables. In this
-        'native" case, we fake our data using SEO_simulator.
+        "native" case, we fake our data using SEO_simulator.
 
         Parameters
         ----------
@@ -106,6 +114,9 @@ class MeanHamilMinimizer_native(MeanHamilMinimizer):
                                         num_fake_samples=self.num_samples)
 
 if __name__ == "__main__":
+    import scipy
+    from openfermion.ops import QubitOperator
+
     def main():
         num_bits = 4
         file_prefix = '../io_folder/mean_hamil_native_test'
@@ -136,10 +147,13 @@ if __name__ == "__main__":
 
         def case(**kwargs):
             return MeanHamilMinimizer_native(file_prefix, num_bits, hamil,
-                                             init_var_num_to_rads, fun_name_to_fun,
-                                             num_samples=num_samples, rand_seed=rand_seed,
+                                             init_var_num_to_rads,
+                                             fun_name_to_fun,
+                                             num_samples=num_samples,
+                                             rand_seed=rand_seed,
                                              print_hiatus=print_hiatus,
-                                             verbose=verbose).find_min(interface='scipy', **kwargs)
+                                             verbose=verbose).find_min(
+                                                interface='scipy', **kwargs)
         print("*************************************")
         min_method = 'Powell'
         num_samples = 0

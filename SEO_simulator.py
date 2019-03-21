@@ -252,10 +252,10 @@ class SEO_simulator(SEO_reader):
                 # can't do array assignments with autograd so
                 # achieve same result with other allowed tensor ops
                 if 'autograd.numpy' in sys.modules:
-                    self.do_autograd_ruse(br_key, sub_arr, slicex)
+                    self.do_autograd_ruse(br_key, slicex, sub_arr)
                     return
 
-                self.cur_st_vec_dict[br_key].arr[tuple(slicex)] = sub_arr
+                self.cur_st_vec_dict[br_key].arr[slicex] = sub_arr
 
     def evolve_by_controlled_one_bit_gate(self,
                 tar_bit_pos, controls, one_bit_gate):
@@ -320,6 +320,7 @@ class SEO_simulator(SEO_reader):
             if not self.measured_bits or not self.mcase_trols:
                 evolve_br = True
             else:
+
                 br_trols = self.get_controls_from_br_key(br_key)
                 if SEO_simulator.branch_is_part_of_mcase(
                         br_trols, self.mcase_trols):
@@ -335,33 +336,38 @@ class SEO_simulator(SEO_reader):
                 # can't do array assignments with autograd so
                 # achieve same result with other allowed tensor ops
                 if 'autograd.numpy' in sys.modules:
-                    self.do_autograd_ruse(br_key, sub_arr, vec_slicex)
+                    self.do_autograd_ruse(br_key, vec_slicex, sub_arr)
                     return
 
                 # original, if autograd is not being used
                 self.cur_st_vec_dict[br_key].arr[vec_slicex] = sub_arr
 
-    def do_autograd_ruse(self, br_key, sub_arr, slicex):
+    def do_autograd_ruse(self, br_key, slicex, sub_arr):
         """
-        internal function only used in evolve_ methods, when autograd is on.
-        Should have same effect as
+        internal function used in evolve_ methods iff autograd is on. Should
+        have same effect as
 
         self.cur_st_vec_dict[br_key].arr[slicex] = sub_arr
 
         Parameters
         ----------
         br_key : str
-        sub_arr : np.ndarray
         slicex : tuple
+        sub_arr : np.ndarray
 
         Returns
         -------
         None
 
         """
-
+        test = False
         arr = self.cur_st_vec_dict[br_key].arr
-        on_slicex = np.full_like(arr, False)
+        if test:
+            arr1 = cp.copy(arr)
+            # print('arr1 bef', arr1)
+            arr1[slicex] = sub_arr
+            # print('arr1 aft', arr1)
+        on_slicex = np.full(arr.shape, False)
         on_slicex[slicex] = True
         bigger_shape = [1]*self.num_bits # slicex is num_bits long
         k = 0
@@ -370,10 +376,15 @@ class SEO_simulator(SEO_reader):
             if type not in [0, 1]:
                 bigger_shape[bit] = sub_arr.shape[k]
                 k += 1
-        np.reshape(sub_arr, tuple(bigger_shape))
+        sub_arr = sub_arr.reshape(tuple(bigger_shape))
         arr = \
             arr*np.logical_not(on_slicex).astype(int)\
             + sub_arr*on_slicex.astype(int)
+        self.cur_st_vec_dict[br_key].arr = arr
+        if test:
+            # print('arr aft', arr)
+            print('testing simulator with autograd on')
+            assert np.linalg.norm(arr-arr1) < 1e-6, 'autograd sim test failed'
 
     def finalize_next_line(self):
         """

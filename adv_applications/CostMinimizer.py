@@ -50,7 +50,7 @@ class CostMinimizer:
     def broadcast_cost_fun_call(self):
         """
         This method prints current cost and x_val each time cost function is
-        called.
+        called. It also prints pred_cost if there is one.
 
         Returns
         -------
@@ -61,15 +61,15 @@ class CostMinimizer:
             return
         if self.iter_count % self.print_hiatus == 0:
             s = 'iter=' + str(self.iter_count)
-            s += ', cost=' + str(self.cur_cost)
-            if self.cur_pred_cost:
-                s += ', pred_cost=' + str(self.cur_pred_cost)
+            s += ', cost=' + '{0.6f}'.format(self.cur_cost)
+            if self.cur_pred_cost is not None:
+                s += ', pred_cost=' + '{0.6f}'.format(self.cur_pred_cost)
             s += ', x_val=' + str(tuple(self.cur_x_val))
             print(s)
 
     def cost_fun(self, x_val):
         """
-        Abstract method. Given x_val, return float for cost.
+        Abstract method. Given x_val, return cost (float).
 
         Parameters
         ----------

@@ -1,34 +1,38 @@
 from adv_applications.CostMinimizer import *
 from StateVec import *
-from openfermion.ops import QubitOperator
 import utilities_gen as utg
 from CodaSEO_writer import *
 from SEO_simulator import *
+from CktEmbedder import *
+from openfermion.ops import QubitOperator
 import sys
+
 
 class MeanHamilMinimizer(CostMinimizer):
     """
     This class is a child of class CostMinimizer. Like its parent,
     this class is also intended to be abstract and to be subclassed. For
-    example, class MeanHamilMinimizer_native is a child of this class.
-    Whereas its parent embodies the essence of any cost minimizing object,
-    this class embodies the essence of an object specifically designed to
-    minimize a cost function which equals the mean value of a Hamiltonian.
+    example, classes MeanHamilMinimizer_native and
+    MeanHamilMinimizer_rigetti are children of this class. Whereas its
+    parent embodies the essence of any cost minimizing object, this class
+    embodies the essence of an object specifically designed to minimize a
+    cost function which equals the mean value of a Hamiltonian.
      
     file_prefix identifies the location of an English file that specifies a
     quantum circuit. If init_st_vec=None, we assume that the initial state
     of that quantum circuit is the ground state (all qubits in state |0>).
     Let |psi> be the final state vector that evolves from that circuit. Let
     hamil be a Hamiltonian suitable for that circuit and stored as an object
-    of QubitOperator, which is a class of the open-source lib OpenFermion.
-    Then the cost function to be minimized is <psi|hamil|psi>.
+    of QubitOperator--- a class of the open-source lib OpenFermion. Then the
+    cost function to be minimized is <psi|hamil|psi>.
     
     Attributes
     ----------
     all_var_nums : list[int]
-        this is a list of distinct ints that identify each continuous 
+        this is a list of distinct ints that identify each continuous
         variable (i.e., parameter, non-functional placeholder variable) on
-        which the cost function depends.
+        which the cost function depends. They are ordered in order of
+        occurrence in the quantum circuit.
     file_prefix : str
     fun_name_to_fun : dict[str, function]
          this is a dict that maps function names to functions. Such
@@ -43,9 +47,10 @@ class MeanHamilMinimizer(CostMinimizer):
     num_bits : int
         number of qubits
     num_samples : int
-        number of samples. If this is zero, the |psi> in <psi|H|psi> is
-        calculated exactly. If this is >0, the |psi> is calculated
-        empirically from a number num_samples of "one-shot" experiments.
+        number of samples (aka num_shots). If this is zero, the |psi> in
+        <psi|H|psi> is calculated exactly from theory. If this is >0,
+        the |psi> is calculated empirically from a number num_samples of
+        "one-shot" experiments.
     rand_seed : int
         random seed
       
@@ -149,8 +154,8 @@ class MeanHamilMinimizer(CostMinimizer):
         fin_file_prefix = self.file_prefix + '99345125047'
 
         # hamil loop
-        arr_1 = np.array([1., 1.])
-        arr_z = np.array([1., -1.])
+        arr_plus = np.array([1., 1.])
+        arr_minus = np.array([1., -1.])
         mean_val = 0
         for term, coef in self.hamil.terms.items():
             # we have checked before that coef is real
@@ -159,10 +164,10 @@ class MeanHamilMinimizer(CostMinimizer):
             # add measurement coda for this term of hamil
             # build real_vec from arr_list.
             # real_vec will be used at end of loop
-            arr_list = [arr_1]*self.num_bits
+            arr_list = [arr_plus]*self.num_bits
             bit_pos_to_xy_str = {}
             for bit_pos, action in term:
-                arr_list[bit_pos] = arr_z
+                arr_list[bit_pos] = arr_minus
                 if action != 'Z':
                     bit_pos_to_xy_str[bit_pos] = action
             real_vec = utg.kron_prod(arr_list)
@@ -182,6 +187,8 @@ class MeanHamilMinimizer(CostMinimizer):
             sim = SEO_simulator(fin_file_prefix, self.num_bits,
                                 init_st_vec, vars_manager=vman)
             fin_st_vec = sim.cur_st_vec_dict['pure']
+            # print('inside pred hamil in/out stvec',
+            # self.init_st_vec, fin_st_vec)
 
             # get effective state vec
             if not num_fake_samples:
@@ -202,7 +209,7 @@ class MeanHamilMinimizer(CostMinimizer):
 
             # add contribution to mean
             mean_val += coef*effective_st_vec.\
-                    get_mean_value_of_real_diag_mat(real_vec).real
+                    get_mean_value_of_real_diag_mat(real_vec)
 
         # create this coda writer in order to delete final files
         wr1 = CodaSEO_writer(self.file_prefix, fin_file_prefix, self.num_bits)
@@ -215,7 +222,7 @@ class MeanHamilMinimizer(CostMinimizer):
         This method wraps the abstract method emp_hamil_mean_val() defined
         in a child class. This method will also print out, whenever it is
         called, a report of the current values of x and cost (and pred_cost
-        if it is calculated).
+        if it is available).
 
         Parameters
         ----------
@@ -237,33 +244,41 @@ class MeanHamilMinimizer(CostMinimizer):
 
         return cost
 
-    def pred_cost_fun(self, xtuple):
+    def pred_cost_fun(self, x_val):
         """
-        Returns the cost, predicted from analytical tools, rather than
-        estimated from data. This method mimics the method cost_fun(),
+        Returns the cost, predicted from theory, rather than estimated from
+        data as in cost_fun(). This method mimics the method cost_fun(),
         but that one wraps the abstract method emp_hamil_mean_val(). This
         one wraps the non-abstract method pred_hamil_mean_val() which is
         defined right in this class.
 
         Parameters
         ----------
-        xtuple : tuple[float]
+        x_val : np.ndarray
 
         Returns
         -------
         float
 
         """
-        var_num_to_rads = dict(zip(self.all_var_nums, xtuple))
-        return self.pred_hamil_mean_val(var_num_to_rads)
+        # print('inside_pred_cost', x_val)
+        var_num_to_rads = dict(zip(self.all_var_nums, tuple(x_val)))
+        # print('mmmmmmmmmaaaaaa', var_num_to_rads)
+        cost = self.pred_hamil_mean_val(var_num_to_rads)
+        # print('bbvvv-cost', cost)
+        return cost
 
     def find_min(self, interface, **kwargs):
         """
-        This method finds min of cost function. It allows user to choose
+        This method finds minimum of cost function. It allows user to choose
         among several possible interfaces, namely, 'scipy', 'autograd',
         'pytorch', 'tflow'. Interface parameters can be passed in via kwargs.
 
-        keyword arguments kwargs
+        Non-scipy interfaces do backprop. It is known that the complexity of
+        calculating forward  propagation and back propagation are about the
+        same.
+
+        kwargs (keyword arguments)
         interface = scipy
             the keyword args of scipy.optimize.minimize
         interface = autograd
@@ -276,8 +291,7 @@ class MeanHamilMinimizer(CostMinimizer):
             do_pred_cost : bool
                 default=True, The gradient of the pred_cost_fun() is always
                 calculated, but calculating the pred_cost_fun() itself is
-                optional. This is increasingly more expensive the larger the
-                circuit.
+                optional.
 
         Parameters
         ----------
@@ -292,8 +306,12 @@ class MeanHamilMinimizer(CostMinimizer):
             scipy.optimize.minimize
 
         """
-        print('x_val~ (' +\
+        print('x_val~ (' +
               ', '.join(['#' + str(k) for k in self.all_var_nums]) + ')')
+
+        def pred_cost(xx):
+            # self argument seems to confuse grad
+            return self.pred_cost_fun(xx)
         if interface == 'scipy':
             import scipy
             minimizer_fun = scipy.optimize.minimize
@@ -301,11 +319,10 @@ class MeanHamilMinimizer(CostMinimizer):
                 self.init_x_val, **kwargs)
             if self.verbose:
                 print('*********final optimum result'
-                      ' (final iter=' + str(self.iter_count) +\
+                      ' (final step=' + str(self.iter_count) +
                       '):\n', opt_result)
             return opt_result
         elif interface == 'autograd':
-            # import adv_applications.setup_autograd
             from autograd import grad
 
             assert 'num_iter' in kwargs, \
@@ -321,17 +338,20 @@ class MeanHamilMinimizer(CostMinimizer):
                 do_pred_cost = kwargs['do_pred_cost']
             else:
                 do_pred_cost = True
-            for iter in range(num_iter):
-                self.cur_cost = self.cost_fun(self.cur_x_val)
-                self.cur_x_val -= rate*grad(self.pred_cost_fun)(
-                    tuple(self.cur_x_val))
+            for step in range(num_iter):
+                xlist = list(self.cur_x_val)
+                # print('mmbbb', self.cur_x_val, xlist)
                 if do_pred_cost:
-                    self.cur_pred_cost = \
-                        self.pred_cost_fun(tuple(self.cur_x_val))
+                    self.cur_pred_cost = pred_cost(self.cur_x_val)
+                self.cur_cost = self.cost_fun(self.cur_x_val)
+                # print('kkkhhh', grad(pred_cost)(self.cur_x_val))
+                for dwrt in range(len(xlist)):
+                    self.cur_x_val[dwrt] -= \
+                        rate*grad(pred_cost)(self.cur_x_val)[dwrt]
 
-        elif interface == 'tflow':
-            assert False, 'not yet'
         elif interface == 'pytorch':
+            assert False, 'not yet'
+        elif interface == 'tflow':
             assert False, 'not yet'
         else:
             assert False, 'unsupported find_min() interface'

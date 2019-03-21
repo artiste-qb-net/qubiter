@@ -8,6 +8,8 @@ from Plotter import *
 import sys
 if 'autograd.numpy' not in sys.modules:
     import numpy as np
+else:
+    import autograd.numpy as np
 
 class StateVec:
     """
@@ -383,7 +385,7 @@ class StateVec:
         float
 
         """
-        return np.sum(np.real(self.arr.conj()*real_vec*self.arr))
+        return np.sum(np.real(np.conj(self.arr)*real_vec*self.arr))
 
     def get_total_prob(self):
         """
@@ -397,7 +399,7 @@ class StateVec:
         float
 
         """
-        return np.sum(np.real(self.arr.conj()*self.arr))
+        return np.sum(np.real(np.conj(self.arr)*self.arr))
 
     @staticmethod
     def get_observations_vec(num_bits, pd, num_shots, rand_seed=None):
