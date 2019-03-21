@@ -7,7 +7,7 @@ else:
     import autograd.numpy as np
 
 
-class RigettiLiason:
+class RigettiTools:
     """
     This class has no constructor. It consists of static methods that
     facilitate the interaction between Qubiter and PyQuil and the Rigetti
