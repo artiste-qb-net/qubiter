@@ -3,12 +3,15 @@
 import sys
 if 'autograd.numpy' not in sys.modules:
     import numpy as np
+else:
+    import autograd.numpy as np
 
 
-class Cloud_rigetti:
+class RigettiLiason:
     """
-    This class has no constructor. It consists of static methods that are
-    useful when communicating with the Rigetti Cloud.
+    This class has no constructor. It consists of static methods that
+    facilitate the interaction between Qubiter and PyQuil and the Rigetti
+    Cloud.
 
     """
 

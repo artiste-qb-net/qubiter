@@ -59,12 +59,13 @@ class CostMinimizer:
         """
         if self.print_hiatus < 1:
             return
+        x_val_str = ', '.join(['{0:0.6f}'.format(x) for x in self.cur_x_val])
         if self.iter_count % self.print_hiatus == 0:
             s = 'iter=' + str(self.iter_count)
-            s += ', cost=' + '{0.6f}'.format(self.cur_cost)
+            s += ', cost=' + '{0:0.6f}'.format(self.cur_cost)
             if self.cur_pred_cost is not None:
-                s += ', pred_cost=' + '{0.6f}'.format(self.cur_pred_cost)
-            s += ', x_val=' + str(tuple(self.cur_x_val))
+                s += ', pred_cost=' + '{0:0.6f}'.format(self.cur_pred_cost)
+            s += ', x_val=' + x_val_str
             print(s)
 
     def cost_fun(self, x_val):

@@ -2,7 +2,7 @@ import copy as cp
 
 from adv_applications.MeanHamilMinimizer import *
 from device_specific.Qubiter_to_RigettiPyQuil import *
-from device_specific.Cloud_rigetti import *
+from device_specific.RigettiLiason import *
 import utilities_gen as utg
 
 from openfermion.ops import QubitOperator
@@ -193,7 +193,7 @@ class MeanHamilMinimizer_rigetti(MeanHamilMinimizer):
             # print(',mmnnb', var_name_to_rads)
             bitstrings = self.qc.run(self.term_to_exec[term], 
                                      memory_map=var_name_to_rads)
-            obs_vec = Cloud_rigetti.obs_vec_from_bitstrings(
+            obs_vec = RigettiLiason.obs_vec_from_bitstrings(
                     bitstrings, self.num_bits, bs_is_array=True)
             
             # go from obs_vec to effective state vec
