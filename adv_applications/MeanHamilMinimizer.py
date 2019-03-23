@@ -182,6 +182,35 @@ class MeanHamilMinimizer(CostMinimizer):
                     'BosonOperator constructor, ' +\
                     'the coefficient of every term must be real.'
 
+    def get_real_vec(self, term):
+        """
+        Internal method that returns a numpy array, of shape [2]*num_bits,
+        that will be used as input to the method
+        StateVec.get_mean_value_of_real_diag_mat()
+
+        The input is a `term`. `terms` is an attribute of QubitOperator (a
+        class in OpenFermion). terms is a dictionary that maps a term to a
+        coeff. A term is a tuple (bit_pos, action).
+
+        Parameters
+        ----------
+        term : tuple
+
+        Returns
+        -------
+        np.ndarray
+            shape=[2]*num_bits
+
+        """
+        arr_plus = np.array([1., 1.])
+        arr_minus = np.array([1., -1.])
+        arr_list = [arr_plus]*self.num_bits
+        for bit_pos, action in term:
+            arr_list[bit_pos] = arr_minus
+        real_arr = utg.kron_prod(arr_list)
+        real_arr = np.reshape(real_arr, tuple([2]*self.num_bits))
+        return real_arr
+
     def emp_hamil_mean_val(self, var_num_to_rads):
         """
         This abstract method returns the empirically determined Hamiltonian
@@ -217,26 +246,16 @@ class MeanHamilMinimizer(CostMinimizer):
         fin_file_prefix = self.file_prefix + '99345125047'
 
         # hamil loop
-        arr_plus = np.array([1., 1.])
-        arr_minus = np.array([1., -1.])
         mean_val = 0
         for term, coef in self.hamil.terms.items():
             # we have checked before that coef is real
             coef = complex(coef).real
 
             # add measurement coda for this term of hamil
-            # build real_arr from arr_list.
-            # real_arr will be used at end of loop
-            arr_list = [arr_plus]*self.num_bits
-            bit_pos_to_xy_str = {}
-            for bit_pos, action in term:
-                arr_list[bit_pos] = arr_minus
-                if action != 'Z':
-                    bit_pos_to_xy_str[bit_pos] = action
-            real_arr = utg.kron_prod(arr_list)
-            real_arr = np.reshape(real_arr, tuple([2]*self.num_bits))
             wr = CodaSEO_writer(self.file_prefix,
                                 fin_file_prefix, self.num_bits)
+            bit_pos_to_xy_str =\
+                {bit: action for bit, action in term if action != 'Z'}
             wr.write_xy_measurements(bit_pos_to_xy_str)
             wr.close_files()
 
@@ -272,6 +291,7 @@ class MeanHamilMinimizer(CostMinimizer):
                 effective_st_vec = fin_st_vec
 
             # add contribution to mean
+            real_arr = self.get_real_vec(term)
             mean_val += coef*effective_st_vec.\
                     get_mean_value_of_real_diag_mat(real_arr)
 
