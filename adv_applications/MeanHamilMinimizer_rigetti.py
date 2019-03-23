@@ -9,10 +9,20 @@ from openfermion.ops import QubitOperator
 
 from pyquil.quil import Program, Pragma
 from pyquil.gates import *
+from pyquil.api import WavefunctionSimulator
 
 
 class MeanHamilMinimizer_rigetti(MeanHamilMinimizer):
     """
+    This class is a child of MeanHamilMinimizer.
+
+    This class uses either Rigetti's real hardware or simulator to calculate
+    mean values. `qc` returned by Rigetti's get_qc() method is passed in as
+    an input to the constructor of this class. If num_samples !=0, the class
+    uses qc.run() to calculate mean values. If num_samples=0, the class
+    ignores the `qc` input and uses PyQuil's WavefunctionSimulator to
+    calculate mean values exactly.
+
     
     Attributes
     ----------
@@ -36,12 +46,12 @@ class MeanHamilMinimizer_rigetti(MeanHamilMinimizer):
         Constructor
 
         Do in constructor as much hamil indep stuff as possible so don't
-        have to redo it with every call to cost fun. Also, an executable (
-        output of Rigetti compile() function) is stored for each term in the
-        hamiltonian hamil.
+        have to redo it with every call to cost fun. Also,
+        when self.num_samples !=0,  an executable (output of Rigetti
+        compile() function) is stored for each term in the hamiltonian
+        hamil. When num_samples=0, we replace those executables by a list of
+        Program lines.
 
-        Parameters
-        ----------
         Parameters
         ----------
         qc : QuantumComputer
@@ -69,63 +79,65 @@ class MeanHamilMinimizer_rigetti(MeanHamilMinimizer):
         self.translator = Qubiter_to_RigettiPyQuil(
             self.file_prefix, self.num_bits,
             aqasm_name='RigPyQuil', prelude_str='', ending_str='')
+        with open(self.translator.aqasm_path, 'r') as fi:
+            self.translation_line_list = fi.readlines()
 
-        # pg prelude
         pg = Program()
         self.pg = pg
-        pg += Pragma('INITIAL_REWIRING', ['"PARTIAL"'])
-        if self.do_resets:
-            pg += RESET()
-        ro = pg.declare('ro', 'BIT', self.num_bits)
-        s = ''
-        for var_num in self.all_var_nums:
-            vname = self.translator.vprefix + str(var_num)
-            s += vname
-            s += ' = pg.declare("'
-            s += vname
-            s += '", memory_type="REAL")\n'
-        exec(s)
+        if self.num_samples:
 
-        # add to pg the operations that are independent of hamil
-        with open(self.translator.aqasm_path, 'r') as fi:
-            lines = fi.readlines()
-        for line in lines:
-            line = line.strip('\n')
-            if line:
-                exec(line)
+            # pg prelude
+            pg += Pragma('INITIAL_REWIRING', ['"PARTIAL"'])
+            if self.do_resets:
+                pg += RESET()
+            ro = pg.declare('ro', 'BIT', self.num_bits)
+            s = ''
+            for var_num in self.all_var_nums:
+                vname = self.translator.vprefix + str(var_num)
+                s += vname
+                s += ' = pg.declare("'
+                s += vname
+                s += '", memory_type="REAL")\n'
+            exec(s)
 
-        len_pg_in = len(pg)
+            # add to pg the operations that are independent of hamil
+            for line in self.translation_line_list:
+                line = line.strip('\n')
+                if line:
+                    exec(line)
 
-        # hamil loop to store executables for each term in hamil
-        self.term_to_exec = {}
-        for term, coef in self.hamil.terms.items():
-            bit_pos_to_xy_str = {}
-            for bit_pos, action in term:
-                if action != 'Z':
-                    bit_pos_to_xy_str[bit_pos] = action
+            len_pg_in = len(pg)
 
-            # reset pg to initial length
+            # hamil loop to store executables for each term in hamil
+            self.term_to_exec = {}
+            for term, coef in self.hamil.terms.items():
+                bit_pos_to_xy_str = {}
+                for bit_pos, action in term:
+                    if action != 'Z':
+                        bit_pos_to_xy_str[bit_pos] = action
 
-            # Temporary work-around to bug
-            # in PyQuil ver 2.5.0.
-            # Slicing was changing
-            # pg from type Program to type list
-            pg = Program(pg[:len_pg_in])
-            self.pg = pg
+                # reset pg to initial length
 
-            # add xy measurements coda to pg
-            MeanHamilMinimizer_rigetti.add_xy_meas_coda_to_program(
-                pg, bit_pos_to_xy_str)
+                # Temporary work-around to bug
+                # in PyQuil ver 2.5.0.
+                # Slicing was changing
+                # pg from type Program to type list
+                pg = Program(pg[:len_pg_in])
+                self.pg = pg
 
-            # request measurements
-            for i in range(self.num_bits):
-                pg += MEASURE(i, ro[i])
+                # add xy measurements coda to pg
+                MeanHamilMinimizer_rigetti.add_xy_meas_coda_to_program(
+                    pg, bit_pos_to_xy_str)
 
-            pg.wrap_in_numshots_loop(shots=self.num_samples)
+                # request measurements
+                for i in range(self.num_bits):
+                    pg += MEASURE(i, ro[i])
 
-            executable = self.qc.compile(pg)
-            # print(",,,...", executable)
-            self.term_to_exec[term] = executable
+                pg.wrap_in_numshots_loop(shots=self.num_samples)
+
+                executable = self.qc.compile(pg)
+                # print(",,,...", executable)
+                self.term_to_exec[term] = executable
             
     @staticmethod
     def add_xy_meas_coda_to_program(prog, bit_pos_to_xy_str):
@@ -157,9 +169,10 @@ class MeanHamilMinimizer_rigetti(MeanHamilMinimizer):
     def emp_hamil_mean_val(self, var_num_to_rads):
         """
         This method returns the empirically determined Hamiltonian mean
-        value. Takes as input the values of placeholder variables. It passes
-        parameter values ( contained in input var_num_to_rads) into the
-        Rigetti method run().
+        value. It takes as input the values of placeholder variables. It
+        passes those values into the Rigetti method run() when num_samples
+        !=0. When num_samples=0, WavefunctionSimulator is used to calculate
+        the output mean value exactly.
 
         Parameters
         ----------
@@ -171,42 +184,66 @@ class MeanHamilMinimizer_rigetti(MeanHamilMinimizer):
 
         """
         # hamil loop
-        arr_1 = np.array([1., 1.])
-        arr_z = np.array([1., -1.])
+        arr_plus = np.array([1., 1.])
+        arr_minus = np.array([1., -1.])
         mean_val = 0
         for term, coef in self.hamil.terms.items():
             # we have checked before that coef is real
             coef = complex(coef).real
             
-            # build real_vec from arr_list.
-            # real_vec will be used at end of loop
-            arr_list = [arr_1]*self.num_bits
+            # build real_arr from arr_list.
+            # real_arr will be used at end of loop
+            arr_list = [arr_plus]*self.num_bits
             for bit_pos, action in term:
-                arr_list[bit_pos] = arr_z
-            real_vec = utg.kron_prod(arr_list)
-            real_vec = np.reshape(real_vec, tuple([2]*self.num_bits))
+                arr_list[bit_pos] = arr_minus
+            real_arr = utg.kron_prod(arr_list)
+            real_arr = np.reshape(real_arr, tuple([2]*self.num_bits))
 
-            # send and receive from cloud, get obs_vec
             vprefix = self.translator.vprefix
             var_name_to_rads = {vprefix + str(vnum): [rads]
                 for vnum, rads in var_num_to_rads.items()}
-            # print(',mmnnb', var_name_to_rads)
-            bitstrings = self.qc.run(self.term_to_exec[term], 
-                                     memory_map=var_name_to_rads)
-            obs_vec = RigettiTools.obs_vec_from_bitstrings(
-                    bitstrings, self.num_bits, bs_is_array=True)
-            
-            # go from obs_vec to effective state vec
-            counts_dict = StateVec.get_counts_from_obs_vec(self.num_bits,
-                                                           obs_vec)
-            emp_pd = StateVec.get_empirical_pd_from_counts(self.num_bits,
-                                                           counts_dict)
-            emp_st_vec = StateVec.get_emp_state_vec_from_emp_pd(
-                    self.num_bits, emp_pd)
-            
+            if self.num_samples:
+                # send and receive from cloud, get obs_vec
+                bitstrings = self.qc.run(self.term_to_exec[term],
+                                         memory_map=var_name_to_rads)
+                obs_vec = RigettiTools.obs_vec_from_bitstrings(
+                        bitstrings, self.num_bits, bs_is_array=True)
+
+                # go from obs_vec to effective state vec
+                counts_dict = StateVec.get_counts_from_obs_vec(self.num_bits,
+                                                               obs_vec)
+                emp_pd = StateVec.get_empirical_pd_from_counts(self.num_bits,
+                                                               counts_dict)
+                effective_st_vec = StateVec.get_emp_state_vec_from_emp_pd(
+                        self.num_bits, emp_pd)
+            else:  # num_samples = 0
+                sim = WavefunctionSimulator()
+                bit_pos_to_xy_str = {}
+                for bit_pos, action in term:
+                    if action != 'Z':
+                        bit_pos_to_xy_str[bit_pos] = action
+                pg = Program()
+                # don't know how to declare number of qubits
+                # so do this
+                for k in range(self.num_bits):
+                    pg += I(k)
+                for key, val in var_name_to_rads.items():
+                    exec(key + '=' + str(val[0]))
+                for line in self.translation_line_list:
+                    line = line.strip('\n')
+                    if line:
+                        exec(line)
+                MeanHamilMinimizer_rigetti.add_xy_meas_coda_to_program(
+                    pg, bit_pos_to_xy_str)
+                st_vec_arr = sim.wavefunction(pg).amplitudes
+                st_vec_arr = st_vec_arr.reshape([2]*self.num_bits)
+                perm = list(reversed(range(self.num_bits)))
+                st_vec_arr = np.transpose(st_vec_arr, perm)
+                effective_st_vec = StateVec(self.num_bits, st_vec_arr)
+
             # add contribution to mean
-            mean_val += coef*emp_st_vec.\
-                    get_mean_value_of_real_diag_mat(real_vec).real
+            mean_val += coef*effective_st_vec.\
+                    get_mean_value_of_real_diag_mat(real_arr)
 
         return mean_val
 

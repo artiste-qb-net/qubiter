@@ -16,6 +16,11 @@ if 'autograd.numpy' not in sys.modules:
 else:
     import autograd.numpy as np
 
+References
+----------
+1. https://github.com/HIPS/autograd/blob/master/docs/tutorial.md
+2. https://github.com/HIPS/autograd/blob/master/docs/updateguide.md
+
 """
 import autograd.numpy as np
 from autograd import grad, jacobian

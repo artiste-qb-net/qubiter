@@ -16,16 +16,79 @@ class MeanHamilMinimizer(CostMinimizer):
     MeanHamilMinimizer_rigetti are children of this class. Whereas its
     parent embodies the essence of any cost minimizing object, this class
     embodies the essence of an object specifically designed to minimize a
-    cost function which equals the mean value of a Hamiltonian.
-     
+    cost function which equals the mean value of a Hamiltonian. In Qubiter's
+    docstrings, we refer to this as the Mean Hamiltonian Minimization Problem.
+
+    The qc history of this problem started with quantum chemists planning to
+    use on a qc the phase estimation algo invented by Kitaev? (an algo that
+    is also implemented in Qubiter) to estimate the energy levels (
+    eigenvalues) of simple molecules, initially H2. Then a bunch of people
+    realized, heck, rather than trying to estimate the eigenvalues of a
+    Hamiltonian by estimating the phase changes it causes, we can estimate
+    those eigenvalues more efficiently by estimating the mean value of that
+    Hamiltonian as measured empirically on a qc. Basically, just the
+    Rayleigh-Ritz method, one of the oldest tricks in the book. One of the
+    first papers to propose this mean idea is
+    https://arxiv.org/abs/1304.3061 Their algo is commonly referred to by
+    the ungainly name VQE (Variational Quantum Eigensolver) VQE was
+    originally applied to do quantum chemistry with a qc. But now Rigetti
+    and others have renamed it hybrid quantum-classical quantum computing
+    and pointed out that it's an algo that has wide applicability, not just
+    to quantum chemistry.
+
+    The idea behind hybrid quantum-classical is very simple. One has a
+    classical box CBox and a quantum box QBox. The gates of QBox depend on N
+    gate parameters. QBox sends info to CBox. CBox sends back to QBox N new
+    gate parameters that will lower some cost function. This feedback
+    process between CBox and QBox continues until the cost is minimized. The
+    cost function is the mean value of a Hamiltonian which is estimated
+    empirically from data obtained from the qc which resides inside the QBox.
+
+    To minimize a function of N continuous parameters, one can use some
+    methods like simulated annealing and Powell that do not require
+    calculating derivatives, or one can use methods that do use derivatives.
+    Another possible separation is between methods that don't care which
+    local minimum they find, as long as they find one of them, and those
+    methods that try to find the best local minimum of them all, the so
+    called global minimum. Yet another separation is between methods that
+    allow constraints and those that don't.
+
+    Among the methods that do use derivatives, the so called gradient based
+    methods only use the 1st derivative, whereas other methods use both
+    first (Jacobian) and second (Hessian) derivatives. The performance of
+    those that use both 1st and 2nd derivatives degrades quickly as N grows.
+    Besides, calculating 2nd derivatives is very expensive. Hence, methods
+    that use the 2nd derivatives are practically useless in the neural
+    network field where N is usually very large. In that field, gradient
+    based methods rule.
+
+    A method that uses no derivatives is Powell. A gradient based method
+    that is designed to have a fast convergence rate is the Conjugate
+    Gradient (CG) method. Another gradient based method is back-propagation
+    (BP). BP can be implemented as distributed computing much more easily
+    than other gradient based methods so it is favored by the most popular
+    computer programs for doing distributed AI, such as PyTorch and
+    Tensorflow.
+
+    The children of this class can perform minimization via various
+    interfaces ('scipy', 'autograd', 'pytorch', 'tflow').
+
+    Non-scipy interfaces implement backprop.
+
+    The 'scipy' interface is a wrapper for the scipy function
+    `scipy.optimize.minimize`. This scipy umbrella method implements many
+    minimization methods, including Powell and CG.
+
+    https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html
+
     file_prefix identifies the location of an English file that specifies a
     quantum circuit. If init_st_vec=None, we assume that the initial state
     of that quantum circuit is the ground state (all qubits in state |0>).
     Let |psi> be the final state vector that evolves from that circuit. Let
     hamil be a Hamiltonian suitable for that circuit and stored as an object
-    of QubitOperator--- a class of the open-source lib OpenFermion. Then the
+    of QubitOperator (a class of the open-source lib OpenFermion). Then the
     cost function to be minimized is <psi|hamil|psi>.
-    
+
     Attributes
     ----------
     all_var_nums : list[int]
@@ -162,16 +225,16 @@ class MeanHamilMinimizer(CostMinimizer):
             coef = complex(coef).real
 
             # add measurement coda for this term of hamil
-            # build real_vec from arr_list.
-            # real_vec will be used at end of loop
+            # build real_arr from arr_list.
+            # real_arr will be used at end of loop
             arr_list = [arr_plus]*self.num_bits
             bit_pos_to_xy_str = {}
             for bit_pos, action in term:
                 arr_list[bit_pos] = arr_minus
                 if action != 'Z':
                     bit_pos_to_xy_str[bit_pos] = action
-            real_vec = utg.kron_prod(arr_list)
-            real_vec = np.reshape(real_vec, tuple([2]*self.num_bits))
+            real_arr = utg.kron_prod(arr_list)
+            real_arr = np.reshape(real_arr, tuple([2]*self.num_bits))
             wr = CodaSEO_writer(self.file_prefix,
                                 fin_file_prefix, self.num_bits)
             wr.write_xy_measurements(bit_pos_to_xy_str)
@@ -191,9 +254,8 @@ class MeanHamilMinimizer(CostMinimizer):
             # self.init_st_vec, fin_st_vec)
 
             # get effective state vec
-            if not num_fake_samples:
-                effective_st_vec = fin_st_vec
-            else:  # if num_fake_samples !=0, then
+            if num_fake_samples:
+                # if num_fake_samples !=0, then
                 # sample qubiter-generated empirical prob dist
                 pd = fin_st_vec.get_pd()
                 obs_vec = StateVec.get_observations_vec(self.num_bits,
@@ -206,10 +268,12 @@ class MeanHamilMinimizer(CostMinimizer):
                 emp_st_vec = StateVec.get_emp_state_vec_from_emp_pd(
                         self.num_bits, emp_pd)
                 effective_st_vec = emp_st_vec
+            else:  # num_fake_samples = 0
+                effective_st_vec = fin_st_vec
 
             # add contribution to mean
             mean_val += coef*effective_st_vec.\
-                    get_mean_value_of_real_diag_mat(real_vec)
+                    get_mean_value_of_real_diag_mat(real_arr)
 
         # create this coda writer in order to delete final files
         wr1 = CodaSEO_writer(self.file_prefix, fin_file_prefix, self.num_bits)
