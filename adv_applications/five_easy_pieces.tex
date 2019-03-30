@@ -4,6 +4,8 @@
 \newcommand{\ket}[1]{|#1\rangle}
 \newcommand{\beq}{\begin{equation}}
 \newcommand{\eeq}{\end{equation}}
+\newcommand{\beqa}{\begin{eqnarray}}
+\newcommand{\eeqa}{\end{eqnarray}}
 \begin{document}
 
 \title{Calculating the Gradient of a Cost Function\\
@@ -211,7 +213,7 @@ This begs the question,
 can we calculate the gradient
 of a general U(2) matrix,
 in an exact, closed form
-that is just as  
+that is just as
 convenient? Yes we can, as I will show next.
 
 Now let us consider the most general U(2).
@@ -252,7 +254,7 @@ where we are abbreviating
   \label{gen_der}
   \eeq
  Eq.(\ref{gen_der}) has
- been checked numerically 
+ been checked numerically
  by Qubiter's code. and is already
 coded into Qubiter's implementation of Autograd.
 
@@ -370,7 +372,7 @@ because then
 The fact that Eq.(\ref{easy_controls})
 holds can be easily verified
 by considering the two
-cases $n(1)n(2)=0,1$ separately. 
+cases $n(1)n(2)=0,1$ separately.
 If LHS=left hand side,
 RHS=right hand side, refer to the two sides of
 Eq.(\ref{easy_controls}):
@@ -505,5 +507,424 @@ in Eq.(\ref{fin_decomp_of_udot}) to get
 partials of $U$ with respect to $\theta_2$
 and $\theta_3$.
 
+\section*{ADDED LATER}
+The above essay was written in a colloquial style
+with the aim of generating interest among
+ my peers in this subject.
+A week later, I am adding this more technical
+appendix to
+fill in some of the gaps that
+were
+left behind in the above colloquial treatment.
+What I do in this appendix is to show how to
+express the
+gradient of the cost function as a sum of
+mean values that are
+readily evaluated empirically on a real qc.
+
+Suppose $a, A$ are integers such that $a\leq A$,
+and $\Omega_j$ are operators acting on $N_b$ qubits.
+Define
+\beq
+\Omega_{[a,A]} = \Omega_a \Omega_{a+1}\ldots \Omega_{A}
+\;
+\eeq
+and
+
+\beq
+\Omega_{[A,a]} = \Omega_A\ldots \Omega_{a+1} \Omega_{a}
+\;.
+\eeq
+Note that
+
+\beq
+(\Omega_{[a, A]})^\dagger = \Omega^\dagger_{[A,a]}
+\;.
+\eeq
+
+The cost function that we minimize
+in Hybrid Quantum Classical computing
+ can be expressed analytically as
+
+\beq C = \bra{\psi_0}(\Omega_{[T-1,0]})^\dagger H
+\Omega_{[T-1,0]}\ket{\psi_0}
+\;,
+\eeq
+where the $\Omega_j$ are unitary operators
+and $H$ is a Hermitian operator
+acting on $N_b$ qubits. Now let us
+focus on
+taking the derivative of $\Omega_\tau$, the gate for a particular time
+$\tau \in \{0,1, \ldots T-1\}$. Define
+
+\beq
+\ket{\psi_\tau} = \Omega_{[\tau-1, 0]}\ket{\psi_0}
+\;
+\eeq
+and
+
+\beq
+H_\tau = (\Omega_{[T-1,\tau]})^\dagger H \Omega_{[T-1,\tau]}
+\;.
+\eeq
+Henceforth,
+we will
+use the angled brackets to
+ denote an average with respect to
+state $\ket{\psi_\tau}$:
+\beq
+\bra{\psi_\tau}\cdot\ket{\psi_\tau}
+=
+\langle \cdot\rangle
+\;.
+\eeq
+Using the above notation, the
+cost function and its derivative
+with respect to a parameter $\theta_{\tau 1}$
+that lives inside the operator $\Omega_{\tau 1}$,
+can be expressed as
+
+\beq
+C = \langle H_\tau\rangle
+\;,
+\eeq
+and
+
+
+\beq
+\frac{\partial C}{\partial\theta_{\tau 1}}
+=
+\langle H_\tau
+\Omega_\tau^\dagger
+\frac{\partial \Omega_\tau}{\partial\theta_{\tau 1}}
+\rangle
++ h.c.
+\;
+\label{derv_cost1}
+\eeq
+h.c. denotes the hermitian conjugate
+of the preceding twin expression.
+
+Let $U_{\tau 1}(0)$
+be an element of $SU(2)$ acting on qubit 0.
+$U_{\tau 1}(0)$ can be parameterized as
+
+
+\beq
+U_{\tau 1}(0)=
+e^{i[\theta_{\tau 1}\sigma_X(0)
++
+\theta_{\tau 2}\sigma_Y(0)
++
+\theta_{\tau 3}\sigma_Z(0)]}
+\;,
+\eeq
+where the $\theta_{\tau d}$ for $d=1,2,3$
+are real numbers,
+and $\sigma_X(0), \sigma_Y(0), \sigma_Z(0)$
+are
+the Pauli matrices acting on qubit 0.
+For definiteness and as a good illustration,
+we will henceforth assume that the
+unitary operator $\Omega_\tau$
+has the special form
+of an SU(2) gate with two controls:
+
+\beq
+\Omega_{\tau}=
+U_{\tau 1}(0)^{n(1)n(2)}
+\;,
+\label{special_omega_tau}
+\eeq
+where, as usual, $n=\ket{0}\bra{0}$
+is the number operator, and $n(1), n(2)$
+are number operators acting on qubits 1 and 2,
+respectively.
+As was shown in the main part of this essay,
+one can express the partial derivative of
+$U_{\tau 1}(0)$ with respect
+ to its parameter $\theta_{\tau 1}$,
+as a linear combination
+
+
+\beq
+\frac{\partial U_{\tau 1}(0)}{\partial\theta_{\tau 1}}
+=
+\sum_k \lambda_{\tau 1,k} V_{\tau 1,k}(0)
+\;,
+\label{lin_comb}
+\eeq
+where the
+coefficients $\lambda_{\tau 1,k}$
+are real numbers and the
+$V_{\tau 1,k}(0)$ are elements of $SU(2)$.
+Here
+$k=1,2,3$ (we exclude the two terms that sum to zero
+because there is no need for them in this situation).
+From Eqs.(\ref{special_omega_tau})
+and (\ref{lin_comb}), it follows that
+
+\beq
+\Omega^\dagger_\tau
+\frac{\partial \Omega_\tau}{\partial\theta_{\tau 1}}
+=
+\sum_k \lambda_{\tau 1,k}\left[
+n(1)n(2)U^\dagger_{\tau 1,k}(0)V_{\tau 1,k}(0)
+\right]
+\;,
+\eeq
+which, when substituted into Eq.(\ref{derv_cost1}),
+yields:
+
+\beq
+\frac{\partial C}{\partial\theta_{\tau 1}}
+=
+\sum_k \lambda_{\tau 1,k}
+\left\langle
+H_\tau n(1)n(2)U^\dagger_{\tau 1,k}(0)V_{\tau 1,k}(0)
++h.c.\right\rangle
+\;.
+\eeq
+
+Note that
+$U^\dagger_{\tau 1,k}(0)V_{\tau 1,k}(0)$ is
+a product of SU(2) matrices, so
+it is itself an SU(2)
+matrix acting on qubit 0.
+Hence, it can be expressed as
+
+\beq
+U^\dagger_{\tau 1,k}(0)V_{\tau 1,k}(0)
+= c_{\tau 1,k} +i \sigma_{\hat{\alpha}_{\tau 1,k}}(0)
+s_{\tau 1,k}
+\;,
+\eeq
+where we abbreviate
+
+\beq
+c_{\tau 1,k} = \cos(\alpha_{\tau 1,k}), \;\;
+s_{\tau 1,k} = \sin(\alpha_{\tau 1,k})
+\;.
+\eeq
+$\alpha_{\tau 1,k}$ is a real number
+and $\hat{\alpha}_{\tau 1,k}$ is a real
+valued unit vector.
+
+Note also that, since
+
+\beq
+n(1)  = \frac{1-\sigma_Z(1)}{2}, \;\;
+n(2)  = \frac{1-\sigma_Z(2)}{2}
+\;,
+\eeq
+one has
+
+\beqa
+n(1)n(2) &=&
+\frac{1}{4}[1 - \sigma_Z(1) - \sigma_Z(2)
++ \sigma_Z(1)\sigma_Z(2)]\\&=&
+\frac{1}{4}\sum_{a=0}^1\sum_{b=0}^1 (-1)^{a+b}
+ \sigma^a_Z(1)\sigma^b_Z(2)
+\;.
+\label{n1n2_sum}
+\eeqa
+
+At this point, it clear that
+in order to evaluate
+$\frac{\partial C}{\partial\theta_{\tau 1}}$
+empirically, one needs to
+evaluate empirically two
+types of mean values
+that we will refer to as types A and B:
+
+\beq
+A_\tau = \langle H_\tau n(1)n(2) + h.c.\rangle
+\;,
+\eeq
+
+\beq
+B_{\tau,k} = \langle H_\tau \sigma^a_Z(1)\sigma_Z^b(2)
+i \sigma_{\hat{\alpha}_{\tau 1,k}}(0) + h.c.\rangle
+\;.
+\eeq
+Note that if we use Eq.(\ref{n1n2_sum})
+in type A (as we did for type B),
+then the two terms on the RHS of type A
+are each a product of Pauli matrices,
+whereas in type B, the two terms on the RHS
+are each a product of Pauli matrices \underline{times $i$}.
+As we shall see, that extra $i$ in type B
+has giant repercussions, making very different
+the methods that can be used to evaluate  type A and B
+mean values. As we shall see, evaluating
+type A mean values
+requires some post-selection, whereas
+evaluating type B ones doesn't.
+Type A mean values don't arise if
+gate $\Omega_\tau$ has no controls.
+So far, the PennyLane software only
+considers evaluating the gradient of uncontrolled
+gates, so they never have to evaluate
+type A mean values.
+
+The above definitions for type A and B
+mean values are not in a form that is
+readily evaluated empirically on a qc.
+The rest of this note will be devoted to
+recasting them into a new form that is.
+
+
+Define
+\beq
+\Sigma(0,1,2) = \sigma^a_Z(1)\sigma_Z^b(2)
+ \sigma_{\hat{\alpha}_{\tau 1,k}}(0)
+\;.
+\eeq
+Note that $\Sigma$
+is a tensor product of Pauli matrices so it satisfies
+
+\beq
+\Sigma^\dagger = \Sigma, \;\; \Sigma^2=1
+\;.
+\label{Sigma_ids}
+\eeq
+Taylor expanding and using Eqs.(\ref{Sigma_ids}),
+one can easily show that
+
+\beq
+Q=e^{i\frac{\pi}{4}\Sigma}
+=\frac{1 + i\Sigma}{\sqrt{2}}
+\;.
+\eeq
+Therefore\footnote{Ref.\cite{xanadu} credits
+Ref.\cite{japan} as the first
+paper to use
+Eq.(\ref{japan_eq})
+in the context of evaluating
+gradients of cost functions in quantum computing.}
+
+\beqa
+B_{\tau,k} &=& i\langle H_\tau \Sigma - h.c.\rangle\\
+&=&
+\left\langle
+Q^\dagger H_\tau Q
+- Q H_\tau Q^\dagger
+\right\rangle
+\;.
+\label{japan_eq}
+\eeqa
+Eq.(\ref{japan_eq}) expresses type B mean
+values in a form
+that is readily evaluated empirically on a real
+qc. Can we do the same for type A mean values?
+
+
+Recall that if $\sigma_Z(\beta)$ is the $Z$ Pauli matrix,
+and $n(\beta)=\ket{0}\bra{0}_\beta$ is the number operator,
+acting on qubit $\beta$,
+then
+
+\beq
+1-2n(\beta) = (-1)^{n(\beta)} = \sigma_Z(\beta)
+\;.
+\eeq
+This result relies on the fact
+that the projection operator $n$
+satisfies $n^2=n$  and therefore
+can only have two eigenvalues, 0 and 1.
+Let
+
+\beq
+\eta = n(1)n(2)
+\;.
+\eeq
+Eta's square also equals itself so
+$\eta\in \{0, 1\}$. Therefore
+
+\beq
+1-2\eta = (-1)^{\eta} = (-1)^{n(1)n(2)} = \sigma_Z(1)^{n(2)}=
+\sigma_Z(2)^{n(1)}
+\;.
+\eeq
+and
+
+\beqa
+H\eta + \eta H &=&
+\frac{-1}{2}(1-2\eta)H(1-2\eta) + \frac{1}{2}H
++ 2\eta H\eta\\
+&=&
+\frac{-1}{2}(-1)^\eta)H(-1)^\eta + \frac{1}{2}H
++ 2\eta H \eta
+\;.
+\eeqa
+This allows us to express type A mean values as
+
+\beq
+A_\tau =\frac{-1}{2}
+\langle (-1)^\eta H_\tau (-1)^\eta\rangle
++ \frac{1}{2}\langle H_\tau \rangle
++ 2\langle\eta H_\tau \eta\rangle
+\;.
+\label{A-as-3-mean-values}
+\eeq
+
+Of the 3 mean values on the RHS of
+Eq.(\ref{A-as-3-mean-values}),
+the first two are readily
+evaluated empirically on a qc.
+The third one,
+$\langle\eta H_\tau \eta\rangle$, is not so ready.
+One possible way to evaluate
+$\langle\eta H_\tau \eta\rangle$ on a qc
+is to first express
+the Hermitian operator $H_\tau$
+as a ``QubitOperator". {\tt QubitOperator}
+is a class
+in the open-source software
+OpenFermion. In other words, decompose
+$\langle\eta H_\tau \eta\rangle$
+into a linear combination
+ with real coefficients $c_r$
+of tensor products of a Pauli operator
+(or the identity) acting on each qubit:
+
+\beq
+H_\tau = \sum_r c_r \prod_{\beta=0}^{N_b-1}
+\sigma_{d_{\beta,r}}(\beta)
+\;.
+\eeq
+Here $d_{\beta,r} \in \{0,1,2,3\}$
+so as to include the identity and the 3 Pauli matrices.
+It follows that
+
+\beqa
+\left\langle\eta H_\tau\eta \right\rangle &=&
+\sum_r c_r
+\left\langle\eta
+\prod_{\beta=0}^{N_b-1}
+\sigma_{d_{\beta_r}}(\beta) \eta\right\rangle
+\\
+&=&\sum_r c_r
+\bra{1}\sigma_{d_1}(1)\ket{1}
+\bra{1}\sigma_{d_2}(2)\ket{1}
+\left\langle n(1)n(2)
+\prod_{\beta\neq 1,2}
+\sigma_{d_\beta}(\beta)\right\rangle
+\;.
+\eeqa
+This final form for $\langle\eta H_\tau \eta\rangle$
+makes it clear how to
+evaluate it empirically on a qc. It involves
+post-selecting the outcomes of qubits 1 and 2.
+
+\begin{thebibliography}{99}
+\bibitem{japan}
+	Kosuke Mitarai, Makoto Negoro,
+Masahiro Kitagawa, and Keisuke Fujii.
+ ``Quantum circuit learning" arXiv:1803.00745.
+\bibitem{xanadu}
+PennyLane documentation has large list of references
+to arXiv papers.
+\end{thebibliography}
 
 \end{document}
