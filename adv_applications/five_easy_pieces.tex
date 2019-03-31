@@ -740,6 +740,7 @@ that we will refer to as types A and B:
 \beq
 A_\tau = \langle H_\tau n(1)n(2) + h.c.\rangle
 \;,
+\label{first_A_def}
 \eeq
 
 \beq
@@ -916,6 +917,100 @@ This final form for $\langle\eta H_\tau \eta\rangle$
 makes it clear how to
 evaluate it empirically on a qc. It involves
 post-selecting the outcomes of qubits 1 and 2.
+
+
+\section*{ADDED LATER (2)}
+
+After posting the first addition 
+to this essay yesterday, I
+thought of a way of expressing the 
+gradient of the cost function in a 
+form that is readily evaluated on
+a quantum computer and does not require
+the computationally expensive task of
+expressing $H_\tau$
+as a QubitOperator. This new method uses an extra
+ancilla qubit that I will call $\xi$.
+
+Let us apply Eq.(\ref{n1n2_sum}) to the earlier
+definition Eq.(\ref{first_A_def}) of $A_\tau$
+and redefine $A_\tau$ as
+\beq
+A_\tau = \langle H_\tau \sigma^a_Z(1)\sigma_Z^b(2) + h.c.\rangle
+\;.
+\eeq
+We keep the same defintion of $B_{\tau,k}$ as before:
+
+\beq
+B_{\tau,k} = \langle H_\tau \sigma^a_Z(1)\sigma_Z^b(2)
+i \sigma_{\hat{\alpha}_{\tau 1,k}}(0) + h.c.\rangle
+\;.
+\eeq
+Let
+
+
+\beq
+\Sigma_A(1,2) = \sigma^a_Z(1)\sigma_Z^b(2)
+\;,
+\eeq
+and
+
+\beq
+\Sigma_B(0, 1,2) = \sigma^a_Z(1)\sigma_Z^b(2)
+\sigma_{\hat{\alpha}_{\tau 1,k}}(0)
+\;.
+\eeq
+Note that 
+$\Sigma_I^2 = 1$ and $\Sigma_I^\dagger = \Sigma_I$
+for $I=A,B$ so the $\Sigma_I$ 
+behave like single Pauli matrices.
+
+The idea is to initialize
+the ancilla qubit $\xi$ in state $\ket{0}$,
+then apply a Hadamard matrix to it,
+then apply a gate $\Sigma_I^{n(\xi)}$
+which acts on the main system but has $\xi$
+as a control, then finally
+measure 
+the mean value of a Pauli matrix for qubit $\xi$
+(measure $\sigma_X(\xi)$ for type A mean values 
+or $\sigma_Y(\xi)$ for type B mean values).
+
+
+\beqa
+A_\tau&=& 
+\langle H_\tau \Sigma_A + \Sigma_A H_\tau \rangle
+\\
+&=&
+\left[
+\begin{array}{ccccc}
+\bra{\psi_\tau}
+&\mid&H_\tau&\mid&\ket{\psi_\tau}\\
+&\Sigma_A^{n(\xi)}&&\Sigma_A^{n(\xi)}&\\
+2\bra{0}_\xi
+Had(\xi)&\mid&\sigma_X(\xi)&\mid&Had(\xi)\ket{0}_\xi
+\end{array}
+\right]
+\;
+\eeqa
+
+\beqa
+B_{\tau,k} &=& i\langle H_\tau \Sigma_B - \Sigma_B H_\tau \rangle
+\\
+&=&
+\left[
+\begin{array}{ccccc}
+\bra{\psi_\tau}
+&\mid&H_\tau&\mid&\ket{\psi_\tau}\\
+&\Sigma_B^{n(\xi)}&&\Sigma_B^{n(\xi)}&\\
+2\bra{0}_\xi
+Had(\xi)&\mid&\sigma_Y(\xi)&\mid&Had(\xi)\ket{0}_\xi
+\end{array}
+\right]
+\;
+\eeqa
+
+
 
 \begin{thebibliography}{99}
 \bibitem{japan}
