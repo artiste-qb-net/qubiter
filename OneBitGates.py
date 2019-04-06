@@ -71,7 +71,7 @@ class OneBitGates:
     @staticmethod
     def P_1(is_quantum=True):
         """
-        Returns projection operator P_1 = |1><1| = nbar, where |0> = [1,
+        Returns projection operator P_1 = |1><1| = n, where |0> = [1,
         0]^T and |1> = [0, 1]^T, T = transpose
 
         Parameters
