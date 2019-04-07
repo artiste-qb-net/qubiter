@@ -4,10 +4,8 @@ from io import StringIO
 from SEO_simulator import *
 
 
-class SEO_Listing:
+class SEO_Lista:
     """
-    Eng=English
-
     Whereas with Qubiter, the main way of storing circuits is **in files**,
     with programs like PyQuil (by Rigetti) and Cirq (by Google), circuits (
     aka programs) are stored **entirely in memory**, essentially as Python
@@ -43,7 +41,7 @@ class SEO_Listing:
     @staticmethod
     def new_line(num_bits, fun_name, param_list):
         """
-        This method returns a new SEO_Listing with a single line for a
+        This method returns a new SEO_Lista with a single line for a
         single gate. fun_name is the name of any function in SEO_writer
         whose name starts with the string 'write_' and param_list is a list
         containing values for the arguments of fun_name. This method creates
@@ -64,7 +62,7 @@ class SEO_Listing:
 
         Returns
         -------
-        SEO_Listing
+        SEO_Lista
 
         """
         assert fun_name[:6] == 'write_'
@@ -81,7 +79,7 @@ class SEO_Listing:
         eng_out.close()
         pic_out.close()
 
-        return SEO_Listing(num_bits, [line])
+        return SEO_Lista(num_bits, [line])
 
     @staticmethod
     def eng_file_to_line_list(file_prefix, num_bits):
@@ -148,7 +146,7 @@ class SEO_Listing:
         None
 
         """
-        SEO_Listing.line_list_to_eng_and_pic_files(
+        SEO_Lista.line_list_to_eng_and_pic_files(
             self.line_list, file_prefix, self.num_bits)
 
     def simulate(self, init_st_vec=None, **kwargs):
@@ -221,32 +219,32 @@ class SEO_Listing:
 
     def __add__(self, other):
         """
-        define + of two SEO_Listing objects
+        define + of two SEO_Lista objects
 
         Parameters
         ----------
-        other : SEO_Listing
+        other : SEO_Lista
 
         Returns
         -------
-        SEO_Listing
+        SEO_Lista
 
         """
         assert self.num_bits == other.num_bits
-        return SEO_Listing(self.num_bits,
-                           self.line_list + other.line_list)
+        return SEO_Lista(self.num_bits,
+                         self.line_list + other.line_list)
 
     def __iadd__(self, other):
         """
-        define += for inplace addition of an SEO_Listing object to self
+        define += for inplace addition of an SEO_Lista object to self
 
         Parameters
         ----------
-        other : SEO_Listing
+        other : SEO_Lista
 
         Returns
         -------
-        SEO_Listing
+        SEO_Lista
 
         """
         assert self.num_bits == other.num_bits
@@ -263,10 +261,10 @@ class SEO_Listing:
 
         Returns
         -------
-        SEO_Listing
+        SEO_Lista
 
         """
-        return SEO_Listing(self.num_bits, self.line_list[item])
+        return SEO_Lista(self.num_bits, self.line_list[item])
 
     def herm(self):
         """
@@ -275,11 +273,11 @@ class SEO_Listing:
 
         Returns
         -------
-        SEO_Listing
+        SEO_Lista
 
         """
         rev_li = list(reversed(self.line_list))
-        listing = SEO_Listing(self.num_bits, rev_li)
+        lista = SEO_Lista(self.num_bits, rev_li)
 
         def minus(in_str):
             if in_str[0] == '-':
@@ -288,7 +286,7 @@ class SEO_Listing:
                 new_str = '-' + in_str
             return new_str
 
-        for line_pos, line in enumerate(listing.line_list):
+        for line_pos, line in enumerate(lista.line_list):
             split_line = line.split('\t')
             line_name = split_line[0]
             if line_name == 'DIAG':
@@ -341,8 +339,8 @@ class SEO_Listing:
             else:
                 assert False, \
                     "reading an unsupported line kind: " + line_name
-            listing.line_list[line_pos] = '\t'.join(split_line)
-        return listing
+            lista.line_list[line_pos] = '\t'.join(split_line)
+        return lista
 
 if __name__ == "__main__":
     def main():
@@ -358,44 +356,44 @@ if __name__ == "__main__":
         wr.write_cnot(2, 3)
         wr.close_files()
 
-        lili = SEO_Listing.eng_file_to_line_list(file_prefix, num_bits)
-        listing = SEO_Listing(num_bits, lili)
+        lili = SEO_Lista.eng_file_to_line_list(file_prefix, num_bits)
+        lista = SEO_Lista(num_bits, lili)
 
-        print("\nlisting print")
-        listing.print()
-        nums, names = listing.get_var_nums_and_fun_names()
-        print("listing's all_var_nums=\n", nums)
-        print("listing's all_fun_names=\n", names)
+        print("\nlista print")
+        lista.print()
+        nums, names = lista.get_var_nums_and_fun_names()
+        print("lista's all_var_nums=\n", nums)
+        print("lista's all_fun_names=\n", names)
 
-        listing.write_eng_and_pic_files(file_prefix + '_ditto')
+        lista.write_eng_and_pic_files(file_prefix + '_ditto')
 
-        print("\nlisting[1:] print")
-        listing[1:].print()
+        print("\nlista[1:] print")
+        lista[1:].print()
 
-        listing_twice = listing + listing
+        lista_twice = lista + lista
 
-        print("\nlisting_twice print")
-        listing_twice.print()
-        nums, names = listing_twice.get_var_nums_and_fun_names()
-        print("listing_twice's all_var_nums=\n", nums)
-        print("listing_twice's all_fun_names=\n", names)
+        print("\nlista_twice print")
+        lista_twice.print()
+        nums, names = lista_twice.get_var_nums_and_fun_names()
+        print("lista_twice's all_var_nums=\n", nums)
+        print("lista_twice's all_fun_names=\n", names)
 
-        listing_0 = SEO_Listing(num_bits)
-        listing_0 += listing
+        lista_0 = SEO_Lista(num_bits)
+        lista_0 += lista
 
-        print("\nlisting_0 print")
-        listing_0.print()
+        print("\nlista_0 print")
+        lista_0.print()
 
-        listing_herm = listing.herm()
-        print('\nlisting_herm print')
-        listing_herm.print()
+        lista_herm = lista.herm()
+        print('\nlista_herm print')
+        lista_herm.print()
 
-        one_liner = SEO_Listing.new_line(4,
+        one_liner = SEO_Lista.new_line(4,
             'write_cnot', [0, 1])
         print('\none_liner print')
         one_liner.print()
 
-        one_liner = SEO_Listing.new_line(4,
+        one_liner = SEO_Lista.new_line(4,
             'write_Rn', [2, [np.pi/2, -np.pi/2, np.pi/3]])
         print('\none_liner print')
         one_liner.print()
