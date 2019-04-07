@@ -135,9 +135,7 @@ class SEO_writer:
         str
 
         """
-
-        return self.file_prefix + '_' + str(self.emb.num_bits_aft) +\
-               '_eng.txt'
+        return ug.get_eng_file_path(self.file_prefix, self.emb.num_bits_aft)
 
     def get_pic_file_path(self):
         """
@@ -148,9 +146,8 @@ class SEO_writer:
         str
 
         """
-
-        return self.file_prefix + '_' + str(self.emb.num_bits_aft) +\
-                ('_ZL' if self.ZL else '_ZF') + 'pic.txt'
+        return ug.get_pic_file_path(self.file_prefix, self.emb.num_bits_aft,
+                                    ZL=self.ZL)
 
     def close_files(self):
         """

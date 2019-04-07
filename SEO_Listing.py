@@ -1,9 +1,10 @@
 from EchoingSEO_reader import *
 # from PlaceholderManager import *
 from io import StringIO
+from SEO_simulator import *
 
 
-class EngFileListing:
+class SEO_Listing:
     """
     Eng=English
 
@@ -42,7 +43,7 @@ class EngFileListing:
     @staticmethod
     def new_line(num_bits, fun_name, param_list):
         """
-        This method returns a new EngFileListing with a single line for a
+        This method returns a new SEO_Listing with a single line for a
         single gate. fun_name is the name of any function in SEO_writer
         whose name starts with the string 'write_' and param_list is a list
         containing values for the arguments of fun_name. This method creates
@@ -63,7 +64,7 @@ class EngFileListing:
 
         Returns
         -------
-        EngFileListing
+        SEO_Listing
 
         """
         assert fun_name[:6] == 'write_'
@@ -80,7 +81,7 @@ class EngFileListing:
         eng_out.close()
         pic_out.close()
 
-        return EngFileListing(num_bits, [line])
+        return SEO_Listing(num_bits, [line])
 
     @staticmethod
     def eng_file_to_line_list(file_prefix, num_bits):
@@ -132,17 +133,6 @@ class EngFileListing:
         # this writes a Picture file from the English file just created
         EchoingSEO_reader.pic_file_from_eng_file(file_prefix, num_bits)
 
-    def print(self):
-        """
-        prints self.line_list, one item per line
-
-        Returns
-        -------
-        None
-
-        """
-        print('\n'.join(self.line_list))
-
     def write_eng_and_pic_files(self, file_prefix):
         """
         This method does the same as line_list_to_eng_and_pic_files(),
@@ -158,8 +148,47 @@ class EngFileListing:
         None
 
         """
-        EngFileListing.line_list_to_eng_and_pic_files(
+        SEO_Listing.line_list_to_eng_and_pic_files(
             self.line_list, file_prefix, self.num_bits)
+
+    def simulate(self, init_st_vec=None, **kwargs):
+        """
+        This method creates temporary English and Picture file from self,
+        and uses those to create an object of SEO_simulator called sim. This
+        has the effect of evolving the state vector to its final state. The
+        method ends by deleting the temporary files, and returning sim. The
+        output sim can be used to access the final state vector, etc.
+
+        Parameters
+        ----------
+        init_st_vec : StateVec
+        kwargs : list
+            key-word arguments of SEO_simulator
+
+        Returns
+        -------
+        SEO_simulator
+
+        """
+        file_prefix = '610935122304'
+        self.write_eng_and_pic_files(file_prefix)
+        sim = SEO_simulator(file_prefix, self.num_bits,
+                init_st_vec=init_st_vec, **kwargs)
+        import os
+        os.remove(ug.get_eng_file_path(file_prefix, self.num_bits))
+        os.remove(ug.get_pic_file_path(file_prefix, self.num_bits))
+        return sim
+
+    def print(self):
+        """
+        prints self.line_list, one item per line
+
+        Returns
+        -------
+        None
+
+        """
+        print('\n'.join(self.line_list))
 
     def get_var_nums_and_fun_names(self):
         """
@@ -192,32 +221,32 @@ class EngFileListing:
 
     def __add__(self, other):
         """
-        define + of two EngFileList objects
+        define + of two SEO_Listing objects
 
         Parameters
         ----------
-        other : EngFileListing
+        other : SEO_Listing
 
         Returns
         -------
-        EngFileListing
+        SEO_Listing
 
         """
         assert self.num_bits == other.num_bits
-        return EngFileListing(self.num_bits,
-                             self.line_list + other.line_list)
+        return SEO_Listing(self.num_bits,
+                           self.line_list + other.line_list)
 
     def __iadd__(self, other):
         """
-        define += for inplace addition of an EngFileList object to self
+        define += for inplace addition of an SEO_Listing object to self
 
         Parameters
         ----------
-        other : EngFileListing
+        other : SEO_Listing
 
         Returns
         -------
-        EngFileListing
+        SEO_Listing
 
         """
         assert self.num_bits == other.num_bits
@@ -234,10 +263,10 @@ class EngFileListing:
 
         Returns
         -------
-        EngFileListing
+        SEO_Listing
 
         """
-        return EngFileListing(self.num_bits, self.line_list[item])
+        return SEO_Listing(self.num_bits, self.line_list[item])
 
     def herm(self):
         """
@@ -246,11 +275,11 @@ class EngFileListing:
 
         Returns
         -------
-        EngFileListing
+        SEO_Listing
 
         """
         rev_li = list(reversed(self.line_list))
-        listing = EngFileListing(self.num_bits, rev_li)
+        listing = SEO_Listing(self.num_bits, rev_li)
 
         def minus(in_str):
             if in_str[0] == '-':
@@ -329,8 +358,8 @@ if __name__ == "__main__":
         wr.write_cnot(2, 3)
         wr.close_files()
 
-        lili = EngFileListing.eng_file_to_line_list(file_prefix, num_bits)
-        listing = EngFileListing(num_bits, lili)
+        lili = SEO_Listing.eng_file_to_line_list(file_prefix, num_bits)
+        listing = SEO_Listing(num_bits, lili)
 
         print("\nlisting print")
         listing.print()
@@ -351,7 +380,7 @@ if __name__ == "__main__":
         print("listing_twice's all_var_nums=\n", nums)
         print("listing_twice's all_fun_names=\n", names)
 
-        listing_0 = EngFileListing(num_bits)
+        listing_0 = SEO_Listing(num_bits)
         listing_0 += listing
 
         print("\nlisting_0 print")
@@ -361,14 +390,16 @@ if __name__ == "__main__":
         print('\nlisting_herm print')
         listing_herm.print()
 
-        one_liner = EngFileListing.new_line(4,
+        one_liner = SEO_Listing.new_line(4,
             'write_cnot', [0, 1])
         print('\none_liner print')
         one_liner.print()
 
-        one_liner = EngFileListing.new_line(4,
+        one_liner = SEO_Listing.new_line(4,
             'write_Rn', [2, [np.pi/2, -np.pi/2, np.pi/3]])
         print('\none_liner print')
         one_liner.print()
+        sim = one_liner.simulate()
+        sim.describe_st_vec_dict()
 
     main()

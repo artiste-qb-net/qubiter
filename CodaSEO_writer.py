@@ -107,10 +107,7 @@ class CodaSEO_writer(SEO_writer):
         None
 
         """
-        self.close_files()
-        import os
-        os.remove(self.fin_eng_path)
-        os.remove(self.fin_pic_path)
+        self.delete_files()
 
     def write_xy_measurements(self, bit_pos_to_xy_str, write_notas=True):
         """

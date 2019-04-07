@@ -255,3 +255,29 @@ def kron_prod(mat_list):
     for k in range(1, num_mats, 1):
         prod = np.kron(prod, mat_list[k])
     return prod
+
+def get_eng_file_path(file_prefix, num_bits):
+    """
+    Returns path to English file
+
+    Returns
+    -------
+    str
+
+    """
+
+    return file_prefix + '_' + str(num_bits) +\
+           '_eng.txt'
+
+def get_pic_file_path(file_prefix, num_bits, ZL=True):
+    """
+    Returns path to Picture file
+
+    Returns
+    -------
+    str
+
+    """
+
+    return file_prefix + '_' + str(num_bits) +\
+            ('_ZL' if ZL else '_ZF') + 'pic.txt'
