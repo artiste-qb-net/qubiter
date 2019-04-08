@@ -38,14 +38,13 @@ class SEO_Lista:
         if not line_list:
             self.line_list = []
 
-    @staticmethod
-    def new_line(num_bits, fun_name, param_list):
+    def append(self, fun_name, param_list):
         """
-        This method returns a new SEO_Lista with a single line for a
-        single gate. fun_name is the name of any function in SEO_writer
-        whose name starts with the string 'write_' and param_list is a list
-        containing values for the arguments of fun_name. This method creates
-        an object of SEO_writer called `wr` and calls
+        This method adds at the end of self a new single line for a single
+        gate. fun_name is the name of any function in SEO_writer whose name
+        starts with the string 'write_' and param_list is a list containing
+        values for the arguments of fun_name. This method creates an object
+        of SEO_writer called `wr` and calls
 
         eval('wr.' + fun_name + '(*param_list)').
 
@@ -62,12 +61,11 @@ class SEO_Lista:
 
         Returns
         -------
-        SEO_Lista
 
         """
         assert fun_name[:6] == 'write_'
         file_prefix = 'tempo970361432226978'
-        emb = CktEmbedder(num_bits, num_bits)
+        emb = CktEmbedder(self.num_bits, self.num_bits)
         eng_out = StringIO()
         pic_out = StringIO()
 
@@ -78,8 +76,7 @@ class SEO_Lista:
         line = eng_out.getvalue().strip('\n')
         eng_out.close()
         pic_out.close()
-
-        return SEO_Lista(num_bits, [line])
+        self.line_list.append(line)
 
     @staticmethod
     def eng_file_to_line_list(file_prefix, num_bits):
@@ -388,16 +385,12 @@ if __name__ == "__main__":
         print('\nlista_herm print')
         lista_herm.print()
 
-        one_liner = SEO_Lista.new_line(4,
-            'write_cnot', [0, 1])
-        print('\none_liner print')
-        one_liner.print()
-
-        one_liner = SEO_Lista.new_line(4,
-            'write_Rn', [2, [np.pi/2, -np.pi/2, np.pi/3]])
-        print('\none_liner print')
-        one_liner.print()
-        sim = one_liner.simulate()
+        lista = SEO_Lista(4)
+        lista.append('write_cnot', [0, 1])
+        lista.append('write_Rn', [2, [np.pi / 2, -np.pi / 2, np.pi / 3]])
+        print('\n print 2 line lista')
+        lista.print()
+        sim = lista.simulate()
         sim.describe_st_vec_dict()
 
     main()
