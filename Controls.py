@@ -204,8 +204,7 @@ class Controls:
         if not self.bit_pos_to_kind:
             return self
 
-        assert self.num_bits == emb.num_bits_bef,\
-            "controls cannot be reset with CktEmbedder"
+        assert self.num_bits == emb.num_bits_bef
         new = Controls(emb.num_bits_aft)
 
         self.refresh_lists()

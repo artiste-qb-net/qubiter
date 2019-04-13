@@ -158,6 +158,7 @@ class SEO_writer:
         None
 
         """
+        # print("bbnnnvvv", 'closing files')
         self.english_out.close()
         self.picture_out.close()
 

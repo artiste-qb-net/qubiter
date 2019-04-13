@@ -96,19 +96,6 @@ class CodaSEO_writer(SEO_writer):
                             english_out=fin_eng_out,
                             picture_out=fin_pic_out)
 
-    def delete_fin_files(self):
-        """
-        This method will delete the final English and Picture files. The
-        files are closed before being deleted in case that hasn't been done
-        yet. Closing a file a second time does nothing.
-
-        Returns
-        -------
-        None
-
-        """
-        self.delete_files()
-
     def write_xy_measurements(self, bit_pos_to_xy_str, write_notas=True):
         """
         This method will append to the final English and Picture files a SEO

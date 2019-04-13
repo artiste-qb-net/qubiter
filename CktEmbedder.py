@@ -82,6 +82,7 @@ class CktEmbedder:
         if self.is_identity_map():
             return bef
         else:
+            # print("6666666", bef, self.bit_map)
             return self.bit_map[bef]
 
     def is_old_bit(self, aft):

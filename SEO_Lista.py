@@ -38,7 +38,7 @@ class SEO_Lista:
         if not line_list:
             self.line_list = []
 
-    def append(self, fun_name, param_list):
+    def append(self, fun_name, param_list, emb=None):
         """
         This method adds at the end of self a new single line for a single
         gate. fun_name is the name of any function in SEO_writer whose name
@@ -55,9 +55,9 @@ class SEO_Lista:
 
         Parameters
         ----------
-        num_bits : int
         fun_name : str
         param_list : list
+        emb : CktEmbedder
 
         Returns
         -------
@@ -65,11 +65,14 @@ class SEO_Lista:
         """
         assert fun_name[:6] == 'write_'
         file_prefix = 'tempo970361432226978'
-        emb = CktEmbedder(self.num_bits, self.num_bits)
+        if emb:
+            emb1 = emb
+        else:
+            emb1 = CktEmbedder(self.num_bits, self.num_bits)
         eng_out = StringIO()
         pic_out = StringIO()
 
-        wr = SEO_writer(file_prefix, emb,
+        wr = SEO_writer(file_prefix, emb1,
                         english_out=eng_out, picture_out=pic_out)
 
         eval('wr.' + fun_name + '(*param_list)')
