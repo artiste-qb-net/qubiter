@@ -114,6 +114,33 @@ class RigettiTools:
             obs_vec[shot] = int(s, 2)
         return obs_vec
 
+
+    def add_xy_meas_coda_to_program(prog, bit_pos_to_xy_str):
+        """
+        This method adds a "coda" (tail ending) to prog using data in
+        bit_pos_to_xy_str to determine what coda will be.
+
+        Parameters
+        ----------
+        prog : Program
+        bit_pos_to_xy_str : dict[int, str]
+
+        Returns
+        -------
+        None
+
+        """
+        for bit_pos, xy_str in bit_pos_to_xy_str.items():
+            if xy_str == 'X':
+                # exp(-i*sigy*pi/4)*sigz*exp(i*sigy*pi/4) = sigx
+                prog += RY(-np.pi/2, bit_pos)
+            elif xy_str == 'Y':
+                # exp(i*sigx*pi/4)*sigz*exp(-i*sigx*pi/4) = sigy
+                prog += RX(np.pi/2, bit_pos)
+            else:
+                assert False, "Unsupported qbit measurement. '" + \
+                            xy_str + "' Should be either 'X' or 'Y'"
+
 if __name__ == "__main__":
     def main1():
         bitstrings = {
@@ -121,7 +148,7 @@ if __name__ == "__main__":
             1: np.array([1, 1, 0, 0, 1, 0, 1, 0, 1, 0]),
             2: np.array([0, 0, 0, 1, 1, 1, 1, 0, 1, 1])}
         num_qbits = 3
-        obs_vec = Cloud_rigetti.obs_vec_from_bitstrings(
+        obs_vec = RigettiTools.obs_vec_from_bitstrings(
             bitstrings, num_qbits, bs_is_array=False)
         print(obs_vec)
 
@@ -131,7 +158,7 @@ if __name__ == "__main__":
             [1,0,1], [0,1,1], [1,0,0], [1,1,1], [0,0,1]
         ])
         num_qbits = 3
-        obs_vec = Cloud_rigetti.obs_vec_from_bitstrings(
+        obs_vec = RigettiTools.obs_vec_from_bitstrings(
             bitstrings, num_qbits, bs_is_array=True)
         print(obs_vec)
     main1()

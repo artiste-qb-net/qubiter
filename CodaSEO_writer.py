@@ -135,12 +135,12 @@ class CodaSEO_writer(SEO_writer):
         for bit_pos, xy_str in bit_pos_to_xy_str.items():
             if xy_str == 'X':
                 if write_notas:
-                    self.write_NOTA("X measurement from |0>, |1>")
+                    self.write_NOTA("change |0_X>, |1_X> to |0>, |1>")
                 # exp(-i*sigy*pi/4)*sigz*exp(i*sigy*pi/4) = sigx
                 self.write_Ry(bit_pos, np.pi/4)
             elif xy_str == 'Y':
                 if write_notas:
-                    self.write_NOTA("Y measurement from |0>, |1>")
+                    self.write_NOTA("change |0_Y>, |1_Y> to |0>, |1>")
                 # exp(i*sigx*pi/4)*sigz*exp(-i*sigx*pi/4) = sigy
                 self.write_Rx(bit_pos, -np.pi/4)
             else:

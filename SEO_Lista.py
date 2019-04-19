@@ -81,6 +81,31 @@ class SEO_Lista:
         pic_out.close()
         self.line_list.append(line)
 
+    def add_xy_meas_coda(self, bit_pos_to_xy_str):
+        """
+        This method adds a "coda" (tail ending) to self using data in
+        bit_pos_to_xy_str to determine what coda will be.
+
+        Parameters
+        ----------
+        bit_pos_to_xy_str : dict[int, str]
+
+        Returns
+        -------
+        None
+
+        """
+        for bit_pos, xy_str in bit_pos_to_xy_str.items():
+            if xy_str == 'X':
+                # exp(-i*sigy*pi/4)*sigz*exp(i*sigy*pi/4) = sigx
+                self.append('write_Ry', [bit_pos, np.pi/4])
+            elif xy_str == 'Y':
+                # exp(i*sigx*pi/4)*sigz*exp(-i*sigx*pi/4) = sigy
+                self.append('write_Rx', [bit_pos, -np.pi/4])
+            else:
+                assert False, "Unsupported qbit measurement. '" + \
+                            xy_str + "' Should be either 'X' or 'Y'"
+
     @staticmethod
     def eng_file_to_line_list(file_prefix, num_bits):
         """
@@ -149,7 +174,7 @@ class SEO_Lista:
         SEO_Lista.line_list_to_eng_and_pic_files(
             self.line_list, file_prefix, self.num_bits)
 
-    def simulate(self, init_st_vec=None, **kwargs):
+    def simulate(self, **kwargs1):
         """
         This method creates temporary English and Picture file from self,
         and uses those to create an object of SEO_simulator called sim. This
@@ -159,8 +184,7 @@ class SEO_Lista:
 
         Parameters
         ----------
-        init_st_vec : StateVec
-        kwargs : list
+        kwargs1 : list
             key-word arguments of SEO_simulator
 
         Returns
@@ -170,8 +194,7 @@ class SEO_Lista:
         """
         file_prefix = '610935122304'
         self.write_eng_and_pic_files(file_prefix)
-        sim = SEO_simulator(file_prefix, self.num_bits,
-                init_st_vec=init_st_vec, **kwargs)
+        sim = SEO_simulator(file_prefix, self.num_bits, **kwargs1)
         import os
         os.remove(ug.get_eng_file_path(file_prefix, self.num_bits))
         os.remove(ug.get_pic_file_path(file_prefix, self.num_bits))
@@ -395,5 +418,8 @@ if __name__ == "__main__":
         lista.print()
         sim = lista.simulate()
         sim.describe_st_vec_dict()
+
+        lista.add_xy_meas_coda({0: 'X', 1: 'Y'})
+        lista.print()
 
     main()

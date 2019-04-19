@@ -11,6 +11,13 @@ class MeanHamil:
     This is an abstract class. The main purpose of this class is to evaluate
     the mean value of a Hamiltonian.
 
+    The Hamiltonian hamil is stored as an object of QubitOperator (a class
+    of the open-source lib OpenFermion). `terms` is an attribute of
+    QubitOperator. hamil.terms is a dictionary that maps a term to a
+    coefficient. A term represents a tensor product of Pauli matrices (a
+    Pauli string) as a tuple of tuples of the form (bit_pos, action). An
+    example of a term: ( (1, 'X'), (2, 'Y'))
+
     file_prefix identifies the location of an English file that specifies a
     quantum circuit. If init_st_vec=None, we assume that the initial state
     of that quantum circuit is the ground state (all qubits in state |0>).
@@ -75,6 +82,7 @@ class MeanHamil:
         self.num_bits = num_bits
         self.hamil = hamil
         MeanHamil.check_hamil_is_herm(hamil)
+        MeanHamil.check_hamil_is_in_range(hamil, num_bits-1)
         self.all_var_nums = all_var_nums
         self.fun_name_to_fun = fun_name_to_fun
         self.init_st_vec = init_st_vec
@@ -106,6 +114,24 @@ class MeanHamil:
                     'BosonOperator constructor, ' +\
                     'the coefficient of every term must be real.'
 
+    @staticmethod
+    def check_hamil_is_in_range(hamil, max_bit_pos):
+        """
+        Checks that the Hamiltonian hamil operates on range(max_bit_pos+1).
+
+        Parameters
+        ----------
+        hamil : QubitOperator
+
+        Returns
+        -------
+        None
+
+        """
+        for term, coef in hamil.terms.items():
+            for bit, action in term:
+                assert bit in range(max_bit_pos+1)
+
     def get_real_vec(self, term):
         """
         Internal method that returns a numpy array, of shape [2]*num_bits,
@@ -114,8 +140,9 @@ class MeanHamil:
 
         The input is a `term`. `terms` is an attribute of QubitOperator (a
         class in OpenFermion). terms is a dictionary that maps a term to a
-        coeff. A term represents a tensor product of Pauli matrices (a Pauli
-        string) as a tuple of tuples of the form (bit_pos, action).
+        coefficient. A term represents a tensor product of Pauli matrices (a
+        Pauli string) as a tuple of tuples of the form (bit_pos, action). An
+        example of a term: ((1, 'X'), (2, 'Y'))
 
         Parameters
         ----------

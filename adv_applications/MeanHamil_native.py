@@ -82,7 +82,7 @@ class MeanHamil_native(MeanHamil):
             else:
                 assert False, 'unsupported native simulator'
             fin_st_vec = sim.cur_st_vec_dict['pure']
-            # print('inside pred hamil in/out stvec',
+            # print('inside pred hamil in/out st_vec',
             # self.init_st_vec, fin_st_vec)
 
             # get effective state vec
@@ -108,9 +108,9 @@ class MeanHamil_native(MeanHamil):
             mean_val += coef*effective_st_vec.\
                     get_mean_value_of_real_diag_mat(real_arr)
 
-        # create this coda writer in order to delete final files
-        wr1 = CodaSEO_writer(self.file_prefix, fin_file_prefix, self.num_bits)
-        wr1.delete_fin_files()
+        # create this writer in order to delete final files
+        wr1 = SEO_writer(fin_file_prefix, self.num_bits)
+        wr1.delete_files()
 
         return mean_val
 

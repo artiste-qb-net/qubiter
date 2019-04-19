@@ -126,7 +126,7 @@ class MeanHamil_rigetti(MeanHamil):
                 # add xy measurements coda to pg
                 bit_pos_to_xy_str =\
                     {bit: action for bit, action in term if action != 'Z'}
-                MeanHamil_rigetti.add_xy_meas_coda_to_program(
+                RigettiTools.add_xy_meas_coda_to_program(
                     pg, bit_pos_to_xy_str)
 
                 # request measurements
@@ -138,33 +138,6 @@ class MeanHamil_rigetti(MeanHamil):
                 executable = self.qc.compile(pg)
                 # print(",,,...", executable)
                 self.term_to_exec[term] = executable
-
-    @staticmethod
-    def add_xy_meas_coda_to_program(prog, bit_pos_to_xy_str):
-        """
-        This method adds a "coda" (tail ending) to prog using data in
-        bit_pos_to_xy_str to determine what coda will be.
-
-        Parameters
-        ----------
-        prog : Program
-        bit_pos_to_xy_str : dict[int, str]
-
-        Returns
-        -------
-        None
-
-        """
-        for bit_pos, xy_str in bit_pos_to_xy_str.items():
-            if xy_str == 'X':
-                # exp(-i*sigy*pi/4)*sigz*exp(i*sigy*pi/4) = sigx
-                prog += RY(-np.pi/2, bit_pos)
-            elif xy_str == 'Y':
-                # exp(i*sigx*pi/4)*sigz*exp(-i*sigx*pi/4) = sigy
-                prog += RX(np.pi/2, bit_pos)
-            else:
-                assert False, "Unsupported qbit measurement. '" + \
-                            xy_str + "' Should be either 'X' or 'Y'"
 
     def get_mean_val(self, var_num_to_rads):
         """
@@ -221,7 +194,7 @@ class MeanHamil_rigetti(MeanHamil):
                         exec(line)
                 bit_pos_to_xy_str =\
                     {bit: action for bit, action in term if action != 'Z'}
-                MeanHamil_rigetti.add_xy_meas_coda_to_program(
+                RigettiTools.add_xy_meas_coda_to_program(
                     pg, bit_pos_to_xy_str)
                 st_vec_arr = sim.wavefunction(pg).amplitudes
                 st_vec_arr = st_vec_arr.reshape([2]*self.num_bits)
