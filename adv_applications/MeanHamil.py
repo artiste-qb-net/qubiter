@@ -165,8 +165,8 @@ class MeanHamil:
 
     def get_mean_val(self, var_num_to_rads):
         """
-        Abstract class. The main goal of subclasses of this class is to
-        generate the float returned by this method.
+        Abstract method. The main goal of subclasses of this class is to
+        override this method.
 
         Parameters
         ----------

@@ -1,5 +1,6 @@
 # from pyquil import get_qc
 # from pyquil.api._base_connection import ForestConnection
+# from pyquil.quil import Program
 import sys
 if 'autograd.numpy' not in sys.modules:
     import numpy as np
@@ -140,6 +141,7 @@ class RigettiTools:
             else:
                 assert False, "Unsupported qbit measurement. '" + \
                             xy_str + "' Should be either 'X' or 'Y'"
+
 
 if __name__ == "__main__":
     def main1():

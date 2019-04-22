@@ -164,7 +164,7 @@ class MeanHamil_rigetti(MeanHamil):
 
             vprefix = self.translator.vprefix
             var_name_to_rads = {vprefix + str(vnum): [rads]
-                for vnum, rads in var_num_to_rads.items()}
+                    for vnum, rads in var_num_to_rads.items()}
             if self.num_samples:
                 # send and receive from cloud, get obs_vec
                 bitstrings = self.qc.run(self.term_to_exec[term],
