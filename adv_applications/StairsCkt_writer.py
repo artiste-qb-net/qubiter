@@ -314,8 +314,8 @@ class StairsCkt_writer(SEO_writer):
         np.ndarray
 
         """
-        return np.vstack((np.array(rads_list) for rads_list in
-                          gate_str_to_rads_list.values()))
+        return np.vstack([np.array(rads_list) for rads_list in
+                          gate_str_to_rads_list.values()])
 
     def get_u2_pos(self, gate_str):
         """

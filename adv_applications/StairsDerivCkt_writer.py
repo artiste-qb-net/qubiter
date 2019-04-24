@@ -355,7 +355,7 @@ if __name__ == "__main__":
         emb = CktEmbedder(num_bits, num_bits)
         deriv_gate_str = list(gate_str_to_rads_list.keys())[2]
         for deriv_direc, dpart_name, has_neg_polarity in \
-                [(0, 'single', False), (3, 's', True)]:
+                [(0, 'single', None), (3, 's', True)]:
             wr = StairsDerivCkt_writer(deriv_gate_str,
                                        has_neg_polarity,
                                        deriv_direc,
