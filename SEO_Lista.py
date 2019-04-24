@@ -359,6 +359,12 @@ class SEO_Lista:
                 pass
             elif line_name == "SWAP":
                 pass
+            elif line_name == "SWAY":
+                for k in range(4, 6):
+                    split_line[k] = minus(split_line[k])
+            elif line_name == "U_2_":
+                for k in range(1, 5):
+                    split_line[k] = minus(split_line[k])
             else:
                 assert False, \
                     "reading an unsupported line kind: " + line_name
