@@ -421,6 +421,30 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
         if self.write_qubiter_files:
             self.qbtr_wr.write_controlled_bit_swap(bit1, bit2, controls)
 
+    def use_U_2_(self, rads0, rads1, rads2, rads3,
+                tar_bit_pos, controls):
+        """
+        Writes line in PyQuil file corresponding to an English file line
+        of type: U_2_ with no controls.
+
+        Parameters
+        ----------
+        rads0 : float
+        rads1 : float
+        rads2 : float
+        rads3 : float
+        tar_bit_pos : int
+        controls : Controls
+
+        Returns
+        -------
+        None
+
+        """
+        assert len(controls.bit_pos) == 0
+        # we drop global phase
+        self.use_ROTN(rads1, rads2, rads3, tar_bit_pos, controls)
+
 if __name__ == "__main__":
     import device_specific.chip_couplings_rigetti as rig
 

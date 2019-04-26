@@ -1,6 +1,7 @@
 # from pyquil import get_qc
 # from pyquil.api._base_connection import ForestConnection
-# from pyquil.quil import Program
+from pyquil.gates import RX, RY
+from pyquil.quil import Program
 import sys
 if 'autograd.numpy' not in sys.modules:
     import numpy as np

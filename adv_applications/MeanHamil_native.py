@@ -109,7 +109,8 @@ class MeanHamil_native(MeanHamil):
                     get_mean_value_of_real_diag_mat(real_arr)
 
         # create this writer in order to delete final files
-        wr1 = SEO_writer(fin_file_prefix, self.num_bits)
+        wr1 = SEO_writer(fin_file_prefix,
+                CktEmbedder(self.num_bits, self.num_bits))
         wr1.delete_files()
 
         return mean_val

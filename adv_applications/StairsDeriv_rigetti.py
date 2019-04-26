@@ -1,26 +1,30 @@
 from adv_applications.StairsDeriv import *
-import itertools as it
-
-import copy as cp
-
 from adv_applications.MeanHamil import *
 from device_specific.Qubiter_to_RigettiPyQuil import *
 from device_specific.RigettiTools import *
 import utilities_gen as utg
+from CGateExpander import *
+
+import itertools as it
+import copy as cp
 
 from openfermion.ops import QubitOperator
 
-from pyquil.quil import Program, Pragma
+from pyquil.quil import Program
+from pyquil.api import QVMConnection
 from pyquil.gates import *
+from pyquil import get_qc
 from pyquil.api import WavefunctionSimulator
+# from pyquil.reference_simulator import ReferenceWavefunctionSimulator
 
 
 class StairsDeriv_rigetti(StairsDeriv):
     """
-    This class is a child of MeanHamil. Its main purpose is to override the
-    method get_mean_val() of its abstract parent class StairsDeriv. In this
-    class, the simulation necessary to evaluate the output of get_mean_val()
-    is done by Rigetti Pyquil simulators.
+    This class is a child of StairsDeriv. Its main purpose is to override
+    the method get_mean_val() of its abstract parent class StairsDeriv. In
+    this class, the simulation necessary to evaluate the output of
+    get_mean_val() is done by Rigetti Pyquil simulators or their physical qc
+    device.
 
     Attributes
     ----------
@@ -57,7 +61,7 @@ class StairsDeriv_rigetti(StairsDeriv):
 
         self.qc = qc
         self.translator = None
-        self.translation_line_list = None
+        self.translation_line_list = []
 
     def get_mean_val(self, var_num_to_rads):
         """
@@ -90,6 +94,9 @@ class StairsDeriv_rigetti(StairsDeriv):
                 wr = StairsDerivCkt_writer(self.deriv_gate_str,
                     has_neg_polarity, deriv_direc, dpart_name,
                         self.gate_str_to_rads_list, self.file_prefix, emb)
+                wr.close_files()
+                # wr.print_pic_file()
+                # wr.print_eng_file()
                 t_list = self.gate_str_to_rads_list[self.deriv_gate_str]
                 coef_of_dpart = StairsDerivCkt_writer.\
                     get_coef_of_dpart(t_list, deriv_direc,
@@ -101,32 +108,51 @@ class StairsDeriv_rigetti(StairsDeriv):
                         var_num_to_rads=var_num_to_rads,
                         fun_name_to_fun=fun_name_to_fun)
 
+                # CGateExpander and the translator Qubiter_to_RigettiPyQuil
+                # are both children of SEO_reader. SEO_reader and any of its
+                #  subclasses will accept a vman ( object of
+                # PlaceholderManager) in one of its keyword args. If a
+                # SEO_reader is given a vman as input, it will use it to
+                # replace placeholder variable strings by floats.
+
+                # PyQuil does not support multi-controlled u2 gates so
+                # expand them to lowest common denominator, CNOTs and single
+                #  qubit gates, using CGateExpander. Give CGateExpander a
+                # vman input so as to float all variables before expansion
+
+                expan = CGateExpander(self.file_prefix, num_bits_w_anc,
+                              vars_manager=vman)
+                # this gives name of new file with expansion
+                out_file_prefix = SEO_reader.xed_file_prefix(self.file_prefix)
+                # expan.wr.print_pic_file()
+                # expan.wr.print_eng_file()
+
                 # this creates a file with all PyQuil gates that are
-                # independent of hamil. All placeholder variables evaluated
-                # using vman, so no free parameters after translation
+                # independent of hamil.
                 self.translator = Qubiter_to_RigettiPyQuil(
-                    self.file_prefix, self.num_bits,
-                    aqasm_name='RigPyQuil', prelude_str='',
-                        ending_str='', vars_manager=vman)
+                    out_file_prefix, self.num_bits,
+                    aqasm_name='RigPyQuil', prelude_str='', ending_str='')
                 with open(self.translator.aqasm_path, 'r') as fi:
                     self.translation_line_list = fi.readlines()
 
-                pg = Program(['pg = Program()'] + self.translation_line_list)
+                pg = Program()
+                for line in self.translation_line_list:
+                    line = line.strip('\n')
+                    if line:
+                        exec(line)
                 len_pg_in = len(pg)
                 for term, coef in self.hamil.terms.items():
                     # we have checked before that coef is real
                     coef = complex(coef).real
 
-                    vprefix = self.translator.vprefix
-                    var_name_to_rads = {vprefix + str(vnum): [rads]
-                            for vnum, rads in var_num_to_rads.items()}
-
                     # print('nnnnnbbbbb', term)
                     new_term = tuple(list(term) + [(num_bits_w_anc-1, 'X')])
                     # print('jjjjjjj', new_term)
 
-                    # throw out previous coda
-                    pg = pg[:len_pg_in]
+                    # Throw out previous coda.
+                    # Remember bug in Pyquil. Slicing a program turns it into
+                    # a list
+                    pg = Program(pg[:len_pg_in])
 
                     # add measurement coda for this term of hamil
                     # and for X at ancilla
@@ -154,28 +180,11 @@ class StairsDeriv_rigetti(StairsDeriv):
                                 self.num_bits, emp_pd)
                     else:  # num_samples = 0
                         sim = WavefunctionSimulator()
-                        pg = Program()
-                        # don't know how to declare number of qubits
-                        # so do this
-                        for k in range(self.num_bits):
-                            pg += I(k)
-                        for key, val in var_name_to_rads.items():
-                            exec(key + '=' + str(val[0]))
-                        for line in self.translation_line_list:
-                            line = line.strip('\n')
-                            if line:
-                                exec(line)
-                        bit_pos_to_xy_str =\
-                            {bit: action for bit, action in term
-                             if action != 'Z'}
-                        RigettiTools.add_xy_meas_coda_to_program(
-                            pg, bit_pos_to_xy_str)
                         st_vec_arr = sim.wavefunction(pg).amplitudes
                         st_vec_arr = st_vec_arr.reshape([2]*self.num_bits)
                         perm = list(reversed(range(self.num_bits)))
                         st_vec_arr = np.transpose(st_vec_arr, perm)
                         effective_st_vec = StateVec(self.num_bits, st_vec_arr)
-
                     # add contribution to mean
                     real_arr = self.get_real_vec(new_term)
                     mean_val_change = coef*effective_st_vec.\

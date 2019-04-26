@@ -2,7 +2,7 @@ from adv_applications.StairsDeriv_rigetti import *
 import pprint as pp
 
 
-class StairsAllDeriv_native(StairsDeriv_rigetti):
+class StairsAllDeriv_rigetti(StairsDeriv_rigetti):
     """
     This class is a child of StairsDeriv_rigetti. For the parent class,
     the get_mean_val() method returns a list of 4 partial derivatives

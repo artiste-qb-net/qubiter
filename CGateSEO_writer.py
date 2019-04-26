@@ -549,6 +549,8 @@ class CGateSEO_writer(SEO_writer):
                 assert False
         elif u2_fun == OneBitGates.rot:
             self.write_internal(fun_arg_list)
+        elif u2_fun == OneBitGates.u2:
+            self.write_internal(fun_arg_list[1:], fun_arg_list[0])
         else:
             assert False, "writing an unsupported controlled gate"
 
