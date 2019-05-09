@@ -62,7 +62,7 @@ class StairsDeriv_native(StairsDeriv):
                     has_neg_polarity = None
                 else:
                     continue  # this skips iteration in loop
-            for dpart_name in self.deriv_direc_to_dpart_range[deriv_direc]:
+            for dpart_name in StairsDeriv.dpart_dict[deriv_direc]:
                 emb = CktEmbedder(num_bits_w_anc, num_bits_w_anc)
                 wr = StairsDerivCkt_writer(self.deriv_gate_str,
                     has_neg_polarity, deriv_direc, dpart_name,

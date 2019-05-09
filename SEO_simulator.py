@@ -9,6 +9,7 @@ import sys
 if 'autograd.numpy' not in sys.modules:
     import numpy as np
 
+
 class SEO_simulator(SEO_reader):
     """
     This class simulates the evolution of a quantum state vector.
@@ -61,8 +62,13 @@ class SEO_simulator(SEO_reader):
         uniquely characterizes the measured controls. For example, if it has
         been measured previously (type 2 measurement only) that qubit 2 is
         True and qubit 4 is False, the branch key will be '4F2T'.
+    tensordot : function
+    transpose : function
 
     """
+    # class variables
+    transpose = np.transpose
+    tensordot = np.tensordot
 
     # rrtucci: combines my java classes:
     # LineList, UnitaryMat, SEO_readerMu
@@ -247,7 +253,7 @@ class SEO_simulator(SEO_reader):
                     evolve_br = True
             if evolve_br:
                 sub_arr = self.cur_st_vec_dict[br_key].arr[slicex]
-                sub_arr = sub_arr.transpose(tuple(perm))
+                sub_arr = SEO_simulator.transpose(sub_arr, axes=perm)
 
                 # can't do array assignments with autograd so
                 # achieve same result with other allowed tensor ops
@@ -303,11 +309,11 @@ class SEO_simulator(SEO_reader):
         # want to map [2, 0, 1, 3, 4] back to [0, 1, 2, 3, 4]
 
         # this didn't work
-        # use perm 0>2, 1>0, 2>1, 3>3, 4>4
+        # use perm 0=>2, 1=>0, 2=>1, 3=>3, 4=>4
         # perm = [new_tar] + list(range(new_tar))
         # perm += list(range(new_tar+1, perm_len))
 
-        # use perm 2>0, 0>1, 1>2, 3>3, 4>4
+        # use perm 2=>0, 0=>1, 1=>2, 3=>3, 4=>4
         perm = list(range(1, new_tar+1)) + [0]
         perm += list(range(new_tar+1, perm_len))
 
@@ -330,8 +336,9 @@ class SEO_simulator(SEO_reader):
                 # Axes 1 of one_bit_gate and new_tar of vec are summed over.
                 #  Axis 0 of one_bit_gate goes to the front of all the axes
                 # of new vec. Use transpose() to realign axes.
-                sub_arr = np.tensordot(one_bit_gate, sub_arr, ([1], [new_tar]))
-                sub_arr = np.transpose(sub_arr, axes=perm)
+                sub_arr = SEO_simulator.tensordot(one_bit_gate, sub_arr,
+                                         ([1], [new_tar]))
+                sub_arr = SEO_simulator.transpose(sub_arr, axes=perm)
 
                 # can't do array assignments with autograd so
                 # achieve same result with other allowed tensor ops
@@ -369,11 +376,11 @@ class SEO_simulator(SEO_reader):
             # print('arr1 aft', arr1)
         on_slicex = np.full(arr.shape, False)
         on_slicex[slicex] = True
-        bigger_shape = [1]*self.num_bits # slicex is num_bits long
+        bigger_shape = [1]*self.num_bits  # slicex is num_bits long
         k = 0
         # print('wwwww', sub_arr.shape, slicex)
-        for bit, type in enumerate(slicex):
-            if type not in [0, 1]:
+        for bit, kind in enumerate(slicex):
+            if kind not in [0, 1]:
                 bigger_shape[bit] = sub_arr.shape[k]
                 k += 1
         sub_arr = sub_arr.reshape(tuple(bigger_shape))
@@ -385,6 +392,29 @@ class SEO_simulator(SEO_reader):
             # print('arr aft', arr)
             print('testing simulator with autograd on')
             assert np.linalg.norm(arr-arr1) < 1e-6, 'autograd sim test failed'
+
+    def convert_tensors_to_numpy(self):
+        """
+        This method is meant to be overridden to replace tensorflow tensors
+        (or some other non-numpy tensor type) by numpy tensors.
+
+        Returns
+        -------
+
+        """
+        pass
+
+    def convert_tensors_to_tf(self):
+        """
+        This method is meant to be overridden to replace numpy tensors by
+        tensorflow tensors (or some other non-numpy tensor type).
+
+
+        Returns
+        -------
+
+        """
+        pass
 
     def finalize_next_line(self):
         """
@@ -400,10 +430,8 @@ class SEO_simulator(SEO_reader):
             print(self.split_line)
             print('line number = ', self.line_count)
             print('operation = ', self.num_ops)
-            st_vecs = self.cur_st_vec_dict
-            StateVec.describe_st_vec_dict(st_vecs,
-                                          # print_st_vec=True,
-                                          show_probs=True)
+            self.describe_st_vec_dict(  # print_st_vec=True,
+                                    show_probs=True)
 
     def describe_st_vec_dict(self, **kwargs):
         """
@@ -420,9 +448,10 @@ class SEO_simulator(SEO_reader):
         None
 
         """
-
-        return StateVec.describe_st_vec_dict(self.cur_st_vec_dict,
+        self.convert_tensors_to_numpy()
+        StateVec.describe_st_vec_dict(self.cur_st_vec_dict,
                                              **kwargs)
+        self.convert_tensors_to_tf()
 
     def get_counts(self, num_shots, omit_zero_counts=True,
                    use_bin_labels=True, rand_seed=None):
@@ -451,6 +480,8 @@ class SEO_simulator(SEO_reader):
         OrderedDict[str, int]
 
         """
+        self.convert_tensors_to_numpy()
+
         if len(self.cur_st_vec_dict) == 1:
             # print('..,,mm', 'was here')
             pd = self.cur_st_vec_dict['pure'].get_pd()
@@ -461,8 +492,11 @@ class SEO_simulator(SEO_reader):
         obs_vec = StateVec.get_observations_vec(
             self.num_bits, pd, num_shots, rand_seed)
 
-        return StateVec.get_counts_from_obs_vec(self.num_bits, obs_vec,
+        out = StateVec.get_counts_from_obs_vec(self.num_bits, obs_vec,
                         use_bin_labels, omit_zero_counts)
+        self.convert_tensors_to_tf()
+
+        return out
 
     def use_DIAG(self, trols, rad_angles):
         """

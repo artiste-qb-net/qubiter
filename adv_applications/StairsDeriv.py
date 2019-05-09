@@ -14,11 +14,19 @@ class StairsDeriv(MeanHamil):
 
     Attributes
     ----------
-    deriv_direc_to_dpart_range : dict[int, list[str]]
+    dpart_dict : dict[int, list[str]]
     deriv_gate_str : str
     gate_str_to_rads_list : dict[str, list[float|str]]
 
     """
+    # class variable
+    dpart_dict = {
+        0: ['single'],
+        1: ['1', 's', '1s'],
+        2: ['1', 's', '1s'],
+        3: ['1', 's', '1s']
+    }
+
     def __init__(self, deriv_gate_str, gate_str_to_rads_list,
                  file_prefix, parent_num_bits, hamil, **kwargs):
         """
@@ -47,13 +55,6 @@ class StairsDeriv(MeanHamil):
         MeanHamil.check_hamil_is_in_range(hamil, parent_num_bits-1)
         self.deriv_gate_str = deriv_gate_str
         self.gate_str_to_rads_list = gate_str_to_rads_list
-
-        self.deriv_direc_to_dpart_range = {
-            0: ['single'],
-            1: ['1', 's', '1s'],
-            2: ['1', 's', '1s'],
-            3: ['1', 's', '1s']
-        }
 
     def get_mean_val(self, var_num_to_rads):
         """
