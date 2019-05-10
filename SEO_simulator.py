@@ -269,7 +269,7 @@ class SEO_simulator(SEO_reader):
                     evolve_br = True
             if evolve_br:
                 sub_arr = self.cur_st_vec_dict[br_key].arr[slicex]
-                sub_arr = SEO_simulator.transpose(sub_arr, axes=perm)
+                sub_arr = SEO_simulator.transpose(sub_arr, perm)
 
                 # can't do array assignments with tensorflow eager so
                 # achieve same result with other allowed tensor ops
@@ -360,7 +360,7 @@ class SEO_simulator(SEO_reader):
                 # of new vec. Use transpose() to realign axes.
                 sub_arr = SEO_simulator.tensordot(one_bit_gate, sub_arr,
                                          ([1], [new_tar]))
-                sub_arr = SEO_simulator.transpose(sub_arr, axes=perm)
+                sub_arr = SEO_simulator.transpose(sub_arr, perm)
 
                 # can't do array assignments with tensorflow eager so
                 # achieve same result with other allowed tensor ops
