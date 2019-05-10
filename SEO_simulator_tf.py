@@ -49,6 +49,7 @@ class SEO_simulator_tf(SEO_simulator):
         self.convert_tensors_to_tf()
         SEO_simulator.transpose = tf.transpose
         SEO_simulator.tensordot = tf.tensordot
+        self.use_tf = True
 
     def convert_tensors_to_tf(self):
         """

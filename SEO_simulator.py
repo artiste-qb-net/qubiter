@@ -258,16 +258,16 @@ class SEO_simulator(SEO_reader):
                 sub_arr = self.cur_st_vec_dict[br_key].arr[slicex]
                 sub_arr = SEO_simulator.transpose(sub_arr, axes=perm)
 
-                # can't do array assignments with autograd so
-                # achieve same result with other allowed tensor ops
-                if 'autograd.numpy' in sys.modules:
-                    self.do_autograd_ruse(br_key, slicex, sub_arr)
-                    return
-
                 # can't do array assignments with tensorflow eager so
                 # achieve same result with other allowed tensor ops
                 if self.use_tf:
                     self.do_tf_ruse(br_key, slicex, sub_arr)
+                    return
+
+                # can't do array assignments with autograd so
+                # achieve same result with other allowed tensor ops
+                if 'autograd.numpy' in sys.modules:
+                    self.do_autograd_ruse(br_key, slicex, sub_arr)
                     return
 
                 self.cur_st_vec_dict[br_key].arr[slicex] = sub_arr
@@ -349,16 +349,16 @@ class SEO_simulator(SEO_reader):
                                          ([1], [new_tar]))
                 sub_arr = SEO_simulator.transpose(sub_arr, axes=perm)
 
-                # can't do array assignments with autograd so
-                # achieve same result with other allowed tensor ops
-                if 'autograd.numpy' in sys.modules:
-                    self.do_autograd_ruse(br_key, vec_slicex, sub_arr)
-                    return
-
                 # can't do array assignments with tensorflow eager so
                 # achieve same result with other allowed tensor ops
                 if self.use_tf:
                     self.do_tf_ruse(br_key, vec_slicex, sub_arr)
+                    return
+                
+                # can't do array assignments with autograd so
+                # achieve same result with other allowed tensor ops
+                if 'autograd.numpy' in sys.modules:
+                    self.do_autograd_ruse(br_key, vec_slicex, sub_arr)
                     return
 
                 # original, if autograd is not being used
