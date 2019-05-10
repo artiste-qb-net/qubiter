@@ -107,31 +107,9 @@ class SEO_simulator_tf(SEO_simulator):
         None
 
         """
-        test = False
-        arr = self.cur_st_vec_dict[br_key].arr
-        if test:
-            arr1 = cp.copy(arr)
-            # print('arr1 bef', arr1)
-            arr1[slicex] = sub_arr
-            # print('arr1 aft', arr1)
-        on_slicex = tf.fill(arr.shape, False)
-        on_slicex[slicex] = True
-        bigger_shape = [1]*self.num_bits  # slicex is num_bits long
-        k = 0
-        # print('wwwww', sub_arr.shape, slicex)
-        for bit, kind in enumerate(slicex):
-            if kind not in [0, 1]:
-                bigger_shape[bit] = sub_arr.shape[k]
-                k += 1
-        sub_arr = tf.reshape(sub_arr, tuple(bigger_shape))
-        arr = \
-            arr*tf.cast(tf.math.logical_not(on_slicex), dtype=tf.int32)\
-            + sub_arr*tf.cast(on_slicex, dtype=tf.int32)
-        self.cur_st_vec_dict[br_key].arr = arr
-        if test:
-            # print('arr aft', arr)
-            print('testing tf simulator')
-            assert tf.linalg.norm(arr-arr1) < 1e-6, 'tf sim test failed'
+        self.convert_tensors_to_numpy()
+        self.cur_st_vec_dict[br_key].arr[slicex] = sub_arr
+        self.convert_tensors_to_tf()
 
 
 if __name__ == "__main__":
