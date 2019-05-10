@@ -64,6 +64,8 @@ class SEO_simulator(SEO_reader):
         True and qubit 4 is False, the branch key will be '4F2T'.
     tensordot : function
     transpose : function
+    use_tf : bool
+        True iff using TensorFlow Eager. False by default
 
     """
     # class variables
@@ -94,6 +96,7 @@ class SEO_simulator(SEO_reader):
             init_st_vec = StateVec.get_ground_st_vec(num_bits)
         self.cur_st_vec_dict = {"pure": init_st_vec}
         self.cached_sts = {}
+        self.use_tf = False
 
         SEO_reader.__init__(self, file_prefix, num_bits, **kwargs)
 
@@ -261,6 +264,12 @@ class SEO_simulator(SEO_reader):
                     self.do_autograd_ruse(br_key, slicex, sub_arr)
                     return
 
+                # can't do array assignments with tensorflow eager so
+                # achieve same result with other allowed tensor ops
+                if self.use_tf:
+                    self.do_tf_ruse(br_key, slicex, sub_arr)
+                    return
+
                 self.cur_st_vec_dict[br_key].arr[slicex] = sub_arr
 
     def evolve_by_controlled_one_bit_gate(self,
@@ -346,6 +355,12 @@ class SEO_simulator(SEO_reader):
                     self.do_autograd_ruse(br_key, vec_slicex, sub_arr)
                     return
 
+                # can't do array assignments with tensorflow eager so
+                # achieve same result with other allowed tensor ops
+                if self.use_tf:
+                    self.do_tf_ruse(br_key, vec_slicex, sub_arr)
+                    return
+
                 # original, if autograd is not being used
                 self.cur_st_vec_dict[br_key].arr[vec_slicex] = sub_arr
 
@@ -392,6 +407,26 @@ class SEO_simulator(SEO_reader):
             # print('arr aft', arr)
             print('testing simulator with autograd on')
             assert np.linalg.norm(arr-arr1) < 1e-6, 'autograd sim test failed'
+
+    def do_tf_ruse(self, br_key, slicex, sub_arr):
+        """
+        internal function, overridden by SEO_simulator_tf, used in evolve_
+        methods iff tf eager is on. Should have same effect as
+
+        self.cur_st_vec_dict[br_key].arr[slicex] = sub_arr
+
+        Parameters
+        ----------
+        br_key : str
+        slicex : tuple
+        sub_arr : np.ndarray
+
+        Returns
+        -------
+        None
+
+        """
+        pass
 
     def convert_tensors_to_numpy(self):
         """

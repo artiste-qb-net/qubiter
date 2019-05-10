@@ -62,7 +62,7 @@ class SEO_simulator_tf(SEO_simulator):
         """
         for br_key, st_vec in self.cur_st_vec_dict.items():
             if isinstance(st_vec.arr, np.ndarray):
-                st_vec.arr = tf.Tensor(st_vec.arr)
+                st_vec.arr = tf.convert_to_tensor(st_vec.arr)
 
     def convert_tensors_to_numpy(self):
         """
@@ -78,6 +78,50 @@ class SEO_simulator_tf(SEO_simulator):
             if isinstance(st_vec.arr, tf.Tensor):
                 st_vec.arr = st_vec.arr.numpy()
 
+    def do_tf_ruse(self, br_key, slicex, sub_arr):
+        """
+        internal function used in evolve_ methods iff tf eager is on. Should
+        have same effect as
+
+        self.cur_st_vec_dict[br_key].arr[slicex] = sub_arr
+
+        Parameters
+        ----------
+        br_key : str
+        slicex : tuple
+        sub_arr : tf.Tensor
+
+        Returns
+        -------
+        None
+
+        """
+        test = False
+        arr = self.cur_st_vec_dict[br_key].arr
+        if test:
+            arr1 = tf.Tensor(arr)
+            # print('arr1 bef', arr1)
+            arr1[slicex] = sub_arr
+            # print('arr1 aft', arr1)
+        on_slicex = tf.fill(arr.shape, False)
+        on_slicex[slicex] = True
+        bigger_shape = [1]*self.num_bits  # slicex is num_bits long
+        k = 0
+        # print('wwwww', sub_arr.shape, slicex)
+        for bit, kind in enumerate(slicex):
+            if kind not in [0, 1]:
+                bigger_shape[bit] = sub_arr.shape[k]
+                k += 1
+        sub_arr = tf.reshape(sub_arr, tuple(bigger_shape))
+        arr = \
+            arr*tf.cast(tf.math.logical_not(on_slicex), dtype=tf.int32)\
+            + sub_arr*tf.cast(on_slicex, dtype=tf.int32)
+        self.cur_st_vec_dict[br_key].arr = arr
+        if test:
+            # print('arr aft', arr)
+            print('testing tf simulator')
+            assert tf.linalg.norm(arr-arr1) < 1e-6, 'tf sim test failed'
+
 
 if __name__ == "__main__":
     def main():
@@ -87,16 +131,16 @@ if __name__ == "__main__":
         if test in [0, 1]:
             # test on circuit for a quantum fourier transform
             # (no loops, no internal measurements)
-            sim = SEO_simulator_tf('io_folder/sim_test1_tf', 6, verbose=True)
+            sim = SEO_simulator_tf('io_folder/sim_test1', 6, verbose=True)
 
         if test in [0, 2]:
             # test embedded loops
-            sim = SEO_simulator('io_folder/sim_test2_tf', 4, verbose=True)
+            sim = SEO_simulator('io_folder/sim_test2', 4, verbose=True)
 
         if test in [0, 3]:
             # test MEAS branching. Each kind 2 measurement doubles number of
             # branches
-            sim = SEO_simulator('io_folder/sim_test3_tf', 4, verbose=True)
+            sim = SEO_simulator('io_folder/sim_test3', 4, verbose=True)
 
     main()
 
