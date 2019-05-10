@@ -110,7 +110,7 @@ class SEO_simulator_tf(SEO_simulator):
         test = False
         arr = self.cur_st_vec_dict[br_key].arr
         if test:
-            arr1 = tf.Tensor(arr)
+            arr1 = cp.copy(arr)
             # print('arr1 bef', arr1)
             arr1[slicex] = sub_arr
             # print('arr1 aft', arr1)

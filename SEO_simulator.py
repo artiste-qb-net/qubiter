@@ -636,6 +636,7 @@ class SEO_simulator(SEO_reader):
         None
 
         """
+        self.convert_tensors_to_numpy()
         # slicex = slice index
         slicex = [slice(None)]*self.num_bits
         # br = branch
@@ -688,6 +689,7 @@ class SEO_simulator(SEO_reader):
             # print(self.cur_st_vec_dict)
         else:
             assert False, 'unsupported measurement kind'
+        self.convert_tensors_to_tf()
 
     def use_MP_Y(self, tar_bit_pos, trols, rad_angles):
         """
@@ -787,6 +789,7 @@ class SEO_simulator(SEO_reader):
         None
 
         """
+        self.convert_tensors_to_numpy()
         print("\n*************************beginning PRINT output")
         print("PRINT line number=" + str(line_num))
         st_vecs = self.cur_st_vec_dict
@@ -805,6 +808,7 @@ class SEO_simulator(SEO_reader):
         else:
             assert False, "unsupported PRINT style"
         print("****************************ending PRINT output")
+        self.convert_tensors_to_tf()
 
     def use_ROTA(self, axis,
                  angle_rads, tar_bit_pos, controls):
