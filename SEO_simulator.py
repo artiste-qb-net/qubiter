@@ -98,7 +98,20 @@ class SEO_simulator(SEO_reader):
         self.cached_sts = {}
         self.use_tf = False
 
+        self.do_more_init_before_reading()
+
         SEO_reader.__init__(self, file_prefix, num_bits, **kwargs)
+
+    def do_more_init_before_reading(self):
+        """
+        stub called in __init__ before calling the parent SEO_reader __init__
+
+        Returns
+        -------
+        None
+
+        """
+        pass
 
     @staticmethod
     def branch_is_part_of_mcase(br_trols, case_trols):
@@ -354,7 +367,7 @@ class SEO_simulator(SEO_reader):
                 if self.use_tf:
                     self.do_tf_ruse(br_key, vec_slicex, sub_arr)
                     return
-                
+
                 # can't do array assignments with autograd so
                 # achieve same result with other allowed tensor ops
                 if 'autograd.numpy' in sys.modules:

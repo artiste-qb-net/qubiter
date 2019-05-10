@@ -46,6 +46,16 @@ class SEO_simulator_tf(SEO_simulator):
         """
         SEO_simulator.__init__(self, file_prefix, num_bits,
                                init_st_vec=init_st_vec, **kwargs)
+
+    def do_more_init_before_reading(self):
+        """
+        overrides method in parent SEO_simulator
+
+        Returns
+        -------
+        None
+
+        """
         self.convert_tensors_to_tf()
         SEO_simulator.transpose = tf.transpose
         SEO_simulator.tensordot = tf.tensordot
@@ -136,12 +146,12 @@ if __name__ == "__main__":
 
         if test in [0, 2]:
             # test embedded loops
-            sim = SEO_simulator('io_folder/sim_test2', 4, verbose=True)
+            sim = SEO_simulator_tf('io_folder/sim_test2', 4, verbose=True)
 
         if test in [0, 3]:
             # test MEAS branching. Each kind 2 measurement doubles number of
             # branches
-            sim = SEO_simulator('io_folder/sim_test3', 4, verbose=True)
+            sim = SEO_simulator_tf('io_folder/sim_test3', 4, verbose=True)
 
     main()
 
