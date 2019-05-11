@@ -272,16 +272,11 @@ class SEO_simulator(SEO_reader):
                 sub_arr = self.cur_st_vec_dict[br_key].arr[slicex]
                 sub_arr = SEO_simulator.transpose(sub_arr, perm)
 
-                # can't do array assignments with tensorflow eager so
-                # achieve same result with other allowed tensor ops
-                if self.use_tf:
-                    self.do_tf_ruse(br_key, slicex, sub_arr)
-                    return
-
-                # can't do array assignments with autograd so
-                # achieve same result with other allowed tensor ops
-                if 'autograd.numpy' in sys.modules:
-                    self.do_autograd_ruse(br_key, slicex, sub_arr)
+                # can't do array assignments with autograd or tensorflow
+                # eager so achieve same result with other allowed tensor ops
+                if self.use_tf or 'autograd.numpy' in sys.modules:
+                    self.do_array_assignment_workaround(
+                        br_key, slicex, sub_arr)
                     return
 
                 self.cur_st_vec_dict[br_key].arr[slicex] = sub_arr
@@ -363,25 +358,20 @@ class SEO_simulator(SEO_reader):
                                          ([1], [new_tar]))
                 sub_arr = SEO_simulator.transpose(sub_arr, perm)
 
-                # can't do array assignments with tensorflow eager so
-                # achieve same result with other allowed tensor ops
-                if self.use_tf:
-                    self.do_tf_ruse(br_key, vec_slicex, sub_arr)
-                    return
-
-                # can't do array assignments with autograd so
-                # achieve same result with other allowed tensor ops
-                if 'autograd.numpy' in sys.modules:
-                    self.do_autograd_ruse(br_key, vec_slicex, sub_arr)
+                # can't do array assignments with autograd or tensorflow
+                # eager so achieve same result with other allowed tensor ops
+                if self.use_tf or 'autograd.numpy' in sys.modules:
+                    self.do_array_assignment_workaround(
+                        br_key, vec_slicex, sub_arr)
                     return
 
                 # original, if autograd is not being used
                 self.cur_st_vec_dict[br_key].arr[vec_slicex] = sub_arr
 
-    def do_autograd_ruse(self, br_key, slicex, sub_arr):
+    def do_array_assignment_workaround(self, br_key, slicex, sub_arr):
         """
-        internal function used in evolve_ methods iff autograd is on. Should
-        have same effect as
+        internal function used in evolve_ methods iff autograd is on or
+        use_tf is True. Should have same effect as
 
         self.cur_st_vec_dict[br_key].arr[slicex] = sub_arr
 
@@ -428,26 +418,6 @@ class SEO_simulator(SEO_reader):
             print('testing simulator ruse')
             assert np.linalg.norm(np.array(arr)-arr1_np) < 1e-6, \
                 'sim ruse test failed'
-
-    def do_tf_ruse(self, br_key, slicex, sub_arr):
-        """
-        internal function, overridden by SEO_simulator_tf, used in evolve_
-        methods iff tf eager is on. Should have same effect as
-
-        self.cur_st_vec_dict[br_key].arr[slicex] = sub_arr
-
-        Parameters
-        ----------
-        br_key : str
-        slicex : tuple
-        sub_arr : np.ndarray
-
-        Returns
-        -------
-        None
-
-        """
-        pass
 
     def convert_tensors_to_numpy(self):
         """

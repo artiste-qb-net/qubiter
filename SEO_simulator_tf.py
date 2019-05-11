@@ -90,30 +90,6 @@ class SEO_simulator_tf(SEO_simulator):
             if isinstance(st_vec.arr, tf.Tensor):
                 st_vec.arr = st_vec.arr.numpy()
 
-    def do_tf_ruse(self, br_key, slicex, sub_arr):
-        """
-        internal function used in evolve_ methods iff tf eager is on. Should
-        have same effect as
-
-        self.cur_st_vec_dict[br_key].arr[slicex] = sub_arr
-
-        Parameters
-        ----------
-        br_key : str
-        slicex : tuple
-        sub_arr : tf.Tensor
-
-        Returns
-        -------
-        None
-
-        """
-        # this uses SEO_simulator.reshape() = tf.reshape(). The method
-        # do_autograd_ruse() has been written so that it works for tf too,
-        # with just this change
-
-        self.do_autograd_ruse(br_key, slicex, sub_arr)
-
 
 if __name__ == "__main__":
     def main():
