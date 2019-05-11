@@ -71,6 +71,7 @@ class SEO_simulator(SEO_reader):
     # class variables
     transpose = np.transpose
     tensordot = np.tensordot
+    reshape = np.reshape
 
     # rrtucci: combines my java classes:
     # LineList, UnitaryMat, SEO_readerMu
@@ -397,29 +398,36 @@ class SEO_simulator(SEO_reader):
         """
         test = False
         arr = self.cur_st_vec_dict[br_key].arr
+
         if test:
-            arr1 = cp.copy(arr)
-            # print('arr1 bef', arr1)
-            arr1[slicex] = sub_arr
-            # print('arr1 aft', arr1)
-        on_slicex = np.full(arr.shape, False)
+            # This creates a numpy copy of arr if arr is numpy.
+            # If arr is tf, it converts to numpy then creates a numpy copy
+            arr1_np = np.array(arr)
+            # print('arr1 bef', arr1_np)
+            arr1_np[slicex] = np.array(sub_arr)
+            # print('arr1 aft', arr1_np)
+        on_slicex = np.full(tuple(arr.shape), False)
         on_slicex[slicex] = True
         bigger_shape = [1]*self.num_bits  # slicex is num_bits long
         k = 0
         # print('wwwww', sub_arr.shape, slicex)
         for bit, kind in enumerate(slicex):
             if kind not in [0, 1]:
-                bigger_shape[bit] = sub_arr.shape[k]
+                bigger_shape[bit] = int(sub_arr.shape[k])
                 k += 1
-        sub_arr = sub_arr.reshape(tuple(bigger_shape))
-        arr = \
-            arr*np.logical_not(on_slicex).astype(int)\
-            + sub_arr*on_slicex.astype(int)
+        one_on_slicex = on_slicex.astype(int)
+        not_one_on_slicex = np.logical_not(on_slicex).astype(int)
+
+        sub_arr = SEO_simulator.reshape(sub_arr, tuple(bigger_shape))
+
+        arr = arr*not_one_on_slicex + sub_arr*one_on_slicex
         self.cur_st_vec_dict[br_key].arr = arr
+
         if test:
             # print('arr aft', arr)
-            print('testing simulator with autograd on')
-            assert np.linalg.norm(arr-arr1) < 1e-6, 'autograd sim test failed'
+            print('testing simulator ruse')
+            assert np.linalg.norm(np.array(arr)-arr1_np) < 1e-6, \
+                'sim ruse test failed'
 
     def do_tf_ruse(self, br_key, slicex, sub_arr):
         """

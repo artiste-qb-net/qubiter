@@ -59,6 +59,7 @@ class SEO_simulator_tf(SEO_simulator):
         self.convert_tensors_to_tf()
         SEO_simulator.transpose = tf.transpose
         SEO_simulator.tensordot = tf.tensordot
+        SEO_simulator.reshape = tf.reshape
         self.use_tf = True
 
     def convert_tensors_to_tf(self):
@@ -107,9 +108,11 @@ class SEO_simulator_tf(SEO_simulator):
         None
 
         """
-        self.convert_tensors_to_numpy()
-        self.cur_st_vec_dict[br_key].arr[slicex] = sub_arr
-        self.convert_tensors_to_tf()
+        # this uses SEO_simulator.reshape() = tf.reshape(). The method
+        # do_autograd_ruse() has been written so that it works for tf too,
+        # with just this change
+
+        self.do_autograd_ruse(br_key, slicex, sub_arr)
 
 
 if __name__ == "__main__":
