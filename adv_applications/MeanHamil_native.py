@@ -1,14 +1,15 @@
 from adv_applications.MeanHamil import *
+from SEO_simulator_tf import *
 
 
 class MeanHamil_native(MeanHamil):
     """
     This class is a child of MeanHamil.
 
-    This class does not call real physical hardware, or someone else's 
-    simulator to calculate mean values. Instead, it uses Qubiter's built-in 
-    simulators, such as `SEO_simulator`. That is why we call this class 
-    native. 
+    This class does not call real physical hardware, or someone else's
+    simulator to calculate mean values. Instead, it uses Qubiter's built-in
+    simulators, such as `SEO_simulator` and `SEO_simulator_tf`. That is why
+    we call this class native.
 
     Attributes
     ----------
@@ -17,6 +18,9 @@ class MeanHamil_native(MeanHamil):
         self.simulator_name must be in this list.
 
     """
+    # class variable
+    list_of_supported_sims = ['SEO_simulator',
+                              'SEO_simulator_tf']
 
     def __init__(self, *args, **kwargs):
         """
@@ -34,9 +38,11 @@ class MeanHamil_native(MeanHamil):
 
         """
         MeanHamil.__init__(self, *args, **kwargs)
-        # can add to list of supported simulators in future
-        self.list_of_supported_sims = ['SEO_simulator']
-        assert self.simulator_name in self.list_of_supported_sims
+        assert self.simulator_name in MeanHamil_native.\
+            list_of_supported_sims
+        if self.simulator_name == 'SEO_simulator_tf':
+            if not tf.executing_eagerly():
+                tf.enable_eager_execution()
 
     def get_mean_val(self, var_num_to_rads):
         """
@@ -79,9 +85,17 @@ class MeanHamil_native(MeanHamil):
             if self.simulator_name == 'SEO_simulator':
                 sim = SEO_simulator(fin_file_prefix, self.num_bits,
                                     init_st_vec, vars_manager=vman)
+            elif self.simulator_name == 'SEO_simulator_tf':
+                init_st_vec.arr = tf.convert_to_tensor(init_st_vec.arr)
+                sim = SEO_simulator_tf(fin_file_prefix, self.num_bits,
+                                    init_st_vec, vars_manager=vman)
             else:
                 assert False, 'unsupported native simulator'
+
             fin_st_vec = sim.cur_st_vec_dict['pure']
+            # if self.simulator_name == 'SEO_simulator_tf':
+            #     fin_st_vec.arr = np.array(init_st_vec.arr)
+
             # print('inside pred hamil in/out st_vec',
             # self.init_st_vec, fin_st_vec)
 

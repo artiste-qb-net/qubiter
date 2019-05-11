@@ -281,3 +281,27 @@ def get_pic_file_path(file_prefix, num_bits, ZL=True):
 
     return file_prefix + '_' + str(num_bits) +\
             ('_ZL' if ZL else '_ZF') + 'pic.txt'
+
+def get_value(kwargs, key_str, default_val=None):
+    """
+    Returns kwargs[key_str] if there is one. Else it returns default_val if
+    there is one. Else aborts.
+
+    Parameters
+    ----------
+    kwargs : dict[str, float]
+    key_str : str
+    default_val : float
+
+    Returns
+    -------
+    float
+
+    """
+    if key_str in kwargs:
+         return kwargs[key_str]
+    elif default_val:
+        return default_val
+    else:
+        assert False, "must pass-in keyword " + key_str +\
+            ' in ' + str(kwargs)

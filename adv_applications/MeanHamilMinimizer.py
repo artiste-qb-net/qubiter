@@ -79,7 +79,7 @@ class MeanHamilMinimizer(CostMinimizer):
     https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html
 
     By a native device, we mean one that uses Qubiter native simulators like
-    SEO_simulator.
+    SEO_simulator and SEO_simulator_tf.
 
     Attributes
     ----------
@@ -192,17 +192,13 @@ class MeanHamilMinimizer(CostMinimizer):
         kwargs (keyword arguments)
         minlib = scipy
             the keyword args of scipy.optimize.minimize
-        minlib = autograd
+        minlib = autograd, tflow
             num_inter : float
                 number of iterations (an iteration is every time call
                 cost_fun)
             descent_rate : float
                 positive float, constant that multiplies gradient of
                 pred_cost_fun(). Often denoted as eta
-            do_pred_cost : bool
-                default=True, The gradient of the pred_cost_fun() is always
-                calculated, but calculating the pred_cost_fun() itself is
-                optional.
 
         Parameters
         ----------
@@ -236,37 +232,45 @@ class MeanHamilMinimizer(CostMinimizer):
         elif minlib == 'autograd':
             from autograd import grad
 
-            assert 'num_iter' in kwargs, \
-                "must pass-in keyword 'num_iter=' " \
-                "if using autograd minlib"
-            num_iter = kwargs['num_iter']
-            assert 'descent_rate' in kwargs, \
-                "must pass-in keyword 'descent_rate=' " \
-                "if using autograd minlib"
-            rate = kwargs['descent_rate']
+            num_iter = utg.get_value(kwargs, 'num_iter')
+            rate = utg.get_value(kwargs, 'descent_rate')
+
             self.cur_x_val = self.init_x_val
-            if 'do_pred_cost' in kwargs:
-                do_pred_cost = kwargs['do_pred_cost']
-            else:
-                do_pred_cost = True
+
             for step in range(num_iter):
                 xlist = list(self.cur_x_val)
                 # print('mmbbb', self.cur_x_val, xlist)
-                if do_pred_cost:
-                    self.cur_pred_cost = pred_cost(self.cur_x_val)
+                self.cur_pred_cost = pred_cost(self.cur_x_val)
                 self.cur_cost = self.cost_fun(self.cur_x_val)
                 # print('kkkhhh', grad(pred_cost)(self.cur_x_val))
                 for dwrt in range(len(xlist)):
                     self.cur_x_val[dwrt] -= \
                         rate*grad(pred_cost)(self.cur_x_val)[dwrt]
 
-        elif minlib == 'pytorch':
-            assert False, 'not yet'
         elif minlib == 'tflow':
+            import tensorflow as tf
+            if not tf.executing_eagerly():
+                tf.enable_eager_execution()
+
+            num_iter = utg.get_value(kwargs, 'num_iter')
+            rate = utg.get_value(kwargs, 'descent_rate')
+
+            self.init_x_val = tf.convert_to_tensor(self.init_x_val)
+            self.cur_x_val = self.init_x_val
+
+            for step in range(num_iter):
+                with tf.GradientTape() as tape:
+                    tape.watch(self.cur_x_val)
+                    self.cur_pred_cost = pred_cost(self.cur_x_val)
+                self.cur_cost = self.cost_fun(self.cur_x_val)
+                self.cur_x_val -= \
+                        rate*tape.gradient(pred_cost, self.cur_x_val)
+
+        elif minlib == 'pytorch':
             assert False, 'not yet'
         else:
             assert False, 'unsupported find_min() minlib'
-
+    
 
 if __name__ == "__main__":
     def main():

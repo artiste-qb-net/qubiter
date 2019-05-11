@@ -105,7 +105,8 @@ class SEO_simulator(SEO_reader):
 
     def do_more_init_before_reading(self):
         """
-        stub called in __init__ before calling the parent SEO_reader __init__
+        Stub. Called in SEO_simulator.__init__ before calling
+        SEO_reader.__init__
 
         Returns
         -------
@@ -434,7 +435,6 @@ class SEO_simulator(SEO_reader):
         """
         This method is meant to be overridden to replace numpy tensors by
         tensorflow tensors (or some other non-numpy tensor type).
-
 
         Returns
         -------
