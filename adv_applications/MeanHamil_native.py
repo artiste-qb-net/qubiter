@@ -41,8 +41,7 @@ class MeanHamil_native(MeanHamil):
         assert self.simulator_name in MeanHamil_native.\
             list_of_supported_sims
         if self.simulator_name == 'SEO_simulator_tf':
-            if not tf.executing_eagerly():
-                tf.enable_eager_execution()
+            assert tf.executing_eagerly()
 
     def get_mean_val(self, var_num_to_rads):
         """

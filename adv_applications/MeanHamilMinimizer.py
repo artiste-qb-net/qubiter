@@ -249,8 +249,7 @@ class MeanHamilMinimizer(CostMinimizer):
 
         elif minlib == 'tflow':
             import tensorflow as tf
-            if not tf.executing_eagerly():
-                tf.enable_eager_execution()
+            assert tf.executing_eagerly()
 
             num_iter = utg.get_value(kwargs, 'num_iter')
             rate = utg.get_value(kwargs, 'descent_rate')

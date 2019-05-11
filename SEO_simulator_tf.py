@@ -43,8 +43,7 @@ class SEO_simulator_tf(SEO_simulator):
         -------
 
         """
-        if not tf.executing_eagerly():
-            tf.enable_eager_execution()
+        assert tf.executing_eagerly()
         SEO_simulator.__init__(self, file_prefix, num_bits,
                                init_st_vec=init_st_vec, **kwargs)
 
