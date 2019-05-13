@@ -49,7 +49,7 @@ class OneBitGates:
         elif lib == 'tf':
             import tensorflow as tf
             convert = tf.convert_to_tensor
-            lili = [[convert(x) for x in li] for li in lili]
+            #lili = [[convert(x) for x in li] for li in lili]
             return convert(lili, dtype=tf.complex128)
         else:
             assert False, "unsupported tensor lib"
@@ -97,10 +97,15 @@ class OneBitGates:
         if lib == 'tf':
             import tensorflow as tf
         if lib == 'np' or lib_to_fun_name is None:
-            return eval(lib + '.' + fun_name)
+            fun = eval(lib + '.' + fun_name)
         else:
             assert lib in lib_to_fun_name
-            return eval(lib + '.' + lib_to_fun_name[lib])
+            fun = eval(lib + '.' + lib_to_fun_name[lib])
+
+        if lib == 'tf':
+            fun = lambda x: tf.cast(fun(x), dtype=tf.complex128)
+
+        return fun
 
     @staticmethod
     def had2(is_quantum=True, lib='np'):
