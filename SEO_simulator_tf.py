@@ -61,6 +61,7 @@ class SEO_simulator_tf(SEO_simulator):
         SEO_simulator.tensordot = tf.tensordot
         SEO_simulator.reshape = tf.reshape
         self.use_tf = True
+        self.lib = 'tf'
 
     def convert_tensors_to_tf(self):
         """
@@ -89,7 +90,6 @@ class SEO_simulator_tf(SEO_simulator):
         for br_key, st_vec in self.cur_st_vec_dict.items():
             if isinstance(st_vec.arr, tf.Tensor):
                 st_vec.arr = st_vec.arr.numpy()
-
 
 if __name__ == "__main__":
     def main():

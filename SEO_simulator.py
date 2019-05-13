@@ -62,6 +62,8 @@ class SEO_simulator(SEO_reader):
         uniquely characterizes the measured controls. For example, if it has
         been measured previously (type 2 measurement only) that qubit 2 is
         True and qubit 4 is False, the branch key will be '4F2T'.
+    lib : str
+        tensor library. Either 'np' for numpy or 'tf' for tensorflow
     tensordot : function
     transpose : function
     use_tf : bool
@@ -98,6 +100,7 @@ class SEO_simulator(SEO_reader):
         self.cur_st_vec_dict = {"pure": init_st_vec}
         self.cached_sts = {}
         self.use_tf = False
+        self.lib = 'np'
 
         self.do_more_init_before_reading()
 
@@ -105,7 +108,7 @@ class SEO_simulator(SEO_reader):
 
     def do_more_init_before_reading(self):
         """
-        Stub. Called in SEO_simulator.__init__ before calling
+        Stub. Called in SEO_simulator.__init__ immediately before calling
         SEO_reader.__init__
 
         Returns
@@ -560,7 +563,7 @@ class SEO_simulator(SEO_reader):
         None
 
         """
-        gate = OneBitGates.had2()
+        gate = OneBitGates.had2(lib=self.lib)
         self.evolve_by_controlled_one_bit_gate(tar_bit_pos, controls, gate)
 
     def use_IF_M_beg(self, controls):
@@ -721,7 +724,7 @@ class SEO_simulator(SEO_reader):
         None
 
         """
-        gate = OneBitGates.phase_fac(angle_rads)
+        gate = OneBitGates.phase_fac(angle_rads, lib=self.lib)
         self.evolve_by_controlled_one_bit_gate(tar_bit_pos, controls, gate)
 
     def use_P_PH(self, projection_bit,
@@ -748,7 +751,7 @@ class SEO_simulator(SEO_reader):
             0: OneBitGates.P_0_phase_fac,
             1: OneBitGates.P_1_phase_fac
         }
-        gate = fun[projection_bit](angle_rads)
+        gate = fun[projection_bit](angle_rads, lib=self.lib)
         self.evolve_by_controlled_one_bit_gate(tar_bit_pos, controls, gate)
 
     def use_PRINT(self, style, line_num):
@@ -808,7 +811,7 @@ class SEO_simulator(SEO_reader):
 
         """
         # print('//////', angle_rads, axis)
-        gate = OneBitGates.rot_ax(angle_rads, axis)
+        gate = OneBitGates.rot_ax(angle_rads, axis, lib=self.lib)
         self.evolve_by_controlled_one_bit_gate(tar_bit_pos, controls, gate)
 
     def use_ROTN(self, angle_x_rads, angle_y_rads, angle_z_rads,
@@ -831,7 +834,8 @@ class SEO_simulator(SEO_reader):
         None
 
         """
-        gate = OneBitGates.rot(angle_x_rads, angle_y_rads, angle_z_rads)
+        gate = OneBitGates.rot(angle_x_rads, angle_y_rads, angle_z_rads,
+                               lib=self.lib)
         self.evolve_by_controlled_one_bit_gate(tar_bit_pos, controls, gate)
 
     def use_SIG(self, axis, tar_bit_pos, controls):
@@ -856,7 +860,7 @@ class SEO_simulator(SEO_reader):
             2: OneBitGates.sigy,
             3: OneBitGates.sigz
         }
-        gate = fun[axis]()
+        gate = fun[axis](lib=self.lib)
         self.evolve_by_controlled_one_bit_gate(tar_bit_pos, controls, gate)
 
     def use_SWAP(self, bit1, bit2, controls):
@@ -918,11 +922,12 @@ class SEO_simulator(SEO_reader):
         rads0, rads1 = rads_list
 
         self.evolve_by_controlled_one_bit_gate(
-            bit2, controls1, OneBitGates.sigx())
+            bit2, controls1, OneBitGates.sigx(lib=self.lib))
         self.evolve_by_controlled_one_bit_gate(
-            bit1, controls2, OneBitGates.u2(rads0, rads1, 0.0, 0.0))
+            bit1, controls2, OneBitGates.u2(rads0, rads1, 0.0, 0.0,
+                                            lib=self.lib))
         self.evolve_by_controlled_one_bit_gate(
-            bit2, controls1, OneBitGates.sigx())
+            bit2, controls1, OneBitGates.sigx(lib=self.lib))
 
     def use_U_2_(self, rads0, rads1, rads2, rads3,
                 tar_bit_pos, controls):
@@ -945,7 +950,7 @@ class SEO_simulator(SEO_reader):
         None
 
         """
-        gate = OneBitGates.u2(rads0, rads1, rads2, rads3)
+        gate = OneBitGates.u2(rads0, rads1, rads2, rads3, lib=self.lib)
         self.evolve_by_controlled_one_bit_gate(tar_bit_pos, controls, gate)
 
 if __name__ == "__main__":

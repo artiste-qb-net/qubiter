@@ -12,24 +12,57 @@ else:
 
 class OneBitGates:
     """
-    This class has no attributes or constructor. It is simply a collection
-    of static methods, all of which return a complex 2 by 2 matrix (numpy
-    array). In cases where the entries of the matrix are all real,
-    an is_quantum bool option is given to choose between a float64 or
-    complex128 array.
+    This class has no attributes or constructor. It is simply a collection 
+    of static methods, all of which return a complex 2 by 2 matrix (numpy 
+    array or array from some other tensor library). In cases where the 
+    entries of the matrix are all real, an is_quantum bool option is given 
+    to choose between a float or complex array. 
+
+    All gates have a tensor library `lib` option. lib equals 'np' for numpy, 
+    'tf' for tensorflow 
 
     Attributes
     ----------
 
     """
     @staticmethod
-    def had2(is_quantum=True):
+    def lib_fun(lib, fun_name, lib_to_fun_name=None):
+        """
+        If lib is 'np', this method returns eval(lib + '.' + fun_name).
+        Else, if lib is not 'np' then: if lib_to_fun_name is None,
+        it returns eval(lib + '.' + fun_name), but if lib_to_fun_name is not
+        None, it returns eval(lib + '.' + lib_to_fun_name[lib]). It aborts
+        if lib_to_fun_name[ lib] doesn't exist.
+
+        Parameters
+        ----------
+        lib : str
+            tensor library, either 'np' for numpy or 'tp' for tensorflow
+        fun_name : str
+            function name
+        lib_to_fun_name : dict[str, str]
+            dictionary mapping lib to fun_name. For example {'tf': 'cos'}
+
+        Returns
+        -------
+        function
+
+        """
+        if lib == 'np' or lib_to_fun_name is None:
+            return eval(lib + '.' + fun_name)
+        else:
+            assert lib in lib_to_fun_name
+            return eval(lib + '.' + lib_to_fun_name[lib])
+
+    @staticmethod
+    def had2(is_quantum=True, lib='np'):
         """
         Returns 2 dimensional Hadamard matrix (\sigma_x + \sigma_z)/sqrt(2)
 
         Parameters
         ----------
         is_quantum : bool
+        lib : str
 
         Returns
         -------
@@ -37,16 +70,17 @@ class OneBitGates:
 
         """
         if not is_quantum:
-            ty = np.float64
+            ty = float
         else:
-            ty = np.complex128
+            ty = complex
         x = 1/np.sqrt(2)
-        mat = np.full((2, 2), x, dtype=ty)
+        mat = OneBitGates.lib_fun(lib, 'full', {'tf': 'fill'})(
+            (2, 2), x, dtype=ty)
         mat[1, 1] = -x
         return mat
 
     @staticmethod
-    def P_0(is_quantum=True):
+    def P_0(is_quantum=True, lib='np'):
         """
         Returns projection operator P_0 = |0><0| = nbar, where |0> = [1,
         0]^T and |1> = [0, 1]^T, T = transpose
@@ -54,6 +88,7 @@ class OneBitGates:
         Parameters
         ----------
         is_quantum : bool
+        lib : str
 
         Returns
         -------
@@ -61,15 +96,15 @@ class OneBitGates:
 
         """
         if not is_quantum:
-            ty = np.float64
+            ty = float
         else:
-            ty = np.complex128
-        mat = np.zeros([2, 2], dtype=ty)
+            ty = complex
+        mat = OneBitGates.lib_fun(lib, 'zeros')([2, 2], dtype=ty)
         mat[0, 0] = 1
         return mat
 
     @staticmethod
-    def P_1(is_quantum=True):
+    def P_1(is_quantum=True, lib='np'):
         """
         Returns projection operator P_1 = |1><1| = n, where |0> = [1,
         0]^T and |1> = [0, 1]^T, T = transpose
@@ -77,6 +112,7 @@ class OneBitGates:
         Parameters
         ----------
         is_quantum : bool
+        lib : str
 
         Returns
         -------
@@ -84,15 +120,15 @@ class OneBitGates:
 
         """
         if not is_quantum:
-            ty = np.float64
+            ty = float
         else:
-            ty = np.complex128
-        mat = np.zeros([2, 2], dtype=ty)
+            ty = complex
+        mat = OneBitGates.lib_fun(lib, 'zeros')([2, 2], dtype=ty)
         mat[1, 1] = 1
         return mat
 
     @staticmethod
-    def P_0_phase_fac(ang_rads):
+    def P_0_phase_fac(ang_rads, lib='np'):
         """
         Returns
 
@@ -101,6 +137,7 @@ class OneBitGates:
         Parameters
         ----------
         ang_rads : float
+        lib : str
 
         Returns
         -------
@@ -112,14 +149,14 @@ class OneBitGates:
             tlist[0] = ang_rads/2
             tlist[3] = ang_rads/2
             return np.exp(1j*ang_rads/2)*pu2(*tlist)
-        ty = np.complex128
-        mat = np.zeros([2, 2], dtype=ty)
-        mat[0, 0] = np.exp(1j*ang_rads)
+        ty = complex
+        mat = OneBitGates.lib_fun(lib, 'zeros')([2, 2], dtype=ty)
+        mat[0, 0] = OneBitGates.lib_fun(lib, 'exp')(1j * ang_rads)
         mat[1, 1] = 1
         return mat
 
     @staticmethod
-    def P_1_phase_fac(ang_rads):
+    def P_1_phase_fac(ang_rads, lib='np'):
         """
         Returns
 
@@ -128,6 +165,7 @@ class OneBitGates:
         Parameters
         ----------
         ang_rads : float
+        lib : str
 
         Returns
         -------
@@ -139,14 +177,14 @@ class OneBitGates:
             tlist[0] = -ang_rads/2
             tlist[3] = -ang_rads/2
             return np.exp(1j*ang_rads/2)*pu2(*tlist)
-        ty = np.complex128
-        mat = np.zeros([2, 2], dtype=ty)
-        mat[1, 1] = np.exp(1j*ang_rads)
+        ty = complex
+        mat = OneBitGates.lib_fun(lib, 'zeros')([2, 2], dtype=ty)
+        mat[1, 1] = OneBitGates.lib_fun(lib, 'exp')(1j * ang_rads)
         mat[0, 0] = 1
         return mat
 
     @staticmethod
-    def phase_fac(ang_rads):
+    def phase_fac(ang_rads, lib='np'):
         """
         Returns
 
@@ -156,6 +194,7 @@ class OneBitGates:
         Parameters
         ----------
         ang_rads : float
+        lib : str
 
         Returns
         -------
@@ -166,15 +205,15 @@ class OneBitGates:
             tlist = [0.]*4
             tlist[0] = ang_rads
             return pu2(*tlist)
-        ty = np.complex128
-        mat = np.zeros([2, 2], dtype=ty)
-        x = np.exp(1j*ang_rads)
+        ty = complex
+        mat = OneBitGates.lib_fun(lib, 'zeros')([2, 2], dtype=ty)
+        x = OneBitGates.lib_fun(lib, 'exp')(1j * ang_rads)
         mat[1, 1] = x
         mat[0, 0] = x
         return mat
 
     @staticmethod
-    def rot(rad_ang_x, rad_ang_y, rad_ang_z):
+    def rot(rad_ang_x, rad_ang_y, rad_ang_z, lib='np'):
         """
         Returns
 
@@ -188,6 +227,7 @@ class OneBitGates:
         rad_ang_x : float
         rad_ang_y : float
         rad_ang_z : float
+        lib : str
 
         Returns
         -------
@@ -198,10 +238,11 @@ class OneBitGates:
             tlist = [0., rad_ang_x, rad_ang_y, rad_ang_z]
             return pu2(*tlist)
                 
-        ty = np.complex128
-        mat = np.zeros([2, 2], dtype=ty)
-        vec = np.array([rad_ang_x, rad_ang_y, rad_ang_z])
-        n = np.linalg.norm(vec)  # sqrt(dot(vec, vec.conj))
+        ty = complex
+        mat = OneBitGates.lib_fun(lib, 'zeros')([2, 2], dtype=ty)
+        vec = OneBitGates.lib_fun(lib, 'array', {'tf': 'convert_to_tensor'})(
+            [rad_ang_x, rad_ang_y, rad_ang_z])
+        n = OneBitGates.lib_fun(lib, 'linalg.norm')(vec)
         if abs(n) < 1e-8:
             mat[0, 0] = 1
             mat[1, 1] = 1
@@ -209,8 +250,8 @@ class OneBitGates:
             nx = rad_ang_x/n
             ny = rad_ang_y/n
             nz = rad_ang_z/n
-            c = np.cos(n)
-            s = np.sin(n)
+            c = OneBitGates.lib_fun(lib, 'cos')(n)
+            s = OneBitGates.lib_fun(lib, 'sin')(n)
             mat[0, 0] = c + 1j*s*nz
             mat[0, 1] = s*ny + 1j*s*nx
             mat[1, 0] = -s*ny + 1j*s*nx
@@ -218,7 +259,7 @@ class OneBitGates:
         return mat
 
     @staticmethod
-    def rot_ax(rad_ang, axis):
+    def rot_ax(rad_ang, axis, lib='np'):
         """
         Returns
 
@@ -230,6 +271,7 @@ class OneBitGates:
         ----------
         rad_ang : float
         axis : int
+        lib : str
 
         Returns
         -------
@@ -243,10 +285,10 @@ class OneBitGates:
             # print('mmbbvv', axis, pu2(*tlist))
             return pu2(*tlist)
         
-        ty = np.complex128
-        mat = np.zeros([2, 2], dtype=ty)
-        c = np.cos(rad_ang)
-        s = np.sin(rad_ang)
+        ty = complex
+        mat = OneBitGates.lib_fun(lib, 'zeros')([2, 2], dtype=ty)
+        c = OneBitGates.lib_fun(lib, 'cos')(rad_ang)
+        s = OneBitGates.lib_fun(lib, 'sin')(rad_ang)
 
         if axis == 1:
             mat[0, 0] = c
@@ -267,13 +309,14 @@ class OneBitGates:
         return mat
 
     @staticmethod
-    def sigx(is_quantum=True):
+    def sigx(is_quantum=True, lib='np'):
         """
         Returns \sigma_x Pauli matrix.
 
         Parameters
         ----------
         is_quantum : bool
+        lib : str
 
         Returns
         -------
@@ -281,38 +324,43 @@ class OneBitGates:
 
         """
         if not is_quantum:
-            ty = np.float64
+            ty = float
         else:
-            ty = np.complex128
-        mat = np.zeros([2, 2], dtype=ty)
+            ty = complex
+        mat = OneBitGates.lib_fun(lib, 'zeros')([2, 2], dtype=ty)
         mat[0, 1] = 1
         mat[1, 0] = 1
         return mat
 
     @staticmethod
-    def sigy():
+    def sigy(lib='np'):
         """
         Returns \sigma_y Pauli matrix.
+
+        Parameters
+        ----------
+        lib : str
 
         Returns
         -------
         np.ndarray
 
         """
-        ty = np.complex128
-        mat = np.zeros([2, 2], dtype=ty)
+        ty = complex
+        mat = OneBitGates.lib_fun(lib, 'zeros')([2, 2], dtype=ty)
         mat[0, 1] = -1j
         mat[1, 0] = 1j
         return mat
 
     @staticmethod
-    def sigz(is_quantum=True):
+    def sigz(is_quantum=True, lib='np'):
         """
         Returns \sigma_z Pauli matrix.
 
         Parameters
         ----------
         is_quantum : bool
+        lib : str
 
         Returns
         -------
@@ -320,16 +368,16 @@ class OneBitGates:
 
         """
         if not is_quantum:
-            ty = np.float64
+            ty = float
         else:
-            ty = np.complex128
-        mat = np.zeros([2, 2], dtype=ty)
+            ty = complex
+        mat = OneBitGates.lib_fun(lib, 'zeros')([2, 2], dtype=ty)
         mat[0, 0] = 1
         mat[1, 1] = -1
         return mat
 
     @staticmethod
-    def mat_S(herm=False):
+    def mat_S(herm=False, lib='np'):
         """
         Returns
 
@@ -340,6 +388,7 @@ class OneBitGates:
         Parameters
         ----------
         herm : bool
+        lib : str
 
         Returns
         -------
@@ -350,22 +399,26 @@ class OneBitGates:
             sign = 1
         else:
             sign = -1
-        return OneBitGates.P_1_phase_fac(sign*np.pi/2)
+        return OneBitGates.P_1_phase_fac(sign*np.pi/2, lib=lib)
 
     @staticmethod
-    def mat_Sdag():
+    def mat_Sdag(lib='np'):
         """
         returns S^\dag
+
+        Parameters
+        ----------
+        lib : str
 
         Returns
         -------
         np.ndarray
 
         """
-        return OneBitGates.mat_S(True)
+        return OneBitGates.mat_S(True, lib=lib)
 
     @staticmethod
-    def mat_T(herm=False):
+    def mat_T(herm=False, lib='np'):
         """
         Returns
 
@@ -376,6 +429,7 @@ class OneBitGates:
         Parameters
         ----------
         herm : bool
+        lib : str
 
         Returns
         -------
@@ -386,22 +440,26 @@ class OneBitGates:
             sign = 1
         else:
             sign = -1
-        return OneBitGates.P_1_phase_fac(sign*np.pi/4)
+        return OneBitGates.P_1_phase_fac(sign*np.pi/4, lib=lib)
 
     @staticmethod
-    def mat_Tdag():
+    def mat_Tdag(lib='np'):
         """
         returns T^\dag
+
+        Parameters
+        ----------
+        lib : str
 
         Returns
         -------
         np.ndarray
 
         """
-        return OneBitGates.mat_T(True)
+        return OneBitGates.mat_T(True, lib=lib)
 
     @staticmethod
-    def u2(rads0, rads1, rads2, rads3):
+    def u2(rads0, rads1, rads2, rads3, lib='np'):
         """
         Returns arbitrary 2-dim unitary matrix (U(2) group) parametrized as
         follows:
@@ -418,6 +476,7 @@ class OneBitGates:
         rads1 : float
         rads2 : float
         rads3 : float
+        lib : str
 
         Returns
         -------
@@ -427,7 +486,8 @@ class OneBitGates:
         if 'autograd.numpy' in sys.modules:
             tlist = [rads0, rads1, rads2, rads3]
             return pu2(*tlist)
-        return np.exp(1j*rads0)*OneBitGates.rot(rads1, rads2, rads3)
+        return OneBitGates.lib_fun(lib, 'exp')(1j * rads0) * \
+               OneBitGates.rot(rads1, rads2, rads3, lib=lib)
 
 
 if __name__ == "__main__":
