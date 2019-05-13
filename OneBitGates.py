@@ -71,9 +71,9 @@ class OneBitGates:
 
         """
         if not is_quantum:
-            ty = float
+            ty = np.float64
         else:
-            ty = complex
+            ty = np.complex128
         x = 1/np.sqrt(2)
         mat = OneBitGates.lib_fun(lib, 'full', {'tf': 'fill'})(
             (2, 2), x, dtype=ty)
@@ -97,9 +97,9 @@ class OneBitGates:
 
         """
         if not is_quantum:
-            ty = float
+            ty = np.float64
         else:
-            ty = complex
+            ty = np.complex128
         mat = OneBitGates.lib_fun(lib, 'zeros')([2, 2], dtype=ty)
         mat[0, 0] = 1
         return mat
@@ -121,9 +121,9 @@ class OneBitGates:
 
         """
         if not is_quantum:
-            ty = float
+            ty = np.float64
         else:
-            ty = complex
+            ty = np.complex128
         mat = OneBitGates.lib_fun(lib, 'zeros')([2, 2], dtype=ty)
         mat[1, 1] = 1
         return mat
@@ -150,7 +150,7 @@ class OneBitGates:
             tlist[0] = ang_rads/2
             tlist[3] = ang_rads/2
             return np.exp(1j*ang_rads/2)*pu2(*tlist)
-        ty = complex
+        ty = np.complex128
         mat = OneBitGates.lib_fun(lib, 'zeros')([2, 2], dtype=ty)
         mat[0, 0] = OneBitGates.lib_fun(lib, 'exp')(1j * ang_rads)
         mat[1, 1] = 1
@@ -178,7 +178,7 @@ class OneBitGates:
             tlist[0] = -ang_rads/2
             tlist[3] = -ang_rads/2
             return np.exp(1j*ang_rads/2)*pu2(*tlist)
-        ty = complex
+        ty = np.complex128
         mat = OneBitGates.lib_fun(lib, 'zeros')([2, 2], dtype=ty)
         mat[1, 1] = OneBitGates.lib_fun(lib, 'exp')(1j * ang_rads)
         mat[0, 0] = 1
@@ -206,7 +206,7 @@ class OneBitGates:
             tlist = [0.]*4
             tlist[0] = ang_rads
             return pu2(*tlist)
-        ty = complex
+        ty = np.complex128
         mat = OneBitGates.lib_fun(lib, 'zeros')([2, 2], dtype=ty)
         x = OneBitGates.lib_fun(lib, 'exp')(1j * ang_rads)
         mat[1, 1] = x
@@ -239,7 +239,7 @@ class OneBitGates:
             tlist = [0., rad_ang_x, rad_ang_y, rad_ang_z]
             return pu2(*tlist)
                 
-        ty = complex
+        ty = np.complex128
         mat = OneBitGates.lib_fun(lib, 'zeros')([2, 2], dtype=ty)
         vec = OneBitGates.lib_fun(lib, 'array', {'tf': 'convert_to_tensor'})(
             [rad_ang_x, rad_ang_y, rad_ang_z])
@@ -286,7 +286,7 @@ class OneBitGates:
             # print('mmbbvv', axis, pu2(*tlist))
             return pu2(*tlist)
         
-        ty = complex
+        ty = np.complex128
         mat = OneBitGates.lib_fun(lib, 'zeros')([2, 2], dtype=ty)
         c = OneBitGates.lib_fun(lib, 'cos')(rad_ang)
         s = OneBitGates.lib_fun(lib, 'sin')(rad_ang)
@@ -325,9 +325,9 @@ class OneBitGates:
 
         """
         if not is_quantum:
-            ty = float
+            ty = np.float64
         else:
-            ty = complex
+            ty = np.complex128
         mat = OneBitGates.lib_fun(lib, 'zeros')([2, 2], dtype=ty)
         mat[0, 1] = 1
         mat[1, 0] = 1
@@ -347,7 +347,7 @@ class OneBitGates:
         np.ndarray
 
         """
-        ty = complex
+        ty = np.complex128
         mat = OneBitGates.lib_fun(lib, 'zeros')([2, 2], dtype=ty)
         mat[0, 1] = -1j
         mat[1, 0] = 1j
@@ -369,9 +369,9 @@ class OneBitGates:
 
         """
         if not is_quantum:
-            ty = float
+            ty = np.float64
         else:
-            ty = complex
+            ty = np.complex128
         mat = OneBitGates.lib_fun(lib, 'zeros')([2, 2], dtype=ty)
         mat[0, 0] = 1
         mat[1, 1] = -1
