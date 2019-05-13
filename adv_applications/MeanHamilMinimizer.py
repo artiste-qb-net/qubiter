@@ -66,9 +66,12 @@ class MeanHamilMinimizer(CostMinimizer):
     TensorFlow.
 
     Qubiter can perform minimization using various minlibs (minimization
-    software libraries) such as 'scipy', 'autograd', 'pytorch', 'tflow'. It
+    software libraries) such as 'scipy', 'autograd', 'tflow', 'pytorch'. It
     can also use various devices (aka simulators or backends), either
-    virtual or real, to do the minimization.
+    virtual or real, to do the minimization. For example, tensorflow is a
+    minlib and SEO_simulator_tf is a backend that is native to qubiter and
+    uses tensorflow. By a native device, we mean one that uses Qubiter
+    native simulators like SEO_simulator and SEO_simulator_tf.
 
     Non-scipy minlibs implement backprop.
 
@@ -77,9 +80,6 @@ class MeanHamilMinimizer(CostMinimizer):
     minimization methods, including Powell and CG.
 
     https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html
-
-    By a native device, we mean one that uses Qubiter native simulators like
-    SEO_simulator and SEO_simulator_tf.
 
     Attributes
     ----------
@@ -94,12 +94,12 @@ class MeanHamilMinimizer(CostMinimizer):
         this array gives the initial values in radians for the cost function
         being minimized. The ordering corresponds to the ordering of
         self.all_var_nums
-    pred_mhamil : MeanHamil
-        Prediction mean Hamiltonian, used to evaluate pred_cost
+    targ_mhamil : MeanHamil
+        Target mean Hamiltonian, used to evaluate targ_cost
 
     """
 
-    def __init__(self, emp_mhamil, pred_mhamil,
+    def __init__(self, emp_mhamil, targ_mhamil,
                  all_var_nums, init_var_num_to_rads,
                  print_hiatus=1, verbose=False):
         """
@@ -108,7 +108,7 @@ class MeanHamilMinimizer(CostMinimizer):
         Parameters
         ----------
         emp_mhamil : MeanHamil
-        pred_mhamil : MeanHamil
+        targ_mhamil : MeanHamil
         all_var_nums : list[int]
         init_var_num_to_rads : dict[int, float]
         print_hiatus : int
@@ -119,10 +119,10 @@ class MeanHamilMinimizer(CostMinimizer):
 
         """
         self.emp_mhamil = emp_mhamil
-        self.pred_mhamil = pred_mhamil
+        self.targ_mhamil = targ_mhamil
         self.all_var_nums = all_var_nums
         assert emp_mhamil.all_var_nums == all_var_nums
-        assert pred_mhamil.all_var_nums == all_var_nums
+        assert targ_mhamil.all_var_nums == all_var_nums
         init_x_val = [init_var_num_to_rads[k] for k in all_var_nums]
         self.init_x_val = np.array(init_x_val)
 
@@ -132,7 +132,7 @@ class MeanHamilMinimizer(CostMinimizer):
         """
         This method wraps self.emp_mhamil.get_mean_val(). This method will
         also print out, whenever it is called, a report of the current
-        values of x and cost (and pred_cost if it is available).
+        values of x and cost (and targ_cost if it is available).
 
         Parameters
         ----------
@@ -144,7 +144,7 @@ class MeanHamilMinimizer(CostMinimizer):
 
         """
 
-        var_num_to_rads = dict(zip(self.all_var_nums, tuple(x_val)))
+        var_num_to_rads = dict(zip(self.all_var_nums, list(x_val)))
         cost = self.emp_mhamil.get_mean_val(var_num_to_rads)
 
         self.cur_x_val = x_val
@@ -154,12 +154,12 @@ class MeanHamilMinimizer(CostMinimizer):
 
         return cost
 
-    def pred_cost_fun(self, x_val):
+    def targ_cost_fun(self, x_val):
         """
         Returns the cost, predicted from theory, rather than estimated from
         data as in cost_fun(). This method mimics the method cost_fun(),
         but that one wraps self.emp_mhamil.get_mean_val(). This one wraps
-        self.pred_mhamil.get_mean_val().
+        self.targ_mhamil.get_mean_val().
 
         Parameters
         ----------
@@ -170,12 +170,12 @@ class MeanHamilMinimizer(CostMinimizer):
         float
 
         """
-        # print('inside_pred_cost', x_val)
-        var_num_to_rads = dict(zip(self.all_var_nums, tuple(x_val)))
+        # print('inside_targ_cost', x_val)
+        var_num_to_rads = dict(zip(self.all_var_nums, list(x_val)))
         # print('mmmmmmmmmaaaaaa', var_num_to_rads)
-        assert self.pred_mhamil.num_samples == 0,\
+        assert self.targ_mhamil.num_samples == 0,\
             'predict cost with zero samples'
-        cost = self.pred_mhamil.get_mean_val(var_num_to_rads)
+        cost = self.targ_mhamil.get_mean_val(var_num_to_rads)
         # print('bbvvv-cost', cost)
         return cost
 
@@ -183,11 +183,7 @@ class MeanHamilMinimizer(CostMinimizer):
         """
         This method finds minimum of cost function. It allows user to choose
         among several possible minlibs, namely, 'scipy', 'autograd',
-        'pytorch', 'tflow'. minlib parameters can be passed in via kwargs.
-
-        Non-scipy minlibs do backprop. It is known that the complexity of
-        calculating forward propagation and back propagation are about the
-        same.
+        'tflow', 'pytorch'. minlib parameters can be passed in via kwargs.
 
         kwargs (keyword arguments)
         minlib = scipy
@@ -198,7 +194,7 @@ class MeanHamilMinimizer(CostMinimizer):
                 cost_fun)
             descent_rate : float
                 positive float, constant that multiplies gradient of
-                pred_cost_fun(). Often denoted as eta
+                cost function being minimized. Often denoted as eta
 
         Parameters
         ----------
@@ -216,9 +212,9 @@ class MeanHamilMinimizer(CostMinimizer):
         print('x_val~ (' +
               ', '.join(['#' + str(k) for k in self.all_var_nums]) + ')')
 
-        def pred_cost(xx):
+        def targ_cost(xx):
             # self argument seems to confuse grad
-            return self.pred_cost_fun(xx)
+            return self.targ_cost_fun(xx)
         if minlib == 'scipy':
             import scipy
             minimizer_fun = scipy.optimize.minimize
@@ -240,12 +236,12 @@ class MeanHamilMinimizer(CostMinimizer):
             for step in range(num_iter):
                 xlist = list(self.cur_x_val)
                 # print('mmbbb', self.cur_x_val, xlist)
-                self.cur_pred_cost = pred_cost(self.cur_x_val)
+                self.cur_targ_cost = targ_cost(self.cur_x_val)
                 self.cur_cost = self.cost_fun(self.cur_x_val)
-                # print('kkkhhh', grad(pred_cost)(self.cur_x_val))
+                # print('kkkhhh', grad(targ_cost)(self.cur_x_val))
                 for dwrt in range(len(xlist)):
                     self.cur_x_val[dwrt] -= \
-                        rate*grad(pred_cost)(self.cur_x_val)[dwrt]
+                        rate*grad(targ_cost)(self.cur_x_val)[dwrt]
 
         elif minlib == 'tflow':
             import tensorflow as tf
@@ -257,13 +253,18 @@ class MeanHamilMinimizer(CostMinimizer):
             self.init_x_val = tf.convert_to_tensor(self.init_x_val)
             self.cur_x_val = self.init_x_val
 
+            # optimizer = tf.train.GradientDescentOptimizer(rate)
+
             for step in range(num_iter):
                 with tf.GradientTape() as tape:
                     tape.watch(self.cur_x_val)
-                    self.cur_pred_cost = pred_cost(self.cur_x_val)
+                    self.cur_targ_cost = targ_cost(self.cur_x_val)
+                    # print('**********cccccccc', self.cur_x_val,
+                    #       self.cur_targ_cost)
                 self.cur_cost = self.cost_fun(self.cur_x_val)
-                self.cur_x_val -= \
-                        rate*tape.gradient(pred_cost, self.cur_x_val)
+                grads = tape.gradient(self.cur_targ_cost, self.cur_x_val)
+                self.cur_x_val -= rate*grads
+                # optimizer.apply_gradients(zip(grads, self.cur_x_val))
 
         elif minlib == 'pytorch':
             assert False, 'not yet'

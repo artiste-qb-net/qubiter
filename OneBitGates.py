@@ -49,7 +49,6 @@ class OneBitGates:
         elif lib == 'tf':
             import tensorflow as tf
             convert = tf.convert_to_tensor
-            #lili = [[convert(x) for x in li] for li in lili]
             return convert(lili, dtype=tf.complex128)
         else:
             assert False, "unsupported tensor lib"

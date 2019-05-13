@@ -8,8 +8,8 @@ class CostMinimizer:
     ----------
     cur_cost : float
         current cost
-    cur_pred_cost : float
-        current predicted cost
+    cur_targ_cost : float
+        current target cost
     cur_x_val : np.ndarray
         current x value
     init_x_val : np.ndarray
@@ -44,13 +44,13 @@ class CostMinimizer:
         
         self.cur_x_val = init_x_val
         self.cur_cost = None
-        self.cur_pred_cost = None
+        self.cur_targ_cost = None
         self.iter_count = 0
 
     def broadcast_cost_fun_call(self):
         """
         This method prints current cost and x_val each time cost function is
-        called. It also prints pred_cost if there is one.
+        called. It also prints targ_cost if there is one.
 
         Returns
         -------
@@ -63,8 +63,8 @@ class CostMinimizer:
         if self.iter_count % self.print_hiatus == 0:
             s = 'iter=' + str(self.iter_count)
             s += ', cost=' + '{0:0.6f}'.format(self.cur_cost)
-            if self.cur_pred_cost is not None:
-                s += ', pred_cost=' + '{0:0.6f}'.format(self.cur_pred_cost)
+            if self.cur_targ_cost is not None:
+                s += ', targ_cost=' + '{0:0.6f}'.format(self.cur_targ_cost)
             s += ', x_val=' + x_val_str
             print(s)
 

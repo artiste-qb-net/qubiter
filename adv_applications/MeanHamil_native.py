@@ -16,6 +16,7 @@ class MeanHamil_native(MeanHamil):
     list_of_supported_sims : list[str]
         list of the names of simulators supported by this class.
         self.simulator_name must be in this list.
+    use_tf : bool
 
     """
     # class variable
@@ -40,13 +41,14 @@ class MeanHamil_native(MeanHamil):
         MeanHamil.__init__(self, *args, **kwargs)
         assert self.simulator_name in MeanHamil_native.\
             list_of_supported_sims
-        if self.simulator_name == 'SEO_simulator_tf':
+        self.use_tf = (self.simulator_name == 'SEO_simulator_tf')
+        if self.use_tf:
             assert tf.executing_eagerly()
 
     def get_mean_val(self, var_num_to_rads):
         """
         This method predicts the mean value of the Hamiltonian hamil using
-        only Qubiter simulators and no data
+        only Qubiter simulators.
 
         Parameters
         ----------
@@ -92,11 +94,9 @@ class MeanHamil_native(MeanHamil):
                 assert False, 'unsupported native simulator'
 
             fin_st_vec = sim.cur_st_vec_dict['pure']
-            # if self.simulator_name == 'SEO_simulator_tf':
-            #     fin_st_vec.arr = np.array(init_st_vec.arr)
 
-            # print('inside pred hamil in/out st_vec',
-            # self.init_st_vec, fin_st_vec)
+            # print('********bbbvvvvvv',
+            # self.init_st_vec.arr, fin_st_vec.arr)
 
             # get effective state vec
             if self.num_samples:
@@ -118,8 +118,15 @@ class MeanHamil_native(MeanHamil):
 
             # add contribution to mean
             real_arr = self.get_real_vec(term)
-            mean_val += coef*effective_st_vec.\
-                    get_mean_value_of_real_diag_mat(real_arr)
+            if not self.use_tf:
+                mean_val += coef*effective_st_vec.\
+                        get_mean_value_of_real_diag_mat(real_arr)
+            else:
+                real_arr = tf.convert_to_tensor(real_arr, dtype=tf.complex128)
+                arr = effective_st_vec.arr
+                mean_val += coef*tf.reduce_sum(
+                    tf.real(tf.conj(arr) * real_arr * arr))
+
 
         # create this writer in order to delete final files
         wr1 = SEO_writer(fin_file_prefix,
