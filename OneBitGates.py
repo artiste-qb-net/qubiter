@@ -103,9 +103,11 @@ class OneBitGates:
             fun = eval(lib + '.' + lib_to_fun_name[lib])
 
         if lib == 'tf':
-            fun = lambda x: tf.cast(fun(x), dtype=tf.complex128)
+            fun1 = lambda x: tf.cast(fun(x), dtype=tf.complex128)
+        else:
+            fun1 = fun
 
-        return fun
+        return fun1
 
     @staticmethod
     def had2(is_quantum=True, lib='np'):
