@@ -9,7 +9,6 @@ else:
     print('pu2 in sys.modules', 'pu2' in sys.modules)
     import autograd.numpy as np
 
-
 class OneBitGates:
     """
     This class has no attributes or constructor. It is simply a collection 
@@ -48,6 +47,8 @@ class OneBitGates:
         function
 
         """
+        if lib == 'tf':
+            import tensorflow as tf
         if lib == 'np' or lib_to_fun_name is None:
             return eval(lib + '.' + fun_name)
         else:
