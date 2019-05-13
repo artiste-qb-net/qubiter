@@ -81,12 +81,12 @@ class OneBitGates:
         # aa0 = almost all 0
         aa0 = np.zeros((nrows, nrows))
         aa0[row, col] = 1
-        aa0 = tf.convert_to_tensor(aa0)
+        aa0 = tf.convert_to_tensor(aa0, dtype=tf.complex128)
 
         # aa1 = almost all 1
         aa1 = np.ones((nrows, nrows))
         aa1[row, col] = 0
-        aa1 = tf.convert_to_tensor(aa1)
+        aa1 = tf.convert_to_tensor(aa1, dtype=tf.complex128)
 
         return tf_mat * aa1 + aa0 * val
 
