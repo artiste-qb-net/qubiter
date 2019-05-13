@@ -9,6 +9,7 @@ else:
     print('pu2 in sys.modules', 'pu2' in sys.modules)
     import autograd.numpy as np
 
+
 class OneBitGates:
     """
     This class has no attributes or constructor. It is simply a collection 
@@ -56,6 +57,40 @@ class OneBitGates:
             return eval(lib + '.' + lib_to_fun_name[lib])
 
     @staticmethod
+    def tf_assign(tf_mat, row, col, val, nrows=2):
+        """
+        This is a temporary workaround until tensorflow begins supporting
+        tensor component assignments
+
+
+        Parameters
+        ----------
+        tf_mat : tf.Tensor
+        row : int
+        col : int
+        val : tf_mat.dtype
+        nrows : int
+
+        Returns
+        -------
+        tf.Tensor
+
+        """
+
+        import tensorflow as tf
+        # aa0 = almost all 0
+        aa0 = np.zeros((nrows, nrows))
+        aa0[row, col] = 1
+        aa0 = tf.convert_to_tensor(aa0)
+
+        # aa1 = almost all 1
+        aa1 = np.ones((nrows, nrows))
+        aa1[row, col] = 0
+        aa1 = tf.convert_to_tensor(aa1)
+
+        return tf_mat * aa1 + aa0 * val
+
+    @staticmethod
     def had2(is_quantum=True, lib='np'):
         """
         Returns 2 dimensional Hadamard matrix (\sigma_x + \sigma_z)/sqrt(2)
@@ -77,7 +112,8 @@ class OneBitGates:
         x = 1/np.sqrt(2)
         mat = OneBitGates.lib_fun(lib, 'full', {'tf': 'fill'})(
             (2, 2), x, dtype=ty)
-        mat[1, 1] = -x
+        mat[1, 1] = -x \
+            if lib != 'tf' else OneBitGates.tf_assign(mat, 1, 1, -x)
         return mat
 
     @staticmethod
@@ -101,7 +137,8 @@ class OneBitGates:
         else:
             ty = np.complex128
         mat = OneBitGates.lib_fun(lib, 'zeros')([2, 2], dtype=ty)
-        mat[0, 0] = 1
+        mat[0, 0] = 1 \
+            if lib != 'tf' else OneBitGates.tf_assign(mat, 0, 0, 1)
         return mat
 
     @staticmethod
@@ -125,7 +162,8 @@ class OneBitGates:
         else:
             ty = np.complex128
         mat = OneBitGates.lib_fun(lib, 'zeros')([2, 2], dtype=ty)
-        mat[1, 1] = 1
+        mat[1, 1] = 1 \
+            if lib != 'tf' else OneBitGates.tf_assign(mat, 1, 1, 1)
         return mat
 
     @staticmethod
@@ -152,8 +190,11 @@ class OneBitGates:
             return np.exp(1j*ang_rads/2)*pu2(*tlist)
         ty = np.complex128
         mat = OneBitGates.lib_fun(lib, 'zeros')([2, 2], dtype=ty)
-        mat[0, 0] = OneBitGates.lib_fun(lib, 'exp')(1j * ang_rads)
-        mat[1, 1] = 1
+        x = OneBitGates.lib_fun(lib, 'exp')(1j * ang_rads)
+        mat[0, 0] = x \
+            if lib != 'tf' else OneBitGates.tf_assign(mat, 0, 0, x)
+        mat[1, 1] = 1 \
+            if lib != 'tf' else OneBitGates.tf_assign(mat, 1, 1, 1)
         return mat
 
     @staticmethod
@@ -180,8 +221,11 @@ class OneBitGates:
             return np.exp(1j*ang_rads/2)*pu2(*tlist)
         ty = np.complex128
         mat = OneBitGates.lib_fun(lib, 'zeros')([2, 2], dtype=ty)
-        mat[1, 1] = OneBitGates.lib_fun(lib, 'exp')(1j * ang_rads)
-        mat[0, 0] = 1
+        x = OneBitGates.lib_fun(lib, 'exp')(1j * ang_rads)
+        mat[1, 1] = x \
+            if lib != 'tf' else OneBitGates.tf_assign(mat, 1, 1, x)
+        mat[0, 0] = 1 \
+            if lib != 'tf' else OneBitGates.tf_assign(mat, 0, 0, 1)
         return mat
 
     @staticmethod
@@ -209,8 +253,10 @@ class OneBitGates:
         ty = np.complex128
         mat = OneBitGates.lib_fun(lib, 'zeros')([2, 2], dtype=ty)
         x = OneBitGates.lib_fun(lib, 'exp')(1j * ang_rads)
-        mat[1, 1] = x
-        mat[0, 0] = x
+        mat[1, 1] = x \
+            if lib != 'tf' else OneBitGates.tf_assign(mat, 1, 1, x)
+        mat[0, 0] = x \
+            if lib != 'tf' else OneBitGates.tf_assign(mat, 0, 0, x)
         return mat
 
     @staticmethod
@@ -245,18 +291,29 @@ class OneBitGates:
             [rad_ang_x, rad_ang_y, rad_ang_z])
         n = OneBitGates.lib_fun(lib, 'linalg.norm')(vec)
         if abs(n) < 1e-8:
-            mat[0, 0] = 1
-            mat[1, 1] = 1
+            mat[0, 0] = 1 \
+                if lib != 'tf' else OneBitGates.tf_assign(mat, 0, 0, 1)
+            mat[1, 1] = 1 \
+                if lib != 'tf' else OneBitGates.tf_assign(mat, 1, 1, 1)
         else:
             nx = rad_ang_x/n
             ny = rad_ang_y/n
             nz = rad_ang_z/n
             c = OneBitGates.lib_fun(lib, 'cos')(n)
             s = OneBitGates.lib_fun(lib, 'sin')(n)
-            mat[0, 0] = c + 1j*s*nz
-            mat[0, 1] = s*ny + 1j*s*nx
-            mat[1, 0] = -s*ny + 1j*s*nx
-            mat[1, 1] = c - 1j*s*nz
+            mat00 = c + 1j*s*nz
+            mat01 = s*ny + 1j*s*nx
+            mat10 = -s*ny + 1j*s*nx
+            mat11 = c - 1j*s*nz
+
+            mat[0, 0] = mat00 \
+                if lib != 'tf' else OneBitGates.tf_assign(mat, 0, 0, mat00)
+            mat[0, 1] = mat01 \
+                if lib != 'tf' else OneBitGates.tf_assign(mat, 0, 1, mat01)
+            mat[1, 0] = mat10 \
+                if lib != 'tf' else OneBitGates.tf_assign(mat, 1, 0, mat10)
+            mat[1, 1] = mat11 \
+                if lib != 'tf' else OneBitGates.tf_assign(mat, 1, 1, mat11)
         return mat
 
     @staticmethod
@@ -292,18 +349,28 @@ class OneBitGates:
         s = OneBitGates.lib_fun(lib, 'sin')(rad_ang)
 
         if axis == 1:
-            mat[0, 0] = c
-            mat[0, 1] = 1j*s
-            mat[1, 0] = 1j*s
-            mat[1, 1] = c
+            mat[0, 0] = c \
+                if lib != 'tf' else OneBitGates.tf_assign(mat, 0, 0, c)
+            mat[0, 1] = 1j*s \
+                if lib != 'tf' else OneBitGates.tf_assign(mat, 0, 1, 1j*s)
+            mat[1, 0] = 1j*s \
+                if lib != 'tf' else OneBitGates.tf_assign(mat, 1, 0, 1j*s)
+            mat[1, 1] = c \
+                if lib != 'tf' else OneBitGates.tf_assign(mat, 1, 1, c)
         elif axis == 2:
-            mat[0, 0] = c
-            mat[0, 1] = s
-            mat[1, 0] = -s
-            mat[1, 1] = c
+            mat[0, 0] = c \
+                if lib != 'tf' else OneBitGates.tf_assign(mat, 0, 0, c)
+            mat[0, 1] = s \
+                if lib != 'tf' else OneBitGates.tf_assign(mat, 0, 1, s)
+            mat[1, 0] = -s \
+                if lib != 'tf' else OneBitGates.tf_assign(mat, 1, 0, -s)
+            mat[1, 1] = c \
+                if lib != 'tf' else OneBitGates.tf_assign(mat, 1, 1, c)
         elif axis == 3:
-            mat[0, 0] = c + 1j*s
-            mat[1, 1] = c - 1j*s
+            mat[0, 0] = c + 1j*s \
+                if lib != 'tf' else OneBitGates.tf_assign(mat, 0, 0, c + 1j*s)
+            mat[1, 1] = c - 1j*s \
+                if lib != 'tf' else OneBitGates.tf_assign(mat, 1, 1, c - 1j*s)
         else:
             assert False, "axis not in [1,2,3]"
 
@@ -329,8 +396,10 @@ class OneBitGates:
         else:
             ty = np.complex128
         mat = OneBitGates.lib_fun(lib, 'zeros')([2, 2], dtype=ty)
-        mat[0, 1] = 1
-        mat[1, 0] = 1
+        mat[0, 1] = 1 \
+                if lib != 'tf' else OneBitGates.tf_assign(mat, 0, 1, 1)
+        mat[1, 0] = 1 \
+                if lib != 'tf' else OneBitGates.tf_assign(mat, 1, 0, 1)
         return mat
 
     @staticmethod
@@ -349,8 +418,10 @@ class OneBitGates:
         """
         ty = np.complex128
         mat = OneBitGates.lib_fun(lib, 'zeros')([2, 2], dtype=ty)
-        mat[0, 1] = -1j
-        mat[1, 0] = 1j
+        mat[0, 1] = -1j \
+                if lib != 'tf' else OneBitGates.tf_assign(mat, 0, 1, -1j)
+        mat[1, 0] = 1j \
+                if lib != 'tf' else OneBitGates.tf_assign(mat, 1, 0, 1j)
         return mat
 
     @staticmethod
@@ -373,8 +444,10 @@ class OneBitGates:
         else:
             ty = np.complex128
         mat = OneBitGates.lib_fun(lib, 'zeros')([2, 2], dtype=ty)
-        mat[0, 0] = 1
-        mat[1, 1] = -1
+        mat[0, 0] = 1 \
+                if lib != 'tf' else OneBitGates.tf_assign(mat, 0, 0, 1)
+        mat[1, 1] = -1 \
+                if lib != 'tf' else OneBitGates.tf_assign(mat, 1, 1, -1)
         return mat
 
     @staticmethod
