@@ -48,7 +48,9 @@ class OneBitGates:
             return np.array(lili, dtype=dtype)
         elif lib == 'tf':
             import tensorflow as tf
-            return tf.convert_to_tensor(lili, dtype=tf.complex128)
+            convert = tf.convert_to_tensor
+            lili = [[convert(x) for x in li] for li in lili]
+            return convert(lili, dtype=tf.complex128)
         else:
             assert False, "unsupported tensor lib"
 
