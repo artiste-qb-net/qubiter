@@ -7,7 +7,7 @@ good introduction to Qubiter's basic features. Other notebooks
 in Qubiter's jupyter notebook folder
 discuss more advanced features:
 
-* https://github.com/artiste-qb-net/qubiter/blob/master/jupyter-notebooks/Say_Hello_World_With_Qubiter.ipynb
+* https://github.com/artiste-qb-net/qubiter/blob/master/qubiter/jupyter_notebooks/Say_Hello_World_With_Qubiter.ipynb
 
 ## Installation
 
