@@ -1,3 +1,0 @@
-Number of lines in file = 15
-Number of Elem. Ops = 10
-Number of SIGX Ops (Controlled or uncontrolled NOTs) = 4

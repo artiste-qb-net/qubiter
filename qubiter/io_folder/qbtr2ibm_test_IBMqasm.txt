@@ -1,0 +1,25 @@
+import numpy as np
+from qiskit import QuantumCircuit
+from qiskit import ClassicalRegister, QuantumRegister
+from qiskit import execute
+
+
+q = QuantumRegister(5, 'q')
+ckt = QuantumCircuit(q)
+
+ckt.h(q[3])
+ckt.x(q[2])
+ckt.y(q[2])
+ckt.z(q[2])
+ckt.u3(-1.0471975511965976, -1.5707963267948966, 1.5707963267948966), q[3])
+ckt.u3(-0.8726646259971648, -0.0, -0.0), q[3])
+ckt.u3(-0.0, -1.0471975511965976, -1.0471975511965976), q[3])
+ckt.u3(-1.4439793494898379, -1.943589293061628, -0.7675840859664932), q[4])
+# 0->1 allowed by c_to_tars
+ckt.cx(q[0], q[1])
+# 1->0 not allowed by c_to_tars
+# SIGX  AT  0  IF  1T
+# not allowed in strict mode
+ckt.u1(0.7853981633974483, q[2])
+ckt.cu1(0.7853981633974483, q[0], q[2])
+ckt.swap(q[2], q[0])

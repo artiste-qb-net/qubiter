@@ -1,0 +1,24 @@
+|   X   |   |   
+|   Y   |   |   
+|   Z   |   |   
+H   |   |   |   
+|   Rx  |   |   
+|   Ry  |   |   
+|   Rz  |   |   
+|   |   R   |   
+|   @P  |   |   
+|   @P  |   |   
+|   @P  |   |   
+|   @P  |   |   
+@---+---X   |   
+PRINT	ALL
+<---+--->   |   
+@---+---@P  |   
+@---+---@P  |   
+NOTA	the coda follows
+|   H   |   |   
+|   |   X---@   
+NOTA	change |0_X>, |1_X> to |0>, |1>
+|   |   Ry  |   
+NOTA	change |0_Y>, |1_Y> to |0>, |1>
+Rx  |   |   |   
