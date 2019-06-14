@@ -7,7 +7,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="qubiter",
-    version="0.0.0",
+    version="0.0.1",
     author="Artiste-qb",
 	keywords = ('quantum compiler'),
     author_email="Robert.Tucci@artiste-qb.net",
@@ -15,7 +15,13 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/artiste-qb-net/qubiter",
-    packages=find_packages(exclude=['contrib', 'docs', 'tests']),
+    packages=find_packages(),
+	#include_package_data=True,
+	package_data={
+        '': ['*.txt', '*.pdf', '*.ipynb', '*.md'],
+		'qubiter': ['quantum_CSD_compiler/*.md'],
+    },	
+	data_files=[('qubiter', ['open_distro_notebooks.ipynb'])],
 	install_requires=[
         'numpy',
         'scipy'
