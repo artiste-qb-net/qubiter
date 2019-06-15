@@ -2,10 +2,12 @@ from qubiter.Controls import *
 from qubiter.SEO_pre_reader import *
 from qubiter.PlaceholderManager import *
 from qubiter.LoopyPlaceholderManager import *
+import os
 
 import sys
 if 'autograd.numpy' not in sys.modules:
     import numpy as np
+
 
 class SEO_reader(SEO_pre_reader):
     """
@@ -177,6 +179,23 @@ class SEO_reader(SEO_pre_reader):
 
         log.close()
 
+    def get_log_file_path(self, rel=True):
+        """
+        Returns path (relative if rel is True, absolute if rel is False) of
+        log file
+
+        Attributes
+        ----------
+        rel : bool
+
+        Returns
+        -------
+        str
+
+        """
+        rel_path = self.file_prefix + '_' + str(self.num_bits) + '_log.txt'
+        return rel_path if rel else os.path.abspath(rel_path)
+
     def print_log_file(self):
         """
         Prints log file.
@@ -186,8 +205,8 @@ class SEO_reader(SEO_pre_reader):
         None
 
         """
-        path = self.file_prefix + '_' + str(self.num_bits) + '_log.txt'
-        with open(path) as f:
+        rel_path = self.get_log_file_path()
+        with open(rel_path) as f:
             print(f.read())
 
     def degs_str_to_rads(self, degs_str):
@@ -949,6 +968,7 @@ class SEO_reader(SEO_pre_reader):
         if self.write_log:
             return
         assert False, 'U_2_ not used'
+
 
 if __name__ == "__main__":
     def main():

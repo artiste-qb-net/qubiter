@@ -13,9 +13,9 @@ dir_whitelist = [
     'quantum_CSD_compiler'
     ]
 file_blacklist = [
+    '__init__.py',
     'run_all_nb.py',
     'run_all_py.py',
-    '__init__.py',
     'setup.py'
 ]
 for dir_name in dir_whitelist:

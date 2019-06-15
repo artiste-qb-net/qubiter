@@ -5,6 +5,7 @@ import re
 import qubiter.utilities_gen as ug
 from qubiter.PlaceholderManager import *
 import sys
+import os
 if 'autograd.numpy' not in sys.modules:
     import numpy as np
 
@@ -126,28 +127,42 @@ class SEO_writer:
 
         self.indentation = 0
 
-    def get_eng_file_path(self):
+    def get_eng_file_path(self, rel=True):
         """
-        Returns path to English file
+        Returns path (relative if rel is True, absolute if rel is False) of
+        English file
+
+        Attributes
+        ----------
+        rel : bool
 
         Returns
         -------
         str
 
         """
-        return ug.get_eng_file_path(self.file_prefix, self.emb.num_bits_aft)
+        rel_path = ug.get_eng_file_path(self.file_prefix,
+                                        self.emb.num_bits_aft)
+        return rel_path if rel else os.path.abspath(rel_path)
 
-    def get_pic_file_path(self):
+    def get_pic_file_path(self, rel=True):
         """
-        Returns path to Picture file
+        Returns path (relative if rel is True, absolute if rel is False) of
+        Picture file
+
+        Attributes
+        ----------
+        rel : bool
 
         Returns
         -------
         str
 
         """
-        return ug.get_pic_file_path(self.file_prefix, self.emb.num_bits_aft,
-                                    ZL=self.ZL)
+        rel_path = ug.get_pic_file_path(self.file_prefix,
+                                        self.emb.num_bits_aft,
+                                        ZL=self.ZL)
+        return rel_path if rel else os.path.abspath(rel_path)
 
     def close_files(self):
         """
