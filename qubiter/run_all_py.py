@@ -4,11 +4,13 @@ from subprocess import Popen, PIPE, call
 '''This script tries to run all class files, in all folders. Class files all 
 have a main() at the end. '''
 
+
 dir_whitelist = [
     "./",
+    'adv_applications',
     'device_specific',
-    'quantum_CSD_compiler',
-    'adv_applications'
+    'latex_tools',
+    'quantum_CSD_compiler'
     ]
 file_blacklist = [
     'run_all_nb.py',
