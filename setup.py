@@ -7,7 +7,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="qubiter",
-    version="0.0.1",
+    version="1.0.0",
     author="qubiter contributors",
     keywords = ('quantum compiler'),
     author_email="rrtucci@gmail.com",
@@ -28,7 +28,7 @@ setup(
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: BSD",
+        "License :: OSI Approved :: BSD License",
         "Operating System :: OS Independent",
     ],
 )
