@@ -21,7 +21,7 @@ setup(
         '': ['*.txt', '*.pdf', '*.ipynb', '*.md', '*.tex', '*.sty'],
         'qubiter': ['quantum_CSD_compiler/*.md'],
     },	
-    data_files=[('qubiter', ['go_to_qubiter_notebooks.ipynb'])],
+    data_files=[('qubiter', ['go_to_qubiter_inner_notebooks.ipynb'])],
     install_requires=[
         'numpy',
         'scipy'
