@@ -2,7 +2,7 @@ from qubiter.CktEmbedder import *
 from qubiter.Controls import *
 from qubiter.OneBitGates import *
 import re
-import qubiter.utilities_gen as ug
+import qubiter.utilities_gen as utg
 from qubiter.PlaceholderManager import *
 import sys
 import os
@@ -116,18 +116,20 @@ class SEO_writer:
         self.measured_bits = []
 
         if english_out is None and file_prefix:
-            self.english_out = open(self.get_eng_file_path(), 'wt')
+            self.english_out = open(utg.preface(self.get_eng_file_path(
+                rel=True)), 'wt')
         else:
             self.english_out = english_out
 
         if picture_out is None and file_prefix:
-            self.picture_out = open(self.get_pic_file_path(), 'wt')
+            self.picture_out = open(utg.preface(self.get_pic_file_path(
+                rel=True)), 'wt')
         else:
             self.picture_out = picture_out
 
         self.indentation = 0
 
-    def get_eng_file_path(self, rel=True):
+    def get_eng_file_path(self, rel=False):
         """
         Returns path (relative if rel is True, absolute if rel is False) of
         English file
@@ -141,11 +143,12 @@ class SEO_writer:
         str
 
         """
-        rel_path = ug.get_eng_file_path(self.file_prefix,
-                                        self.emb.num_bits_aft)
-        return rel_path if rel else os.path.abspath(rel_path)
+        rel_path = utg.get_eng_file_rel_path(self.file_prefix,
+                                             self.emb.num_bits_aft)
+        # print("..,,mmmm", rel_path)
+        return rel_path if rel else utg.preface(rel_path)
 
-    def get_pic_file_path(self, rel=True):
+    def get_pic_file_path(self, rel=False):
         """
         Returns path (relative if rel is True, absolute if rel is False) of
         Picture file
@@ -159,10 +162,10 @@ class SEO_writer:
         str
 
         """
-        rel_path = ug.get_pic_file_path(self.file_prefix,
-                                        self.emb.num_bits_aft,
-                                        ZL=self.ZL)
-        return rel_path if rel else os.path.abspath(rel_path)
+        rel_path = utg.get_pic_file_rel_path(self.file_prefix,
+                                             self.emb.num_bits_aft,
+                                             ZL=self.ZL)
+        return rel_path if rel else utg.preface(rel_path)
 
     def close_files(self):
         """
@@ -202,7 +205,7 @@ class SEO_writer:
         None
 
         """
-        with open(self.get_eng_file_path()) as f:
+        with open(utg.preface(self.get_eng_file_path(rel=True))) as f:
             print(f.read())
 
     def print_pic_file(self):
@@ -214,7 +217,7 @@ class SEO_writer:
         None
 
         """
-        with open(self.get_pic_file_path()) as f:
+        with open(utg.preface(self.get_pic_file_path(rel=True))) as f:
             print(f.read())
 
     def colonize(self, pic_line):
@@ -1426,7 +1429,7 @@ if __name__ == "__main__":
         ang_rads = 30*np.pi/180
 
         for ZL in [False, True]:
-            wr = SEO_writer('io_folder/wr_test', emb, ZL=ZL)
+            wr = SEO_writer('qubiter/io_folder/wr_test', emb, ZL=ZL)
 
             wr.write_NOTA('zero bit last = ' + str(ZL))
 

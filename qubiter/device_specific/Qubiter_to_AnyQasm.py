@@ -147,7 +147,7 @@ class Qubiter_to_AnyQasm(SEO_reader):
 
         self.aqasm_path = file_prefix +\
                           '_' + aqasm_name + '.' + aqasm_ftype
-        self.aqasm_out = open(self.aqasm_path, 'wt')
+        self.aqasm_out = open(utg.preface(self.aqasm_path), 'wt')
 
         self.qbtr_wr = None
         if write_qubiter_files:
@@ -295,7 +295,7 @@ class Qubiter_to_AnyQasm(SEO_reader):
         -------
 
         """
-        with open(self.aqasm_path) as f:
+        with open(utg.preface(self.aqasm_path)) as f:
             print(f.read())
 
 if __name__ == "__main__":

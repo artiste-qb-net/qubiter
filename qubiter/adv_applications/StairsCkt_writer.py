@@ -411,7 +411,7 @@ if __name__ == "__main__":
         num_bits = 4
         gate_str_to_rads_list = StairsCkt_writer.get_gate_str_to_rads_list(
             num_bits, '#int')
-        file_prefix = '../io_folder/stairs_writer_test'
+        file_prefix = 'qubiter/io_folder/stairs_writer_test'
         emb = CktEmbedder(num_bits, num_bits)
 
         wr = StairsCkt_writer(gate_str_to_rads_list, file_prefix, emb)

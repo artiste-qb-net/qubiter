@@ -1,5 +1,5 @@
 from qubiter.device_specific.Qubiter_to_AnyQasm import *
-import qubiter.utilities_gen as ug
+import qubiter.utilities_gen as utg
 
 
 class Qubiter_to_IBMqasm(Qubiter_to_AnyQasm):
@@ -325,7 +325,7 @@ class Qubiter_to_IBMqasm(Qubiter_to_AnyQasm):
         assert len(controls.bit_pos) == 0
 
         rad_ang_list = [angle_x_rads, angle_y_rads, angle_z_rads]
-        assert ug.all_floats(rad_ang_list), \
+        assert utg.all_floats(rad_ang_list), \
             'At present, IBM qasm does not support variable angles'
         arr = OneBitGates.rot(*rad_ang_list)
         line_str = Qubiter_to_IBMqasm.qasm_line_for_rot(arr, tar_bit_pos)
@@ -425,7 +425,7 @@ if __name__ == "__main__":
     import qubiter.device_specific.chip_couplings_ibm as ibm
 
     def main():
-        file_prefix = "../io_folder/qbtr2ibm_test"
+        file_prefix = "qubiter/io_folder/qbtr2ibm_test"
         aqasm_name = 'IBMqasm'
         num_bits = 5
         c_to_tars = ibm.ibmq5YorktownTenerife_c_to_tars

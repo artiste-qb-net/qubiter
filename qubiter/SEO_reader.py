@@ -2,6 +2,7 @@ from qubiter.Controls import *
 from qubiter.SEO_pre_reader import *
 from qubiter.PlaceholderManager import *
 from qubiter.LoopyPlaceholderManager import *
+import qubiter.utilities_gen as utg
 import os
 
 import sys
@@ -106,8 +107,8 @@ class SEO_reader(SEO_pre_reader):
         self.measured_bits = []
         self.mcase_trols = None
 
-        self.english_in = open(
-            file_prefix + '_' + str(num_bits) + '_eng.txt', 'rt')
+        self.english_in = open(utg.preface(
+            file_prefix + '_' + str(num_bits) + '_eng.txt'), 'rt')
 
         self.loop_to_cur_rep = {loop_num: 0 for
                                 loop_num in self.loop_to_nreps.keys()}
@@ -157,8 +158,8 @@ class SEO_reader(SEO_pre_reader):
         None
 
         """
-        log = open(
-            self.file_prefix + '_' + str(self.num_bits) + '_log.txt', 'wt')
+        log = open(utg.preface(
+            self.file_prefix + '_' + str(self.num_bits) + '_log.txt'), 'wt')
         s = ''
         s += "Number of lines in file = " + str(self.tot_num_lines) + '\n'
         s += "Number of Elem. Ops = " + str(self.num_ops) + '\n'
@@ -179,7 +180,7 @@ class SEO_reader(SEO_pre_reader):
 
         log.close()
 
-    def get_log_file_path(self, rel=True):
+    def get_log_file_path(self, rel=False):
         """
         Returns path (relative if rel is True, absolute if rel is False) of
         log file
@@ -194,7 +195,7 @@ class SEO_reader(SEO_pre_reader):
 
         """
         rel_path = self.file_prefix + '_' + str(self.num_bits) + '_log.txt'
-        return rel_path if rel else os.path.abspath(rel_path)
+        return rel_path if rel else utg.preface(rel_path)
 
     def print_log_file(self):
         """
@@ -205,8 +206,8 @@ class SEO_reader(SEO_pre_reader):
         None
 
         """
-        rel_path = self.get_log_file_path()
-        with open(rel_path) as f:
+        path = self.get_log_file_path(rel=True)
+        with open(utg.preface(path)) as f:
             print(f.read())
 
     def degs_str_to_rads(self, degs_str):
@@ -248,7 +249,7 @@ class SEO_reader(SEO_pre_reader):
         xfile_name = self.file_prefix + '_' + str(self.num_bits) +\
             '_loop' + str(self.xfile_num) + '.py'
         try:
-            loopx_in = open(xfile_name, 'rt')
+            loopx_in = open(utg.preface(xfile_name), 'rt')
         except IOError:
             print("Expected to find but didn't find a file named\n" +
                   xfile_name)
@@ -972,7 +973,7 @@ class SEO_reader(SEO_pre_reader):
 
 if __name__ == "__main__":
     def main():
-        file_prefix = 'io_folder/expansions_examples_X1'
+        file_prefix = 'qubiter/io_folder/expansions_examples_X1'
         num_bits = 3
         SEO_reader(file_prefix, num_bits, write_log=True)
     main()

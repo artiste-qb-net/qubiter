@@ -21,4 +21,5 @@ for fname in os.listdir(dir_name):
         # this raise will stop execution on first error
         #     raise
         # finally:
-        #     nbformat.write(nb, open("ERROR_" + fname, mode='wt'))
+        #     nbformat.write(nb, "ERROR_" + fname,
+        #     mode='wt'))

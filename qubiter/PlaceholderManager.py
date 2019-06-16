@@ -4,7 +4,7 @@ if 'autograd.numpy' not in sys.modules:
 else:
     import autograd.numpy as np
 # from SEO_writer import *
-import qubiter.utilities_gen as ug
+import qubiter.utilities_gen as utg
 from collections import defaultdict
 
 
@@ -150,7 +150,7 @@ class PlaceholderManager:
             tokens = nom[1:].split('*')
             if len(tokens) > 2:
                 return False
-            if not ug.is_non_neg_int(tokens[0]):
+            if not utg.is_non_neg_int(tokens[0]):
                 return False
             if len(tokens) == 2:
                 try:
@@ -164,7 +164,7 @@ class PlaceholderManager:
             if len(tokens) < 2:
                 return False
             for t in tokens[1:]:
-                if not ug.is_non_neg_int(t):
+                if not utg.is_non_neg_int(t):
                     return False
         else:
             return False
@@ -516,7 +516,7 @@ if __name__ == "__main__":
         # names where the numerical values of those angles would have been.
 
         num_bits = 4
-        file_prefix = 'io_folder/placeholder_test'
+        file_prefix = 'qubiter/io_folder/placeholder_test'
         emb = CktEmbedder(num_bits, num_bits)
         wr = SEO_writer(file_prefix, emb)
         wr.write_Rx(2, rads=np.pi/7)

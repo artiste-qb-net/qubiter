@@ -329,13 +329,13 @@ class ForbiddenCNotExpander(EchoingSEO_reader):
 if __name__ == "__main__":
     def main():
         import qubiter.device_specific.chip_couplings_ibm as ibm
-        file_prefix = "../io_folder/forbidden_cnots_ibm"
+        file_prefix = "qubiter/io_folder/forbidden_cnots_ibm"
         print(file_prefix)
         num_bits = 5
         c_to_tars = ibm.ibmq5YorktownTenerife_c_to_tars
         ForbiddenCNotExpander(file_prefix, num_bits, c_to_tars)
 
-        file_prefix = "../io_folder/forbidden_cnots1"
+        file_prefix = "qubiter/io_folder/forbidden_cnots1"
         print(file_prefix)
         num_bits = 4
         c_to_tars = {0: [1], 1: [2], 2: [3], 3: []}

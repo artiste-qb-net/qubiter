@@ -1,7 +1,7 @@
 from qubiter.device_specific.Qubiter_to_AnyQasm import *
 from qubiter.device_specific.QbitPlanarLattice import *
 import qubiter.device_specific.chip_couplings_google as cc
-import qubiter.utilities_gen as ug
+import qubiter.utilities_gen as utg
 
 
 class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
@@ -319,7 +319,7 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
         assert len(controls.bit_pos) == 0
 
         rad_ang_list = [angle_x_rads, angle_y_rads, angle_z_rads]
-        assert ug.all_floats(rad_ang_list), \
+        assert utg.all_floats(rad_ang_list), \
             "With Cirq, ROTN with any of its 3 angles variable is " +\
             "not allowed. Workaround: can use 3 rotations of type " +\
             "Rx, Ry or Rz with variable angles."
@@ -440,7 +440,7 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
 if __name__ == "__main__":
 
     def main():
-        file_prefix = "../io_folder/qbtr2google_test"
+        file_prefix = "qubiter/io_folder/qbtr2google_test"
         aqasm_name = 'GooCirq'
         num_bits = 5
         c_to_tars = 'do_fill'  # filled by constructor

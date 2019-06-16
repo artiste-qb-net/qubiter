@@ -1,5 +1,5 @@
 from functools import reduce
-
+import os
 import sys
 if 'autograd.numpy' not in sys.modules:
     import numpy as np
@@ -259,7 +259,7 @@ def kron_prod(mat_list):
     return prod
 
 
-def get_eng_file_path(file_prefix, num_bits):
+def get_eng_file_rel_path(file_prefix, num_bits):
     """
     Returns path to English file
 
@@ -273,7 +273,7 @@ def get_eng_file_path(file_prefix, num_bits):
            '_eng.txt'
 
 
-def get_pic_file_path(file_prefix, num_bits, ZL=True):
+def get_pic_file_rel_path(file_prefix, num_bits, ZL=True):
     """
     Returns path to Picture file
 
@@ -314,7 +314,7 @@ def get_value(kwargs, key_str, default_val=None):
 
 def find_path_to_qubiter():
     """
-    Returns path to this file
+    Returns absolute path to this file
 
     Returns
     ------
@@ -322,12 +322,41 @@ def find_path_to_qubiter():
 
     """
     from inspect import getsourcefile
-    path = getsourcefile(find_path_to_qubiter)
+    path = str(getsourcefile(find_path_to_qubiter))
     return path
+
+
+def preface(file_prefix):
+    """
+    Throughout Qubiter, the term file prefix is used. It is used to define
+    absolute file paths as str1 +  file_prefix + str2. This method returns
+    str1 + file_prefix. file_prefix itself is defined relative to the
+    directory containing qubiter/utilities_gen.py. For example, if this file
+    has absolute path something/qubiter/utilities_gen.py, then this method
+    returns something/file_prefix
+
+    Parameters
+    ----------
+    file_prefix : str
+
+    Returns
+    -------
+    str
+
+    """
+    # this is something/qubiter/utilities_gen
+    path1 = find_path_to_qubiter()
+    # this is something/qubiter
+    path1 = os.path.split(path1)[0]
+    # this is something/
+    path1 = str(os.path.split(path1)[0])
+    return path1 + '/' + file_prefix
 
 
 if __name__ == "__main__":
     def main():
-        find_path_to_qubiter()
+        print('---------------------')
+        print(find_path_to_qubiter())
+        print(preface('A/B/test.py'))
 
     main()

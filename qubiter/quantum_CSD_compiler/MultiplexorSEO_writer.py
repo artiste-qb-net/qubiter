@@ -337,13 +337,13 @@ if __name__ == "__main__":
                 num_gbits = 3
             num_bits = nt + nf + num_MP_trols + 1 + num_gbits
             emb = CktEmbedder(num_bits, num_bits)
-            file_prefix = "../io_folder/plexor_test_" + style
+            file_prefix = "qubiter/io_folder/plexor_test_" + style
             wr = MultiplexorSEO_writer(file_prefix, emb, style, rad_angles,
                 num_T_trols=nt, num_F_trols=nf, num_gbits=num_gbits)
             wr.write()
             wr.close_files()
 
-        file_prefix = "../io_folder/plexor_exact_check"
+        file_prefix = "qubiter/io_folder/plexor_exact_check"
         num_bits = 4
         num_angles = (1 << (num_bits-1))
         emb = CktEmbedder(num_bits, num_bits)

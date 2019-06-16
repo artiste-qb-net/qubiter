@@ -1,6 +1,7 @@
 import numpy as np
 import copy as cp
 from qubiter.Controls import *
+import qubiter.utilities_gen as utg
 
 
 class AsciiPic_to_Latex:
@@ -183,7 +184,7 @@ class AsciiPic_to_Latex:
 
         mosaic_word_list = []
         inside_if_m_block = False
-        pic_file_in = open(file_path)
+        pic_file_in = open(utg.preface(file_path))
         while not pic_file_in.closed:
             line = pic_file_in.readline()
             if not line:
@@ -459,13 +460,13 @@ if __name__ == "__main__":
                     latex_str += trans.get_ckt_latex(mosaic_word_list,
                                                      init_states)
             latex_str += AsciiPic_to_Latex.get_ending_latex()
-            with open(file_out1, "w") as fi:
+            with open(utg.preface(file_out1), "w") as fi:
                 fi.write(latex_str)
 
         # test 1 ---------------
         print('test 1')
         num_bits = 7
-        file_out = "latex_test1.tex"
+        file_out = "qubiter/latex_tools/latex_test1.tex"
         mosaic_word_list = [
             "|X++@||",
             "|Y+O@O|",
@@ -485,7 +486,7 @@ if __name__ == "__main__":
         # test 2 ---------------
         print("test 2")
         num_bits = 7
-        file_in = "latex_test_pic.txt"
+        file_in = "qubiter/latex_tools/latex_test_pic.txt"
         mosaic_word_list = \
             AsciiPic_to_Latex.qubiter_pic_file_to_mosaic_word_list(
                 file_in, num_bits, ZL=True)
@@ -494,8 +495,8 @@ if __name__ == "__main__":
         # test 3 ---------------
         print('test 3')
         num_bits = 3
-        file_in = '../io_folder/teleportation-with-ifs_3_ZLpic.txt'
-        file_out = 'latex_test_telep.tex'
+        file_in = 'qubiter/io_folder/teleportation-with-ifs_3_ZLpic.txt'
+        file_out = 'qubiter/latex_tools/latex_test_telep.tex'
         mosaic_word_list = \
             AsciiPic_to_Latex.qubiter_pic_file_to_mosaic_word_list(
                 file_in, num_bits, ZL=True)

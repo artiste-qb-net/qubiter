@@ -125,7 +125,7 @@ class SEO_Lista:
 
         """
         path = file_prefix + '_' + str(num_bits) + '_eng.txt'
-        with open(path, 'r') as f:
+        with open(utg.preface(path), 'r') as f:
             line_list = [line.rstrip('\n') for line in f]
         return line_list
 
@@ -149,7 +149,7 @@ class SEO_Lista:
 
         """
         end_str = '_' + str(num_bits) + '_eng.txt'
-        with open(file_prefix + end_str, 'w') as f:
+        with open(utg.preface(file_prefix + end_str), 'w') as f:
             for line in line_list:
                 f.write(line + '\n')
 
@@ -192,12 +192,14 @@ class SEO_Lista:
         SEO_simulator
 
         """
-        file_prefix = '610935122304'
+        file_prefix = 'qubiter/io_folder/610935122304'
         self.write_eng_and_pic_files(file_prefix)
         sim = SEO_simulator(file_prefix, self.num_bits, **kwargs1)
         import os
-        os.remove(ug.get_eng_file_path(file_prefix, self.num_bits))
-        os.remove(ug.get_pic_file_path(file_prefix, self.num_bits))
+        rel_paths = [utg.get_eng_file_rel_path(file_prefix, self.num_bits),
+                     utg.get_pic_file_rel_path(file_prefix, self.num_bits)]
+        for rp in rel_paths:
+            os.remove(utg.preface(rp))
         return sim
 
     def print(self):
@@ -374,7 +376,7 @@ class SEO_Lista:
 if __name__ == "__main__":
     def main():
         num_bits = 4
-        file_prefix = 'io_folder/eng_file_line_list_test'
+        file_prefix = 'qubiter/io_folder/eng_file_line_list_test'
         emb = CktEmbedder(num_bits, num_bits)
         wr = SEO_writer(file_prefix, emb)
         wr.write_Rx(2, rads=np.pi/7)

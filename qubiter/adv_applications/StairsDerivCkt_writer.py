@@ -351,7 +351,7 @@ if __name__ == "__main__":
             get_gate_str_to_rads_list(
                 parent_num_bits, '#int', rads_const=np.pi/2)
 
-        file_prefix = '../io_folder/stairs_deriv_writer_test'
+        file_prefix = 'qubiter/io_folder/stairs_deriv_writer_test'
         emb = CktEmbedder(num_bits, num_bits)
         deriv_gate_str = list(gate_str_to_rads_list.keys())[2]
         for deriv_direc, dpart_name, has_neg_polarity in \

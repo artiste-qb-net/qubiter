@@ -228,7 +228,7 @@ if __name__ == "__main__":
                 rads_const=np.pi/2,
                 u2_bit_to_higher_bits=u2_bit_to_higher_bits)
 
-        file_prefix = '../io_folder/stairs_deriv_thr_writer_test'
+        file_prefix = 'qubiter/io_folder/stairs_deriv_thr_writer_test'
 
         tot_num_bits = StairsDerivThrCkt_writer.sta_get_tot_num_bits(
             parent_num_bits, gate_str_to_rads_list)

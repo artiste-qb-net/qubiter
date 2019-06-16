@@ -103,8 +103,8 @@ class ChipCouplingsFitter:
 
         """
         old_cnots = []
-        english_in = open(
-            file_prefix + '_' + str(num_bits) + '_eng.txt', 'rt')
+        english_in = open(utg.preface(
+            file_prefix + '_' + str(num_bits) + '_eng.txt'), 'rt')
 
         while not english_in.closed:
             line = english_in.readline()
@@ -237,7 +237,7 @@ if __name__ == "__main__":
         import qubiter.device_specific.chip_couplings_ibm as ibm
         c_to_tars = ibm.ibmq5YorktownTenerife_c_to_tars
         num_bits = 5
-        file_prefix = "../io_folder/couplings_fitter"
+        file_prefix = "qubiter/io_folder/couplings_fitter"
 
         print("control_to_targets=", c_to_tars)
 

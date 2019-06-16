@@ -1,4 +1,4 @@
-
+import qubiter.utilities_gen as utg
 
 class SEO_pre_reader:
     """
@@ -52,8 +52,8 @@ class SEO_pre_reader:
         """
         self.file_prefix = file_prefix
         self.num_bits = num_bits
-        self.english_in = open(
-            file_prefix + '_' + str(num_bits) + '_eng.txt', 'rt')
+        self.english_in = open(utg.preface(
+            file_prefix + '_' + str(num_bits) + '_eng.txt'), 'rt')
         self.split_line = None
 
         self.tot_num_lines = 0

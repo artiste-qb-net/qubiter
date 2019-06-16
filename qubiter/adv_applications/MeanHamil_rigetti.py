@@ -82,7 +82,7 @@ class MeanHamil_rigetti(MeanHamil):
         self.translator = Qubiter_to_RigettiPyQuil(
             self.file_prefix, self.num_bits,
             aqasm_name='RigPyQuil', prelude_str='', ending_str='')
-        with open(self.translator.aqasm_path, 'r') as fi:
+        with open(utg.preface(self.translator.aqasm_path), 'r') as fi:
             self.translation_line_list = fi.readlines()
 
         pg = Program()

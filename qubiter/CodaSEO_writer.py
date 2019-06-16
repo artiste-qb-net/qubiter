@@ -1,4 +1,5 @@
 from qubiter.SEO_writer import *
+import qubiter.utilities_gen as utg
 from shutil import copyfile
 
 
@@ -66,24 +67,25 @@ class CodaSEO_writer(SEO_writer):
 
         # copying files
         try:
-            copyfile(init_eng_path, fin_eng_path)
-            # print(',,ll', open(fin_eng_path).read())
+            copyfile(utg.preface(init_eng_path),
+                     utg.preface(fin_eng_path))
         except:
             assert False, 'Could not copy file\n' + init_eng_path
 
         try:
-            copyfile(init_pic_path, fin_pic_path)
+            copyfile(utg.preface(init_pic_path),
+                     utg.preface(fin_pic_path))
         except:
             assert False, 'Could not copy file\n' + init_pic_path
 
         # opening copies of files
         try:
-            fin_eng_out = open(fin_eng_path, 'a')
+            fin_eng_out = open(utg.preface(fin_eng_path), 'a')
         except:
             assert False, 'Could not open file\n' + fin_eng_path
 
         try:
-            fin_pic_out = open(fin_pic_path, 'a')
+            fin_pic_out = open(utg.preface(fin_pic_path), 'a')
         except:
             assert False, 'Could not open file\n' + fin_pic_path
 
@@ -149,8 +151,8 @@ class CodaSEO_writer(SEO_writer):
 
 if __name__ == "__main__":
     def main():
-        init_file_prefix = 'io_folder/coda_writer_test_init'
-        fin_file_prefix = 'io_folder/coda_writer_test_fin'
+        init_file_prefix = 'qubiter/io_folder/coda_writer_test_init'
+        fin_file_prefix = 'qubiter/io_folder/coda_writer_test_fin'
         num_bits = 4
 
         wr = CodaSEO_writer(init_file_prefix, fin_file_prefix, num_bits)

@@ -279,6 +279,6 @@ if __name__ == "__main__":
         num_bits = 3
         init_unitary_mat = FouSEO_writer.fourier_trans_mat(1 << num_bits)
         emb = CktEmbedder(num_bits, num_bits)
-        file_prefix = '../io_folder/csd_test'
+        file_prefix = 'qubiter/io_folder/csd_test'
         t = Tree(True, file_prefix, emb, init_unitary_mat, verbose=False)
     main()

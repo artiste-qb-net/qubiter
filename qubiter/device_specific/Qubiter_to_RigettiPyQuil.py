@@ -1,6 +1,6 @@
 from qubiter.device_specific.Qubiter_to_AnyQasm import *
 import qubiter.device_specific.chip_couplings_rigetti as cc
-import qubiter.utilities_gen as ug
+import qubiter.utilities_gen as utg
 
 
 class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
@@ -304,7 +304,7 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
         assert len(controls.bit_pos) == 0
         
         rad_ang_list = [angle_x_rads, angle_y_rads, angle_z_rads]       
-        assert ug.all_floats(rad_ang_list), \
+        assert utg.all_floats(rad_ang_list), \
             "With Pyquil, ROTN with any of its 3 angles variable is " +\
             "not allowed. Workaround: can use 3 rotations of type " +\
             "Rx, Ry or Rz with variable angles."
@@ -449,7 +449,7 @@ if __name__ == "__main__":
     import qubiter.device_specific.chip_couplings_rigetti as rig
 
     def main():
-        file_prefix = "../io_folder/qbtr2rigetti_test"
+        file_prefix = "qubiter/io_folder/qbtr2rigetti_test"
         aqasm_name = 'RigPyQuil'
         num_bits = 6
         c_to_tars = rig.rigetti20_c_to_tars

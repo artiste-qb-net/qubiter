@@ -37,8 +37,8 @@ class LoopFileGenerator(SEO_reader):
         -------
 
         """
-        self.loop_out = open(
-            file_prefix + '_' + str(num_bits) + '_loop.py', 'wt')
+        self.loop_out = open(utg.preface(
+            file_prefix + '_' + str(num_bits) + '_loop.py'), 'wt')
 
         # to pass integer by reference, must put inside a list
         self.indentation_li = [0]
@@ -119,12 +119,12 @@ class LoopFileGenerator(SEO_reader):
 
 
 if __name__ == "__main__":
-    from SEO_writer import *
-    from SEO_simulator import *
-    from StateVec import *
+    from qubiter.SEO_writer import *
+    from qubiter.SEO_simulator import *
+    from qubiter.StateVec import *
 
     def main():
-        file_prefix = 'io_folder/loop_gen_test'
+        file_prefix = 'qubiter/io_folder/loop_gen_test'
         num_bits = 4
 
         # write the English and Picture files

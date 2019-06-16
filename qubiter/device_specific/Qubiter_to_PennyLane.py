@@ -1,5 +1,5 @@
 from qubiter.device_specific.Qubiter_to_AnyQasm import *
-import qubiter.utilities_gen as ug
+import qubiter.utilities_gen as utg
 
 
 class Qubiter_to_PennyLane(Qubiter_to_AnyQasm):
@@ -79,7 +79,7 @@ class Qubiter_to_PennyLane(Qubiter_to_AnyQasm):
         s += ' '*self.indentation + '# '
         s += str(self.all_fun_names) + '\n'
         if self.fun_defs_path:
-            with open(self.fun_defs_path, 'r') as fi:
+            with open(utg.preface(self.fun_defs_path), 'r') as fi:
                 fi_lines = fi.readlines()
             for line in fi_lines:
                 s += ' '*self.indentation + line
@@ -442,7 +442,7 @@ class Qubiter_to_PennyLane(Qubiter_to_AnyQasm):
 if __name__ == "__main__":
 
     def main1():
-        file_prefix = "../io_folder/qbtr2penny_test1"
+        file_prefix = "qubiter/io_folder/qbtr2penny_test1"
         num_bits = 3
         emb = CktEmbedder(num_bits, num_bits)
         wr = SEO_writer(file_prefix, emb)
@@ -468,7 +468,7 @@ if __name__ == "__main__":
                 write_qubiter_files=True)
 
     def main2():
-        file_prefix = "../io_folder/qbtr2penny_test2"
+        file_prefix = "qubiter/io_folder/qbtr2penny_test2"
         num_bits = 4
         emb = CktEmbedder(num_bits, num_bits)
         wr = SEO_writer(file_prefix, emb)
@@ -480,7 +480,7 @@ if __name__ == "__main__":
         wr.close_files()
 
         aqasm_name = 'PennyL'
-        fun_defs_path = '../io_folder/qbtr2penny_test2_fun_defs.py'
+        fun_defs_path = 'qubiter/io_folder/qbtr2penny_test2_fun_defs.py'
         qnode_name = 'Feynman'
         Qubiter_to_PennyLane(file_prefix, num_bits,
                 qnode_name,

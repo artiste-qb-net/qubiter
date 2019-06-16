@@ -427,7 +427,8 @@ class EchoingSEO_reader(SEO_reader):
         end_str = '_' + str(num_bits) + '_eng.txt'
         file_prefix_tempo = file_prefix + '_tempo'
         from shutil import copyfile
-        copyfile(file_prefix + end_str, file_prefix_tempo + end_str)
+        copyfile(utg.preface(file_prefix + end_str),
+                 utg.preface(file_prefix_tempo + end_str))
 
         emb = CktEmbedder(num_bits, num_bits)
         # English out file must different from English in file because one
@@ -437,12 +438,12 @@ class EchoingSEO_reader(SEO_reader):
         EchoingSEO_reader(file_prefix_tempo, num_bits, wr, vars_manager=vman)
 
         import os
-        os.remove(file_prefix_tempo + end_str)
+        os.remove(utg.preface(file_prefix_tempo + end_str))
 
 if __name__ == "__main__":
     def main():
-        file_prefix_in = 'io_folder/echo_test'
-        file_prefix_out = 'io_folder/echo_test_perm'
+        file_prefix_in = 'qubiter/io_folder/echo_test'
+        file_prefix_out = 'qubiter/io_folder/echo_test_perm'
         num_bits = 6
 
         # permute qubits by advancing their positions by 1

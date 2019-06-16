@@ -122,7 +122,7 @@ if __name__ == "__main__":
     def main():
         num_bits = 3
         emb = CktEmbedder(num_bits, num_bits)
-        file_prefix = 'io_folder/matrix_prod_test'
+        file_prefix = 'qubiter/io_folder/matrix_prod_test'
         wr = FouSEO_writer(True, file_prefix, emb)
         wr.close_files()
         mp = SEO_MatrixProduct(file_prefix, num_bits)
