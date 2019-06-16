@@ -1,5 +1,6 @@
 from functools import reduce
 import os
+import posixpath
 import sys
 if 'autograd.numpy' not in sys.modules:
     import numpy as np
@@ -322,35 +323,46 @@ def find_path_to_qubiter():
 
     """
     from inspect import getsourcefile
-    path = str(getsourcefile(find_path_to_qubiter))
-    return path
+    path = getsourcefile(find_path_to_qubiter)
+    return posixpath.normpath(path)
 
 
-def preface(file_prefix):
+def preface(a_str):
     """
-    Throughout Qubiter, the term file prefix is used. It is used to define
-    absolute file paths as str1 +  file_prefix + str2. This method returns
-    str1 + file_prefix. file_prefix itself is defined relative to the
-    directory containing qubiter/utilities_gen.py. For example, if this file
-    has absolute path something/qubiter/utilities_gen.py, then this method
-    returns something/file_prefix
+    Throughout Qubiter, the term `file_prefix` is used for files. If the
+    file_prefix string starts with `_`, then the file is created with
+    relative path equal to (hence, it shows up in the current working
+    directory)
+
+    ./file_prefix + ending
+
+    If file_prefix doesn't start with `_`, then the file is created with
+    absolute path equal to (hence, it shows up in qubiter's io_folder)
+
+    absolute_path_to_io_folder/file_prefix + ending.
+
+    Given a_str, if it doesn't start with `_`, this method returns
+    absolute_path_to_io_folder/a_str. Otherwise, this method just returns
+    a_str
 
     Parameters
     ----------
-    file_prefix : str
+    a_str : str
 
     Returns
     -------
     str
 
     """
-    # this is something/qubiter/utilities_gen
+    if a_str[0] == '_':
+        return a_str
+    # this is something/qubiter/qubiter/utilities_gen
     path1 = find_path_to_qubiter()
-    # this is something/qubiter
+    # this is something/qubiter/qubiter
     path1 = os.path.split(path1)[0]
-    # this is something/
-    path1 = str(os.path.split(path1)[0])
-    return path1 + '/' + file_prefix
+    # using os.path instead of posixpath led to errors in open(file_path) if
+    # file_path had directories with blank spaces (whitespace)
+    return posixpath.normpath(path1 + '/io_folder/' + a_str)
 
 
 if __name__ == "__main__":

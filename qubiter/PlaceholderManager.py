@@ -516,7 +516,7 @@ if __name__ == "__main__":
         # names where the numerical values of those angles would have been.
 
         num_bits = 4
-        file_prefix = 'qubiter/io_folder/placeholder_test'
+        file_prefix = 'placeholder_test'
         emb = CktEmbedder(num_bits, num_bits)
         wr = SEO_writer(file_prefix, emb)
         wr.write_Rx(2, rads=np.pi/7)

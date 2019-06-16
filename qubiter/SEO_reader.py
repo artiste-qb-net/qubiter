@@ -973,7 +973,7 @@ class SEO_reader(SEO_pre_reader):
 
 if __name__ == "__main__":
     def main():
-        file_prefix = 'qubiter/io_folder/expansions_examples_X1'
+        file_prefix = 'expansions_examples_X1'
         num_bits = 3
         SEO_reader(file_prefix, num_bits, write_log=True)
     main()

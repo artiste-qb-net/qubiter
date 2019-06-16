@@ -571,7 +571,7 @@ if __name__ == "__main__":
         # trol_kinds in ZL convention
         trol_kinds = [True, False, False]
 
-        wr = CGateSEO_writer('qubiter/io_folder/cgate_expansions', emb,
+        wr = CGateSEO_writer('cgate_expansions', emb,
                 do_checking=True, verbose=False)
 
         u2_fun_to_fun_arg_list = co.OrderedDict((
@@ -608,7 +608,7 @@ if __name__ == "__main__":
         emb = CktEmbedder(num_bits, num_bits)
         # trol_kinds in ZL convention
         trol_kinds = [True, False, False, False]
-        file_prefix = 'qubiter/io_folder/cgate_expan_mat_prod'
+        file_prefix = 'cgate_expan_mat_prod'
 
         wr = CGateSEO_writer(file_prefix, emb)
 

@@ -237,7 +237,7 @@ if __name__ == "__main__":
         import qubiter.device_specific.chip_couplings_ibm as ibm
         c_to_tars = ibm.ibmq5YorktownTenerife_c_to_tars
         num_bits = 5
-        file_prefix = "qubiter/io_folder/couplings_fitter"
+        file_prefix = "couplings_fitter"
 
         print("control_to_targets=", c_to_tars)
 

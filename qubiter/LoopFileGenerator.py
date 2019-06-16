@@ -124,7 +124,7 @@ if __name__ == "__main__":
     from qubiter.StateVec import *
 
     def main():
-        file_prefix = 'qubiter/io_folder/loop_gen_test'
+        file_prefix = 'loop_gen_test'
         num_bits = 4
 
         # write the English and Picture files

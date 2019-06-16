@@ -192,7 +192,7 @@ class SEO_Lista:
         SEO_simulator
 
         """
-        file_prefix = 'qubiter/io_folder/610935122304'
+        file_prefix = '610935122304'
         self.write_eng_and_pic_files(file_prefix)
         sim = SEO_simulator(file_prefix, self.num_bits, **kwargs1)
         import os
@@ -376,7 +376,7 @@ class SEO_Lista:
 if __name__ == "__main__":
     def main():
         num_bits = 4
-        file_prefix = 'qubiter/io_folder/eng_file_line_list_test'
+        file_prefix = 'eng_file_line_list_test'
         emb = CktEmbedder(num_bits, num_bits)
         wr = SEO_writer(file_prefix, emb)
         wr.write_Rx(2, rads=np.pi/7)

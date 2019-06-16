@@ -425,7 +425,7 @@ if __name__ == "__main__":
     import qubiter.device_specific.chip_couplings_ibm as ibm
 
     def main():
-        file_prefix = "qubiter/io_folder/qbtr2ibm_test"
+        file_prefix = "qbtr2ibm_test"
         aqasm_name = 'IBMqasm'
         num_bits = 5
         c_to_tars = ibm.ibmq5YorktownTenerife_c_to_tars

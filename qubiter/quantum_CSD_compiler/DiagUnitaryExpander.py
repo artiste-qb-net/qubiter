@@ -155,7 +155,7 @@ class DiagUnitaryExpander(EchoingSEO_reader):
 if __name__ == "__main__":
     def main():
         num_bits = 6
-        file_prefix = "qubiter/io_folder/d_unitary_test_one_line"
+        file_prefix = "d_unitary_test_one_line"
         style = 'exact'
         xer = DiagUnitaryExpander(file_prefix, num_bits, style)
     main()

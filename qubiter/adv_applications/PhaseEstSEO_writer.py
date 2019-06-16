@@ -312,7 +312,7 @@ if __name__ == "__main__":
             wr = PhaseEstSEO_writer(do_write=False,
                                     num_probe_bits=4,
                                     atom_writer=atom_wr,
-                                    file_prefix="qubiter/io_folder/ph_est_test",
+                                    file_prefix="ph_est_test",
                                     emb=fin_emb,
                                     ZL=ZL)
             wr.write()

@@ -442,7 +442,7 @@ class Qubiter_to_PennyLane(Qubiter_to_AnyQasm):
 if __name__ == "__main__":
 
     def main1():
-        file_prefix = "qubiter/io_folder/qbtr2penny_test1"
+        file_prefix = "qbtr2penny_test1"
         num_bits = 3
         emb = CktEmbedder(num_bits, num_bits)
         wr = SEO_writer(file_prefix, emb)
@@ -468,7 +468,7 @@ if __name__ == "__main__":
                 write_qubiter_files=True)
 
     def main2():
-        file_prefix = "qubiter/io_folder/qbtr2penny_test2"
+        file_prefix = "qbtr2penny_test2"
         num_bits = 4
         emb = CktEmbedder(num_bits, num_bits)
         wr = SEO_writer(file_prefix, emb)
@@ -480,7 +480,7 @@ if __name__ == "__main__":
         wr.close_files()
 
         aqasm_name = 'PennyL'
-        fun_defs_path = 'qubiter/io_folder/qbtr2penny_test2_fun_defs.py'
+        fun_defs_path = 'qbtr2penny_test2_fun_defs.py'
         qnode_name = 'Feynman'
         Qubiter_to_PennyLane(file_prefix, num_bits,
                 qnode_name,

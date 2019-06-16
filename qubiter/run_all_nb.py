@@ -7,7 +7,7 @@ folder. The notebooks are executed but not saved (i.e., overwritten) '''
 
 dir_name = 'jupyter_notebooks'
 for fname in os.listdir(dir_name):
-    if fname[-6:] == '.ipynb':
+    if fname[-6:] == '.ipynb':  # and fname[-12:] == 'native.ipynb':
         print("------------", fname)
         try:
             # open() fails when reading markdown Chinese characters
@@ -18,8 +18,7 @@ for fname in os.listdir(dir_name):
             ep.preprocess(nb, {'metadata': {'path': dir_name + "/"}})
         except:
             print('error in ', fname)
-        # this raise will stop execution on first error
+        # #this raise will stop execution on first error
         #     raise
         # finally:
-        #     nbformat.write(nb, "ERROR_" + fname,
-        #     mode='wt'))
+        #     nbformat.write(nb, "ERROR_" + fname)

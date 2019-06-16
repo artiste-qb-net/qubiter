@@ -11,7 +11,7 @@ class CodaSEO_writer(SEO_writer):
     files and opens the copies, called the final English and Picture files,
     in the append mode. Thereafter, the user can write to those final files
     using methods that this class inherits from its parent SEO_writer.
-    Cola SEO writer means tail-end SEO writer, which accurately describes
+    Coda SEO writer means tail-end SEO writer, which accurately describes
     what this class does.
 
     Attributes
@@ -151,8 +151,8 @@ class CodaSEO_writer(SEO_writer):
 
 if __name__ == "__main__":
     def main():
-        init_file_prefix = 'qubiter/io_folder/coda_writer_test_init'
-        fin_file_prefix = 'qubiter/io_folder/coda_writer_test_fin'
+        init_file_prefix = 'coda_writer_test_init'
+        fin_file_prefix = 'coda_writer_test_fin'
         num_bits = 4
 
         wr = CodaSEO_writer(init_file_prefix, fin_file_prefix, num_bits)

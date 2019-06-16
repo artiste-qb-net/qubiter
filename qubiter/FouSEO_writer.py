@@ -134,7 +134,7 @@ if __name__ == "__main__":
 
         for ZL in [True, False]:
             wr = FouSEO_writer(True,
-                               'qubiter/io_folder/fou_test',
+                               'fou_test',
                                emb,
                                ZL=ZL)
             wr.write_NOTA('do h.c. next')

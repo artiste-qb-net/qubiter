@@ -78,7 +78,7 @@ if __name__ == "__main__":
                 u2_bit_to_higher_bits=u2_bit_to_higher_bits)
         pp.pprint(gate_str_to_rads_list)
 
-        file_prefix = 'qubiter/io_folder/stairs_all_deriv_native_test'
+        file_prefix = 'stairs_all_deriv_native_test'
 
         hamil = QubitOperator('Y0 X1', .4) +\
             QubitOperator('X0', .7)

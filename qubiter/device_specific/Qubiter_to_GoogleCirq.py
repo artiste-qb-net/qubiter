@@ -440,7 +440,7 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
 if __name__ == "__main__":
 
     def main():
-        file_prefix = "qubiter/io_folder/qbtr2google_test"
+        file_prefix = "qbtr2google_test"
         aqasm_name = 'GooCirq'
         num_bits = 5
         c_to_tars = 'do_fill'  # filled by constructor

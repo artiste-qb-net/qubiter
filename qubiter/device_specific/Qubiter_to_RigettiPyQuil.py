@@ -449,7 +449,7 @@ if __name__ == "__main__":
     import qubiter.device_specific.chip_couplings_rigetti as rig
 
     def main():
-        file_prefix = "qubiter/io_folder/qbtr2rigetti_test"
+        file_prefix = "qbtr2rigetti_test"
         aqasm_name = 'RigPyQuil'
         num_bits = 6
         c_to_tars = rig.rigetti20_c_to_tars

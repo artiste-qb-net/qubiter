@@ -150,7 +150,7 @@ if __name__ == "__main__":
 
         deriv_gate_str = list(gate_str_to_rads_list.keys())[2]
 
-        file_prefix = 'qubiter/io_folder/stairs_deriv_native_test'
+        file_prefix = 'stairs_deriv_native_test'
 
         hamil = QubitOperator('X1 Y0 X1 Y1', .4) +\
             QubitOperator('Y2 X1', .7)

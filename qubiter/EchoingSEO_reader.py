@@ -442,8 +442,8 @@ class EchoingSEO_reader(SEO_reader):
 
 if __name__ == "__main__":
     def main():
-        file_prefix_in = 'qubiter/io_folder/echo_test'
-        file_prefix_out = 'qubiter/io_folder/echo_test_perm'
+        file_prefix_in = 'echo_test'
+        file_prefix_out = 'echo_test_perm'
         num_bits = 6
 
         # permute qubits by advancing their positions by 1

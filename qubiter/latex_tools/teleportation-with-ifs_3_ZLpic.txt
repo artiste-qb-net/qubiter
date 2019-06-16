@@ -1,0 +1,18 @@
+|   |   R   
+PRINT	ALL
+|   H   |   
+X---@   |   
+|   X---@   
+|   |   H   
+PRINT	ALL
+|   |   M   
+|   M   :   
+PRINT	ALL
+IF_M(	0T	){
+Z   :   :   
+}IF_M
+PRINT	ALL
+IF_M(	1T	){
+X   :   :   
+}IF_M
+PRINT	ALL

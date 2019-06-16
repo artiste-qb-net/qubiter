@@ -1429,7 +1429,7 @@ if __name__ == "__main__":
         ang_rads = 30*np.pi/180
 
         for ZL in [False, True]:
-            wr = SEO_writer('qubiter/io_folder/wr_test', emb, ZL=ZL)
+            wr = SEO_writer('wr_test', emb, ZL=ZL)
 
             wr.write_NOTA('zero bit last = ' + str(ZL))
 

@@ -159,7 +159,7 @@ class MultiplexorExpander(EchoingSEO_reader):
 if __name__ == "__main__":
     def main():
         num_bits = 6
-        file_prefix = "qubiter/io_folder/plexor_test_one_line"
+        file_prefix = "plexor_test_one_line"
         style = 'exact'
         xer = MultiplexorExpander(file_prefix, num_bits, style)
     main()

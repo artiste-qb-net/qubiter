@@ -605,11 +605,11 @@ class CGateExpander(SEO_reader):
 
 if __name__ == "__main__":
     def main():
-        xer = CGateExpander('qubiter/io_folder/fou_test', 6, verbose=True)
-        xer = CGateExpander('qubiter/io_folder/fou_test_X1', 6, verbose=True)
-        xer = CGateExpander('qubiter/io_folder/ph_est_test', 8, verbose=True)
-        xer = CGateExpander('qubiter/io_folder/sim_test2', 4, verbose=True)
+        xer = CGateExpander('fou_test', 6, verbose=True)
+        xer = CGateExpander('fou_test_X1', 6, verbose=True)
+        xer = CGateExpander('ph_est_test', 8, verbose=True)
+        xer = CGateExpander('sim_test2', 4, verbose=True)
         # write log file for sim_test2
-        SEO_reader('qubiter/io_folder/sim_test2', 4, write_log=True)
-        xer = CGateExpander('qubiter/io_folder/sim_test3', 4, verbose=True)
+        SEO_reader('sim_test2', 4, write_log=True)
+        xer = CGateExpander('sim_test3', 4, verbose=True)
     main()
