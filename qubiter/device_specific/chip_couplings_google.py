@@ -10,7 +10,8 @@
 # (r, c-1).
 
 
-BRISTLECONE_GRID = """
+BRISTLECONE_GRID = \
+"""
 -----AB-----
 ----ABCD----
 ---ABCDEF---

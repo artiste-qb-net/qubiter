@@ -1,0 +1,396 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qubiter.quantum_CSD_compiler.CS_Decomp &mdash; qubiter 1.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> qubiter
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../rosetta.html">Qubiter Rosetta Stone</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">qubiter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qubiter.quantum_CSD_compiler.CS_Decomp</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qubiter.quantum_CSD_compiler.CS_Decomp</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">cuncsd_sq</span> <span class="k">as</span> <span class="nn">csd</span>
+<span class="kn">from</span> <span class="nn">qubiter.UnitaryMat</span> <span class="k">import</span> <span class="o">*</span>
+
+
+<div class="viewcode-block" id="CS_Decomp"><a class="viewcode-back" href="../../../qubiter.quantum_CSD_compiler.CS_Decomp.html#qubiter.quantum_CSD_compiler.CS_Decomp.CS_Decomp">[docs]</a><span class="k">class</span> <span class="nc">CS_Decomp</span><span class="p">:</span>
+
+<div class="viewcode-block" id="CS_Decomp.get_csd"><a class="viewcode-back" href="../../../qubiter.quantum_CSD_compiler.CS_Decomp.html#qubiter.quantum_CSD_compiler.CS_Decomp.CS_Decomp.get_csd">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_csd</span><span class="p">(</span><span class="n">unitary_mats</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function does a CS (cosine-sine) decomposition (by calling the LAPACK function cuncsd.f. The old C++</span>
+<span class="sd">        Qubiter called zggsvd.f instead) of each unitary matrix in the list of arrays unitary_mats. This function is</span>
+<span class="sd">        called by the constructor of the class Node and is fundamental for decomposing a unitary matrix into</span>
+<span class="sd">        multiplexors and diagonal unitaries.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        unitary_mats : list(np.ndarray)</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list(np.ndarray), list(np.ndarray), list(np.ndarray)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">block_size</span> <span class="o">=</span> <span class="n">unitary_mats</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">num_mats</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">unitary_mats</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">mat</span> <span class="ow">in</span> <span class="n">unitary_mats</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">mat</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">block_size</span><span class="p">,</span> <span class="n">block_size</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">block_size</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">left_mats</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">right_mats</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">unitary_mats</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+                            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_mats</span><span class="p">)])</span>
+            <span class="n">vec1</span> <span class="o">=</span> <span class="n">vec</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">num_mats</span><span class="p">,))</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">vec</span> <span class="o">-</span> <span class="n">vec1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-6</span><span class="p">:</span>
+                <span class="n">central_mats</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">c_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span>
+                <span class="n">s_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span>
+                <span class="n">central_mats</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">s_vec</span><span class="p">,</span> <span class="n">c_vec</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Henning Dekant constructed a python wrapper for LAPACK&#39;s cuncsd.f</span>
+            <span class="c1"># via the python application f2py. Thanks Henning!</span>
+
+            <span class="c1"># In[2]: import cuncsd</span>
+            <span class="c1"># In[3]: print(cuncsd.cuncsd.__doc__)</span>
+            <span class="c1"># x11,x12,x21,x22,theta,u1,u2,v1t,v2t,work,rwork,iwork,info =</span>
+            <span class="c1"># cuncsd(p,x11,x12,x21,x22,lwork,lrwork,</span>
+            <span class="c1"># [jobu1,jobu2,jobv1t,jobv2t,trans,signs,m,q,</span>
+            <span class="c1"># ldx11,ldx12,ldx21,ldx22,ldu1,ldu2,ldv1t,ldv2t,credit])</span>
+            <span class="c1">#</span>
+            <span class="c1"># Wrapper for ``cuncsd``.</span>
+            <span class="c1">#</span>
+            <span class="c1"># Parameters</span>
+            <span class="c1"># ----------</span>
+            <span class="c1"># p : input int</span>
+            <span class="c1"># x11 : input rank-2 array(&#39;F&#39;) with bounds (p,p)</span>
+            <span class="c1"># x12 : input rank-2 array(&#39;F&#39;) with bounds (p,p)</span>
+            <span class="c1"># x21 : input rank-2 array(&#39;F&#39;) with bounds (p,p)</span>
+            <span class="c1"># x22 : input rank-2 array(&#39;F&#39;) with bounds (p,p)</span>
+            <span class="c1"># lwork : input int</span>
+            <span class="c1"># lrwork : input int</span>
+            <span class="c1">#</span>
+            <span class="c1"># Other Parameters</span>
+            <span class="c1"># ----------------</span>
+            <span class="c1"># jobu1 : input string(len=1), optional</span>
+            <span class="c1">#     Default: &#39;Y&#39;</span>
+            <span class="c1"># jobu2 : input string(len=1), optional</span>
+            <span class="c1">#     Default: &#39;Y&#39;</span>
+            <span class="c1"># jobv1t : input string(len=1), optional</span>
+            <span class="c1">#     Default: &#39;Y&#39;</span>
+            <span class="c1"># jobv2t : input string(len=1), optional</span>
+            <span class="c1">#     Default: &#39;Y&#39;</span>
+            <span class="c1"># trans : input string(len=1), optional</span>
+            <span class="c1">#     Default: &#39;T&#39;</span>
+            <span class="c1"># signs : input string(len=1), optional</span>
+            <span class="c1">#     Default: &#39;O&#39;</span>
+            <span class="c1"># m : input int, optional</span>
+            <span class="c1">#     Default: 2*p</span>
+            <span class="c1"># q : input int, optional</span>
+            <span class="c1">#     Default: p</span>
+            <span class="c1"># ldx11 : input int, optional</span>
+            <span class="c1">#     Default: p</span>
+            <span class="c1"># ldx12 : input int, optional</span>
+            <span class="c1">#     Default: p</span>
+            <span class="c1"># ldx21 : input int, optional</span>
+            <span class="c1">#     Default: p</span>
+            <span class="c1"># ldx22 : input int, optional</span>
+            <span class="c1">#     Default: p</span>
+            <span class="c1"># ldu1 : input int, optional</span>
+            <span class="c1">#     Default: p</span>
+            <span class="c1"># ldu2 : input int, optional</span>
+            <span class="c1">#     Default: p</span>
+            <span class="c1"># ldv1t : input int, optional</span>
+            <span class="c1">#     Default: p</span>
+            <span class="c1"># ldv2t : input int, optional</span>
+            <span class="c1">#     Default: p</span>
+            <span class="c1"># credit : input int, optional</span>
+            <span class="c1">#     Default: 0</span>
+            <span class="c1">#</span>
+            <span class="c1"># Returns</span>
+            <span class="c1"># -------</span>
+            <span class="c1"># x11 : rank-2 array(&#39;F&#39;) with bounds (p,p)</span>
+            <span class="c1"># x12 : rank-2 array(&#39;F&#39;) with bounds (p,p)</span>
+            <span class="c1"># x21 : rank-2 array(&#39;F&#39;) with bounds (p,p)</span>
+            <span class="c1"># x22 : rank-2 array(&#39;F&#39;) with bounds (p,p)</span>
+            <span class="c1"># theta : rank-1 array(&#39;f&#39;) with bounds (p)</span>
+            <span class="c1"># u1 : rank-2 array(&#39;F&#39;) with bounds (p,p)</span>
+            <span class="c1"># u2 : rank-2 array(&#39;F&#39;) with bounds (p,p)</span>
+            <span class="c1"># v1t : rank-2 array(&#39;F&#39;) with bounds (p,p)</span>
+            <span class="c1"># v2t : rank-2 array(&#39;F&#39;) with bounds (p,p)</span>
+            <span class="c1"># work : rank-1 array(&#39;F&#39;) with bounds (abs(lwork))</span>
+            <span class="c1"># rwork : rank-1 array(&#39;f&#39;) with bounds (abs(lrwork))</span>
+            <span class="c1"># iwork : rank-1 array(&#39;i&#39;) with bounds (p)</span>
+            <span class="c1"># info : int</span>
+
+            <span class="n">left_mats</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">central_mats</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">right_mats</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="k">for</span> <span class="n">mat</span> <span class="ow">in</span> <span class="n">unitary_mats</span><span class="p">:</span>
+                <span class="n">dim</span> <span class="o">=</span> <span class="n">mat</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">assert</span> <span class="n">dim</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span>
+                <span class="n">hdim</span> <span class="o">=</span> <span class="n">dim</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span>  <span class="c1"># half dimension</span>
+
+                <span class="n">p</span> <span class="o">=</span> <span class="n">hdim</span>
+                <span class="c1"># x11 = np.copy(mat[0:hdim, 0:hdim], &#39;C&#39;)</span>
+                <span class="c1"># x12 = np.copy(mat[0:hdim, hdim:dim], &#39;C&#39;)</span>
+                <span class="c1"># x21 = np.copy(mat[hdim:dim, 0:hdim], &#39;C&#39;)</span>
+                <span class="c1"># x22 = np.copy(mat[hdim:dim, hdim:dim], &#39;C&#39;)</span>
+
+                <span class="n">x11</span> <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">hdim</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="n">hdim</span><span class="p">]</span>
+                <span class="n">x12</span> <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">hdim</span><span class="p">,</span> <span class="n">hdim</span><span class="p">:</span><span class="n">dim</span><span class="p">]</span>
+                <span class="n">x21</span> <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="n">hdim</span><span class="p">:</span><span class="n">dim</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="n">hdim</span><span class="p">]</span>
+                <span class="n">x22</span> <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="n">hdim</span><span class="p">:</span><span class="n">dim</span><span class="p">,</span> <span class="n">hdim</span><span class="p">:</span><span class="n">dim</span><span class="p">]</span>
+
+                <span class="c1"># print(&#39;mat\n&#39;, mat)</span>
+                <span class="c1"># print(&#39;x11\n&#39;, x11)</span>
+                <span class="c1"># print(&#39;x12\n&#39;, x12)</span>
+                <span class="c1"># print(&#39;x21\n&#39;, x21)</span>
+                <span class="c1"># print(&#39;x22\n&#39;, x22)</span>
+                <span class="n">x11</span><span class="p">,</span> <span class="n">x12</span><span class="p">,</span> <span class="n">x21</span><span class="p">,</span> <span class="n">x22</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">u1</span><span class="p">,</span> <span class="n">u2</span><span class="p">,</span> <span class="n">v1t</span><span class="p">,</span> <span class="n">v2t</span><span class="p">,</span> \
+                <span class="n">work</span><span class="p">,</span> <span class="n">rwork</span><span class="p">,</span> <span class="n">iwork</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> \
+                    <span class="n">csd</span><span class="o">.</span><span class="n">cuncsd</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">x11</span><span class="p">,</span> <span class="n">x12</span><span class="p">,</span> <span class="n">x21</span><span class="p">,</span> <span class="n">x22</span><span class="p">,</span> <span class="n">lwork</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">lrwork</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+                               <span class="n">trans</span><span class="o">=</span><span class="s1">&#39;F&#39;</span><span class="p">)</span>
+                <span class="c1"># print(&#39;x11\n&#39;, x11)</span>
+                <span class="c1"># print(&#39;x12\n&#39;, x12)</span>
+                <span class="c1"># print(&#39;x21\n&#39;, x21)</span>
+                <span class="c1"># print(&#39;x22\n&#39;, x22)</span>
+
+                <span class="n">lw</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">work</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">real</span><span class="p">)</span>
+                <span class="n">lrw</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">rwork</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">real</span><span class="p">)</span>
+                <span class="c1"># print(&quot;work query:&quot;, lw)</span>
+                <span class="c1"># print(&quot;rwork query:&quot;, lrw)</span>
+                <span class="n">x11</span><span class="p">,</span> <span class="n">x12</span><span class="p">,</span> <span class="n">x21</span><span class="p">,</span> <span class="n">x22</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">u1</span><span class="p">,</span> <span class="n">u2</span><span class="p">,</span> <span class="n">v1t</span><span class="p">,</span> <span class="n">v2t</span><span class="p">,</span> \
+                <span class="n">work</span><span class="p">,</span> <span class="n">rwork</span><span class="p">,</span> <span class="n">iwork</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> \
+                    <span class="n">csd</span><span class="o">.</span><span class="n">cuncsd</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">x11</span><span class="p">,</span> <span class="n">x12</span><span class="p">,</span> <span class="n">x21</span><span class="p">,</span> <span class="n">x22</span><span class="p">,</span> <span class="n">lwork</span><span class="o">=</span><span class="n">lw</span><span class="p">,</span> <span class="n">lrwork</span><span class="o">=</span><span class="n">lrw</span><span class="p">,</span>
+                               <span class="n">trans</span><span class="o">=</span><span class="s1">&#39;F&#39;</span><span class="p">)</span>
+                <span class="c1"># print(&#39;info&#39;, info)</span>
+                <span class="c1"># print(&#39;u1 continguous&#39;, u1.flags.contiguous)</span>
+                <span class="c1"># u1 = np.ascontiguousarray(u1)</span>
+                <span class="c1"># u2 = np.ascontiguousarray(u2)</span>
+                <span class="c1"># v1t = np.ascontiguousarray(v1t)</span>
+                <span class="c1"># v2t = np.ascontiguousarray(v2t)</span>
+                <span class="c1"># print(&#39;u1 continguous&#39;, u1.flags.contiguous)</span>
+
+                <span class="n">left_mats</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">u1</span><span class="p">)</span>
+                <span class="n">left_mats</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">u2</span><span class="p">)</span>
+                <span class="n">central_mats</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+                <span class="n">right_mats</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v1t</span><span class="p">)</span>
+                <span class="n">right_mats</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v2t</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">left_mats</span><span class="p">,</span> <span class="n">central_mats</span><span class="p">,</span> <span class="n">right_mats</span></div></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">qubiter.FouSEO_writer</span> <span class="k">import</span> <span class="o">*</span>
+
+    <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">cs decomp example-------------&quot;</span><span class="p">)</span>
+        <span class="n">num_bits</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="n">num_rows</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_bits</span>
+        <span class="n">mat</span> <span class="o">=</span> <span class="n">FouSEO_writer</span><span class="o">.</span><span class="n">fourier_trans_mat</span><span class="p">(</span><span class="n">num_rows</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">UnitaryMat</span><span class="o">.</span><span class="n">is_unitary</span><span class="p">(</span><span class="n">mat</span><span class="p">)</span>
+        <span class="n">left_mats</span><span class="p">,</span> <span class="n">central_mats</span><span class="p">,</span> <span class="n">right_mats</span> <span class="o">=</span> <span class="n">CS_Decomp</span><span class="o">.</span><span class="n">get_csd</span><span class="p">([</span><span class="n">mat</span><span class="p">])</span>
+        <span class="c1"># print(&#39;left mats\n&#39;, left_mats)</span>
+        <span class="c1"># print(&#39;central_mats\n&#39;, central_mats)</span>
+        <span class="c1"># print(&#39;right_mats\n&#39;, right_mats)</span>
+
+        <span class="n">left</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">num_rows</span><span class="p">,</span> <span class="n">num_rows</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+        <span class="n">left</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">num_rows</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="n">num_rows</span> <span class="o">/</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">left_mats</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">left</span><span class="p">[</span><span class="n">num_rows</span> <span class="o">/</span> <span class="mi">2</span><span class="p">:</span><span class="n">num_rows</span><span class="p">,</span> <span class="n">num_rows</span> <span class="o">/</span> <span class="mi">2</span><span class="p">:</span><span class="n">num_rows</span><span class="p">]</span> <span class="o">=</span> <span class="n">left_mats</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="c1"># print(&#39;left&#39;, left)</span>
+
+        <span class="n">right</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">num_rows</span><span class="p">,</span> <span class="n">num_rows</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+        <span class="n">right</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">num_rows</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="n">num_rows</span> <span class="o">/</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">right_mats</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">right</span><span class="p">[</span><span class="n">num_rows</span> <span class="o">/</span> <span class="mi">2</span><span class="p">:</span><span class="n">num_rows</span><span class="p">,</span> <span class="n">num_rows</span> <span class="o">/</span> <span class="mi">2</span><span class="p">:</span><span class="n">num_rows</span><span class="p">]</span> <span class="o">=</span> <span class="n">right_mats</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">center</span> <span class="o">=</span> <span class="n">MultiplexorSEO_writer</span><span class="o">.</span><span class="n">mp_mat</span><span class="p">(</span><span class="n">central_mats</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="c1"># print(&#39;center&#39;, center)</span>
+        <span class="n">mat_prod</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">center</span><span class="p">),</span> <span class="n">right</span><span class="p">)</span>
+        <span class="c1"># print(&#39;mat\n&#39;, mat)</span>
+        <span class="c1"># print(&#39;mat_prod\n&#39;, mat_prod)</span>
+        <span class="n">err</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">mat</span> <span class="o">-</span> <span class="n">mat_prod</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;err=&#39;</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+
+    <span class="n">main</span><span class="p">()</span>
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Robert R. Tucci &amp; Qubiter contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

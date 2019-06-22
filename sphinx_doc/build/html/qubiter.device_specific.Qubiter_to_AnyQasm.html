@@ -1,0 +1,385 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qubiter.device_specific.Qubiter_to_AnyQasm module &mdash; qubiter 1.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> qubiter
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rosetta.html">Qubiter Rosetta Stone</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">qubiter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>qubiter.device_specific.Qubiter_to_AnyQasm module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/qubiter.device_specific.Qubiter_to_AnyQasm.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-qubiter.device_specific.Qubiter_to_AnyQasm">
+<span id="qubiter-device-specific-qubiter-to-anyqasm-module"></span><h1>qubiter.device_specific.Qubiter_to_AnyQasm module<a class="headerlink" href="#module-qubiter.device_specific.Qubiter_to_AnyQasm" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="qubiter.device_specific.Qubiter_to_AnyQasm.Qubiter_to_AnyQasm">
+<em class="property">class </em><code class="sig-prename descclassname">qubiter.device_specific.Qubiter_to_AnyQasm.</code><code class="sig-name descname">Qubiter_to_AnyQasm</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_bits</em>, <em class="sig-param">aqasm_name=''</em>, <em class="sig-param">strict_mode=False</em>, <em class="sig-param">c_to_tars=None</em>, <em class="sig-param">write_qubiter_files=False</em>, <em class="sig-param">vars_manager=None</em>, <em class="sig-param">aqasm_ftype='txt'</em>, <em class="sig-param">prelude_str=None</em>, <em class="sig-param">ending_str=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/device_specific/Qubiter_to_AnyQasm.html#Qubiter_to_AnyQasm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.device_specific.Qubiter_to_AnyQasm.Qubiter_to_AnyQasm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="qubiter.SEO_reader.html#qubiter.SEO_reader.SEO_reader" title="qubiter.SEO_reader.SEO_reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">qubiter.SEO_reader.SEO_reader</span></code></a></p>
+<p>This abstract class is a child of SEO_reader. It reads an input English
+file and writes an AnyQasm file that is a translation of the input
+English file into the AnyQasm language. If the flag write_qubiter_files
+is set to True, this class will also write new English and Picture files
+that are in 1-1 onto line correspondence with the output AnyQasm file.</p>
+<p>Footnote: Some AnyQasm’s distinguish between quantum registers qreg and
+classical registers creg. Qubiter does not use cregs because it uses the
+classical memory of your Linux PC instead. AnyQasm has an intricate set
+of commands for measurements. Qubiter has a complete set of measurement
+commands too (see MEAS in Rosetta stone). The AnyQasm and Qubiter
+measurement commands can obviously be translated into each other. We
+leave that part of the translation to a future version of this class.</p>
+<p>This class can run in either a strict or a non-strict mode depending on
+the flag <cite>strict_mode</cite>, which equals False in default mode. In the
+strict mode, the set of gates allowed is constrained to a small but
+universal set that is specified below, and that is allowed in any target
+qasm. In the non-strict mode, more gates are allowed that depend on
+specific target qasm. In the strict mode, the program will end if you
+try to use gates that are not allowed. In the non-strict mode,
+the program will end if you try to use gates for a target language that
+have not been implemented yet in the Qubiter class targeting that
+language, often because the target language doesn’t support those gates.</p>
+<p>Will refer to target qasm as AnyQasm or aqasm</p>
+<p>Next we give a description of the strict_mode:</p>
+<p>In the strict mode, the input English file that is read can only have
+lines of the following types or else the program will abort with an
+error message:</p>
+<p>1. single qubit rotations (HAD2, SIGX, SIGY, SIGZ, ROTX, ROTY,
+ROTZ or ROTN with no controls)</p>
+<p>2. simple CNOTs (SIGX with a single True control). Call them c-&gt;t=(
+c, t) if c is the control and t the target. (c, t) must be allowed
+by ‘c_to_tars’.</p>
+<ol class="arabic simple" start="3">
+<li><p>NOTA or PRINT lines. PRINT lines are commented out.</p></li>
+</ol>
+<p>If you have an English file that contains lines that are more
+complicated than this (because, for example, they contain rotations with
+one or more controls attached, or because a CNOT is not allowed
+according to ‘c_to_tars’), you can use the expander classes
+CGateExpander, DiagUnitaryExpander, MultiplexorExpander,
+and ForbiddenCNotExpander to expand the circuit to an equivalent albeit
+longer circuit that satisfies constraints 1, 2, 3.</p>
+<p>This class can handle a chip with any number of qubits.</p>
+<p>This class halts execution if it encounters a CNOT that is disallowed
+according to the input ‘c_to_tars’. ‘c_to_tars’ varies with chip. Some
+‘c_to_tars’s are listed in the files ‘<a href="#id3"><span class="problematic" id="id4">chip_couplings_</span></a>…’ found in same
+folder as this file. If c_to_tars = None, the class assumes any CNOT is
+possible.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>all_fun_names</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – a list of all the distinct function names encountered in circuit</p></li>
+<li><p><strong>all_var_nums</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – a list of all distinct numbers of the variables encountered in circuit</p></li>
+<li><p><strong>aqasm_name</strong> (<em>str</em>) – the name of the aqasm language, for example, IBMqasm. Used as ending
+of file name, between ‘_’ and ‘.txt’</p></li>
+<li><p><strong>aqasm_path</strong> (<em>str</em>) – path to aqasm file</p></li>
+<li><p><strong>aqasm_out</strong> (<em>_io.TextIOWrapper</em>) – This output stream is used to write an aqasm file based on the input
+English file.</p></li>
+<li><p><strong>c_to_tars</strong> (<em>dict</em><em>[</em><em>int</em><em>, </em><em>list</em><em>[</em><em>int</em><em>]</em><em>]</em>) – a dictionary mapping j in range(num_bits) to a list, possibly empty,
+of the physically allowed targets of qubit j, when j is the control
+of a CNOT. If c_to_tars = None, the class assumes any CNOT is
+possible.</p></li>
+<li><p><strong>file_prefix</strong> (<em>str</em>) – </p></li>
+<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>qbtr_wr</strong> (<a class="reference internal" href="qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer" title="qubiter.SEO_writer.SEO_writer"><em>SEO_writer</em></a>) – A SEO_writer object created iff write_qubiter_files is True.</p></li>
+<li><p><strong>strict_mode</strong> (<em>bool</em>) – </p></li>
+<li><p><strong>vprefix</strong> (<em>str</em>) – all variables in aqasm file will be called vprefix + an int</p></li>
+<li><p><strong>write_qubiter_files</strong> (<em>bool</em>) – The class always writes an AnyQasm text file based on the input
+English file that is read. Iff this is True, the class also writes
+English and Picture files in 1-1 line correspondence with the output
+AnyQasm file</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="qubiter.device_specific.Qubiter_to_AnyQasm.Qubiter_to_AnyQasm.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_bits</em>, <em class="sig-param">aqasm_name=''</em>, <em class="sig-param">strict_mode=False</em>, <em class="sig-param">c_to_tars=None</em>, <em class="sig-param">write_qubiter_files=False</em>, <em class="sig-param">vars_manager=None</em>, <em class="sig-param">aqasm_ftype='txt'</em>, <em class="sig-param">prelude_str=None</em>, <em class="sig-param">ending_str=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/device_specific/Qubiter_to_AnyQasm.html#Qubiter_to_AnyQasm.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.device_specific.Qubiter_to_AnyQasm.Qubiter_to_AnyQasm.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_prefix</strong> (<em>str</em>) – </p></li>
+<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>aqasm_name</strong> (<em>str</em>) – </p></li>
+<li><p><strong>strict_mode</strong> (<em>bool</em>) – </p></li>
+<li><p><strong>c_to_tars</strong> (<em>dict</em><em>[</em><em>int</em><em>, </em><em>list</em><em>[</em><em>int</em><em>]</em><em>]</em><em>|None</em>) – </p></li>
+<li><p><strong>write_qubiter_files</strong> (<em>bool</em>) – </p></li>
+<li><p><strong>vars_manager</strong> (<a class="reference internal" href="qubiter.PlaceholderManager.html#qubiter.PlaceholderManager.PlaceholderManager" title="qubiter.PlaceholderManager.PlaceholderManager"><em>PlaceholderManager</em></a>) – </p></li>
+<li><p><strong>aqasm_ftype</strong> (<em>str</em>) – file type of output aqasm file. If this equals ‘txt’, name of
+aqasm file will end in ‘.txt’</p></li>
+<li><p><strong>prelude_str</strong> (<em>str | None</em>) – string to write as prelude to aqasm file. If None, then the
+override method of self.write_prelude() is called</p></li>
+<li><p><strong>ending_str</strong> (<em>str | None</em>) – string to write as ending to aqasm file. If None, then the
+override method of self.write_ending() is called</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.device_specific.Qubiter_to_AnyQasm.Qubiter_to_AnyQasm.new_var_name">
+<code class="sig-name descname">new_var_name</code><span class="sig-paren">(</span><em class="sig-param">var_name</em>, <em class="sig-param">coda=''</em>, <em class="sig-param">strict=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/device_specific/Qubiter_to_AnyQasm.html#Qubiter_to_AnyQasm.new_var_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.device_specific.Qubiter_to_AnyQasm.Qubiter_to_AnyQasm.new_var_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Starts by asserting that var_name is a legal variable name.</p>
+<p>If var_name is not functional, this method replaces # in var_name by
+self.vprefix and adds coda to end of string.  For example,
+if self.vprefix=’rads’ and var_name=’-#2*.5”, then output is
+‘-rads2*.5’ + coda</p>
+<p>If var_name is functional, this method replaces each # in var_name
+by self.vprefix, adds commas and parenthesis, and adds coda to end
+of string. For example, if self.vprefix=’rads’ and
+var_name=’-fun#1#2’, then output is ‘-fun(rads1, rads2)’ + coda</p>
+<p>The above applies only if strict=False. In the strict mode, only an
+empty coda is allowed for functional placeholders. For
+non-functional placeholders, if var_name contains an <a href="#id1"><span class="problematic" id="id2">*</span></a>, then the str
+after the * and the coda are merged using eval().</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>var_name</strong> (<em>str</em>) – </p></li>
+<li><p><strong>coda</strong> (<em>str</em>) – </p></li>
+<li><p><strong>strict</strong> (<em>bool</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.device_specific.Qubiter_to_AnyQasm.Qubiter_to_AnyQasm.print_aqasm_file">
+<code class="sig-name descname">print_aqasm_file</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/device_specific/Qubiter_to_AnyQasm.html#Qubiter_to_AnyQasm.print_aqasm_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.device_specific.Qubiter_to_AnyQasm.Qubiter_to_AnyQasm.print_aqasm_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints aqasm file created by constructor.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.device_specific.Qubiter_to_AnyQasm.Qubiter_to_AnyQasm.write">
+<code class="sig-name descname">write</code><span class="sig-paren">(</span><em class="sig-param">s</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/device_specific/Qubiter_to_AnyQasm.html#Qubiter_to_AnyQasm.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.device_specific.Qubiter_to_AnyQasm.Qubiter_to_AnyQasm.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes string s to aqasm and qubiter out files</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>s</strong> (<em>str</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.device_specific.Qubiter_to_AnyQasm.Qubiter_to_AnyQasm.write_ending">
+<code class="sig-name descname">write_ending</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/device_specific/Qubiter_to_AnyQasm.html#Qubiter_to_AnyQasm.write_ending"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.device_specific.Qubiter_to_AnyQasm.Qubiter_to_AnyQasm.write_ending" title="Permalink to this definition">¶</a></dt>
+<dd><p>abstract function, writes AnyQasm’s ending statements after calls to
+<a href="#id5"><span class="problematic" id="id6">use_</span></a> methods for gates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.device_specific.Qubiter_to_AnyQasm.Qubiter_to_AnyQasm.write_prelude">
+<code class="sig-name descname">write_prelude</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/device_specific/Qubiter_to_AnyQasm.html#Qubiter_to_AnyQasm.write_prelude"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.device_specific.Qubiter_to_AnyQasm.Qubiter_to_AnyQasm.write_prelude" title="Permalink to this definition">¶</a></dt>
+<dd><p>abstract function, writes AnyQasm’s opening statements before calls
+to <a href="#id7"><span class="problematic" id="id8">use_</span></a> methods for gates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Robert R. Tucci &amp; Qubiter contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

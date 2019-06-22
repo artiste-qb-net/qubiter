@@ -40,7 +40,7 @@ class SEO_simulator(SEO_reader):
     except when there is only a single branch.
 
     If cur_st_vec_dict contains as values the states |br0>, |br1>, |br2>,
-    ...], then one can construct the density matrix of that state as \rho =
+    ...], then one can construct the density matrix of that state as rho =
     |br0><br0| + |br1><br1| + |br2><br2| + ... divided by a number so that
     trace(rho)=1. In other words, cur_st_vec_dict is just a particular way
     of storing the density matrix of a state. A state with a single branch

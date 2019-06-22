@@ -1,0 +1,332 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qubiter.device_specific.ChipCouplingsFitter module &mdash; qubiter 1.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> qubiter
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rosetta.html">Qubiter Rosetta Stone</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">qubiter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>qubiter.device_specific.ChipCouplingsFitter module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/qubiter.device_specific.ChipCouplingsFitter.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-qubiter.device_specific.ChipCouplingsFitter">
+<span id="qubiter-device-specific-chipcouplingsfitter-module"></span><h1>qubiter.device_specific.ChipCouplingsFitter module<a class="headerlink" href="#module-qubiter.device_specific.ChipCouplingsFitter" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="qubiter.device_specific.ChipCouplingsFitter.ChipCouplingsFitter">
+<em class="property">class </em><code class="sig-prename descclassname">qubiter.device_specific.ChipCouplingsFitter.</code><code class="sig-name descname">ChipCouplingsFitter</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_bits</em>, <em class="sig-param">c_to_tars</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/device_specific/ChipCouplingsFitter.html#ChipCouplingsFitter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.device_specific.ChipCouplingsFitter.ChipCouplingsFitter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Recall that an undirected graph G is defined as a pair of sets (V, E),
+where V is a set of vertices, and E, the edges, is a set of tuples (c,
+t), where c and t are in V. For undirected graphs, the order of c and t
+is ignored.</p>
+<p>This class reads an English file in order to build a list of the CNots
+used in the file. The CNots in the list are specified as (c, t) tuples.
+Then the class builds an undirected graph, call it GE=(V_GE, E_GE) for
+Graph_English, from that CNots list. Then the class builds another
+graph, call it GP=(V_GP, E_GP) for Graph_Physical, from the c_to_tars
+describing the couplings of a particular chip. Then the class uses the
+python networkx function for finding “graph isomorphisms” between
+undirected graphs. The class attempts to find a map phi() from the
+vertices of GE to the vertices of GP, so that phi(x_GE) is a subset of
+x_GP with x=V, E. If the search for phi() succeeds, then phi induces a
+permutation map, call it bit_map: range(num_bits)-&gt;range(num_bits),
+bit_ge-&gt;bit_gp, of the qubits of the circuit from which GE was
+assembled. Under this permutation, the CNots of the permuted circuit are
+all allowed** by the chip constraint c_to_tars. In that sense, the map
+bit_map() is a “fit” to the chip couplings.</p>
+<p><a href="#id1"><span class="problematic" id="id2">**</span></a>except, some CNots may have to be reversed (control and target
+swapped) using Hadamards. These reversals can be performed with the
+class ForbiddenCNotExpander.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><p><strong>bit_map</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – bit_map[bit_ge] = bit_gp defines a map from the bits bit_ge
+of the graph GE to the bits bit_gp of the graph GP.</p>
+</dd>
+</dl>
+<dl class="method">
+<dt id="qubiter.device_specific.ChipCouplingsFitter.ChipCouplingsFitter.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_bits</em>, <em class="sig-param">c_to_tars</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/device_specific/ChipCouplingsFitter.html#ChipCouplingsFitter.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.device_specific.ChipCouplingsFitter.ChipCouplingsFitter.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_prefix</strong> (<em>str</em>) – file prefix of English file which is to be read to assemble
+a list of CNots used in the file.</p></li>
+<li><p><strong>num_bits</strong> (<em>int</em>) – Number of qubits used in English file with file prefix
+<cite>file_prefix</cite>. IMP: We assume that c_to_tars refers to a chip with
+num_bits too. Both the English file and the chip must have the
+same number of qubits. This is no loss of generality. As long as
+the English file doesn’t mention qubit positions &gt;= num_bits,
+all you have to do to conform is to change the name of the
+English file so that it claims to pertain to num_bits qubits.</p></li>
+<li><p><strong>c_to_tars</strong> (<em>dict</em><em>[</em><em>int</em><em>, </em><em>list</em><em>[</em><em>int</em><em>]</em><em>]</em>) – a dictionary mapping j in range(num_bits) to a list, possibly
+empty, of the physically allowed targets of qubit j, when j is
+the control of a CNOT.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.device_specific.ChipCouplingsFitter.ChipCouplingsFitter.draw_phys_and_eng_graphs">
+<em class="property">static </em><code class="sig-name descname">draw_phys_and_eng_graphs</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_bits</em>, <em class="sig-param">c_to_tars</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/device_specific/ChipCouplingsFitter.html#ChipCouplingsFitter.draw_phys_and_eng_graphs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.device_specific.ChipCouplingsFitter.ChipCouplingsFitter.draw_phys_and_eng_graphs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draws the Physical and English undirected graphs. This is useful in
+case you want to try to use human pattern recognition to embed the
+English graph inside the Physical graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_prefix</strong> (<em>str</em>) – </p></li>
+<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>c_to_tars</strong> (<em>dict</em><em>[</em><em>int</em><em>, </em><em>list</em><em>[</em><em>int</em><em>]</em><em>]</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.device_specific.ChipCouplingsFitter.ChipCouplingsFitter.get_bit_map_from_c_to_tars">
+<em class="property">static </em><code class="sig-name descname">get_bit_map_from_c_to_tars</code><span class="sig-paren">(</span><em class="sig-param">num_bits</em>, <em class="sig-param">old_cnots</em>, <em class="sig-param">c_to_tars</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/device_specific/ChipCouplingsFitter.html#ChipCouplingsFitter.get_bit_map_from_c_to_tars"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.device_specific.ChipCouplingsFitter.ChipCouplingsFitter.get_bit_map_from_c_to_tars" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function has as inputs <cite>old_cnot</cite> describing the CNots in an
+English file for a circuit with num_bits qubits and <cite>c_to_tars</cite>
+describing the couplings of a chip with num_bits qubits. The
+function returns a list <cite>bit_map</cite> of num_bit many ints that
+describes a permutation map mapping range(num_bits)-&gt;range(
+num_bits), bit_ge-&gt;bit_gp. Under this permutation, the CNots of the
+circuit described by the input English file are mapped into new
+CNots which are all allowed** by the chip couplings constraint
+c_to_tars.</p>
+<p>** except their targets and controls may have to be reversed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>old_cnots</strong> (<em>tuple</em><em>[</em><em>tuple</em><em>[</em><em>int</em><em>, </em><em>int</em><em>]</em><em>]</em>) – </p></li>
+<li><p><strong>c_to_tars</strong> (<em>dict</em><em>[</em><em>int</em><em>, </em><em>list</em><em>[</em><em>int</em><em>]</em><em>]</em>) – </p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list[int]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.device_specific.ChipCouplingsFitter.ChipCouplingsFitter.get_cnots_in_file">
+<em class="property">static </em><code class="sig-name descname">get_cnots_in_file</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_bits</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/device_specific/ChipCouplingsFitter.html#ChipCouplingsFitter.get_cnots_in_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.device_specific.ChipCouplingsFitter.ChipCouplingsFitter.get_cnots_in_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function reads an English file with file prefix <cite>file_prefix</cite>
+pertaining to a circuit with num_bit many qubits. It returns a tuple
+of the CNots mentioned in the English file. The CNots are specified
+as tuples (c, t), where c is the control bit position and t is the
+target bit position.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_prefix</strong> (<em>str</em>) – </p></li>
+<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple[tuple[int, int]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Robert R. Tucci &amp; Qubiter contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

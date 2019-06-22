@@ -1,0 +1,270 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qubiter.device_specific.RigettiTools module &mdash; qubiter 1.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> qubiter
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rosetta.html">Qubiter Rosetta Stone</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">qubiter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>qubiter.device_specific.RigettiTools module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/qubiter.device_specific.RigettiTools.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-qubiter.device_specific.RigettiTools">
+<span id="qubiter-device-specific-rigettitools-module"></span><h1>qubiter.device_specific.RigettiTools module<a class="headerlink" href="#module-qubiter.device_specific.RigettiTools" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="qubiter.device_specific.RigettiTools.RigettiTools">
+<em class="property">class </em><code class="sig-prename descclassname">qubiter.device_specific.RigettiTools.</code><code class="sig-name descname">RigettiTools</code><a class="reference internal" href="_modules/qubiter/device_specific/RigettiTools.html#RigettiTools"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.device_specific.RigettiTools.RigettiTools" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class has no constructor. It consists of static methods that
+facilitate the interaction between Qubiter and PyQuil and the Rigetti
+Cloud.</p>
+<dl class="method">
+<dt id="qubiter.device_specific.RigettiTools.RigettiTools.add_xy_meas_coda_to_program">
+<code class="sig-name descname">add_xy_meas_coda_to_program</code><span class="sig-paren">(</span><em class="sig-param">bit_pos_to_xy_str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/device_specific/RigettiTools.html#RigettiTools.add_xy_meas_coda_to_program"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.device_specific.RigettiTools.RigettiTools.add_xy_meas_coda_to_program" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method adds a “coda” (tail ending) to prog using data in
+bit_pos_to_xy_str to determine what coda will be.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>prog</strong> (<em>Program</em>) – </p></li>
+<li><p><strong>bit_pos_to_xy_str</strong> (<em>dict</em><em>[</em><em>int</em><em>, </em><em>str</em><em>]</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.device_specific.RigettiTools.RigettiTools.obs_vec_from_bitstrings">
+<em class="property">static </em><code class="sig-name descname">obs_vec_from_bitstrings</code><span class="sig-paren">(</span><em class="sig-param">bitstrings</em>, <em class="sig-param">num_qbits</em>, <em class="sig-param">bs_is_array</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/device_specific/RigettiTools.html#RigettiTools.obs_vec_from_bitstrings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.device_specific.RigettiTools.RigettiTools.obs_vec_from_bitstrings" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method converts a PyQuil <cite>bitstrings</cite> into a Qubiter
+observation vector which it then returns.</p>
+<p>Qubiter likes to state the results of an experiment repeated
+num_shots (aka num_samples) times by what it calls an observation
+vector. An obs vec is a 1-dim array, num_shots long, whose entries
+are integers which are the decimal representation of a string,
+num_qbits long, of zeros and ones. This string of zeros and ones
+gives the state of each qubit in the ZL convention</p>
+<p>PyQuil likes to state the results of an experiment repeated num_shots
+times by what it calls bitstrings. A bitstrings is a dict that maps
+qubit number to a 1-dim array, num_shots long, of zeros and ones.
+Here is an example:</p>
+<p># [1]:
+#
+# bitstrings = qc.run_and_measure(program, trials=10)
+# bitstrings
+#
+# [2]:
+#
+# {0: array([1, 0, 0, 1, 1, 1, 1, 0, 1, 0]),
+#  1: array([1, 0, 0, 1, 1, 1, 1, 0, 1, 0]),
+#  2: array([1, 0, 0, 1, 1, 1, 1, 0, 1, 0])}</p>
+<p>However, qc.run() returns a numpy array of zeros and ones and shape
+(num_shots, num_qbits), formed from the bitstrings dict just
+described. If bs_is_array=False, we assume the input bitstrings is a
+dict, and if True, we assume it is an array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bitstrings</strong> (<em>dict</em><em>[</em><em>int</em><em>, </em><em>np.ndarray</em><em>]</em>) – </p></li>
+<li><p><strong>num_qbits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>bs_is_array</strong> (<em>bool</em>) – stands for: bitstrings is array</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>shape = (num_shots,)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Robert R. Tucci &amp; Qubiter contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

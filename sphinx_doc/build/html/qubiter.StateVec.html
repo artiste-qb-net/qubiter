@@ -1,0 +1,739 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qubiter.StateVec module &mdash; qubiter 1.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> qubiter
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rosetta.html">Qubiter Rosetta Stone</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">qubiter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>qubiter.StateVec module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/qubiter.StateVec.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-qubiter.StateVec">
+<span id="qubiter-statevec-module"></span><h1>qubiter.StateVec module<a class="headerlink" href="#module-qubiter.StateVec" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="qubiter.StateVec.StateVec">
+<em class="property">class </em><code class="sig-prename descclassname">qubiter.StateVec.</code><code class="sig-name descname">StateVec</code><span class="sig-paren">(</span><em class="sig-param">num_bits</em>, <em class="sig-param">arr=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/StateVec.html#StateVec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.StateVec.StateVec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class is a wrapper for its main attribute, a complex numpy array
+self.arr with shape [2]*num_bits. The class also provides functions for
+performing calculations on dictionaries of the objects of this class
+StateVec. The keys of these dictionaries of state vectors are strings
+that we call branch_keys, because they name “branches” in class
+SEO_simulation. This class also provides a function for constructing
+from such dictionaries of state vectors, a density matrix which is a 2
+dim square numpy array of dimension 2^num_bits.</p>
+<p>IMPORTANT: See docstring of method get_traditional_st_vec() for
+explanation of qubit ordering conventions and shape of self.arr</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>arr</strong> (<em>np.ndarray</em>) – a complex array of shape [2]*num_bits</p></li>
+<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="qubiter.StateVec.StateVec.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">num_bits</em>, <em class="sig-param">arr=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/StateVec.html#StateVec.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.StateVec.StateVec.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>arr</strong> (<em>np.ndarray</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.StateVec.StateVec.__str__">
+<code class="sig-name descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/StateVec.html#StateVec.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.StateVec.StateVec.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns str(self.arr)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.StateVec.StateVec.describe_self">
+<code class="sig-name descname">describe_self</code><span class="sig-paren">(</span><em class="sig-param">print_st_vec=False</em>, <em class="sig-param">do_pp=False</em>, <em class="sig-param">omit_zero_amps=False</em>, <em class="sig-param">show_probs=False</em>, <em class="sig-param">ZL=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/StateVec.html#StateVec.describe_self"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.StateVec.StateVec.describe_self" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints a description of self.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>print_st_vec</strong> (<em>bool</em>) – if True, prints the final state vector (which may be huge. For n
+qubits, it has 2^n components.)</p></li>
+<li><p><strong>do_pp</strong> (<em>bool</em>) – pp= pretty print. Only used if print_st_vec=True. For pp=False,
+it prints final state vector in usual numpy array print style.
+For pp=True, it prints final state vector as column of (index,
+array value) pairs.</p></li>
+<li><p><strong>omit_zero_amps</strong> (<em>bool</em>) – If print_st_vec=True, pp=True and this parameter is True too,
+will omit states with zero amplitude</p></li>
+<li><p><strong>show_probs</strong> (<em>bool</em>) – If True, will show probability of each standard basis state</p></li>
+<li><p><strong>ZL</strong> (<em>bool</em>) – If True, multi-index of ket in ZL (Zero bit Last) convention.
+If False, multi-index of ket in ZF (Zero bit First) convention.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.StateVec.StateVec.describe_st_vec_dict">
+<em class="property">static </em><code class="sig-name descname">describe_st_vec_dict</code><span class="sig-paren">(</span><em class="sig-param">st_vec_dict</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/StateVec.html#StateVec.describe_st_vec_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.StateVec.StateVec.describe_st_vec_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calls describe_st_vec() for each branch of st_vec_dict</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>st_vec_dict</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="#qubiter.StateVec.StateVec" title="qubiter.StateVec.StateVec"><em>StateVec</em></a><em>]</em>) – </p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – the keyword arguments of describe_self()</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.StateVec.StateVec.get_bit_probs">
+<em class="property">static </em><code class="sig-name descname">get_bit_probs</code><span class="sig-paren">(</span><em class="sig-param">num_bits</em>, <em class="sig-param">pd</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/StateVec.html#StateVec.get_bit_probs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.StateVec.StateVec.get_bit_probs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list whose jth item is, for the jth qubit, the pair (p,
+1-p), where p is the probability that the jth qubit is 0, if the
+state of all other qubits is ignored.</p>
+<p>Does not assume that pd is normalized to 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>pd</strong> (<em>np.ndarray</em>) – probability distribution of shape (2^num_bits,) IMP: assumed to
+be indexed in ZL convention</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list[tuple[float, float]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.StateVec.StateVec.get_counts_from_obs_vec">
+<em class="property">static </em><code class="sig-name descname">get_counts_from_obs_vec</code><span class="sig-paren">(</span><em class="sig-param">num_bits</em>, <em class="sig-param">obs_vec</em>, <em class="sig-param">use_bin_labels=True</em>, <em class="sig-param">omit_zero_counts=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/StateVec.html#StateVec.get_counts_from_obs_vec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.StateVec.StateVec.get_counts_from_obs_vec" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method takes as input an observations vector obs_vec such as
+returned by another method in this class, namely
+get_observations_vec(). This method returns an OrderedDict called
+state_name_to_count that maps the names of states to the number of
+times they occur in obs_vec. If use_bin_labels=True, state names are
+a string composed of a binary number that is num_bits long, followed
+by ‘ZL’ because ZL convention is assumed. If use_bin_labels=False,
+state names are ‘0’, ‘1’, ‘2’, etc.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>obs_vec</strong> (<em>np.ndarray</em>) – </p></li>
+<li><p><strong>use_bin_labels</strong> (<em>bool</em>) – </p></li>
+<li><p><strong>omit_zero_counts</strong> (<em>bool</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>OrderedDict[str, int]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.StateVec.StateVec.get_den_mat">
+<em class="property">static </em><code class="sig-name descname">get_den_mat</code><span class="sig-paren">(</span><em class="sig-param">num_bits</em>, <em class="sig-param">st_vec_dict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/StateVec.html#StateVec.get_den_mat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.StateVec.StateVec.get_den_mat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a density matrix (indexed in ZL convention) constructed from
+st_vec_dict which is a dict from strings to StateVec.</p>
+<p>The rows and columns are always labelled 0, 1, 2, .. or binary
+representation thereof, regardless of whether ZL or ZF convention.
+To switch between bin to dec representations of labels,
+see docstring of get_traditional_st_vec().</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>st_vec_dict</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="#qubiter.StateVec.StateVec" title="qubiter.StateVec.StateVec"><em>StateVec</em></a><em>]</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.StateVec.StateVec.get_den_mat_pd">
+<em class="property">static </em><code class="sig-name descname">get_den_mat_pd</code><span class="sig-paren">(</span><em class="sig-param">den_mat</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/StateVec.html#StateVec.get_den_mat_pd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.StateVec.StateVec.get_den_mat_pd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the diagonal of den_mat (so indexed in ZL convention) .
+den_mat is expected to be a density matrix returned by get_den_mat()</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>den_mat</strong> (<em>np.ndarray</em>) – density matrix, shape=(dim, dim) where dim=2^num_bits, indexed
+in ZL convention.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.StateVec.StateVec.get_emp_state_vec_from_emp_pd">
+<em class="property">static </em><code class="sig-name descname">get_emp_state_vec_from_emp_pd</code><span class="sig-paren">(</span><em class="sig-param">num_bits</em>, <em class="sig-param">emp_pd</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/StateVec.html#StateVec.get_emp_state_vec_from_emp_pd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.StateVec.StateVec.get_emp_state_vec_from_emp_pd" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method takes as input an empirical probability distribution
+emp_pd and it returns an empirical state vector calculated from
+emp_pd. This requires reshaping emp_pd to the shape [2]*num_bits,
+permuting its indices from the ZL to the ZF convention, and then
+taking the sqrt of the components to get an amplitude instead of a
+probability. All amplitudes of the output state vector are real
+though.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>emp_pd</strong> (<em>np.ndarray</em>) – its shape is (1&lt;&lt;num_bits,)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#qubiter.StateVec.StateVec" title="qubiter.StateVec.StateVec">StateVec</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.StateVec.StateVec.get_empirical_pd_from_counts">
+<em class="property">static </em><code class="sig-name descname">get_empirical_pd_from_counts</code><span class="sig-paren">(</span><em class="sig-param">num_bits</em>, <em class="sig-param">state_name_to_count</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/StateVec.html#StateVec.get_empirical_pd_from_counts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.StateVec.StateVec.get_empirical_pd_from_counts" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method takes as input “the counts dict” (i.e., an OrderedDict
+called state_name_to_count which is produced by another method in
+this class, namely get_counts_from_obs_vec()). This method returns
+an empirical probability distribution emp_pd calculated from the
+counts dict. emp_pd indices are ints referring to qubit states
+labelled in the ZL convention.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>state_name_to_count</strong> (<em>OrderedDict</em><em>[</em><em>str</em><em>, </em><em>int</em><em>]</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>emp_pd</strong> – its shape is (1&lt;&lt;num_bits,)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.StateVec.StateVec.get_entropy">
+<em class="property">static </em><code class="sig-name descname">get_entropy</code><span class="sig-paren">(</span><em class="sig-param">den_mat</em>, <em class="sig-param">method='eigen'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/StateVec.html#StateVec.get_entropy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.StateVec.StateVec.get_entropy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns entropy of density matrix den_mat. Uses natural log for
+entropy.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>den_mat</strong> (<em>np.ndarray</em>) – Density matrix. Eigenvalues must be non-negative and sum to 1</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – method used to calculate log of array. Either ‘eigen’ or ‘pade’</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.StateVec.StateVec.get_ground_st_vec">
+<em class="property">static </em><code class="sig-name descname">get_ground_st_vec</code><span class="sig-paren">(</span><em class="sig-param">num_bits</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/StateVec.html#StateVec.get_ground_st_vec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.StateVec.StateVec.get_ground_st_vec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns StateVec for the ground state <a href="#id1"><span class="problematic" id="id2">|</span></a>0&gt;|0&gt;|0&gt;…|0&gt;, where <a href="#id3"><span class="problematic" id="id4">|</span></a>0&gt; = [
+1,0]^t and <a href="#id5"><span class="problematic" id="id6">|</span></a>1&gt; = [0,1]^t, t = transpose</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>num_bits</strong> (<em>int</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#qubiter.StateVec.StateVec" title="qubiter.StateVec.StateVec">StateVec</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.StateVec.StateVec.get_impurity">
+<em class="property">static </em><code class="sig-name descname">get_impurity</code><span class="sig-paren">(</span><em class="sig-param">den_mat</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/StateVec.html#StateVec.get_impurity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.StateVec.StateVec.get_impurity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns abs(trace(den_mat^2) -1). This is zero iff the density
+matrix den_mat represents a pure state. For example, for a pure
+state den_mat = <a href="#id13"><span class="problematic" id="id14">|a&gt;&lt;a|</span></a>, den_mat^2 = den_mat = <a href="#id15"><span class="problematic" id="id16">|a&gt;&lt;a|</span></a> so this
+quantity is indeed zero.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>den_mat</strong> (<em>np.nparray</em>) – density matrix, shape=(dim, dim) where dim=2^num_bits</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.StateVec.StateVec.get_mean_value_of_real_diag_mat">
+<code class="sig-name descname">get_mean_value_of_real_diag_mat</code><span class="sig-paren">(</span><em class="sig-param">real_arr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/StateVec.html#StateVec.get_mean_value_of_real_diag_mat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.StateVec.StateVec.get_mean_value_of_real_diag_mat" title="Permalink to this definition">¶</a></dt>
+<dd><p>In Quantum Mechanics, one often needs to calculate the mean value of
+a Hermitian operator H, mean= &lt;psi|H|psi&gt;. Let H = U^dag D U,
+where U is unitary and D is real diagonal matrix. If self = U|psi&gt;,
+then this reduces to finding mean= &lt;self|D|self&gt;. So must decompose
+U into a SEO and evolve, using SEO_simulator, to the state U|psi&gt;.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>real_arr</strong> (<em>np.ndarray</em>) – a real array of shape=[2]^num_bits (same shape as self.arr). If
+flattened, real_arr contains the diagonal of the matrix D. If U
+is a Kronecker prod of 2-dim unitary matrices, the flattened
+real_arr can be obtained as Kronecker product of spinors, i.e.,
+shape=( 2, ) arrays.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.StateVec.StateVec.get_observations_vec">
+<em class="property">static </em><code class="sig-name descname">get_observations_vec</code><span class="sig-paren">(</span><em class="sig-param">num_bits</em>, <em class="sig-param">pd</em>, <em class="sig-param">num_shots</em>, <em class="sig-param">rand_seed=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/StateVec.html#StateVec.get_observations_vec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.StateVec.StateVec.get_observations_vec" title="Permalink to this definition">¶</a></dt>
+<dd><p>vec = vector</p>
+<p>num_shots (number of shots) is often called number of trials or
+number of samples.</p>
+<p>For num_shots=1, this method returns an int (actually, a 1 X 1 array
+with an int in it) in range(1&lt;&lt;num_bits) chosen according to the
+probability distribution pd for num_bits qubits. If the output int
+were to be expressed in binary notation, its last, rightmost bit
+would be the measurement of the 0th qubit (because pd is assumed to
+be in ZL convention).</p>
+<p>For num_shots&gt;1, the method returns an np.ndarray of shape (
+num_shots,) with the result of doing num_shots repetitions of what
+was done for num_shots=1.</p>
+<p>Does not assume that pd is normalized to 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>pd</strong> (<em>np.ndarray</em>) – probability distribution of shape (2^num_bits,) IMP: assumed to
+be indexed in ZL convention</p></li>
+<li><p><strong>num_shots</strong> (<em>int</em>) – </p></li>
+<li><p><strong>rand_seed</strong> (<em>int</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>shape (num_shots,)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.StateVec.StateVec.get_partial_tr">
+<em class="property">static </em><code class="sig-name descname">get_partial_tr</code><span class="sig-paren">(</span><em class="sig-param">num_bits</em>, <em class="sig-param">den_mat</em>, <em class="sig-param">traced_bits_set</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/StateVec.html#StateVec.get_partial_tr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.StateVec.StateVec.get_partial_tr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the partial trace of a density matrix den_mat. Traces over
+qubits in set traced_bits_set. To get full trace, just do np.trace(
+den_mat)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>den_mat</strong> (<em>np.ndarray</em>) – if dim=2^num_bits, this function assumes that den_mat has shape
+(dim, dim) and that it’s indexed in the ZL convention so qubit 0
+corresponds to axis num_bits-1.</p></li>
+<li><p><strong>traced_bits_set</strong> (<em>set</em><em>[</em><em>int</em><em>]</em>) – Set of qubits being traced over</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.StateVec.StateVec.get_pd">
+<code class="sig-name descname">get_pd</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/StateVec.html#StateVec.get_pd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.StateVec.StateVec.get_pd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns copy of self.get_traditional_st_vec() with amplitudes
+replaced by probabilities. pd = probability distribution. So returns
+one column array indexed in ZL convention like the traditional state
+vec is. Doesn’t check that the resulting array sums to 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>probability distribution of shape (2^num_bits,) IMP: will
+be indexed in ZL convention</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.StateVec.StateVec.get_random_st_vec">
+<em class="property">static </em><code class="sig-name descname">get_random_st_vec</code><span class="sig-paren">(</span><em class="sig-param">num_bits</em>, <em class="sig-param">rand_seed=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/StateVec.html#StateVec.get_random_st_vec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.StateVec.StateVec.get_random_st_vec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns StateVec for random state sum_b^n A(b^n)|b^n&gt;, b^n in {0,
+1}^n, where n=num_bits and sum_b^n <a href="#id7"><span class="problematic" id="id8">|</span></a>A( b^n)|^2 = 1</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>rand_seed</strong> (<em>int</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#qubiter.StateVec.StateVec" title="qubiter.StateVec.StateVec">StateVec</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.StateVec.StateVec.get_standard_basis_st_vec">
+<em class="property">static </em><code class="sig-name descname">get_standard_basis_st_vec</code><span class="sig-paren">(</span><em class="sig-param">spin_dir_list</em>, <em class="sig-param">ZL=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/StateVec.html#StateVec.get_standard_basis_st_vec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.StateVec.StateVec.get_standard_basis_st_vec" title="Permalink to this definition">¶</a></dt>
+<dd><p>If ZL = True, returns StateVec for state …|s2&gt;|s1&gt;|s0&gt;,
+where spin_dir_list=[…,s2, s1, s0], s_j in {0, 1} for all j,
+<a href="#id9"><span class="problematic" id="id10">|</span></a>0&gt; = [1, 0]^t and <a href="#id11"><span class="problematic" id="id12">|</span></a>1&gt; = [0,1]^t, t = transpose. If ZL = False,
+same except spin_dir_list=reversed([…,s2, s1, s0]).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>spin_dir_list</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – </p></li>
+<li><p><strong>ZL</strong> (<em>bool</em>) – True(False) if last(first) entry of spin_dir_list refers to
+qubit 0</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#qubiter.StateVec.StateVec" title="qubiter.StateVec.StateVec">StateVec</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.StateVec.StateVec.get_total_prob">
+<code class="sig-name descname">get_total_prob</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/StateVec.html#StateVec.get_total_prob"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.StateVec.StateVec.get_total_prob" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns total probability of self.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.StateVec.StateVec.get_traditional_st_vec">
+<code class="sig-name descname">get_traditional_st_vec</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/StateVec.html#StateVec.get_traditional_st_vec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.StateVec.StateVec.get_traditional_st_vec" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>IMPORTANT: Internally, self.arr in Qubiter has shape [2]*num_bits
+and assumes ZF convention because that way a numpy axis and a qubit
+number are the same thing. However, the traditional way of writing a
+state vector is as a column array of dimension 1&lt;&lt; num_bits in the
+ZL convention.</strong></p>
+<p>This function returns the traditional view. So it reshapes (
+flattens) the array and it reverses the axes (reversing axes takes
+it from ZF to ZL).</p>
+<p>The rows are always labelled 0, 1, 2, 3, … or the binary
+representation thereof, regardless of whether ZL or ZF convention.
+One can go from digital to binary labels and vice versa
+using</p>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">binary_repr</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span>
+<span class="go">&#39;0011&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="go">3</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.StateVec.StateVec.is_zero">
+<em class="property">static </em><code class="sig-name descname">is_zero</code><span class="sig-paren">(</span><em class="sig-param">st_vec</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/StateVec.html#StateVec.is_zero"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.StateVec.StateVec.is_zero" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True iff an object of this class is None or its parameter
+‘arr’ is None</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>st_vec</strong> (<em>StateVec|None</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.StateVec.StateVec.pp_arr_entries">
+<code class="sig-name descname">pp_arr_entries</code><span class="sig-paren">(</span><em class="sig-param">omit_zero_amps=False</em>, <em class="sig-param">show_probs=False</em>, <em class="sig-param">ZL=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/StateVec.html#StateVec.pp_arr_entries"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.StateVec.StateVec.pp_arr_entries" title="Permalink to this definition">¶</a></dt>
+<dd><p>pp=pretty print. Prints for each entry of self.arr, a line of the
+form (i, j, k, …) self.arr[i, j, k, …], with zero bit last (
+resp., first) if ZL=True (resp., False).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>omit_zero_amps</strong> (<em>bool</em>) – If True, will not list states with zero amplitude</p></li>
+<li><p><strong>show_probs</strong> (<em>bool</em>) – If True, will show probability of each amplitude</p></li>
+<li><p><strong>ZL</strong> (<em>bool</em>) – If True, multi-index in ZL (Zero bit Last) convention. If False,
+multi-index in ZF (Zero bit First) convention.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Robert R. Tucci &amp; Qubiter contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

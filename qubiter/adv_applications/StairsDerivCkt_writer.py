@@ -53,8 +53,8 @@ class StairsDerivCkt_writer(SEO_writer):
     differentiated, via 4 functions of tlist. These functions can be
     obtained via the method get_fun_name_to_fun().
 
-    Attributes:
-    -----------
+    Attributes
+    ----------
     deriv_direc : int
         in range(4)
     deriv_gate_str : str

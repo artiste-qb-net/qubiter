@@ -1,0 +1,474 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qubiter.quantum_CSD_compiler.Tree &mdash; qubiter 1.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> qubiter
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../rosetta.html">Qubiter Rosetta Stone</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">qubiter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qubiter.quantum_CSD_compiler.Tree</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qubiter.quantum_CSD_compiler.Tree</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">qubiter.SEO_writer</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">qubiter.quantum_CSD_compiler.Node</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">qubiter.UnitaryMat</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">collections</span> <span class="k">as</span> <span class="nn">co</span>
+
+
+<div class="viewcode-block" id="Tree"><a class="viewcode-back" href="../../../qubiter.quantum_CSD_compiler.Tree.html#qubiter.quantum_CSD_compiler.Tree.Tree">[docs]</a><span class="k">class</span> <span class="nc">Tree</span><span class="p">(</span><span class="n">SEO_writer</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class creates a binary tree of nodes whose cargo is contained in</span>
+<span class="sd">    the attributes of class Node. This class, being a child of class</span>
+<span class="sd">    SEO_writer, is also capable of writing English &amp; Picture files. After</span>
+<span class="sd">    creating a binary tree, it proceeds to use that tree to produce a CS</span>
+<span class="sd">    decomposition of the unitary matrix init_unitary_mat that is fed into</span>
+<span class="sd">    its constructor. This CS (cosine-sine) decomp consists of a sequence of</span>
+<span class="sd">    diagonal unitaries (DIAG lines in English file) and multiplexors (MP_Y</span>
+<span class="sd">    lines in English file) whose product equals init_unitary_mat.</span>
+
+<span class="sd">    If you wish to expand DIAG and MP_Y lines into cnots and single qubit</span>
+<span class="sd">    rotations, use DiagUnitaryExpander and MultiplexorExpander classes.</span>
+
+<span class="sd">    The CS decomposition was a famous decomp of Linear Algebra well before</span>
+<span class="sd">    quantum computing. It was first applied to quantum computing in the 1999</span>
+<span class="sd">    paper and accompanying C++ program cited below. Much of the code of the</span>
+<span class="sd">    original C++ Qubiter has been rewritten in Python for the new pythonic</span>
+<span class="sd">    Qubiter.</span>
+
+<span class="sd">    Let init_unitary_mat be N dimensional, with N = 2^n, where n = number of</span>
+<span class="sd">    qubits. A general N dimensional unitary matrix has N^2 dofs (real</span>
+<span class="sd">    degrees of freedom). That&#39;s because it has N^2 complex entries, so 2*N^2</span>
+<span class="sd">    real parameters, but those parameters are subject to N real constraints</span>
+<span class="sd">    and N(N-1)/2 complex constraints, for a total of N^2 real constraints.</span>
+<span class="sd">    So 2N^2 real parameters minus N^2 real constraints gives N^2 dofs.</span>
+
+<span class="sd">    (a) Each DIAG (MP_Y, resp.) line of the CS decomp of init_unitary_mat</span>
+<span class="sd">    depends on N (N/2, resp.) angles and there are about N DIAG and N MP_Y</span>
+<span class="sd">    lines. So the DIAG lines alone have enough dofs, N^2 of them, to cover</span>
+<span class="sd">    all N^2 dofs of init_unitary_mat. So clearly, there is a lot of</span>
+<span class="sd">    redundancy in the CS decomp used by Qubiter. But, there is hope: the CS</span>
+<span class="sd">    decomp is not unique, and it might be possible to choose a CS decomp</span>
+<span class="sd">    that makes zero many of the angles in the DIAG and MP_Y lines. Some of</span>
+<span class="sd">    those &quot;compiler optimizations&quot; are considered in references below.</span>
+
+<span class="sd">    (b) The CS decomp as used here leads to order N^2 = 2^{2n} cnots and</span>
+<span class="sd">    qubit rotations so it is impractical for large N. But for small N,</span>
+<span class="sd">    it can be useful. For large N, it might be possible to discover</span>
+<span class="sd">    approximations to individual MP_Y and DIAG lines. An approximation of</span>
+<span class="sd">    this type is considered in MultiplexorExpander.</span>
+
+<span class="sd">    Clearly, there is much room for future research to improve (a) and (b).</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    1. R.R. Tucci, A Rudimentary Quantum Compiler(2cnd Ed.)</span>
+<span class="sd">    https://arxiv.org/abs/quant-ph/9902062</span>
+
+<span class="sd">    2. Qubiter 1.11, a C++ program whose first version was released together</span>
+<span class="sd">    with Ref.1 above. Qubiter 1.11 is included in the</span>
+<span class="sd">    quantum_CSD_compiler/LEGACY folder of this newer, pythonic version of</span>
+<span class="sd">    Qubiter.</span>
+
+<span class="sd">    3. R.R. Tucci, Quantum Fast Fourier Transform Viewed as a Special Case</span>
+<span class="sd">    of Recursive Application of Cosine-Sine Decomposition,</span>
+<span class="sd">    https://arxiv.org/abs/quant-ph/0411097</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    global_phase_rads : float</span>
+<span class="sd">        If arr is the initial unitary matrix fed to the constructor,</span>
+<span class="sd">        then this equals delta, where arr = exp(i*delta) arr1, where arr1 is</span>
+<span class="sd">        a special unitary matrix (det(arr1) = 1)</span>
+<span class="sd">    root_nd : Node</span>
+<span class="sd">        The root or starting node of the tree. The only node without parents.</span>
+<span class="sd">        Each node remembers its children, so you only need the root_nd to</span>
+<span class="sd">        access all other nodes.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Tree.__init__"><a class="viewcode-back" href="../../../qubiter.quantum_CSD_compiler.Tree.html#qubiter.quantum_CSD_compiler.Tree.Tree.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">do_write</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">emb</span><span class="p">,</span> <span class="n">init_unitary_mat</span><span class="p">,</span>
+                 <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        do_write : bool</span>
+<span class="sd">        file_prefix : str</span>
+<span class="sd">        emb : CktEmbedder</span>
+<span class="sd">        init_unitary_mat : np.ndarray</span>
+<span class="sd">            This is the matrix that is fed to cs_decomp() in root node</span>
+<span class="sd">            constructor.</span>
+<span class="sd">        verbose : bool</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
+        <span class="n">SEO_writer</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">emb</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">UnitaryMat</span><span class="o">.</span><span class="n">is_unitary</span><span class="p">(</span><span class="n">init_unitary_mat</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">global_phase_rads</span> <span class="o">=</span> \
+            <span class="n">UnitaryMat</span><span class="o">.</span><span class="n">global_phase_rads</span><span class="p">(</span><span class="n">init_unitary_mat</span><span class="p">)</span>
+        <span class="n">ph_fac</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">global_phase_rads</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root_nd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_tree</span><span class="p">(</span><span class="n">init_unitary_mat</span><span class="o">/</span><span class="n">ph_fac</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">do_write</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">()</span></div>
+        
+<div class="viewcode-block" id="Tree.build_tree"><a class="viewcode-back" href="../../../qubiter.quantum_CSD_compiler.Tree.html#qubiter.quantum_CSD_compiler.Tree.Tree.build_tree">[docs]</a>    <span class="k">def</span> <span class="nf">build_tree</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_unitary_mat</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function is called by the constructor to build a tree of</span>
+<span class="sd">        Node&#39;s. It returns the root node of the tree.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        init_unitary_mat : np.ndarray</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Node</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">nd_ctr</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">num_bits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_bef</span>
+        <span class="n">num_rows</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_bits</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">init_unitary_mat</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">num_rows</span><span class="p">,</span> <span class="n">num_rows</span><span class="p">)</span>
+        <span class="n">root_nd</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="n">nd_ctr</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                            <span class="n">init_unitary_mat</span><span class="o">=</span><span class="n">init_unitary_mat</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;building tree------------&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">root_nd</span><span class="p">)</span>
+        <span class="n">node_q</span> <span class="o">=</span> <span class="n">co</span><span class="o">.</span><span class="n">deque</span><span class="p">([</span><span class="n">root_nd</span><span class="p">])</span>
+
+        <span class="c1"># level = level of tree splitting = len(node_q)</span>
+        <span class="c1"># level = 1 for root node</span>
+        <span class="c1"># level = num_of_bits+1 for node whose</span>
+        <span class="c1"># central_mat is list of 1 dim arrays</span>
+        <span class="n">level</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="k">while</span> <span class="n">level</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># since level!=0, cur_nd is not None here</span>
+            <span class="n">cur_nd</span> <span class="o">=</span> <span class="n">node_q</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">level</span> <span class="o">==</span> <span class="n">num_bits</span><span class="o">+</span><span class="mi">1</span> <span class="ow">or</span> <span class="n">cur_nd</span><span class="o">.</span><span class="n">is_barren</span><span class="p">():</span>
+                <span class="n">node_q</span><span class="o">.</span><span class="n">popleft</span><span class="p">()</span>
+                <span class="n">level</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">cur_nd</span><span class="o">.</span><span class="n">left_nd</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">nd_ctr</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">next_nd</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="n">nd_ctr</span><span class="p">,</span> <span class="n">cur_nd</span><span class="p">,</span> <span class="s1">&#39;left&#39;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="n">cur_nd</span><span class="p">,</span> <span class="s1">&#39;-left-&gt;&#39;</span><span class="p">,</span> <span class="n">next_nd</span><span class="p">)</span>
+                    <span class="n">node_q</span><span class="o">.</span><span class="n">appendleft</span><span class="p">(</span><span class="n">next_nd</span><span class="p">)</span>
+                    <span class="n">level</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">elif</span> <span class="n">cur_nd</span><span class="o">.</span><span class="n">right_nd</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">nd_ctr</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">next_nd</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="n">nd_ctr</span><span class="p">,</span> <span class="n">cur_nd</span><span class="p">,</span> <span class="s1">&#39;right&#39;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="n">cur_nd</span><span class="p">,</span> <span class="s1">&#39;-right-&gt;&#39;</span><span class="p">,</span> <span class="n">next_nd</span><span class="p">)</span>
+                    <span class="n">node_q</span><span class="o">.</span><span class="n">appendleft</span><span class="p">(</span><span class="n">next_nd</span><span class="p">)</span>
+                    <span class="n">level</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">node_q</span><span class="o">.</span><span class="n">popleft</span><span class="p">()</span>
+                    <span class="n">level</span> <span class="o">-=</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">root_nd</span></div>
+
+<div class="viewcode-block" id="Tree.write"><a class="viewcode-back" href="../../../qubiter.quantum_CSD_compiler.Tree.html#qubiter.quantum_CSD_compiler.Tree.Tree.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function writes English &amp; Picture files. It visits all the</span>
+<span class="sd">        Node&#39;s of the tree from right to left (this way: &lt;--). It calls</span>
+<span class="sd">        self.write_node() for each node.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">node_q</span> <span class="o">=</span> <span class="n">co</span><span class="o">.</span><span class="n">deque</span><span class="p">()</span>
+        <span class="n">nd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root_nd</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;writing tree------------&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">nd</span><span class="p">)</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">nd</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">node_q</span><span class="o">.</span><span class="n">appendleft</span><span class="p">(</span><span class="n">nd</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">nd</span><span class="o">.</span><span class="n">right_nd</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="n">nd</span><span class="p">,</span> <span class="s1">&#39;-right-&gt;&#39;</span><span class="p">,</span> <span class="n">nd</span><span class="o">.</span><span class="n">right_nd</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="n">nd</span><span class="p">,</span> <span class="s1">&#39;-right-&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;None&#39;</span><span class="p">)</span>
+                <span class="n">nd</span> <span class="o">=</span> <span class="n">nd</span><span class="o">.</span><span class="n">right_nd</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Extract first of the node_q and assign it to nd.</span>
+                <span class="c1"># Exit while() loop if node_q is empty.</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">nd</span> <span class="o">=</span> <span class="n">node_q</span><span class="o">.</span><span class="n">popleft</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">write_node</span><span class="p">(</span><span class="n">nd</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">nd</span><span class="o">.</span><span class="n">left_nd</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                            <span class="nb">print</span><span class="p">(</span><span class="n">nd</span><span class="p">,</span> <span class="s1">&#39;-left-&gt;&#39;</span><span class="p">,</span> <span class="n">nd</span><span class="o">.</span><span class="n">left_nd</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="nb">print</span><span class="p">(</span><span class="n">nd</span><span class="p">,</span> <span class="s1">&#39;-left-&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;None&#39;</span><span class="p">)</span>
+                    <span class="n">nd</span> <span class="o">=</span> <span class="n">nd</span><span class="o">.</span><span class="n">left_nd</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="k">break</span></div>
+
+<div class="viewcode-block" id="Tree.write_node"><a class="viewcode-back" href="../../../qubiter.quantum_CSD_compiler.Tree.html#qubiter.quantum_CSD_compiler.Tree.Tree.write_node">[docs]</a>    <span class="k">def</span> <span class="nf">write_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nd</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function is called by self.write() for each node of the tree.</span>
+<span class="sd">        For a node with level &lt;= num_bits, the function writes an MP_Y line,</span>
+<span class="sd">        whereas if level = num_bits + 1, it writes a DIAG line.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        nd : Node</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write_NOTA</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">nd</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;next:&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;------start writing &#39;</span><span class="p">,</span> <span class="n">nd</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">nd</span><span class="o">.</span><span class="n">is_barren</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write_NOTA</span><span class="p">(</span><span class="s2">&quot;barren node&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="n">num_bits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_bef</span>
+
+        <span class="k">assert</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">nd</span><span class="o">.</span><span class="n">level</span> <span class="o">&lt;=</span> <span class="n">num_bits</span><span class="o">+</span><span class="mi">1</span>
+        <span class="c1"># tar_bit_pos = num_bits - 1 for level=1</span>
+        <span class="c1"># tar_bit_pos = 0 for level=num_bits</span>
+        <span class="c1"># tar_bit_pos = -1 for level=num_bits+1</span>
+        <span class="n">tar_bit_pos</span> <span class="o">=</span> <span class="n">num_bits</span> <span class="o">-</span> <span class="n">nd</span><span class="o">.</span><span class="n">level</span>
+
+        <span class="n">trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">tar_bit_pos</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">trols</span><span class="o">.</span><span class="n">bit_pos_to_kind</span> <span class="o">=</span> <span class="p">{</span><span class="n">c</span><span class="p">:</span> <span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">)}</span>
+            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">num_bits</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">trols</span><span class="o">.</span><span class="n">bit_pos_to_kind</span><span class="p">[</span><span class="n">c</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">trols</span><span class="o">.</span><span class="n">bit_pos_to_kind</span> <span class="o">=</span> <span class="p">{</span><span class="n">c</span><span class="p">:</span> <span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)}</span>
+        <span class="n">trols</span><span class="o">.</span><span class="n">refresh_lists</span><span class="p">()</span>
+
+        <span class="n">rad_angles</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># central_mats is list of numpy arrays</span>
+        <span class="k">for</span> <span class="n">dmat</span> <span class="ow">in</span> <span class="n">nd</span><span class="o">.</span><span class="n">central_mats</span><span class="p">:</span>
+            <span class="n">rad_angles</span> <span class="o">+=</span> <span class="nb">list</span><span class="p">(</span><span class="n">dmat</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
+
+        <span class="c1"># permute arr bit indices</span>
+        <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">tar_bit_pos</span> <span class="o">&lt;=</span> <span class="n">num_bits</span><span class="o">-</span><span class="mi">3</span><span class="p">:</span>
+            <span class="c1"># turn rad_angles into equivalent bit indexed tensor</span>
+            <span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">rad_angles</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">([</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">num_bits</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+            <span class="n">perm</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">))</span> <span class="o">+</span> \
+                <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_bits</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">+</span> <span class="p">[</span><span class="n">tar_bit_pos</span><span class="p">]</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;permutation&quot;</span><span class="p">,</span> <span class="n">perm</span><span class="p">)</span>
+            <span class="n">arr</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">perm</span><span class="p">)</span>
+            <span class="c1"># flatten arr and turn it into a list</span>
+            <span class="n">rad_angles</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">arr</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
+        <span class="c1"># print(rad_angles)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;target bit&quot;</span><span class="p">,</span> <span class="n">tar_bit_pos</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;controls&quot;</span><span class="p">,</span> <span class="n">trols</span><span class="o">.</span><span class="n">bit_pos_to_kind</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;rad_angles&quot;</span><span class="p">,</span> <span class="n">rad_angles</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">tar_bit_pos</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_multiplexor_gate</span><span class="p">(</span>
+                    <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span> <span class="n">rad_angles</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_diag_unitary_gate</span><span class="p">(</span><span class="n">trols</span><span class="p">,</span> <span class="n">rad_angles</span><span class="p">)</span></div></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">qubiter.FouSEO_writer</span> <span class="k">import</span> <span class="o">*</span>
+
+    <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+        <span class="n">num_bits</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="n">init_unitary_mat</span> <span class="o">=</span> <span class="n">FouSEO_writer</span><span class="o">.</span><span class="n">fourier_trans_mat</span><span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_bits</span><span class="p">)</span>
+        <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">)</span>
+        <span class="n">file_prefix</span> <span class="o">=</span> <span class="s1">&#39;csd_test&#39;</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">emb</span><span class="p">,</span> <span class="n">init_unitary_mat</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Robert R. Tucci &amp; Qubiter contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

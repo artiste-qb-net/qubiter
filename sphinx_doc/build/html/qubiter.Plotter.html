@@ -1,0 +1,393 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qubiter.Plotter module &mdash; qubiter 1.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> qubiter
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rosetta.html">Qubiter Rosetta Stone</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">qubiter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>qubiter.Plotter module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/qubiter.Plotter.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-qubiter.Plotter">
+<span id="qubiter-plotter-module"></span><h1>qubiter.Plotter module<a class="headerlink" href="#module-qubiter.Plotter" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="qubiter.Plotter.Plotter">
+<em class="property">class </em><code class="sig-prename descclassname">qubiter.Plotter.</code><code class="sig-name descname">Plotter</code><a class="reference internal" href="_modules/qubiter/Plotter.html#Plotter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.Plotter.Plotter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class has no constructor. All its methods are static methods. It
+contains various utility methods for (1) creating pandas dataframes from
+state vectors and density matrices created by StateVec methods, and (2)
+plotting such dataframes. Dataframes with probability (resp., amplitude)
+entries are plotted as bar plots (resp., quiver plots). Casting things
+into dataframes is convenient because they are automatically displayed
+as html tables in jupyter notebooks.</p>
+<dl class="method">
+<dt id="qubiter.Plotter.Plotter.get_bit_probs_df">
+<em class="property">static </em><code class="sig-name descname">get_bit_probs_df</code><span class="sig-paren">(</span><em class="sig-param">bit_probs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/Plotter.html#Plotter.get_bit_probs_df"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.Plotter.Plotter.get_bit_probs_df" title="Permalink to this definition">¶</a></dt>
+<dd><p>Admits as input a list bit_probs with num_bits items consisting of
+pairs of two floats. Returns a dataframe with two columns and
+num_bits rows. The rows are labelled by 0, 1, 2, …</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>bit_probs</strong> (<em>list</em><em>[</em><em>tuple</em><em>(</em><em>float</em><em>, </em><em>float</em><em>)</em><em>]</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pan.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.Plotter.Plotter.get_den_mat_df">
+<em class="property">static </em><code class="sig-name descname">get_den_mat_df</code><span class="sig-paren">(</span><em class="sig-param">num_bits</em>, <em class="sig-param">den_mat</em>, <em class="sig-param">use_bin_labels=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/Plotter.html#Plotter.get_den_mat_df"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.Plotter.Plotter.get_den_mat_df" title="Permalink to this definition">¶</a></dt>
+<dd><p>Admits as input a numpy array den_mat (a density matrix) of shape (
+dim, dim), where dim= 2^num_bits and ZL convention is assumed.
+Returns square dataframe with entries of den_mat. The rows and
+columns are labelled by 0, 1, 2, … or their binary equivalents,
+depending on the bool value of use_bin_labels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>den_mat</strong> (<em>np.ndarray</em>) – </p></li>
+<li><p><strong>use_bin_labels</strong> (<em>bool</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pan.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.Plotter.Plotter.get_pd_df">
+<em class="property">static </em><code class="sig-name descname">get_pd_df</code><span class="sig-paren">(</span><em class="sig-param">num_bits</em>, <em class="sig-param">pd</em>, <em class="sig-param">use_bin_labels=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/Plotter.html#Plotter.get_pd_df"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.Plotter.Plotter.get_pd_df" title="Permalink to this definition">¶</a></dt>
+<dd><p>Admits as input a 1-dim numpy array pd (probability distribution)
+with shape ( 2^num_bits, ) and ZL convention is assumed. Returns a
+dataframe with its entries. The rows are labelled by 0, 1, 2,
+… or their binary equivalents, depending on the bool value of
+use_bin_labels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>pd</strong> (<em>np.ndarray</em>) – </p></li>
+<li><p><strong>use_bin_labels</strong> (<em>bool</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pan.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.Plotter.Plotter.get_st_vec_df">
+<em class="property">static </em><code class="sig-name descname">get_st_vec_df</code><span class="sig-paren">(</span><em class="sig-param">trad_st_vec</em>, <em class="sig-param">use_bin_labels=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/Plotter.html#Plotter.get_st_vec_df"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.Plotter.Plotter.get_st_vec_df" title="Permalink to this definition">¶</a></dt>
+<dd><p>Admits as input trad_st_vec which is a complex numpy array with
+shape (dim,) where dim= 2^num_bits and ZL convention is assumed.
+Returns a dataframe with a single column with 2^num_bit rows. The
+rows are labelled by 0, 1, 2, … or their binary equivalents,
+depending on the bool value of use_bin_labels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>trad_st_vec</strong> (<em>np.ndarray</em>) – </p></li>
+<li><p><strong>use_bin_labels</strong> (<em>bool</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pan.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.Plotter.Plotter.get_states">
+<em class="property">static </em><code class="sig-name descname">get_states</code><span class="sig-paren">(</span><em class="sig-param">num_bits</em>, <em class="sig-param">use_bin_labels=True</em>, <em class="sig-param">ZL=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/Plotter.html#Plotter.get_states"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.Plotter.Plotter.get_states" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns list of strings [‘0’, ‘1’, ..] with 2^num_bits entries if
+use_bin_labels=False, or the binary string equivalents if
+use_bin_labels=True.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>use_bin_labels</strong> (<em>bool</em>) – </p></li>
+<li><p><strong>ZL</strong> (<em>bool</em>) – If True, appends “(ZL)” to state labels. Else appends “(ZF)”</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.Plotter.Plotter.plot_counts">
+<em class="property">static </em><code class="sig-name descname">plot_counts</code><span class="sig-paren">(</span><em class="sig-param">state_name_to_counts</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/Plotter.html#Plotter.plot_counts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.Plotter.Plotter.plot_counts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots an OrderedDict[str, int] called state_name_to_counts as a bar
+graph. Divides counts by their sum before plotting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>state_name_to_counts</strong> (<em>OrderedDict</em><em>[</em><em>str</em><em>, </em><em>int</em><em>]</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.Plotter.Plotter.plot_phasors">
+<em class="property">static </em><code class="sig-name descname">plot_phasors</code><span class="sig-paren">(</span><em class="sig-param">titles</em>, <em class="sig-param">st_vec_df_list=None</em>, <em class="sig-param">den_mat_df_list=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/Plotter.html#Plotter.plot_phasors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.Plotter.Plotter.plot_phasors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Admits as input a list of dataframes called ‘st_vec_df_list’ or one
+called ‘den_mat_df_list’ but not both. Exactly one of these lists
+must be None. The names of the dataframes are given by the list of
+strings ‘titles’. Let dim = 2^num_bits. The dataframes in
+st_vec_df_list have one column with dim rows, whereas those for
+den_mat_df_list are square with dim rows and columns. This function
+plots each dataframe in the list as a quiver plot (phasor-&gt;arrow)
+with dim rows and either one column or dim columns.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>titles</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – </p></li>
+<li><p><strong>st_vec_df_list</strong> (<em>list</em><em>[</em><em>pan.DataFrame</em><em>]</em><em>|None</em>) – </p></li>
+<li><p><strong>den_mat_df_list</strong> (<em>list</em><em>[</em><em>pan.DataFrame</em><em>]</em><em>|None</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.Plotter.Plotter.plot_probs_col">
+<em class="property">static </em><code class="sig-name descname">plot_probs_col</code><span class="sig-paren">(</span><em class="sig-param">titles</em>, <em class="sig-param">probs_col_df_list</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/Plotter.html#Plotter.plot_probs_col"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.Plotter.Plotter.plot_probs_col" title="Permalink to this definition">¶</a></dt>
+<dd><p>Admits as input a list of dataframes called ‘probs_col_df_list’. The
+names of the dataframes are given by the list of strings ‘titles’.
+The dataframes all have a single column, and possibly different
+numbers of rows. All entries of all dataframes are floats between 0
+and 1. This function plots each dataframe in the list as a barplot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>titles</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – </p></li>
+<li><p><strong>probs_col_df_list</strong> (<em>list</em><em>[</em><em>pan.DataFrame</em><em>]</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Robert R. Tucci &amp; Qubiter contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

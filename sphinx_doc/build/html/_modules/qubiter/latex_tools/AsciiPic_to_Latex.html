@@ -1,0 +1,697 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qubiter.latex_tools.AsciiPic_to_Latex &mdash; qubiter 1.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> qubiter
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../rosetta.html">Qubiter Rosetta Stone</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">qubiter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qubiter.latex_tools.AsciiPic_to_Latex</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qubiter.latex_tools.AsciiPic_to_Latex</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">copy</span> <span class="k">as</span> <span class="nn">cp</span>
+<span class="kn">from</span> <span class="nn">qubiter.Controls</span> <span class="k">import</span> <span class="o">*</span>
+
+
+<div class="viewcode-block" id="AsciiPic_to_Latex"><a class="viewcode-back" href="../../../qubiter.latex_tools.AsciiPic_to_Latex.html#qubiter.latex_tools.AsciiPic_to_Latex.AsciiPic_to_Latex">[docs]</a><span class="k">class</span> <span class="nc">AsciiPic_to_Latex</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class can translate a Qubiter Picture file (which is a text file</span>
+<span class="sd">    that contains an ASCII picture of a quantum circuit) into Latex code</span>
+<span class="sd">    that can be compiled into a scholarly, publication quality eps or pdf</span>
+<span class="sd">    picture of the circuit. The Latex code generated by this class calls</span>
+<span class="sd">    commands from the package QCircuit, which in turn calls commands from</span>
+<span class="sd">    the package xypic.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    1. Bryan Eastin, S. Flammia, &quot;Q-circuit Tutorial&quot;,</span>
+<span class="sd">    https://arxiv.org/abs/quant-ph/0406003v2</span>
+<span class="sd">    2. K.H. Rose, &quot;xypic users&#39;s guide&quot;</span>
+<span class="sd">    (There is also a much longer &quot;xypic reference manual&quot;</span>
+
+<span class="sd">    You can use the Latex code produced by this class as a starting point.</span>
+<span class="sd">    You can tweak the code by hand by adding annotations in Latex or by</span>
+<span class="sd">    changing various parameters as explained in the xypic and Qcircuit</span>
+<span class="sd">    documentation.</span>
+
+<span class="sd">    Instead of going from Qubiter Picture file to Latex code directly,</span>
+<span class="sd">    this class inserts an intermediate translation step that we call a</span>
+<span class="sd">    Mosaic ascii picture. A Mosaic picture is a simplified, abridged version</span>
+<span class="sd">    of a Qubiter &quot;native&quot; Picture file. In Qubiter native pictures,</span>
+<span class="sd">    each gate is made up of multiple bonds, and each bond is 4 characters</span>
+<span class="sd">    long. A Mosaic picture uses 1 character per bond instead of 4, usually</span>
+<span class="sd">    retaining only the first character of each bond of the counterpart</span>
+<span class="sd">    Qubiter native picture. Hence, a Mosaic picture is exactly 1/4 as long</span>
+<span class="sd">    as its Qubiter native picture counterpart. Qubiter native pictures and</span>
+<span class="sd">    Mosaic pictures can both be machine generated by Qubiter or written by</span>
+<span class="sd">    hand. Because they are 1/4 as long, Mosaic pictures are easier to write</span>
+<span class="sd">    by hand than Qubiter native pictures.</span>
+
+<span class="sd">    Here is a quantum circuit with 7 qubits and 9 gates expressed in Qubiter</span>
+<span class="sd">    native picture format and in Mosaic picture format. In both pictures,</span>
+<span class="sd">    time points downwards. Each line (row) represents one gate, or one unit</span>
+<span class="sd">    of time. Columns 0, 4, 8, ... represent a qubit in the Qubiter native pic.</span>
+
+<span class="sd">    Qubiter native pic:</span>
+
+<span class="sd">    |   X---+---+---@   |   |</span>
+<span class="sd">    |   Y---+---O---@---O   |</span>
+<span class="sd">    |   H   |   |   |   |   |</span>
+<span class="sd">    |   &lt;---+---+---&gt;   |   |</span>
+<span class="sd">    M   |   |   |   |   |   |</span>
+<span class="sd">    @---X   |   |   |   |   |</span>
+<span class="sd">    @---+---+---+---+---X   |</span>
+<span class="sd">    @---+---+---O---+---X   |</span>
+
+<span class="sd">    Mosaic pic:</span>
+
+<span class="sd">    |X++@||</span>
+<span class="sd">    |Y+O@O|</span>
+<span class="sd">    |H|||||</span>
+<span class="sd">    |&lt;++&gt;||</span>
+<span class="sd">    M||||||</span>
+<span class="sd">    @X|||||</span>
+<span class="sd">    @++++X|</span>
+<span class="sd">    @++O+X|</span>
+
+<span class="sd">    As you can see, in the Mosaic pic, the white spaces and hyphens are</span>
+<span class="sd">    omitted. The following symbols are kept:</span>
+
+<span class="sd">    kept = [</span>
+<span class="sd">        &#39;H&#39;,  # Hadamard matrix</span>
+<span class="sd">        &#39;M&#39;,  # measurement of type 2</span>
+<span class="sd">        &#39;O&#39;,  # Control of type False</span>
+<span class="sd">        &#39;@&#39;,  # Control of type True</span>
+<span class="sd">        &#39;X&#39;,  # sigma_X Pauli matrix</span>
+<span class="sd">        &#39;Y&#39;,  # sigma_Y Pauli matrix</span>
+<span class="sd">        &#39;Z&#39;,  # sigma_Z Pauli matrix</span>
+<span class="sd">        &#39;&lt;&#39;,  # left edge of swap gate</span>
+<span class="sd">        &#39;&gt;&#39;,  # right edge of swap gate</span>
+<span class="sd">        &#39;|&#39;,  # wire connecting two times</span>
+<span class="sd">        &#39;+&#39;,  # &#39;|&#39; connecting 2 times crossed by a &#39;-&#39; connecting two qubits</span>
+<span class="sd">        &#39;$&#39;]  # place holder to be replaced in Latex by initial ket of a qubit</span>
+
+<span class="sd">    In translating a Mosaic picture to Latex, this class will try to</span>
+<span class="sd">    interpret each character of a Mosaic pic by using the &quot;kept&quot; list above.</span>
+<span class="sd">    If you insert a character that it can&#39;t interpret, like for example an</span>
+<span class="sd">    &#39;A&#39;, it will translate that character to a Latex one qubit box with an</span>
+<span class="sd">    &#39;A&#39; inside it. If a gate (=time=mosaic pic row) has at least one &#39;?&#39; in</span>
+<span class="sd">    the mosaic pic, it will be drawn in the Latex with inter-qubit wiring.</span>
+<span class="sd">    For example, a mosaic row |AA|?| will be drawn in the Latex with a box</span>
+<span class="sd">    around each A and a box around the ? and a wire connecting all 3 boxes.</span>
+
+<span class="sd">    In Qubiter native pics and Mosaic pics, time points down, the way we</span>
+<span class="sd">    normally read  English. In the Latex pictures generated by this class,</span>
+<span class="sd">    you can choose for time to point either from left to right (&gt;) or vice</span>
+<span class="sd">    versa (&lt;). The &gt; convention is more popular than the &lt; convention,</span>
+<span class="sd">    but the &lt; convention is preferred by the cognoscenti because it</span>
+<span class="sd">    recognizes that quantum circuit diagrams are merely a graphical</span>
+<span class="sd">    representation of Dirac notation, and Dirac notation uses the &lt;</span>
+<span class="sd">    convention. Reversing a convention espoused by the universally popular</span>
+<span class="sd">    Dirac notation is a totally needless complication.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    gb_char_arr : np.ndarray</span>
+<span class="sd">        This internal variable is a rectangular array of single characters,</span>
+<span class="sd">        of shape (num_gates, num_bits), hence its name starts with gb. Each</span>
+<span class="sd">        gate is a unit of time, and, as usual in Qubiter, the words bit and</span>
+<span class="sd">        qubit are used interchangeably. To build this array, we start by</span>
+<span class="sd">        splitting a Mosaic picture into a character array, then we make some</span>
+<span class="sd">        modifications like adding a row of &#39;$&#39; characters and another of &#39;|&#39;</span>
+<span class="sd">        characters as placeholders.</span>
+<span class="sd">    gb_ch_is_measured : np.ndarray[bool]</span>
+<span class="sd">        Internal variable, a bool array of the same shape as gb_char_arr.</span>
+<span class="sd">        For each ch (aka character, node, vertex) entry in gb_char_arr,</span>
+<span class="sd">        the corresponding bool entry of this array answers the question of</span>
+<span class="sd">        whether or not that node is already measured (i.e., whether it</span>
+<span class="sd">        occurs at the same qubit as an M node but after it).</span>
+<span class="sd">    init_states : list[str]</span>
+<span class="sd">        A list of num_bits many strings. Each string will be inserted inside</span>
+<span class="sd">        a ket and displayed in the Latex picture as the starting state of a</span>
+<span class="sd">        qubit. The strings in the list are ordered in top qubit to bottom</span>
+<span class="sd">        qubit order.</span>
+<span class="sd">    reverse_bits : bool</span>
+<span class="sd">        Set to True iff you want qubit order in Mosaic pic to be reversed in</span>
+<span class="sd">        Latex pic.</span>
+<span class="sd">    reverse_gates : bool</span>
+<span class="sd">        Set to True iff you want gate order in Mosaic pic to be reversed in</span>
+<span class="sd">        Latex pic.</span>
+<span class="sd">    time_dir : str</span>
+<span class="sd">        time_dir = &#39;&lt;&#39; if reverse_gates else &#39;&gt;&#39;</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="AsciiPic_to_Latex.__init__"><a class="viewcode-back" href="../../../qubiter.latex_tools.AsciiPic_to_Latex.html#qubiter.latex_tools.AsciiPic_to_Latex.AsciiPic_to_Latex.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reverse_bits</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">reverse_gates</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        reverse_bits : bool</span>
+<span class="sd">        reverse_gates : bool</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">reverse_bits</span> <span class="o">=</span> <span class="n">reverse_bits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reverse_gates</span> <span class="o">=</span> <span class="n">reverse_gates</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time_dir</span> <span class="o">=</span> <span class="s1">&#39;&lt;&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">reverse_gates</span> <span class="k">else</span> <span class="s1">&#39;&gt;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_bit_on_top</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reverse_bits</span>
+
+        <span class="c1"># these change with each mosaic_word_list considered</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_states</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gb_char_arr</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gb_ch_is_measured</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="AsciiPic_to_Latex.qubiter_pic_file_to_mosaic_word_list"><a class="viewcode-back" href="../../../qubiter.latex_tools.AsciiPic_to_Latex.html#qubiter.latex_tools.AsciiPic_to_Latex.AsciiPic_to_Latex.qubiter_pic_file_to_mosaic_word_list">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">qubiter_pic_file_to_mosaic_word_list</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="n">ZL</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reads Qubiter native pic file and returns a mosaic word list,</span>
+<span class="sd">        which is a list of words all of which have the same number (</span>
+<span class="sd">        =num_bits) of characters.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        file_path : str</span>
+<span class="sd">            Path to Qubiter native pic file.</span>
+<span class="sd">        num_bits : int</span>
+<span class="sd">            Number of qubits. The name of every native pic file generated by</span>
+<span class="sd">            Qubiter states the value of num_bits.</span>
+<span class="sd">        ZL : bool</span>
+<span class="sd">            Set to True iff file is using Zero bit Last convention. Opposite</span>
+<span class="sd">            of ZL is ZF (Zero First). The  name of every native pic file</span>
+<span class="sd">            generated by Qubiter states either ZL or ZF.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list[str]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">mosaic_word_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">inside_if_m_block</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">pic_file_in</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="n">pic_file_in</span><span class="o">.</span><span class="n">closed</span><span class="p">:</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">pic_file_in</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span>
+                <span class="n">pic_file_in</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                <span class="k">break</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">)</span>
+            <span class="n">split_line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+            <span class="n">ch_list</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="c1"># print(&quot;..&quot;, split_line)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">inside_if_m_block</span><span class="p">:</span>
+                <span class="n">m_block_controls</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">vtx</span> <span class="ow">in</span> <span class="n">split_line</span><span class="p">:</span>
+                <span class="c1"># print(&#39;vtx&#39;, vtx)</span>
+                <span class="k">if</span> <span class="n">vtx</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;@&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;|&#39;</span><span class="p">,</span> <span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="s1">&#39;%&#39;</span><span class="p">,</span> <span class="s1">&#39;+&#39;</span><span class="p">,</span>
+                           <span class="s1">&#39;H&#39;</span><span class="p">,</span> <span class="s1">&#39;M&#39;</span><span class="p">,</span> <span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="s1">&#39;Ph&#39;</span><span class="p">,</span>
+                           <span class="s1">&#39;Rx&#39;</span><span class="p">,</span> <span class="s1">&#39;Ry&#39;</span><span class="p">,</span> <span class="s1">&#39;Rz&#39;</span><span class="p">,</span> <span class="s1">&#39;R&#39;</span><span class="p">,</span> <span class="s1">&#39;X&#39;</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">,</span> <span class="s1">&#39;Z&#39;</span><span class="p">]:</span>
+                    <span class="n">ch_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vtx</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="n">vtx</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;OP&#39;</span><span class="p">,</span> <span class="s1">&#39;@P&#39;</span><span class="p">]:</span>
+                    <span class="n">ch_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;?&#39;</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">vtx</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;M1&#39;</span><span class="p">,</span> <span class="s1">&#39;M2&#39;</span><span class="p">]:</span>
+                    <span class="k">assert</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;unsupported measurement type&quot;</span>
+                <span class="k">elif</span> <span class="n">vtx</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;LOOP&#39;</span><span class="p">,</span> <span class="s1">&#39;NEXT&#39;</span><span class="p">]:</span>
+                    <span class="k">assert</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;loops not supported by Mosaic&quot;</span>
+                <span class="k">elif</span> <span class="n">vtx</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;NOTA&#39;</span><span class="p">,</span> <span class="s1">&#39;PRINT&#39;</span><span class="p">]:</span>
+                    <span class="k">break</span>
+                <span class="k">elif</span> <span class="n">vtx</span> <span class="o">==</span> <span class="s1">&#39;IF_M(&#39;</span><span class="p">:</span>
+                    <span class="n">inside_if_m_block</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="c1"># m_block_controls should be empty at this point</span>
+                    <span class="k">assert</span> <span class="ow">not</span> <span class="n">m_block_controls</span><span class="o">.</span><span class="n">bit_pos_to_kind</span>
+                    <span class="n">trols</span> <span class="o">=</span> <span class="n">split_line</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="c1"># print(&#39;trols&#39;, trols)</span>
+                    <span class="n">trol_bits</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">trols</span><span class="p">]</span>
+                    <span class="n">trol_kinds</span> <span class="o">=</span> \
+                        <span class="p">[</span><span class="kc">True</span> <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;T&#39;</span> <span class="k">else</span> <span class="kc">False</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">trols</span><span class="p">]</span>
+                    <span class="k">for</span> <span class="n">bit</span><span class="p">,</span> <span class="n">kind</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">trol_bits</span><span class="p">,</span> <span class="n">trol_kinds</span><span class="p">):</span>
+                        <span class="n">m_block_controls</span><span class="o">.</span><span class="n">bit_pos_to_kind</span><span class="p">[</span><span class="n">bit</span><span class="p">]</span> <span class="o">=</span> <span class="n">kind</span>
+                    <span class="n">m_block_controls</span><span class="o">.</span><span class="n">refresh_lists</span><span class="p">()</span>
+                    <span class="k">break</span>
+                <span class="k">elif</span> <span class="n">vtx</span> <span class="o">==</span> <span class="s1">&#39;}IF_M&#39;</span><span class="p">:</span>
+                    <span class="n">inside_if_m_block</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="k">break</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">assert</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;unexpected circuit node: &#39;&quot;</span> <span class="o">+</span> <span class="n">vtx</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span>
+            <span class="c1"># print(&quot;split_line&quot;, split_line)</span>
+            <span class="c1"># ch_list may be empty in cases where broke out of vtx loop</span>
+            <span class="k">if</span> <span class="n">ch_list</span><span class="p">:</span>
+                <span class="c1"># give controls of if_m block to gates inside block</span>
+                <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">ch_list</span><span class="p">)</span> <span class="o">==</span> <span class="n">num_bits</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">ch_list</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">inside_if_m_block</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">bit</span><span class="p">,</span> <span class="n">kind</span> <span class="ow">in</span> <span class="n">m_block_controls</span><span class="o">.</span><span class="n">bit_pos_to_kind</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">ZL</span><span class="p">:</span>
+                            <span class="n">ch_list</span><span class="p">[</span><span class="n">bit</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;@&#39;</span> <span class="k">if</span> <span class="n">kind</span> <span class="k">else</span> <span class="s1">&#39;O&#39;</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">ch_list</span><span class="p">[</span><span class="n">num_bits</span> <span class="o">-</span> <span class="n">bit</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;@&#39;</span> <span class="k">if</span> <span class="n">kind</span> <span class="k">else</span> <span class="s1">&#39;O&#39;</span>
+                <span class="c1"># replace : by |</span>
+                <span class="n">ch_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">ch</span> <span class="k">if</span> <span class="n">ch</span> <span class="o">!=</span> <span class="s1">&#39;:&#39;</span> <span class="k">else</span> <span class="s1">&#39;|&#39;</span> <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">ch_list</span><span class="p">]</span>
+
+                <span class="c1"># replace | by + when justified</span>
+                <span class="n">gate_has_inter_qubit_wires</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">ch_list</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">ch</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;@&#39;</span><span class="p">,</span> <span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;+&#39;</span><span class="p">]:</span>
+                        <span class="n">gate_has_inter_qubit_wires</span> <span class="o">=</span> <span class="kc">True</span>
+                        <span class="k">break</span>
+                <span class="k">if</span> <span class="n">gate_has_inter_qubit_wires</span><span class="p">:</span>
+                    <span class="n">non_vertical_pos</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)</span>
+                                        <span class="k">if</span> <span class="n">ch_list</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;|&#39;</span><span class="p">]</span>
+                    <span class="n">min_non_vert</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">non_vertical_pos</span><span class="p">)</span>
+                    <span class="n">max_non_vert</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">non_vertical_pos</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">min_non_vert</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_non_vert</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="n">ch_list</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;|&#39;</span><span class="p">:</span>
+                            <span class="n">ch_list</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;+&#39;</span>
+
+                <span class="n">mosaic_word_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ch_list</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">mosaic_word_list</span></div>
+
+<div class="viewcode-block" id="AsciiPic_to_Latex.process_mosaic_word_list"><a class="viewcode-back" href="../../../qubiter.latex_tools.AsciiPic_to_Latex.html#qubiter.latex_tools.AsciiPic_to_Latex.AsciiPic_to_Latex.process_mosaic_word_list">[docs]</a>    <span class="k">def</span> <span class="nf">process_mosaic_word_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mosaic_word_list</span><span class="p">,</span> <span class="n">init_states</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Internal function that uses info in the input mosaic_word_list to</span>
+<span class="sd">        fill certain attributes of the class.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mosaic_word_list : list[str]</span>
+<span class="sd">        init_states : list[str]</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">               </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">word_list</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">mosaic_word_list</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_states</span> <span class="o">=</span> <span class="n">init_states</span>
+
+        <span class="n">num_bits</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">word_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">word_list</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="o">==</span> <span class="n">num_bits</span>
+
+        <span class="k">def</span> <span class="nf">repeated_ch</span><span class="p">(</span><span class="n">ch</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">ch</span><span class="p">]</span><span class="o">*</span><span class="n">num_bits</span><span class="p">)</span>
+
+        <span class="c1"># extend end</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">reverse_gates</span><span class="p">:</span>
+            <span class="c1"># print(word_list, [repeated_ch(&#39;|&#39;)] )</span>
+            <span class="n">word_list</span> <span class="o">=</span> <span class="n">word_list</span> <span class="o">+</span> <span class="p">[</span><span class="n">repeated_ch</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">)]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">word_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">repeated_ch</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">)]</span> <span class="o">+</span> <span class="n">word_list</span>
+
+        <span class="k">if</span> <span class="n">init_states</span><span class="p">:</span>
+            <span class="n">word_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">repeated_ch</span><span class="p">(</span><span class="s1">&#39;$&#39;</span><span class="p">)]</span> <span class="o">+</span> <span class="n">word_list</span>
+
+        <span class="n">num_gates</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">word_list</span><span class="p">)</span>
+        <span class="n">char_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">word_list</span><span class="p">:</span>
+            <span class="n">char_list</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">word</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gb_char_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">char_list</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">num_gates</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">gb_ch_is_measured</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+                    <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">num_gates</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">gate</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_gates</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">bit</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_bits</span><span class="p">):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">gb_char_arr</span><span class="p">[</span><span class="n">gate</span><span class="p">,</span> <span class="n">bit</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;M&#39;</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">gate1</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">gate</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_gates</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">gb_ch_is_measured</span><span class="p">[</span><span class="n">gate1</span><span class="p">,</span> <span class="n">bit</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="c1"># print(&#39;..&#39;, self.gb_ch_is_measured)</span>
+        <span class="k">for</span> <span class="n">gate</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_gates</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">bit</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_bits</span><span class="p">):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">gb_ch_is_measured</span><span class="p">[</span><span class="n">gate</span><span class="p">,</span> <span class="n">bit</span><span class="p">]:</span>
+                    <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">gb_char_arr</span><span class="p">[</span><span class="n">gate</span><span class="p">,</span> <span class="n">bit</span><span class="p">]</span> <span class="ow">in</span> \
+                        <span class="p">[</span><span class="s1">&#39;@&#39;</span><span class="p">,</span> <span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="s1">&#39;|&#39;</span><span class="p">,</span> <span class="s1">&#39;+&#39;</span><span class="p">],</span>\
+                        <span class="s2">&quot;Only admissible ops on a measured qubit are @,O,|,+&quot;</span></div>
+
+        <span class="c1"># print(&quot;self.gb_char_arr=\n&quot;, self.gb_char_arr)</span>
+
+<div class="viewcode-block" id="AsciiPic_to_Latex.get_preface_latex"><a class="viewcode-back" href="../../../qubiter.latex_tools.AsciiPic_to_Latex.html#qubiter.latex_tools.AsciiPic_to_Latex.AsciiPic_to_Latex.get_preface_latex">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_preface_latex</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns preface code of Latex document.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">preface</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">documentclass[12pt]</span><span class="si">{article}</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">preface</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">usepackage{Qcircuit_v2, Qcircuit_extension}</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">preface</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">begin</span><span class="si">{document}</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">preface</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+        <span class="k">return</span> <span class="n">preface</span></div>
+
+<div class="viewcode-block" id="AsciiPic_to_Latex.get_ending_latex"><a class="viewcode-back" href="../../../qubiter.latex_tools.AsciiPic_to_Latex.html#qubiter.latex_tools.AsciiPic_to_Latex.AsciiPic_to_Latex.get_ending_latex">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_ending_latex</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns ending code of Latex document.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">end</span><span class="si">{document}</span><span class="s2">&quot;</span></div>
+
+<div class="viewcode-block" id="AsciiPic_to_Latex.get_ckt_latex"><a class="viewcode-back" href="../../../qubiter.latex_tools.AsciiPic_to_Latex.html#qubiter.latex_tools.AsciiPic_to_Latex.AsciiPic_to_Latex.get_ckt_latex">[docs]</a>    <span class="k">def</span> <span class="nf">get_ckt_latex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mosaic_word_list</span><span class="p">,</span> <span class="n">init_states</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns Latex code for quantum circuit described by the input</span>
+<span class="sd">        mosaic_word_list.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mosaic_word_list : list[str]</span>
+<span class="sd">        init_states : list[str]</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">process_mosaic_word_list</span><span class="p">(</span><span class="n">mosaic_word_list</span><span class="p">,</span> <span class="n">init_states</span><span class="p">)</span>
+
+        <span class="n">latex_str</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">begin</span><span class="si">{equation}</span><span class="se">\n\\</span><span class="s2">begin</span><span class="si">{array}{c}</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">latex_str</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">Qcircuit @C=2em @R=.4em {</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+        <span class="n">num_bits</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">mosaic_word_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">num_gates</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">mosaic_word_list</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span>
+
+        <span class="k">for</span> <span class="n">bit</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_bits</span><span class="p">):</span>
+            <span class="n">_bit</span> <span class="o">=</span> <span class="n">bit</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">reverse_bits</span><span class="p">:</span>
+                <span class="n">_bit</span> <span class="o">=</span> <span class="n">num_bits</span> <span class="o">-</span> <span class="n">bit</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">bit</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">latex_str</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\\\\</span><span class="s1">  % bit &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">bit</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">latex_str</span> <span class="o">+=</span> <span class="s1">&#39;% bit &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">bit</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="k">for</span> <span class="n">gate_num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_gates</span><span class="p">):</span>
+                <span class="n">_gate_num</span> <span class="o">=</span> <span class="n">gate_num</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">reverse_gates</span><span class="p">:</span>
+                    <span class="n">_gate_num</span> <span class="o">=</span> <span class="n">num_gates</span> <span class="o">-</span> <span class="n">_gate_num</span> <span class="o">-</span> <span class="mi">1</span>
+                <span class="n">gate_char</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gb_char_arr</span><span class="p">[</span><span class="n">_gate_num</span><span class="p">,</span> <span class="n">_bit</span><span class="p">]</span>
+                <span class="n">is_m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gb_ch_is_measured</span><span class="p">[</span><span class="n">_gate_num</span><span class="p">,</span> <span class="n">_bit</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">gate_char</span> <span class="o">==</span> <span class="s1">&#39;M&#39;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">reverse_gates</span><span class="p">:</span>
+                        <span class="n">latex_str</span> <span class="o">+=</span> <span class="s1">&#39;&amp;</span><span class="se">\\</span><span class="s1">Rmeter&#39;</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">latex_str</span> <span class="o">+=</span> <span class="s1">&#39;&amp;</span><span class="se">\\</span><span class="s1">meter&#39;</span>
+                <span class="k">elif</span> <span class="n">gate_char</span> <span class="o">==</span> <span class="s1">&#39;O&#39;</span><span class="p">:</span>
+                    <span class="n">latex_str</span> <span class="o">+=</span> <span class="s1">&#39;&amp;</span><span class="se">\\</span><span class="s1">Cogate&#39;</span> <span class="k">if</span> <span class="n">is_m</span> <span class="k">else</span> <span class="s1">&#39;&amp;</span><span class="se">\\</span><span class="s1">ogate&#39;</span>
+                <span class="k">elif</span> <span class="n">gate_char</span> <span class="o">==</span> <span class="s1">&#39;X&#39;</span><span class="p">:</span>
+                    <span class="n">latex_str</span> <span class="o">+=</span> <span class="s1">&#39;&amp;</span><span class="se">\\</span><span class="s1">timesgate&#39;</span>
+                <span class="k">elif</span> <span class="n">gate_char</span> <span class="o">==</span> <span class="s1">&#39;&lt;&#39;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">reverse_bits</span><span class="p">:</span>
+                        <span class="n">latex_str</span> <span class="o">+=</span> <span class="s1">&#39;&amp;</span><span class="se">\\</span><span class="s1">darrowgate&#39;</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">latex_str</span> <span class="o">+=</span> <span class="s1">&#39;&amp;</span><span class="se">\\</span><span class="s1">uarrowgate&#39;</span>
+                <span class="k">elif</span> <span class="n">gate_char</span> <span class="o">==</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">reverse_bits</span><span class="p">:</span>
+                        <span class="n">latex_str</span> <span class="o">+=</span> <span class="s1">&#39;&amp;</span><span class="se">\\</span><span class="s1">uarrowgate&#39;</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">latex_str</span> <span class="o">+=</span> <span class="s1">&#39;&amp;</span><span class="se">\\</span><span class="s1">darrowgate&#39;</span>
+                <span class="k">elif</span> <span class="n">gate_char</span> <span class="o">==</span> <span class="s1">&#39;@&#39;</span><span class="p">:</span>
+                    <span class="n">latex_str</span> <span class="o">+=</span> <span class="s1">&#39;&amp;</span><span class="se">\\</span><span class="s1">Cdotgate&#39;</span> <span class="k">if</span> <span class="n">is_m</span> <span class="k">else</span> <span class="s1">&#39;&amp;</span><span class="se">\\</span><span class="s1">dotgate&#39;</span>
+                <span class="k">elif</span> <span class="n">gate_char</span> <span class="o">==</span> <span class="s1">&#39;|&#39;</span><span class="p">:</span>
+                    <span class="n">latex_str</span> <span class="o">+=</span> <span class="s1">&#39;&amp;</span><span class="se">\\</span><span class="s1">cw&#39;</span> <span class="k">if</span> <span class="n">is_m</span> <span class="k">else</span> <span class="s1">&#39;&amp;</span><span class="se">\\</span><span class="s1">qw&#39;</span>
+                <span class="k">elif</span> <span class="n">gate_char</span> <span class="o">==</span> <span class="s1">&#39;+&#39;</span><span class="p">:</span>
+                    <span class="n">latex_str</span> <span class="o">+=</span> <span class="s1">&#39;&amp;</span><span class="se">\\</span><span class="s1">cw&#39;</span> <span class="k">if</span> <span class="n">is_m</span> <span class="k">else</span> <span class="s1">&#39;&amp;</span><span class="se">\\</span><span class="s1">qw&#39;</span>
+                <span class="k">elif</span> <span class="n">gate_char</span> <span class="o">==</span> <span class="s1">&#39;$&#39;</span><span class="p">:</span>
+                    <span class="n">stick</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">lstick&#39;</span> <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">reverse_gates</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+                    <span class="n">latex_str</span> <span class="o">+=</span> <span class="s1">&#39;&amp;&#39;</span> <span class="o">+</span> <span class="n">stick</span> <span class="o">+</span> <span class="s1">&#39;{</span><span class="se">\\</span><span class="s1">ket{&#39;</span> <span class="o">+</span>\
+                                 <span class="bp">self</span><span class="o">.</span><span class="n">init_states</span><span class="p">[</span><span class="n">bit</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;}}&#39;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">latex_str</span> <span class="o">+=</span> <span class="s1">&#39;&amp;\gate{&#39;</span> <span class="o">+</span> <span class="n">gate_char</span> <span class="o">+</span> <span class="s1">&#39;}&#39;</span>
+
+                <span class="c1"># add \qwx</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">reverse_bits</span><span class="p">:</span>
+                    <span class="n">bit_range</span> <span class="o">=</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">num_bits</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">bit_range</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)</span>
+                <span class="n">gate_ch_list</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">gb_char_arr</span><span class="p">[</span><span class="n">_gate_num</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="k">for</span>
+                                <span class="n">k</span> <span class="ow">in</span> <span class="n">bit_range</span><span class="p">]</span>
+                <span class="n">gate_has_inter_qubit_wires</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">gate_ch_list</span><span class="p">:</span>
+                    <span class="c1"># any gate-time with at least one &#39;?&#39; in mosaic pic</span>
+                    <span class="c1"># will be drawn in latex with inter-qubit wiring</span>
+                    <span class="k">if</span> <span class="n">ch</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;@&#39;</span><span class="p">,</span> <span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="s1">&#39;?&#39;</span><span class="p">]:</span>
+                        <span class="n">gate_has_inter_qubit_wires</span> <span class="o">=</span> <span class="kc">True</span>
+                        <span class="k">break</span>
+                <span class="k">if</span> <span class="n">gate_has_inter_qubit_wires</span><span class="p">:</span>
+                    <span class="n">non_vertical_pos</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)</span>
+                                        <span class="k">if</span> <span class="n">gate_ch_list</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;|&#39;</span><span class="p">]</span>
+                    <span class="n">min_non_vert</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">non_vertical_pos</span><span class="p">)</span>
+                    <span class="n">max_non_vert</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">non_vertical_pos</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">min_non_vert</span><span class="p">,</span> <span class="n">max_non_vert</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="n">bit</span><span class="o">-</span><span class="mi">1</span> <span class="o">==</span> <span class="n">k</span><span class="p">:</span>
+                            <span class="n">latex_str</span> <span class="o">+=</span> <span class="s1">&#39;\qwx&#39;</span>
+
+                <span class="n">latex_str</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\t\t</span><span class="si">% g</span><span class="s1">ate &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">gate_num</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">latex_str</span> <span class="o">+=</span> <span class="s1">&#39;}</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">latex_str</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">end</span><span class="si">{array}</span><span class="se">\n\\</span><span class="s1">end</span><span class="si">{equation}</span><span class="se">\n\n</span><span class="s1">&#39;</span>
+
+        <span class="k">return</span> <span class="n">latex_str</span></div></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+
+        <span class="k">def</span> <span class="nf">write_latex_file</span><span class="p">(</span><span class="n">file_out1</span><span class="p">):</span>
+            <span class="n">latex_str</span> <span class="o">=</span> <span class="n">AsciiPic_to_Latex</span><span class="o">.</span><span class="n">get_preface_latex</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">rev_bits</span> <span class="ow">in</span> <span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">]:</span>
+                <span class="n">last_bit_on_top</span> <span class="o">=</span> <span class="n">rev_bits</span>
+                <span class="k">for</span> <span class="n">rev_gates</span> <span class="ow">in</span> <span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">]:</span>
+                    <span class="c1"># print(&#39;case&#39;, rev_bits, rev_gates)</span>
+                    <span class="n">time_dir</span> <span class="o">=</span> <span class="s1">&#39;&lt;&#39;</span> <span class="k">if</span> <span class="n">rev_gates</span> <span class="k">else</span> <span class="s1">&#39;&gt;&#39;</span>
+                    <span class="n">latex_str</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">last bit on top=&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">last_bit_on_top</span><span class="p">)</span>
+                    <span class="n">latex_str</span> <span class="o">+=</span> <span class="s2">&quot;, time dir= $&quot;</span> <span class="o">+</span> <span class="n">time_dir</span> <span class="o">+</span> <span class="s1">&#39;$</span><span class="se">\n\n</span><span class="s1">&#39;</span>
+                    <span class="n">trans</span> <span class="o">=</span> <span class="n">AsciiPic_to_Latex</span><span class="p">(</span><span class="n">rev_bits</span><span class="p">,</span> <span class="n">rev_gates</span><span class="p">)</span>
+                    <span class="n">latex_str</span> <span class="o">+=</span> <span class="n">trans</span><span class="o">.</span><span class="n">get_ckt_latex</span><span class="p">(</span><span class="n">mosaic_word_list</span><span class="p">,</span>
+                                                     <span class="n">init_states</span><span class="p">)</span>
+            <span class="n">latex_str</span> <span class="o">+=</span> <span class="n">AsciiPic_to_Latex</span><span class="o">.</span><span class="n">get_ending_latex</span><span class="p">()</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_out1</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fi</span><span class="p">:</span>
+                <span class="n">fi</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">latex_str</span><span class="p">)</span>
+
+        <span class="c1"># test 1 ---------------</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;test 1&#39;</span><span class="p">)</span>
+        <span class="n">num_bits</span> <span class="o">=</span> <span class="mi">7</span>
+        <span class="n">file_out</span> <span class="o">=</span> <span class="s2">&quot;latex_test1.tex&quot;</span>
+        <span class="n">mosaic_word_list</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;|X++@||&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;|Y+O@O|&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;HH|||||&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;|&lt;++&gt;||&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;M|M|M||&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;@X|||||&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;@++++X|&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;@++O+X|&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;|A|||B?&quot;</span><span class="p">]</span>
+        <span class="n">init_states</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">bit</span><span class="p">)</span> <span class="k">for</span> <span class="n">bit</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)]</span>
+        <span class="c1"># init_states = None</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="n">mosaic_word_list</span><span class="p">)</span>
+        <span class="n">write_latex_file</span><span class="p">(</span><span class="n">file_out</span><span class="p">)</span>
+
+        <span class="c1"># test 2 ---------------</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;test 2&quot;</span><span class="p">)</span>
+        <span class="n">num_bits</span> <span class="o">=</span> <span class="mi">7</span>
+        <span class="n">file_in</span> <span class="o">=</span> <span class="s2">&quot;latex_test_pic.txt&quot;</span>
+        <span class="n">mosaic_word_list</span> <span class="o">=</span> \
+            <span class="n">AsciiPic_to_Latex</span><span class="o">.</span><span class="n">qubiter_pic_file_to_mosaic_word_list</span><span class="p">(</span>
+                <span class="n">file_in</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="n">ZL</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">mosaic_word_list</span><span class="p">)</span>
+
+        <span class="c1"># test 3 ---------------</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;test 3&#39;</span><span class="p">)</span>
+        <span class="n">num_bits</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="n">file_in</span> <span class="o">=</span> <span class="s1">&#39;teleportation-with-ifs_3_ZLpic.txt&#39;</span>
+        <span class="n">file_out</span> <span class="o">=</span> <span class="s1">&#39;latex_test_telep.tex&#39;</span>
+        <span class="n">mosaic_word_list</span> <span class="o">=</span> \
+            <span class="n">AsciiPic_to_Latex</span><span class="o">.</span><span class="n">qubiter_pic_file_to_mosaic_word_list</span><span class="p">(</span>
+                <span class="n">file_in</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="n">ZL</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">mosaic_word_list</span><span class="p">)</span>
+        <span class="n">init_states</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;0&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">num_bits</span>
+        <span class="n">write_latex_file</span><span class="p">(</span><span class="n">file_out</span><span class="p">)</span>
+    <span class="n">main</span><span class="p">()</span>
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Robert R. Tucci &amp; Qubiter contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

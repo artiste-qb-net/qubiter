@@ -1,21 +1,26 @@
 # retired
-ibmqx2_c_to_tars = {
+ibmqx2_c_to_tars =\
+{
     0: [1, 2],
     1: [2],
     2: [],
     3: [2, 4],
-    4: [2]}  # 6 edges
+    4: [2]
+}  # 6 edges
 
 # retired
-ibmqx4_c_to_tars = {
+ibmqx4_c_to_tars =\
+{
     0: [],
     1: [0],
     2: [0, 1, 4],
     3: [2, 4],
-    4: []}  # 6 edges
+    4: []
+}  # 6 edges
 
 # retired
-ibmq16Rus_c_to_tars = {
+ibmq16Rus_c_to_tars = \
+{
     0: [],
     1: [0, 2],
     2: [3],
@@ -31,9 +36,11 @@ ibmq16Rus_c_to_tars = {
     12: [5, 11, 13],
     13: [4, 14],
     14: [],
-    15: [0, 2, 14]}  # 22 edges
+    15: [0, 2, 14]
+}  # 22 edges
 
-ibm20AustinTokyo_c_to_tars = {
+ibm20AustinTokyo_c_to_tars = \
+{
     0: [1, 5],
     1: [0, 2, 6, 7],
     2: [1, 3, 6, 7],
@@ -53,16 +60,20 @@ ibm20AustinTokyo_c_to_tars = {
     16: [11, 12, 15, 17],
     17: [11, 12, 16, 18],
     18: [13, 14, 17, 19],
-    19: [13, 14, 18]}  # 86 edges
+    19: [13, 14, 18]
+}  # 86 edges
 
-ibmq5YorktownTenerife_c_to_tars = {
+ibmq5YorktownTenerife_c_to_tars = \
+{
     0: [1, 2],
     1: [0, 2],
     2: [0, 1, 3, 4],
     3: [2, 4],
-    4: [2, 3]}  # 12 edges
+    4: [2, 3]
+}  # 12 edges
 
-ibmq14Melb_c_to_tars = {
+ibmq14Melb_c_to_tars = \
+{
     0: [1],
     1: [0, 2, 13],
     2: [1, 3, 12],
@@ -76,4 +87,5 @@ ibmq14Melb_c_to_tars = {
     10: [4, 9, 11],
     11: [3, 10, 12],
     12: [2, 11, 13],
-    13: [1, 12]}  # 36 edges
+    13: [1, 12]
+}  # 36 edges

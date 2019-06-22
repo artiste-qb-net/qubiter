@@ -1,0 +1,582 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qubiter.BitVector &mdash; qubiter 1.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> qubiter
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../rosetta.html">Qubiter Rosetta Stone</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">qubiter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>qubiter.BitVector</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qubiter.BitVector</h1><div class="highlight"><pre>
+<span></span>
+<div class="viewcode-block" id="BitVector"><a class="viewcode-back" href="../../qubiter.BitVector.html#qubiter.BitVector.BitVector">[docs]</a><span class="k">class</span> <span class="nc">BitVector</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class uses an int called dec_rep as a vector of self.len many bits,</span>
+<span class="sd">    where self.len &lt;= self.max_len. The class wraps some common bitwise</span>
+<span class="sd">    operations, and some less common ones too (like Gray coding that is</span>
+<span class="sd">    needed by Qubiter). In some cases, the bitwise manipulation might be</span>
+<span class="sd">    more succinct than the corresponding function in this wrapper, but the</span>
+<span class="sd">    wrapper function&#39;s name spells out in words what is wanted.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dec_rep : int</span>
+<span class="sd">        decimal representation, the int whose binary representation carries</span>
+<span class="sd">        a bit vector of length self.len</span>
+<span class="sd">    len : int</span>
+<span class="sd">        the length of the bit vector</span>
+<span class="sd">    max_len : int</span>
+<span class="sd">        maximum self.len allowed</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="BitVector.__init__"><a class="viewcode-back" href="../../qubiter.BitVector.html#qubiter.BitVector.BitVector.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">dec_rep</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        length : int</span>
+<span class="sd">        dec_rep : int</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">len</span> <span class="o">=</span> <span class="n">length</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dec_rep</span> <span class="o">=</span> <span class="n">dec_rep</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_len</span> <span class="o">=</span> <span class="mi">16</span>
+        <span class="k">assert</span> <span class="n">length</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_len</span><span class="p">,</span> <span class="s2">&quot;bit vector is too long&quot;</span>
+        <span class="k">assert</span> <span class="n">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;bit vector len must be &gt;=1&quot;</span></div>
+
+<div class="viewcode-block" id="BitVector.copy"><a class="viewcode-back" href="../../qubiter.BitVector.html#qubiter.BitVector.BitVector.copy">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="n">bvec</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Copy constructor, returns a new BitVector which is a copy of the</span>
+<span class="sd">        BitVector bvec.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        bvec : BitVector</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        BitVector</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">BitVector</span><span class="p">(</span><span class="n">bvec</span><span class="o">.</span><span class="n">len</span><span class="p">,</span> <span class="n">bvec</span><span class="o">.</span><span class="n">dec_rep</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BitVector.bit_is_T"><a class="viewcode-back" href="../../qubiter.BitVector.html#qubiter.BitVector.BitVector.bit_is_T">[docs]</a>    <span class="k">def</span> <span class="nf">bit_is_T</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bpos</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns True iff bit at position bpos is 1 (True)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        bpos : int</span>
+<span class="sd">            bit position</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">bpos</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">len</span><span class="p">,</span> <span class="s2">&quot;bit position is too large&quot;</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">bpos</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dec_rep</span> <span class="o">&amp;</span> <span class="n">mask</span><span class="p">)</span> <span class="o">==</span> <span class="n">mask</span></div>
+
+<div class="viewcode-block" id="BitVector.set_bit_T"><a class="viewcode-back" href="../../qubiter.BitVector.html#qubiter.BitVector.BitVector.set_bit_T">[docs]</a>    <span class="k">def</span> <span class="nf">set_bit_T</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bpos</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets to 1 (True) the bit of self at position bpos.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        bpos : int</span>
+<span class="sd">            bit position</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">bpos</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">len</span><span class="p">,</span> <span class="s2">&quot;bit position is too large&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dec_rep</span> <span class="o">|=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">bpos</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BitVector.set_bit_F"><a class="viewcode-back" href="../../qubiter.BitVector.html#qubiter.BitVector.BitVector.set_bit_F">[docs]</a>    <span class="k">def</span> <span class="nf">set_bit_F</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bpos</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets to 0 (False) the bit of self at position bpos.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        bpos : int</span>
+<span class="sd">            bit position</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">bpos</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">len</span><span class="p">,</span> <span class="s2">&quot;bit position is too large&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dec_rep</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">bpos</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BitVector.set_all_bits_T"><a class="viewcode-back" href="../../qubiter.BitVector.html#qubiter.BitVector.BitVector.set_all_bits_T">[docs]</a>    <span class="k">def</span> <span class="nf">set_all_bits_T</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets to 1 (True) the bits of self at position bpos</span>
+<span class="sd">        from 0 to len-1 inclusive.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># example: len = 3, dec_rep becomes 15 = b0111</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dec_rep</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">len</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span></div>
+
+<div class="viewcode-block" id="BitVector.set_all_bits_F"><a class="viewcode-back" href="../../qubiter.BitVector.html#qubiter.BitVector.BitVector.set_all_bits_F">[docs]</a>    <span class="k">def</span> <span class="nf">set_all_bits_F</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets to 0 (False) the bits of self at positions bpos</span>
+<span class="sd">        from 0 to len-1 inclusive.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dec_rep</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+<div class="viewcode-block" id="BitVector.get_num_T_bits"><a class="viewcode-back" href="../../qubiter.BitVector.html#qubiter.BitVector.BitVector.get_num_T_bits">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_T_bits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the number of 1 (True) bits at positions bpos</span>
+<span class="sd">        from 0 to len-1 inclusive.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">bpos</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">len</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bit_is_T</span><span class="p">(</span><span class="n">bpos</span><span class="p">):</span>
+                <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">count</span></div>
+
+<div class="viewcode-block" id="BitVector.find_T_bit_to_right_of"><a class="viewcode-back" href="../../qubiter.BitVector.html#qubiter.BitVector.BitVector.find_T_bit_to_right_of">[docs]</a>    <span class="k">def</span> <span class="nf">find_T_bit_to_right_of</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bpos</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns position of 1 (True) bit immediately to the right of</span>
+<span class="sd">        position bpos. Returns -1 if there is no such bit.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        bpos : int</span>
+<span class="sd">            bit position</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">bpos</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+
+        <span class="n">right_T_bit</span> <span class="o">=</span> <span class="n">bpos</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">right_T_bit</span><span class="p">)</span>
+        <span class="n">found_it</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">right_T_bit</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="n">mask</span> <span class="o">&gt;&gt;=</span> <span class="mi">1</span>
+            <span class="n">found_it</span> <span class="o">=</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">dec_rep</span> <span class="o">&amp;</span> <span class="n">mask</span><span class="p">)</span> <span class="o">==</span> <span class="n">mask</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">right_T_bit</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">found_it</span><span class="p">:</span>
+                <span class="k">break</span>
+        <span class="k">if</span> <span class="n">found_it</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">right_T_bit</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span></div>
+
+<div class="viewcode-block" id="BitVector.find_T_bit_to_left_of"><a class="viewcode-back" href="../../qubiter.BitVector.html#qubiter.BitVector.BitVector.find_T_bit_to_left_of">[docs]</a>    <span class="k">def</span> <span class="nf">find_T_bit_to_left_of</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bpos</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns position of 1 (True) bit immediately to the left of position</span>
+<span class="sd">        bpos. Returns -1 if there is no such bit.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        bpos : int</span>
+<span class="sd">            bit position</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">bpos</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">len</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+
+        <span class="n">left_T_bit</span> <span class="o">=</span> <span class="n">bpos</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">left_T_bit</span><span class="p">)</span>
+        <span class="n">found_it</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">left_T_bit</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">mask</span> <span class="o">&lt;&lt;=</span> <span class="mi">1</span>
+            <span class="n">found_it</span> <span class="o">=</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">dec_rep</span> <span class="o">&amp;</span> <span class="n">mask</span><span class="p">)</span> <span class="o">==</span> <span class="n">mask</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">left_T_bit</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">len</span><span class="o">-</span><span class="mi">1</span> <span class="ow">or</span> <span class="n">found_it</span><span class="p">:</span>
+                <span class="k">break</span>
+        <span class="k">if</span> <span class="n">found_it</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">left_T_bit</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span></div>
+
+<div class="viewcode-block" id="BitVector.find_leftmost_T_bit"><a class="viewcode-back" href="../../qubiter.BitVector.html#qubiter.BitVector.BitVector.find_leftmost_T_bit">[docs]</a>    <span class="k">def</span> <span class="nf">find_leftmost_T_bit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Out of all 1 (True) bits, returns position of the leftmost one of</span>
+<span class="sd">        those to the the left of position bpos. Returns -1 if there is no</span>
+<span class="sd">        such bit.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bit_is_T</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">len</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">len</span><span class="o">-</span><span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_T_bit_to_right_of</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">len</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BitVector.find_rightmost_T_bit"><a class="viewcode-back" href="../../qubiter.BitVector.html#qubiter.BitVector.BitVector.find_rightmost_T_bit">[docs]</a>    <span class="k">def</span> <span class="nf">find_rightmost_T_bit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Out of all 1 (True) bits, returns position of the rightmost one of</span>
+<span class="sd">        those to the the right of position bpos. Returns -1 if there is no</span>
+<span class="sd">        such bit.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bit_is_T</span><span class="p">(</span><span class="mi">0</span><span class="p">):</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_T_bit_to_left_of</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BitVector.get_bit_string"><a class="viewcode-back" href="../../qubiter.BitVector.html#qubiter.BitVector.BitVector.get_bit_string">[docs]</a>    <span class="k">def</span> <span class="nf">get_bit_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns self represented as string of length self.len of ones and</span>
+<span class="sd">        zeros. If bit_str is the output, [int(x) for x in bit_str] will turn</span>
+<span class="sd">        result to list of ints.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">bit_str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">beta</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">len</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bit_is_T</span><span class="p">(</span><span class="n">beta</span><span class="p">):</span>
+                <span class="n">bit_str</span> <span class="o">+=</span> <span class="s1">&#39;1&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">bit_str</span> <span class="o">+=</span> <span class="s1">&#39;0&#39;</span>
+        <span class="k">return</span> <span class="n">bit_str</span></div>
+
+<div class="viewcode-block" id="BitVector.__str__"><a class="viewcode-back" href="../../qubiter.BitVector.html#qubiter.BitVector.BitVector.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Readable representation of self</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_bit_string</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;=&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dec_rep</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BitVector.new_with_T_on_diff"><a class="viewcode-back" href="../../qubiter.BitVector.html#qubiter.BitVector.BitVector.new_with_T_on_diff">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">new_with_T_on_diff</span><span class="p">(</span><span class="n">bvec1</span><span class="p">,</span> <span class="n">bvec2</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Given two BitVectors bevc1 and bvec2, this return a BitVector which</span>
+<span class="sd">        is a bitwise xor (mod 2 sum) of the bits of bvec1 and bvec2.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        bvec1 : BitVector</span>
+<span class="sd">        bvec2 : BitVector</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        BitVector</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">bvec1</span><span class="o">.</span><span class="n">len</span> <span class="o">==</span> <span class="n">bvec2</span><span class="o">.</span><span class="n">len</span>
+        <span class="k">return</span> <span class="n">BitVector</span><span class="p">(</span><span class="n">bvec1</span><span class="o">.</span><span class="n">len</span><span class="p">,</span> <span class="n">bvec1</span><span class="o">.</span><span class="n">dec_rep</span> <span class="o">^</span> <span class="n">bvec2</span><span class="o">.</span><span class="n">dec_rep</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BitVector.get_lazy_from_normal"><a class="viewcode-back" href="../../qubiter.BitVector.html#qubiter.BitVector.BitVector.get_lazy_from_normal">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_lazy_from_normal</span><span class="p">(</span><span class="n">bit_len</span><span class="p">,</span> <span class="n">normal</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Throughout Qubiter, we will often refer to &quot;Gray Code&quot; as &quot;lazy</span>
+<span class="sd">        ordering&quot;. In lazy ordering with bit_len many bits, one gives a</span>
+<span class="sd">        sequence of bit vectors of length bit_len, so that two adjacent</span>
+<span class="sd">        items of the sequence differ by just one bit. For example 000=0,</span>
+<span class="sd">        100=4, 110=6, 010=2, 011=3, 111=7, 101=5, 001=1. Each element of</span>
+<span class="sd">        this sequence represented as an int will be called lazy, and each</span>
+<span class="sd">        int in the sequence 0, 1, 2, 3, 4, 5, 6, 7 will be called normal.</span>
+<span class="sd">        Normal ordering is usually called dictionary ordering. Normal and</span>
+<span class="sd">        lazy sequences both start at 0.</span>
+
+<span class="sd">        Suppose bit_len = 3. The lazy sequence 000, 100, 110, 010, 011, 111,</span>
+<span class="sd">        101, 001 is easily obtained from the &quot;standard&quot; lazy sequence 000,</span>
+<span class="sd">        001, 011, 010, 110, 111, 101, 100 by &quot;reflecting&quot; each sequence</span>
+<span class="sd">        term. We will use the second sequence because it is more common in</span>
+<span class="sd">        the literature.</span>
+
+<span class="sd">        References</span>
+<span class="sd">        ----------</span>
+<span class="sd">        1. Martin Gardener, &quot;Knotted DoughNuts and Other</span>
+<span class="sd">        Mathematical Entertainments&quot;, chapt. 2, &quot;The Binary Gray Code&quot;</span>
+<span class="sd">        2. &quot;Numerical Recipies in C&quot;</span>
+<span class="sd">        3. Many books on Discrete Mathematics for CompSci types</span>
+<span class="sd">        4. On the web, in Eric&#39;s Treasure Trove/Math/Gray Codes</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        bit_len : int</span>
+<span class="sd">        normal : int</span>
+<span class="sd">            Function returns the lazy int that corresponds to this normal int.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lazy_bvec</span> <span class="o">=</span> <span class="n">BitVector</span><span class="p">(</span><span class="n">bit_len</span><span class="p">,</span> <span class="n">normal</span><span class="p">)</span>
+        <span class="n">lazy</span> <span class="o">=</span> <span class="n">lazy_bvec</span><span class="o">.</span><span class="n">dec_rep</span>
+        <span class="k">if</span> <span class="n">bit_len</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">bit_len</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                <span class="c1"># Look at bpos = m+1, if it&#39;s ON, then flip bpos=m.</span>
+                <span class="c1">#  Remember that ^ is same as a mod2 sum.</span>
+                <span class="n">lazy</span> <span class="o">^=</span> <span class="p">(((</span><span class="n">normal</span> <span class="o">&gt;&gt;</span> <span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">m</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">lazy</span></div>
+
+<div class="viewcode-block" id="BitVector.lazy_advance"><a class="viewcode-back" href="../../qubiter.BitVector.html#qubiter.BitVector.BitVector.lazy_advance">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">lazy_advance</span><span class="p">(</span><span class="n">old_normal</span><span class="p">,</span> <span class="n">old_lazy</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method takes int &quot;old_lazy&quot; (which corresponds to bit vector</span>
+<span class="sd">        &quot;old_normal&quot;), and changes it to the next lazy int, &quot;new_lazy&quot; (</span>
+<span class="sd">        which corresponds to &quot;new_normal&quot;).</span>
+
+<span class="sd">        example:</span>
+
+<span class="sd">        lazy sequence: 000, 001, 011, 010, 110, 111, 101, 100</span>
+
+<span class="sd">        old_lazy = 011</span>
+<span class="sd">        old_normal = 2 = 010</span>
+
+<span class="sd">        new_normal = 3 = 011</span>
+<span class="sd">        mask = (new_normal &amp; ~old_normal) = 011 &amp; 101 = 001</span>
+<span class="sd">        new_lazy = new_normal ^ mask = 011 ^ 001 = 010</span>
+
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        old_normal : int</span>
+<span class="sd">        old_lazy : int</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int, int</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">new_normal</span> <span class="o">=</span> <span class="n">old_normal</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">new_lazy</span> <span class="o">=</span> <span class="n">old_lazy</span> <span class="o">^</span> <span class="p">(</span><span class="n">new_normal</span> <span class="o">&amp;</span> <span class="o">~</span><span class="p">(</span><span class="n">new_normal</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">new_normal</span><span class="p">,</span> <span class="n">new_lazy</span></div></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">length</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">length=&#39;</span><span class="p">,</span> <span class="n">length</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;normal, lazy, lazy in binary:&#39;</span><span class="p">)</span>
+            <span class="n">max_normal</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">length</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="n">normal</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">lazy</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">while</span> <span class="n">normal</span> <span class="o">&lt;=</span> <span class="n">max_normal</span><span class="p">:</span>
+                <span class="n">lazy_bvec</span> <span class="o">=</span> <span class="n">BitVector</span><span class="p">(</span><span class="n">length</span><span class="p">,</span> <span class="n">lazy</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">normal</span><span class="p">,</span> <span class="n">lazy</span><span class="p">,</span> <span class="n">BitVector</span><span class="o">.</span><span class="n">get_bit_string</span><span class="p">(</span><span class="n">lazy_bvec</span><span class="p">))</span>
+                <span class="n">normal</span><span class="p">,</span> <span class="n">lazy</span> <span class="o">=</span> <span class="n">BitVector</span><span class="o">.</span><span class="n">lazy_advance</span><span class="p">(</span><span class="n">normal</span><span class="p">,</span> <span class="n">lazy</span><span class="p">)</span>
+    <span class="n">main</span><span class="p">()</span>
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Robert R. Tucci &amp; Qubiter contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

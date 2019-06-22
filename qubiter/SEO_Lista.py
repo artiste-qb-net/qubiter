@@ -2,6 +2,8 @@ from qubiter.EchoingSEO_reader import *
 # from PlaceholderManager import *
 from io import StringIO
 from qubiter.SEO_simulator import *
+import os
+import tempfile
 
 
 class SEO_Lista:
@@ -17,7 +19,7 @@ class SEO_Lista:
 
     In this class, we support Qubiter's version of PyQuil's and Cirq's gate
     lists. In Qubiter, we use simply a Python list of the lines, stored as
-    strings, with the ending '\n' removed, of the circuit's English file.
+    strings, with the ending \\n removed, of the circuit's English file.
 
     Attributes
     ----------
@@ -111,7 +113,7 @@ class SEO_Lista:
         """
         This static method reads an English file with file prefix
         `file_prefix` and it returns a list of its line strings. Note that
-        the '\n' at the end of each line in the English file is removed
+        the '\\n' at the end of each line in the English file is removed
         before adding it to the line list.
 
         Parameters
@@ -134,7 +136,7 @@ class SEO_Lista:
         """
         This method does the reverse of eng_file_to_line_list(). It writes
         both an English file and a Picture file with file
-        prefix=file_prefix. Note that an '\n' is added at the end of each
+        prefix=file_prefix. Note that an '\\n' is added at the end of each
         line in the line list before writing the line to the English file.
 
         Parameters
@@ -176,10 +178,10 @@ class SEO_Lista:
 
     def simulate(self, **kwargs1):
         """
-        This method creates temporary English and Picture file from self,
-        and uses those to create an object of SEO_simulator called sim. This
-        has the effect of evolving the state vector to its final state. The
-        method ends by deleting the temporary files, and returning sim. The
+        This method creates a temporary English file from self, and uses
+        that to create an object of SEO_simulator called sim. This has the
+        effect of evolving the state vector to its final state. The method
+        ends by deleting the temporary English file, and returning sim. The
         output sim can be used to access the final state vector, etc.
 
         Parameters
@@ -193,14 +195,32 @@ class SEO_Lista:
 
         """
         file_prefix = '610935122304'
-        self.write_eng_and_pic_files(file_prefix)
+        end_str = '_' + str(self.num_bits) + '_eng.txt'
+        fname = file_prefix + end_str
+        with open(utg.preface(fname), 'w') as f:
+            for line in self.line_list:
+                f.write(line + '\n')
+
         sim = SEO_simulator(file_prefix, self.num_bits, **kwargs1)
-        import os
-        rel_paths = [utg.get_eng_file_rel_path(file_prefix, self.num_bits),
-                     utg.get_pic_file_rel_path(file_prefix, self.num_bits)]
-        for rp in rel_paths:
-            os.remove(utg.preface(rp))
+        os.remove(utg.preface(fname))
         return sim
+
+        # this doesn't work, maybe because temp file opened twice
+
+        # file_prefix = '610935122304'
+        # end_str = '_' + str(self.num_bits) + '_eng.txt'
+        # fname = file_prefix + end_str
+        # fi = tempfile.NamedTemporaryFile(mode='w+b',
+        #                                  prefix=file_prefix,
+        #                                  suffix=end_str,
+        #                                  dir=utg.preface('x')[:-2],
+        #                                  delete=True)
+        # for line in self.line_list:
+        #     fi.write(line + '\n')
+        # # sim opens file by name
+        # sim = SEO_simulator(file_prefix, self.num_bits, **kwargs1)
+        # # sim closes file
+        # return sim
 
     def print(self):
         """
@@ -293,8 +313,8 @@ class SEO_Lista:
 
     def herm(self):
         """
-        This method returns an EngLineList which is the Hermitian
-        conjugate of self.
+        This method returns an EngLineList which is the Hermitian conjugate
+        of self.
 
         Returns
         -------
@@ -372,6 +392,7 @@ class SEO_Lista:
                     "reading an unsupported line kind: " + line_name
             lista.line_list[line_pos] = '\t'.join(split_line)
         return lista
+
 
 if __name__ == "__main__":
     def main():
