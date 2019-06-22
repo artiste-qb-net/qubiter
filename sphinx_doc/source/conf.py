@@ -80,4 +80,6 @@ napoleon_use_rtype = True
 napoleon_use_keyword = True
 napoleon_use_custom_sections = None
 
+master_doc = 'index'
+
 
