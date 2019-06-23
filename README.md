@@ -9,6 +9,12 @@ discuss more advanced features:
 
 * https://github.com/artiste-qb-net/qubiter/blob/master/qubiter/jupyter_notebooks/Say_Hello_World_With_Qubiter.ipynb
 
+See also, at the readthedocs.org 
+website, the beautiful documentation generated automatically by the Sphinx 
+software based on Qubiter's docstrings and code:
+
+* https://qubiter.readthedocs.io/en/latest/
+
 ## Installation
 
 The simplest thing that avoids 
@@ -20,8 +26,6 @@ all of Python and Qubiter installed (although you may need to
 update Qubiter using Git).
  Bayesforge is also available on the Tencent cloud.
  
-
-
 Of  course, you can also clone the latest version or update
 an older version of Qubiter on your computer
 from this repo by using Git commands.
