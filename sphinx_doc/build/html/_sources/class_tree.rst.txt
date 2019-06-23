@@ -1,2 +1,0 @@
-.. inheritance-diagram:: qubiter
-    :parts: 1

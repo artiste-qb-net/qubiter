@@ -292,7 +292,7 @@
     <span class="k">return</span> <span class="n">jacobian</span><span class="p">(</span><span class="n">u2r</span><span class="p">,</span> <span class="n">dwrt</span><span class="p">)(</span><span class="o">*</span><span class="n">tlist</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">jacobian</span><span class="p">(</span><span class="n">u2i</span><span class="p">,</span> <span class="n">dwrt</span><span class="p">)(</span><span class="o">*</span><span class="n">tlist</span><span class="p">)</span></div>
 
 
-<span class="nd">@primitive</span>
+<div class="viewcode-block" id="pu2r"><a class="viewcode-back" href="../../../qubiter.adv_applications.setup_autograd.html#qubiter.adv_applications.setup_autograd.pu2r">[docs]</a><span class="nd">@primitive</span>
 <span class="k">def</span> <span class="nf">pu2r</span><span class="p">(</span><span class="o">*</span><span class="n">tlist</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns real part of u2, and registers it as being primitive.</span>
@@ -312,10 +312,10 @@
 <span class="sd">        shape=(2,2)</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">u2_alt</span><span class="p">(</span><span class="o">*</span><span class="n">tlist</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">u2_alt</span><span class="p">(</span><span class="o">*</span><span class="n">tlist</span><span class="p">))</span></div>
 
 
-<span class="nd">@primitive</span>
+<div class="viewcode-block" id="pu2i"><a class="viewcode-back" href="../../../qubiter.adv_applications.setup_autograd.html#qubiter.adv_applications.setup_autograd.pu2i">[docs]</a><span class="nd">@primitive</span>
 <span class="k">def</span> <span class="nf">pu2i</span><span class="p">(</span><span class="o">*</span><span class="n">tlist</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns imaginary part of u2, and registers it as being primitive.</span>
@@ -335,7 +335,7 @@
 <span class="sd">        shape=(2,2)</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">u2_alt</span><span class="p">(</span><span class="o">*</span><span class="n">tlist</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">u2_alt</span><span class="p">(</span><span class="o">*</span><span class="n">tlist</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="pu2"><a class="viewcode-back" href="../../../qubiter.adv_applications.setup_autograd.html#qubiter.adv_applications.setup_autograd.pu2">[docs]</a><span class="k">def</span> <span class="nf">pu2</span><span class="p">(</span><span class="o">*</span><span class="n">tlist</span><span class="p">):</span>

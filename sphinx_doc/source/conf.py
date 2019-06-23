@@ -82,4 +82,14 @@ napoleon_use_custom_sections = None
 
 master_doc = 'index'
 
-
+autodoc_mock_imports = \
+[
+    'autograd',
+    'cuncsd_sq',
+    'openfermion'
+    'numpy',
+    'pandas',
+    'pyquil',
+    'tensorflow',
+    'scipy'
+]

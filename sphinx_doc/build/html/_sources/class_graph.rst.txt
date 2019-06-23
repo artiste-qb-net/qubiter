@@ -1,8 +1,0 @@
-.. _class_graph
-
-=======================
-Class Inheritance Graph
-=======================
-
-.. inheritance-diagram:: qubiter
-    :parts: 1
