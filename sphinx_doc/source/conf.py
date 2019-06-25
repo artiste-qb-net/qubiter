@@ -86,8 +86,9 @@ autodoc_mock_imports = \
 [
     'autograd',
     'cuncsd_sq',
-    'openfermion',
+    'matplotlib',
     'numpy',
+    'openfermion',
     'pandas',
     'pyquil',
     'tensorflow',

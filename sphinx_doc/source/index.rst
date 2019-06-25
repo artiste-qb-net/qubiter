@@ -13,8 +13,7 @@ Saved on |today|
    :caption: Table of Contents:
 
    rosetta
-
-.. classgraph
+   classgraph
 
 
 ===========================

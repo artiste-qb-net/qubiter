@@ -41,6 +41,7 @@ Submodules
    qubiter.SEO_writer
    qubiter.StateVec
    qubiter.UnitaryMat
+   qubiter.classgraph
    qubiter.run_all_nb
    qubiter.run_all_py
    qubiter.utilities_gen
