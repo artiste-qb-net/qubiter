@@ -1,0 +1,531 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qubiter.BitVector module &mdash; qubiter 1.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> qubiter
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rosetta.html">Qubiter Rosetta Stone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classgraph.html">Qubiter’s Class Graph</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">qubiter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>qubiter.BitVector module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/qubiter.BitVector.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-qubiter.BitVector">
+<span id="qubiter-bitvector-module"></span><h1>qubiter.BitVector module<a class="headerlink" href="#module-qubiter.BitVector" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="qubiter.BitVector.BitVector">
+<em class="property">class </em><code class="sig-prename descclassname">qubiter.BitVector.</code><code class="sig-name descname">BitVector</code><span class="sig-paren">(</span><em class="sig-param">length</em>, <em class="sig-param">dec_rep</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/BitVector.html#BitVector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.BitVector.BitVector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class uses an int called dec_rep as a vector of self.len many bits,
+where self.len &lt;= self.max_len. The class wraps some common bitwise
+operations, and some less common ones too (like Gray coding that is
+needed by Qubiter). In some cases, the bitwise manipulation might be
+more succinct than the corresponding function in this wrapper, but the
+wrapper function’s name spells out in words what is wanted.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dec_rep</strong> (<em>int</em>) – decimal representation, the int whose binary representation carries
+a bit vector of length self.len</p></li>
+<li><p><strong>len</strong> (<em>int</em>) – the length of the bit vector</p></li>
+<li><p><strong>max_len</strong> (<em>int</em>) – maximum self.len allowed</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="qubiter.BitVector.BitVector.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">length</em>, <em class="sig-param">dec_rep</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/BitVector.html#BitVector.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.BitVector.BitVector.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>length</strong> (<em>int</em>) – </p></li>
+<li><p><strong>dec_rep</strong> (<em>int</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.BitVector.BitVector.__str__">
+<code class="sig-name descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/BitVector.html#BitVector.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.BitVector.BitVector.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Readable representation of self</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.BitVector.BitVector.bit_is_T">
+<code class="sig-name descname">bit_is_T</code><span class="sig-paren">(</span><em class="sig-param">bpos</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/BitVector.html#BitVector.bit_is_T"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.BitVector.BitVector.bit_is_T" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True iff bit at position bpos is 1 (True)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>bpos</strong> (<em>int</em>) – bit position</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.BitVector.BitVector.copy">
+<em class="property">static </em><code class="sig-name descname">copy</code><span class="sig-paren">(</span><em class="sig-param">bvec</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/BitVector.html#BitVector.copy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.BitVector.BitVector.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy constructor, returns a new BitVector which is a copy of the
+BitVector bvec.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>bvec</strong> (<a class="reference internal" href="#qubiter.BitVector.BitVector" title="qubiter.BitVector.BitVector"><em>BitVector</em></a>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#qubiter.BitVector.BitVector" title="qubiter.BitVector.BitVector">BitVector</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.BitVector.BitVector.find_T_bit_to_left_of">
+<code class="sig-name descname">find_T_bit_to_left_of</code><span class="sig-paren">(</span><em class="sig-param">bpos</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/BitVector.html#BitVector.find_T_bit_to_left_of"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.BitVector.BitVector.find_T_bit_to_left_of" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns position of 1 (True) bit immediately to the left of position
+bpos. Returns -1 if there is no such bit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>bpos</strong> (<em>int</em>) – bit position</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.BitVector.BitVector.find_T_bit_to_right_of">
+<code class="sig-name descname">find_T_bit_to_right_of</code><span class="sig-paren">(</span><em class="sig-param">bpos</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/BitVector.html#BitVector.find_T_bit_to_right_of"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.BitVector.BitVector.find_T_bit_to_right_of" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns position of 1 (True) bit immediately to the right of
+position bpos. Returns -1 if there is no such bit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>bpos</strong> (<em>int</em>) – bit position</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.BitVector.BitVector.find_leftmost_T_bit">
+<code class="sig-name descname">find_leftmost_T_bit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/BitVector.html#BitVector.find_leftmost_T_bit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.BitVector.BitVector.find_leftmost_T_bit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Out of all 1 (True) bits, returns position of the leftmost one of
+those to the the left of position bpos. Returns -1 if there is no
+such bit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.BitVector.BitVector.find_rightmost_T_bit">
+<code class="sig-name descname">find_rightmost_T_bit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/BitVector.html#BitVector.find_rightmost_T_bit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.BitVector.BitVector.find_rightmost_T_bit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Out of all 1 (True) bits, returns position of the rightmost one of
+those to the the right of position bpos. Returns -1 if there is no
+such bit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.BitVector.BitVector.get_bit_string">
+<code class="sig-name descname">get_bit_string</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/BitVector.html#BitVector.get_bit_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.BitVector.BitVector.get_bit_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns self represented as string of length self.len of ones and
+zeros. If bit_str is the output, [int(x) for x in bit_str] will turn
+result to list of ints.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.BitVector.BitVector.get_lazy_from_normal">
+<em class="property">static </em><code class="sig-name descname">get_lazy_from_normal</code><span class="sig-paren">(</span><em class="sig-param">bit_len</em>, <em class="sig-param">normal</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/BitVector.html#BitVector.get_lazy_from_normal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.BitVector.BitVector.get_lazy_from_normal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Throughout Qubiter, we will often refer to “Gray Code” as “lazy
+ordering”. In lazy ordering with bit_len many bits, one gives a
+sequence of bit vectors of length bit_len, so that two adjacent
+items of the sequence differ by just one bit. For example 000=0,
+100=4, 110=6, 010=2, 011=3, 111=7, 101=5, 001=1. Each element of
+this sequence represented as an int will be called lazy, and each
+int in the sequence 0, 1, 2, 3, 4, 5, 6, 7 will be called normal.
+Normal ordering is usually called dictionary ordering. Normal and
+lazy sequences both start at 0.</p>
+<p>Suppose bit_len = 3. The lazy sequence 000, 100, 110, 010, 011, 111,
+101, 001 is easily obtained from the “standard” lazy sequence 000,
+001, 011, 010, 110, 111, 101, 100 by “reflecting” each sequence
+term. We will use the second sequence because it is more common in
+the literature.</p>
+<p class="rubric">References</p>
+<p>1. Martin Gardener, “Knotted DoughNuts and Other
+Mathematical Entertainments”, chapt. 2, “The Binary Gray Code”
+2. “Numerical Recipies in C”
+3. Many books on Discrete Mathematics for CompSci types
+4. On the web, in Eric’s Treasure Trove/Math/Gray Codes</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bit_len</strong> (<em>int</em>) – </p></li>
+<li><p><strong>normal</strong> (<em>int</em>) – Function returns the lazy int that corresponds to this normal int.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.BitVector.BitVector.get_num_T_bits">
+<code class="sig-name descname">get_num_T_bits</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/BitVector.html#BitVector.get_num_T_bits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.BitVector.BitVector.get_num_T_bits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the number of 1 (True) bits at positions bpos
+from 0 to len-1 inclusive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.BitVector.BitVector.lazy_advance">
+<em class="property">static </em><code class="sig-name descname">lazy_advance</code><span class="sig-paren">(</span><em class="sig-param">old_normal</em>, <em class="sig-param">old_lazy</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/BitVector.html#BitVector.lazy_advance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.BitVector.BitVector.lazy_advance" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method takes int “old_lazy” (which corresponds to bit vector
+“old_normal”), and changes it to the next lazy int, “new_lazy” (
+which corresponds to “new_normal”).</p>
+<p>example:</p>
+<p>lazy sequence: 000, 001, 011, 010, 110, 111, 101, 100</p>
+<p>old_lazy = 011
+old_normal = 2 = 010</p>
+<p>new_normal = 3 = 011
+mask = (new_normal &amp; ~old_normal) = 011 &amp; 101 = 001
+new_lazy = new_normal ^ mask = 011 ^ 001 = 010</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>old_normal</strong> (<em>int</em>) – </p></li>
+<li><p><strong>old_lazy</strong> (<em>int</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int, int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.BitVector.BitVector.new_with_T_on_diff">
+<em class="property">static </em><code class="sig-name descname">new_with_T_on_diff</code><span class="sig-paren">(</span><em class="sig-param">bvec1</em>, <em class="sig-param">bvec2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/BitVector.html#BitVector.new_with_T_on_diff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.BitVector.BitVector.new_with_T_on_diff" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given two BitVectors bevc1 and bvec2, this return a BitVector which
+is a bitwise xor (mod 2 sum) of the bits of bvec1 and bvec2.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bvec1</strong> (<a class="reference internal" href="#qubiter.BitVector.BitVector" title="qubiter.BitVector.BitVector"><em>BitVector</em></a>) – </p></li>
+<li><p><strong>bvec2</strong> (<a class="reference internal" href="#qubiter.BitVector.BitVector" title="qubiter.BitVector.BitVector"><em>BitVector</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#qubiter.BitVector.BitVector" title="qubiter.BitVector.BitVector">BitVector</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.BitVector.BitVector.set_all_bits_F">
+<code class="sig-name descname">set_all_bits_F</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/BitVector.html#BitVector.set_all_bits_F"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.BitVector.BitVector.set_all_bits_F" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets to 0 (False) the bits of self at positions bpos
+from 0 to len-1 inclusive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.BitVector.BitVector.set_all_bits_T">
+<code class="sig-name descname">set_all_bits_T</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/BitVector.html#BitVector.set_all_bits_T"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.BitVector.BitVector.set_all_bits_T" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets to 1 (True) the bits of self at position bpos
+from 0 to len-1 inclusive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.BitVector.BitVector.set_bit_F">
+<code class="sig-name descname">set_bit_F</code><span class="sig-paren">(</span><em class="sig-param">bpos</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/BitVector.html#BitVector.set_bit_F"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.BitVector.BitVector.set_bit_F" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets to 0 (False) the bit of self at position bpos.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>bpos</strong> (<em>int</em>) – bit position</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.BitVector.BitVector.set_bit_T">
+<code class="sig-name descname">set_bit_T</code><span class="sig-paren">(</span><em class="sig-param">bpos</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/BitVector.html#BitVector.set_bit_T"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.BitVector.BitVector.set_bit_T" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets to 1 (True) the bit of self at position bpos.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>bpos</strong> (<em>int</em>) – bit position</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Robert R. Tucci &amp; Qubiter contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,476 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qubiter.adv_applications.StairsCkt_writer module &mdash; qubiter 1.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> qubiter
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rosetta.html">Qubiter Rosetta Stone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classgraph.html">Qubiter’s Class Graph</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">qubiter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>qubiter.adv_applications.StairsCkt_writer module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/qubiter.adv_applications.StairsCkt_writer.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-qubiter.adv_applications.StairsCkt_writer">
+<span id="qubiter-adv-applications-stairsckt-writer-module"></span><h1>qubiter.adv_applications.StairsCkt_writer module<a class="headerlink" href="#module-qubiter.adv_applications.StairsCkt_writer" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="qubiter.adv_applications.StairsCkt_writer.StairsCkt_writer">
+<em class="property">class </em><code class="sig-prename descclassname">qubiter.adv_applications.StairsCkt_writer.</code><code class="sig-name descname">StairsCkt_writer</code><span class="sig-paren">(</span><em class="sig-param">gate_str_to_rads_list</em>, <em class="sig-param">file_prefix</em>, <em class="sig-param">emb</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/adv_applications/StairsCkt_writer.html#StairsCkt_writer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.adv_applications.StairsCkt_writer.StairsCkt_writer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer" title="qubiter.SEO_writer.SEO_writer"><code class="xref py py-class docutils literal notranslate"><span class="pre">qubiter.SEO_writer.SEO_writer</span></code></a></p>
+<p>This class is a subclass of class SEO_writer and it writes a “Stairs
+Circuit”. For example, this is what the Picture file of a Stairs Circuit
+looks like for num_bits = 3</p>
+<p>U   |   |
+O—U   |
+&#64;—U   |
+O—O—U
+<a class="reference external" href="mailto:O---&#37;&#52;&#48;---U">O—<span>&#64;</span>—U</a>
+&#64;—O—U
+&#64;-<a class="reference external" href="mailto:--&#37;&#52;&#48;---U">–<span>&#64;</span>—U</a></p>
+<p>Here, U is a general U(2) matrix with 4 parameters, all of which can be
+made into placeholder variables. If each U is represented by a node and
+the controls of each U represent its parents, then this quantum circuit
+can be represented by a fully connected Quantum Bayesian Network (QB
+net). (See my &gt;10 year old blog called “Quantum Bayesian Networks” for
+more info than you would ever want to know about QB nets).</p>
+<p>This class can also be asked to construct a QB net that is <strong>not</strong> fully
+connected, by limiting the number of controls for a given U to fewer
+than all the ones to its left. For example, suppose that in the
+num_bits=3 case, we restrict the parents of the U in the last step to
+just one, instead of the 2 parents that it has in the fully connected
+case. Then we get</p>
+<p>U   |   |
+O—U   |
+&#64;—U   |
+O—+—U
+&#64;—+—U</p>
+<p>or</p>
+<p>U   |   |
+O—U   |
+&#64;—U   |
+|   O—U
+|   &#64;—U</p>
+<p>The constructor of this class has as input an ordered dictionary called
+gate_str_to_rads_list. This dictionary gives for each gate in the
+quantum circuit, a gate string gate_str that specifies the gate.
+gate_str_to_rads_list maps gate_str to a list of 4 floats (or
+placeholder variables for those floats) for the 4 parameters of the U
+matrix. For example, here are possible values for gate_str_to_rads_list
+for the num_bits=3 fully connected qb net</p>
+<p>with every rads_list item filled with the same constant .3
+{‘prior’: [0.3, 0.3, 0.3, 0.3],</p>
+<blockquote>
+<div><p>‘2F’: [0.3, 0.3, 0.3, 0.3],
+‘2T’: [0.3, 0.3, 0.3, 0.3],
+‘2F1F’: [0.3, 0.3, 0.3, 0.3],
+‘2F1T’: [0.3, 0.3, 0.3, 0.3],
+‘2T1F’: [0.3, 0.3, 0.3, 0.3],
+‘2T1T’: [0.3, 0.3, 0.3, 0.3]}</p>
+</div></blockquote>
+<p>with every rads_list item filled by a random number between 0 and 2pi
+{‘prior’: [0.46731839721496604,</p>
+<blockquote>
+<div><blockquote>
+<div><p>0.012285135138256131,
+0.20001353832948487,
+0.36694428209569985],</p>
+</div></blockquote>
+<dl class="simple">
+<dt>‘2F’: [4.1968011007222898,</dt><dd><p>5.1978252498063808,
+4.8063090848060321,
+4.2509081392354409],</p>
+</dd>
+<dt>‘2T’: [4.3359074640905213,</dt><dd><p>2.0749617893052315,
+4.555666727197961,
+5.3092010293653802],</p>
+</dd>
+<dt>‘2F1F’: [0.99177045463186475,</dt><dd><p>3.3344615340103325,
+2.1441702948866386,
+2.4603764283165521],</p>
+</dd>
+<dt>‘2F1T’: [4.0909522483111145,</dt><dd><p>2.0714182784661888,
+5.4034187072431923,
+6.0856723571386766],</p>
+</dd>
+<dt>‘2T1F’: [4.0000452017061194,</dt><dd><p>3.7193341571216658,
+3.381322125034953,
+5.4492142181489802],</p>
+</dd>
+<dt>‘2T1T’: [6.2597553541046853,</dt><dd><p>0.077807529496169509,
+3.7389318319862217,
+6.2233264819972307]}</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>with every rads_list item filled by a unique placeholder variable string
+{‘prior’: [‘#50’, ‘#51’, ‘#52’, ‘#53’],</p>
+<blockquote>
+<div><p>‘2F’: [‘#500’, ‘#501’, ‘#502’, ‘#503’],
+‘2T’: [‘#510’, ‘#511’, ‘#512’, ‘#513’],
+‘2F1F’: [‘#5000’, ‘#5001’, ‘#5002’, ‘#5003’],
+‘2F1T’: [‘#5010’, ‘#5011’, ‘#5012’, ‘#5013’],
+‘2T1F’: [‘#5100’, ‘#5101’, ‘#5102’, ‘#5103’],
+‘2T1T’: [‘#5110’, ‘#5111’, ‘#5112’, ‘#5113’]}</p>
+</div></blockquote>
+<p>This is what gate_str_to_rads_list looks like in the num_bits=3 case,
+when the last U has only one parent (qbit 2) instead of two parents (
+qbits 1 and 2):</p>
+<dl class="simple">
+<dt>{‘prior’: [‘#50’, ‘#51’, ‘#52’, ‘#53’],</dt><dd><p>‘2F’: [‘#500’, ‘#501’, ‘#502’, ‘#503’],
+‘2T’: [‘#510’, ‘#511’, ‘#512’, ‘#513’],
+‘<a href="#id1"><span class="problematic" id="id2">2F1_</span></a>’: [‘#5050’, ‘#5051’, ‘#5052’, ‘#5053’],
+‘<a href="#id3"><span class="problematic" id="id4">2T1_</span></a>’: [‘#5150’, ‘#5151’, ‘#5152’, ‘#5153’]}</p>
+</dd>
+</dl>
+<p>Note that all placeholder strings begin with ‘#5’ to insure that once
+the hash character is removed, the remaining number doesn’t start with
+‘0’. Note that characters ‘_’ and ‘5’ represent bits whose values are
+unspecified.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><p><strong>gate_str_to_rads_list</strong> (<em>OrderedDict</em><em>[</em><em>str</em><em>, </em><em>list</em><em>[</em><em>float|str</em><em>]</em><em>]</em>) – </p>
+</dd>
+</dl>
+<dl class="method">
+<dt id="qubiter.adv_applications.StairsCkt_writer.StairsCkt_writer.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">gate_str_to_rads_list</em>, <em class="sig-param">file_prefix</em>, <em class="sig-param">emb</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/adv_applications/StairsCkt_writer.html#StairsCkt_writer.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.adv_applications.StairsCkt_writer.StairsCkt_writer.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor</p>
+<p>This constructor writes English and Picture files but it doesn’t
+close those files after writing them. You must do that yourself
+using close_files().</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gate_str_to_rads_list</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>list</em><em>[</em><em>float|str</em><em>]</em><em>]</em>) – </p></li>
+<li><p><strong>file_prefix</strong> (<em>str</em>) – file prefix for English and Picture files written by this class</p></li>
+<li><p><strong>emb</strong> (<a class="reference internal" href="qubiter.CktEmbedder.html#qubiter.CktEmbedder.CktEmbedder" title="qubiter.CktEmbedder.CktEmbedder"><em>CktEmbedder</em></a>) – </p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – key-word arguments of SEO_writer</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.adv_applications.StairsCkt_writer.StairsCkt_writer.get_all_var_nums">
+<em class="property">static </em><code class="sig-name descname">get_all_var_nums</code><span class="sig-paren">(</span><em class="sig-param">gate_str_to_rads_list</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/adv_applications/StairsCkt_writer.html#StairsCkt_writer.get_all_var_nums"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.adv_applications.StairsCkt_writer.StairsCkt_writer.get_all_var_nums" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method scans each rads_list of gate_str_to_rads_list for items
+of the type ‘#x’ where x is an int. Every int x is added to a list
+all_var_nums which is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>gate_str_to_rads_list</strong> (<em>OrderedDict</em><em>[</em><em>str</em><em>, </em><em>list</em><em>[</em><em>float|str</em><em>]</em><em>]</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list[int]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.adv_applications.StairsCkt_writer.StairsCkt_writer.get_controls_from_gate_str">
+<em class="property">static </em><code class="sig-name descname">get_controls_from_gate_str</code><span class="sig-paren">(</span><em class="sig-param">num_bits</em>, <em class="sig-param">gate_str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/adv_applications/StairsCkt_writer.html#StairsCkt_writer.get_controls_from_gate_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.adv_applications.StairsCkt_writer.StairsCkt_writer.get_controls_from_gate_str" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method returns an object of class Controls, constructed from
+info in the input <cite>gate_str</cite> (a well formed key of
+gate_str_to_rads_lis)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>gate_str</strong> (<em>str</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="qubiter.Controls.html#qubiter.Controls.Controls" title="qubiter.Controls.Controls">Controls</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.adv_applications.StairsCkt_writer.StairsCkt_writer.get_gate_str_to_rads_list">
+<em class="property">static </em><code class="sig-name descname">get_gate_str_to_rads_list</code><span class="sig-paren">(</span><em class="sig-param">num_bits</em>, <em class="sig-param">fill_type</em>, <em class="sig-param">rads_const=None</em>, <em class="sig-param">u2_bit_to_higher_bits=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/adv_applications/StairsCkt_writer.html#StairsCkt_writer.get_gate_str_to_rads_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.adv_applications.StairsCkt_writer.StairsCkt_writer.get_gate_str_to_rads_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method returns a gate_str_to_rads_list constructed according to
+the specs given by its arguments.</p>
+<p>fill_type is a string in [‘const’, ‘rand’, ‘#int’] The 3 types of
+fill_type have already been illustrated in the class docstring. If
+the fill_type is ‘const’, then the method expects a float for
+rads_const.</p>
+<p>u2_bit_to_higher_bits is used to restrict the controls of each U.
+For example, for num_bits=3,</p>
+<p>u2_bit_to_higher_bits = {0: [1, 2], 1: [2], 2: []}</p>
+<p>specifies a fully connected qb net, whereas</p>
+<p>u2_bit_to_higher_bits = {0: [2], 1: [2], 2: []}</p>
+<p>means qubit 0 has qubit 2 but not 1 as parent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>fill_type</strong> (<em>str</em>) – either ‘const’, ‘rand’ or ‘#int’</p></li>
+<li><p><strong>rads_const</strong> (<em>float | None</em>) – </p></li>
+<li><p><strong>u2_bit_to_higher_bits</strong> (<em>dict</em><em>[</em><em>int</em><em>, </em><em>list</em><em>[</em><em>int</em><em>]</em><em>]</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>OrderedDict[str, list[float]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.adv_applications.StairsCkt_writer.StairsCkt_writer.get_u2_pos">
+<code class="sig-name descname">get_u2_pos</code><span class="sig-paren">(</span><em class="sig-param">gate_str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/adv_applications/StairsCkt_writer.html#StairsCkt_writer.get_u2_pos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.adv_applications.StairsCkt_writer.StairsCkt_writer.get_u2_pos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a well formed gate_str (one of the keys of
+gate_str_to_rads_list), this method returns the bit position of the
+U(2) matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>gate_str</strong> (<em>str</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.adv_applications.StairsCkt_writer.StairsCkt_writer.get_var_num_to_rads">
+<em class="property">static </em><code class="sig-name descname">get_var_num_to_rads</code><span class="sig-paren">(</span><em class="sig-param">gate_str_to_rads_list</em>, <em class="sig-param">fill_type</em>, <em class="sig-param">rads_const=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/adv_applications/StairsCkt_writer.html#StairsCkt_writer.get_var_num_to_rads"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.adv_applications.StairsCkt_writer.StairsCkt_writer.get_var_num_to_rads" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method returns a dict var_num_to_rads obtained as follows. The
+rads lists in gate_str_to_rads_list are scanned for items of the
+type ‘#x’ where x is an int. Then x is mapped to a float, either the
+constant rads_const if fill_type is ‘const’, or a random number if
+fill type is ‘rand’.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gate_str_to_rads_list</strong> (<em>OrderedDict</em><em>[</em><em>str</em><em>, </em><em>list</em><em>[</em><em>float|str</em><em>]</em><em>]</em>) – </p></li>
+<li><p><strong>fill_type</strong> (<em>str</em>) – </p></li>
+<li><p><strong>rads_const</strong> (<em>float | None</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict[int, float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.adv_applications.StairsCkt_writer.StairsCkt_writer.make_array_from_gate_str_to_rads_list">
+<em class="property">static </em><code class="sig-name descname">make_array_from_gate_str_to_rads_list</code><span class="sig-paren">(</span><em class="sig-param">gate_str_to_rads_list</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/adv_applications/StairsCkt_writer.html#StairsCkt_writer.make_array_from_gate_str_to_rads_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.adv_applications.StairsCkt_writer.StairsCkt_writer.make_array_from_gate_str_to_rads_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method returns a numpy array which is constructed from
+gate_str_to_rads_list by vertically stacking (with np.vstack()) its
+rads_lists</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>gate_str_to_rads_list</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>list</em><em>[</em><em>float|str</em><em>]</em><em>]</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.adv_applications.StairsCkt_writer.StairsCkt_writer.write">
+<code class="sig-name descname">write</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/adv_applications/StairsCkt_writer.html#StairsCkt_writer.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.adv_applications.StairsCkt_writer.StairsCkt_writer.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method writes English and Picture files for a Stairs Circuit.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Robert R. Tucci &amp; Qubiter contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,369 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qubiter.adv_applications.MeanHamil &mdash; qubiter 1.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> qubiter
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../rosetta.html">Qubiter Rosetta Stone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../classgraph.html">Qubiter’s Class Graph</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">qubiter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qubiter.adv_applications.MeanHamil</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qubiter.adv_applications.MeanHamil</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">qubiter.StateVec</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">qubiter.utilities_gen</span> <span class="k">as</span> <span class="nn">utg</span>
+<span class="kn">from</span> <span class="nn">qubiter.CodaSEO_writer</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">qubiter.SEO_simulator</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">qubiter.CktEmbedder</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">openfermion.ops</span> <span class="k">import</span> <span class="n">QubitOperator</span>
+
+
+<div class="viewcode-block" id="MeanHamil"><a class="viewcode-back" href="../../../qubiter.adv_applications.MeanHamil.html#qubiter.adv_applications.MeanHamil.MeanHamil">[docs]</a><span class="k">class</span> <span class="nc">MeanHamil</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This is an abstract class. The main purpose of this class is to evaluate</span>
+<span class="sd">    the mean value of a Hamiltonian.</span>
+
+<span class="sd">    The Hamiltonian hamil is stored as an object of QubitOperator (a class</span>
+<span class="sd">    of the open-source lib OpenFermion). `terms` is an attribute of</span>
+<span class="sd">    QubitOperator. hamil.terms is a dictionary that maps a term to a</span>
+<span class="sd">    coefficient. A term represents a tensor product of Pauli matrices (a</span>
+<span class="sd">    Pauli string) as a tuple of tuples of the form (bit_pos, action). An</span>
+<span class="sd">    example of a term: ( (1, &#39;X&#39;), (2, &#39;Y&#39;))</span>
+
+<span class="sd">    file_prefix identifies the location of an English file that specifies a</span>
+<span class="sd">    quantum circuit. If init_st_vec=None, we assume that the initial state</span>
+<span class="sd">    of that quantum circuit is the ground state (all qubits in state |0&gt;).</span>
+<span class="sd">    Let |psi&gt; be the final state vector that evolves from that circuit. Let</span>
+<span class="sd">    hamil be a Hamiltonian suitable for that circuit and stored as an object</span>
+<span class="sd">    of QubitOperator (a class of the open-source lib OpenFermion). Then the</span>
+<span class="sd">    mean value evaluated by this class is &lt;psi|hamil|psi&gt;.</span>
+
+<span class="sd">    Subclasses of this class use different methods to evaluate this mean</span>
+<span class="sd">    value. They might change the tensor lib (numpy, PyTorch, TensorFlow) or</span>
+<span class="sd">    the device (native, Rigetti, etc.) or the simulator for a particular</span>
+<span class="sd">    device. They might evaluate the mean value exactly or empirically.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    all_var_nums : list[int]</span>
+<span class="sd">        This is a list of all the non-functional placeholder variable numbers</span>
+<span class="sd">    file_prefix : str</span>
+<span class="sd">        Prefix to English file to be used in evaluating the mean hamil</span>
+<span class="sd">    fun_name_to_fun : dict[str, function]</span>
+<span class="sd">         This is a dict that maps function names to functions. Such</span>
+<span class="sd">         functions are functional placeholders, meaning that their values</span>
+<span class="sd">         are only decided at a later time. These functions do not vary</span>
+<span class="sd">         during the minimization process.</span>
+<span class="sd">    hamil : QubitOperator</span>
+<span class="sd">        Hamiltonian</span>
+<span class="sd">    init_st_vec : StateVec</span>
+<span class="sd">        initial state vector</span>
+<span class="sd">    num_bits : int</span>
+<span class="sd">        number of qubits</span>
+<span class="sd">    num_samples : int</span>
+<span class="sd">        number of samples (aka num_shots). If this is zero, the |psi&gt; in</span>
+<span class="sd">        &lt;psi|H|psi&gt; is calculated exactly from theory. If this is &gt;0,</span>
+<span class="sd">        the |psi&gt; is calculated empirically from a number num_samples of</span>
+<span class="sd">        &quot;one-shot&quot; experiments.</span>
+<span class="sd">    simulator_name : str | None</span>
+<span class="sd">        name of the simulator.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="MeanHamil.__init__"><a class="viewcode-back" href="../../../qubiter.adv_applications.MeanHamil.html#qubiter.adv_applications.MeanHamil.MeanHamil.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="n">hamil</span><span class="p">,</span>
+            <span class="n">all_var_nums</span><span class="p">,</span> <span class="n">fun_name_to_fun</span><span class="p">,</span> <span class="n">init_st_vec</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">simulator_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">num_samples</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        file_prefix : str</span>
+<span class="sd">        num_bits : int</span>
+<span class="sd">        hamil : QubitOperator</span>
+<span class="sd">        all_var_nums : list[int]</span>
+<span class="sd">        fun_name_to_fun : dict[str, function]</span>
+<span class="sd">        init_st_vec : StateVec</span>
+<span class="sd">        simulator_name : str</span>
+<span class="sd">        num_samples : int</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_prefix</span> <span class="o">=</span> <span class="n">file_prefix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span> <span class="o">=</span> <span class="n">num_bits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hamil</span> <span class="o">=</span> <span class="n">hamil</span>
+        <span class="n">MeanHamil</span><span class="o">.</span><span class="n">check_hamil_is_herm</span><span class="p">(</span><span class="n">hamil</span><span class="p">)</span>
+        <span class="n">MeanHamil</span><span class="o">.</span><span class="n">check_hamil_is_in_range</span><span class="p">(</span><span class="n">hamil</span><span class="p">,</span> <span class="n">num_bits</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_var_nums</span> <span class="o">=</span> <span class="n">all_var_nums</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fun_name_to_fun</span> <span class="o">=</span> <span class="n">fun_name_to_fun</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_st_vec</span> <span class="o">=</span> <span class="n">init_st_vec</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">init_st_vec</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">init_st_vec</span> <span class="o">=</span> <span class="n">StateVec</span><span class="o">.</span><span class="n">get_ground_st_vec</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">simulator_name</span> <span class="o">=</span> <span class="n">simulator_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_samples</span> <span class="o">=</span> <span class="n">num_samples</span></div>
+
+<div class="viewcode-block" id="MeanHamil.check_hamil_is_herm"><a class="viewcode-back" href="../../../qubiter.adv_applications.MeanHamil.html#qubiter.adv_applications.MeanHamil.MeanHamil.check_hamil_is_herm">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">check_hamil_is_herm</span><span class="p">(</span><span class="n">hamil</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks that the Hamiltonian hamil is a Hermitian operator. Emits</span>
+<span class="sd">        warning and stops execution if it isn&#39;t.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        hamil : QubitOperator</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">term</span><span class="p">,</span> <span class="n">coef</span> <span class="ow">in</span> <span class="n">hamil</span><span class="o">.</span><span class="n">terms</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">coef</span> <span class="o">=</span> <span class="nb">complex</span><span class="p">(</span><span class="n">coef</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">coef</span><span class="o">.</span><span class="n">imag</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">1e-8</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;The Hamiltonian should be Hermitian but it &#39;</span> <span class="o">+</span>\
+                    <span class="s2">&quot;isn&#39;t. After being simplified by the &quot;</span> <span class="o">+</span>\
+                    <span class="s1">&#39;BosonOperator constructor, &#39;</span> <span class="o">+</span>\
+                    <span class="s1">&#39;the coefficient of every term must be real.&#39;</span></div>
+
+<div class="viewcode-block" id="MeanHamil.check_hamil_is_in_range"><a class="viewcode-back" href="../../../qubiter.adv_applications.MeanHamil.html#qubiter.adv_applications.MeanHamil.MeanHamil.check_hamil_is_in_range">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">check_hamil_is_in_range</span><span class="p">(</span><span class="n">hamil</span><span class="p">,</span> <span class="n">max_bit_pos</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks that the Hamiltonian hamil operates on range(max_bit_pos+1).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        hamil : QubitOperator</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">term</span><span class="p">,</span> <span class="n">coef</span> <span class="ow">in</span> <span class="n">hamil</span><span class="o">.</span><span class="n">terms</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">bit</span><span class="p">,</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">term</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="n">bit</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_bit_pos</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MeanHamil.get_real_vec"><a class="viewcode-back" href="../../../qubiter.adv_applications.MeanHamil.html#qubiter.adv_applications.MeanHamil.MeanHamil.get_real_vec">[docs]</a>    <span class="k">def</span> <span class="nf">get_real_vec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">term</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Internal method that returns a numpy array, of shape [2]*num_bits,</span>
+<span class="sd">        that will be used as input to the method</span>
+<span class="sd">        StateVec.get_mean_value_of_real_diag_mat()</span>
+
+<span class="sd">        The input is a `term`. `terms` is an attribute of QubitOperator (a</span>
+<span class="sd">        class in OpenFermion). terms is a dictionary that maps a term to a</span>
+<span class="sd">        coefficient. A term represents a tensor product of Pauli matrices (a</span>
+<span class="sd">        Pauli string) as a tuple of tuples of the form (bit_pos, action). An</span>
+<span class="sd">        example of a term: ((1, &#39;X&#39;), (2, &#39;Y&#39;))</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        term : tuple</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+<span class="sd">            shape=[2]*num_bits</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">arr_plus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">])</span>
+        <span class="n">arr_minus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">])</span>
+        <span class="n">arr_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">arr_plus</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span>
+        <span class="k">for</span> <span class="n">bit_pos</span><span class="p">,</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">term</span><span class="p">:</span>
+            <span class="n">arr_list</span><span class="p">[</span><span class="n">bit_pos</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr_minus</span>
+        <span class="n">real_arr</span> <span class="o">=</span> <span class="n">utg</span><span class="o">.</span><span class="n">kron_prod</span><span class="p">(</span><span class="n">arr_list</span><span class="p">)</span>
+        <span class="n">real_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">real_arr</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">([</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">real_arr</span></div>
+
+<div class="viewcode-block" id="MeanHamil.get_mean_val"><a class="viewcode-back" href="../../../qubiter.adv_applications.MeanHamil.html#qubiter.adv_applications.MeanHamil.MeanHamil.get_mean_val">[docs]</a>    <span class="k">def</span> <span class="nf">get_mean_val</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var_num_to_rads</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Abstract method. The main goal of subclasses of this class is to</span>
+<span class="sd">        override this method.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        var_num_to_rads : dict[int, float]</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="kc">False</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Robert R. Tucci &amp; Qubiter contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

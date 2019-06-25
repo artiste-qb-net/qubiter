@@ -1,0 +1,721 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qubiter.CGateExpander module &mdash; qubiter 1.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> qubiter
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rosetta.html">Qubiter Rosetta Stone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classgraph.html">Qubiter’s Class Graph</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">qubiter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>qubiter.CGateExpander module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/qubiter.CGateExpander.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-qubiter.CGateExpander">
+<span id="qubiter-cgateexpander-module"></span><h1>qubiter.CGateExpander module<a class="headerlink" href="#module-qubiter.CGateExpander" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="qubiter.CGateExpander.CGateExpander">
+<em class="property">class </em><code class="sig-prename descclassname">qubiter.CGateExpander.</code><code class="sig-name descname">CGateExpander</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_bits</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/CGateExpander.html#CGateExpander"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.CGateExpander.CGateExpander" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="qubiter.SEO_reader.html#qubiter.SEO_reader.SEO_reader" title="qubiter.SEO_reader.SEO_reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">qubiter.SEO_reader.SEO_reader</span></code></a></p>
+<p>Qubiter English and Picture files allow single lines that represent U(2)
+matrices of numerous types with 0, 1 or multiple controls of either the
+n or nbar kind. If we say a gate is controlled, it may have 1 or more
+controls (it might be singly or multiply controlled). This class is a
+child of SEO_reader. The class reads any previously created Qubiter
+English file and it writes new English &amp; Picture files wherein every
+line of the original English file is expanded into a sequence of (1)
+single qubit rotations and (2) simple CNOTs. Such a class is useful
+because many quantum computers (for example, IBM Quantum Experience) can
+only do (1) and (2).</p>
+<p>If the input English file has file_prefix as file prefix, then the
+output English &amp; Picture files have as file prefix file_prefix + ‘_X1’,
+assuming that ‘_X’ + str(k) for some integer k is not already the ending
+of file_prefix. If it is, then the ending is changed to ‘_X’ + str(
+k+1).</p>
+<p>Global phase factors are ignored, so expansions equal the original line
+up to a phase factor.</p>
+<p>You can get a count of the number of CNOTs in the expanded file by
+creating an object of the class SEO_reader.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><p><strong>wr</strong> (<a class="reference internal" href="qubiter.CGateSEO_writer.html#qubiter.CGateSEO_writer.CGateSEO_writer" title="qubiter.CGateSEO_writer.CGateSEO_writer"><em>CGateSEO_writer</em></a>) – This object of CGateSEO_writer, created in the class constructor,
+is called inside every <a href="#id1"><span class="problematic" id="id2">use_</span></a>  function to do some writing in the output
+files.</p>
+</dd>
+</dl>
+<dl class="method">
+<dt id="qubiter.CGateExpander.CGateExpander.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_bits</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/CGateExpander.html#CGateExpander.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.CGateExpander.CGateExpander.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_prefix</strong> (<em>str</em>) – </p></li>
+<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.CGateExpander.CGateExpander.do_log">
+<code class="sig-name descname">do_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/CGateExpander.html#CGateExpander.do_log"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.CGateExpander.CGateExpander.do_log" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class does a “flat” reading of the input file; i.e.,
+the reading does not respect loop structure. Hence, we won’t let it
+write a log file, for if we did, it would be incorrect. A correct
+log file can always be obtained by creating a SEO_reader object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.CGateExpander.CGateExpander.emb_for_c_u2">
+<code class="sig-name descname">emb_for_c_u2</code><span class="sig-paren">(</span><em class="sig-param">tar_bit_pos</em>, <em class="sig-param">controls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/CGateExpander.html#CGateExpander.emb_for_c_u2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.CGateExpander.CGateExpander.emb_for_c_u2" title="Permalink to this definition">¶</a></dt>
+<dd><p>This internal function returns a CktEmbedder object called emb that
+is used to write an expansion for a controlled U(2) matrix with
+target at tar_bit_pos.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tar_bit_pos</strong> (<em>int</em>) – </p></li>
+<li><p><strong>controls</strong> (<a class="reference internal" href="qubiter.Controls.html#qubiter.Controls.Controls" title="qubiter.Controls.Controls"><em>Controls</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="qubiter.CktEmbedder.html#qubiter.CktEmbedder.CktEmbedder" title="qubiter.CktEmbedder.CktEmbedder">CktEmbedder</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.CGateExpander.CGateExpander.two_embs_for_c_bit_swap">
+<code class="sig-name descname">two_embs_for_c_bit_swap</code><span class="sig-paren">(</span><em class="sig-param">bit1</em>, <em class="sig-param">bit2</em>, <em class="sig-param">controls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/CGateExpander.html#CGateExpander.two_embs_for_c_bit_swap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.CGateExpander.CGateExpander.two_embs_for_c_bit_swap" title="Permalink to this definition">¶</a></dt>
+<dd><p>This internal function returns two CktEmbedder objects called emb0,
+emb1 that are used to write an expansion for a controlled swap of
+bits bit1, bit2.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bit1</strong> (<em>int</em>) – </p></li>
+<li><p><strong>bit2</strong> (<em>int</em>) – </p></li>
+<li><p><strong>controls</strong> (<a class="reference internal" href="qubiter.Controls.html#qubiter.Controls.Controls" title="qubiter.Controls.Controls"><em>Controls</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(<a class="reference internal" href="qubiter.CktEmbedder.html#qubiter.CktEmbedder.CktEmbedder" title="qubiter.CktEmbedder.CktEmbedder">CktEmbedder</a>, <a class="reference internal" href="qubiter.CktEmbedder.html#qubiter.CktEmbedder.CktEmbedder" title="qubiter.CktEmbedder.CktEmbedder">CktEmbedder</a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.CGateExpander.CGateExpander.use_DIAG">
+<code class="sig-name descname">use_DIAG</code><span class="sig-paren">(</span><em class="sig-param">trols</em>, <em class="sig-param">rad_angles</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/CGateExpander.html#CGateExpander.use_DIAG"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.CGateExpander.CGateExpander.use_DIAG" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns error message if input circuit contains diagonal unitaries
+DIAG.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>trols</strong> (<a class="reference internal" href="qubiter.Controls.html#qubiter.Controls.Controls" title="qubiter.Controls.Controls"><em>Controls</em></a>) – </p></li>
+<li><p><strong>rad_angles</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.CGateExpander.CGateExpander.use_HAD2">
+<code class="sig-name descname">use_HAD2</code><span class="sig-paren">(</span><em class="sig-param">tar_bit_pos</em>, <em class="sig-param">controls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/CGateExpander.html#CGateExpander.use_HAD2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.CGateExpander.CGateExpander.use_HAD2" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function expands a HAD2 line; i.e., it reads the line from the
+input English file and writes an expansion of it in the output
+English &amp; Picture files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tar_bit_pos</strong> (<em>int</em>) – </p></li>
+<li><p><strong>controls</strong> (<a class="reference internal" href="qubiter.Controls.html#qubiter.Controls.Controls" title="qubiter.Controls.Controls"><em>Controls</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.CGateExpander.CGateExpander.use_IF_M_beg">
+<code class="sig-name descname">use_IF_M_beg</code><span class="sig-paren">(</span><em class="sig-param">controls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/CGateExpander.html#CGateExpander.use_IF_M_beg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.CGateExpander.CGateExpander.use_IF_M_beg" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function echoes IF_M_beg line.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>controls</strong> (<a class="reference internal" href="qubiter.Controls.html#qubiter.Controls.Controls" title="qubiter.Controls.Controls"><em>Controls</em></a>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.CGateExpander.CGateExpander.use_IF_M_end">
+<code class="sig-name descname">use_IF_M_end</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/CGateExpander.html#CGateExpander.use_IF_M_end"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.CGateExpander.CGateExpander.use_IF_M_end" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function echoes IF_M_end line</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.CGateExpander.CGateExpander.use_LOOP">
+<code class="sig-name descname">use_LOOP</code><span class="sig-paren">(</span><em class="sig-param">loop_num</em>, <em class="sig-param">nreps</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/CGateExpander.html#CGateExpander.use_LOOP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.CGateExpander.CGateExpander.use_LOOP" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function echoes a LOOP line; i.e., it transcribes the line from
+the input English file to the output English &amp; Picture files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>loop_num</strong> (<em>int</em>) – </p></li>
+<li><p><strong>nreps</strong> (<em>int</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.CGateExpander.CGateExpander.use_MEAS">
+<code class="sig-name descname">use_MEAS</code><span class="sig-paren">(</span><em class="sig-param">tar_bit_pos</em>, <em class="sig-param">kind</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/CGateExpander.html#CGateExpander.use_MEAS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.CGateExpander.CGateExpander.use_MEAS" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function echoes a MEAS line; i.e., it transcribes the line from
+the input English file to the output English &amp; Picture files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>kind</strong> (<em>int</em>) – </p></li>
+<li><p><strong>tar_bit_pos</strong> (<em>int</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.CGateExpander.CGateExpander.use_MP_Y">
+<code class="sig-name descname">use_MP_Y</code><span class="sig-paren">(</span><em class="sig-param">tar_bit_pos</em>, <em class="sig-param">trols</em>, <em class="sig-param">rad_angles</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/CGateExpander.html#CGateExpander.use_MP_Y"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.CGateExpander.CGateExpander.use_MP_Y" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns error message if input circuit contains multiplexors MP_Y.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tar_bit_pos</strong> (<em>int</em>) – </p></li>
+<li><p><strong>trols</strong> (<a class="reference internal" href="qubiter.Controls.html#qubiter.Controls.Controls" title="qubiter.Controls.Controls"><em>Controls</em></a>) – </p></li>
+<li><p><strong>rad_angles</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.CGateExpander.CGateExpander.use_NEXT">
+<code class="sig-name descname">use_NEXT</code><span class="sig-paren">(</span><em class="sig-param">loop_num</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/CGateExpander.html#CGateExpander.use_NEXT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.CGateExpander.CGateExpander.use_NEXT" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function echoes a NEXT line; i.e., it transcribes the line from
+the input English file to the output English &amp; Picture files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>loop_num</strong> (<em>int</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.CGateExpander.CGateExpander.use_NOTA">
+<code class="sig-name descname">use_NOTA</code><span class="sig-paren">(</span><em class="sig-param">bla_str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/CGateExpander.html#CGateExpander.use_NOTA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.CGateExpander.CGateExpander.use_NOTA" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function echoes a NOTA line; i.e., it transcribes the line from
+the input English file to the output English &amp; Picture files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>bla_str</strong> (<em>str</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.CGateExpander.CGateExpander.use_PHAS">
+<code class="sig-name descname">use_PHAS</code><span class="sig-paren">(</span><em class="sig-param">angle_rads</em>, <em class="sig-param">tar_bit_pos</em>, <em class="sig-param">controls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/CGateExpander.html#CGateExpander.use_PHAS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.CGateExpander.CGateExpander.use_PHAS" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function expands a PHAS line; i.e., it reads the line from the
+input English file and writes an expansion of it in the output
+English &amp; Picture files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>angle_rads</strong> (<em>float</em>) – </p></li>
+<li><p><strong>tar_bit_pos</strong> (<em>int</em>) – </p></li>
+<li><p><strong>controls</strong> (<a class="reference internal" href="qubiter.Controls.html#qubiter.Controls.Controls" title="qubiter.Controls.Controls"><em>Controls</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.CGateExpander.CGateExpander.use_PRINT">
+<code class="sig-name descname">use_PRINT</code><span class="sig-paren">(</span><em class="sig-param">style</em>, <em class="sig-param">line_num</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/CGateExpander.html#CGateExpander.use_PRINT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.CGateExpander.CGateExpander.use_PRINT" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function echoes a PRINT line; i.e., it transcribes the line
+from the input English file to the output English &amp; Picture files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>style</strong> (<em>str</em>) – </p></li>
+<li><p><strong>line_num</strong> (<em>int</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.CGateExpander.CGateExpander.use_P_PH">
+<code class="sig-name descname">use_P_PH</code><span class="sig-paren">(</span><em class="sig-param">projection_bit</em>, <em class="sig-param">angle_rads</em>, <em class="sig-param">tar_bit_pos</em>, <em class="sig-param">controls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/CGateExpander.html#CGateExpander.use_P_PH"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.CGateExpander.CGateExpander.use_P_PH" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function expands a P0PH or P1PH line; i.e., it reads the line
+from the input English file and writes an expansion of it in the
+output English &amp; Picture files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>projection_bit</strong> (<em>int</em>) – </p></li>
+<li><p><strong>angle_rads</strong> (<em>float</em>) – </p></li>
+<li><p><strong>tar_bit_pos</strong> (<em>int</em>) – </p></li>
+<li><p><strong>controls</strong> (<a class="reference internal" href="qubiter.Controls.html#qubiter.Controls.Controls" title="qubiter.Controls.Controls"><em>Controls</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.CGateExpander.CGateExpander.use_ROTA">
+<code class="sig-name descname">use_ROTA</code><span class="sig-paren">(</span><em class="sig-param">axis</em>, <em class="sig-param">angle_rads</em>, <em class="sig-param">tar_bit_pos</em>, <em class="sig-param">controls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/CGateExpander.html#CGateExpander.use_ROTA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.CGateExpander.CGateExpander.use_ROTA" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function expands a ROTX, ROTY or ROTZ line; i.e., it reads the
+line from the input English file and writes an expansion of it in
+the output English &amp; Picture files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>axis</strong> (<em>int</em>) – </p></li>
+<li><p><strong>angle_rads</strong> (<em>float</em>) – </p></li>
+<li><p><strong>tar_bit_pos</strong> (<em>int</em>) – </p></li>
+<li><p><strong>controls</strong> (<a class="reference internal" href="qubiter.Controls.html#qubiter.Controls.Controls" title="qubiter.Controls.Controls"><em>Controls</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.CGateExpander.CGateExpander.use_ROTN">
+<code class="sig-name descname">use_ROTN</code><span class="sig-paren">(</span><em class="sig-param">angle_x_rads</em>, <em class="sig-param">angle_y_rads</em>, <em class="sig-param">angle_z_rads</em>, <em class="sig-param">tar_bit_pos</em>, <em class="sig-param">controls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/CGateExpander.html#CGateExpander.use_ROTN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.CGateExpander.CGateExpander.use_ROTN" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function expands a ROTN line; i.e., it reads the line from the
+input English file and writes an expansion of it in the output
+English &amp; Picture files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>angle_x_rads</strong> (<em>float</em>) – </p></li>
+<li><p><strong>angle_y_rads</strong> (<em>float</em>) – </p></li>
+<li><p><strong>angle_z_rads</strong> (<em>float</em>) – </p></li>
+<li><p><strong>tar_bit_pos</strong> (<em>int</em>) – </p></li>
+<li><p><strong>controls</strong> (<a class="reference internal" href="qubiter.Controls.html#qubiter.Controls.Controls" title="qubiter.Controls.Controls"><em>Controls</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.CGateExpander.CGateExpander.use_SIG">
+<code class="sig-name descname">use_SIG</code><span class="sig-paren">(</span><em class="sig-param">axis</em>, <em class="sig-param">tar_bit_pos</em>, <em class="sig-param">controls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/CGateExpander.html#CGateExpander.use_SIG"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.CGateExpander.CGateExpander.use_SIG" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function expands a SIGX, SIGY or SIGZ line; i.e., it reads the
+line from the input English file and writes an expansion of it in
+the output English &amp; Picture files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>axis</strong> (<em>int</em>) – </p></li>
+<li><p><strong>tar_bit_pos</strong> (<em>int</em>) – </p></li>
+<li><p><strong>controls</strong> (<a class="reference internal" href="qubiter.Controls.html#qubiter.Controls.Controls" title="qubiter.Controls.Controls"><em>Controls</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.CGateExpander.CGateExpander.use_SWAP">
+<code class="sig-name descname">use_SWAP</code><span class="sig-paren">(</span><em class="sig-param">bit1</em>, <em class="sig-param">bit2</em>, <em class="sig-param">controls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/CGateExpander.html#CGateExpander.use_SWAP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.CGateExpander.CGateExpander.use_SWAP" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function expands a SWAP; i.e., it reads the line from the input
+English file and writes an expansion of it in the output English &amp;
+Picture files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bit1</strong> (<em>int</em>) – </p></li>
+<li><p><strong>bit2</strong> (<em>int</em>) – </p></li>
+<li><p><strong>controls</strong> (<a class="reference internal" href="qubiter.Controls.html#qubiter.Controls.Controls" title="qubiter.Controls.Controls"><em>Controls</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.CGateExpander.CGateExpander.use_SWAY">
+<code class="sig-name descname">use_SWAY</code><span class="sig-paren">(</span><em class="sig-param">bit1</em>, <em class="sig-param">bit2</em>, <em class="sig-param">controls</em>, <em class="sig-param">rads_list</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/CGateExpander.html#CGateExpander.use_SWAY"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.CGateExpander.CGateExpander.use_SWAY" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function expands a SWAY line; i.e., it reads the line from the
+input English file and writes an expansion of it in the output
+English &amp; Picture files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bit1</strong> (<em>int</em>) – </p></li>
+<li><p><strong>bit2</strong> (<em>int</em>) – </p></li>
+<li><p><strong>controls</strong> (<a class="reference internal" href="qubiter.Controls.html#qubiter.Controls.Controls" title="qubiter.Controls.Controls"><em>Controls</em></a>) – </p></li>
+<li><p><strong>rads_list</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.CGateExpander.CGateExpander.use_SWA_">
+<code class="sig-name descname">use_SWA_</code><span class="sig-paren">(</span><em class="sig-param">bit1</em>, <em class="sig-param">bit2</em>, <em class="sig-param">controls</em>, <em class="sig-param">rads_list=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/CGateExpander.html#CGateExpander.use_SWA_"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.CGateExpander.CGateExpander.use_SWA_" title="Permalink to this definition">¶</a></dt>
+<dd><p>This internal function expands a SWAP or SWAY line; i.e., it reads
+the line from the input English file and writes an expansion of it
+in the output English &amp; Picture files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bit1</strong> (<em>int</em>) – </p></li>
+<li><p><strong>bit2</strong> (<em>int</em>) – </p></li>
+<li><p><strong>controls</strong> (<a class="reference internal" href="qubiter.Controls.html#qubiter.Controls.Controls" title="qubiter.Controls.Controls"><em>Controls</em></a>) – </p></li>
+<li><p><strong>rads_list</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – list of 4 floats</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.CGateExpander.CGateExpander.use_U_2_">
+<code class="sig-name descname">use_U_2_</code><span class="sig-paren">(</span><em class="sig-param">rads0</em>, <em class="sig-param">rads1</em>, <em class="sig-param">rads2</em>, <em class="sig-param">rads3</em>, <em class="sig-param">tar_bit_pos</em>, <em class="sig-param">controls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/CGateExpander.html#CGateExpander.use_U_2_"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.CGateExpander.CGateExpander.use_U_2_" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function expands a <a href="#id3"><span class="problematic" id="id4">U_2_</span></a> line; i.e., it reads the line from the
+input English file and writes an expansion of it in the output
+English &amp; Picture files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rads0</strong> (<em>float</em>) – </p></li>
+<li><p><strong>rads1</strong> (<em>float</em>) – </p></li>
+<li><p><strong>rads2</strong> (<em>float</em>) – </p></li>
+<li><p><strong>rads3</strong> (<em>float</em>) – </p></li>
+<li><p><strong>tar_bit_pos</strong> (<em>int</em>) – </p></li>
+<li><p><strong>controls</strong> (<a class="reference internal" href="qubiter.Controls.html#qubiter.Controls.Controls" title="qubiter.Controls.Controls"><em>Controls</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.CGateExpander.CGateExpander.write_gate_name">
+<code class="sig-name descname">write_gate_name</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">num_trols</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/CGateExpander.html#CGateExpander.write_gate_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.CGateExpander.CGateExpander.write_gate_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is used solely in the verbose mode. It announces with
+a NOTA comment line the beginning of a gate expansion.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – </p></li>
+<li><p><strong>num_trols</strong> (<em>int</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Robert R. Tucci &amp; Qubiter contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

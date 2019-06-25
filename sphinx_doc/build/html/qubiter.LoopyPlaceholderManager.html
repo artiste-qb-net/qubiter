@@ -1,0 +1,296 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qubiter.LoopyPlaceholderManager module &mdash; qubiter 1.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> qubiter
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rosetta.html">Qubiter Rosetta Stone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classgraph.html">Qubiter’s Class Graph</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">qubiter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>qubiter.LoopyPlaceholderManager module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/qubiter.LoopyPlaceholderManager.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-qubiter.LoopyPlaceholderManager">
+<span id="qubiter-loopyplaceholdermanager-module"></span><h1>qubiter.LoopyPlaceholderManager module<a class="headerlink" href="#module-qubiter.LoopyPlaceholderManager" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="qubiter.LoopyPlaceholderManager.LoopyPlaceholderManager">
+<em class="property">class </em><code class="sig-prename descclassname">qubiter.LoopyPlaceholderManager.</code><code class="sig-name descname">LoopyPlaceholderManager</code><span class="sig-paren">(</span><em class="sig-param">loop_out</em>, <em class="sig-param">indentation_li</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/LoopyPlaceholderManager.html#LoopyPlaceholderManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.LoopyPlaceholderManager.LoopyPlaceholderManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="qubiter.PlaceholderManager.html#qubiter.PlaceholderManager.PlaceholderManager" title="qubiter.PlaceholderManager.PlaceholderManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">qubiter.PlaceholderManager.PlaceholderManager</span></code></a></p>
+<p>This class is important to you only if you are interested in using loops
+in the English file.</p>
+<p>This class is a child of PlaceholderManager. Like its parent
+PlaceholderManager, it stores and processes info having to do with
+placeholder variables.</p>
+<p>This class in used by class LoopFileGenerator to write a Loop File,
+which is a template Python file that when modified by you and executed,
+generates the history of each placeholder variable ( either a hash
+variable or a functional placeholder) used in a target circuit with
+nested loops.</p>
+<p>A history of a variable is a list of all the values it will assume all
+the times it is used in the circuit (each repetition in a loop or nested
+loops is counted as a different use.)</p>
+<p>Variables with a _li suffix are one item lists. This is a way of passing
+by reference (i.e., by pointer) instead of by value, an immutable in
+Python.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>indentation_li</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – one item list containing an int that stores the current number
+of indentation spaces in the Loop File being written</p></li>
+<li><p><strong>loop_out</strong> (<em>_io.TextIOWrapper</em>) – out stream to Loop File being generated by collaboration of this
+class and a LoopFileManager. This class writes to loop_out info
+stored in it</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="qubiter.LoopyPlaceholderManager.LoopyPlaceholderManager.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">loop_out</em>, <em class="sig-param">indentation_li</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/LoopyPlaceholderManager.html#LoopyPlaceholderManager.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.LoopyPlaceholderManager.LoopyPlaceholderManager.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>loop_out</strong> (<em>_io.TextIOWrapper</em>) – </p></li>
+<li><p><strong>indentation_li</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – </p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.LoopyPlaceholderManager.LoopyPlaceholderManager.degs_str_to_rads">
+<code class="sig-name descname">degs_str_to_rads</code><span class="sig-paren">(</span><em class="sig-param">degs_str</em>, <em class="sig-param">line_count</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/LoopyPlaceholderManager.html#LoopyPlaceholderManager.degs_str_to_rads"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.LoopyPlaceholderManager.LoopyPlaceholderManager.degs_str_to_rads" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method overrides method of same name in parent class
+PlaceholderManager. This method is called by class SEO_reader every
+time a placeholder with a legal name is encountered while reading an
+input English file. This method analyzes the legal name and writes
+info gleaned from that analysis to the Loop File being written.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>degs_str</strong> (<em>str</em>) – </p></li>
+<li><p><strong>line_count</strong> (<em>int</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float | str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.LoopyPlaceholderManager.LoopyPlaceholderManager.write_loop_file_ending">
+<code class="sig-name descname">write_loop_file_ending</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/LoopyPlaceholderManager.html#LoopyPlaceholderManager.write_loop_file_ending"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.LoopyPlaceholderManager.LoopyPlaceholderManager.write_loop_file_ending" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method writes stuff at the end of the Loop File, after the
+English file has been read.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.LoopyPlaceholderManager.LoopyPlaceholderManager.write_loop_file_prelude">
+<code class="sig-name descname">write_loop_file_prelude</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/LoopyPlaceholderManager.html#LoopyPlaceholderManager.write_loop_file_prelude"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.LoopyPlaceholderManager.LoopyPlaceholderManager.write_loop_file_prelude" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method writes stuff at the beginning of the Loop File, before
+the English file has been read.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Robert R. Tucci &amp; Qubiter contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

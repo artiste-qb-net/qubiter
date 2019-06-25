@@ -1,0 +1,272 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qubiter.CodaSEO_writer module &mdash; qubiter 1.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> qubiter
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rosetta.html">Qubiter Rosetta Stone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classgraph.html">Qubiter’s Class Graph</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">qubiter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>qubiter.CodaSEO_writer module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/qubiter.CodaSEO_writer.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-qubiter.CodaSEO_writer">
+<span id="qubiter-codaseo-writer-module"></span><h1>qubiter.CodaSEO_writer module<a class="headerlink" href="#module-qubiter.CodaSEO_writer" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="qubiter.CodaSEO_writer.CodaSEO_writer">
+<em class="property">class </em><code class="sig-prename descclassname">qubiter.CodaSEO_writer.</code><code class="sig-name descname">CodaSEO_writer</code><span class="sig-paren">(</span><em class="sig-param">init_file_prefix</em>, <em class="sig-param">fin_file_prefix</em>, <em class="sig-param">num_bits</em>, <em class="sig-param">ZL=True</em>, <em class="sig-param">fin_emb=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/CodaSEO_writer.html#CodaSEO_writer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.CodaSEO_writer.CodaSEO_writer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer" title="qubiter.SEO_writer.SEO_writer"><code class="xref py py-class docutils literal notranslate"><span class="pre">qubiter.SEO_writer.SEO_writer</span></code></a></p>
+<p>This class is a child of class <cite>SEO_writer</cite>. The constructor of this
+class accepts as input the paths to a pair of well-formed initial
+English and Picture files. The class makes copies of those 2 initial
+files and opens the copies, called the final English and Picture files,
+in the append mode. Thereafter, the user can write to those final files
+using methods that this class inherits from its parent SEO_writer.
+Coda SEO writer means tail-end SEO writer, which accurately describes
+what this class does.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fin_eng_path</strong> (<em>str</em>) – path to final English file that starts life as a verbatim copy of
+the initial English file and is thereafter appended to.</p></li>
+<li><p><strong>fin_pic_path</strong> (<em>str</em>) – path to final Picture file that starts life as a verbatim copy of
+the initial Picture file and is thereafter appended to.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="qubiter.CodaSEO_writer.CodaSEO_writer.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">init_file_prefix</em>, <em class="sig-param">fin_file_prefix</em>, <em class="sig-param">num_bits</em>, <em class="sig-param">ZL=True</em>, <em class="sig-param">fin_emb=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/CodaSEO_writer.html#CodaSEO_writer.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.CodaSEO_writer.CodaSEO_writer.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>init_file_prefix</strong> (<em>str</em>) – </p></li>
+<li><p><strong>fin_file_prefix</strong> (<em>str</em>) – </p></li>
+<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>ZL</strong> (<em>bool</em>) – </p></li>
+<li><p><strong>fin_emb</strong> (<a class="reference internal" href="qubiter.CktEmbedder.html#qubiter.CktEmbedder.CktEmbedder" title="qubiter.CktEmbedder.CktEmbedder"><em>CktEmbedder</em></a>) – circuit embedder for the writer of the final English and Picture
+files</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.CodaSEO_writer.CodaSEO_writer.write_xy_measurements">
+<code class="sig-name descname">write_xy_measurements</code><span class="sig-paren">(</span><em class="sig-param">bit_pos_to_xy_str</em>, <em class="sig-param">write_notas=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/CodaSEO_writer.html#CodaSEO_writer.write_xy_measurements"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.CodaSEO_writer.CodaSEO_writer.write_xy_measurements" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method will append to the final English and Picture files a SEO
+of rotations, one rotation at each key of the input dictionary
+<cite>bit_pos_to_xy_str</cite>. That input dictionary <cite>bit_pos_to_xy_str</cite> maps
+qubit positions (int) to xy str values that are: either ‘X’ or ‘Y’.</p>
+<p>Let sigx, sigy and sigz be the Pauli matrices.</p>
+<p>When key=b and value=’X’, a rotation exp(i*sigy*pi/4) is applied to
+qubit b. This rotation is chosen because it diagonalizes sigx,
+according to the equation: exp(-i*sigy*pi/4)*sigz*exp(i*sigy*pi/4) =
+sigx.</p>
+<p>When key=b and value=’Y’, a rotation exp(-i*sigx*pi/4) is applied
+to qubit b. This rotation is chosen because it diagonalizes sigy,
+according to the equation: exp(i*sigx*pi/4)*sigz*exp(-i*sigx*pi/4) =
+sigy.</p>
+<p>These rotations are applied in order to convert an X or Y qubit
+measurement into the standard Z measurements which are along the
+eigenvectors of sigz. There is no need to apply any rotations when Z
+is measured because the operating qubit basis is already the
+eigenvectors of sigz.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bit_pos_to_xy_str</strong> (<em>dict</em><em>[</em><em>int</em><em>, </em><em>str</em><em>]</em>) – </p></li>
+<li><p><strong>write_notas</strong> (<em>bool</em>) – whether to write a NOTA before each rotation explaining it</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Robert R. Tucci &amp; Qubiter contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

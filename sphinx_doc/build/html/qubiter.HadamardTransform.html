@@ -1,0 +1,243 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qubiter.HadamardTransform module &mdash; qubiter 1.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> qubiter
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rosetta.html">Qubiter Rosetta Stone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classgraph.html">Qubiter’s Class Graph</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">qubiter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>qubiter.HadamardTransform module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/qubiter.HadamardTransform.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-qubiter.HadamardTransform">
+<span id="qubiter-hadamardtransform-module"></span><h1>qubiter.HadamardTransform module<a class="headerlink" href="#module-qubiter.HadamardTransform" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="qubiter.HadamardTransform.HadamardTransform">
+<em class="property">class </em><code class="sig-prename descclassname">qubiter.HadamardTransform.</code><code class="sig-name descname">HadamardTransform</code><a class="reference internal" href="_modules/qubiter/HadamardTransform.html#HadamardTransform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.HadamardTransform.HadamardTransform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class contains only static methods and no constructor. Its
+functions are related to the Hadamard Transform.</p>
+<dl class="method">
+<dt id="qubiter.HadamardTransform.HadamardTransform.hadamard_mat">
+<em class="property">static </em><code class="sig-name descname">hadamard_mat</code><span class="sig-paren">(</span><em class="sig-param">num_bits</em>, <em class="sig-param">is_quantum=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/HadamardTransform.html#HadamardTransform.hadamard_mat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.HadamardTransform.HadamardTransform.hadamard_mat" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function return a numpy array with the num_bits-fold tensor
+product of the 2 dim Hadamard matrix H. If is_quantum=True (False,
+resp.), it returns a complex (real, resp.) array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>is_quantum</strong> (<em>bool</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.HadamardTransform.HadamardTransform.ht">
+<em class="property">static </em><code class="sig-name descname">ht</code><span class="sig-paren">(</span><em class="sig-param">num_bits</em>, <em class="sig-param">in_arr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/HadamardTransform.html#HadamardTransform.ht"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.HadamardTransform.HadamardTransform.ht" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function calculates the Hadamard transform of in_arr. Let H be
+the 2 dimensional Hadamard matrix and let ht be the num_bit-fold
+tensor product of H. Then this function returns the matrix product
+ht*in_arr = out_arr. in_arr and out_arr both have the same shape (
+2^num_bits,).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_bits</strong> (<em>int</em>) – The number of bits. The dimension of the Hadamard tranform is
+2^num_bits</p></li>
+<li><p><strong>in_arr</strong> (<em>np.ndarray</em>) – Input array.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Robert R. Tucci &amp; Qubiter contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

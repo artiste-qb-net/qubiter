@@ -1,0 +1,607 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qubiter.OneBitGates module &mdash; qubiter 1.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> qubiter
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rosetta.html">Qubiter Rosetta Stone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classgraph.html">Qubiter’s Class Graph</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">qubiter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>qubiter.OneBitGates module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/qubiter.OneBitGates.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-qubiter.OneBitGates">
+<span id="qubiter-onebitgates-module"></span><h1>qubiter.OneBitGates module<a class="headerlink" href="#module-qubiter.OneBitGates" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="qubiter.OneBitGates.OneBitGates">
+<em class="property">class </em><code class="sig-prename descclassname">qubiter.OneBitGates.</code><code class="sig-name descname">OneBitGates</code><a class="reference internal" href="_modules/qubiter/OneBitGates.html#OneBitGates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneBitGates.OneBitGates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class has no attributes or constructor. It is simply a collection
+of static methods, all of which return a complex 2 by 2 matrix (numpy
+array or array from some other tensor library). In cases where the
+entries of the matrix are all real, an is_quantum bool option is given
+to choose between a float or complex array.</p>
+<p>All gates have a tensor library <cite>lib</cite> option. lib equals ‘np’ for numpy,
+‘tf’ for tensorflow</p>
+<dl class="method">
+<dt id="qubiter.OneBitGates.OneBitGates.P_0">
+<em class="property">static </em><code class="sig-name descname">P_0</code><span class="sig-paren">(</span><em class="sig-param">is_quantum=True</em>, <em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneBitGates.html#OneBitGates.P_0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneBitGates.OneBitGates.P_0" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns projection operator P_0 = <a href="#id9"><span class="problematic" id="id10">|0&gt;&lt;0|</span></a> = nbar, where <a href="#id1"><span class="problematic" id="id2">|</span></a>0&gt; = [1,
+0]^T and <a href="#id3"><span class="problematic" id="id4">|</span></a>1&gt; = [0, 1]^T, T = transpose</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_quantum</strong> (<em>bool</em>) – </p></li>
+<li><p><strong>lib</strong> (<em>str</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.OneBitGates.OneBitGates.P_0_phase_fac">
+<em class="property">static </em><code class="sig-name descname">P_0_phase_fac</code><span class="sig-paren">(</span><em class="sig-param">ang_rads</em>, <em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneBitGates.html#OneBitGates.P_0_phase_fac"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneBitGates.OneBitGates.P_0_phase_fac" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns</p>
+<p>exp(1j*ang_rads*P_0) = [[x, 0],[0, 1]] with x = exp(1j*ang_rads)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ang_rads</strong> (<em>float</em>) – </p></li>
+<li><p><strong>lib</strong> (<em>str</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.OneBitGates.OneBitGates.P_1">
+<em class="property">static </em><code class="sig-name descname">P_1</code><span class="sig-paren">(</span><em class="sig-param">is_quantum=True</em>, <em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneBitGates.html#OneBitGates.P_1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneBitGates.OneBitGates.P_1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns projection operator P_1 = <a href="#id11"><span class="problematic" id="id12">|1&gt;&lt;1|</span></a> = n, where <a href="#id5"><span class="problematic" id="id6">|</span></a>0&gt; = [1,
+0]^T and <a href="#id7"><span class="problematic" id="id8">|</span></a>1&gt; = [0, 1]^T, T = transpose</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_quantum</strong> (<em>bool</em>) – </p></li>
+<li><p><strong>lib</strong> (<em>str</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.OneBitGates.OneBitGates.P_1_phase_fac">
+<em class="property">static </em><code class="sig-name descname">P_1_phase_fac</code><span class="sig-paren">(</span><em class="sig-param">ang_rads</em>, <em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneBitGates.html#OneBitGates.P_1_phase_fac"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneBitGates.OneBitGates.P_1_phase_fac" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns</p>
+<p>exp(1j*ang_rads*P_1) = [[1, 0],[0, x]] with x = exp(1j*ang_rads)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ang_rads</strong> (<em>float</em>) – </p></li>
+<li><p><strong>lib</strong> (<em>str</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.OneBitGates.OneBitGates.const_dict">
+<em class="property">static </em><code class="sig-name descname">const_dict</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneBitGates.html#OneBitGates.const_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneBitGates.OneBitGates.const_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns dictionary with all values equal to x. Dict is destined to
+fill a future 2-dim matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.OneBitGates.OneBitGates.get_fun">
+<em class="property">static </em><code class="sig-name descname">get_fun</code><span class="sig-paren">(</span><em class="sig-param">lib</em>, <em class="sig-param">fun_name</em>, <em class="sig-param">lib_to_fun_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneBitGates.html#OneBitGates.get_fun"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneBitGates.OneBitGates.get_fun" title="Permalink to this definition">¶</a></dt>
+<dd><p>If lib is ‘np’, this method returns eval(lib + ‘.’ + fun_name).
+Else, if lib is not ‘np’ then: if lib_to_fun_name is None,
+it returns eval(lib + ‘.’ + fun_name), but if lib_to_fun_name is not
+None, it returns eval(lib + ‘.’ + lib_to_fun_name[lib]). It aborts
+if lib_to_fun_name[ lib] doesn’t exist.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lib</strong> (<em>str</em>) – tensor library, either ‘np’ for numpy or ‘tp’ for tensorflow</p></li>
+<li><p><strong>fun_name</strong> (<em>str</em>) – function name</p></li>
+<li><p><strong>lib_to_fun_name</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em>) – dictionary mapping lib to fun_name. For example {‘tf’: ‘cos’}</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.OneBitGates.OneBitGates.get_mat">
+<em class="property">static </em><code class="sig-name descname">get_mat</code><span class="sig-paren">(</span><em class="sig-param">lib</em>, <em class="sig-param">mat_dict</em>, <em class="sig-param">dtype=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneBitGates.html#OneBitGates.get_mat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneBitGates.OneBitGates.get_mat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Internal function that creates a tensor of type lib, based on a dict
+mat_dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lib</strong> (<em>str</em>) – </p></li>
+<li><p><strong>mat_dict</strong> (<em>dict</em>) – </p></li>
+<li><p><strong>dtype</strong> (<em>dtype | None</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.OneBitGates.OneBitGates.had2">
+<em class="property">static </em><code class="sig-name descname">had2</code><span class="sig-paren">(</span><em class="sig-param">is_quantum=True</em>, <em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneBitGates.html#OneBitGates.had2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneBitGates.OneBitGates.had2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns 2 dimensional Hadamard matrix (sigma_x + sigma_z)/sqrt(2)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_quantum</strong> (<em>bool</em>) – </p></li>
+<li><p><strong>lib</strong> (<em>str</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.OneBitGates.OneBitGates.mat_S">
+<em class="property">static </em><code class="sig-name descname">mat_S</code><span class="sig-paren">(</span><em class="sig-param">herm=False</em>, <em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneBitGates.html#OneBitGates.mat_S"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneBitGates.OneBitGates.mat_S" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns</p>
+<p>[[1, 0],[0, x*sign]] where x=exp(j*pi/2)=j</p>
+<p>where sign = 1 if herm=False and sign = -1 if herm=True</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>herm</strong> (<em>bool</em>) – </p></li>
+<li><p><strong>lib</strong> (<em>str</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.OneBitGates.OneBitGates.mat_Sdag">
+<em class="property">static </em><code class="sig-name descname">mat_Sdag</code><span class="sig-paren">(</span><em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneBitGates.html#OneBitGates.mat_Sdag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneBitGates.OneBitGates.mat_Sdag" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns S^dag</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>lib</strong> (<em>str</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.OneBitGates.OneBitGates.mat_T">
+<em class="property">static </em><code class="sig-name descname">mat_T</code><span class="sig-paren">(</span><em class="sig-param">herm=False</em>, <em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneBitGates.html#OneBitGates.mat_T"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneBitGates.OneBitGates.mat_T" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns</p>
+<p>[[1, 0],[0, exp(j*pi/4*sign)]]</p>
+<p>where sign = 1 if herm=False and sign = -1 if herm=True</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>herm</strong> (<em>bool</em>) – </p></li>
+<li><p><strong>lib</strong> (<em>str</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.OneBitGates.OneBitGates.mat_Tdag">
+<em class="property">static </em><code class="sig-name descname">mat_Tdag</code><span class="sig-paren">(</span><em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneBitGates.html#OneBitGates.mat_Tdag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneBitGates.OneBitGates.mat_Tdag" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns T^dag</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>lib</strong> (<em>str</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.OneBitGates.OneBitGates.phase_fac">
+<em class="property">static </em><code class="sig-name descname">phase_fac</code><span class="sig-paren">(</span><em class="sig-param">ang_rads</em>, <em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneBitGates.html#OneBitGates.phase_fac"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneBitGates.OneBitGates.phase_fac" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns</p>
+<p>exp(1j*ang_rads*I_2) = [[x, 0],[0, x]] with x = exp(1j*ang_rads)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ang_rads</strong> (<em>float</em>) – </p></li>
+<li><p><strong>lib</strong> (<em>str</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.OneBitGates.OneBitGates.rot">
+<em class="property">static </em><code class="sig-name descname">rot</code><span class="sig-paren">(</span><em class="sig-param">rad_ang_x</em>, <em class="sig-param">rad_ang_y</em>, <em class="sig-param">rad_ang_z</em>, <em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneBitGates.html#OneBitGates.rot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneBitGates.OneBitGates.rot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns</p>
+<p>exp(1j*(rad_ang_x*sig_x + rad_ang_y*sig_y + rad_ang_z*sig_z))</p>
+<p>where rad_ang_x is an angle in radians and sig_x is the x Pauli
+matrix, etc.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rad_ang_x</strong> (<em>float</em>) – </p></li>
+<li><p><strong>rad_ang_y</strong> (<em>float</em>) – </p></li>
+<li><p><strong>rad_ang_z</strong> (<em>float</em>) – </p></li>
+<li><p><strong>lib</strong> (<em>str</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.OneBitGates.OneBitGates.rot_ax">
+<em class="property">static </em><code class="sig-name descname">rot_ax</code><span class="sig-paren">(</span><em class="sig-param">rad_ang</em>, <em class="sig-param">axis</em>, <em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneBitGates.html#OneBitGates.rot_ax"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneBitGates.OneBitGates.rot_ax" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns</p>
+<p>exp(1j*rad_ang*sig_n)</p>
+<p>where n = x if axis = 1, n = y if axis = 2 and n = z if axis = 3</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rad_ang</strong> (<em>float</em>) – </p></li>
+<li><p><strong>axis</strong> (<em>int</em>) – </p></li>
+<li><p><strong>lib</strong> (<em>str</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.OneBitGates.OneBitGates.sigx">
+<em class="property">static </em><code class="sig-name descname">sigx</code><span class="sig-paren">(</span><em class="sig-param">is_quantum=True</em>, <em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneBitGates.html#OneBitGates.sigx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneBitGates.OneBitGates.sigx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns sigma_x Pauli matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_quantum</strong> (<em>bool</em>) – </p></li>
+<li><p><strong>lib</strong> (<em>str</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.OneBitGates.OneBitGates.sigy">
+<em class="property">static </em><code class="sig-name descname">sigy</code><span class="sig-paren">(</span><em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneBitGates.html#OneBitGates.sigy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneBitGates.OneBitGates.sigy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns sigma_y Pauli matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>lib</strong> (<em>str</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.OneBitGates.OneBitGates.sigz">
+<em class="property">static </em><code class="sig-name descname">sigz</code><span class="sig-paren">(</span><em class="sig-param">is_quantum=True</em>, <em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneBitGates.html#OneBitGates.sigz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneBitGates.OneBitGates.sigz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns sigma_z Pauli matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_quantum</strong> (<em>bool</em>) – </p></li>
+<li><p><strong>lib</strong> (<em>str</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.OneBitGates.OneBitGates.u2">
+<em class="property">static </em><code class="sig-name descname">u2</code><span class="sig-paren">(</span><em class="sig-param">rads0</em>, <em class="sig-param">rads1</em>, <em class="sig-param">rads2</em>, <em class="sig-param">rads3</em>, <em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneBitGates.html#OneBitGates.u2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneBitGates.OneBitGates.u2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns arbitrary 2-dim unitary matrix (U(2) group) parametrized as
+follows:</p>
+<p>exp(1j*(rads0 + rads1*sig_x + rads2*sig_y + rads3*sig_z))</p>
+<p>where rads1 is an angle in radians and sig_x is the x Pauli
+matrix, etc.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rads0</strong> (<em>float</em>) – </p></li>
+<li><p><strong>rads1</strong> (<em>float</em>) – </p></li>
+<li><p><strong>rads2</strong> (<em>float</em>) – </p></li>
+<li><p><strong>rads3</strong> (<em>float</em>) – </p></li>
+<li><p><strong>lib</strong> (<em>str</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Robert R. Tucci &amp; Qubiter contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

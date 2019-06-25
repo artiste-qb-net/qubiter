@@ -1,0 +1,494 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qubiter.device_specific.Qubiter_to_AnyQasm &mdash; qubiter 1.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> qubiter
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../rosetta.html">Qubiter Rosetta Stone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../classgraph.html">Qubiter’s Class Graph</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">qubiter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qubiter.device_specific.Qubiter_to_AnyQasm</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qubiter.device_specific.Qubiter_to_AnyQasm</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">qubiter.Controls</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">qubiter.SEO_reader</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">qubiter.SEO_writer</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">qubiter.UnitaryMat</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">qubiter.utilities_gen</span> <span class="k">as</span> <span class="nn">ut</span>
+
+
+<div class="viewcode-block" id="Qubiter_to_AnyQasm"><a class="viewcode-back" href="../../../qubiter.device_specific.Qubiter_to_AnyQasm.html#qubiter.device_specific.Qubiter_to_AnyQasm.Qubiter_to_AnyQasm">[docs]</a><span class="k">class</span> <span class="nc">Qubiter_to_AnyQasm</span><span class="p">(</span><span class="n">SEO_reader</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This abstract class is a child of SEO_reader. It reads an input English</span>
+<span class="sd">    file and writes an AnyQasm file that is a translation of the input</span>
+<span class="sd">    English file into the AnyQasm language. If the flag write_qubiter_files</span>
+<span class="sd">    is set to True, this class will also write new English and Picture files</span>
+<span class="sd">    that are in 1-1 onto line correspondence with the output AnyQasm file.</span>
+
+<span class="sd">    Footnote: Some AnyQasm&#39;s distinguish between quantum registers qreg and</span>
+<span class="sd">    classical registers creg. Qubiter does not use cregs because it uses the</span>
+<span class="sd">    classical memory of your Linux PC instead. AnyQasm has an intricate set</span>
+<span class="sd">    of commands for measurements. Qubiter has a complete set of measurement</span>
+<span class="sd">    commands too (see MEAS in Rosetta stone). The AnyQasm and Qubiter</span>
+<span class="sd">    measurement commands can obviously be translated into each other. We</span>
+<span class="sd">    leave that part of the translation to a future version of this class.</span>
+
+<span class="sd">    This class can run in either a strict or a non-strict mode depending on</span>
+<span class="sd">    the flag `strict_mode`, which equals False in default mode. In the</span>
+<span class="sd">    strict mode, the set of gates allowed is constrained to a small but</span>
+<span class="sd">    universal set that is specified below, and that is allowed in any target</span>
+<span class="sd">    qasm. In the non-strict mode, more gates are allowed that depend on</span>
+<span class="sd">    specific target qasm. In the strict mode, the program will end if you</span>
+<span class="sd">    try to use gates that are not allowed. In the non-strict mode,</span>
+<span class="sd">    the program will end if you try to use gates for a target language that</span>
+<span class="sd">    have not been implemented yet in the Qubiter class targeting that</span>
+<span class="sd">    language, often because the target language doesn&#39;t support those gates.</span>
+<span class="sd">    </span>
+<span class="sd">    Will refer to target qasm as AnyQasm or aqasm</span>
+
+<span class="sd">    Next we give a description of the strict_mode:</span>
+
+<span class="sd">    In the strict mode, the input English file that is read can only have</span>
+<span class="sd">    lines of the following types or else the program will abort with an</span>
+<span class="sd">    error message:</span>
+
+<span class="sd">    1. single qubit rotations (HAD2, SIGX, SIGY, SIGZ, ROTX, ROTY,</span>
+<span class="sd">    ROTZ or ROTN with no controls)</span>
+
+<span class="sd">    2. simple CNOTs (SIGX with a single True control). Call them c-&gt;t=(</span>
+<span class="sd">    c, t) if c is the control and t the target. (c, t) must be allowed</span>
+<span class="sd">    by &#39;c_to_tars&#39;.</span>
+
+<span class="sd">    3. NOTA or PRINT lines. PRINT lines are commented out.</span>
+
+<span class="sd">    If you have an English file that contains lines that are more</span>
+<span class="sd">    complicated than this (because, for example, they contain rotations with</span>
+<span class="sd">    one or more controls attached, or because a CNOT is not allowed</span>
+<span class="sd">    according to &#39;c_to_tars&#39;), you can use the expander classes</span>
+<span class="sd">    CGateExpander, DiagUnitaryExpander, MultiplexorExpander,</span>
+<span class="sd">    and ForbiddenCNotExpander to expand the circuit to an equivalent albeit</span>
+<span class="sd">    longer circuit that satisfies constraints 1, 2, 3.</span>
+
+<span class="sd">    This class can handle a chip with any number of qubits.</span>
+
+<span class="sd">    This class halts execution if it encounters a CNOT that is disallowed</span>
+<span class="sd">    according to the input &#39;c_to_tars&#39;. &#39;c_to_tars&#39; varies with chip. Some</span>
+<span class="sd">    &#39;c_to_tars&#39;s are listed in the files &#39;chip_couplings_...&#39; found in same</span>
+<span class="sd">    folder as this file. If c_to_tars = None, the class assumes any CNOT is</span>
+<span class="sd">    possible.</span>
+
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    all_fun_names : list[str]</span>
+<span class="sd">        a list of all the distinct function names encountered in circuit</span>
+<span class="sd">    all_var_nums : list[int]</span>
+<span class="sd">        a list of all distinct numbers of the variables encountered in circuit</span>
+<span class="sd">    aqasm_name : str</span>
+<span class="sd">        the name of the aqasm language, for example, IBMqasm. Used as ending</span>
+<span class="sd">        of file name, between &#39;_&#39; and &#39;.txt&#39;</span>
+<span class="sd">    aqasm_path : str</span>
+<span class="sd">        path to aqasm file</span>
+<span class="sd">    aqasm_out : _io.TextIOWrapper</span>
+<span class="sd">        This output stream is used to write an aqasm file based on the input</span>
+<span class="sd">        English file.</span>
+<span class="sd">    c_to_tars : dict[int, list[int]]</span>
+<span class="sd">        a dictionary mapping j in range(num_bits) to a list, possibly empty,</span>
+<span class="sd">        of the physically allowed targets of qubit j, when j is the control</span>
+<span class="sd">        of a CNOT. If c_to_tars = None, the class assumes any CNOT is</span>
+<span class="sd">        possible.</span>
+<span class="sd">    file_prefix : str</span>
+<span class="sd">    num_bits : int</span>
+<span class="sd">    qbtr_wr : SEO_writer</span>
+<span class="sd">        A SEO_writer object created iff write_qubiter_files is True.</span>
+<span class="sd">    strict_mode : bool</span>
+<span class="sd">    vprefix : str</span>
+<span class="sd">        all variables in aqasm file will be called vprefix + an int</span>
+<span class="sd">    write_qubiter_files : bool</span>
+<span class="sd">        The class always writes an AnyQasm text file based on the input</span>
+<span class="sd">        English file that is read. Iff this is True, the class also writes</span>
+<span class="sd">        English and Picture files in 1-1 line correspondence with the output</span>
+<span class="sd">        AnyQasm file</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Qubiter_to_AnyQasm.__init__"><a class="viewcode-back" href="../../../qubiter.device_specific.Qubiter_to_AnyQasm.html#qubiter.device_specific.Qubiter_to_AnyQasm.Qubiter_to_AnyQasm.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="n">aqasm_name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="n">strict_mode</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">c_to_tars</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">write_qubiter_files</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">vars_manager</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">aqasm_ftype</span><span class="o">=</span><span class="s1">&#39;txt&#39;</span><span class="p">,</span>
+                 <span class="n">prelude_str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ending_str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        file_prefix : str</span>
+<span class="sd">        num_bits : int</span>
+<span class="sd">        aqasm_name : str</span>
+<span class="sd">        strict_mode : bool</span>
+<span class="sd">        c_to_tars : dict[int, list[int]]|None</span>
+<span class="sd">        write_qubiter_files : bool</span>
+<span class="sd">        vars_manager : PlaceholderManager</span>
+<span class="sd">        aqasm_ftype : str</span>
+<span class="sd">            file type of output aqasm file. If this equals &#39;txt&#39;, name of</span>
+<span class="sd">            aqasm file will end in &#39;.txt&#39;</span>
+<span class="sd">        prelude_str : str | None</span>
+<span class="sd">            string to write as prelude to aqasm file. If None, then the</span>
+<span class="sd">            override method of self.write_prelude() is called</span>
+<span class="sd">        ending_str : str | None</span>
+<span class="sd">            string to write as ending to aqasm file. If None, then the</span>
+<span class="sd">            override method of self.write_ending() is called</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_prefix</span> <span class="o">=</span> <span class="n">file_prefix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span> <span class="o">=</span> <span class="n">num_bits</span>
+
+        <span class="n">vman</span> <span class="o">=</span> <span class="n">PlaceholderManager</span><span class="p">(</span><span class="n">eval_all_vars</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">rdr</span> <span class="o">=</span> <span class="n">SEO_reader</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="n">vars_manager</span><span class="o">=</span><span class="n">vman</span><span class="p">,</span>
+                        <span class="n">write_log</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_var_nums</span> <span class="o">=</span> <span class="n">rdr</span><span class="o">.</span><span class="n">vars_manager</span><span class="o">.</span><span class="n">all_var_nums</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_fun_names</span> <span class="o">=</span> <span class="n">rdr</span><span class="o">.</span><span class="n">vars_manager</span><span class="o">.</span><span class="n">all_fun_names</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">aqasm_name</span> <span class="o">=</span> <span class="n">aqasm_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">strict_mode</span> <span class="o">=</span> <span class="n">strict_mode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vprefix</span> <span class="o">=</span> <span class="s1">&#39;rads&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">c_to_tars</span> <span class="o">=</span> <span class="n">c_to_tars</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_qubiter_files</span> <span class="o">=</span> <span class="n">write_qubiter_files</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">aqasm_path</span> <span class="o">=</span> <span class="n">file_prefix</span> <span class="o">+</span>\
+                          <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">aqasm_name</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="n">aqasm_ftype</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">aqasm_out</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">utg</span><span class="o">.</span><span class="n">preface</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">aqasm_path</span><span class="p">),</span> <span class="s1">&#39;wt&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">qbtr_wr</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">write_qubiter_files</span><span class="p">:</span>
+            <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">)</span>
+            <span class="n">out_file_prefix</span> <span class="o">=</span> <span class="n">SEO_reader</span><span class="o">.</span><span class="n">xed_file_prefix</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qbtr_wr</span> <span class="o">=</span> <span class="n">SEO_writer</span><span class="p">(</span><span class="n">out_file_prefix</span><span class="p">,</span> <span class="n">emb</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">prelude_str</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">prelude_str</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write_prelude</span><span class="p">()</span>
+
+        <span class="n">vman1</span> <span class="o">=</span> <span class="n">PlaceholderManager</span><span class="p">(</span><span class="n">eval_all_vars</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">SEO_reader</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span>
+                            <span class="n">vars_manager</span><span class="o">=</span><span class="n">vman1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">ending_str</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">ending_str</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write_ending</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">aqasm_out</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">write_qubiter_files</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qbtr_wr</span><span class="o">.</span><span class="n">close_files</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Qubiter_to_AnyQasm.write"><a class="viewcode-back" href="../../../qubiter.device_specific.Qubiter_to_AnyQasm.html#qubiter.device_specific.Qubiter_to_AnyQasm.Qubiter_to_AnyQasm.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Writes string s to aqasm and qubiter out files</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        s : str</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">aqasm_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_qubiter_files</span><span class="p">:</span>
+            <span class="n">lines</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">qbtr_wr</span><span class="o">.</span><span class="n">write_NOTA</span><span class="p">(</span><span class="n">line</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Qubiter_to_AnyQasm.write_prelude"><a class="viewcode-back" href="../../../qubiter.device_specific.Qubiter_to_AnyQasm.html#qubiter.device_specific.Qubiter_to_AnyQasm.Qubiter_to_AnyQasm.write_prelude">[docs]</a>    <span class="k">def</span> <span class="nf">write_prelude</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        abstract function, writes AnyQasm&#39;s opening statements before calls</span>
+<span class="sd">        to use_ methods for gates.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">assert</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="Qubiter_to_AnyQasm.write_ending"><a class="viewcode-back" href="../../../qubiter.device_specific.Qubiter_to_AnyQasm.html#qubiter.device_specific.Qubiter_to_AnyQasm.Qubiter_to_AnyQasm.write_ending">[docs]</a>    <span class="k">def</span> <span class="nf">write_ending</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        abstract function, writes AnyQasm&#39;s ending statements after calls to</span>
+<span class="sd">        use_ methods for gates.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="Qubiter_to_AnyQasm.new_var_name"><a class="viewcode-back" href="../../../qubiter.device_specific.Qubiter_to_AnyQasm.html#qubiter.device_specific.Qubiter_to_AnyQasm.Qubiter_to_AnyQasm.new_var_name">[docs]</a>    <span class="k">def</span> <span class="nf">new_var_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">coda</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Starts by asserting that var_name is a legal variable name.</span>
+
+<span class="sd">        If var_name is not functional, this method replaces # in var_name by</span>
+<span class="sd">        self.vprefix and adds coda to end of string.  For example,</span>
+<span class="sd">        if self.vprefix=&#39;rads&#39; and var_name=&#39;-#2*.5&quot;, then output is</span>
+<span class="sd">        &#39;-rads2*.5&#39; + coda</span>
+
+<span class="sd">        If var_name is functional, this method replaces each # in var_name</span>
+<span class="sd">        by self.vprefix, adds commas and parenthesis, and adds coda to end</span>
+<span class="sd">        of string. For example, if self.vprefix=&#39;rads&#39; and</span>
+<span class="sd">        var_name=&#39;-fun#1#2&#39;, then output is &#39;-fun(rads1, rads2)&#39; + coda</span>
+
+<span class="sd">        The above applies only if strict=False. In the strict mode, only an</span>
+<span class="sd">        empty coda is allowed for functional placeholders. For</span>
+<span class="sd">        non-functional placeholders, if var_name contains an *, then the str</span>
+<span class="sd">        after the * and the coda are merged using eval().</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        var_name : str</span>
+<span class="sd">        coda : str</span>
+<span class="sd">        strict : bool</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">PlaceholderManager</span><span class="o">.</span><span class="n">is_legal_var_name</span><span class="p">(</span><span class="n">var_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">PlaceholderManager</span><span class="o">.</span><span class="n">is_functional_var</span><span class="p">(</span><span class="n">var_name</span><span class="p">):</span>
+            <span class="n">new_coda</span> <span class="o">=</span> <span class="n">coda</span>
+            <span class="k">if</span> <span class="n">coda</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">coda</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;illegal coda: &quot;</span> <span class="o">+</span> <span class="n">coda</span>
+            <span class="n">star_pos</span> <span class="o">=</span> <span class="n">var_name</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">strict</span> <span class="ow">and</span> <span class="n">star_pos</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">coda</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="n">coda</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="s2">&quot;A coda must start with * &quot;</span> <span class="o">+</span>\
+                    <span class="s2">&quot;in strict mode. Got coda: &quot;</span> <span class="o">+</span> <span class="n">coda</span>
+                <span class="n">fac1</span> <span class="o">=</span> <span class="n">var_name</span><span class="p">[</span><span class="n">star_pos</span><span class="o">+</span><span class="mi">1</span><span class="p">:]</span>
+                <span class="n">fac2</span> <span class="o">=</span> <span class="n">coda</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+                <span class="n">fac12</span> <span class="o">=</span> <span class="n">fac1</span> <span class="o">+</span> <span class="s1">&#39;*&#39;</span> <span class="o">+</span> <span class="n">fac2</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">new_coda</span> <span class="o">=</span> <span class="s1">&#39;*&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">fac12</span><span class="p">))</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="k">assert</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;cannot eval &quot;&#39;</span> <span class="o">+</span>\
+                                  <span class="n">fac12</span> <span class="o">+</span> <span class="s1">&#39;&quot; to merge &quot;&#39;</span> <span class="o">+</span>\
+                            <span class="n">var_name</span> <span class="o">+</span> <span class="s1">&#39;&quot; and &quot;&#39;</span> <span class="o">+</span> <span class="n">coda</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span>
+            <span class="n">end_pos</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">var_name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">strict</span> <span class="ow">and</span> <span class="n">star_pos</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">end_pos</span> <span class="o">=</span> <span class="n">star_pos</span>
+
+            <span class="k">if</span> <span class="n">var_name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;#&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">vprefix</span> <span class="o">+</span> <span class="n">var_name</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="n">end_pos</span><span class="p">]</span> <span class="o">+</span> <span class="n">new_coda</span>
+            <span class="k">else</span><span class="p">:</span>  <span class="c1"># starts with -#</span>
+                <span class="k">return</span> <span class="s2">&quot;-&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">vprefix</span> <span class="o">+</span> <span class="n">var_name</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="n">end_pos</span><span class="p">]</span> <span class="o">+</span> <span class="n">new_coda</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">strict</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="ow">not</span> <span class="n">coda</span><span class="p">,</span> <span class="s2">&quot;functional placeholders cannot &quot;</span> <span class="o">+</span>\
+                    <span class="s1">&#39;have scaling factors in strict mode&#39;</span>
+            <span class="n">first_hash_pos</span> <span class="o">=</span> <span class="n">var_name</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="p">)</span>
+            <span class="n">nums_strings</span> <span class="o">=</span> <span class="n">var_name</span><span class="p">[</span><span class="n">first_hash_pos</span><span class="o">+</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="p">)</span>
+            <span class="n">arg_str</span> <span class="o">=</span> <span class="s1">&#39;(&#39;</span>
+            <span class="k">for</span> <span class="n">num_str</span> <span class="ow">in</span> <span class="n">nums_strings</span><span class="p">:</span>
+                <span class="n">arg_str</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vprefix</span> <span class="o">+</span> <span class="n">num_str</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span>
+            <span class="n">arg_str</span> <span class="o">=</span> <span class="n">arg_str</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span>
+            <span class="k">return</span> <span class="n">var_name</span><span class="p">[:</span><span class="n">first_hash_pos</span><span class="p">]</span> <span class="o">+</span> <span class="n">arg_str</span> <span class="o">+</span> <span class="n">coda</span></div>
+
+<div class="viewcode-block" id="Qubiter_to_AnyQasm.print_aqasm_file"><a class="viewcode-back" href="../../../qubiter.device_specific.Qubiter_to_AnyQasm.html#qubiter.device_specific.Qubiter_to_AnyQasm.Qubiter_to_AnyQasm.print_aqasm_file">[docs]</a>    <span class="k">def</span> <span class="nf">print_aqasm_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prints aqasm file created by constructor.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">utg</span><span class="o">.</span><span class="n">preface</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">aqasm_path</span><span class="p">))</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span></div></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Robert R. Tucci &amp; Qubiter contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

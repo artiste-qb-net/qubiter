@@ -1,0 +1,363 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qubiter.LoopFileGenerator &mdash; qubiter 1.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> qubiter
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../rosetta.html">Qubiter Rosetta Stone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../classgraph.html">Qubiter’s Class Graph</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">qubiter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>qubiter.LoopFileGenerator</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qubiter.LoopFileGenerator</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">qubiter.SEO_reader</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">qubiter.LoopyPlaceholderManager</span> <span class="k">import</span> <span class="o">*</span>
+
+
+<div class="viewcode-block" id="LoopFileGenerator"><a class="viewcode-back" href="../../qubiter.LoopFileGenerator.html#qubiter.LoopFileGenerator.LoopFileGenerator">[docs]</a><span class="k">class</span> <span class="nc">LoopFileGenerator</span><span class="p">(</span><span class="n">SEO_reader</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is important to you only if you are interested in using loops</span>
+<span class="sd">    in the English file.</span>
+
+<span class="sd">    This class reads an English file (a .txt text file) with nested loops in</span>
+<span class="sd">    it and it writes a Loop File (a .py python script). Like all</span>
+<span class="sd">    SEO_reader&#39;s, this class has a PlaceholderManager call vars_manager (</span>
+<span class="sd">    variables manager), but for this class, the vars_manager is of the</span>
+<span class="sd">    special type LoopyPlaceholderManager.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    indentation_li : list[int]</span>
+<span class="sd">        one item list containing an int that stores the current number</span>
+<span class="sd">        of indentation spaces in the Loop File being written</span>
+<span class="sd">    loop_out : _io.TextIOWrapper</span>
+<span class="sd">        out stream to Loop File being generated.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="LoopFileGenerator.__init__"><a class="viewcode-back" href="../../qubiter.LoopFileGenerator.html#qubiter.LoopFileGenerator.LoopFileGenerator.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        file_prefix : str</span>
+<span class="sd">        num_bits : int</span>
+<span class="sd">        kwargs : dict</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loop_out</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">utg</span><span class="o">.</span><span class="n">preface</span><span class="p">(</span>
+            <span class="n">file_prefix</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;_loop.py&#39;</span><span class="p">),</span> <span class="s1">&#39;wt&#39;</span><span class="p">)</span>
+
+        <span class="c1"># to pass integer by reference, must put inside a list</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">indentation_li</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">vman</span> <span class="o">=</span> <span class="n">LoopyPlaceholderManager</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loop_out</span><span class="p">,</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">indentation_li</span><span class="p">,</span> <span class="n">eval_all_vars</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="n">vman</span><span class="o">.</span><span class="n">write_loop_file_prelude</span><span class="p">()</span>
+
+        <span class="c1"># Must set write_log to True or else SEO_reader will abort. However,</span>
+        <span class="c1">#  we also override do_log in this class to prevent log from being</span>
+        <span class="c1"># written.</span>
+        <span class="n">SEO_reader</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="n">write_log</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">vars_manager</span><span class="o">=</span><span class="n">vman</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="n">vman</span><span class="o">.</span><span class="n">write_loop_file_ending</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loop_out</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="LoopFileGenerator.do_log"><a class="viewcode-back" href="../../qubiter.LoopFileGenerator.html#qubiter.LoopFileGenerator.LoopFileGenerator.do_log">[docs]</a>    <span class="k">def</span> <span class="nf">do_log</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        We override this to prevent writing of log, because when we do,</span>
+<span class="sd">        we get a wrong count for the number of elem ops, because this</span>
+<span class="sd">        SEO_reader is performing a flat reading of the English file (i.e.,</span>
+<span class="sd">        not jumping back at NEXTs)</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="LoopFileGenerator.use_LOOP"><a class="viewcode-back" href="../../qubiter.LoopFileGenerator.html#qubiter.LoopFileGenerator.LoopFileGenerator.use_LOOP">[docs]</a>    <span class="k">def</span> <span class="nf">use_LOOP</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loop_num</span><span class="p">,</span> <span class="n">nreps</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method overrides method of same name in parent class SEO_reader.</span>
+
+<span class="sd">        Its purpose is to write a &quot;for&quot; line in the Loop File. It also</span>
+<span class="sd">        increases the indentation in the Loop File by 4 spaces. This gives</span>
+<span class="sd">        Python style indentation for for-loops in Loop File.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        loop_num : int</span>
+<span class="sd">        nreps : int</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loop_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39; &#39;</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">indentation_li</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span>
+            <span class="s1">&#39;for j&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">loop_num</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; in range(&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nreps</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;):&#39;</span> <span class="o">+</span>
+            <span class="s1">&#39;  # line &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">line_count</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">indentation_li</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">4</span></div>
+
+<div class="viewcode-block" id="LoopFileGenerator.use_NEXT"><a class="viewcode-back" href="../../qubiter.LoopFileGenerator.html#qubiter.LoopFileGenerator.LoopFileGenerator.use_NEXT">[docs]</a>    <span class="k">def</span> <span class="nf">use_NEXT</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loop_num</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method overrides method of same name in parent class</span>
+<span class="sd">        SEO_reader. It reduces the indentation in the Loop File by 4 spaces.</span>
+<span class="sd">        This gives Python style indentation for for-loops in Loop File.</span>
+
+<span class="sd">        The use_NEXT in the parent class is responsible for jumping back</span>
+<span class="sd">        from NEXT line to LOOP line if the total number of reps (nreps)</span>
+<span class="sd">        hasn&#39;t been completed. This override doesn&#39;t do that jump. This</span>
+<span class="sd">        gives a flat reading of the English file, without jumping back at</span>
+<span class="sd">        NEXTs.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        loop_num : int</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">indentation_li</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-=</span> <span class="mi">4</span></div></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">qubiter.SEO_writer</span> <span class="k">import</span> <span class="o">*</span>
+    <span class="kn">from</span> <span class="nn">qubiter.SEO_simulator</span> <span class="k">import</span> <span class="o">*</span>
+    <span class="kn">from</span> <span class="nn">qubiter.StateVec</span> <span class="k">import</span> <span class="o">*</span>
+
+    <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+        <span class="n">file_prefix</span> <span class="o">=</span> <span class="s1">&#39;loop_gen_test&#39;</span>
+        <span class="n">num_bits</span> <span class="o">=</span> <span class="mi">4</span>
+
+        <span class="c1"># write the English and Picture files</span>
+        <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">)</span>
+        <span class="n">wr</span> <span class="o">=</span> <span class="n">SEO_writer</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">emb</span><span class="p">)</span>
+        <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span>
+                                         <span class="n">Controls</span><span class="o">.</span><span class="n">new_knob</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+                                         <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span>
+                                         <span class="p">[</span><span class="s1">&#39;#1&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="n">wr</span><span class="o">.</span><span class="n">write_LOOP</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="n">nreps</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span>
+                                         <span class="n">Controls</span><span class="o">.</span><span class="n">new_knob</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+                                         <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span>
+                                         <span class="p">[</span><span class="s1">&#39;-my_fun1#1#2&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+        <span class="n">wr</span><span class="o">.</span><span class="n">write_LOOP</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">nreps</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+        <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span>
+                                         <span class="n">Controls</span><span class="o">.</span><span class="n">new_knob</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+                                         <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot</span><span class="p">,</span>
+                                         <span class="p">[</span><span class="s1">&#39;-#1*.5&#39;</span><span class="p">,</span> <span class="s1">&#39;#2&#39;</span><span class="p">,</span>  <span class="s1">&#39;-my_fun3#3&#39;</span><span class="p">])</span>
+        <span class="n">wr</span><span class="o">.</span><span class="n">write_NEXT</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span>
+                                         <span class="n">Controls</span><span class="o">.</span><span class="n">new_knob</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+                                         <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span>
+                                         <span class="p">[</span><span class="s1">&#39;my_fun1#1#2&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+        <span class="n">wr</span><span class="o">.</span><span class="n">write_NEXT</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+        <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span>
+                                 <span class="n">Controls</span><span class="o">.</span><span class="n">new_knob</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+                                 <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span>
+                                 <span class="p">[</span><span class="s1">&#39;#1*.3&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="n">wr</span><span class="o">.</span><span class="n">write_one_bit_gate</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;my_fun#1&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="n">wr</span><span class="o">.</span><span class="n">close_files</span><span class="p">()</span>
+
+        <span class="c1"># write a log</span>
+        <span class="n">SEO_reader</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="n">write_log</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># write a Loop File</span>
+        <span class="n">LoopFileGenerator</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">)</span>
+
+        <span class="c1"># read a Loop xfile and do simulation</span>
+        <span class="n">sim</span> <span class="o">=</span> <span class="n">SEO_simulator</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">xfile_num</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">----------------------------------------&quot;</span><span class="p">)</span>
+        <span class="n">StateVec</span><span class="o">.</span><span class="n">describe_st_vec_dict</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">cur_st_vec_dict</span><span class="p">)</span>
+    <span class="n">main</span><span class="p">()</span>
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Robert R. Tucci &amp; Qubiter contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

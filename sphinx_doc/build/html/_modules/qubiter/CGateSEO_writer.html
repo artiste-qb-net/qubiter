@@ -1,0 +1,824 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qubiter.CGateSEO_writer &mdash; qubiter 1.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> qubiter
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../rosetta.html">Qubiter Rosetta Stone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../classgraph.html">Qubiter’s Class Graph</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">qubiter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>qubiter.CGateSEO_writer</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qubiter.CGateSEO_writer</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">qubiter.SEO_writer</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">qubiter.SEO_simulator</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">qubiter.CktEmbedder</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">qubiter.BitVector</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">itertools</span> <span class="k">as</span> <span class="nn">it</span>
+<span class="kn">import</span> <span class="nn">collections</span> <span class="k">as</span> <span class="nn">co</span>
+
+
+<div class="viewcode-block" id="CGateSEO_writer"><a class="viewcode-back" href="../../qubiter.CGateSEO_writer.html#qubiter.CGateSEO_writer.CGateSEO_writer">[docs]</a><span class="k">class</span> <span class="nc">CGateSEO_writer</span><span class="p">(</span><span class="n">SEO_writer</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is a child of SEO_writer. When one_line=True, it writes a</span>
+<span class="sd">    single line for an c_u2 (controlled U(2) gate).  When one_line=False,</span>
+<span class="sd">    it writes an expansion of that gate. When expand_1c_u2=True, the c_u2 is</span>
+<span class="sd">    expanded so that its sub-component 1c_u2 (singly controlled U(2) gates)</span>
+<span class="sd">    are expanded into cnots and qubit rotations. If expand_1c_u2=False,</span>
+<span class="sd">    the 1c_u2 are not expanded.</span>
+
+<span class="sd">    If we say a gate is controlled, it may have 1 or more controls (it might</span>
+<span class="sd">    be singly or multiply controlled).</span>
+
+<span class="sd">    Global phase factors are ignored, so expansions equal the original line</span>
+<span class="sd">    up to a phase factor.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    1. CGateSEO_writer.pdf, by Robert Tucci, included with Qubiter source</span>
+<span class="sd">    code.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    do_checking : bool</span>
+<span class="sd">        Does some checking of algebra</span>
+<span class="sd">    expand_1c_u2 : bool</span>
+<span class="sd">        When this is True, the c_u2 (controlled U(2) gate) is expanded so</span>
+<span class="sd">        that its sub-component 1c_u2 (uni controlled U(2) gates) are</span>
+<span class="sd">        expanded into cnots and qubit rotations. If this is False, the 1c_u2</span>
+<span class="sd">        are not expanded.</span>
+<span class="sd">    one_line : bool</span>
+<span class="sd">        When this is True, it writes a single line for the c_u2 ( controlled</span>
+<span class="sd">        U(2) gate). When False, it writes an expansion of that gate.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="CGateSEO_writer.__init__"><a class="viewcode-back" href="../../qubiter.CGateSEO_writer.html#qubiter.CGateSEO_writer.CGateSEO_writer.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">emb</span><span class="p">,</span>
+            <span class="n">one_line</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">expand_1c_u2</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">do_checking</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        file_prefix : str</span>
+<span class="sd">        emb : CktEmbedder</span>
+<span class="sd">        one_line : bool</span>
+<span class="sd">        expand_1c_u2 : bool</span>
+<span class="sd">        do_checking : bool</span>
+<span class="sd">        verbose : bool</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">one_line</span> <span class="o">=</span> <span class="n">one_line</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">expand_1c_u2</span> <span class="o">=</span> <span class="n">expand_1c_u2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_checking</span> <span class="o">=</span> <span class="n">do_checking</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
+        <span class="n">SEO_writer</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">emb</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CGateSEO_writer.su2_mat_prod"><a class="viewcode-back" href="../../qubiter.CGateSEO_writer.html#qubiter.CGateSEO_writer.CGateSEO_writer.su2_mat_prod">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">su2_mat_prod</span><span class="p">(</span><span class="n">su2_pair1</span><span class="p">,</span> <span class="n">su2_pair2</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        An SU(2) matrix can be expressed as exp(i*theta*sig_n) where theta</span>
+<span class="sd">        is a real number and sig_n = n \cdot sigma. Here n is a 3 dim real</span>
+<span class="sd">        UNIT vector and sigma = [sigx, sigy, sigz], where sigx, sigy and</span>
+<span class="sd">        sigz are the 3 Pauli matrices. We define the su2_pair of this SU(2)</span>
+<span class="sd">        matrix as the list [theta, n], with n expressed as a numpy array.</span>
+<span class="sd">        One can prove by Taylor expansion that</span>
+<span class="sd">    </span>
+<span class="sd">        exp(i*theta*sig_n) = c + i*sig_n*s</span>
+<span class="sd">    </span>
+<span class="sd">        where c = cos(theta) and s = sin(theta).</span>
+<span class="sd">    </span>
+<span class="sd">        This subroutine maps su2_pair1, su2_pair2 --&gt; su2_pair</span>
+<span class="sd">    </span>
+<span class="sd">        where</span>
+<span class="sd">    </span>
+<span class="sd">        exp(i*theta*sig_n) = exp(i*theta1*sig_n1) exp(i*theta2*sig_n2)</span>
+<span class="sd">    </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        su2_pair1 : [float, np.array]</span>
+<span class="sd">            su2_pair of left matrix in matrix product</span>
+<span class="sd">    </span>
+<span class="sd">        su2_pair2 : [float, np.array]</span>
+<span class="sd">            su2_pair of right matrix in matrix product</span>
+<span class="sd">    </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        [float, np.array]</span>
+<span class="sd">    </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+    
+        <span class="n">theta1</span><span class="p">,</span> <span class="n">n1</span> <span class="o">=</span> <span class="n">su2_pair1</span>
+        <span class="n">theta2</span><span class="p">,</span> <span class="n">n2</span> <span class="o">=</span> <span class="n">su2_pair2</span>
+        <span class="n">s1</span><span class="p">,</span> <span class="n">c1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta1</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta1</span><span class="p">)</span>
+        <span class="n">s2</span><span class="p">,</span> <span class="n">c2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta2</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta2</span><span class="p">)</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">s1</span><span class="o">*</span><span class="n">c2</span><span class="o">*</span><span class="n">n1</span> <span class="o">+</span> <span class="n">s2</span><span class="o">*</span><span class="n">c1</span><span class="o">*</span><span class="n">n2</span> <span class="o">-</span> <span class="n">s1</span><span class="o">*</span><span class="n">s2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">n1</span><span class="p">,</span> <span class="n">n2</span><span class="p">)</span>
+        <span class="n">mag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="n">n</span> <span class="o">/=</span> <span class="n">mag</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">c1</span><span class="o">*</span><span class="n">c2</span> <span class="o">-</span> <span class="n">s1</span><span class="o">*</span><span class="n">s2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">n1</span><span class="p">,</span> <span class="n">n2</span><span class="p">)</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">mag</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">theta</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="CGateSEO_writer.write_1c_u2"><a class="viewcode-back" href="../../qubiter.CGateSEO_writer.html#qubiter.CGateSEO_writer.CGateSEO_writer.write_1c_u2">[docs]</a>    <span class="k">def</span> <span class="nf">write_1c_u2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">trol_bit_pos</span><span class="p">,</span> <span class="n">rads_list</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Writes an expansion of an 1c_u2 (singly controlled U(2) matrix). In</span>
+<span class="sd">        general, such an expansion will contain 3 cnots, but for special</span>
+<span class="sd">        cases taken here into account, it&#39;s possible to get away with using</span>
+<span class="sd">        only 2 or 1 cnots.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        tar_bit_pos : int</span>
+<span class="sd">            target bit position</span>
+<span class="sd">        trol_bit_pos : int</span>
+<span class="sd">            control bit position</span>
+
+<span class="sd">        rads_list : list[float]</span>
+<span class="sd">            list of 3 angles in radians. If it equals [radx, rady, radz],</span>
+<span class="sd">            then U(2) gate given by e^{i*delta} exp(i*(radx*sigx + rady*sigy</span>
+<span class="sd">            + radz*sigz))</span>
+
+<span class="sd">        delta : float|None</span>
+<span class="sd">            U(2) gate being controlled equals e^{i*delta} times SU(2) gate</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">num_bits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_bef</span>
+        <span class="n">trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="o">.</span><span class="n">new_knob</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">trol_bit_pos</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">expand_1c_u2</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span>
+                <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot</span><span class="p">,</span> <span class="n">rads_list</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="k">def</span> <span class="nf">write_delta_rot</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">delta</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">write_one_bit_gate</span><span class="p">(</span>
+                    <span class="n">trol_bit_pos</span><span class="p">,</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span> <span class="p">[</span><span class="o">-</span><span class="n">delta</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+
+        <span class="k">def</span> <span class="nf">write_cnot</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span>
+                <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigx</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">write_rot</span><span class="p">(</span><span class="n">rads_list1</span><span class="p">,</span> <span class="n">herm_conj</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">herm_conj</span><span class="p">:</span>
+                <span class="n">rads_list2</span> <span class="o">=</span> <span class="n">rads_list</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">rads_list2</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">rads_list1</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write_one_bit_gate</span><span class="p">(</span>
+                <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot</span><span class="p">,</span> <span class="n">rads_list2</span><span class="p">)</span>
+
+        <span class="n">rads_x</span><span class="p">,</span> <span class="n">rads_y</span><span class="p">,</span> <span class="n">rads_z</span> <span class="o">=</span> <span class="n">rads_list</span>
+        <span class="n">theta_w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">rads_x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">rads_y</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">rads_z</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">cw</span><span class="p">,</span> <span class="n">sw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta_w</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta_w</span><span class="p">)</span>
+        <span class="n">wx</span><span class="p">,</span> <span class="n">wy</span><span class="p">,</span> <span class="n">wz</span> <span class="o">=</span> <span class="p">[</span><span class="n">rads_x</span><span class="o">/</span><span class="n">theta_w</span><span class="p">,</span> <span class="n">rads_y</span><span class="o">/</span><span class="n">theta_w</span><span class="p">,</span> <span class="n">rads_z</span><span class="o">/</span><span class="n">theta_w</span><span class="p">]</span>
+        <span class="n">TOL</span> <span class="o">=</span> <span class="mf">1E-6</span>
+
+        <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">theta_w</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">TOL</span><span class="p">:</span>  <span class="c1"># 1 cnot, 0 or 2 target rots</span>
+            <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">wy</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">TOL</span> <span class="ow">and</span> <span class="nb">abs</span><span class="p">(</span><span class="n">wz</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">TOL</span> <span class="ow">and</span> \
+                    <span class="nb">abs</span><span class="p">(</span><span class="n">delta</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">TOL</span><span class="p">:</span>  <span class="c1"># simple cnot, 0 target rots</span>
+                <span class="n">write_cnot</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>  <span class="c1"># 1 cnot, 2 target rots</span>
+                <span class="n">theta_a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span>
+                <span class="n">ax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">wx</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+                <span class="c1"># ax != 0 or else wy=wz=0, which was already considered</span>
+                <span class="n">ay</span> <span class="o">=</span> <span class="n">wy</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">ax</span><span class="p">)</span>
+                <span class="n">az</span> <span class="o">=</span> <span class="n">wz</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">ax</span><span class="p">)</span>
+                <span class="n">rads_list_a</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">theta_a</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">ax</span><span class="p">,</span> <span class="n">ay</span><span class="p">,</span> <span class="n">az</span><span class="p">]))</span>
+
+                <span class="n">write_rot</span><span class="p">(</span><span class="n">rads_list_a</span><span class="p">,</span> <span class="n">herm_conj</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">write_cnot</span><span class="p">()</span>
+                <span class="n">write_rot</span><span class="p">(</span><span class="n">rads_list_a</span><span class="p">)</span>
+                <span class="n">write_delta_rot</span><span class="p">()</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">do_checking</span><span class="p">:</span>
+                    <span class="n">mat_w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">(</span><span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot</span><span class="p">(</span><span class="o">*</span><span class="n">rads_list</span><span class="p">))</span>
+                    <span class="n">mat_a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">(</span><span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot</span><span class="p">(</span><span class="o">*</span><span class="n">rads_list_a</span><span class="p">))</span>
+                    <span class="n">mat_sigx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">(</span><span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigx</span><span class="p">())</span>
+                    <span class="n">diff</span> <span class="o">=</span> <span class="n">mat_w</span> <span class="o">-</span> <span class="n">mat_a</span><span class="o">*</span><span class="n">mat_sigx</span><span class="o">*</span><span class="n">mat_a</span><span class="o">.</span><span class="n">getH</span><span class="p">()</span>
+                    <span class="n">err</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">err</span> <span class="o">&gt;</span> <span class="n">TOL</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;1 cnot, 2 rots&quot;</span><span class="p">)</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span>
+                        <span class="k">assert</span> <span class="kc">False</span>
+            
+        <span class="k">elif</span> <span class="nb">abs</span><span class="p">(</span><span class="n">wx</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">TOL</span><span class="p">:</span>  <span class="c1"># 2 cnots, 2 target rots</span>
+            <span class="c1"># this is the same as the general case (2 cnots, 3 target rots)</span>
+            <span class="c1"># with alp=beta</span>
+            <span class="n">alp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">wz</span><span class="o">*</span><span class="n">sw</span><span class="p">,</span> <span class="n">cw</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+            <span class="n">gamma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">sw</span><span class="o">*</span><span class="n">wy</span><span class="p">,</span>
+                               <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">cw</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">wz</span><span class="o">*</span><span class="n">sw</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+            <span class="n">su2_pair_a</span> <span class="o">=</span> <span class="n">CGateSEO_writer</span><span class="o">.</span><span class="n">su2_mat_prod</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">alp</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])],</span>
+                <span class="p">[</span><span class="n">gamma</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])])</span>
+            <span class="n">rads_list_a</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">su2_pair_a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">su2_pair_a</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+            <span class="n">write_cnot</span><span class="p">()</span>
+            <span class="n">write_rot</span><span class="p">(</span><span class="n">rads_list_a</span><span class="p">,</span> <span class="n">herm_conj</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">write_cnot</span><span class="p">()</span>
+            <span class="n">write_rot</span><span class="p">(</span><span class="n">rads_list_a</span><span class="p">)</span>
+            <span class="n">write_delta_rot</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">do_checking</span><span class="p">:</span>
+                <span class="n">mat_w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">(</span><span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot</span><span class="p">(</span><span class="o">*</span><span class="n">rads_list</span><span class="p">))</span>
+                <span class="n">mat_a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">(</span><span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot</span><span class="p">(</span><span class="o">*</span><span class="n">rads_list_a</span><span class="p">))</span>
+                <span class="n">mat_sigx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">(</span><span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigx</span><span class="p">())</span>
+                <span class="n">diff</span> <span class="o">=</span> <span class="n">mat_w</span> <span class="o">-</span> <span class="n">mat_a</span><span class="o">*</span><span class="n">mat_sigx</span><span class="o">*</span><span class="n">mat_a</span><span class="o">.</span><span class="n">getH</span><span class="p">()</span><span class="o">*</span><span class="n">mat_sigx</span>
+                <span class="n">err</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">err</span> <span class="o">&gt;</span> <span class="n">TOL</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;2 cnot, 2 rots&quot;</span><span class="p">,</span> <span class="n">rads_list</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span>
+                    <span class="k">assert</span> <span class="kc">False</span>
+
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># 2 cnots, 3 target rots</span>
+            <span class="n">theta1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">wz</span><span class="o">*</span><span class="n">sw</span><span class="p">,</span> <span class="n">cw</span><span class="p">)</span>
+            <span class="n">theta2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">wx</span><span class="p">,</span> <span class="n">wy</span><span class="p">)</span>
+            <span class="n">alp</span> <span class="o">=</span> <span class="p">(</span><span class="n">theta1</span> <span class="o">+</span> <span class="n">theta2</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+            <span class="n">beta</span> <span class="o">=</span> <span class="p">(</span><span class="n">theta1</span> <span class="o">-</span> <span class="n">theta2</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+            <span class="n">gamma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">sw</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">wx</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">wy</span><span class="o">**</span><span class="mi">2</span><span class="p">),</span>
+                               <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">cw</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">wz</span><span class="o">*</span><span class="n">sw</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+            <span class="n">su2_pair_a</span> <span class="o">=</span> <span class="n">CGateSEO_writer</span><span class="o">.</span><span class="n">su2_mat_prod</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">alp</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])],</span>
+                <span class="p">[</span><span class="n">gamma</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])])</span>
+            <span class="n">su2_pair_b</span> <span class="o">=</span> <span class="n">CGateSEO_writer</span><span class="o">.</span><span class="n">su2_mat_prod</span><span class="p">(</span>
+                <span class="p">[</span><span class="o">-</span><span class="n">gamma</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])],</span>
+                <span class="p">[</span><span class="o">-</span><span class="p">(</span><span class="n">alp</span><span class="o">+</span><span class="n">beta</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])])</span>
+            <span class="n">su2_pair_c</span> <span class="o">=</span> <span class="p">[(</span><span class="n">beta</span><span class="o">-</span><span class="n">alp</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])]</span>
+            <span class="n">rads_list_a</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">su2_pair_a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">su2_pair_a</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">rads_list_b</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">su2_pair_b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">su2_pair_b</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">rads_list_c</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">su2_pair_c</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">su2_pair_c</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+            <span class="n">write_rot</span><span class="p">(</span><span class="n">rads_list_c</span><span class="p">)</span>
+            <span class="n">write_cnot</span><span class="p">()</span>
+            <span class="n">write_rot</span><span class="p">(</span><span class="n">rads_list_b</span><span class="p">)</span>
+            <span class="n">write_cnot</span><span class="p">()</span>
+            <span class="n">write_rot</span><span class="p">(</span><span class="n">rads_list_a</span><span class="p">)</span>
+            <span class="n">write_delta_rot</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">do_checking</span><span class="p">:</span>
+                <span class="n">mat_id</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">(</span><span class="n">OneBitGates</span><span class="o">.</span><span class="n">phase_fac</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
+                <span class="n">mat_w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">(</span><span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot</span><span class="p">(</span><span class="o">*</span><span class="n">rads_list</span><span class="p">))</span>
+                <span class="n">mat_a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">(</span><span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot</span><span class="p">(</span><span class="o">*</span><span class="n">rads_list_a</span><span class="p">))</span>
+                <span class="n">mat_b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">(</span><span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot</span><span class="p">(</span><span class="o">*</span><span class="n">rads_list_b</span><span class="p">))</span>
+                <span class="n">mat_c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">(</span><span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot</span><span class="p">(</span><span class="o">*</span><span class="n">rads_list_c</span><span class="p">))</span>
+                <span class="n">mat_sigx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">(</span><span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigx</span><span class="p">())</span>
+                <span class="n">diff</span> <span class="o">=</span> <span class="n">mat_w</span> <span class="o">-</span> <span class="n">mat_a</span><span class="o">*</span><span class="n">mat_sigx</span><span class="o">*</span><span class="n">mat_b</span><span class="o">*</span><span class="n">mat_sigx</span><span class="o">*</span><span class="n">mat_c</span>
+                <span class="n">err</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">err</span> <span class="o">&gt;</span> <span class="n">TOL</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;2 cnot, 3 rots, identity 1&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span>
+                    <span class="k">assert</span> <span class="kc">False</span>
+                <span class="n">diff</span> <span class="o">=</span> <span class="n">mat_id</span> <span class="o">-</span> <span class="n">mat_a</span><span class="o">*</span><span class="n">mat_b</span><span class="o">*</span><span class="n">mat_c</span>
+                <span class="n">err</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">err</span> <span class="o">&gt;</span> <span class="n">TOL</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;2 cnot, 3 rots, identity 2&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span>
+                    <span class="k">assert</span> <span class="kc">False</span></div>
+
+    <span class="c1"># def write_gen_n_controlled_u2(self, n_index_list, rads_list, delta=None):</span>
+    <span class="c1">#     &quot;&quot;&quot;</span>
+    <span class="c1">#     Writes an expansion for a U(2) matrix W(num_bits-1) that is</span>
+    <span class="c1">#     controlled by a &quot;generalized n&quot; equal to GN = n(n_index_list). Thus,</span>
+    <span class="c1">#     the gate written by this function equals W(num_bits-1)^GN.</span>
+    <span class="c1">#     Generalized n&#39;s are defined in the reference CGateExpander.pdf</span>
+    <span class="c1">#</span>
+    <span class="c1">#     Parameters</span>
+    <span class="c1">#     ----------</span>
+    <span class="c1">#     n_index_list : list[int]</span>
+    <span class="c1">#         indices of the generalized n</span>
+    <span class="c1">#</span>
+    <span class="c1">#     rads_list : list[float]</span>
+    <span class="c1">#         list of 3 angles in radians. If it equals [radx, rady, radz],</span>
+    <span class="c1">#         then U(2) gate given by e^{i*delta} exp(i*(radx*sigx + rady*sigy</span>
+    <span class="c1">#         + radz*sigz))</span>
+    <span class="c1">#</span>
+    <span class="c1">#     delta : float|None</span>
+    <span class="c1">#         U(2) gate being controlled equals e^{i*delta} times SU(2) gate</span>
+    <span class="c1">#</span>
+    <span class="c1">#     Returns</span>
+    <span class="c1">#     -------</span>
+    <span class="c1">#     None</span>
+    <span class="c1">#</span>
+    <span class="c1">#     &quot;&quot;&quot;</span>
+    <span class="c1">#</span>
+    <span class="c1">#     num_bits = self.emb.num_bits_bef</span>
+    <span class="c1">#</span>
+    <span class="c1">#     for k in range(len(n_index_list)-1):</span>
+    <span class="c1">#         tar_pos = n_index_list[k+1]</span>
+    <span class="c1">#         trol_pos = n_index_list[k]</span>
+    <span class="c1">#         trols = Controls.new_knob(num_bits, trol_pos, True)</span>
+    <span class="c1">#         self.write_controlled_one_bit_gate(</span>
+    <span class="c1">#             tar_pos, trols, OneBitGates.sigx)</span>
+    <span class="c1">#</span>
+    <span class="c1">#     self.write_1c_u2(num_bits - 1, n_index_list[-1], rads_list, delta)</span>
+    <span class="c1">#</span>
+    <span class="c1">#     for k in reversed(range(len(n_index_list)-1)):</span>
+    <span class="c1">#         tar_pos = n_index_list[k+1]</span>
+    <span class="c1">#         trol_pos = n_index_list[k]</span>
+    <span class="c1">#         trols = Controls.new_knob(num_bits, trol_pos, True)</span>
+    <span class="c1">#         self.write_controlled_one_bit_gate(</span>
+    <span class="c1">#             tar_pos, trols, OneBitGates.sigx)</span>
+    <span class="c1">#</span>
+    <span class="c1"># def write_internal(self, rads_list, delta=None):</span>
+    <span class="c1">#     &quot;&quot;&quot;</span>
+    <span class="c1">#     This internal function is used in write() and is less general than</span>
+    <span class="c1">#     the latter. It expands an c_u2 into a product of several</span>
+    <span class="c1">#     &quot;generalized n&quot; controlled U(2) gates.</span>
+    <span class="c1">#</span>
+    <span class="c1">#     Parameters</span>
+    <span class="c1">#     ----------</span>
+    <span class="c1">#     rads_list : list[float]</span>
+    <span class="c1">#         list of 3 angles in radians. If it equals [radx, rady, radz],</span>
+    <span class="c1">#         then U(2) gate given by e^{i*delta} exp(i*(radx*sigx + rady*sigy</span>
+    <span class="c1">#         + radz*sigz))</span>
+    <span class="c1">#</span>
+    <span class="c1">#     delta : float|None</span>
+    <span class="c1">#         U(2) gate being controlled equals e^{i*delta} times SU(2) gate</span>
+    <span class="c1">#</span>
+    <span class="c1">#     Returns</span>
+    <span class="c1">#     -------</span>
+    <span class="c1">#     None</span>
+    <span class="c1">#</span>
+    <span class="c1">#     &quot;&quot;&quot;</span>
+    <span class="c1">#     num_bits = self.emb.num_bits_bef</span>
+    <span class="c1">#     for num_boxes in range(1, num_bits):</span>
+    <span class="c1">#         for comb in it.combinations(range(0, num_bits-1), num_boxes):</span>
+    <span class="c1">#             n_index_list = sorted(list(comb), reverse=True)</span>
+    <span class="c1">#             sign = 1</span>
+    <span class="c1">#             if len(comb) % 2 == 0:</span>
+    <span class="c1">#                 sign = -1</span>
+    <span class="c1">#             new_rads_list = list(</span>
+    <span class="c1">#                 sign*np.array(rads_list)/(1 &lt;&lt; (num_bits-2)))</span>
+    <span class="c1">#             if delta:</span>
+    <span class="c1">#                 new_delta = sign*delta/(1 &lt;&lt; (num_bits-2))</span>
+    <span class="c1">#             else:</span>
+    <span class="c1">#                 new_delta = None</span>
+    <span class="c1">#             self.write_gen_n_controlled_u2(</span>
+    <span class="c1">#                 n_index_list, new_rads_list, new_delta)</span>
+
+<div class="viewcode-block" id="CGateSEO_writer.write_internal"><a class="viewcode-back" href="../../qubiter.CGateSEO_writer.html#qubiter.CGateSEO_writer.CGateSEO_writer.write_internal">[docs]</a>    <span class="k">def</span> <span class="nf">write_internal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rads_list</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This internal function is used in write() and is less general than</span>
+<span class="sd">        the latter. It expands an c_u2 into a product of 1c_u2 with</span>
+<span class="sd">        intervening cnots.</span>
+
+<span class="sd">        In the CGateSEO_writer.pdf documentation, we show that any c_u2 can</span>
+<span class="sd">        be expanded into a product of several &quot;generalized n&quot; controlled U(</span>
+<span class="sd">        2) gates of the form  W(num_bits-1)^GN, wherein U(2) matrix W(</span>
+<span class="sd">        num_bits-1) is controlled by a &quot;generalized n&quot; equal to GN = n(</span>
+<span class="sd">        n_index_list)</span>
+
+<span class="sd">        Since the factors W(num_bits-1)^GN in the product commute amongst</span>
+<span class="sd">        themselves, it is possible and convenient to order them in Gray code</span>
+<span class="sd">        order (Qubiter knows about Gray Code via its class BitVector).</span>
+<span class="sd">        Ordering them in Gray Code allows this function to cancel some cnots</span>
+<span class="sd">        from adjacent GN.</span>
+
+<span class="sd">        An earlier version of this function, now commented, did not use Gray</span>
+<span class="sd">        Code and used more cnots than this one.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        rads_list : list[float]</span>
+<span class="sd">            list of 3 angles in radians. If it equals [radx, rady, radz],</span>
+<span class="sd">            then U(2) gate given by e^{i*delta} exp(i*(radx*sigx + rady*sigy</span>
+<span class="sd">            + radz*sigz))</span>
+
+<span class="sd">        delta : float|None</span>
+<span class="sd">            U(2) gate being controlled equals e^{i*delta} times SU(2) gate</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">num_bits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_bef</span>
+        <span class="n">num_trols</span> <span class="o">=</span> <span class="n">num_bits</span><span class="o">-</span><span class="mi">1</span>
+        <span class="n">max_f</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_trols</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
+
+        <span class="k">def</span> <span class="nf">write_cnot</span><span class="p">(</span><span class="n">tar_bpos</span><span class="p">,</span> <span class="n">trol_bpos</span><span class="p">):</span>
+            <span class="n">trol</span> <span class="o">=</span> <span class="n">Controls</span><span class="o">.</span><span class="n">new_knob</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">trol_bpos</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="n">tar_bpos</span><span class="p">,</span> <span class="n">trol</span><span class="p">,</span>
+                                               <span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigx</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">write_cnot_stair</span><span class="p">(</span><span class="n">bvec</span><span class="p">):</span>
+            <span class="n">tar_bpos</span> <span class="o">=</span> <span class="n">bvec</span><span class="o">.</span><span class="n">find_rightmost_T_bit</span><span class="p">()</span>
+            <span class="n">trol_bpos</span> <span class="o">=</span> <span class="n">tar_bpos</span>
+            <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="n">trol_bpos</span> <span class="o">=</span> <span class="n">bvec</span><span class="o">.</span><span class="n">find_T_bit_to_left_of</span><span class="p">(</span><span class="n">trol_bpos</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">trol_bpos</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="k">break</span>
+                <span class="n">write_cnot</span><span class="p">(</span><span class="n">tar_bpos</span><span class="p">,</span> <span class="n">trol_bpos</span><span class="p">)</span>
+
+        <span class="n">cur_bvec</span> <span class="o">=</span> <span class="n">BitVector</span><span class="p">(</span><span class="n">num_trols</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">prev_bvec</span> <span class="o">=</span> <span class="n">BitVector</span><span class="p">(</span><span class="n">num_trols</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">f</span><span class="p">,</span> <span class="n">lazy</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+        <span class="n">f</span><span class="p">,</span> <span class="n">lazy</span> <span class="o">=</span> <span class="n">BitVector</span><span class="o">.</span><span class="n">lazy_advance</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">lazy</span><span class="p">)</span>
+        <span class="n">cur_bvec</span><span class="o">.</span><span class="n">dec_rep</span> <span class="o">=</span> <span class="n">lazy</span>
+        <span class="k">while</span> <span class="n">f</span> <span class="o">&lt;=</span> <span class="n">max_f</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">f, lazy&quot;</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">lazy</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">write_NOTA</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">prev_bvec</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;-&gt;&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">cur_bvec</span><span class="p">))</span>
+            <span class="n">sign</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">cur_bvec</span><span class="o">.</span><span class="n">get_num_T_bits</span><span class="p">()</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">sign</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+            <span class="n">new_rads_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+                <span class="n">sign</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">rads_list</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">num_bits</span><span class="o">-</span><span class="mi">2</span><span class="p">)))</span>
+            <span class="k">if</span> <span class="n">delta</span><span class="p">:</span>
+                <span class="n">new_delta</span> <span class="o">=</span> <span class="n">sign</span><span class="o">*</span><span class="n">delta</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">num_bits</span><span class="o">-</span><span class="mi">2</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">new_delta</span> <span class="o">=</span> <span class="kc">None</span>
+
+            <span class="n">diff_bvec</span> <span class="o">=</span> <span class="n">BitVector</span><span class="o">.</span><span class="n">new_with_T_on_diff</span><span class="p">(</span><span class="n">cur_bvec</span><span class="p">,</span> <span class="n">prev_bvec</span><span class="p">)</span>
+            <span class="n">diff_bpos</span> <span class="o">=</span> <span class="n">diff_bvec</span><span class="o">.</span><span class="n">find_rightmost_T_bit</span><span class="p">()</span>
+            <span class="n">min_prev_bpos</span> <span class="o">=</span> <span class="n">prev_bvec</span><span class="o">.</span><span class="n">find_rightmost_T_bit</span><span class="p">()</span>
+            <span class="n">min_cur_bpos</span> <span class="o">=</span> <span class="n">cur_bvec</span><span class="o">.</span><span class="n">find_rightmost_T_bit</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">f</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># first 1c_u2 has not cnots preceding it</span>
+                <span class="k">if</span> <span class="n">min_cur_bpos</span> <span class="o">==</span> <span class="n">min_prev_bpos</span><span class="p">:</span>
+                    <span class="n">write_cnot</span><span class="p">(</span><span class="n">min_cur_bpos</span><span class="p">,</span> <span class="n">diff_bpos</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">write_cnot_stair</span><span class="p">(</span><span class="n">prev_bvec</span><span class="p">)</span>
+                    <span class="n">write_cnot_stair</span><span class="p">(</span><span class="n">cur_bvec</span><span class="p">)</span>
+
+            <span class="n">u2_trol_bpos</span> <span class="o">=</span> <span class="n">min_cur_bpos</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write_1c_u2</span><span class="p">(</span>
+                <span class="n">num_bits</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">u2_trol_bpos</span><span class="p">,</span> <span class="n">new_rads_list</span><span class="p">,</span> <span class="n">new_delta</span><span class="p">)</span>
+            <span class="n">prev_bvec</span> <span class="o">=</span> <span class="n">BitVector</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">cur_bvec</span><span class="p">)</span>
+            <span class="n">f</span><span class="p">,</span> <span class="n">lazy</span> <span class="o">=</span> <span class="n">BitVector</span><span class="o">.</span><span class="n">lazy_advance</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">lazy</span><span class="p">)</span>
+            <span class="n">cur_bvec</span><span class="o">.</span><span class="n">dec_rep</span> <span class="o">=</span> <span class="n">lazy</span></div>
+
+<div class="viewcode-block" id="CGateSEO_writer.write_hads"><a class="viewcode-back" href="../../qubiter.CGateSEO_writer.html#qubiter.CGateSEO_writer.CGateSEO_writer.write_hads">[docs]</a>    <span class="k">def</span> <span class="nf">write_hads</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trol_kinds</span><span class="p">,</span> <span class="n">herm_conj</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Writes a chain of cnots that are useful when some of the controls of</span>
+<span class="sd">        the c_u2 being considered are n_bar = P_0 = |0&gt;&lt;0| instead of n =</span>
+<span class="sd">        P_1 = |1&gt;&lt;1|. We are using the identity sigx n sigx = nbar to</span>
+<span class="sd">        convert n&#39;s to nbar&#39;s.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        trol_kinds : list[bool]</span>
+<span class="sd">            A list of control kinds. True for n=P_1 and False for n_bar=P_0</span>
+<span class="sd">        herm_conj : bool</span>
+<span class="sd">            When this is True, writes Hermitian conjugate of expansion.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">num_trols</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">trol_kinds</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">herm_conj</span><span class="p">:</span>
+            <span class="n">range1</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_trols</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">range1</span> <span class="o">=</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">num_trols</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">range1</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">trol_kinds</span><span class="p">[</span><span class="n">k</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">write_one_bit_gate</span><span class="p">(</span><span class="n">num_trols</span><span class="o">-</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigx</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CGateSEO_writer.write"><a class="viewcode-back" href="../../qubiter.CGateSEO_writer.html#qubiter.CGateSEO_writer.CGateSEO_writer.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trol_kinds</span><span class="p">,</span> <span class="n">u2_fun</span><span class="p">,</span> <span class="n">fun_arg_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This is the most general function of this class. All other functions</span>
+<span class="sd">        of the class are mostly internal and are called by this function.</span>
+<span class="sd">        This function achieves the main goal of the class, which is to give</span>
+<span class="sd">        various expansions of an c_u2 (controlled U(2) matrix). For</span>
+<span class="sd">        one_line=True, this function just calls</span>
+<span class="sd">        write_controlled_one_bit_gate() of the parent class. For</span>
+<span class="sd">        one_line=False, it gives an expansion of the c_u2.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        trol_kinds : list[bool]</span>
+<span class="sd">            list of control types. Type is False if nbar=P_0 and True if n=P_1</span>
+<span class="sd">        u2_fun : function</span>
+<span class="sd">            One of the functions in class OneBitGates</span>
+<span class="sd">        fun_arg_list : list[int|float]</span>
+<span class="sd">            list of arguments of u2_fun</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">num_bits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_bef</span>
+        <span class="n">tar_bit_pos</span> <span class="o">=</span> <span class="n">num_bits</span><span class="o">-</span><span class="mi">1</span>
+        <span class="n">num_trols</span> <span class="o">=</span> <span class="n">num_bits</span><span class="o">-</span><span class="mi">1</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">trol_kinds</span><span class="p">)</span> <span class="o">==</span> <span class="n">num_trols</span>
+        <span class="n">trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)</span>
+        <span class="n">trols</span><span class="o">.</span><span class="n">bit_pos_to_kind</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">trol_kinds</span><span class="p">[</span><span class="n">num_bits</span><span class="o">-</span><span class="n">k</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+                                 <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_bits</span><span class="o">-</span><span class="mi">1</span><span class="p">)}</span>
+        <span class="n">trols</span><span class="o">.</span><span class="n">refresh_lists</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">one_line</span> <span class="ow">or</span> <span class="n">num_trols</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span>
+                    <span class="n">trols</span><span class="p">,</span> <span class="n">u2_fun</span><span class="p">,</span> <span class="n">fun_arg_list</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># insert opening Hadamards for controls equal to n_bar = |0&gt;&lt;0|</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_hads</span><span class="p">(</span><span class="n">trols</span><span class="o">.</span><span class="n">kinds</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">u2_fun</span> <span class="o">==</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">P_0_phase_fac</span><span class="p">:</span>
+            <span class="n">rads</span> <span class="o">=</span> <span class="n">fun_arg_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write_internal</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rads</span> <span class="o">/</span> <span class="mi">2</span><span class="p">],</span> <span class="n">rads</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">u2_fun</span> <span class="o">==</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">P_1_phase_fac</span><span class="p">:</span>
+            <span class="n">rads</span> <span class="o">=</span> <span class="n">fun_arg_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write_internal</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">rads</span> <span class="o">/</span> <span class="mi">2</span><span class="p">],</span> <span class="n">rads</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">u2_fun</span> <span class="o">==</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigx</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">num_bits</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="c1"># If it&#39;s a CNOT, no expansion necessary</span>
+                <span class="c1"># Control must be set to True because</span>
+                <span class="c1"># opening and closing Hadamards take care of False</span>
+                <span class="n">trols1</span> <span class="o">=</span> <span class="n">Controls</span><span class="o">.</span><span class="n">new_knob</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span>
+                    <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">trols1</span><span class="p">,</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigx</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">write_internal</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">u2_fun</span> <span class="o">==</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigy</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write_internal</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">u2_fun</span> <span class="o">==</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigz</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write_internal</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">],</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">u2_fun</span> <span class="o">==</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">had2</span><span class="p">:</span>
+            <span class="n">rads</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write_internal</span><span class="p">([</span><span class="n">rads</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rads</span><span class="p">],</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">u2_fun</span> <span class="o">==</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">:</span>
+            <span class="n">rads</span> <span class="o">=</span> <span class="n">fun_arg_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">axis</span> <span class="o">=</span> <span class="n">fun_arg_list</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">axis</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">write_internal</span><span class="p">([</span><span class="n">rads</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">axis</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">write_internal</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">rads</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">axis</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">write_internal</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rads</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="kc">False</span>
+        <span class="k">elif</span> <span class="n">u2_fun</span> <span class="o">==</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write_internal</span><span class="p">(</span><span class="n">fun_arg_list</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">u2_fun</span> <span class="o">==</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">u2</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write_internal</span><span class="p">(</span><span class="n">fun_arg_list</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">fun_arg_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;writing an unsupported controlled gate&quot;</span>
+
+        <span class="c1"># insert closing Hadamards for controls equal to n_bar = |0&gt;&lt;0|</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_hads</span><span class="p">(</span><span class="n">trols</span><span class="o">.</span><span class="n">kinds</span><span class="p">,</span> <span class="n">herm_conj</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">qubiter.SEO_MatrixProduct</span> <span class="k">import</span> <span class="o">*</span>
+    <span class="kn">from</span> <span class="nn">qubiter.OneBitGates</span> <span class="k">import</span> <span class="o">*</span>
+
+    <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+
+        <span class="n">num_bits_bef</span> <span class="o">=</span> <span class="mi">4</span>
+        <span class="n">num_bits_aft</span> <span class="o">=</span> <span class="mi">5</span>
+        <span class="n">bit_map</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">num_bits_bef</span><span class="p">))</span>
+        <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_bits_bef</span><span class="p">,</span> <span class="n">num_bits_aft</span><span class="p">,</span> <span class="n">bit_map</span><span class="p">)</span>
+
+        <span class="c1"># trol_kinds in ZL convention</span>
+        <span class="n">trol_kinds</span> <span class="o">=</span> <span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">]</span>
+
+        <span class="n">wr</span> <span class="o">=</span> <span class="n">CGateSEO_writer</span><span class="p">(</span><span class="s1">&#39;cgate_expansions&#39;</span><span class="p">,</span> <span class="n">emb</span><span class="p">,</span>
+                <span class="n">do_checking</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="n">u2_fun_to_fun_arg_list</span> <span class="o">=</span> <span class="n">co</span><span class="o">.</span><span class="n">OrderedDict</span><span class="p">((</span>
+            <span class="p">(</span><span class="n">OneBitGates</span><span class="o">.</span><span class="n">P_0_phase_fac</span><span class="p">,</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">3</span><span class="p">]),</span>
+            <span class="p">(</span><span class="n">OneBitGates</span><span class="o">.</span><span class="n">P_1_phase_fac</span><span class="p">,</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">3</span><span class="p">]),</span>
+            <span class="p">(</span><span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigx</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigy</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigz</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">OneBitGates</span><span class="o">.</span><span class="n">had2</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">]),</span>
+            <span class="p">(</span><span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot</span><span class="p">,</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">6</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">3</span><span class="p">])</span>
+        <span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">u2_fun</span><span class="p">,</span> <span class="n">fun_arg_list</span> <span class="ow">in</span> <span class="n">u2_fun_to_fun_arg_list</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+
+            <span class="n">wr</span><span class="o">.</span><span class="n">write_NOTA</span><span class="p">(</span><span class="s1">&#39;--------new u2 gate --------------------------&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">one_line</span> <span class="ow">in</span> <span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">]:</span>
+                <span class="n">wr</span><span class="o">.</span><span class="n">one_line</span> <span class="o">=</span> <span class="n">one_line</span>
+                <span class="k">if</span> <span class="n">one_line</span><span class="p">:</span>
+                    <span class="n">wr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">trol_kinds</span><span class="p">,</span> <span class="n">u2_fun</span><span class="p">,</span> <span class="n">fun_arg_list</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">expand_1c_u2</span> <span class="ow">in</span> <span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">]:</span>
+                        <span class="n">wr</span><span class="o">.</span><span class="n">expand_1c_u2</span> <span class="o">=</span> <span class="n">expand_1c_u2</span>
+                        <span class="n">wr</span><span class="o">.</span><span class="n">write_NOTA</span><span class="p">(</span>
+                            <span class="s1">&#39;--------expand_1c_u2=&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">expand_1c_u2</span><span class="p">))</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">u2_fun</span><span class="p">,</span>
+                              <span class="s2">&quot;one_line=&quot;</span><span class="p">,</span> <span class="n">one_line</span><span class="p">,</span> <span class="s2">&quot;expand=&quot;</span><span class="p">,</span> <span class="n">expand_1c_u2</span><span class="p">)</span>
+                        <span class="n">wr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">trol_kinds</span><span class="p">,</span> <span class="n">u2_fun</span><span class="p">,</span> <span class="n">fun_arg_list</span><span class="p">)</span>
+
+        <span class="n">wr</span><span class="o">.</span><span class="n">close_files</span><span class="p">()</span>
+
+        <span class="c1"># a check that an expansion multiplies to original</span>
+        <span class="n">num_bits</span> <span class="o">=</span> <span class="mi">5</span>
+        <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">)</span>
+        <span class="c1"># trol_kinds in ZL convention</span>
+        <span class="n">trol_kinds</span> <span class="o">=</span> <span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">]</span>
+        <span class="n">file_prefix</span> <span class="o">=</span> <span class="s1">&#39;cgate_expan_mat_prod&#39;</span>
+
+        <span class="n">wr</span> <span class="o">=</span> <span class="n">CGateSEO_writer</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">emb</span><span class="p">)</span>
+
+        <span class="n">u2_fun</span> <span class="o">=</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot_ax</span>
+        <span class="n">rads</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">3</span>
+
+        <span class="n">wr</span><span class="o">.</span><span class="n">one_line</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">wr</span><span class="o">.</span><span class="n">write_NOTA</span><span class="p">(</span><span class="s2">&quot;one line=True-----------&quot;</span><span class="p">)</span>
+        <span class="n">wr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">trol_kinds</span><span class="p">,</span> <span class="n">u2_fun</span><span class="p">,</span> <span class="p">[</span><span class="n">rads</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+
+        <span class="n">wr</span><span class="o">.</span><span class="n">write_NOTA</span><span class="p">(</span><span class="s2">&quot;herm. conj, one line=False-----------&quot;</span><span class="p">)</span>
+        <span class="n">wr</span><span class="o">.</span><span class="n">one_line</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">wr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">trol_kinds</span><span class="p">,</span> <span class="n">u2_fun</span><span class="p">,</span> <span class="p">[</span><span class="o">-</span><span class="n">rads</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+
+        <span class="n">wr</span><span class="o">.</span><span class="n">close_files</span><span class="p">()</span>
+
+        <span class="n">mp</span> <span class="o">=</span> <span class="n">SEO_MatrixProduct</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">)</span>
+        <span class="n">id_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_bits</span><span class="p">,)))</span>
+        <span class="n">err</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">mp</span><span class="o">.</span><span class="n">prod_arr</span> <span class="o">-</span> <span class="n">id_mat</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;err=&quot;</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+    <span class="n">main</span><span class="p">()</span>
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Robert R. Tucci &amp; Qubiter contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

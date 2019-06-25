@@ -1,0 +1,844 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qubiter.SEO_simulator module &mdash; qubiter 1.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> qubiter
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rosetta.html">Qubiter Rosetta Stone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classgraph.html">Qubiter’s Class Graph</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">qubiter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>qubiter.SEO_simulator module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/qubiter.SEO_simulator.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-qubiter.SEO_simulator">
+<span id="qubiter-seo-simulator-module"></span><h1>qubiter.SEO_simulator module<a class="headerlink" href="#module-qubiter.SEO_simulator" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="qubiter.SEO_simulator.SEO_simulator">
+<em class="property">class </em><code class="sig-prename descclassname">qubiter.SEO_simulator.</code><code class="sig-name descname">SEO_simulator</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_bits</em>, <em class="sig-param">init_st_vec=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="qubiter.SEO_reader.html#qubiter.SEO_reader.SEO_reader" title="qubiter.SEO_reader.SEO_reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">qubiter.SEO_reader.SEO_reader</span></code></a></p>
+<p>This class simulates the evolution of a quantum state vector.</p>
+<p>This class has SEO_reader as a parent. Each line of an English file is
+read by the parent class and handed over to the <a href="#id19"><span class="problematic" id="id20">use_</span></a> functions of this
+simulator class. The <a href="#id21"><span class="problematic" id="id22">use_</span></a>  functions multiply the current state vector by
+the unitary matrix that represents the latest line read.</p>
+<p>An initial state vector can be entered via the constructor or else it is
+set to the ground state automatically by the constructor.</p>
+<p>3 kinds (called 0, 1, 2) of measurements MEAS are allowed. A type 0
+measurement inserts a projector <a href="#id1"><span class="problematic" id="id2">|0&gt;&lt;0|</span></a> = n = P_0 at the target bit. A
+type 1 measurement inserts a projector <a href="#id3"><span class="problematic" id="id4">|1&gt;&lt;1|</span></a> = nbar = P_1 at the target
+bit. A type 2 measurement stores a copy of the state vector after <a href="#id5"><span class="problematic" id="id6">|0&gt;&lt;0|</span></a>
+has been applied, and another copy after <a href="#id7"><span class="problematic" id="id8">|1&gt;&lt;1|</span></a> has been applied.</p>
+<p>self.cur_st_vec_dict is a dictionary of strings (called branch keys) to
+state vectors StateVec on num_bits qubits. We will refer to each state
+vec in the dict as a branch. Initially, this dict contains a single
+branch with branch key = “pure”. A measurement MEAS of kinds 0 or 1 does
+not change the number of branches in the dict, but a measurement of kind
+2 doubles their number.</p>
+<p>Note that since projectors are not unitary matrices, the branches of
+cur_st_vec_dict are not expected have normalized state vectors as values
+except when there is only a single branch.</p>
+<p>If cur_st_vec_dict contains as values the states <a href="#id9"><span class="problematic" id="id10">|br0&gt;, |br1&gt;, |br2&gt;,
+...], then one can construct the density matrix of that state as rho =
+|br0&gt;&lt;br0|</span></a> + <a href="#id11"><span class="problematic" id="id12">|br1&gt;&lt;br1|</span></a> + <a href="#id13"><span class="problematic" id="id14">|br2&gt;&lt;br2|</span></a> + … divided by a number so that
+trace(rho)=1. In other words, cur_st_vec_dict is just a particular way
+of storing the density matrix of a state. A state with a single branch
+is a pure state, but a state with more than one branch may not be.</p>
+<p>An item of cur_st_vec_dict may be key=some string, value=None. This
+means the state vector of that branch is zero.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cached_sts</strong> (<em>dict</em><em>[</em><em>int</em><em>, </em><em>dict</em><em>(</em><em>str</em><em>, </em><a class="reference internal" href="qubiter.StateVec.html#qubiter.StateVec.StateVec" title="qubiter.StateVec.StateVec"><em>StateVec</em></a><em>)</em><em>]</em>) – A dictionary mapping an int to past values of self.cur_st_vec_dict.
+Used by use_PRINT() sometimes.</p></li>
+<li><p><strong>cur_st_vec_dict</strong> (<em>dict</em><em>(</em><em>str</em><em>, </em><a class="reference internal" href="qubiter.StateVec.html#qubiter.StateVec.StateVec" title="qubiter.StateVec.StateVec"><em>StateVec</em></a><em>)</em>) – dictionary with key= branch_key string and value= StateVec|None. If
+there is a single item in dict, the dict represents a pure state and
+the key is “pure”. If there is more than one item, the dict
+represents a mixed state and each branch key is a string that
+uniquely characterizes the measured controls. For example, if it has
+been measured previously (type 2 measurement only) that qubit 2 is
+True and qubit 4 is False, the branch key will be ‘4F2T’.</p></li>
+<li><p><strong>lib</strong> (<em>str</em>) – tensor library. Either ‘np’ for numpy or ‘tf’ for tensorflow</p></li>
+<li><p><a class="reference internal" href="#qubiter.SEO_simulator.SEO_simulator.tensordot" title="qubiter.SEO_simulator.SEO_simulator.tensordot"><strong>tensordot</strong></a> (<em>function</em>) – </p></li>
+<li><p><a class="reference internal" href="#qubiter.SEO_simulator.SEO_simulator.transpose" title="qubiter.SEO_simulator.SEO_simulator.transpose"><strong>transpose</strong></a> (<em>function</em>) – </p></li>
+<li><p><strong>use_tf</strong> (<em>bool</em>) – True iff using TensorFlow Eager. False by default</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="qubiter.SEO_simulator.SEO_simulator.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_bits</em>, <em class="sig-param">init_st_vec=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_prefix</strong> (<em>str</em>) – </p></li>
+<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>init_st_vec</strong> (<a class="reference internal" href="qubiter.StateVec.html#qubiter.StateVec.StateVec" title="qubiter.StateVec.StateVec"><em>StateVec</em></a>) – get this using the functions StateVec.get_ground_st_vec() or
+StateVec.get_standard_basis_st_vec().</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.SEO_simulator.SEO_simulator.branch_is_part_of_mcase">
+<em class="property">static </em><code class="sig-name descname">branch_is_part_of_mcase</code><span class="sig-paren">(</span><em class="sig-param">br_trols</em>, <em class="sig-param">case_trols</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator.branch_is_part_of_mcase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.branch_is_part_of_mcase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True iff the controls br_trols defining a branch of
+self.cur_st_vec_dict agree with the controls case_trols defining a
+case measured.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>br_trols</strong> (<a class="reference internal" href="qubiter.Controls.html#qubiter.Controls.Controls" title="qubiter.Controls.Controls"><em>Controls</em></a>) – </p></li>
+<li><p><strong>case_trols</strong> (<a class="reference internal" href="qubiter.Controls.html#qubiter.Controls.Controls" title="qubiter.Controls.Controls"><em>Controls</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.SEO_simulator.SEO_simulator.convert_tensors_to_numpy">
+<code class="sig-name descname">convert_tensors_to_numpy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator.convert_tensors_to_numpy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.convert_tensors_to_numpy" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is meant to be overridden to replace tensorflow tensors
+(or some other non-numpy tensor type) by numpy tensors.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.SEO_simulator.SEO_simulator.convert_tensors_to_tf">
+<code class="sig-name descname">convert_tensors_to_tf</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator.convert_tensors_to_tf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.convert_tensors_to_tf" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is meant to be overridden to replace numpy tensors by
+tensorflow tensors (or some other non-numpy tensor type).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.SEO_simulator.SEO_simulator.describe_st_vec_dict">
+<code class="sig-name descname">describe_st_vec_dict</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator.describe_st_vec_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.describe_st_vec_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calls method with same name in class StateVec. It prints a
+description of the current state vector dictionary. Can call this at
+the end, after running through whole circuit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>kwargs</strong> (<em>dict</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.SEO_simulator.SEO_simulator.do_array_assignment_workaround">
+<code class="sig-name descname">do_array_assignment_workaround</code><span class="sig-paren">(</span><em class="sig-param">br_key</em>, <em class="sig-param">slicex</em>, <em class="sig-param">sub_arr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator.do_array_assignment_workaround"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.do_array_assignment_workaround" title="Permalink to this definition">¶</a></dt>
+<dd><p>internal function used in <a href="#id23"><span class="problematic" id="id24">evolve_</span></a> methods iff autograd is on or
+use_tf is True. Should have same effect as</p>
+<p>self.cur_st_vec_dict[br_key].arr[slicex] = sub_arr</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>br_key</strong> (<em>str</em>) – </p></li>
+<li><p><strong>slicex</strong> (<em>tuple</em>) – </p></li>
+<li><p><strong>sub_arr</strong> (<em>np.ndarray</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.SEO_simulator.SEO_simulator.do_more_init_before_reading">
+<code class="sig-name descname">do_more_init_before_reading</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator.do_more_init_before_reading"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.do_more_init_before_reading" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stub. Called in SEO_simulator.__init__ immediately before calling
+SEO_reader.__init__</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.SEO_simulator.SEO_simulator.evolve_by_controlled_bit_swap">
+<code class="sig-name descname">evolve_by_controlled_bit_swap</code><span class="sig-paren">(</span><em class="sig-param">bit1</em>, <em class="sig-param">bit2</em>, <em class="sig-param">controls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator.evolve_by_controlled_bit_swap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.evolve_by_controlled_bit_swap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evolve each branch of cur_st_vec_dict by controlled bit swap iff the
+bit swap line is (1) outside of any IF_M block, or (2) it is inside
+such a block, and it satisfies self.mcase_trols.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bit1</strong> (<em>int</em>) – </p></li>
+<li><p><strong>bit2</strong> (<em>int</em>) – bit1 and bit2 are the positions of the 2 bits being swapped.</p></li>
+<li><p><strong>controls</strong> (<a class="reference internal" href="qubiter.Controls.html#qubiter.Controls.Controls" title="qubiter.Controls.Controls"><em>Controls</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.SEO_simulator.SEO_simulator.evolve_by_controlled_one_bit_gate">
+<code class="sig-name descname">evolve_by_controlled_one_bit_gate</code><span class="sig-paren">(</span><em class="sig-param">tar_bit_pos</em>, <em class="sig-param">controls</em>, <em class="sig-param">one_bit_gate</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator.evolve_by_controlled_one_bit_gate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.evolve_by_controlled_one_bit_gate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evolve each branch of cur_st_vec_dict by controlled one bit gate (
+from class OneBitGates) iff the controlled one bit gate line is (1)
+outside of an IF_M block, or (2) it is inside such a block, and it
+satisfies self.mcase_trols. Note one_bit_gate is entered as
+np.ndarray.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tar_bit_pos</strong> (<em>int</em>) – bit position of target of one bit gate.</p></li>
+<li><p><strong>controls</strong> (<a class="reference internal" href="qubiter.Controls.html#qubiter.Controls.Controls" title="qubiter.Controls.Controls"><em>Controls</em></a>) – </p></li>
+<li><p><strong>one_bit_gate</strong> (<em>np.ndarray</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.SEO_simulator.SEO_simulator.finalize_next_line">
+<code class="sig-name descname">finalize_next_line</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator.finalize_next_line"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.finalize_next_line" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints running documentary at the end of the reading of each line.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.SEO_simulator.SEO_simulator.get_br_key_with_new_link">
+<em class="property">static </em><code class="sig-name descname">get_br_key_with_new_link</code><span class="sig-paren">(</span><em class="sig-param">br_key</em>, <em class="sig-param">new_bit_pos</em>, <em class="sig-param">new_kind</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator.get_br_key_with_new_link"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.get_br_key_with_new_link" title="Permalink to this definition">¶</a></dt>
+<dd><p>Say new_bit_pos=2 and new_kind=True. This returns a new branch key
+with ‘2T’ added to the end of the string br_key</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>br_key</strong> (<em>str</em>) – </p></li>
+<li><p><strong>new_bit_pos</strong> (<em>int</em>) – </p></li>
+<li><p><strong>new_kind</strong> (<em>bool</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.SEO_simulator.SEO_simulator.get_controls_from_br_key">
+<code class="sig-name descname">get_controls_from_br_key</code><span class="sig-paren">(</span><em class="sig-param">br_key</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator.get_controls_from_br_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.get_controls_from_br_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a Controls object built from br_key. br_key is assumed to be
+a str key for self.cur_st_vec_dict</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>br_key</strong> (<em>str</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="qubiter.Controls.html#qubiter.Controls.Controls" title="qubiter.Controls.Controls">Controls</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.SEO_simulator.SEO_simulator.get_counts">
+<code class="sig-name descname">get_counts</code><span class="sig-paren">(</span><em class="sig-param">num_shots</em>, <em class="sig-param">omit_zero_counts=True</em>, <em class="sig-param">use_bin_labels=True</em>, <em class="sig-param">rand_seed=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator.get_counts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.get_counts" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method calculates a probability distribution that we call pd
+from the current state vector if it is pure. (If the state vec is
+not pure, it calculates a density matrix from the
+self.cur_st_vec_dict. Then it extracts the diagonal of that density
+matrix. That diagonal must be a probability distribution that we
+call pd.) Then the method samples pd, num_shots times. The method
+returns the result of that sampling as an OrderedDict
+state_name_to_counts. Depending on the value of the flag
+use_bin_labels, the state names are a string ‘0’, ‘1’, ‘2’, etc,
+or their binary representations followed by ‘ZL’, because the ZL
+convention is assumed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_shots</strong> (<em>int</em>) – </p></li>
+<li><p><strong>omit_zero_counts</strong> (<em>bool</em>) – </p></li>
+<li><p><strong>use_bin_labels</strong> (<em>bool</em>) – </p></li>
+<li><p><strong>rand_seed</strong> (<em>int</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>OrderedDict[str, int]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="qubiter.SEO_simulator.SEO_simulator.reshape">
+<code class="sig-name descname">reshape</code><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.reshape" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="qubiter.SEO_simulator.SEO_simulator.tensordot">
+<code class="sig-name descname">tensordot</code><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.tensordot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="qubiter.SEO_simulator.SEO_simulator.transpose">
+<code class="sig-name descname">transpose</code><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.transpose" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="qubiter.SEO_simulator.SEO_simulator.use_DIAG">
+<code class="sig-name descname">use_DIAG</code><span class="sig-paren">(</span><em class="sig-param">trols</em>, <em class="sig-param">rad_angles</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator.use_DIAG"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.use_DIAG" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method should not be called. If called, it explains why it
+shouldn’t be called.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>trols</strong> (<a class="reference internal" href="qubiter.Controls.html#qubiter.Controls.Controls" title="qubiter.Controls.Controls"><em>Controls</em></a>) – </p></li>
+<li><p><strong>rad_angles</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.SEO_simulator.SEO_simulator.use_HAD2">
+<code class="sig-name descname">use_HAD2</code><span class="sig-paren">(</span><em class="sig-param">tar_bit_pos</em>, <em class="sig-param">controls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator.use_HAD2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.use_HAD2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overrides the parent class <a href="#id25"><span class="problematic" id="id26">use_</span></a> function. Calls
+evolve_by_controlled_one_bit_gate() for had2.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tar_bit_pos</strong> (<em>int</em>) – </p></li>
+<li><p><strong>controls</strong> (<a class="reference internal" href="qubiter.Controls.html#qubiter.Controls.Controls" title="qubiter.Controls.Controls"><em>Controls</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.SEO_simulator.SEO_simulator.use_IF_M_beg">
+<code class="sig-name descname">use_IF_M_beg</code><span class="sig-paren">(</span><em class="sig-param">controls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator.use_IF_M_beg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.use_IF_M_beg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Do nothing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>controls</strong> (<a class="reference internal" href="qubiter.Controls.html#qubiter.Controls.Controls" title="qubiter.Controls.Controls"><em>Controls</em></a>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.SEO_simulator.SEO_simulator.use_IF_M_end">
+<code class="sig-name descname">use_IF_M_end</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator.use_IF_M_end"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.use_IF_M_end" title="Permalink to this definition">¶</a></dt>
+<dd><p>Do nothing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.SEO_simulator.SEO_simulator.use_MEAS">
+<code class="sig-name descname">use_MEAS</code><span class="sig-paren">(</span><em class="sig-param">tar_bit_pos</em>, <em class="sig-param">kind</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator.use_MEAS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.use_MEAS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overrides the parent class <a href="#id27"><span class="problematic" id="id28">use_</span></a> function.</p>
+<p>For kind 0 (resp., 1) measurements, it applies <a href="#id15"><span class="problematic" id="id16">|0&gt;&lt;0|</span></a> (resp.,
+<a href="#id17"><span class="problematic" id="id18">|1&gt;&lt;1|</span></a>) to each branch of cur_st_vec_dict.</p>
+<p>For kind 2 measurements, it first doubles the number of branches in
+cur_st_vec_dict by adding a deep copy of each branch. Next,
+it applies P_0 to half of the branches of the dict and P_1 to the
+other half.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>kind</strong> (<em>int</em>) – </p></li>
+<li><p><strong>tar_bit_pos</strong> (<em>int</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.SEO_simulator.SEO_simulator.use_MP_Y">
+<code class="sig-name descname">use_MP_Y</code><span class="sig-paren">(</span><em class="sig-param">tar_bit_pos</em>, <em class="sig-param">trols</em>, <em class="sig-param">rad_angles</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator.use_MP_Y"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.use_MP_Y" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method should not be called. If called, it explains why it
+shouldn’t be called.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tar_bit_pos</strong> (<em>int</em>) – </p></li>
+<li><p><strong>trols</strong> (<a class="reference internal" href="qubiter.Controls.html#qubiter.Controls.Controls" title="qubiter.Controls.Controls"><em>Controls</em></a>) – </p></li>
+<li><p><strong>rad_angles</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.SEO_simulator.SEO_simulator.use_NOTA">
+<code class="sig-name descname">use_NOTA</code><span class="sig-paren">(</span><em class="sig-param">bla_str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator.use_NOTA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.use_NOTA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Do nothing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>bla_str</strong> (<em>str</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.SEO_simulator.SEO_simulator.use_PHAS">
+<code class="sig-name descname">use_PHAS</code><span class="sig-paren">(</span><em class="sig-param">angle_rads</em>, <em class="sig-param">tar_bit_pos</em>, <em class="sig-param">controls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator.use_PHAS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.use_PHAS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overrides the parent class <a href="#id29"><span class="problematic" id="id30">use_</span></a> function. Calls
+evolve_by_controlled_one_bit_gate() for PHAS.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>angle_rads</strong> (<em>float</em>) – </p></li>
+<li><p><strong>tar_bit_pos</strong> (<em>int</em>) – </p></li>
+<li><p><strong>controls</strong> (<a class="reference internal" href="qubiter.Controls.html#qubiter.Controls.Controls" title="qubiter.Controls.Controls"><em>Controls</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.SEO_simulator.SEO_simulator.use_PRINT">
+<code class="sig-name descname">use_PRINT</code><span class="sig-paren">(</span><em class="sig-param">style</em>, <em class="sig-param">line_num</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator.use_PRINT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.use_PRINT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints to screen a description of self.cur_st_vec_dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>style</strong> (<em>str</em>) – style in which to print</p></li>
+<li><p><strong>line_num</strong> (<em>int</em>) – line number in eng &amp; pic files in which PRINT command appears</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.SEO_simulator.SEO_simulator.use_P_PH">
+<code class="sig-name descname">use_P_PH</code><span class="sig-paren">(</span><em class="sig-param">projection_bit</em>, <em class="sig-param">angle_rads</em>, <em class="sig-param">tar_bit_pos</em>, <em class="sig-param">controls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator.use_P_PH"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.use_P_PH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overrides the parent class <a href="#id31"><span class="problematic" id="id32">use_</span></a> function. Calls
+evolve_by_controlled_one_bit_gate() for P_0 and P_1 phase factors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>projection_bit</strong> (<em>int</em>) – 0 (resp. 1) for P_0 (resp. P_1) projection</p></li>
+<li><p><strong>angle_rads</strong> (<em>float</em>) – </p></li>
+<li><p><strong>tar_bit_pos</strong> (<em>int</em>) – </p></li>
+<li><p><strong>controls</strong> (<a class="reference internal" href="qubiter.Controls.html#qubiter.Controls.Controls" title="qubiter.Controls.Controls"><em>Controls</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.SEO_simulator.SEO_simulator.use_ROTA">
+<code class="sig-name descname">use_ROTA</code><span class="sig-paren">(</span><em class="sig-param">axis</em>, <em class="sig-param">angle_rads</em>, <em class="sig-param">tar_bit_pos</em>, <em class="sig-param">controls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator.use_ROTA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.use_ROTA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overrides the parent class <a href="#id33"><span class="problematic" id="id34">use_</span></a> function. Calls
+evolve_by_controlled_one_bit_gate() for rot along axes x, y, or z.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>axis</strong> (<em>int</em>) – 1, 2, 3 for x, y, z</p></li>
+<li><p><strong>angle_rads</strong> (<em>float</em>) – </p></li>
+<li><p><strong>tar_bit_pos</strong> (<em>int</em>) – </p></li>
+<li><p><strong>controls</strong> (<a class="reference internal" href="qubiter.Controls.html#qubiter.Controls.Controls" title="qubiter.Controls.Controls"><em>Controls</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.SEO_simulator.SEO_simulator.use_ROTN">
+<code class="sig-name descname">use_ROTN</code><span class="sig-paren">(</span><em class="sig-param">angle_x_rads</em>, <em class="sig-param">angle_y_rads</em>, <em class="sig-param">angle_z_rads</em>, <em class="sig-param">tar_bit_pos</em>, <em class="sig-param">controls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator.use_ROTN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.use_ROTN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overrides the parent class <a href="#id35"><span class="problematic" id="id36">use_</span></a> function. Calls
+evolve_by_controlled_one_bit_gate() for rot along arbitrary axis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>angle_x_rads</strong> (<em>float</em>) – </p></li>
+<li><p><strong>angle_y_rads</strong> (<em>float</em>) – </p></li>
+<li><p><strong>angle_z_rads</strong> (<em>float</em>) – </p></li>
+<li><p><strong>tar_bit_pos</strong> (<em>int</em>) – </p></li>
+<li><p><strong>controls</strong> (<a class="reference internal" href="qubiter.Controls.html#qubiter.Controls.Controls" title="qubiter.Controls.Controls"><em>Controls</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.SEO_simulator.SEO_simulator.use_SIG">
+<code class="sig-name descname">use_SIG</code><span class="sig-paren">(</span><em class="sig-param">axis</em>, <em class="sig-param">tar_bit_pos</em>, <em class="sig-param">controls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator.use_SIG"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.use_SIG" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overrides the parent class <a href="#id37"><span class="problematic" id="id38">use_</span></a> function. Calls
+evolve_by_controlled_one_bit_gate() for sigx, sigy, sigz.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>axis</strong> (<em>int</em>) – 1, 2, 3 for x, y, z</p></li>
+<li><p><strong>tar_bit_pos</strong> (<em>int</em>) – </p></li>
+<li><p><strong>controls</strong> (<a class="reference internal" href="qubiter.Controls.html#qubiter.Controls.Controls" title="qubiter.Controls.Controls"><em>Controls</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.SEO_simulator.SEO_simulator.use_SWAP">
+<code class="sig-name descname">use_SWAP</code><span class="sig-paren">(</span><em class="sig-param">bit1</em>, <em class="sig-param">bit2</em>, <em class="sig-param">controls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator.use_SWAP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.use_SWAP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overrides the parent class <a href="#id39"><span class="problematic" id="id40">use_</span></a> function. Calls
+evolve_by_controlled_bit_swap().</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bit1</strong> (<em>int</em>) – </p></li>
+<li><p><strong>bit2</strong> (<em>int</em>) – </p></li>
+<li><p><strong>controls</strong> (<a class="reference internal" href="qubiter.Controls.html#qubiter.Controls.Controls" title="qubiter.Controls.Controls"><em>Controls</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.SEO_simulator.SEO_simulator.use_SWAY">
+<code class="sig-name descname">use_SWAY</code><span class="sig-paren">(</span><em class="sig-param">bit1</em>, <em class="sig-param">bit2</em>, <em class="sig-param">controls</em>, <em class="sig-param">rads_list</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator.use_SWAY"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.use_SWAY" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overrides the parent class <a href="#id41"><span class="problematic" id="id42">use_</span></a> function. Calls
+evolve_by_controlled_one_bit_gate() 3 times.</p>
+<p>This relies on the fact that</p>
+<p>SWAY(0, 1) = SWAY(1, 0) =
+X—&#64;
+&#64;—U2
+X—&#64;</p>
+<p>U2 = exp(j*(rads0 + rads1*sig_x))</p>
+<p>rads_list = [rads0, rads1]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bit1</strong> (<em>int</em>) – </p></li>
+<li><p><strong>bit2</strong> (<em>int</em>) – </p></li>
+<li><p><strong>controls</strong> (<a class="reference internal" href="qubiter.Controls.html#qubiter.Controls.Controls" title="qubiter.Controls.Controls"><em>Controls</em></a>) – </p></li>
+<li><p><strong>rads_list</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.SEO_simulator.SEO_simulator.use_U_2_">
+<code class="sig-name descname">use_U_2_</code><span class="sig-paren">(</span><em class="sig-param">rads0</em>, <em class="sig-param">rads1</em>, <em class="sig-param">rads2</em>, <em class="sig-param">rads3</em>, <em class="sig-param">tar_bit_pos</em>, <em class="sig-param">controls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator.use_U_2_"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.use_U_2_" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overrides the parent class <a href="#id43"><span class="problematic" id="id44">use_</span></a> function. Calls
+evolve_by_controlled_one_bit_gate() for arbitrary unitary 2-dim
+matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rads0</strong> (<em>float</em>) – </p></li>
+<li><p><strong>rads1</strong> (<em>float</em>) – </p></li>
+<li><p><strong>rads2</strong> (<em>float</em>) – </p></li>
+<li><p><strong>rads3</strong> (<em>float</em>) – </p></li>
+<li><p><strong>tar_bit_pos</strong> (<em>int</em>) – </p></li>
+<li><p><strong>controls</strong> (<a class="reference internal" href="qubiter.Controls.html#qubiter.Controls.Controls" title="qubiter.Controls.Controls"><em>Controls</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Robert R. Tucci &amp; Qubiter contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

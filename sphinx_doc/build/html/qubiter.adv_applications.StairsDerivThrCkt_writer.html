@@ -1,0 +1,348 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qubiter.adv_applications.StairsDerivThrCkt_writer module &mdash; qubiter 1.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> qubiter
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rosetta.html">Qubiter Rosetta Stone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classgraph.html">Qubiter’s Class Graph</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">qubiter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>qubiter.adv_applications.StairsDerivThrCkt_writer module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/qubiter.adv_applications.StairsDerivThrCkt_writer.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-qubiter.adv_applications.StairsDerivThrCkt_writer">
+<span id="qubiter-adv-applications-stairsderivthrckt-writer-module"></span><h1>qubiter.adv_applications.StairsDerivThrCkt_writer module<a class="headerlink" href="#module-qubiter.adv_applications.StairsDerivThrCkt_writer" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="qubiter.adv_applications.StairsDerivThrCkt_writer.StairsDerivThrCkt_writer">
+<em class="property">class </em><code class="sig-prename descclassname">qubiter.adv_applications.StairsDerivThrCkt_writer.</code><code class="sig-name descname">StairsDerivThrCkt_writer</code><span class="sig-paren">(</span><em class="sig-param">deriv_direc</em>, <em class="sig-param">dpart_name</em>, <em class="sig-param">gate_str_to_rads_list</em>, <em class="sig-param">file_prefix</em>, <em class="sig-param">emb</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/adv_applications/StairsDerivThrCkt_writer.html#StairsDerivThrCkt_writer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.adv_applications.StairsDerivThrCkt_writer.StairsDerivThrCkt_writer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer" title="qubiter.SEO_writer.SEO_writer"><code class="xref py py-class docutils literal notranslate"><span class="pre">qubiter.SEO_writer.SEO_writer</span></code></a></p>
+<p>(Stairs Derivative Threaded Circuit) This class is a subclass of
+<cite>SEO_writer</cite>. It writes English and Picture files for several derivative
+circuits used for calculating the gradients of a quantum cost function (
+mean hamiltonian).</p>
+<p>This class calls class <cite>StairsDerivCkt_writer</cite> many times. Each time,
+a new sub-circuit is built that acts on fresh set of qubits not used
+before. So this class builds many threads, i.e., independent
+sub-circuits which can be evolved in parallel.</p>
+<p>If you compare the constructor of this “threaded” writer class with that
+of the “non-threaded” writer class <cite>StairsDerivCkt_writer</cite>, you will see
+that the constructor of this class has two fewer arguments, namely
+<cite>deriv_gate_str</cite>, <cite>has_neg_polarity</cite>. All other arguments are the same for
+both classes. The reason for this is that all the possibilities for
+those two arguments are included as (parallel, independent) subcircuits
+of the giant quantum circuit created by this class.</p>
+<p>Most attributes of this class are the same as those for
+<cite>StairsDerivCkt_writer</cite>. One new attribute is
+<cite>subckt_to_large_small_bit_pair</cite>.</p>
+<p>subckts are labeled by a pair: (deriv_gate_str, has_neg_polarity).</p>
+<p><cite>subckt_to_large_small_bit_pair</cite> maps each subckt to its edge qubits.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>deriv_direc</strong> (<em>int</em>) – </p></li>
+<li><p><strong>dpart_name</strong> (<em>str</em>) – </p></li>
+<li><p><strong>gate_str_to_rads_list</strong> (<em>dict</em><em>[</em><em>int</em><em>, </em><em>list</em><em>[</em><em>float</em><em>]</em><em>]</em>) – </p></li>
+<li><p><strong>parent_num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>subckt_to_large_small_bit_pair</strong> (<em>dict</em><em>[</em><em>(</em><em>str</em><em>, </em><em>bool</em><em>)</em><em>, </em><em>tuple</em><em>[</em><em>int</em><em>]</em><em>]</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="qubiter.adv_applications.StairsDerivThrCkt_writer.StairsDerivThrCkt_writer.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">deriv_direc</em>, <em class="sig-param">dpart_name</em>, <em class="sig-param">gate_str_to_rads_list</em>, <em class="sig-param">file_prefix</em>, <em class="sig-param">emb</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/adv_applications/StairsDerivThrCkt_writer.html#StairsDerivThrCkt_writer.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.adv_applications.StairsDerivThrCkt_writer.StairsDerivThrCkt_writer.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor</p>
+<p>This constructor writes English and Picture files but it doesn’t
+close those files after writing them. You must do that yourself
+using close_files().</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>deriv_direc</strong> (<em>int</em>) – </p></li>
+<li><p><strong>dpart_name</strong> (<em>str</em>) – </p></li>
+<li><p><strong>gate_str_to_rads_list</strong> (<em>dict</em><em>[</em><em>int</em><em>, </em><em>list</em><em>[</em><em>float</em><em>]</em><em>]</em>) – </p></li>
+<li><p><strong>file_prefix</strong> (<em>str</em>) – </p></li>
+<li><p><strong>emb</strong> (<a class="reference internal" href="qubiter.CktEmbedder.html#qubiter.CktEmbedder.CktEmbedder" title="qubiter.CktEmbedder.CktEmbedder"><em>CktEmbedder</em></a>) – </p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – key-word arguments of SEO_writer</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.adv_applications.StairsDerivThrCkt_writer.StairsDerivThrCkt_writer.get_coef_of_dpart">
+<code class="sig-name descname">get_coef_of_dpart</code><span class="sig-paren">(</span><em class="sig-param">subckt</em>, <em class="sig-param">deriv_direc</em>, <em class="sig-param">dpart_name</em>, <em class="sig-param">var_num_to_rads=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/adv_applications/StairsDerivThrCkt_writer.html#StairsDerivThrCkt_writer.get_coef_of_dpart"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.adv_applications.StairsDerivThrCkt_writer.StairsDerivThrCkt_writer.get_coef_of_dpart" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method returns a dict mapping each subckt (labeled by a pair: (
+deriv_gate_str, has_neg_polarity)) to its coefficient of dpart (either
+p1, ps or -p1*ps).</p>
+<p>var_num_to_rads is used if self wrote the English file with #int
+string symbols for placeholder variables. var_num_to_rads is used to
+float those strings. This is necessary before analytical calculation
+of the output of this method can proceed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>subckt</strong> (<em>(</em><em>str</em><em>, </em><em>bool</em><em>)</em>) – </p></li>
+<li><p><strong>deriv_direc</strong> (<em>int</em>) – </p></li>
+<li><p><strong>dpart_name</strong> (<em>str</em>) – </p></li>
+<li><p><strong>var_num_to_rads</strong> (<em>dict</em><em>[</em><em>int</em><em>, </em><em>float</em><em>]</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict[(str, bool), float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.adv_applications.StairsDerivThrCkt_writer.StairsDerivThrCkt_writer.get_fun_name_to_fun">
+<code class="sig-name descname">get_fun_name_to_fun</code><span class="sig-paren">(</span><em class="sig-param">deriv_direc</em>, <em class="sig-param">dpart_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/adv_applications/StairsDerivThrCkt_writer.html#StairsDerivThrCkt_writer.get_fun_name_to_fun"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.adv_applications.StairsDerivThrCkt_writer.StairsDerivThrCkt_writer.get_fun_name_to_fun" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method returns a dictionary fun_name_to_fun mapping the
+function name to function, for all functions defined by this class.
+It combines the fun_name_to_fun of all the subckts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>deriv_direc</strong> (<em>int</em>) – </p></li>
+<li><p><strong>dpart_name</strong> (<em>str</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict[str, function]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.adv_applications.StairsDerivThrCkt_writer.StairsDerivThrCkt_writer.get_tot_num_bits">
+<code class="sig-name descname">get_tot_num_bits</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/adv_applications/StairsDerivThrCkt_writer.html#StairsDerivThrCkt_writer.get_tot_num_bits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.adv_applications.StairsDerivThrCkt_writer.StairsDerivThrCkt_writer.get_tot_num_bits" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the self version of sta_get_tot_num_bits()</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.adv_applications.StairsDerivThrCkt_writer.StairsDerivThrCkt_writer.sta_get_tot_num_bits">
+<em class="property">static </em><code class="sig-name descname">sta_get_tot_num_bits</code><span class="sig-paren">(</span><em class="sig-param">parent_num_bits</em>, <em class="sig-param">gate_str_to_rads_list</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/adv_applications/StairsDerivThrCkt_writer.html#StairsDerivThrCkt_writer.sta_get_tot_num_bits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.adv_applications.StairsDerivThrCkt_writer.StairsDerivThrCkt_writer.sta_get_tot_num_bits" title="Permalink to this definition">¶</a></dt>
+<dd><p>This static (sta) method returns the total number of qbits for the
+quantum circuit generated by this class, i.e., it returns the sum of
+the qbits used by each subcircuit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>parent_num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>gate_str_to_rads_list</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>list</em><em>[</em><em>float</em><em>]</em><em>]</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qubiter.adv_applications.StairsDerivThrCkt_writer.StairsDerivThrCkt_writer.write">
+<code class="sig-name descname">write</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/adv_applications/StairsDerivThrCkt_writer.html#StairsDerivThrCkt_writer.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.adv_applications.StairsDerivThrCkt_writer.StairsDerivThrCkt_writer.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method writes English and Picture files for a giant quantum
+circuit which consists of many parallel, independent subcircuits,
+each subcircuit acting on a distinct set of qbits. The subcircuits
+are generated by calling <cite>StairsDerivCkt_writer</cite> for all the
+possibilities of <cite>deriv_gate_str</cite> and <cite>has_neg_polarity</cite></p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Robert R. Tucci &amp; Qubiter contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
