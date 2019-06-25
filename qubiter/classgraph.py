@@ -10,13 +10,6 @@ The purpose of this script is to generate a file called classgraph.pdf
 with the class graph for qubiter. The script also generates a file called 
 classgraph_orphans.html that lists the orphan classes. Orphan classes (i.e., 
 classes with no parents or children) don't show up in classgraph.pdf. 
-
-This script also refreshes the file sphinx_doc/source/_static. It copies the 
-latest 
-
-classgraph.pdf, classgraph_orphans.html, qubiter_rosetta_stone.pdf 
-
-there.
 """
 
 # cl_to_data = pyclbr.readmodule("SEO_reader")
@@ -88,13 +81,6 @@ with open(orp_name, 'w') as fi:
     fi.write('</ol>\n')
     fi.write('</body></html>')
 
-
-# refresh sphinx_doc
-prefix = '../sphinx_doc/source/_static/'
-ros_name = 'qubiter_rosetta_stone.pdf'
-copyfile(pdf_name, prefix + pdf_name)
-copyfile(orp_name, prefix + orp_name)
-copyfile(ros_name, prefix + ros_name)
 
 
 
