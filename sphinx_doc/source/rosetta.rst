@@ -1,8 +1,8 @@
 .. _rosetta:
 
-=====================
-Qubiter Rosetta Stone
-=====================
+=============
+Rosetta Stone
+=============
 
+`click here <_static/qubiter_rosetta_stone.pdf>`_
 
-:download:`pdf <_static/qubiter_rosetta_stone.pdf>`

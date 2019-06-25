@@ -3,16 +3,18 @@ import os
 import pprint as pp
 import networkx as nx
 import graphviz as gv
+from shutil import copyfile
 
 """
-The purpose of this script is to generate a classgraph.pdf file with the 
-class graph for qubiter. The script also generates a classgraph_orphans.txt 
-file listing the orphan classes, which don't show up in classgraph.pdf. 
+The purpose of this script is to generate a file called classgraph.pdf 
+with the class graph for qubiter. The script also generates a file called 
+classgraph_orphans.html that lists the orphan classes. Orphan classes (i.e., 
+classes with no parents or children) don't show up in classgraph.pdf. 
 
 This script also refreshes the file sphinx_doc/source/_static. It copies the 
 latest 
 
-classgraph.pdf, classgraph_orphans.txt, qubiter_rosetta_stone.pdf 
+classgraph.pdf, classgraph_orphans.html, qubiter_rosetta_stone.pdf 
 
 there.
 """
@@ -73,16 +75,21 @@ with open(dot_name, 'r') as fi:
     src = gv.Source(fi.read())
 src.render(dot_name, view=False, format='pdf')
 pdf_name = nom + '.pdf'
-os.rename(dot_name + '.pdf', pdf_name)
+copyfile(dot_name + '.pdf', pdf_name)
+os.remove(dot_name + '.pdf')
 
 # write txt file listing orphans (not shown in classgraph)
-orp_name = 'classgraph_orphans.txt'
+orp_name = 'classgraph_orphans.html'
 with open(orp_name, 'w') as fi:
+    fi.write('<html><body>\n')
+    fi.write('<ol>\n')
     for nd in orphans:
-        fi.write(nd +'\n')
+        fi.write('<li>' + nd + '\n')
+    fi.write('</ol>\n')
+    fi.write('</body></html>')
+
 
 # refresh sphinx_doc
-from shutil import copyfile
 prefix = '../sphinx_doc/source/_static/'
 ros_name = 'qubiter_rosetta_stone.pdf'
 copyfile(pdf_name, prefix + pdf_name)
