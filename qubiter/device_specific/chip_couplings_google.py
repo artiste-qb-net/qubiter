@@ -1,17 +1,20 @@
+def aaa():
+    # trick sphinx to build link in doc
+    pass
 
-
-# from cirq/google/known_devices.py
-# Positions with - are empty.
-# Letters at row, col = (r, c) are connected
-# to letters with
-# (r+1, c),
-# (r-1, c),
-# (r, c+1),
-# (r, c-1).
-
+"""
+from cirq/google/known_devices.py
+Positions with - are empty.
+Letters at row, col = (r, c) are connected
+to letters with
+(r+1, c),
+(r-1, c),
+(r, c+1),
+(r, c-1).
+"""
 
 BRISTLECONE_GRID = \
-"""
+r"""
 -----AB-----
 ----ABCD----
 ---ABCDEF---
@@ -25,7 +28,7 @@ ABCDEFGHIJKL
 -----KL-----
 """
 
-"""
+r"""
 >>> import cirq
 >>> print(cirq.google.Bristlecone)
                                         

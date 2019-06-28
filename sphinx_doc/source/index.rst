@@ -9,8 +9,7 @@ Saved on |today|
 
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Table of Contents:
+   :caption: Table of Contents
 
    rosetta
    classgraph
@@ -21,6 +20,7 @@ Saved on |today|
 ===========================
 
 * :ref:`Module Index <modindex>`
+
 
 .. * :ref:`Terms Index <genindex>`
 .. * :ref:`Search Page <search>`

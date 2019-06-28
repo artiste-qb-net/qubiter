@@ -1,0 +1,239 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qubiter.device_specific.chip_couplings_google &mdash; qubiter 1.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> qubiter
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+        
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../rosetta.html">Rosetta Stone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../classgraph.html">Class Graph</a></li>
+</ul>
+
+            
+          
+        <a href="py-modindex.html">Module Index</a>
+    
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">qubiter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qubiter.device_specific.chip_couplings_google</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qubiter.device_specific.chip_couplings_google</h1><div class="highlight"><pre>
+<div class="viewcode-block" id="aaa"><a class="viewcode-back" href="../../../qubiter.device_specific.chip_couplings_google.html#qubiter.device_specific.chip_couplings_google.aaa">[docs]</a><span></span><span class="k">def</span> <span class="nf">aaa</span><span class="p">():</span>
+    <span class="c1"># trick sphinx to build link in doc</span>
+    <span class="k">pass</span></div>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">from cirq/google/known_devices.py</span>
+<span class="sd">Positions with - are empty.</span>
+<span class="sd">Letters at row, col = (r, c) are connected</span>
+<span class="sd">to letters with</span>
+<span class="sd">(r+1, c),</span>
+<span class="sd">(r-1, c),</span>
+<span class="sd">(r, c+1),</span>
+<span class="sd">(r, c-1).</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">BRISTLECONE_GRID</span> <span class="o">=</span> \
+<span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">-----AB-----</span>
+<span class="sd">----ABCD----</span>
+<span class="sd">---ABCDEF---</span>
+<span class="sd">--ABCDEFGH--</span>
+<span class="sd">-ABCDEFGHIJ-</span>
+<span class="sd">ABCDEFGHIJKL</span>
+<span class="sd">-CDEFGHIJKL-</span>
+<span class="sd">--EFGHIJKL--</span>
+<span class="sd">---GHIJKL---</span>
+<span class="sd">----IJKL----</span>
+<span class="sd">-----KL-----</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">&gt;&gt;&gt; import cirq</span>
+<span class="sd">&gt;&gt;&gt; print(cirq.google.Bristlecone)</span>
+<span class="sd">                                        </span>
+<span class="sd">                                             (0, 5)....(0, 6)</span>
+<span class="sd">                                    (1, 4)...(1, 5)....(1, 6)....(1, 7)</span>
+<span class="sd">                           (2, 3)...(2, 4)...(2, 5)....(2, 6)....(2, 7)...(2, 8)     </span>
+<span class="sd">                  (3, 2)...(3, 3)...(3, 4)...(3, 5)....(3, 6)....(3, 7)...(3, 8)...(3, 9)</span>
+<span class="sd">         (4, 1)...(4, 2)...(4, 3)...(4, 4)...(4, 5)....(4, 6)....(4, 7)...(4, 8)...(4, 9)...(4, 10)</span>
+<span class="sd">(5, 0)...(5, 1)...(5, 2)...(5, 3)...(5, 4)...(5, 5)....(5, 6)....(5, 7)...(5, 8)...(5, 9)...(5, 10)...(5, 11)</span>
+<span class="sd">         (6, 1)...(6, 2)...(6, 3)...(6, 4)...(6, 5)....(6, 6)....(6, 7)...(6, 8)...(6, 9)...(6, 10)</span>
+<span class="sd">                  (7, 2)...(7, 3)...(7, 4)...(7, 5)....(7, 6)....(7, 7)...(7, 8)...(7, 9)</span>
+<span class="sd">                           (8, 3)...(8, 4)...(8, 5)....(8, 6)....(8, 7)...(8, 8)</span>
+<span class="sd">                                    (9, 4)...(9, 5)....(9, 6)....(9, 7)</span>
+<span class="sd">                                             (10, 5)...(10, 6)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Robert R. Tucci &amp; Qubiter contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
