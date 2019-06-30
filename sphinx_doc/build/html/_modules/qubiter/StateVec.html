@@ -162,6 +162,7 @@
 <span class="k">else</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">autograd.numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
+
 <div class="viewcode-block" id="StateVec"><a class="viewcode-back" href="../../qubiter.StateVec.html#qubiter.StateVec.StateVec">[docs]</a><span class="k">class</span> <span class="nc">StateVec</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This class is a wrapper for its main attribute, a complex numpy array</span>
@@ -774,7 +775,7 @@
     <span class="c1">#     return counts</span>
 
 <div class="viewcode-block" id="StateVec.pp_arr_entries"><a class="viewcode-back" href="../../qubiter.StateVec.html#qubiter.StateVec.StateVec.pp_arr_entries">[docs]</a>    <span class="k">def</span> <span class="nf">pp_arr_entries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">omit_zero_amps</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                          <span class="n">show_probs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ZL</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+                          <span class="n">show_pp_probs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ZL</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        pp=pretty print. Prints for each entry of self.arr, a line of the</span>
 <span class="sd">        form (i, j, k, ...) self.arr[i, j, k, ...], with zero bit last (</span>
@@ -784,7 +785,7 @@
 <span class="sd">        ----------</span>
 <span class="sd">        omit_zero_amps : bool</span>
 <span class="sd">            If True, will not list states with zero amplitude</span>
-<span class="sd">        show_probs : bool</span>
+<span class="sd">        show_pp_probs : bool</span>
 <span class="sd">            If True, will show probability of each amplitude</span>
 
 <span class="sd">        ZL : bool</span>
@@ -805,21 +806,52 @@
             <span class="c1"># turn index tuple into string and remove commas</span>
             <span class="n">ind_str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;, &#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">label</span>
             <span class="n">mag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">show_probs</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">omit_zero_amps</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">mag</span> <span class="o">&gt;</span> <span class="mf">1E-6</span><span class="p">:</span>
-                        <span class="nb">print</span><span class="p">(</span><span class="n">ind_str</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="s1">&#39;, prob=&#39;</span><span class="p">,</span> <span class="n">mag</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="n">ind_str</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="s1">&#39;, prob=&#39;</span><span class="p">,</span> <span class="n">mag</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">extra_str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+            <span class="k">if</span> <span class="n">show_pp_probs</span><span class="p">:</span>
+                <span class="n">extra_str</span> <span class="o">=</span> <span class="s1">&#39;, prob=&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">mag</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">omit_zero_amps</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">mag</span> <span class="o">&gt;</span> <span class="mf">1E-6</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">ind_str</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">extra_str</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">omit_zero_amps</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">mag</span> <span class="o">&gt;</span> <span class="mf">1E-6</span><span class="p">:</span>
-                        <span class="nb">print</span><span class="p">(</span><span class="n">ind_str</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="n">ind_str</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span></div>
+                <span class="nb">print</span><span class="p">(</span><span class="n">ind_str</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">extra_str</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="StateVec.get_style_dict"><a class="viewcode-back" href="../../qubiter.StateVec.html#qubiter.StateVec.StateVec.get_style_dict">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_style_dict</span><span class="p">(</span><span class="n">style</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Given a style string as input, this method returns a dict mapping</span>
+<span class="sd">        various strings denoting parameters of the method</span>
+<span class="sd">        StateVec.describe_self() to their bool values for the input style.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        style : str</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict[str, bool]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">vanilla</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;print_st_vec&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="s1">&#39;do_pp&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="s1">&#39;omit_zero_amps&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="s1">&#39;show_pp_probs&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="s1">&#39;ZL&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s1">&#39;plot_st_vec_pd&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">style</span> <span class="o">==</span> <span class="s1">&#39;V1&#39;</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">vanilla</span>
+        <span class="k">elif</span> <span class="n">style</span> <span class="o">==</span> <span class="s1">&#39;ALL&#39;</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span> <span class="kc">True</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">vanilla</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
+            <span class="n">out</span><span class="p">[</span><span class="s1">&#39;plot_st_vec_pd&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">elif</span> <span class="n">style</span> <span class="o">==</span> <span class="s1">&#39;ALL+&#39;</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span> <span class="kc">True</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">vanilla</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;unsupported style for StateVec.describe_self()&quot;</span>
+        <span class="k">return</span> <span class="n">out</span></div>
 
 <div class="viewcode-block" id="StateVec.describe_self"><a class="viewcode-back" href="../../qubiter.StateVec.html#qubiter.StateVec.StateVec.describe_self">[docs]</a>    <span class="k">def</span> <span class="nf">describe_self</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">print_st_vec</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">do_pp</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="n">omit_zero_amps</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">show_probs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ZL</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+                      <span class="n">omit_zero_amps</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">show_pp_probs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ZL</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                      <span class="n">plot_st_vec_pd</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Prints a description of self.</span>
 
@@ -828,23 +860,21 @@
 <span class="sd">        print_st_vec : bool</span>
 <span class="sd">            if True, prints the final state vector (which may be huge. For n</span>
 <span class="sd">            qubits, it has 2^n components.)</span>
-
 <span class="sd">        do_pp : bool</span>
 <span class="sd">            pp= pretty print. Only used if print_st_vec=True. For pp=False,</span>
 <span class="sd">            it prints final state vector in usual numpy array print style.</span>
 <span class="sd">            For pp=True, it prints final state vector as column of (index,</span>
 <span class="sd">            array value) pairs.</span>
-
 <span class="sd">        omit_zero_amps : bool</span>
 <span class="sd">            If print_st_vec=True, pp=True and this parameter is True too,</span>
 <span class="sd">            will omit states with zero amplitude</span>
-
-<span class="sd">        show_probs : bool</span>
+<span class="sd">        show_pp_probs : bool</span>
 <span class="sd">            If True, will show probability of each standard basis state</span>
-
 <span class="sd">        ZL : bool</span>
 <span class="sd">            If True, multi-index of ket in ZL (Zero bit Last) convention.</span>
 <span class="sd">            If False, multi-index of ket in ZF (Zero bit First) convention.</span>
+<span class="sd">        plot_st_vec_pd : bool</span>
+<span class="sd">            If True, plots state vector&#39;s probability distribution</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -861,7 +891,7 @@
                     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ZF convention (Zero bit First in state tuple)&#39;</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ZL convention (Zero bit Last in state tuple)&#39;</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">pp_arr_entries</span><span class="p">(</span><span class="n">omit_zero_amps</span><span class="p">,</span> <span class="n">show_probs</span><span class="p">,</span> <span class="n">ZL</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">pp_arr_entries</span><span class="p">(</span><span class="n">omit_zero_amps</span><span class="p">,</span> <span class="n">show_pp_probs</span><span class="p">,</span> <span class="n">ZL</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arr</span><span class="p">)</span>
 
@@ -870,17 +900,21 @@
 
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;dictionary with key=qubit, value=(Prob(0), Prob(1))&#39;</span><span class="p">)</span>
         <span class="n">bit_probs</span> <span class="o">=</span> <span class="n">StateVec</span><span class="o">.</span><span class="n">get_bit_probs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pd</span><span class="p">())</span>
-        <span class="n">pp</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="n">bit_probs</span><span class="p">)))</span></div>
+        <span class="n">pp</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="n">bit_probs</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="n">plot_st_vec_pd</span><span class="p">:</span>
+            <span class="n">st_vec_pd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pd</span><span class="p">()</span>
+            <span class="n">st_vec_pd_df</span> <span class="o">=</span> <span class="n">Plotter</span><span class="o">.</span><span class="n">get_pd_df</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">st_vec_pd</span><span class="p">)</span>
+            <span class="n">Plotter</span><span class="o">.</span><span class="n">plot_probs_col</span><span class="p">([</span><span class="s1">&#39;st_vec_pd&#39;</span><span class="p">],</span> <span class="p">[</span><span class="n">st_vec_pd_df</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="StateVec.describe_st_vec_dict"><a class="viewcode-back" href="../../qubiter.StateVec.html#qubiter.StateVec.StateVec.describe_st_vec_dict">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">describe_st_vec_dict</span><span class="p">(</span><span class="n">st_vec_dict</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Calls describe_st_vec() for each branch of st_vec_dict</span>
+<span class="sd">        Calls describe_self() for each branch of st_vec_dict</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        st_vec_dict : dict[str, StateVec]</span>
-<span class="sd">        kwargs : dict</span>
+<span class="sd">        kwargs : dict[]</span>
 <span class="sd">            the keyword arguments of describe_self()</span>
 
 <span class="sd">        Returns</span>
@@ -894,6 +928,7 @@
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;zero state vector&quot;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">st_vec_dict</span><span class="p">[</span><span class="n">br_key</span><span class="p">]</span><span class="o">.</span><span class="n">describe_self</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
@@ -944,7 +979,7 @@
 
         <span class="n">StateVec</span><span class="o">.</span><span class="n">describe_st_vec_dict</span><span class="p">(</span><span class="n">st_vec_dict</span><span class="p">,</span>
                 <span class="n">print_st_vec</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">do_pp</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                <span class="n">omit_zero_amps</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">show_probs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ZL</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">omit_zero_amps</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">show_pp_probs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ZL</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">main</span><span class="p">()</span>
     <span class="kn">import</span> <span class="nn">doctest</span>
     <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>

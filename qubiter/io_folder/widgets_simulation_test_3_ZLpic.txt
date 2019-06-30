@@ -1,0 +1,9 @@
+|   |   Ry  
+|   Ry  |   
+|   X---@   
+PRINT	ALL+
+|   |   Ry  
+|   Ry  |   
+|   X---@   
+PRINT	ALL+
+Rx--O---@   

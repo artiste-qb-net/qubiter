@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>qubiter.jupyter_notebooks package &mdash; qubiter 1.0.1 documentation</title>
+  <title>qubiter.jupyter_notebooks.utilities_widgets module &mdash; qubiter 1.0.1 documentation</title>
   
 
   
@@ -131,13 +131,13 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>qubiter.jupyter_notebooks package</li>
+      <li>qubiter.jupyter_notebooks.utilities_widgets module</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/qubiter.jupyter_notebooks.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/qubiter.jupyter_notebooks.utilities_widgets.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -150,19 +150,42 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="qubiter-jupyter-notebooks-package">
-<h1>qubiter.jupyter_notebooks package<a class="headerlink" href="#qubiter-jupyter-notebooks-package" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="qubiter.jupyter_notebooks.utilities_widgets.html">qubiter.jupyter_notebooks.utilities_widgets module</a></li>
+  <div class="section" id="module-qubiter.jupyter_notebooks.utilities_widgets">
+<span id="qubiter-jupyter-notebooks-utilities-widgets-module"></span><h1>qubiter.jupyter_notebooks.utilities_widgets module<a class="headerlink" href="#module-qubiter.jupyter_notebooks.utilities_widgets" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="qubiter.jupyter_notebooks.utilities_widgets.run_sim_gui">
+<code class="sig-prename descclassname">qubiter.jupyter_notebooks.utilities_widgets.</code><code class="sig-name descname">run_sim_gui</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_bits</em>, <em class="sig-param">all_var_nums</em>, <em class="sig-param">fun_name_to_fun=None</em>, <em class="sig-param">slider_max_degs=1080</em>, <em class="sig-param">append_new=False</em>, <em class="sig-param">sty_fin_desc='ALL'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/jupyter_notebooks/utilities_widgets.html#run_sim_gui"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.jupyter_notebooks.utilities_widgets.run_sim_gui" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates and runs a widgets gui (graphical user interface). The gui has
+a button labelled <cite>Run</cite> that creates an object of SEO_simulator. The gui
+contains a slider for each placeholder variable (parameter) of a circuit
+that has been created a priori by a SEO_writer using the name
+<cite>file_prefix</cite> and number of qubits <cite>num_bits</cite>.</p>
+<p>If a parameter is labelled <cite>#1</cite>, then the slider value degs_1 times
+pi/180 is substituted for <cite>#1</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_prefix</strong> (<em>str</em>) – </p></li>
+<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>all_var_nums</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – all the placeholder variable numbers. If the circuit has exactly
+two placeholder variables #5 and #7, then all_var_nums=[5, 7]</p></li>
+<li><p><strong>fun_name_to_fun</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>function</em><em>]</em>) – dict mapping every functional placeholder name to its function</p></li>
+<li><p><strong>slider_max_degs</strong> (<em>float</em>) – maximum (in degrees) of sliders (same for all of them)</p></li>
+<li><p><strong>append_new</strong> (<em>bool</em>) – If True, printout for current run will be appended to end. If False,
+the previous printout will be erased before printing for current run.</p></li>
+<li><p><strong>sty_fin_desc</strong> (<em>str</em>) – The style used in the description of the final state vector.
+Argument of StateVec.get_style_dict().</p></li>
 </ul>
-</div>
-</div>
-<div class="section" id="module-qubiter.jupyter_notebooks">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-qubiter.jupyter_notebooks" title="Permalink to this headline">¶</a></h2>
-</div>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 
 

@@ -1,6 +1,13 @@
 qubiter.jupyter\_notebooks package
 ==================================
 
+Submodules
+----------
+
+.. toctree::
+
+   qubiter.jupyter_notebooks.utilities_widgets
+
 Module contents
 ---------------
 

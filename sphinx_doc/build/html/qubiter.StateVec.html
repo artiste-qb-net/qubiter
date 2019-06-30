@@ -204,7 +204,7 @@ explanation of qubit ordering conventions and shape of self.arr</p>
 
 <dl class="method">
 <dt id="qubiter.StateVec.StateVec.describe_self">
-<code class="sig-name descname">describe_self</code><span class="sig-paren">(</span><em class="sig-param">print_st_vec=False</em>, <em class="sig-param">do_pp=False</em>, <em class="sig-param">omit_zero_amps=False</em>, <em class="sig-param">show_probs=False</em>, <em class="sig-param">ZL=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/StateVec.html#StateVec.describe_self"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.StateVec.StateVec.describe_self" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">describe_self</code><span class="sig-paren">(</span><em class="sig-param">print_st_vec=False</em>, <em class="sig-param">do_pp=False</em>, <em class="sig-param">omit_zero_amps=False</em>, <em class="sig-param">show_pp_probs=False</em>, <em class="sig-param">ZL=True</em>, <em class="sig-param">plot_st_vec_pd=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/StateVec.html#StateVec.describe_self"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.StateVec.StateVec.describe_self" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prints a description of self.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -217,9 +217,10 @@ For pp=True, it prints final state vector as column of (index,
 array value) pairs.</p></li>
 <li><p><strong>omit_zero_amps</strong> (<em>bool</em>) – If print_st_vec=True, pp=True and this parameter is True too,
 will omit states with zero amplitude</p></li>
-<li><p><strong>show_probs</strong> (<em>bool</em>) – If True, will show probability of each standard basis state</p></li>
+<li><p><strong>show_pp_probs</strong> (<em>bool</em>) – If True, will show probability of each standard basis state</p></li>
 <li><p><strong>ZL</strong> (<em>bool</em>) – If True, multi-index of ket in ZL (Zero bit Last) convention.
 If False, multi-index of ket in ZF (Zero bit First) convention.</p></li>
+<li><p><strong>plot_st_vec_pd</strong> (<em>bool</em>) – If True, plots state vector’s probability distribution</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -234,12 +235,12 @@ If False, multi-index of ket in ZF (Zero bit First) convention.</p></li>
 <dl class="method">
 <dt id="qubiter.StateVec.StateVec.describe_st_vec_dict">
 <em class="property">static </em><code class="sig-name descname">describe_st_vec_dict</code><span class="sig-paren">(</span><em class="sig-param">st_vec_dict</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/StateVec.html#StateVec.describe_st_vec_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.StateVec.StateVec.describe_st_vec_dict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calls describe_st_vec() for each branch of st_vec_dict</p>
+<dd><p>Calls describe_self() for each branch of st_vec_dict</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>st_vec_dict</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="#qubiter.StateVec.StateVec" title="qubiter.StateVec.StateVec"><em>StateVec</em></a><em>]</em>) – </p></li>
-<li><p><strong>kwargs</strong> (<em>dict</em>) – the keyword arguments of describe_self()</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em><em>[</em><em>]</em>) – the keyword arguments of describe_self()</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -607,6 +608,25 @@ qubit 0</p></li>
 </dd></dl>
 
 <dl class="method">
+<dt id="qubiter.StateVec.StateVec.get_style_dict">
+<em class="property">static </em><code class="sig-name descname">get_style_dict</code><span class="sig-paren">(</span><em class="sig-param">style</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/StateVec.html#StateVec.get_style_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.StateVec.StateVec.get_style_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a style string as input, this method returns a dict mapping
+various strings denoting parameters of the method
+StateVec.describe_self() to their bool values for the input style.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>style</strong> (<em>str</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict[str, bool]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="qubiter.StateVec.StateVec.get_total_prob">
 <code class="sig-name descname">get_total_prob</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/StateVec.html#StateVec.get_total_prob"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.StateVec.StateVec.get_total_prob" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns total probability of self.</p>
@@ -673,7 +693,7 @@ using</p>
 
 <dl class="method">
 <dt id="qubiter.StateVec.StateVec.pp_arr_entries">
-<code class="sig-name descname">pp_arr_entries</code><span class="sig-paren">(</span><em class="sig-param">omit_zero_amps=False</em>, <em class="sig-param">show_probs=False</em>, <em class="sig-param">ZL=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/StateVec.html#StateVec.pp_arr_entries"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.StateVec.StateVec.pp_arr_entries" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">pp_arr_entries</code><span class="sig-paren">(</span><em class="sig-param">omit_zero_amps=False</em>, <em class="sig-param">show_pp_probs=False</em>, <em class="sig-param">ZL=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/StateVec.html#StateVec.pp_arr_entries"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.StateVec.StateVec.pp_arr_entries" title="Permalink to this definition">¶</a></dt>
 <dd><p>pp=pretty print. Prints for each entry of self.arr, a line of the
 form (i, j, k, …) self.arr[i, j, k, …], with zero bit last (
 resp., first) if ZL=True (resp., False).</p>
@@ -681,7 +701,7 @@ resp., first) if ZL=True (resp., False).</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>omit_zero_amps</strong> (<em>bool</em>) – If True, will not list states with zero amplitude</p></li>
-<li><p><strong>show_probs</strong> (<em>bool</em>) – If True, will show probability of each amplitude</p></li>
+<li><p><strong>show_pp_probs</strong> (<em>bool</em>) – If True, will show probability of each amplitude</p></li>
 <li><p><strong>ZL</strong> (<em>bool</em>) – If True, multi-index in ZL (Zero bit Last) convention. If False,
 multi-index in ZF (Zero bit First) convention.</p></li>
 </ul>

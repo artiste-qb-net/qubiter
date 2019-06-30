@@ -460,7 +460,7 @@ class SEO_simulator(SEO_reader):
             print('line number = ', self.line_count)
             print('operation = ', self.num_ops)
             self.describe_st_vec_dict(  # print_st_vec=True,
-                                    show_probs=True)
+                                    show_pp_probs=True)
 
     def describe_st_vec_dict(self, **kwargs):
         """
@@ -470,7 +470,7 @@ class SEO_simulator(SEO_reader):
 
         Parameters
         ----------
-        kwargs : dict
+        kwargs : dict[]
 
         Returns
         -------
@@ -774,20 +774,10 @@ class SEO_simulator(SEO_reader):
         print("\n*************************beginning PRINT output")
         print("PRINT line number=" + str(line_num))
         st_vecs = self.cur_st_vec_dict
-        if style == "V1":
-            StateVec.describe_st_vec_dict(st_vecs,
-                                        # print_st_vec=True,
-                                        show_probs=True)
-        elif style == "ALL":
-            StateVec.describe_st_vec_dict(st_vecs,
-                                        print_st_vec=True,
-                                        do_pp=True,
-                                        omit_zero_amps=True,
-                                        show_probs=True)
-            # must store copy or it will change
-            self.cached_sts[line_num] = cp.deepcopy(st_vecs)
-        else:
-            assert False, "unsupported PRINT style"
+        StateVec.describe_st_vec_dict(st_vecs,
+                                      **StateVec.get_style_dict(style))
+        # must store copy or it will change
+        self.cached_sts[line_num] = cp.deepcopy(st_vecs)
         print("****************************ending PRINT output")
         self.convert_tensors_to_tf()
 

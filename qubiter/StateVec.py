@@ -11,6 +11,7 @@ if 'autograd.numpy' not in sys.modules:
 else:
     import autograd.numpy as np
 
+
 class StateVec:
     """
     This class is a wrapper for its main attribute, a complex numpy array
@@ -623,7 +624,7 @@ class StateVec:
     #     return counts
 
     def pp_arr_entries(self, omit_zero_amps=False,
-                          show_probs=False, ZL=True):
+                          show_pp_probs=False, ZL=True):
         """
         pp=pretty print. Prints for each entry of self.arr, a line of the
         form (i, j, k, ...) self.arr[i, j, k, ...], with zero bit last (
@@ -633,7 +634,7 @@ class StateVec:
         ----------
         omit_zero_amps : bool
             If True, will not list states with zero amplitude
-        show_probs : bool
+        show_pp_probs : bool
             If True, will show probability of each amplitude
 
         ZL : bool
@@ -654,21 +655,52 @@ class StateVec:
             # turn index tuple into string and remove commas
             ind_str = str(index).replace(', ', '') + label
             mag = np.absolute(x)
-            if show_probs:
-                if omit_zero_amps:
-                    if mag > 1E-6:
-                        print(ind_str, x, ', prob=', mag**2)
-                else:
-                    print(ind_str, x, ', prob=', mag**2)
+            extra_str = ''
+            if show_pp_probs:
+                extra_str = ', prob=' + str(mag**2)
+            if omit_zero_amps:
+                if mag > 1E-6:
+                    print(ind_str, x, extra_str)
             else:
-                if omit_zero_amps:
-                    if mag > 1E-6:
-                        print(ind_str, x)
-                else:
-                    print(ind_str, x)
+                print(ind_str, x, extra_str)
+
+    @staticmethod
+    def get_style_dict(style):
+        """
+        Given a style string as input, this method returns a dict mapping
+        various strings denoting parameters of the method
+        StateVec.describe_self() to their bool values for the input style.
+
+        Parameters
+        ----------
+        style : str
+
+        Returns
+        -------
+        dict[str, bool]
+
+        """
+        vanilla = {
+            'print_st_vec': False,
+            'do_pp': False,
+            'omit_zero_amps': False,
+            'show_pp_probs': False,
+            'ZL': True,
+            'plot_st_vec_pd': False}
+        if style == 'V1':
+            out = vanilla
+        elif style == 'ALL':
+            out = {x: True for x in vanilla.keys()}
+            out['plot_st_vec_pd'] = False
+        elif style == 'ALL+':
+            out = {x: True for x in vanilla.keys()}
+        else:
+            assert False, "unsupported style for StateVec.describe_self()"
+        return out
 
     def describe_self(self, print_st_vec=False, do_pp=False,
-            omit_zero_amps=False, show_probs=False, ZL=True):
+                      omit_zero_amps=False, show_pp_probs=False, ZL=True,
+                      plot_st_vec_pd=False):
         """
         Prints a description of self.
 
@@ -677,23 +709,21 @@ class StateVec:
         print_st_vec : bool
             if True, prints the final state vector (which may be huge. For n
             qubits, it has 2^n components.)
-
         do_pp : bool
             pp= pretty print. Only used if print_st_vec=True. For pp=False,
             it prints final state vector in usual numpy array print style.
             For pp=True, it prints final state vector as column of (index,
             array value) pairs.
-
         omit_zero_amps : bool
             If print_st_vec=True, pp=True and this parameter is True too,
             will omit states with zero amplitude
-
-        show_probs : bool
+        show_pp_probs : bool
             If True, will show probability of each standard basis state
-
         ZL : bool
             If True, multi-index of ket in ZL (Zero bit Last) convention.
             If False, multi-index of ket in ZF (Zero bit First) convention.
+        plot_st_vec_pd : bool
+            If True, plots state vector's probability distribution
 
         Returns
         -------
@@ -710,7 +740,7 @@ class StateVec:
                     print('ZF convention (Zero bit First in state tuple)')
                 else:
                     print('ZL convention (Zero bit Last in state tuple)')
-                self.pp_arr_entries(omit_zero_amps, show_probs, ZL)
+                self.pp_arr_entries(omit_zero_amps, show_pp_probs, ZL)
             else:
                 print(self.arr)
 
@@ -720,16 +750,20 @@ class StateVec:
         print('dictionary with key=qubit, value=(Prob(0), Prob(1))')
         bit_probs = StateVec.get_bit_probs(self.num_bits, self.get_pd())
         pp.pprint(dict(enumerate(bit_probs)))
+        if plot_st_vec_pd:
+            st_vec_pd = self.get_pd()
+            st_vec_pd_df = Plotter.get_pd_df(self.num_bits, st_vec_pd)
+            Plotter.plot_probs_col(['st_vec_pd'], [st_vec_pd_df])
 
     @staticmethod
     def describe_st_vec_dict(st_vec_dict, **kwargs):
         """
-        Calls describe_st_vec() for each branch of st_vec_dict
+        Calls describe_self() for each branch of st_vec_dict
 
         Parameters
         ----------
         st_vec_dict : dict[str, StateVec]
-        kwargs : dict
+        kwargs : dict[]
             the keyword arguments of describe_self()
 
         Returns
@@ -743,6 +777,7 @@ class StateVec:
                 print("zero state vector")
             else:
                 st_vec_dict[br_key].describe_self(**kwargs)
+
 
 if __name__ == "__main__":
     def main():
@@ -793,7 +828,7 @@ if __name__ == "__main__":
 
         StateVec.describe_st_vec_dict(st_vec_dict,
                 print_st_vec=True, do_pp=True,
-                omit_zero_amps=False, show_probs=True, ZL=True)
+                omit_zero_amps=False, show_pp_probs=True, ZL=True)
     main()
     import doctest
     doctest.testmod(verbose=True)

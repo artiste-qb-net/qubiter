@@ -1,0 +1,296 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qubiter.jupyter_notebooks.utilities_widgets &mdash; qubiter 1.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> qubiter
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+        
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../rosetta.html">Rosetta Stone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../classgraph.html">Class Graph</a></li>
+</ul>
+
+            
+          
+        <a href="py-modindex.html">Module Index</a>
+    
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">qubiter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qubiter.jupyter_notebooks.utilities_widgets</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qubiter.jupyter_notebooks.utilities_widgets</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">ipywidgets</span> <span class="k">as</span> <span class="nn">wid</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="k">import</span> <span class="n">display</span><span class="p">,</span> <span class="n">clear_output</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">qubiter.PlaceholderManager</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">qubiter.SEO_simulator</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">qubiter.StateVec</span> <span class="k">import</span> <span class="o">*</span>
+
+
+<div class="viewcode-block" id="run_sim_gui"><a class="viewcode-back" href="../../../qubiter.jupyter_notebooks.utilities_widgets.html#qubiter.jupyter_notebooks.utilities_widgets.run_sim_gui">[docs]</a><span class="k">def</span> <span class="nf">run_sim_gui</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="n">all_var_nums</span><span class="p">,</span> <span class="n">fun_name_to_fun</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">slider_max_degs</span><span class="o">=</span><span class="mi">360</span><span class="o">*</span><span class="mi">3</span><span class="p">,</span> <span class="n">append_new</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">sty_fin_desc</span><span class="o">=</span><span class="s1">&#39;ALL&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generates and runs a widgets gui (graphical user interface). The gui has</span>
+<span class="sd">    a button labelled `Run` that creates an object of SEO_simulator. The gui</span>
+<span class="sd">    contains a slider for each placeholder variable (parameter) of a circuit</span>
+<span class="sd">    that has been created a priori by a SEO_writer using the name</span>
+<span class="sd">    `file_prefix` and number of qubits `num_bits`.</span>
+
+<span class="sd">    If a parameter is labelled `#1`, then the slider value degs_1 times</span>
+<span class="sd">    pi/180 is substituted for `#1`</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    file_prefix : str</span>
+<span class="sd">    num_bits : int</span>
+<span class="sd">    all_var_nums : list[int]</span>
+<span class="sd">        all the placeholder variable numbers. If the circuit has exactly</span>
+<span class="sd">        two placeholder variables #5 and #7, then all_var_nums=[5, 7]</span>
+<span class="sd">    fun_name_to_fun : dict[str, function]</span>
+<span class="sd">        dict mapping every functional placeholder name to its function</span>
+<span class="sd">    slider_max_degs : float</span>
+<span class="sd">        maximum (in degrees) of sliders (same for all of them)</span>
+<span class="sd">    append_new : bool</span>
+<span class="sd">        If True, printout for current run will be appended to end. If False,</span>
+<span class="sd">        the previous printout will be erased before printing for current run.</span>
+<span class="sd">    sty_fin_desc : str</span>
+<span class="sd">        The style used in the description of the final state vector.</span>
+<span class="sd">        Argument of StateVec.get_style_dict().</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">var_num_to_rads</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">hbox_comps</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">slider_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">all_var_nums</span><span class="p">:</span>
+        <span class="n">slider</span> <span class="o">=</span> <span class="n">wid</span><span class="o">.</span><span class="n">FloatSlider</span><span class="p">(</span>
+            <span class="nb">min</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+            <span class="nb">max</span><span class="o">=</span><span class="n">slider_max_degs</span><span class="p">,</span>
+            <span class="n">step</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+            <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;vertical&#39;</span><span class="p">)</span>
+        <span class="n">slider_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">slider</span><span class="p">)</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">wid</span><span class="o">.</span><span class="n">FloatText</span><span class="p">(</span><span class="n">layout</span><span class="o">=</span><span class="n">wid</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="s1">&#39;70px&#39;</span><span class="p">))</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="n">wid</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s1">&#39;degs_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">num</span><span class="p">))</span>
+        <span class="n">wid</span><span class="o">.</span><span class="n">jslink</span><span class="p">((</span><span class="n">slider</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">),</span> <span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">))</span>
+        <span class="n">hbox_comps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">wid</span><span class="o">.</span><span class="n">VBox</span><span class="p">([</span><span class="n">slider</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">label</span><span class="p">]))</span>
+        <span class="n">var_num_to_rads</span><span class="p">[</span><span class="n">num</span><span class="p">]</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">value</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">180</span>
+
+    <span class="n">rbut</span> <span class="o">=</span> <span class="n">wid</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;Run&#39;</span><span class="p">)</span>
+    <span class="n">rbut</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="s1">&#39;110px&#39;</span>
+    <span class="n">rbut</span><span class="o">.</span><span class="n">button_style</span> <span class="o">=</span> <span class="s1">&#39;danger&#39;</span>
+
+    <span class="n">ebut</span> <span class="o">=</span> <span class="n">wid</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;Erase Output&#39;</span><span class="p">)</span>
+    <span class="n">ebut</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="s1">&#39;110px&#39;</span>
+    <span class="n">ebut</span><span class="o">.</span><span class="n">button_style</span> <span class="o">=</span> <span class="s1">&#39;danger&#39;</span>
+
+    <span class="n">hbox_comps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">wid</span><span class="o">.</span><span class="n">VBox</span><span class="p">([</span><span class="n">rbut</span><span class="p">,</span> <span class="n">ebut</span><span class="p">]))</span>
+    <span class="n">hbox</span> <span class="o">=</span> <span class="n">wid</span><span class="o">.</span><span class="n">HBox</span><span class="p">(</span><span class="n">hbox_comps</span><span class="p">)</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">hbox</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">slider_do</span><span class="p">(</span><span class="n">num1</span><span class="p">,</span> <span class="n">change</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">change</span><span class="p">[</span><span class="s1">&#39;new&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">change</span><span class="p">[</span><span class="s1">&#39;old&#39;</span><span class="p">]:</span>
+            <span class="n">var_num_to_rads</span><span class="p">[</span><span class="n">num1</span><span class="p">]</span> <span class="o">=</span> <span class="n">change</span><span class="p">[</span><span class="s1">&#39;new&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">180</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">var_num_to_rads</span><span class="p">[</span><span class="n">num1</span><span class="p">]</span> <span class="o">=</span> <span class="n">change</span><span class="p">[</span><span class="s1">&#39;old&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">180</span>
+
+    <span class="k">for</span> <span class="n">num1</span><span class="p">,</span> <span class="n">slider</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">all_var_nums</span><span class="p">,</span> <span class="n">slider_list</span><span class="p">):</span>
+        <span class="n">fun</span> <span class="o">=</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">num2</span><span class="o">=</span><span class="n">num1</span><span class="p">:</span> <span class="n">slider_do</span><span class="p">(</span><span class="n">num2</span><span class="p">,</span> <span class="n">x</span><span class="p">))</span>
+        <span class="n">slider</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="n">fun</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="s1">&#39;value&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">rbut_event_handler</span><span class="p">(</span><span class="n">btn</span><span class="p">):</span>
+        <span class="n">vman</span> <span class="o">=</span> <span class="n">PlaceholderManager</span><span class="p">(</span><span class="n">var_num_to_rads</span><span class="o">=</span><span class="n">var_num_to_rads</span><span class="p">,</span>
+                                  <span class="n">fun_name_to_fun</span><span class="o">=</span><span class="n">fun_name_to_fun</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">append_new</span><span class="p">:</span>
+            <span class="n">clear_output</span><span class="p">()</span>
+            <span class="n">display</span><span class="p">(</span><span class="n">hbox</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">num1</span> <span class="ow">in</span> <span class="n">all_var_nums</span><span class="p">:</span>
+            <span class="n">rads</span> <span class="o">=</span> <span class="n">var_num_to_rads</span><span class="p">[</span><span class="n">num1</span><span class="p">]</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;degs_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">num1</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;(=rads)&#39;</span><span class="p">,</span>
+                  <span class="n">rads</span><span class="o">*</span><span class="mi">180</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="s1">&#39;(&#39;</span><span class="p">,</span>  <span class="n">rads</span><span class="p">,</span> <span class="s1">&#39;)&#39;</span><span class="p">)</span>
+        <span class="n">sim</span> <span class="o">=</span> <span class="n">SEO_simulator</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="n">vars_manager</span><span class="o">=</span><span class="n">vman</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">-----------------------------beginning final results&#39;</span><span class="p">)</span>
+        <span class="n">StateVec</span><span class="o">.</span><span class="n">describe_st_vec_dict</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">cur_st_vec_dict</span><span class="p">,</span>
+                                      <span class="o">**</span><span class="n">StateVec</span><span class="o">.</span><span class="n">get_style_dict</span><span class="p">(</span><span class="n">sty_fin_desc</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;-----------------------------ending final results</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">rbut</span><span class="o">.</span><span class="n">on_click</span><span class="p">(</span><span class="n">rbut_event_handler</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">ebut_event_handler</span><span class="p">(</span><span class="n">btn</span><span class="p">):</span>
+        <span class="n">clear_output</span><span class="p">()</span>
+        <span class="n">display</span><span class="p">(</span><span class="n">hbox</span><span class="p">)</span>
+    <span class="n">ebut</span><span class="o">.</span><span class="n">on_click</span><span class="p">(</span><span class="n">ebut_event_handler</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Robert R. Tucci &amp; Qubiter contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
