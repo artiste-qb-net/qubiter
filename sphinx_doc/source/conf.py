@@ -92,6 +92,8 @@ autodoc_mock_imports = \
     'openfermion',
     'pandas',
     'pyquil',
+    'IPython',
+    'ipywidgets',
     'tensorflow',
     'scipy'
 ]
