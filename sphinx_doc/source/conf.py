@@ -87,13 +87,13 @@ autodoc_mock_imports = \
 [
     'autograd',
     'cuncsd_sq',
+    'IPython',
+    'ipywidgets',
     'matplotlib',
     'numpy',
     'openfermion',
     'pandas',
     'pyquil',
-    'IPython',
-    'ipywidgets',
     'tensorflow',
     'scipy'
 ]
