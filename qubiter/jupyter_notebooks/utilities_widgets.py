@@ -16,7 +16,7 @@ def run_sim_gui(file_prefix, num_bits, all_var_nums, fun_name_to_fun=None,
     that has been created a priori by a SEO_writer using the name
     `file_prefix` and number of qubits `num_bits`.
 
-    If a parameter is labelled `#1`, then the slider value degs_1 times
+    If a parameter is labelled `#1`, then the slider value for degs_1 times
     pi/180 is substituted for `#1`
 
     Parameters
@@ -70,11 +70,8 @@ def run_sim_gui(file_prefix, num_bits, all_var_nums, fun_name_to_fun=None,
     hbox = wid.HBox(hbox_comps)
     display(hbox)
 
-    def slider_do(num1, change):
-        if change['new'] != change['old']:
-            var_num_to_rads[num1] = change['new'] * np.pi / 180
-        else:
-            var_num_to_rads[num1] = change['old'] * np.pi / 180
+    def slider_do(num3, change):
+        var_num_to_rads[num3] = change['new'] * np.pi/180
 
     for num1, slider in zip(all_var_nums, slider_list):
         fun = (lambda x, num2=num1: slider_do(num2, x))
@@ -86,9 +83,9 @@ def run_sim_gui(file_prefix, num_bits, all_var_nums, fun_name_to_fun=None,
         if not append_new:
             clear_output()
             display(hbox)
-        for num1 in all_var_nums:
-            rads = var_num_to_rads[num1]
-            print('degs_' + str(num1) + '(=rads)',
+        for num in all_var_nums:
+            rads = var_num_to_rads[num]
+            print('degs_' + str(num) + '(=rads)',
                   rads*180/np.pi, '(',  rads, ')')
         sim = SEO_simulator(file_prefix, num_bits, vars_manager=vman)
         print('\n-----------------------------beginning final results')
