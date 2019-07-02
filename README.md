@@ -4,10 +4,14 @@
 
 The following Jupyter notebook is a 
 good introduction to Qubiter's basic features. Other notebooks
-in Qubiter's jupyter notebook folder
+in Qubiter's jupyter_notebook folder
 discuss more advanced features:
 
-* https://github.com/artiste-qb-net/qubiter/blob/master/qubiter/jupyter_notebooks/Say_Hello_World_With_Qubiter.ipynb
+* https://nbviewer.jupyter.org/github/artiste-qb-net/qubiter/blob/master/qubiter/jupyter_notebooks/Say_Hello_World_With_Qubiter.ipynb
+
+The following automatically generated notebook summarizes all other notebooks:
+
+* https://nbviewer.jupyter.org/github/artiste-qb-net/qubiter/blob/master/qubiter/jupyter_notebooks/SUMMARY.ipynb
 
 See also, at the readthedocs.org 
 website, the beautiful documentation generated automatically by the Sphinx 
