@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>qubiter.jupyter_notebooks.utilities_widgets module &mdash; qubiter 1.0.1 documentation</title>
+  <title>qubiter.jupyter_notebooks.utilities_nb module &mdash; qubiter 1.0.1 documentation</title>
   
 
   
@@ -131,13 +131,13 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>qubiter.jupyter_notebooks.utilities_widgets module</li>
+      <li>qubiter.jupyter_notebooks.utilities_nb module</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/qubiter.jupyter_notebooks.utilities_widgets.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/qubiter.jupyter_notebooks.utilities_nb.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -150,17 +150,17 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-qubiter.jupyter_notebooks.utilities_widgets">
-<span id="qubiter-jupyter-notebooks-utilities-widgets-module"></span><h1>qubiter.jupyter_notebooks.utilities_widgets module<a class="headerlink" href="#module-qubiter.jupyter_notebooks.utilities_widgets" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-qubiter.jupyter_notebooks.utilities_nb">
+<span id="qubiter-jupyter-notebooks-utilities-nb-module"></span><h1>qubiter.jupyter_notebooks.utilities_nb module<a class="headerlink" href="#module-qubiter.jupyter_notebooks.utilities_nb" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
-<dt id="qubiter.jupyter_notebooks.utilities_widgets.run_sim_gui">
-<code class="sig-prename descclassname">qubiter.jupyter_notebooks.utilities_widgets.</code><code class="sig-name descname">run_sim_gui</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_bits</em>, <em class="sig-param">all_var_nums</em>, <em class="sig-param">fun_name_to_fun=None</em>, <em class="sig-param">slider_max_degs=1080</em>, <em class="sig-param">append_new=False</em>, <em class="sig-param">sty_fin_desc='ALL'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/jupyter_notebooks/utilities_widgets.html#run_sim_gui"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.jupyter_notebooks.utilities_widgets.run_sim_gui" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates and runs a widgets gui (graphical user interface). The gui has
-a button labelled <cite>Run</cite> that creates an object of SEO_simulator. The gui
-contains a slider for each placeholder variable (parameter) of a circuit
-that has been created a priori by a SEO_writer using the name
-<cite>file_prefix</cite> and number of qubits <cite>num_bits</cite>.</p>
-<p>If a parameter is labelled <cite>#1</cite>, then the slider value degs_1 times
+<dt id="qubiter.jupyter_notebooks.utilities_nb.run_sim_gui">
+<code class="sig-prename descclassname">qubiter.jupyter_notebooks.utilities_nb.</code><code class="sig-name descname">run_sim_gui</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_bits</em>, <em class="sig-param">all_var_nums</em>, <em class="sig-param">fun_name_to_fun=None</em>, <em class="sig-param">slider_max_degs=1080</em>, <em class="sig-param">append_new=False</em>, <em class="sig-param">sty_fin_desc='ALL'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/jupyter_notebooks/utilities_nb.html#run_sim_gui"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.jupyter_notebooks.utilities_nb.run_sim_gui" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method generates and runs a widgets gui (graphical user interface).
+The gui has a button labelled <cite>Run</cite> that creates an object of
+SEO_simulator. The gui contains a slider for each placeholder variable (
+parameter) of a circuit that has been created a priori by a SEO_writer
+using the name <cite>file_prefix</cite> and number of qubits <cite>num_bits</cite>.</p>
+<p>If a parameter is labelled <cite>#1</cite>, then the slider value for degs_1 times
 pi/180 is substituted for <cite>#1</cite></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>

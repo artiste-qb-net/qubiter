@@ -6,7 +6,7 @@ Submodules
 
 .. toctree::
 
-   qubiter.jupyter_notebooks.utilities_widgets
+   qubiter.jupyter_notebooks.utilities_nb
 
 Module contents
 ---------------

@@ -10,11 +10,11 @@ def run_sim_gui(file_prefix, num_bits, all_var_nums, fun_name_to_fun=None,
                 slider_max_degs=360*3, append_new=False,
                 sty_fin_desc='ALL'):
     """
-    Generates and runs a widgets gui (graphical user interface). The gui has
-    a button labelled `Run` that creates an object of SEO_simulator. The gui
-    contains a slider for each placeholder variable (parameter) of a circuit
-    that has been created a priori by a SEO_writer using the name
-    `file_prefix` and number of qubits `num_bits`.
+    This method generates and runs a widgets gui (graphical user interface).
+    The gui has a button labelled `Run` that creates an object of
+    SEO_simulator. The gui contains a slider for each placeholder variable (
+    parameter) of a circuit that has been created a priori by a SEO_writer
+    using the name `file_prefix` and number of qubits `num_bits`.
 
     If a parameter is labelled `#1`, then the slider value for degs_1 times
     pi/180 is substituted for `#1`
