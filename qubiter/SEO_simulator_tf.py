@@ -93,7 +93,7 @@ class SEO_simulator_tf(SEO_simulator):
 
 if __name__ == "__main__":
     def main():
-        tf.enable_eager_execution()
+        # tf.enable_eager_execution()
         # use test = 0 if want to run all tests at once.
         test = 0
         # test = 3

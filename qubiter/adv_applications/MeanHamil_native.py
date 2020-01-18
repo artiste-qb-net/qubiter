@@ -125,7 +125,7 @@ class MeanHamil_native(MeanHamil):
                 real_arr = tf.convert_to_tensor(real_arr, dtype=tf.complex128)
                 arr = effective_st_vec.arr
                 mean_val += coef*tf.reduce_sum(
-                    tf.real(tf.conj(arr) * real_arr * arr))
+                    tf.math.real(tf.math.conj(arr) * real_arr * arr))
 
 
         # create this writer in order to delete final files
