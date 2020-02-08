@@ -387,6 +387,7 @@ class StairsCkt_writer(SEO_writer):
             self.write_controlled_one_bit_gate(u2_pos, trols,
                     OneBitGates.u2, rads_list)
 
+
 if __name__ == "__main__":
     def main():
         num_bits = 3

@@ -6,6 +6,7 @@ import qubiter.utilities_gen as utg
 from qubiter.PlaceholderManager import *
 import sys
 import os
+from IPython.display import HTML, display
 if 'autograd.numpy' not in sys.modules:
     import numpy as np
 
@@ -196,29 +197,84 @@ class SEO_writer:
         os.remove(self.get_eng_file_path())
         os.remove(self.get_pic_file_path())
 
-    def print_eng_file(self):
+    @staticmethod
+    def gen_html_from_eng_or_pic_file(f):
+        """
+        This function returns a string for an html table generated from an
+        English or Picture file. The table has two columns.
+        The first column gives the line numbers starting from 1.
+
+        Parameters
+        ----------
+        f : file
+            f is file object returned by open()
+
+        Returns
+        -------
+        str
+
+        """
+        k = 1
+        line = f.readline()
+        all_lines = ''
+        td0 = "<td style='border-right:1px solid red;'>"
+        td1 = "<td style='text-align:left;'>"
+        while line:
+            all_lines += td0 + str(k) + "</td>" + td1 +\
+                         "<pre>" + line.strip() + "</pre>" +\
+                         '</td></tr>'
+            k += 1
+            line = f.readline()
+        table = "<table style='font-family:monospace'><tr>" +\
+                all_lines + '</table>'
+        # print(table)
+        return table
+
+    def print_eng_file(self, jup=False):
         """
         Prints English file.
 
+        Parameters
+        ----------
+        jup : bool
+
+            If jup=False, it prints text. Otherwise, it draws in a jupyter
+            notebook a table with line numbers starting at 1
+
         Returns
         -------
         None
 
         """
-        with open(utg.preface(self.get_eng_file_path(rel=True))) as f:
-            print(f.read())
+        with open(utg.preface(self.get_eng_file_path(rel=True)), 'r') as f:
+            if not jup:
+                print(f.read())
+            else:
+                dis_obj = HTML(SEO_writer.gen_html_from_eng_or_pic_file(f))
+                display(dis_obj)
 
-    def print_pic_file(self):
+    def print_pic_file(self, jup=False):
         """
         Prints Picture file.
 
+        Parameters
+        ----------
+        jup : bool
+
+            If jup=False, it prints text. Otherwise, it draws in a jupyter
+            notebook a table with line numbers starting at 1
+
         Returns
         -------
         None
 
         """
-        with open(utg.preface(self.get_pic_file_path(rel=True))) as f:
-            print(f.read())
+        with open(utg.preface(self.get_pic_file_path(rel=True)), 'r') as f:
+            if not jup:
+                print(f.read())
+            else:
+                dis_obj = HTML(SEO_writer.gen_html_from_eng_or_pic_file(f))
+                display(dis_obj)
 
     def colonize(self, pic_line):
         """
@@ -492,7 +548,7 @@ class SEO_writer:
         # np.float types are different from float!!!
         if isinstance(rads, (int, float, np.floating)):
             # print("--nnn", str(rads*180/np.pi))
-            return str(rads*180/np.pi)
+            return '{0:0.6f}'.format(rads*180/np.pi)
         else:
             assert PlaceholderManager.is_legal_var_name(rads), \
                 "attempting to write an illegal variable name: '" +\

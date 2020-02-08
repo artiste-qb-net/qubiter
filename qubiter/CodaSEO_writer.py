@@ -149,6 +149,7 @@ class CodaSEO_writer(SEO_writer):
                 assert False, "Unsupported qbit measurement. '" + \
                             xy_str + "' Should be either 'X' or 'Y'"
 
+
 if __name__ == "__main__":
     def main():
         init_file_prefix = 'coda_writer_test_init'

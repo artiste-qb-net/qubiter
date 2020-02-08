@@ -19,6 +19,6 @@ NOTA	the coda follows
 HAD2	AT	2
 SIGX	AT	1	IF	0T
 NOTA	change |0_X>, |1_X> to |0>, |1>
-ROTY	45.0	AT	1
+ROTY	45.000000	AT	1
 NOTA	change |0_Y>, |1_Y> to |0>, |1>
-ROTX	-45.0	AT	3
+ROTX	-45.000000	AT	3

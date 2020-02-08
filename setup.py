@@ -9,14 +9,15 @@ setup(
     name="qubiter",
     version="1.0.1",
     author="qubiter contributors",
-    keywords = ('quantum compiler'),
+    keywords=('quantum compiler'),
     author_email="rrtucci@gmail.com",
-    description="Python tools for reading, writing, compiling, simulating quantum computer circuits.",
+    description="Python tools for reading, writing, compiling, " +\
+                "simulating quantum computer circuits.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/artiste-qb-net/qubiter",
     packages=find_packages(),
-    #include_package_data=True,
+    # include_package_data=True,
     package_data={
         '': ['*.txt', '*.pdf', '*.ipynb', '*.md', '*.tex', '*.sty'],
         'qubiter': ['quantum_CSD_compiler/*.md'],

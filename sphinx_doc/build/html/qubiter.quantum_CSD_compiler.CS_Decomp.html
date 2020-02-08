@@ -159,10 +159,12 @@
 <dl class="method">
 <dt id="qubiter.quantum_CSD_compiler.CS_Decomp.CS_Decomp.get_csd">
 <em class="property">static </em><code class="sig-name descname">get_csd</code><span class="sig-paren">(</span><em class="sig-param">unitary_mats</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/quantum_CSD_compiler/CS_Decomp.html#CS_Decomp.get_csd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.quantum_CSD_compiler.CS_Decomp.CS_Decomp.get_csd" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function does a CS (cosine-sine) decomposition (by calling the LAPACK function cuncsd.f. The old C++
-Qubiter called zggsvd.f instead) of each unitary matrix in the list of arrays unitary_mats. This function is
-called by the constructor of the class Node and is fundamental for decomposing a unitary matrix into
-multiplexors and diagonal unitaries.</p>
+<dd><p>This function does a CS (cosine-sine) decomposition (by calling the
+LAPACK function cuncsd.f. The old C++ Qubiter called zggsvd.f
+instead) of each unitary matrix in the list of arrays unitary_mats.
+This function is called by the constructor of the class Node and is
+fundamental for decomposing a unitary matrix into multiplexors and
+diagonal unitaries.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>unitary_mats</strong> (<em>list</em><em>(</em><em>np.ndarray</em><em>)</em>) – </p>

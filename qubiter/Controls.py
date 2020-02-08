@@ -218,6 +218,7 @@ class Controls:
         new.refresh_lists()
         return new
 
+
 if __name__ == "__main__":
     def main():
         print(5)

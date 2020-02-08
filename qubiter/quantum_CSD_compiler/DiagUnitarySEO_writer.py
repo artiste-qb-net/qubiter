@@ -268,6 +268,7 @@ class DiagUnitarySEO_writer(SEO_writer):
             sign = -1
         return np.diag(np.exp(1j*sign*np.array(rad_angles)))
 
+
 if __name__ == "__main__":
     def main():
         nt = 1

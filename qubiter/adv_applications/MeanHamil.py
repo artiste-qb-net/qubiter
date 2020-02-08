@@ -122,6 +122,7 @@ class MeanHamil:
         Parameters
         ----------
         hamil : QubitOperator
+        max_bit_pos : int
 
         Returns
         -------

@@ -2,6 +2,7 @@ def aaa():
     # trick sphinx to build link in doc
     pass
 
+
 """
 from cirq/google/known_devices.py
 Positions with - are empty.

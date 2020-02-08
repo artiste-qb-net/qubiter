@@ -44,6 +44,7 @@ Submodules
    qubiter.classgraph
    qubiter.run_all_nb
    qubiter.run_all_py
+   qubiter.test
    qubiter.utilities_gen
 
 Module contents

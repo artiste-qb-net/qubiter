@@ -303,6 +303,7 @@ class AtomWriter(SEO_writer):
         """
         self.write_pow_hermitian(1)
 
+
 if __name__ == "__main__":
     def main():
         bit_map = list(range(7))

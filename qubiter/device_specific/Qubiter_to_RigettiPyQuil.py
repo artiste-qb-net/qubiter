@@ -445,6 +445,7 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
         # we drop global phase
         self.use_ROTN(rads1, rads2, rads3, tar_bit_pos, controls)
 
+
 if __name__ == "__main__":
     import qubiter.device_specific.chip_couplings_rigetti as rig
 

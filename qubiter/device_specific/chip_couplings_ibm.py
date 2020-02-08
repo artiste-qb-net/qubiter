@@ -2,6 +2,7 @@ def aaa():
     # trick sphinx to build link in doc
     pass
 
+
 # retired
 ibmqx2_c_to_tars =\
 {

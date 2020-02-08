@@ -360,6 +360,7 @@
     <span class="c1"># print(&#39;mmbbvv, pu2&#39;, pu2r(*tlist) +1j* pu2r(*tlist))</span>
     <span class="k">return</span> <span class="n">pu2r</span><span class="p">(</span><span class="o">*</span><span class="n">tlist</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">pu2i</span><span class="p">(</span><span class="o">*</span><span class="n">tlist</span><span class="p">)</span></div>
 
+
 <span class="n">defvjp</span><span class="p">(</span><span class="n">pu2r</span><span class="p">,</span>
        <span class="c1"># defines vector-jacobian-product of pu2r</span>
        <span class="c1"># g.shape == pu2r.shape</span>
@@ -408,6 +409,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">assert</span> <span class="n">dwrt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">jacobian</span><span class="p">(</span><span class="n">pu2r</span><span class="p">,</span> <span class="n">dwrt</span><span class="p">)(</span><span class="o">*</span><span class="n">tlist</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">jacobian</span><span class="p">(</span><span class="n">pu2i</span><span class="p">,</span> <span class="n">dwrt</span><span class="p">)(</span><span class="o">*</span><span class="n">tlist</span><span class="p">)</span></div>
+
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">qubiter.OneBitGates</span> <span class="k">import</span> <span class="o">*</span>

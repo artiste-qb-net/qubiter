@@ -6,7 +6,7 @@ def Feynman(rads2, rads1):
     # ['my_fun']
     def my_fun(x, y):
         return x + .5*y
-    qml.RX(-0.8975979010256552, wires=2)
+    qml.RX(-0.8975979109989651, wires=2)
     qml.RX(rads2*.5*(-2), wires=1)
     def rot(rad_ang_x, rad_ang_y, rad_ang_z, lib='np'):
         """

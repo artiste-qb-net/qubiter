@@ -125,6 +125,7 @@ class FouSEO_writer(SEO_writer):
                 mat[r, s] = np.exp(1j*sign*2*np.pi*r*s/num_rows)/norma
         return mat
 
+
 if __name__ == "__main__":
     def main():
         num_bits_bef = 4

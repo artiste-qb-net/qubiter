@@ -6,7 +6,7 @@ NOTA	    # distinct fun names in functional placeholders=
 NOTA	    # ['my_fun']
 NOTA	    def my_fun(x, y):
 NOTA	        return x + .5*y
-ROTX	25.714285714285715	AT	2
+ROTX	25.714286	AT	2
 ROTX	#2*.5	AT	1
 NOTA	    def rot(rad_ang_x, rad_ang_y, rad_ang_z, lib='np'):
 NOTA	        """

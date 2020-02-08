@@ -149,7 +149,8 @@
            <div itemprop="articleBody">
             
   <h1>Source code for qubiter.quantum_CSD_compiler.CS_Decomp</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">cuncsd_sq</span> <span class="k">as</span> <span class="nn">csd</span>
+<span></span><span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">cuncsd_sq</span> <span class="k">as</span> <span class="nn">csd</span>
 <span class="kn">from</span> <span class="nn">qubiter.UnitaryMat</span> <span class="k">import</span> <span class="o">*</span>
 
 
@@ -158,10 +159,12 @@
 <div class="viewcode-block" id="CS_Decomp.get_csd"><a class="viewcode-back" href="../../../qubiter.quantum_CSD_compiler.CS_Decomp.html#qubiter.quantum_CSD_compiler.CS_Decomp.CS_Decomp.get_csd">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_csd</span><span class="p">(</span><span class="n">unitary_mats</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        This function does a CS (cosine-sine) decomposition (by calling the LAPACK function cuncsd.f. The old C++</span>
-<span class="sd">        Qubiter called zggsvd.f instead) of each unitary matrix in the list of arrays unitary_mats. This function is</span>
-<span class="sd">        called by the constructor of the class Node and is fundamental for decomposing a unitary matrix into</span>
-<span class="sd">        multiplexors and diagonal unitaries.</span>
+<span class="sd">        This function does a CS (cosine-sine) decomposition (by calling the</span>
+<span class="sd">        LAPACK function cuncsd.f. The old C++ Qubiter called zggsvd.f</span>
+<span class="sd">        instead) of each unitary matrix in the list of arrays unitary_mats.</span>
+<span class="sd">        This function is called by the constructor of the class Node and is</span>
+<span class="sd">        fundamental for decomposing a unitary matrix into multiplexors and</span>
+<span class="sd">        diagonal unitaries.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -321,8 +324,10 @@
                 <span class="n">right_mats</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v2t</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">left_mats</span><span class="p">,</span> <span class="n">central_mats</span><span class="p">,</span> <span class="n">right_mats</span></div></div>
 
+
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">qubiter.FouSEO_writer</span> <span class="k">import</span> <span class="o">*</span>
+    <span class="kn">from</span> <span class="nn">qubiter.quantum_CSD_compiler.MultiplexorSEO_writer</span> <span class="k">import</span> <span class="o">*</span>
 
     <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">cs decomp example-------------&quot;</span><span class="p">)</span>
@@ -336,13 +341,14 @@
         <span class="c1"># print(&#39;right_mats\n&#39;, right_mats)</span>
 
         <span class="n">left</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">num_rows</span><span class="p">,</span> <span class="n">num_rows</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
-        <span class="n">left</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">num_rows</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="n">num_rows</span> <span class="o">/</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">left_mats</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">left</span><span class="p">[</span><span class="n">num_rows</span> <span class="o">/</span> <span class="mi">2</span><span class="p">:</span><span class="n">num_rows</span><span class="p">,</span> <span class="n">num_rows</span> <span class="o">/</span> <span class="mi">2</span><span class="p">:</span><span class="n">num_rows</span><span class="p">]</span> <span class="o">=</span> <span class="n">left_mats</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">half_nrows</span> <span class="o">=</span> <span class="n">num_rows</span> <span class="o">//</span> <span class="mi">2</span>
+        <span class="n">left</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">half_nrows</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="n">half_nrows</span><span class="p">]</span> <span class="o">=</span> <span class="n">left_mats</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">left</span><span class="p">[</span><span class="n">half_nrows</span><span class="p">:</span><span class="n">num_rows</span><span class="p">,</span> <span class="n">half_nrows</span><span class="p">:</span><span class="n">num_rows</span><span class="p">]</span> <span class="o">=</span> <span class="n">left_mats</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="c1"># print(&#39;left&#39;, left)</span>
 
         <span class="n">right</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">num_rows</span><span class="p">,</span> <span class="n">num_rows</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
-        <span class="n">right</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">num_rows</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="n">num_rows</span> <span class="o">/</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">right_mats</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">right</span><span class="p">[</span><span class="n">num_rows</span> <span class="o">/</span> <span class="mi">2</span><span class="p">:</span><span class="n">num_rows</span><span class="p">,</span> <span class="n">num_rows</span> <span class="o">/</span> <span class="mi">2</span><span class="p">:</span><span class="n">num_rows</span><span class="p">]</span> <span class="o">=</span> <span class="n">right_mats</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">right</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">half_nrows</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="n">half_nrows</span><span class="p">]</span> <span class="o">=</span> <span class="n">right_mats</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">right</span><span class="p">[</span><span class="n">half_nrows</span><span class="p">:</span><span class="n">num_rows</span><span class="p">,</span> <span class="n">half_nrows</span><span class="p">:</span><span class="n">num_rows</span><span class="p">]</span> <span class="o">=</span> <span class="n">right_mats</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
         <span class="n">center</span> <span class="o">=</span> <span class="n">MultiplexorSEO_writer</span><span class="o">.</span><span class="n">mp_mat</span><span class="p">(</span><span class="n">central_mats</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="c1"># print(&#39;center&#39;, center)</span>

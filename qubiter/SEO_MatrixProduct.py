@@ -116,6 +116,7 @@ class SEO_MatrixProduct:
         self.prod_arr = np.vstack(fin_list).transpose()
         # print(self.prod_arr)
 
+
 if __name__ == "__main__":
     from qubiter.FouSEO_writer import *
 

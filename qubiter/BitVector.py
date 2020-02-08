@@ -376,6 +376,7 @@ class BitVector:
         new_lazy = old_lazy ^ (new_normal & ~(new_normal-1))
         return new_normal, new_lazy
 
+
 if __name__ == "__main__":
     def main():
         for length in [3, 4]:

@@ -91,6 +91,7 @@ class SEO_simulator_tf(SEO_simulator):
             if isinstance(st_vec.arr, tf.Tensor):
                 st_vec.arr = st_vec.arr.numpy()
 
+
 if __name__ == "__main__":
     def main():
         # tf.enable_eager_execution()

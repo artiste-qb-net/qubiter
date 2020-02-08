@@ -65,6 +65,7 @@ class StairsAllDeriv_native(StairsDeriv_native):
                 StairsDeriv_native.get_mean_val(self, var_num_to_rads)
         return gate_str_to_partials_list
 
+
 if __name__ == "__main__":
     def main():
         num_bits = 4

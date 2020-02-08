@@ -71,6 +71,7 @@ class StairsDeriv(MeanHamil):
         """
         assert False
 
+
 if __name__ == "__main__":
     def main():
         print(5)

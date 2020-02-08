@@ -133,6 +133,7 @@ class LoopyPlaceholderManager(PlaceholderManager):
         self.loop_out.write('all_fun_names += ' +
                             str(self.all_fun_names) + "\n")
 
+
 if __name__ == "__main__":
     def main():
         print(5)

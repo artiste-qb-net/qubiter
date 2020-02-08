@@ -412,7 +412,7 @@ class AsciiPic_to_Latex:
                     latex_str += '&' + stick + '{\\ket{' +\
                                  self.init_states[bit] + '}}'
                 else:
-                    latex_str += '&\gate{' + gate_char + '}'
+                    latex_str += '&\\gate{' + gate_char + '}'
 
                 # add \qwx
                 if self.reverse_bits:
@@ -435,13 +435,14 @@ class AsciiPic_to_Latex:
                     max_non_vert = max(non_vertical_pos)
                     for k in range(min_non_vert, max_non_vert):
                         if bit-1 == k:
-                            latex_str += '\qwx'
+                            latex_str += '\\qwx'
 
                 latex_str += '\t\t% gate ' + str(gate_num) + '\n'
         latex_str += '}\n'
         latex_str += '\\end{array}\n\\end{equation}\n\n'
 
         return latex_str
+
 
 if __name__ == "__main__":
     def main():

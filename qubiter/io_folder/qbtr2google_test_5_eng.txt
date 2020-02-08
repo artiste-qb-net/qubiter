@@ -16,4 +16,3 @@ NOTA  not allowed in strict mode
 P1PH	#1	AT	2
 P1PH	-#1	AT	2	IF	0T
 SWAP	2	0
-

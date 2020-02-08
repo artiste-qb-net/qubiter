@@ -242,9 +242,10 @@
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">st_vec</span><span class="o">.</span><span class="n">arr</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
                 <span class="n">st_vec</span><span class="o">.</span><span class="n">arr</span> <span class="o">=</span> <span class="n">st_vec</span><span class="o">.</span><span class="n">arr</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span></div></div>
 
+
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-        <span class="n">tf</span><span class="o">.</span><span class="n">enable_eager_execution</span><span class="p">()</span>
+        <span class="c1"># tf.enable_eager_execution()</span>
         <span class="c1"># use test = 0 if want to run all tests at once.</span>
         <span class="n">test</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="c1"># test = 3</span>

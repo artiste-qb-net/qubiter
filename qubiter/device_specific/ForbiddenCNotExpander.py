@@ -326,6 +326,7 @@ class ForbiddenCNotExpander(EchoingSEO_reader):
             else:  # x[1] is int
                 self.wr.write_cnot(x[0], x[1])
 
+
 if __name__ == "__main__":
     def main():
         import qubiter.device_specific.chip_couplings_ibm as ibm

@@ -157,6 +157,7 @@
 <span class="kn">from</span> <span class="nn">qubiter.PlaceholderManager</span> <span class="k">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="k">import</span> <span class="n">HTML</span><span class="p">,</span> <span class="n">display</span>
 <span class="k">if</span> <span class="s1">&#39;autograd.numpy&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
@@ -347,29 +348,84 @@
         <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_eng_file_path</span><span class="p">())</span>
         <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_pic_file_path</span><span class="p">())</span></div>
 
-<div class="viewcode-block" id="SEO_writer.print_eng_file"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.print_eng_file">[docs]</a>    <span class="k">def</span> <span class="nf">print_eng_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="SEO_writer.gen_html_from_eng_or_pic_file"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.gen_html_from_eng_or_pic_file">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">gen_html_from_eng_or_pic_file</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function returns a string for an html table generated from an</span>
+<span class="sd">        English or Picture file. The table has two columns.</span>
+<span class="sd">        The first column gives the line numbers starting from 1.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        f : file</span>
+<span class="sd">            f is file object returned by open()</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+        <span class="n">all_lines</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">td0</span> <span class="o">=</span> <span class="s2">&quot;&lt;td style=&#39;border-right:1px solid red;&#39;&gt;&quot;</span>
+        <span class="n">td1</span> <span class="o">=</span> <span class="s2">&quot;&lt;td style=&#39;text-align:left;&#39;&gt;&quot;</span>
+        <span class="k">while</span> <span class="n">line</span><span class="p">:</span>
+            <span class="n">all_lines</span> <span class="o">+=</span> <span class="n">td0</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;&lt;/td&gt;&quot;</span> <span class="o">+</span> <span class="n">td1</span> <span class="o">+</span>\
+                         <span class="s2">&quot;&lt;pre&gt;&quot;</span> <span class="o">+</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;&lt;/pre&gt;&quot;</span> <span class="o">+</span>\
+                         <span class="s1">&#39;&lt;/td&gt;&lt;/tr&gt;&#39;</span>
+            <span class="n">k</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+        <span class="n">table</span> <span class="o">=</span> <span class="s2">&quot;&lt;table style=&#39;font-family:monospace&#39;&gt;&lt;tr&gt;&quot;</span> <span class="o">+</span>\
+                <span class="n">all_lines</span> <span class="o">+</span> <span class="s1">&#39;&lt;/table&gt;&#39;</span>
+        <span class="c1"># print(table)</span>
+        <span class="k">return</span> <span class="n">table</span></div>
+
+<div class="viewcode-block" id="SEO_writer.print_eng_file"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.print_eng_file">[docs]</a>    <span class="k">def</span> <span class="nf">print_eng_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jup</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Prints English file.</span>
 
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        jup : bool</span>
+
+<span class="sd">            If jup=False, it prints text. Otherwise, it draws in a jupyter</span>
+<span class="sd">            notebook a table with line numbers starting at 1</span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        None</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">utg</span><span class="o">.</span><span class="n">preface</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_eng_file_path</span><span class="p">(</span><span class="n">rel</span><span class="o">=</span><span class="kc">True</span><span class="p">)))</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span></div>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">utg</span><span class="o">.</span><span class="n">preface</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_eng_file_path</span><span class="p">(</span><span class="n">rel</span><span class="o">=</span><span class="kc">True</span><span class="p">)),</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">jup</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">dis_obj</span> <span class="o">=</span> <span class="n">HTML</span><span class="p">(</span><span class="n">SEO_writer</span><span class="o">.</span><span class="n">gen_html_from_eng_or_pic_file</span><span class="p">(</span><span class="n">f</span><span class="p">))</span>
+                <span class="n">display</span><span class="p">(</span><span class="n">dis_obj</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SEO_writer.print_pic_file"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.print_pic_file">[docs]</a>    <span class="k">def</span> <span class="nf">print_pic_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="SEO_writer.print_pic_file"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.print_pic_file">[docs]</a>    <span class="k">def</span> <span class="nf">print_pic_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jup</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Prints Picture file.</span>
 
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        jup : bool</span>
+
+<span class="sd">            If jup=False, it prints text. Otherwise, it draws in a jupyter</span>
+<span class="sd">            notebook a table with line numbers starting at 1</span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        None</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">utg</span><span class="o">.</span><span class="n">preface</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_pic_file_path</span><span class="p">(</span><span class="n">rel</span><span class="o">=</span><span class="kc">True</span><span class="p">)))</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span></div>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">utg</span><span class="o">.</span><span class="n">preface</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_pic_file_path</span><span class="p">(</span><span class="n">rel</span><span class="o">=</span><span class="kc">True</span><span class="p">)),</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">jup</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">dis_obj</span> <span class="o">=</span> <span class="n">HTML</span><span class="p">(</span><span class="n">SEO_writer</span><span class="o">.</span><span class="n">gen_html_from_eng_or_pic_file</span><span class="p">(</span><span class="n">f</span><span class="p">))</span>
+                <span class="n">display</span><span class="p">(</span><span class="n">dis_obj</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SEO_writer.colonize"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.colonize">[docs]</a>    <span class="k">def</span> <span class="nf">colonize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pic_line</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -643,7 +699,7 @@
         <span class="c1"># np.float types are different from float!!!</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rads</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">floating</span><span class="p">)):</span>
             <span class="c1"># print(&quot;--nnn&quot;, str(rads*180/np.pi))</span>
-            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">rads</span><span class="o">*</span><span class="mi">180</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+            <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{0:0.6f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">rads</span><span class="o">*</span><span class="mi">180</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">assert</span> <span class="n">PlaceholderManager</span><span class="o">.</span><span class="n">is_legal_var_name</span><span class="p">(</span><span class="n">rads</span><span class="p">),</span> \
                 <span class="s2">&quot;attempting to write an illegal variable name: &#39;&quot;</span> <span class="o">+</span>\

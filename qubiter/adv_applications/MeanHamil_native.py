@@ -135,6 +135,7 @@ class MeanHamil_native(MeanHamil):
 
         return mean_val
 
+
 if __name__ == "__main__":
     def main():
         print(5)

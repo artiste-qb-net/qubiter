@@ -603,6 +603,7 @@ class CGateExpander(SEO_reader):
         """
         pass
 
+
 if __name__ == "__main__":
     def main():
         xer = CGateExpander('fou_test', 6, verbose=True)

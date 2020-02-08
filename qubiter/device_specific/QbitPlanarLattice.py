@@ -151,6 +151,7 @@ class QbitPlanarLattice:
             c_to_tars[ind] = self.neighbors_of(ind)
         return c_to_tars
 
+
 if __name__ == "__main__":
     import qubiter.device_specific.chip_couplings_google as cc
     import pprint as pp

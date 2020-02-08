@@ -272,6 +272,7 @@ class Tree(SEO_writer):
         else:
             self.write_controlled_diag_unitary_gate(trols, rad_angles)
 
+
 if __name__ == "__main__":
     from qubiter.FouSEO_writer import *
 

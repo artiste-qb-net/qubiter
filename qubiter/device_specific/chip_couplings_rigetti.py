@@ -2,6 +2,7 @@ def aaa():
     # trick sphinx to build link in doc
     pass
 
+
 rigetti20_c_to_tars = \
 {
     0: [5, 6],

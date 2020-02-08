@@ -148,6 +148,7 @@ class CktEmbedder:
 
         return compo_emb
 
+
 if __name__ == "__main__":
     def main():
         print(5)

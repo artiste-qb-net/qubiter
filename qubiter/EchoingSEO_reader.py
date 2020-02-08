@@ -440,6 +440,7 @@ class EchoingSEO_reader(SEO_reader):
         import os
         os.remove(utg.preface(file_prefix_tempo + end_str))
 
+
 if __name__ == "__main__":
     def main():
         file_prefix_in = 'echo_test'

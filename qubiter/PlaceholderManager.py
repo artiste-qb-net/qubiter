@@ -501,6 +501,7 @@ class PlaceholderManager:
             assert PlaceholderManager.have_resolved_history(
                 self.fun_name_to_hist[fun_name])
 
+
 if __name__ == "__main__":
     from qubiter.SEO_writer import *
     from qubiter.SEO_reader import *

@@ -209,6 +209,7 @@ def pu2(*tlist):
     # print('mmbbvv, pu2', pu2r(*tlist) +1j* pu2r(*tlist))
     return pu2r(*tlist) + 1j*pu2i(*tlist)
 
+
 defvjp(pu2r,
        # defines vector-jacobian-product of pu2r
        # g.shape == pu2r.shape
@@ -257,6 +258,7 @@ def d_auto_pu2(dwrt, *tlist):
     """
     assert dwrt in range(4)
     return jacobian(pu2r, dwrt)(*tlist) + 1j*jacobian(pu2i, dwrt)(*tlist)
+
 
 if __name__ == "__main__":
     from qubiter.OneBitGates import *

@@ -557,6 +557,7 @@ class CGateSEO_writer(SEO_writer):
         # insert closing Hadamards for controls equal to n_bar = |0><0|
         self.write_hads(trols.kinds, herm_conj=True)
 
+
 if __name__ == "__main__":
     from qubiter.SEO_MatrixProduct import *
     from qubiter.OneBitGates import *

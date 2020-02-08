@@ -156,6 +156,7 @@ class MultiplexorExpander(EchoingSEO_reader):
         # revert to default embedder
         self.wr.emb = CktEmbedder(self.num_bits, self.num_bits)
 
+
 if __name__ == "__main__":
     def main():
         num_bits = 6

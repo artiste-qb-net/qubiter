@@ -142,6 +142,7 @@ class Node:
         """
         return str(self.nd_id) + '(L' + str(self.level) + ')'
 
+
 if __name__ == "__main__":
     def main():
         print(5)

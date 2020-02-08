@@ -8,10 +8,12 @@ class CS_Decomp:
     @staticmethod
     def get_csd(unitary_mats):
         """
-        This function does a CS (cosine-sine) decomposition (by calling the LAPACK function cuncsd.f. The old C++
-        Qubiter called zggsvd.f instead) of each unitary matrix in the list of arrays unitary_mats. This function is
-        called by the constructor of the class Node and is fundamental for decomposing a unitary matrix into
-        multiplexors and diagonal unitaries.
+        This function does a CS (cosine-sine) decomposition (by calling the
+        LAPACK function cuncsd.f. The old C++ Qubiter called zggsvd.f
+        instead) of each unitary matrix in the list of arrays unitary_mats.
+        This function is called by the constructor of the class Node and is
+        fundamental for decomposing a unitary matrix into multiplexors and
+        diagonal unitaries.
 
         Parameters
         ----------
@@ -170,6 +172,7 @@ class CS_Decomp:
                 right_mats.append(v1t)
                 right_mats.append(v2t)
         return left_mats, central_mats, right_mats
+
 
 if __name__ == "__main__":
     from qubiter.FouSEO_writer import *

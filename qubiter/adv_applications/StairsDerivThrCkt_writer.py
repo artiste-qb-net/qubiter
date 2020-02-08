@@ -217,6 +217,7 @@ class StairsDerivThrCkt_writer(SEO_writer):
             sta_get_tot_num_bits(self.parent_num_bits,
                                  self.gate_str_to_rads_list)
 
+
 if __name__ == "__main__":
     def main():
         parent_num_bits = 3

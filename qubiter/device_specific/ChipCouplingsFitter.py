@@ -231,7 +231,8 @@ class ChipCouplingsFitter:
         if verbose:
             print("bit_map=", bit_map)
         return bit_map
-            
+
+
 if __name__ == "__main__":
     def main():
         import qubiter.device_specific.chip_couplings_ibm as ibm

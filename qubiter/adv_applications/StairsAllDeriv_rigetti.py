@@ -66,6 +66,7 @@ class StairsAllDeriv_rigetti(StairsDeriv_rigetti):
                 StairsDeriv_rigetti.get_mean_val(self, var_num_to_rads)
         return gate_str_to_partials_list
 
+
 if __name__ == "__main__":
     def main():
         print(5)

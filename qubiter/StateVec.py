@@ -657,12 +657,15 @@ class StateVec:
             mag = np.absolute(x)
             extra_str = ''
             if show_pp_probs:
-                extra_str = ', prob=' + str(mag**2)
+                extra_str = '\t prob=' + '{0:6f}'.format(mag**2)
+            x_str = ' (' if x.real < 0 else ' ( '
+            x_str += '{0:.6f} {1} {2:.6f}j)'.\
+                format(x.real, '-' if x.imag < 0 else '+', abs(x.imag))
             if omit_zero_amps:
                 if mag > 1E-6:
-                    print(ind_str, x, extra_str)
+                    print(ind_str + x_str + extra_str)
             else:
-                print(ind_str, x, extra_str)
+                print(ind_str + x_str + extra_str)
 
     @staticmethod
     def get_style_dict(style):
@@ -745,10 +748,12 @@ class StateVec:
                 print(self.arr)
 
         print('total probability of state vector ' +
-              '(=one if no measurements)=', self.get_total_prob())
+              '(=one if no measurements)=',
+              "{0:0.6f}".format(self.get_total_prob()))
 
         print('dictionary with key=qubit, value=(Prob(0), Prob(1))')
         bit_probs = StateVec.get_bit_probs(self.num_bits, self.get_pd())
+        bit_probs = [(round(x, 6), round(y, 6)) for x, y in bit_probs]
         pp.pprint(dict(enumerate(bit_probs)))
         if plot_st_vec_pd:
             st_vec_pd = self.get_pd()

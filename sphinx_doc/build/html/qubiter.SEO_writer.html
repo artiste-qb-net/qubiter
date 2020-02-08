@@ -287,6 +287,25 @@ Closing a file a second time does nothing.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="qubiter.SEO_writer.SEO_writer.gen_html_from_eng_or_pic_file">
+<em class="property">static </em><code class="sig-name descname">gen_html_from_eng_or_pic_file</code><span class="sig-paren">(</span><em class="sig-param">f</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_writer.html#SEO_writer.gen_html_from_eng_or_pic_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_writer.SEO_writer.gen_html_from_eng_or_pic_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function returns a string for an html table generated from an
+English or Picture file. The table has two columns.
+The first column gives the line numbers starting from 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>f</strong> (<em>file</em>) – f is file object returned by open()</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="qubiter.SEO_writer.SEO_writer.get_eng_file_path">
 <code class="sig-name descname">get_eng_file_path</code><span class="sig-paren">(</span><em class="sig-param">rel=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_writer.html#SEO_writer.get_eng_file_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_writer.SEO_writer.get_eng_file_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns path (relative if rel is True, absolute if rel is False) of
@@ -324,28 +343,36 @@ Picture file</p>
 
 <dl class="method">
 <dt id="qubiter.SEO_writer.SEO_writer.print_eng_file">
-<code class="sig-name descname">print_eng_file</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_writer.html#SEO_writer.print_eng_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_writer.SEO_writer.print_eng_file" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">print_eng_file</code><span class="sig-paren">(</span><em class="sig-param">jup=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_writer.html#SEO_writer.print_eng_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_writer.SEO_writer.print_eng_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prints English file.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p></p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>jup</strong> (<em>bool</em>) – If jup=False, it prints text. Otherwise, it draws in a jupyter
+notebook a table with line numbers starting at 1</p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>None</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="qubiter.SEO_writer.SEO_writer.print_pic_file">
-<code class="sig-name descname">print_pic_file</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_writer.html#SEO_writer.print_pic_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_writer.SEO_writer.print_pic_file" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">print_pic_file</code><span class="sig-paren">(</span><em class="sig-param">jup=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_writer.html#SEO_writer.print_pic_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_writer.SEO_writer.print_pic_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prints Picture file.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p></p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>jup</strong> (<em>bool</em>) – If jup=False, it prints text. Otherwise, it draws in a jupyter
+notebook a table with line numbers starting at 1</p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>None</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
 </dd>
 </dl>
 </dd></dl>
