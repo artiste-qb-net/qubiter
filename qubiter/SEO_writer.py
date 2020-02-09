@@ -846,7 +846,8 @@ class SEO_writer:
         if use_sway:
             self.english_out.write('\tBY')
             for k in range(2):
-                self.english_out.write('\t' + str(rads_list[k]))
+                deg_str = self.rads_to_degs_str(rads_list[k])
+                self.english_out.write('\t' + deg_str)
         self.english_out.write("\tIF\t" if num_controls != 0 else "\n")
 
         # list bit-positions in decreasing order
