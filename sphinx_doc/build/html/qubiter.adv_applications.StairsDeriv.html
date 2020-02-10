@@ -154,7 +154,7 @@
 <span id="qubiter-adv-applications-stairsderiv-module"></span><h1>qubiter.adv_applications.StairsDeriv module<a class="headerlink" href="#module-qubiter.adv_applications.StairsDeriv" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="qubiter.adv_applications.StairsDeriv.StairsDeriv">
-<em class="property">class </em><code class="sig-prename descclassname">qubiter.adv_applications.StairsDeriv.</code><code class="sig-name descname">StairsDeriv</code><span class="sig-paren">(</span><em class="sig-param">deriv_gate_str</em>, <em class="sig-param">gate_str_to_rads_list</em>, <em class="sig-param">file_prefix</em>, <em class="sig-param">parent_num_bits</em>, <em class="sig-param">hamil</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/adv_applications/StairsDeriv.html#StairsDeriv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.adv_applications.StairsDeriv.StairsDeriv" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">qubiter.adv_applications.StairsDeriv.</code><code class="sig-name descname">StairsDeriv</code><span class="sig-paren">(</span><em class="sig-param">deriv_gate_str</em>, <em class="sig-param">gate_str_to_rads_list</em>, <em class="sig-param">file_prefix</em>, <em class="sig-param">parent_num_qbits</em>, <em class="sig-param">hamil</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/adv_applications/StairsDeriv.html#StairsDeriv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.adv_applications.StairsDeriv.StairsDeriv" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="qubiter.adv_applications.MeanHamil.html#qubiter.adv_applications.MeanHamil.MeanHamil" title="qubiter.adv_applications.MeanHamil.MeanHamil"><code class="xref py py-class docutils literal notranslate"><span class="pre">qubiter.adv_applications.MeanHamil.MeanHamil</span></code></a></p>
 <p>This abstract class is a child of abstract class MeanHamil. The main
 purpose of its children classes is to override the method get_mean_val()
@@ -173,7 +173,7 @@ Openfermion class QubitOperator).</p>
 </dl>
 <dl class="method">
 <dt id="qubiter.adv_applications.StairsDeriv.StairsDeriv.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">deriv_gate_str</em>, <em class="sig-param">gate_str_to_rads_list</em>, <em class="sig-param">file_prefix</em>, <em class="sig-param">parent_num_bits</em>, <em class="sig-param">hamil</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/adv_applications/StairsDeriv.html#StairsDeriv.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.adv_applications.StairsDeriv.StairsDeriv.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">deriv_gate_str</em>, <em class="sig-param">gate_str_to_rads_list</em>, <em class="sig-param">file_prefix</em>, <em class="sig-param">parent_num_qbits</em>, <em class="sig-param">hamil</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/adv_applications/StairsDeriv.html#StairsDeriv.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.adv_applications.StairsDeriv.StairsDeriv.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constructor</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -181,7 +181,7 @@ Openfermion class QubitOperator).</p>
 <li><p><strong>deriv_gate_str</strong> (<em>str</em>) – </p></li>
 <li><p><strong>gate_str_to_rads_list</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>list</em><em>[</em><em>float|str</em><em>]</em><em>]</em>) – </p></li>
 <li><p><strong>file_prefix</strong> (<em>str</em>) – </p></li>
-<li><p><strong>parent_num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>parent_num_qbits</strong> (<em>int</em>) – </p></li>
 <li><p><strong>hamil</strong> (<em>QubitOperator</em>) – </p></li>
 <li><p><strong>kwargs</strong> (<em>dict</em>) – key-word arguments of MeanHamil</p></li>
 </ul>

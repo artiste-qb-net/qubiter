@@ -26,7 +26,7 @@ class Node:
     left_nd : Node
         Node to left of self.
     level : int
-        1<= level <= num_bits+1. level = 1 for root node, level =
+        1<= level <= num_qbits+1. level = 1 for root node, level =
         num_of_bits+1 for node whose central_mat is list of 1 dim arrays
     nd_id : int
         node id, int assigned by Tree, nd_id=0 for first (root) node created

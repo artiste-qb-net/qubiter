@@ -154,7 +154,7 @@
 <span id="qubiter-codaseo-writer-module"></span><h1>qubiter.CodaSEO_writer module<a class="headerlink" href="#module-qubiter.CodaSEO_writer" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="qubiter.CodaSEO_writer.CodaSEO_writer">
-<em class="property">class </em><code class="sig-prename descclassname">qubiter.CodaSEO_writer.</code><code class="sig-name descname">CodaSEO_writer</code><span class="sig-paren">(</span><em class="sig-param">init_file_prefix</em>, <em class="sig-param">fin_file_prefix</em>, <em class="sig-param">num_bits</em>, <em class="sig-param">ZL=True</em>, <em class="sig-param">fin_emb=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/CodaSEO_writer.html#CodaSEO_writer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.CodaSEO_writer.CodaSEO_writer" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">qubiter.CodaSEO_writer.</code><code class="sig-name descname">CodaSEO_writer</code><span class="sig-paren">(</span><em class="sig-param">init_file_prefix</em>, <em class="sig-param">fin_file_prefix</em>, <em class="sig-param">num_qbits</em>, <em class="sig-param">ZL=True</em>, <em class="sig-param">fin_emb=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/CodaSEO_writer.html#CodaSEO_writer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.CodaSEO_writer.CodaSEO_writer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer" title="qubiter.SEO_writer.SEO_writer"><code class="xref py py-class docutils literal notranslate"><span class="pre">qubiter.SEO_writer.SEO_writer</span></code></a></p>
 <p>This class is a child of class <cite>SEO_writer</cite>. The constructor of this
 class accepts as input the paths to a pair of well-formed initial
@@ -176,13 +176,13 @@ the initial Picture file and is thereafter appended to.</p></li>
 </dl>
 <dl class="method">
 <dt id="qubiter.CodaSEO_writer.CodaSEO_writer.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">init_file_prefix</em>, <em class="sig-param">fin_file_prefix</em>, <em class="sig-param">num_bits</em>, <em class="sig-param">ZL=True</em>, <em class="sig-param">fin_emb=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/CodaSEO_writer.html#CodaSEO_writer.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.CodaSEO_writer.CodaSEO_writer.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">init_file_prefix</em>, <em class="sig-param">fin_file_prefix</em>, <em class="sig-param">num_qbits</em>, <em class="sig-param">ZL=True</em>, <em class="sig-param">fin_emb=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/CodaSEO_writer.html#CodaSEO_writer.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.CodaSEO_writer.CodaSEO_writer.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>init_file_prefix</strong> (<em>str</em>) – </p></li>
 <li><p><strong>fin_file_prefix</strong> (<em>str</em>) – </p></li>
-<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>num_qbits</strong> (<em>int</em>) – </p></li>
 <li><p><strong>ZL</strong> (<em>bool</em>) – </p></li>
 <li><p><strong>fin_emb</strong> (<a class="reference internal" href="qubiter.CktEmbedder.html#qubiter.CktEmbedder.CktEmbedder" title="qubiter.CktEmbedder.CktEmbedder"><em>CktEmbedder</em></a>) – circuit embedder for the writer of the final English and Picture
 files</p></li>

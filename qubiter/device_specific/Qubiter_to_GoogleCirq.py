@@ -20,7 +20,7 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
     lattice : QbitPlanarLattice
 
     """
-    def __init__(self, file_prefix, num_bits, **kwargs):
+    def __init__(self, file_prefix, num_qbits, **kwargs):
         """
         Constructor
 
@@ -32,7 +32,7 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
 
         """
         self.lattice = QbitPlanarLattice(cc.BRISTLECONE_GRID)
-        Qubiter_to_AnyQasm.__init__(self, file_prefix, num_bits, **kwargs)
+        Qubiter_to_AnyQasm.__init__(self, file_prefix, num_qbits, **kwargs)
 
     def write_prelude(self):
         """
@@ -443,9 +443,9 @@ if __name__ == "__main__":
     def main():
         file_prefix = "qbtr2google_test"
         aqasm_name = 'GooCirq'
-        num_bits = 5
+        num_qbits = 5
         c_to_tars = 'do_fill'  # filled by constructor
-        Qubiter_to_GoogleCirq(file_prefix, num_bits, aqasm_name=aqasm_name,
+        Qubiter_to_GoogleCirq(file_prefix, num_qbits, aqasm_name=aqasm_name,
                               c_to_tars=c_to_tars, write_qubiter_files=True)
 
     main()

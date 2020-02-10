@@ -158,7 +158,7 @@
 <dd><p>Bases: <a class="reference internal" href="qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer" title="qubiter.SEO_writer.SEO_writer"><code class="xref py py-class docutils literal notranslate"><span class="pre">qubiter.SEO_writer.SEO_writer</span></code></a></p>
 <p>This class is a subclass of class SEO_writer and it writes a “Stairs
 Circuit”. For example, this is what the Picture file of a Stairs Circuit
-looks like for num_bits = 3</p>
+looks like for num_qbits = 3</p>
 <p>U   |   |
 O—U   |
 &#64;—U   |
@@ -175,7 +175,7 @@ more info than you would ever want to know about QB nets).</p>
 <p>This class can also be asked to construct a QB net that is <strong>not</strong> fully
 connected, by limiting the number of controls for a given U to fewer
 than all the ones to its left. For example, suppose that in the
-num_bits=3 case, we restrict the parents of the U in the last step to
+num_qbits=3 case, we restrict the parents of the U in the last step to
 just one, instead of the 2 parents that it has in the fully connected
 case. Then we get</p>
 <p>U   |   |
@@ -195,7 +195,7 @@ quantum circuit, a gate string gate_str that specifies the gate.
 gate_str_to_rads_list maps gate_str to a list of 4 floats (or
 placeholder variables for those floats) for the 4 parameters of the U
 matrix. For example, here are possible values for gate_str_to_rads_list
-for the num_bits=3 fully connected qb net</p>
+for the num_qbits=3 fully connected qb net</p>
 <p>with every rads_list item filled with the same constant .3
 {‘prior’: [0.3, 0.3, 0.3, 0.3],</p>
 <blockquote>
@@ -251,7 +251,7 @@ for the num_bits=3 fully connected qb net</p>
 ‘2T1F’: [‘#5100’, ‘#5101’, ‘#5102’, ‘#5103’],
 ‘2T1T’: [‘#5110’, ‘#5111’, ‘#5112’, ‘#5113’]}</p>
 </div></blockquote>
-<p>This is what gate_str_to_rads_list looks like in the num_bits=3 case,
+<p>This is what gate_str_to_rads_list looks like in the num_qbits=3 case,
 when the last U has only one parent (qbit 2) instead of two parents (
 qbits 1 and 2):</p>
 <dl class="simple">
@@ -310,14 +310,14 @@ all_var_nums which is returned.</p>
 
 <dl class="method">
 <dt id="qubiter.adv_applications.StairsCkt_writer.StairsCkt_writer.get_controls_from_gate_str">
-<em class="property">static </em><code class="sig-name descname">get_controls_from_gate_str</code><span class="sig-paren">(</span><em class="sig-param">num_bits</em>, <em class="sig-param">gate_str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/adv_applications/StairsCkt_writer.html#StairsCkt_writer.get_controls_from_gate_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.adv_applications.StairsCkt_writer.StairsCkt_writer.get_controls_from_gate_str" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">get_controls_from_gate_str</code><span class="sig-paren">(</span><em class="sig-param">num_qbits</em>, <em class="sig-param">gate_str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/adv_applications/StairsCkt_writer.html#StairsCkt_writer.get_controls_from_gate_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.adv_applications.StairsCkt_writer.StairsCkt_writer.get_controls_from_gate_str" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method returns an object of class Controls, constructed from
 info in the input <cite>gate_str</cite> (a well formed key of
 gate_str_to_rads_lis)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>num_qbits</strong> (<em>int</em>) – </p></li>
 <li><p><strong>gate_str</strong> (<em>str</em>) – </p></li>
 </ul>
 </dd>
@@ -332,7 +332,7 @@ gate_str_to_rads_lis)</p>
 
 <dl class="method">
 <dt id="qubiter.adv_applications.StairsCkt_writer.StairsCkt_writer.get_gate_str_to_rads_list">
-<em class="property">static </em><code class="sig-name descname">get_gate_str_to_rads_list</code><span class="sig-paren">(</span><em class="sig-param">num_bits</em>, <em class="sig-param">fill_type</em>, <em class="sig-param">rads_const=None</em>, <em class="sig-param">u2_bit_to_higher_bits=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/adv_applications/StairsCkt_writer.html#StairsCkt_writer.get_gate_str_to_rads_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.adv_applications.StairsCkt_writer.StairsCkt_writer.get_gate_str_to_rads_list" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">get_gate_str_to_rads_list</code><span class="sig-paren">(</span><em class="sig-param">num_qbits</em>, <em class="sig-param">fill_type</em>, <em class="sig-param">rads_const=None</em>, <em class="sig-param">u2_bit_to_higher_bits=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/adv_applications/StairsCkt_writer.html#StairsCkt_writer.get_gate_str_to_rads_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.adv_applications.StairsCkt_writer.StairsCkt_writer.get_gate_str_to_rads_list" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method returns a gate_str_to_rads_list constructed according to
 the specs given by its arguments.</p>
 <p>fill_type is a string in [‘const’, ‘rand’, ‘#int’] The 3 types of
@@ -340,7 +340,7 @@ fill_type have already been illustrated in the class docstring. If
 the fill_type is ‘const’, then the method expects a float for
 rads_const.</p>
 <p>u2_bit_to_higher_bits is used to restrict the controls of each U.
-For example, for num_bits=3,</p>
+For example, for num_qbits=3,</p>
 <p>u2_bit_to_higher_bits = {0: [1, 2], 1: [2], 2: []}</p>
 <p>specifies a fully connected qb net, whereas</p>
 <p>u2_bit_to_higher_bits = {0: [2], 1: [2], 2: []}</p>
@@ -348,7 +348,7 @@ For example, for num_bits=3,</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>num_qbits</strong> (<em>int</em>) – </p></li>
 <li><p><strong>fill_type</strong> (<em>str</em>) – either ‘const’, ‘rand’ or ‘#int’</p></li>
 <li><p><strong>rads_const</strong> (<em>float | None</em>) – </p></li>
 <li><p><strong>u2_bit_to_higher_bits</strong> (<em>dict</em><em>[</em><em>int</em><em>, </em><em>list</em><em>[</em><em>int</em><em>]</em><em>]</em>) – </p></li>

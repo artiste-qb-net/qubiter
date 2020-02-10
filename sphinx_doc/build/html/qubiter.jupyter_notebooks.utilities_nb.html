@@ -154,19 +154,19 @@
 <span id="qubiter-jupyter-notebooks-utilities-nb-module"></span><h1>qubiter.jupyter_notebooks.utilities_nb module<a class="headerlink" href="#module-qubiter.jupyter_notebooks.utilities_nb" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="qubiter.jupyter_notebooks.utilities_nb.run_sim_gui">
-<code class="sig-prename descclassname">qubiter.jupyter_notebooks.utilities_nb.</code><code class="sig-name descname">run_sim_gui</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_bits</em>, <em class="sig-param">all_var_nums</em>, <em class="sig-param">fun_name_to_fun=None</em>, <em class="sig-param">slider_max_degs=1080</em>, <em class="sig-param">append_new=False</em>, <em class="sig-param">sty_fin_desc='ALL'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/jupyter_notebooks/utilities_nb.html#run_sim_gui"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.jupyter_notebooks.utilities_nb.run_sim_gui" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">qubiter.jupyter_notebooks.utilities_nb.</code><code class="sig-name descname">run_sim_gui</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_qbits</em>, <em class="sig-param">all_var_nums</em>, <em class="sig-param">fun_name_to_fun=None</em>, <em class="sig-param">slider_max_degs=1080</em>, <em class="sig-param">append_new=False</em>, <em class="sig-param">sty_fin_desc='ALL'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/jupyter_notebooks/utilities_nb.html#run_sim_gui"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.jupyter_notebooks.utilities_nb.run_sim_gui" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method generates and runs a widgets gui (graphical user interface).
 The gui has a button labelled <cite>Run</cite> that creates an object of
 SEO_simulator. The gui contains a slider for each placeholder variable (
 parameter) of a circuit that has been created a priori by a SEO_writer
-using the name <cite>file_prefix</cite> and number of qubits <cite>num_bits</cite>.</p>
+using the name <cite>file_prefix</cite> and number of qubits <cite>num_qbits</cite>.</p>
 <p>If a parameter is labelled <cite>#1</cite>, then the slider value for degs_1 times
 pi/180 is substituted for <cite>#1</cite></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>file_prefix</strong> (<em>str</em>) – </p></li>
-<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>num_qbits</strong> (<em>int</em>) – </p></li>
 <li><p><strong>all_var_nums</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – all the placeholder variable numbers. If the circuit has exactly
 two placeholder variables #5 and #7, then all_var_nums=[5, 7]</p></li>
 <li><p><strong>fun_name_to_fun</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>function</em><em>]</em>) – dict mapping every functional placeholder name to its function</p></li>

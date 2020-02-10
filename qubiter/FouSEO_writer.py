@@ -49,18 +49,18 @@ class FouSEO_writer(SEO_writer):
         None
 
         """
-        num_bits = self.emb.num_bits_bef
+        num_qbits = self.emb.num_qbits_bef
 
         # permutation R
         if self.do_perm:
-            for r in range(num_bits-1, 0, -1):
+            for r in range(num_qbits-1, 0, -1):
                 for k in range(r-1, -1, -1):
                     self.write_bit_swap(r, k)
 
-        for k in range(num_bits):
+        for k in range(num_qbits):
             self.write_one_bit_gate(k, OneBitGates.had2)
-            trols = Controls.new_knob(num_bits, k, True)
-            for r in range(k+1, num_bits):
+            trols = Controls.new_single_trol(num_qbits, k, True)
+            for r in range(k+1, num_qbits):
                 # note r>k
                 self.write_controlled_one_bit_gate(
                     r,  # target bit pos
@@ -78,11 +78,11 @@ class FouSEO_writer(SEO_writer):
         None
 
         """
-        num_bits = self.emb.num_bits_bef
+        num_qbits = self.emb.num_qbits_bef
 
-        for k in range(num_bits-1, -1, -1):
-            trols = Controls.new_knob(num_bits, k, True)
-            for r in range(num_bits-1, k, -1):
+        for k in range(num_qbits-1, -1, -1):
+            trols = Controls.new_single_trol(num_qbits, k, True)
+            for r in range(num_qbits-1, k, -1):
                 # note r>k
                 self.write_controlled_one_bit_gate(
                     r,  # target bit pos
@@ -92,7 +92,7 @@ class FouSEO_writer(SEO_writer):
                 )
             self.write_one_bit_gate(k, OneBitGates.had2)
         if self.do_perm:
-            for r in range(1, num_bits):
+            for r in range(1, num_qbits):
                 for k in range(r):
                     self.write_bit_swap(r, k)
 
@@ -128,10 +128,10 @@ class FouSEO_writer(SEO_writer):
 
 if __name__ == "__main__":
     def main():
-        num_bits_bef = 4
-        num_bits_aft = 6
-        bit_map = list(range(num_bits_bef))
-        emb = CktEmbedder(num_bits_bef, num_bits_aft, bit_map)
+        num_qbits_bef = 4
+        num_qbits_aft = 6
+        bit_map = list(range(num_qbits_bef))
+        emb = CktEmbedder(num_qbits_bef, num_qbits_aft, bit_map)
 
         for ZL in [True, False]:
             wr = FouSEO_writer(True,

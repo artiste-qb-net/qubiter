@@ -29,7 +29,7 @@ class SEO_simulator(SEO_reader):
     has been applied, and another copy after |1><1| has been applied.
 
     self.cur_st_vec_dict is a dictionary of strings (called branch keys) to
-    state vectors StateVec on num_bits qubits. We will refer to each state
+    state vectors StateVec on num_qbits qubits. We will refer to each state
     vec in the dict as a branch. Initially, this dict contains a single
     branch with branch key = "pure". A measurement MEAS of kinds 0 or 1 does
     not change the number of branches in the dict, but a measurement of kind
@@ -78,7 +78,7 @@ class SEO_simulator(SEO_reader):
     # rrtucci: combines my java classes:
     # LineList, UnitaryMat, SEO_readerMu
 
-    def __init__(self, file_prefix, num_bits,
+    def __init__(self, file_prefix, num_qbits,
                  init_st_vec=None, **kwargs):
         """
         Constructor
@@ -86,7 +86,7 @@ class SEO_simulator(SEO_reader):
         Parameters
         ----------
         file_prefix : str
-        num_bits : int
+        num_qbits : int
         init_st_vec : StateVec
             get this using the functions StateVec.get_ground_st_vec() or
             StateVec.get_standard_basis_st_vec().
@@ -96,7 +96,7 @@ class SEO_simulator(SEO_reader):
 
         """
         if StateVec.is_zero(init_st_vec):
-            init_st_vec = StateVec.get_ground_st_vec(num_bits)
+            init_st_vec = StateVec.get_ground_st_vec(num_qbits)
         self.cur_st_vec_dict = {"pure": init_st_vec}
         self.cached_sts = {}
         self.use_tf = False
@@ -104,7 +104,7 @@ class SEO_simulator(SEO_reader):
 
         self.do_more_init_before_reading()
 
-        SEO_reader.__init__(self, file_prefix, num_bits, **kwargs)
+        SEO_reader.__init__(self, file_prefix, num_qbits, **kwargs)
 
     def do_more_init_before_reading(self):
         """
@@ -183,7 +183,7 @@ class SEO_simulator(SEO_reader):
                     kinds.append(True)
                 else:
                     kinds.append(False)
-        trols = Controls(self.num_bits)
+        trols = Controls(self.num_qbits)
         trols.bit_pos_to_kind = dict(zip(bit_pos, kinds))
         trols.refresh_lists()
         return trols
@@ -232,10 +232,10 @@ class SEO_simulator(SEO_reader):
         """
         assert bit1 != bit2, "swapped bits must be different"
         for bit in [bit1, bit2]:
-            assert -1 < bit < self.num_bits
+            assert -1 < bit < self.num_qbits
             assert bit not in controls.bit_pos
  
-        slicex = [slice(None)]*self.num_bits
+        slicex = [slice(None)]*self.num_qbits
         num_controls = len(controls.bit_pos_to_kind)
         for k in range(num_controls):
             assert isinstance(controls.kinds[k], bool)
@@ -247,7 +247,7 @@ class SEO_simulator(SEO_reader):
 
         # components that are fixed are no longer axes
         scout = 0
-        for bit in range(self.num_bits):
+        for bit in range(self.num_qbits):
             if bit == bit1:
                 new1 = scout
             if bit == bit2:
@@ -306,9 +306,9 @@ class SEO_simulator(SEO_reader):
         None
 
         """
-        assert -1 < tar_bit_pos < self.num_bits
+        assert -1 < tar_bit_pos < self.num_qbits
 
-        vec_slicex = [slice(None)]*self.num_bits
+        vec_slicex = [slice(None)]*self.num_qbits
         num_controls = len(controls.bit_pos_to_kind)
         for k in range(num_controls):
             assert isinstance(controls.kinds[k], bool)
@@ -320,7 +320,7 @@ class SEO_simulator(SEO_reader):
 
         # components that are fixed are no longer axes
         scout = 0
-        for bit in range(self.num_bits):
+        for bit in range(self.num_qbits):
             if bit == tar_bit_pos:
                 new_tar = scout
             if bit not in controls.bit_pos:
@@ -402,7 +402,7 @@ class SEO_simulator(SEO_reader):
             # print('arr1 aft', arr1_np)
         on_slicex = np.full(tuple(arr.shape), False)
         on_slicex[slicex] = True
-        bigger_shape = [1]*self.num_bits  # slicex is num_bits long
+        bigger_shape = [1]*self.num_qbits  # slicex is num_qbits long
         k = 0
         # print('wwwww', sub_arr.shape, slicex)
         for bit, kind in enumerate(slicex):
@@ -515,13 +515,13 @@ class SEO_simulator(SEO_reader):
             # print('..,,mm', 'was here')
             pd = self.cur_st_vec_dict['pure'].get_pd()
         else:
-            den_mat = StateVec.get_den_mat(self.num_bits, self.cur_st_vec_dict)
+            den_mat = StateVec.get_den_mat(self.num_qbits, self.cur_st_vec_dict)
             pd = StateVec.get_den_mat_pd(den_mat)
         # print('....,,,', pd.shape)
         obs_vec = StateVec.get_observations_vec(
-            self.num_bits, pd, num_shots, rand_seed)
+            self.num_qbits, pd, num_shots, rand_seed)
 
-        out = StateVec.get_counts_from_obs_vec(self.num_bits, obs_vec,
+        out = StateVec.get_counts_from_obs_vec(self.num_qbits, obs_vec,
                         use_bin_labels, omit_zero_counts)
         self.convert_tensors_to_tf()
 
@@ -619,7 +619,7 @@ class SEO_simulator(SEO_reader):
         """
         self.convert_tensors_to_numpy()
         # slicex = slice index
-        slicex = [slice(None)]*self.num_bits
+        slicex = [slice(None)]*self.num_qbits
         # br = branch
         if kind in [0, 1]:
             b = 1 if kind == 0 else 0

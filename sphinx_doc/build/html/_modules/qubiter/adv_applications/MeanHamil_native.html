@@ -221,7 +221,7 @@
 
             <span class="c1"># add measurement coda for this term of hamil</span>
             <span class="n">wr</span> <span class="o">=</span> <span class="n">CodaSEO_writer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_prefix</span><span class="p">,</span>
-                                <span class="n">fin_file_prefix</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span><span class="p">)</span>
+                                <span class="n">fin_file_prefix</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span><span class="p">)</span>
             <span class="n">bit_pos_to_xy_str</span> <span class="o">=</span>\
                 <span class="p">{</span><span class="n">bit</span><span class="p">:</span> <span class="n">action</span> <span class="k">for</span> <span class="n">bit</span><span class="p">,</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">term</span> <span class="k">if</span> <span class="n">action</span> <span class="o">!=</span> <span class="s1">&#39;Z&#39;</span><span class="p">}</span>
             <span class="n">wr</span><span class="o">.</span><span class="n">write_xy_measurements</span><span class="p">(</span><span class="n">bit_pos_to_xy_str</span><span class="p">)</span>
@@ -235,11 +235,11 @@
             <span class="c1"># fresh copy of it each time</span>
             <span class="n">init_st_vec</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">init_st_vec</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">simulator_name</span> <span class="o">==</span> <span class="s1">&#39;SEO_simulator&#39;</span><span class="p">:</span>
-                <span class="n">sim</span> <span class="o">=</span> <span class="n">SEO_simulator</span><span class="p">(</span><span class="n">fin_file_prefix</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span><span class="p">,</span>
+                <span class="n">sim</span> <span class="o">=</span> <span class="n">SEO_simulator</span><span class="p">(</span><span class="n">fin_file_prefix</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span><span class="p">,</span>
                                     <span class="n">init_st_vec</span><span class="p">,</span> <span class="n">vars_manager</span><span class="o">=</span><span class="n">vman</span><span class="p">)</span>
             <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">simulator_name</span> <span class="o">==</span> <span class="s1">&#39;SEO_simulator_tf&#39;</span><span class="p">:</span>
                 <span class="n">init_st_vec</span><span class="o">.</span><span class="n">arr</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">convert_to_tensor</span><span class="p">(</span><span class="n">init_st_vec</span><span class="o">.</span><span class="n">arr</span><span class="p">)</span>
-                <span class="n">sim</span> <span class="o">=</span> <span class="n">SEO_simulator_tf</span><span class="p">(</span><span class="n">fin_file_prefix</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span><span class="p">,</span>
+                <span class="n">sim</span> <span class="o">=</span> <span class="n">SEO_simulator_tf</span><span class="p">(</span><span class="n">fin_file_prefix</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span><span class="p">,</span>
                                     <span class="n">init_st_vec</span><span class="p">,</span> <span class="n">vars_manager</span><span class="o">=</span><span class="n">vman</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">assert</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;unsupported native simulator&#39;</span>
@@ -254,15 +254,15 @@
                 <span class="c1"># if num_samples !=0, then</span>
                 <span class="c1"># sample qubiter-generated empirical prob dist</span>
                 <span class="n">pd</span> <span class="o">=</span> <span class="n">fin_st_vec</span><span class="o">.</span><span class="n">get_pd</span><span class="p">()</span>
-                <span class="n">obs_vec</span> <span class="o">=</span> <span class="n">StateVec</span><span class="o">.</span><span class="n">get_observations_vec</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span><span class="p">,</span>
+                <span class="n">obs_vec</span> <span class="o">=</span> <span class="n">StateVec</span><span class="o">.</span><span class="n">get_observations_vec</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span><span class="p">,</span>
                         <span class="n">pd</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_samples</span><span class="p">)</span>
-                <span class="n">counts_dict</span> <span class="o">=</span> <span class="n">StateVec</span><span class="o">.</span><span class="n">get_counts_from_obs_vec</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span><span class="p">,</span>
+                <span class="n">counts_dict</span> <span class="o">=</span> <span class="n">StateVec</span><span class="o">.</span><span class="n">get_counts_from_obs_vec</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span><span class="p">,</span>
                                                                <span class="n">obs_vec</span><span class="p">)</span>
-                <span class="n">emp_pd</span> <span class="o">=</span> <span class="n">StateVec</span><span class="o">.</span><span class="n">get_empirical_pd_from_counts</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span><span class="p">,</span>
+                <span class="n">emp_pd</span> <span class="o">=</span> <span class="n">StateVec</span><span class="o">.</span><span class="n">get_empirical_pd_from_counts</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span><span class="p">,</span>
                                                                <span class="n">counts_dict</span><span class="p">)</span>
                 <span class="c1"># print(&#39;mmmmmmmm,,,&#39;, np.linalg.norm(pd-emp_pd))</span>
                 <span class="n">emp_st_vec</span> <span class="o">=</span> <span class="n">StateVec</span><span class="o">.</span><span class="n">get_emp_state_vec_from_emp_pd</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">emp_pd</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">emp_pd</span><span class="p">)</span>
                 <span class="n">effective_st_vec</span> <span class="o">=</span> <span class="n">emp_st_vec</span>
             <span class="k">else</span><span class="p">:</span>  <span class="c1"># num_samples = 0</span>
                 <span class="n">effective_st_vec</span> <span class="o">=</span> <span class="n">fin_st_vec</span>
@@ -281,7 +281,7 @@
 
         <span class="c1"># create this writer in order to delete final files</span>
         <span class="n">wr1</span> <span class="o">=</span> <span class="n">SEO_writer</span><span class="p">(</span><span class="n">fin_file_prefix</span><span class="p">,</span>
-                <span class="n">CktEmbedder</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span><span class="p">))</span>
+                <span class="n">CktEmbedder</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span><span class="p">))</span>
         <span class="n">wr1</span><span class="o">.</span><span class="n">delete_files</span><span class="p">()</span>
 
         <span class="k">return</span> <span class="n">mean_val</span></div></div>

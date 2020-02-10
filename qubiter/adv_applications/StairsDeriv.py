@@ -28,7 +28,7 @@ class StairsDeriv(MeanHamil):
     }
 
     def __init__(self, deriv_gate_str, gate_str_to_rads_list,
-                 file_prefix, parent_num_bits, hamil, **kwargs):
+                 file_prefix, parent_num_qbits, hamil, **kwargs):
         """
         Constructor
 
@@ -37,7 +37,7 @@ class StairsDeriv(MeanHamil):
         deriv_gate_str : str
         gate_str_to_rads_list : dict[str, list[float|str]]
         file_prefix : str
-        parent_num_bits : int
+        parent_num_qbits : int
         hamil : QubitOperator
         kwargs : dict
             key-word arguments of MeanHamil
@@ -49,10 +49,10 @@ class StairsDeriv(MeanHamil):
         all_var_nums = StairsCkt_writer.\
             get_all_var_nums(gate_str_to_rads_list)
         fun_name_to_fun = {}  # filled by get_mean_val()
-        MeanHamil.__init__(self, file_prefix, parent_num_bits+1, hamil,
+        MeanHamil.__init__(self, file_prefix, parent_num_qbits+1, hamil,
             all_var_nums, fun_name_to_fun, **kwargs)
-        # ancilla at bit pos parent_num_bits
-        MeanHamil.check_hamil_is_in_range(hamil, parent_num_bits-1)
+        # ancilla at bit pos parent_num_qbits
+        MeanHamil.check_hamil_is_in_range(hamil, parent_num_qbits-1)
         self.deriv_gate_str = deriv_gate_str
         self.gate_str_to_rads_list = gate_str_to_rads_list
 

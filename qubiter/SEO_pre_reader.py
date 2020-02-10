@@ -1,5 +1,6 @@
 import qubiter.utilities_gen as utg
 
+
 class SEO_pre_reader:
     """
     This class' constructor scans (pre-reads) an English file (a type of txt
@@ -26,7 +27,7 @@ class SEO_pre_reader:
         a dictionary mapping loop number TO loop line + 1
     loop_to_start_offset : dict[int, int]
         a dictionary mapping loop number TO offset of loop's start
-    num_bits : int
+    num_qbits : int
         number of qubits in whole circuit
     split_line : list[str]
         storage space for a list of strings obtained by splitting a line
@@ -35,15 +36,15 @@ class SEO_pre_reader:
 
     """
 
-    def __init__(self, file_prefix, num_bits):
+    def __init__(self, file_prefix, num_qbits):
         """
         Constructor
 
         Parameters
         ----------
         file_prefix : str
-            file must be called file_prefix + '_' + num_bits + "_eng.txt"
-        num_bits : int
+            file must be called file_prefix + '_' + num_qbits + "_eng.txt"
+        num_qbits : int
             total number of qubits of circuit.
 
         Returns
@@ -51,9 +52,9 @@ class SEO_pre_reader:
 
         """
         self.file_prefix = file_prefix
-        self.num_bits = num_bits
+        self.num_qbits = num_qbits
         self.english_in = open(utg.preface(
-            file_prefix + '_' + str(num_bits) + '_eng.txt'), 'rt')
+            file_prefix + '_' + str(num_qbits) + '_eng.txt'), 'rt')
         self.split_line = None
 
         self.tot_num_lines = 0

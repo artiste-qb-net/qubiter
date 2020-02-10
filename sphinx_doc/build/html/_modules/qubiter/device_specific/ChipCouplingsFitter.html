@@ -177,7 +177,7 @@
 <span class="sd">    undirected graphs. The class attempts to find a map phi() from the</span>
 <span class="sd">    vertices of GE to the vertices of GP, so that phi(x_GE) is a subset of</span>
 <span class="sd">    x_GP with x=V, E. If the search for phi() succeeds, then phi induces a</span>
-<span class="sd">    permutation map, call it bit_map: range(num_bits)-&gt;range(num_bits),</span>
+<span class="sd">    permutation map, call it bit_map: range(num_qbits)-&gt;range(num_qbits),</span>
 <span class="sd">    bit_ge-&gt;bit_gp, of the qubits of the circuit from which GE was</span>
 <span class="sd">    assembled. Under this permutation, the CNots of the permuted circuit are</span>
 <span class="sd">    all allowed** by the chip constraint c_to_tars. In that sense, the map</span>
@@ -194,7 +194,7 @@
 <span class="sd">        of the graph GE to the bits bit_gp of the graph GP.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="ChipCouplingsFitter.__init__"><a class="viewcode-back" href="../../../qubiter.device_specific.ChipCouplingsFitter.html#qubiter.device_specific.ChipCouplingsFitter.ChipCouplingsFitter.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="n">c_to_tars</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="ChipCouplingsFitter.__init__"><a class="viewcode-back" href="../../../qubiter.device_specific.ChipCouplingsFitter.html#qubiter.device_specific.ChipCouplingsFitter.ChipCouplingsFitter.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">,</span> <span class="n">c_to_tars</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Constructor</span>
 
@@ -203,16 +203,16 @@
 <span class="sd">        file_prefix : str</span>
 <span class="sd">            file prefix of English file which is to be read to assemble</span>
 <span class="sd">            a list of CNots used in the file.</span>
-<span class="sd">        num_bits : int</span>
+<span class="sd">        num_qbits : int</span>
 <span class="sd">            Number of qubits used in English file with file prefix</span>
 <span class="sd">            `file_prefix`. IMP: We assume that c_to_tars refers to a chip with</span>
-<span class="sd">            num_bits too. Both the English file and the chip must have the</span>
+<span class="sd">            num_qbits too. Both the English file and the chip must have the</span>
 <span class="sd">            same number of qubits. This is no loss of generality. As long as</span>
-<span class="sd">            the English file doesn&#39;t mention qubit positions &gt;= num_bits,</span>
+<span class="sd">            the English file doesn&#39;t mention qubit positions &gt;= num_qbits,</span>
 <span class="sd">            all you have to do to conform is to change the name of the</span>
-<span class="sd">            English file so that it claims to pertain to num_bits qubits.</span>
+<span class="sd">            English file so that it claims to pertain to num_qbits qubits.</span>
 <span class="sd">        c_to_tars : dict[int, list[int]]</span>
-<span class="sd">            a dictionary mapping j in range(num_bits) to a list, possibly</span>
+<span class="sd">            a dictionary mapping j in range(num_qbits) to a list, possibly</span>
 <span class="sd">            empty, of the physically allowed targets of qubit j, when j is</span>
 <span class="sd">            the control of a CNOT.</span>
 
@@ -225,16 +225,16 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">old_cnots</span> <span class="o">=</span> <span class="n">ChipCouplingsFitter</span><span class="o">.</span><span class="n">get_cnots_in_file</span><span class="p">(</span>
-            <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+            <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bit_map</span> <span class="o">=</span> <span class="n">ChipCouplingsFitter</span><span class="o">.</span><span class="n">get_bit_map_from_c_to_tars</span><span class="p">(</span>
-            <span class="n">num_bits</span><span class="p">,</span> <span class="n">old_cnots</span><span class="p">,</span> <span class="n">c_to_tars</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
-        <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bit_map</span><span class="p">)</span>
+            <span class="n">num_qbits</span><span class="p">,</span> <span class="n">old_cnots</span><span class="p">,</span> <span class="n">c_to_tars</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+        <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bit_map</span><span class="p">)</span>
         <span class="n">out_file_prefix</span> <span class="o">=</span> <span class="n">SEO_reader</span><span class="o">.</span><span class="n">xed_file_prefix</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">)</span>
         <span class="n">wr</span> <span class="o">=</span> <span class="n">SEO_writer</span><span class="p">(</span><span class="n">out_file_prefix</span><span class="p">,</span> <span class="n">emb</span><span class="p">)</span>
-        <span class="n">EchoingSEO_reader</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="n">wr</span><span class="p">)</span></div>
+        <span class="n">EchoingSEO_reader</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">,</span> <span class="n">wr</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ChipCouplingsFitter.get_cnots_in_file"><a class="viewcode-back" href="../../../qubiter.device_specific.ChipCouplingsFitter.html#qubiter.device_specific.ChipCouplingsFitter.ChipCouplingsFitter.get_cnots_in_file">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_cnots_in_file</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_cnots_in_file</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This function reads an English file with file prefix `file_prefix`</span>
 <span class="sd">        pertaining to a circuit with num_bit many qubits. It returns a tuple</span>
@@ -245,7 +245,7 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        file_prefix : str</span>
-<span class="sd">        num_bits : int</span>
+<span class="sd">        num_qbits : int</span>
 <span class="sd">        verbose : bool</span>
 
 <span class="sd">        Returns</span>
@@ -255,7 +255,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">old_cnots</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">english_in</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">utg</span><span class="o">.</span><span class="n">preface</span><span class="p">(</span>
-            <span class="n">file_prefix</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;_eng.txt&#39;</span><span class="p">),</span> <span class="s1">&#39;rt&#39;</span><span class="p">)</span>
+            <span class="n">file_prefix</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;_eng.txt&#39;</span><span class="p">),</span> <span class="s1">&#39;rt&#39;</span><span class="p">)</span>
 
         <span class="k">while</span> <span class="ow">not</span> <span class="n">english_in</span><span class="o">.</span><span class="n">closed</span><span class="p">:</span>
             <span class="n">line</span> <span class="o">=</span> <span class="n">english_in</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
@@ -280,7 +280,7 @@
         <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">old_cnots</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ChipCouplingsFitter.draw_phys_and_eng_graphs"><a class="viewcode-back" href="../../../qubiter.device_specific.ChipCouplingsFitter.html#qubiter.device_specific.ChipCouplingsFitter.ChipCouplingsFitter.draw_phys_and_eng_graphs">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">draw_phys_and_eng_graphs</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="n">c_to_tars</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">draw_phys_and_eng_graphs</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">,</span> <span class="n">c_to_tars</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Draws the Physical and English undirected graphs. This is useful in</span>
 <span class="sd">        case you want to try to use human pattern recognition to embed the</span>
@@ -289,7 +289,7 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        file_prefix : str</span>
-<span class="sd">        num_bits : int</span>
+<span class="sd">        num_qbits : int</span>
 <span class="sd">        c_to_tars : dict[int, list[int]]</span>
 
 <span class="sd">        Returns</span>
@@ -308,7 +308,7 @@
 
         <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
         <span class="n">old_cnots</span> <span class="o">=</span> <span class="n">ChipCouplingsFitter</span><span class="o">.</span><span class="n">get_cnots_in_file</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span>
-                                                          <span class="n">num_bits</span><span class="p">)</span>
+                                                          <span class="n">num_qbits</span><span class="p">)</span>
         <span class="n">GE</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
         <span class="n">GE</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">(</span><span class="n">old_cnots</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;English graph&#39;</span><span class="p">)</span>
@@ -318,14 +318,14 @@
 
 <div class="viewcode-block" id="ChipCouplingsFitter.get_bit_map_from_c_to_tars"><a class="viewcode-back" href="../../../qubiter.device_specific.ChipCouplingsFitter.html#qubiter.device_specific.ChipCouplingsFitter.ChipCouplingsFitter.get_bit_map_from_c_to_tars">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_bit_map_from_c_to_tars</span><span class="p">(</span>
-            <span class="n">num_bits</span><span class="p">,</span> <span class="n">old_cnots</span><span class="p">,</span> <span class="n">c_to_tars</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+            <span class="n">num_qbits</span><span class="p">,</span> <span class="n">old_cnots</span><span class="p">,</span> <span class="n">c_to_tars</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This function has as inputs `old_cnot` describing the CNots in an</span>
-<span class="sd">        English file for a circuit with num_bits qubits and `c_to_tars`</span>
-<span class="sd">        describing the couplings of a chip with num_bits qubits. The</span>
+<span class="sd">        English file for a circuit with num_qbits qubits and `c_to_tars`</span>
+<span class="sd">        describing the couplings of a chip with num_qbits qubits. The</span>
 <span class="sd">        function returns a list `bit_map` of num_bit many ints that</span>
-<span class="sd">        describes a permutation map mapping range(num_bits)-&gt;range(</span>
-<span class="sd">        num_bits), bit_ge-&gt;bit_gp. Under this permutation, the CNots of the</span>
+<span class="sd">        describes a permutation map mapping range(num_qbits)-&gt;range(</span>
+<span class="sd">        num_qbits), bit_ge-&gt;bit_gp. Under this permutation, the CNots of the</span>
 <span class="sd">        circuit described by the input English file are mapped into new</span>
 <span class="sd">        CNots which are all allowed** by the chip couplings constraint</span>
 <span class="sd">        c_to_tars.</span>
@@ -334,7 +334,7 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        num_bits : int</span>
+<span class="sd">        num_qbits : int</span>
 <span class="sd">        old_cnots : tuple[tuple[int, int]]</span>
 <span class="sd">        c_to_tars : dict[int, list[int]]</span>
 <span class="sd">        verbose : bool</span>
@@ -371,12 +371,12 @@
         <span class="n">gp_bit_to_ge_bit</span> <span class="o">=</span> <span class="n">g_match</span><span class="o">.</span><span class="n">mapping</span>
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;gp_bit_to_ge_bit=&#39;</span><span class="p">,</span> <span class="n">gp_bit_to_ge_bit</span><span class="p">)</span>
-        <span class="n">bit_map</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">num_bits</span>
+        <span class="n">bit_map</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">num_qbits</span>
         <span class="n">gp_bits</span><span class="p">,</span> <span class="n">ge_bits</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">gp_bit_to_ge_bit</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">ge_bit</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ge_bits</span><span class="p">):</span>
             <span class="n">bit_map</span><span class="p">[</span><span class="n">ge_bit</span><span class="p">]</span> <span class="o">=</span> <span class="n">gp_bits</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
-        <span class="n">undefined_domain</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)</span> <span class="k">if</span> <span class="n">bit_map</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">complement_of_range</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">bit_map</span><span class="p">]</span>
+        <span class="n">undefined_domain</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">)</span> <span class="k">if</span> <span class="n">bit_map</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">complement_of_range</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">)</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">bit_map</span><span class="p">]</span>
         <span class="k">for</span> <span class="n">y</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">undefined_domain</span><span class="p">):</span>
             <span class="n">bit_map</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">complement_of_range</span><span class="p">[</span><span class="n">y</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
@@ -388,19 +388,19 @@
     <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
         <span class="kn">import</span> <span class="nn">qubiter.device_specific.chip_couplings_ibm</span> <span class="k">as</span> <span class="nn">ibm</span>
         <span class="n">c_to_tars</span> <span class="o">=</span> <span class="n">ibm</span><span class="o">.</span><span class="n">ibmq5YorktownTenerife_c_to_tars</span>
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="mi">5</span>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="mi">5</span>
         <span class="n">file_prefix</span> <span class="o">=</span> <span class="s2">&quot;couplings_fitter&quot;</span>
 
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;control_to_targets=&quot;</span><span class="p">,</span> <span class="n">c_to_tars</span><span class="p">)</span>
 
         <span class="n">verbose</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="n">fitter</span> <span class="o">=</span> <span class="n">ChipCouplingsFitter</span><span class="p">(</span>
-            <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="n">c_to_tars</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+            <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">,</span> <span class="n">c_to_tars</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
 
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Must close or save/close all matplotlib &quot;</span>
               <span class="s2">&quot;windows in order to finish execution of script.&quot;</span><span class="p">)</span>
         <span class="n">ChipCouplingsFitter</span><span class="o">.</span><span class="n">draw_phys_and_eng_graphs</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span>
-                                                     <span class="n">num_bits</span><span class="p">,</span>
+                                                     <span class="n">num_qbits</span><span class="p">,</span>
                                                      <span class="n">c_to_tars</span><span class="p">)</span>
     <span class="n">main</span><span class="p">()</span>
 

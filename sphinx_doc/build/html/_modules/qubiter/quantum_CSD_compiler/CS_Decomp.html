@@ -331,8 +331,8 @@
 
     <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">cs decomp example-------------&quot;</span><span class="p">)</span>
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="mi">2</span>
-        <span class="n">num_rows</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_bits</span>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="n">num_rows</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_qbits</span>
         <span class="n">mat</span> <span class="o">=</span> <span class="n">FouSEO_writer</span><span class="o">.</span><span class="n">fourier_trans_mat</span><span class="p">(</span><span class="n">num_rows</span><span class="p">)</span>
         <span class="k">assert</span> <span class="n">UnitaryMat</span><span class="o">.</span><span class="n">is_unitary</span><span class="p">(</span><span class="n">mat</span><span class="p">)</span>
         <span class="n">left_mats</span><span class="p">,</span> <span class="n">central_mats</span><span class="p">,</span> <span class="n">right_mats</span> <span class="o">=</span> <span class="n">CS_Decomp</span><span class="o">.</span><span class="n">get_csd</span><span class="p">([</span><span class="n">mat</span><span class="p">])</span>

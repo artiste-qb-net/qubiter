@@ -167,7 +167,7 @@
 <span class="sd">    ----------</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="Qubiter_to_IBMqasm.__init__"><a class="viewcode-back" href="../../../qubiter.device_specific.Qubiter_to_IBMqasm.html#qubiter.device_specific.Qubiter_to_IBMqasm.Qubiter_to_IBMqasm.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="Qubiter_to_IBMqasm.__init__"><a class="viewcode-back" href="../../../qubiter.device_specific.Qubiter_to_IBMqasm.html#qubiter.device_specific.Qubiter_to_IBMqasm.Qubiter_to_IBMqasm.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Constructor</span>
 
@@ -178,7 +178,7 @@
 <span class="sd">        -------</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">Qubiter_to_AnyQasm</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+        <span class="n">Qubiter_to_AnyQasm</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Qubiter_to_IBMqasm.write_prelude"><a class="viewcode-back" href="../../../qubiter.device_specific.Qubiter_to_IBMqasm.html#qubiter.device_specific.Qubiter_to_IBMqasm.Qubiter_to_IBMqasm.write_prelude">[docs]</a>    <span class="k">def</span> <span class="nf">write_prelude</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -194,7 +194,7 @@
         <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;from qiskit import QuantumCircuit</span><span class="se">\n</span><span class="s1">&#39;</span>
         <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;from qiskit import ClassicalRegister, QuantumRegister</span><span class="se">\n</span><span class="s1">&#39;</span>
         <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;from qiskit import execute</span><span class="se">\n\n\n</span><span class="s1">&#39;</span>
-        <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;q = QuantumRegister(&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;, &#39;q&#39;)</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;q = QuantumRegister(&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;, &#39;q&#39;)</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;ckt = QuantumCircuit(q)&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span></div>
 
@@ -579,9 +579,9 @@
     <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
         <span class="n">file_prefix</span> <span class="o">=</span> <span class="s2">&quot;qbtr2ibm_test&quot;</span>
         <span class="n">aqasm_name</span> <span class="o">=</span> <span class="s1">&#39;IBMqasm&#39;</span>
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="mi">5</span>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="mi">5</span>
         <span class="n">c_to_tars</span> <span class="o">=</span> <span class="n">ibm</span><span class="o">.</span><span class="n">ibmq5YorktownTenerife_c_to_tars</span>
-        <span class="n">Qubiter_to_IBMqasm</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="n">aqasm_name</span><span class="o">=</span><span class="n">aqasm_name</span><span class="p">,</span>
+        <span class="n">Qubiter_to_IBMqasm</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">,</span> <span class="n">aqasm_name</span><span class="o">=</span><span class="n">aqasm_name</span><span class="p">,</span>
                            <span class="n">c_to_tars</span><span class="o">=</span><span class="n">c_to_tars</span><span class="p">,</span> <span class="n">write_qubiter_files</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="n">main</span><span class="p">()</span>

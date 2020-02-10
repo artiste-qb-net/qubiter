@@ -411,7 +411,7 @@
     <span class="k">return</span> <span class="n">prod</span></div>
 
 
-<div class="viewcode-block" id="get_eng_file_rel_path"><a class="viewcode-back" href="../../qubiter.utilities_gen.html#qubiter.utilities_gen.get_eng_file_rel_path">[docs]</a><span class="k">def</span> <span class="nf">get_eng_file_rel_path</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">):</span>
+<div class="viewcode-block" id="get_eng_file_rel_path"><a class="viewcode-back" href="../../qubiter.utilities_gen.html#qubiter.utilities_gen.get_eng_file_rel_path">[docs]</a><span class="k">def</span> <span class="nf">get_eng_file_rel_path</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns path to English file</span>
 
@@ -421,11 +421,11 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">return</span> <span class="n">file_prefix</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)</span> <span class="o">+</span>\
+    <span class="k">return</span> <span class="n">file_prefix</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">)</span> <span class="o">+</span>\
            <span class="s1">&#39;_eng.txt&#39;</span></div>
 
 
-<div class="viewcode-block" id="get_pic_file_rel_path"><a class="viewcode-back" href="../../qubiter.utilities_gen.html#qubiter.utilities_gen.get_pic_file_rel_path">[docs]</a><span class="k">def</span> <span class="nf">get_pic_file_rel_path</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="n">ZL</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="get_pic_file_rel_path"><a class="viewcode-back" href="../../qubiter.utilities_gen.html#qubiter.utilities_gen.get_pic_file_rel_path">[docs]</a><span class="k">def</span> <span class="nf">get_pic_file_rel_path</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">,</span> <span class="n">ZL</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns path to Picture file</span>
 
@@ -435,7 +435,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">return</span> <span class="n">file_prefix</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)</span> <span class="o">+</span>\
+    <span class="k">return</span> <span class="n">file_prefix</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">)</span> <span class="o">+</span>\
             <span class="p">(</span><span class="s1">&#39;_ZL&#39;</span> <span class="k">if</span> <span class="n">ZL</span> <span class="k">else</span> <span class="s1">&#39;_ZF&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;pic.txt&#39;</span></div>
 
 

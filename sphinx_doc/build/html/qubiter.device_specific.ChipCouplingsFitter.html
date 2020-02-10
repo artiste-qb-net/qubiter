@@ -154,7 +154,7 @@
 <span id="qubiter-device-specific-chipcouplingsfitter-module"></span><h1>qubiter.device_specific.ChipCouplingsFitter module<a class="headerlink" href="#module-qubiter.device_specific.ChipCouplingsFitter" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="qubiter.device_specific.ChipCouplingsFitter.ChipCouplingsFitter">
-<em class="property">class </em><code class="sig-prename descclassname">qubiter.device_specific.ChipCouplingsFitter.</code><code class="sig-name descname">ChipCouplingsFitter</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_bits</em>, <em class="sig-param">c_to_tars</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/device_specific/ChipCouplingsFitter.html#ChipCouplingsFitter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.device_specific.ChipCouplingsFitter.ChipCouplingsFitter" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">qubiter.device_specific.ChipCouplingsFitter.</code><code class="sig-name descname">ChipCouplingsFitter</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_qbits</em>, <em class="sig-param">c_to_tars</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/device_specific/ChipCouplingsFitter.html#ChipCouplingsFitter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.device_specific.ChipCouplingsFitter.ChipCouplingsFitter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Recall that an undirected graph G is defined as a pair of sets (V, E),
 where V is a set of vertices, and E, the edges, is a set of tuples (c,
@@ -170,7 +170,7 @@ python networkx function for finding “graph isomorphisms” between
 undirected graphs. The class attempts to find a map phi() from the
 vertices of GE to the vertices of GP, so that phi(x_GE) is a subset of
 x_GP with x=V, E. If the search for phi() succeeds, then phi induces a
-permutation map, call it bit_map: range(num_bits)-&gt;range(num_bits),
+permutation map, call it bit_map: range(num_qbits)-&gt;range(num_qbits),
 bit_ge-&gt;bit_gp, of the qubits of the circuit from which GE was
 assembled. Under this permutation, the CNots of the permuted circuit are
 all allowed** by the chip constraint c_to_tars. In that sense, the map
@@ -186,21 +186,21 @@ of the graph GE to the bits bit_gp of the graph GP.</p>
 </dl>
 <dl class="method">
 <dt id="qubiter.device_specific.ChipCouplingsFitter.ChipCouplingsFitter.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_bits</em>, <em class="sig-param">c_to_tars</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/device_specific/ChipCouplingsFitter.html#ChipCouplingsFitter.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.device_specific.ChipCouplingsFitter.ChipCouplingsFitter.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_qbits</em>, <em class="sig-param">c_to_tars</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/device_specific/ChipCouplingsFitter.html#ChipCouplingsFitter.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.device_specific.ChipCouplingsFitter.ChipCouplingsFitter.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constructor</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>file_prefix</strong> (<em>str</em>) – file prefix of English file which is to be read to assemble
 a list of CNots used in the file.</p></li>
-<li><p><strong>num_bits</strong> (<em>int</em>) – Number of qubits used in English file with file prefix
+<li><p><strong>num_qbits</strong> (<em>int</em>) – Number of qubits used in English file with file prefix
 <cite>file_prefix</cite>. IMP: We assume that c_to_tars refers to a chip with
-num_bits too. Both the English file and the chip must have the
+num_qbits too. Both the English file and the chip must have the
 same number of qubits. This is no loss of generality. As long as
-the English file doesn’t mention qubit positions &gt;= num_bits,
+the English file doesn’t mention qubit positions &gt;= num_qbits,
 all you have to do to conform is to change the name of the
-English file so that it claims to pertain to num_bits qubits.</p></li>
-<li><p><strong>c_to_tars</strong> (<em>dict</em><em>[</em><em>int</em><em>, </em><em>list</em><em>[</em><em>int</em><em>]</em><em>]</em>) – a dictionary mapping j in range(num_bits) to a list, possibly
+English file so that it claims to pertain to num_qbits qubits.</p></li>
+<li><p><strong>c_to_tars</strong> (<em>dict</em><em>[</em><em>int</em><em>, </em><em>list</em><em>[</em><em>int</em><em>]</em><em>]</em>) – a dictionary mapping j in range(num_qbits) to a list, possibly
 empty, of the physically allowed targets of qubit j, when j is
 the control of a CNOT.</p></li>
 <li><p><strong>verbose</strong> (<em>bool</em>) – </p></li>
@@ -211,7 +211,7 @@ the control of a CNOT.</p></li>
 
 <dl class="method">
 <dt id="qubiter.device_specific.ChipCouplingsFitter.ChipCouplingsFitter.draw_phys_and_eng_graphs">
-<em class="property">static </em><code class="sig-name descname">draw_phys_and_eng_graphs</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_bits</em>, <em class="sig-param">c_to_tars</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/device_specific/ChipCouplingsFitter.html#ChipCouplingsFitter.draw_phys_and_eng_graphs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.device_specific.ChipCouplingsFitter.ChipCouplingsFitter.draw_phys_and_eng_graphs" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">draw_phys_and_eng_graphs</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_qbits</em>, <em class="sig-param">c_to_tars</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/device_specific/ChipCouplingsFitter.html#ChipCouplingsFitter.draw_phys_and_eng_graphs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.device_specific.ChipCouplingsFitter.ChipCouplingsFitter.draw_phys_and_eng_graphs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Draws the Physical and English undirected graphs. This is useful in
 case you want to try to use human pattern recognition to embed the
 English graph inside the Physical graph.</p>
@@ -219,7 +219,7 @@ English graph inside the Physical graph.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>file_prefix</strong> (<em>str</em>) – </p></li>
-<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>num_qbits</strong> (<em>int</em>) – </p></li>
 <li><p><strong>c_to_tars</strong> (<em>dict</em><em>[</em><em>int</em><em>, </em><em>list</em><em>[</em><em>int</em><em>]</em><em>]</em>) – </p></li>
 </ul>
 </dd>
@@ -234,13 +234,13 @@ English graph inside the Physical graph.</p>
 
 <dl class="method">
 <dt id="qubiter.device_specific.ChipCouplingsFitter.ChipCouplingsFitter.get_bit_map_from_c_to_tars">
-<em class="property">static </em><code class="sig-name descname">get_bit_map_from_c_to_tars</code><span class="sig-paren">(</span><em class="sig-param">num_bits</em>, <em class="sig-param">old_cnots</em>, <em class="sig-param">c_to_tars</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/device_specific/ChipCouplingsFitter.html#ChipCouplingsFitter.get_bit_map_from_c_to_tars"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.device_specific.ChipCouplingsFitter.ChipCouplingsFitter.get_bit_map_from_c_to_tars" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">get_bit_map_from_c_to_tars</code><span class="sig-paren">(</span><em class="sig-param">num_qbits</em>, <em class="sig-param">old_cnots</em>, <em class="sig-param">c_to_tars</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/device_specific/ChipCouplingsFitter.html#ChipCouplingsFitter.get_bit_map_from_c_to_tars"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.device_specific.ChipCouplingsFitter.ChipCouplingsFitter.get_bit_map_from_c_to_tars" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function has as inputs <cite>old_cnot</cite> describing the CNots in an
-English file for a circuit with num_bits qubits and <cite>c_to_tars</cite>
-describing the couplings of a chip with num_bits qubits. The
+English file for a circuit with num_qbits qubits and <cite>c_to_tars</cite>
+describing the couplings of a chip with num_qbits qubits. The
 function returns a list <cite>bit_map</cite> of num_bit many ints that
-describes a permutation map mapping range(num_bits)-&gt;range(
-num_bits), bit_ge-&gt;bit_gp. Under this permutation, the CNots of the
+describes a permutation map mapping range(num_qbits)-&gt;range(
+num_qbits), bit_ge-&gt;bit_gp. Under this permutation, the CNots of the
 circuit described by the input English file are mapped into new
 CNots which are all allowed** by the chip couplings constraint
 c_to_tars.</p>
@@ -248,7 +248,7 @@ c_to_tars.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>num_qbits</strong> (<em>int</em>) – </p></li>
 <li><p><strong>old_cnots</strong> (<em>tuple</em><em>[</em><em>tuple</em><em>[</em><em>int</em><em>, </em><em>int</em><em>]</em><em>]</em>) – </p></li>
 <li><p><strong>c_to_tars</strong> (<em>dict</em><em>[</em><em>int</em><em>, </em><em>list</em><em>[</em><em>int</em><em>]</em><em>]</em>) – </p></li>
 <li><p><strong>verbose</strong> (<em>bool</em>) – </p></li>
@@ -265,7 +265,7 @@ c_to_tars.</p>
 
 <dl class="method">
 <dt id="qubiter.device_specific.ChipCouplingsFitter.ChipCouplingsFitter.get_cnots_in_file">
-<em class="property">static </em><code class="sig-name descname">get_cnots_in_file</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_bits</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/device_specific/ChipCouplingsFitter.html#ChipCouplingsFitter.get_cnots_in_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.device_specific.ChipCouplingsFitter.ChipCouplingsFitter.get_cnots_in_file" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">get_cnots_in_file</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_qbits</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/device_specific/ChipCouplingsFitter.html#ChipCouplingsFitter.get_cnots_in_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.device_specific.ChipCouplingsFitter.ChipCouplingsFitter.get_cnots_in_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function reads an English file with file prefix <cite>file_prefix</cite>
 pertaining to a circuit with num_bit many qubits. It returns a tuple
 of the CNots mentioned in the English file. The CNots are specified
@@ -275,7 +275,7 @@ target bit position.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>file_prefix</strong> (<em>str</em>) – </p></li>
-<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>num_qbits</strong> (<em>int</em>) – </p></li>
 <li><p><strong>verbose</strong> (<em>bool</em>) – </p></li>
 </ul>
 </dd>

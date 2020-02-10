@@ -57,6 +57,5 @@ def Turing():
             mat_dict['10'] = -s*ny + 1j*s*nx
             mat_dict['11'] = c - 1j*s*nz
         return OneBitGates.get_mat(lib, mat_dict)
-    qml.QubitUnitary(rot(-6.283185307179586,
-                         -6.283185307179586, -6.283185307179586), wires=0)
+    qml.QubitUnitary(rot(-6.283185307179586, -6.283185307179586, -6.283185307179586), wires=0)
     return qml.expval.Hermitian(hamil)

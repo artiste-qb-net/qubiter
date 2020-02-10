@@ -171,7 +171,7 @@
 <span class="sd">    lattice : QbitPlanarLattice</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="Qubiter_to_GoogleCirq.__init__"><a class="viewcode-back" href="../../../qubiter.device_specific.Qubiter_to_GoogleCirq.html#qubiter.device_specific.Qubiter_to_GoogleCirq.Qubiter_to_GoogleCirq.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="Qubiter_to_GoogleCirq.__init__"><a class="viewcode-back" href="../../../qubiter.device_specific.Qubiter_to_GoogleCirq.html#qubiter.device_specific.Qubiter_to_GoogleCirq.Qubiter_to_GoogleCirq.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Constructor</span>
 
@@ -183,7 +183,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lattice</span> <span class="o">=</span> <span class="n">QbitPlanarLattice</span><span class="p">(</span><span class="n">cc</span><span class="o">.</span><span class="n">BRISTLECONE_GRID</span><span class="p">)</span>
-        <span class="n">Qubiter_to_AnyQasm</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+        <span class="n">Qubiter_to_AnyQasm</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Qubiter_to_GoogleCirq.write_prelude"><a class="viewcode-back" href="../../../qubiter.device_specific.Qubiter_to_GoogleCirq.html#qubiter.device_specific.Qubiter_to_GoogleCirq.Qubiter_to_GoogleCirq.write_prelude">[docs]</a>    <span class="k">def</span> <span class="nf">write_prelude</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -594,9 +594,9 @@
     <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
         <span class="n">file_prefix</span> <span class="o">=</span> <span class="s2">&quot;qbtr2google_test&quot;</span>
         <span class="n">aqasm_name</span> <span class="o">=</span> <span class="s1">&#39;GooCirq&#39;</span>
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="mi">5</span>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="mi">5</span>
         <span class="n">c_to_tars</span> <span class="o">=</span> <span class="s1">&#39;do_fill&#39;</span>  <span class="c1"># filled by constructor</span>
-        <span class="n">Qubiter_to_GoogleCirq</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="n">aqasm_name</span><span class="o">=</span><span class="n">aqasm_name</span><span class="p">,</span>
+        <span class="n">Qubiter_to_GoogleCirq</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">,</span> <span class="n">aqasm_name</span><span class="o">=</span><span class="n">aqasm_name</span><span class="p">,</span>
                               <span class="n">c_to_tars</span><span class="o">=</span><span class="n">c_to_tars</span><span class="p">,</span> <span class="n">write_qubiter_files</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="n">main</span><span class="p">()</span>

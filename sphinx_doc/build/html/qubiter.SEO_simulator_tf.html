@@ -154,7 +154,7 @@
 <span id="qubiter-seo-simulator-tf-module"></span><h1>qubiter.SEO_simulator_tf module<a class="headerlink" href="#module-qubiter.SEO_simulator_tf" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="qubiter.SEO_simulator_tf.SEO_simulator_tf">
-<em class="property">class </em><code class="sig-prename descclassname">qubiter.SEO_simulator_tf.</code><code class="sig-name descname">SEO_simulator_tf</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_bits</em>, <em class="sig-param">init_st_vec=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator_tf.html#SEO_simulator_tf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator_tf.SEO_simulator_tf" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">qubiter.SEO_simulator_tf.</code><code class="sig-name descname">SEO_simulator_tf</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_qbits</em>, <em class="sig-param">init_st_vec=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator_tf.html#SEO_simulator_tf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator_tf.SEO_simulator_tf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="qubiter.SEO_simulator.html#qubiter.SEO_simulator.SEO_simulator" title="qubiter.SEO_simulator.SEO_simulator"><code class="xref py py-class docutils literal notranslate"><span class="pre">qubiter.SEO_simulator.SEO_simulator</span></code></a></p>
 <p>TF= TensorFlow</p>
 <p>This class is a child of SEO_simulator. The class replaces numpy methods
@@ -171,13 +171,13 @@ convert the numpy tensors back to tf, the way they were upon starting
 the method.</p>
 <dl class="method">
 <dt id="qubiter.SEO_simulator_tf.SEO_simulator_tf.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_bits</em>, <em class="sig-param">init_st_vec=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator_tf.html#SEO_simulator_tf.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator_tf.SEO_simulator_tf.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_qbits</em>, <em class="sig-param">init_st_vec=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator_tf.html#SEO_simulator_tf.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator_tf.SEO_simulator_tf.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constructor</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>file_prefix</strong> (<em>str</em>) – </p></li>
-<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>num_qbits</strong> (<em>int</em>) – </p></li>
 <li><p><strong>init_st_vec</strong> (<a class="reference internal" href="qubiter.StateVec.html#qubiter.StateVec.StateVec" title="qubiter.StateVec.StateVec"><em>StateVec</em></a>) – </p></li>
 <li><p><strong>kwargs</strong> (<em>dict</em>) – keyword args of SEO_simulator</p></li>
 </ul>

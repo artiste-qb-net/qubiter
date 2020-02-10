@@ -273,8 +273,8 @@
 
         <span class="n">nd_ctr</span> <span class="o">=</span> <span class="mi">0</span>
 
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_bef</span>
-        <span class="n">num_rows</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_bits</span><span class="p">)</span>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_bef</span>
+        <span class="n">num_rows</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_qbits</span><span class="p">)</span>
         <span class="k">assert</span> <span class="n">init_unitary_mat</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">num_rows</span><span class="p">,</span> <span class="n">num_rows</span><span class="p">)</span>
         <span class="n">root_nd</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="n">nd_ctr</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
                             <span class="n">init_unitary_mat</span><span class="o">=</span><span class="n">init_unitary_mat</span><span class="p">)</span>
@@ -292,7 +292,7 @@
         <span class="k">while</span> <span class="n">level</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="c1"># since level!=0, cur_nd is not None here</span>
             <span class="n">cur_nd</span> <span class="o">=</span> <span class="n">node_q</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="k">if</span> <span class="n">level</span> <span class="o">==</span> <span class="n">num_bits</span><span class="o">+</span><span class="mi">1</span> <span class="ow">or</span> <span class="n">cur_nd</span><span class="o">.</span><span class="n">is_barren</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">level</span> <span class="o">==</span> <span class="n">num_qbits</span><span class="o">+</span><span class="mi">1</span> <span class="ow">or</span> <span class="n">cur_nd</span><span class="o">.</span><span class="n">is_barren</span><span class="p">():</span>
                 <span class="n">node_q</span><span class="o">.</span><span class="n">popleft</span><span class="p">()</span>
                 <span class="n">level</span> <span class="o">-=</span> <span class="mi">1</span>
             <span class="k">else</span><span class="p">:</span>
@@ -360,8 +360,8 @@
 <div class="viewcode-block" id="Tree.write_node"><a class="viewcode-back" href="../../../qubiter.quantum_CSD_compiler.Tree.html#qubiter.quantum_CSD_compiler.Tree.Tree.write_node">[docs]</a>    <span class="k">def</span> <span class="nf">write_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nd</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This function is called by self.write() for each node of the tree.</span>
-<span class="sd">        For a node with level &lt;= num_bits, the function writes an MP_Y line,</span>
-<span class="sd">        whereas if level = num_bits + 1, it writes a DIAG line.</span>
+<span class="sd">        For a node with level &lt;= num_qbits, the function writes an MP_Y line,</span>
+<span class="sd">        whereas if level = num_qbits + 1, it writes a DIAG line.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -378,21 +378,21 @@
         <span class="k">if</span> <span class="n">nd</span><span class="o">.</span><span class="n">is_barren</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">write_NOTA</span><span class="p">(</span><span class="s2">&quot;barren node&quot;</span><span class="p">)</span>
             <span class="k">return</span>
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_bef</span>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_bef</span>
 
-        <span class="k">assert</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">nd</span><span class="o">.</span><span class="n">level</span> <span class="o">&lt;=</span> <span class="n">num_bits</span><span class="o">+</span><span class="mi">1</span>
-        <span class="c1"># tar_bit_pos = num_bits - 1 for level=1</span>
-        <span class="c1"># tar_bit_pos = 0 for level=num_bits</span>
-        <span class="c1"># tar_bit_pos = -1 for level=num_bits+1</span>
-        <span class="n">tar_bit_pos</span> <span class="o">=</span> <span class="n">num_bits</span> <span class="o">-</span> <span class="n">nd</span><span class="o">.</span><span class="n">level</span>
+        <span class="k">assert</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">nd</span><span class="o">.</span><span class="n">level</span> <span class="o">&lt;=</span> <span class="n">num_qbits</span><span class="o">+</span><span class="mi">1</span>
+        <span class="c1"># tar_bit_pos = num_qbits - 1 for level=1</span>
+        <span class="c1"># tar_bit_pos = 0 for level=num_qbits</span>
+        <span class="c1"># tar_bit_pos = -1 for level=num_qbits+1</span>
+        <span class="n">tar_bit_pos</span> <span class="o">=</span> <span class="n">num_qbits</span> <span class="o">-</span> <span class="n">nd</span><span class="o">.</span><span class="n">level</span>
 
-        <span class="n">trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)</span>
+        <span class="n">trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">tar_bit_pos</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">trols</span><span class="o">.</span><span class="n">bit_pos_to_kind</span> <span class="o">=</span> <span class="p">{</span><span class="n">c</span><span class="p">:</span> <span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">)}</span>
-            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">num_bits</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">num_qbits</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
                 <span class="n">trols</span><span class="o">.</span><span class="n">bit_pos_to_kind</span><span class="p">[</span><span class="n">c</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">trols</span><span class="o">.</span><span class="n">bit_pos_to_kind</span> <span class="o">=</span> <span class="p">{</span><span class="n">c</span><span class="p">:</span> <span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)}</span>
+            <span class="n">trols</span><span class="o">.</span><span class="n">bit_pos_to_kind</span> <span class="o">=</span> <span class="p">{</span><span class="n">c</span><span class="p">:</span> <span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">)}</span>
         <span class="n">trols</span><span class="o">.</span><span class="n">refresh_lists</span><span class="p">()</span>
 
         <span class="n">rad_angles</span> <span class="o">=</span> <span class="p">[]</span>
@@ -401,11 +401,11 @@
             <span class="n">rad_angles</span> <span class="o">+=</span> <span class="nb">list</span><span class="p">(</span><span class="n">dmat</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
 
         <span class="c1"># permute arr bit indices</span>
-        <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">tar_bit_pos</span> <span class="o">&lt;=</span> <span class="n">num_bits</span><span class="o">-</span><span class="mi">3</span><span class="p">:</span>
+        <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">tar_bit_pos</span> <span class="o">&lt;=</span> <span class="n">num_qbits</span><span class="o">-</span><span class="mi">3</span><span class="p">:</span>
             <span class="c1"># turn rad_angles into equivalent bit indexed tensor</span>
-            <span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">rad_angles</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">([</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">num_bits</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+            <span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">rad_angles</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">([</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">num_qbits</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
             <span class="n">perm</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">))</span> <span class="o">+</span> \
-                <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_bits</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">+</span> <span class="p">[</span><span class="n">tar_bit_pos</span><span class="p">]</span>
+                <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_qbits</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">+</span> <span class="p">[</span><span class="n">tar_bit_pos</span><span class="p">]</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;permutation&quot;</span><span class="p">,</span> <span class="n">perm</span><span class="p">)</span>
             <span class="n">arr</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">perm</span><span class="p">)</span>
@@ -428,9 +428,9 @@
     <span class="kn">from</span> <span class="nn">qubiter.FouSEO_writer</span> <span class="k">import</span> <span class="o">*</span>
 
     <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="mi">3</span>
-        <span class="n">init_unitary_mat</span> <span class="o">=</span> <span class="n">FouSEO_writer</span><span class="o">.</span><span class="n">fourier_trans_mat</span><span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_bits</span><span class="p">)</span>
-        <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">)</span>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="n">init_unitary_mat</span> <span class="o">=</span> <span class="n">FouSEO_writer</span><span class="o">.</span><span class="n">fourier_trans_mat</span><span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_qbits</span><span class="p">)</span>
+        <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">)</span>
         <span class="n">file_prefix</span> <span class="o">=</span> <span class="s1">&#39;csd_test&#39;</span>
         <span class="n">t</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">emb</span><span class="p">,</span> <span class="n">init_unitary_mat</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">main</span><span class="p">()</span>

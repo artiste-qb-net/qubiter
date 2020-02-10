@@ -145,7 +145,7 @@ class SEO_writer:
 
         """
         rel_path = utg.get_eng_file_rel_path(self.file_prefix,
-                                             self.emb.num_bits_aft)
+                                             self.emb.num_qbits_aft)
         # print("..,,mmmm", rel_path)
         return rel_path if rel else utg.preface(rel_path)
 
@@ -164,7 +164,7 @@ class SEO_writer:
 
         """
         rel_path = utg.get_pic_file_rel_path(self.file_prefix,
-                                             self.emb.num_bits_aft,
+                                             self.emb.num_qbits_aft,
                                              ZL=self.ZL)
         return rel_path if rel else utg.preface(rel_path)
 
@@ -293,10 +293,10 @@ class SEO_writer:
         str
 
         """
-        num_bits = self.emb.num_bits_aft
+        num_qbits = self.emb.num_qbits_aft
         li = list(pic_line)
-        for bit in range(0, num_bits):
-            m = 4*(num_bits - 1 - bit)
+        for bit in range(0, num_qbits):
+            m = 4*(num_qbits - 1 - bit)
             if bit in self.measured_bits:
                 if li[m] == "|":
                     li[m] = ":"
@@ -434,8 +434,8 @@ class SEO_writer:
 
         """
 
-        # num_bits_bef = self.emb.num_bits_bef
-        num_bits_aft = self.emb.num_bits_aft
+        # num_qbits_bef = self.emb.num_qbits_bef
+        num_qbits_aft = self.emb.num_qbits_aft
         aft_tar_bit_pos = self.emb.aft(tar_bit_pos)
 
         assert kind in [0, 1, 2], "unsupported measurement kind"
@@ -451,7 +451,7 @@ class SEO_writer:
         biggest = aft_tar_bit_pos
         smallest = aft_tar_bit_pos
         # k a bit position
-        for k in range(num_bits_aft-1, biggest, -1):
+        for k in range(num_qbits_aft-1, biggest, -1):
             pic_line += "|   "
         if kind == 0:
             pic_line += "M0  "
@@ -603,8 +603,8 @@ class SEO_writer:
         """
         aft_trols = self.write_controlled_preamble(trols)
 
-        # num_bits_bef = self.emb.num_bits_bef
-        num_bits_aft = self.emb.num_bits_aft
+        # num_qbits_bef = self.emb.num_qbits_bef
+        num_qbits_aft = self.emb.num_qbits_aft
         aft_tar_bit_pos = self.emb.aft(tar_bit_pos)
 
         # number of controls may be zero
@@ -683,7 +683,7 @@ class SEO_writer:
             smallest = min(aft_trols.bit_pos[num_controls-1], aft_tar_bit_pos)
 
         # k a bit position
-        for k in range(num_bits_aft-1, biggest, -1):
+        for k in range(num_qbits_aft-1, biggest, -1):
             pic_line += "|   "
 
         c_int = 0
@@ -818,16 +818,16 @@ class SEO_writer:
         """
         aft_trols = self.write_controlled_preamble(trols)
 
-        num_bits_bef = self.emb.num_bits_bef
-        num_bits_aft = self.emb.num_bits_aft
+        num_qbits_bef = self.emb.num_qbits_bef
+        num_qbits_aft = self.emb.num_qbits_aft
         # aft_tar_bit_pos = self.emb.aft(tar_bit_pos)
 
         # number of controls may be zero
         num_controls = len(aft_trols.bit_pos)
 
         assert bit1 != bit2, "swapped bits must be different"
-        assert -1 < bit1 < num_bits_bef
-        assert -1 < bit2 < num_bits_bef
+        assert -1 < bit1 < num_qbits_bef
+        assert -1 < bit2 < num_qbits_bef
         x = [self.emb.aft(bit1), self.emb.aft(bit2)]
         big = max(x)
         small = min(x)
@@ -866,7 +866,7 @@ class SEO_writer:
             smallest = min(aft_trols.bit_pos[num_controls-1], small)
 
         # k a bit position
-        for k in range(num_bits_aft-1, biggest, -1):
+        for k in range(num_qbits_aft-1, biggest, -1):
             pic_line += "|   "
 
         c_int = 0
@@ -928,8 +928,8 @@ class SEO_writer:
         """
         aft_trols = self.write_controlled_preamble(trols)
 
-        # num_bits_bef = self.emb.num_bits_bef
-        num_bits_aft = self.emb.num_bits_aft
+        # num_qbits_bef = self.emb.num_qbits_bef
+        num_qbits_aft = self.emb.num_qbits_aft
         aft_tar_bit_pos = self.emb.aft(tar_bit_pos)
 
         # number of controls may be zero
@@ -979,7 +979,7 @@ class SEO_writer:
             smallest = min(aft_trols.bit_pos[num_controls-1], aft_tar_bit_pos)
 
         # k a bit position
-        for k in range(num_bits_aft-1, biggest, -1):
+        for k in range(num_qbits_aft-1, biggest, -1):
             pic_line += "|   "
 
         c_int = 0
@@ -1036,8 +1036,8 @@ class SEO_writer:
         """
         aft_trols = self.write_controlled_preamble(trols)
 
-        # num_bits_bef = self.emb.num_bits_bef
-        num_bits_aft = self.emb.num_bits_aft
+        # num_qbits_bef = self.emb.num_qbits_bef
+        num_qbits_aft = self.emb.num_qbits_aft
         # aft_tar_bit_pos = self.emb.aft(tar_bit_pos)
 
         # number of controls may be zero
@@ -1082,7 +1082,7 @@ class SEO_writer:
         smallest = aft_trols.bit_pos[num_controls-1]
 
         # k a bit position
-        for k in range(num_bits_aft-1, biggest, -1):
+        for k in range(num_qbits_aft-1, biggest, -1):
             pic_line += "|   "
 
         c_int = 0
@@ -1362,8 +1362,8 @@ class SEO_writer:
         None
 
         """
-        num_bits = self.emb.num_bits_aft
-        trols = Controls.new_knob(num_bits, control_bit, kind)
+        num_qbits = self.emb.num_qbits_aft
+        trols = Controls.new_single_trol(num_qbits, control_bit, kind)
         self.write_controlled_one_bit_gate(target_bit, trols,
             OneBitGates.sigx)
 
@@ -1383,8 +1383,8 @@ class SEO_writer:
         None
 
         """
-        num_bits = self.emb.num_bits_aft
-        trols = Controls.new_knob(num_bits, control_bit, kind)
+        num_qbits = self.emb.num_qbits_aft
+        trols = Controls.new_single_trol(num_qbits, control_bit, kind)
         self.write_controlled_one_bit_gate(target_bit, trols,
             OneBitGates.sigz)
 
@@ -1408,8 +1408,8 @@ class SEO_writer:
         None
 
         """
-        num_bits = self.emb.num_bits_aft
-        trols = Controls.new_knob(num_bits, control_bit, kind)
+        num_qbits = self.emb.num_qbits_aft
+        trols = Controls.new_single_trol(num_qbits, control_bit, kind)
         self.write_controlled_one_bit_gate(target_bit, trols,
             OneBitGates.P_1_phase_fac, [rads])
 
@@ -1478,9 +1478,9 @@ class SEO_writer:
 
 if __name__ == "__main__":
     def main():
-        num_bits = 5
-        emb = CktEmbedder(num_bits, num_bits)
-        trols = Controls(num_bits)
+        num_qbits = 5
+        emb = CktEmbedder(num_qbits, num_qbits)
+        trols = Controls(num_qbits)
         trols.bit_pos_to_kind = {3: True, 4: False}
         trols.refresh_lists()
         ang_rads = 30*np.pi/180
@@ -1548,13 +1548,13 @@ if __name__ == "__main__":
             wr.write_cnot(2, 1)
 
             tar_bit_pos = 0
-            trols1 = Controls(num_bits)
+            trols1 = Controls(num_qbits)
             trols1.bit_pos_to_kind = {1: 0, 2: 1, 3: True, 4: False}
             trols1.refresh_lists()
             wr.write_controlled_multiplexor_gate(tar_bit_pos, trols1,
                 [ang_rads/3, ang_rads*2/3, ang_rads, ang_rads*4/3])
 
-            trols2 = Controls(num_bits)
+            trols2 = Controls(num_qbits)
             trols2.bit_pos_to_kind = {1: 0, 2: 1}
             trols2.refresh_lists()
             wr.write_multiplexor_gate(tar_bit_pos, trols2,

@@ -178,14 +178,14 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="SEO_simulator_tf.__init__"><a class="viewcode-back" href="../../qubiter.SEO_simulator_tf.html#qubiter.SEO_simulator_tf.SEO_simulator_tf.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="n">init_st_vec</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="SEO_simulator_tf.__init__"><a class="viewcode-back" href="../../qubiter.SEO_simulator_tf.html#qubiter.SEO_simulator_tf.SEO_simulator_tf.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">,</span> <span class="n">init_st_vec</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Constructor</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        file_prefix : str</span>
-<span class="sd">        num_bits : int</span>
+<span class="sd">        num_qbits : int</span>
 <span class="sd">        init_st_vec : StateVec</span>
 <span class="sd">        kwargs : dict</span>
 <span class="sd">            keyword args of SEO_simulator</span>
@@ -195,7 +195,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">assert</span> <span class="n">tf</span><span class="o">.</span><span class="n">executing_eagerly</span><span class="p">()</span>
-        <span class="n">SEO_simulator</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span>
+        <span class="n">SEO_simulator</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">,</span>
                                <span class="n">init_st_vec</span><span class="o">=</span><span class="n">init_st_vec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SEO_simulator_tf.do_more_init_before_reading"><a class="viewcode-back" href="../../qubiter.SEO_simulator_tf.html#qubiter.SEO_simulator_tf.SEO_simulator_tf.do_more_init_before_reading">[docs]</a>    <span class="k">def</span> <span class="nf">do_more_init_before_reading</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

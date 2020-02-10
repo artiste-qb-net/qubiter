@@ -122,8 +122,8 @@ class Tree(SEO_writer):
 
         nd_ctr = 0
 
-        num_bits = self.emb.num_bits_bef
-        num_rows = (1 << num_bits)
+        num_qbits = self.emb.num_qbits_bef
+        num_rows = (1 << num_qbits)
         assert init_unitary_mat.shape == (num_rows, num_rows)
         root_nd = Node(nd_ctr, None, None,
                             init_unitary_mat=init_unitary_mat)
@@ -141,7 +141,7 @@ class Tree(SEO_writer):
         while level != 0:
             # since level!=0, cur_nd is not None here
             cur_nd = node_q[0]
-            if level == num_bits+1 or cur_nd.is_barren():
+            if level == num_qbits+1 or cur_nd.is_barren():
                 node_q.popleft()
                 level -= 1
             else:
@@ -209,8 +209,8 @@ class Tree(SEO_writer):
     def write_node(self, nd):
         """
         This function is called by self.write() for each node of the tree.
-        For a node with level <= num_bits, the function writes an MP_Y line,
-        whereas if level = num_bits + 1, it writes a DIAG line.
+        For a node with level <= num_qbits, the function writes an MP_Y line,
+        whereas if level = num_qbits + 1, it writes a DIAG line.
 
         Parameters
         ----------
@@ -227,21 +227,21 @@ class Tree(SEO_writer):
         if nd.is_barren():
             self.write_NOTA("barren node")
             return
-        num_bits = self.emb.num_bits_bef
+        num_qbits = self.emb.num_qbits_bef
 
-        assert 1 <= nd.level <= num_bits+1
-        # tar_bit_pos = num_bits - 1 for level=1
-        # tar_bit_pos = 0 for level=num_bits
-        # tar_bit_pos = -1 for level=num_bits+1
-        tar_bit_pos = num_bits - nd.level
+        assert 1 <= nd.level <= num_qbits+1
+        # tar_bit_pos = num_qbits - 1 for level=1
+        # tar_bit_pos = 0 for level=num_qbits
+        # tar_bit_pos = -1 for level=num_qbits+1
+        tar_bit_pos = num_qbits - nd.level
 
-        trols = Controls(num_bits)
+        trols = Controls(num_qbits)
         if tar_bit_pos >= 0:
             trols.bit_pos_to_kind = {c: c for c in range(tar_bit_pos)}
-            for c in range(tar_bit_pos, num_bits-1):
+            for c in range(tar_bit_pos, num_qbits-1):
                 trols.bit_pos_to_kind[c+1] = c
         else:
-            trols.bit_pos_to_kind = {c: c for c in range(num_bits)}
+            trols.bit_pos_to_kind = {c: c for c in range(num_qbits)}
         trols.refresh_lists()
 
         rad_angles = []
@@ -250,11 +250,11 @@ class Tree(SEO_writer):
             rad_angles += list(dmat.flatten())
 
         # permute arr bit indices
-        if 0 <= tar_bit_pos <= num_bits-3:
+        if 0 <= tar_bit_pos <= num_qbits-3:
             # turn rad_angles into equivalent bit indexed tensor
-            arr = np.array(rad_angles).reshape([2]*(num_bits-1))
+            arr = np.array(rad_angles).reshape([2]*(num_qbits-1))
             perm = list(range(tar_bit_pos)) + \
-                list(range(tar_bit_pos+1, num_bits-1)) + [tar_bit_pos]
+                list(range(tar_bit_pos+1, num_qbits-1)) + [tar_bit_pos]
             if self.verbose:
                 print("permutation", perm)
             arr.transpose(perm)
@@ -277,9 +277,9 @@ if __name__ == "__main__":
     from qubiter.FouSEO_writer import *
 
     def main():
-        num_bits = 3
-        init_unitary_mat = FouSEO_writer.fourier_trans_mat(1 << num_bits)
-        emb = CktEmbedder(num_bits, num_bits)
+        num_qbits = 3
+        init_unitary_mat = FouSEO_writer.fourier_trans_mat(1 << num_qbits)
+        emb = CktEmbedder(num_qbits, num_qbits)
         file_prefix = 'csd_test'
         t = Tree(True, file_prefix, emb, init_unitary_mat, verbose=False)
     main()

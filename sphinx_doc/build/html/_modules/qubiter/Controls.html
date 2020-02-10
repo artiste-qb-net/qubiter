@@ -168,28 +168,28 @@
 <span class="sd">        order</span>
 <span class="sd">    bit_pos_to_kind : dict[int, bool|int]</span>
 <span class="sd">        Dictionary matching control bit position with its kind.</span>
-<span class="sd">        The domain of the map bit_pos_to_kind is a subset of range(num_bits)</span>
+<span class="sd">        The domain of the map bit_pos_to_kind is a subset of range(num_qbits)</span>
 <span class="sd">    kinds : list[bool|int]</span>
 <span class="sd">        this is the value&#39;s half if you unzip bit_pos_to_kind.</span>
-<span class="sd">    num_bits : int</span>
+<span class="sd">    num_qbits : int</span>
 <span class="sd">        number of qubits in full quantum circuit</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># combines my JAVA classes Control, TFControls, MultiControls</span>
 
-<div class="viewcode-block" id="Controls.__init__"><a class="viewcode-back" href="../../qubiter.Controls.html#qubiter.Controls.Controls.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">):</span>
+<div class="viewcode-block" id="Controls.__init__"><a class="viewcode-back" href="../../qubiter.Controls.html#qubiter.Controls.Controls.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Constructor</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        num_bits : int</span>
+<span class="sd">        num_qbits : int</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span> <span class="o">=</span> <span class="n">num_bits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span> <span class="o">=</span> <span class="n">num_qbits</span>
         <span class="c1"># num_controls = len(bit_pos_to_kind) = len(bit_pos) = len(kinds)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bit_pos_to_kind</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bit_pos</span> <span class="o">=</span> <span class="p">[]</span>
@@ -211,7 +211,7 @@
 <span class="sd">        Controls</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">new</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="n">old</span><span class="o">.</span><span class="n">num_bits</span> <span class="o">+</span> <span class="n">extra_bits</span><span class="p">)</span>
+        <span class="n">new</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="n">old</span><span class="o">.</span><span class="n">num_qbits</span> <span class="o">+</span> <span class="n">extra_bits</span><span class="p">)</span>
         <span class="n">new</span><span class="o">.</span><span class="n">bit_pos_to_kind</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">old</span><span class="o">.</span><span class="n">bit_pos_to_kind</span><span class="p">)</span>
         <span class="n">new</span><span class="o">.</span><span class="n">bit_pos</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">old</span><span class="o">.</span><span class="n">bit_pos</span><span class="p">)</span>
         <span class="n">new</span><span class="o">.</span><span class="n">kinds</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">old</span><span class="o">.</span><span class="n">kinds</span><span class="p">)</span>
@@ -232,7 +232,7 @@
 <span class="sd">        None</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&lt;</span> <span class="n">bit_pos</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span><span class="p">,</span> \
+        <span class="k">assert</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&lt;</span> <span class="n">bit_pos</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span><span class="p">,</span> \
             <span class="s2">&quot;bit position is out of range&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bit_pos_to_kind</span><span class="p">[</span><span class="n">bit_pos</span><span class="p">]</span> <span class="o">=</span> <span class="n">kind</span>
         <span class="k">if</span> <span class="n">do_refresh</span><span class="p">:</span>
@@ -258,14 +258,14 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">bit_pos_to_kind</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bit_pos</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kinds</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">li</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Controls.new_knob"><a class="viewcode-back" href="../../qubiter.Controls.html#qubiter.Controls.Controls.new_knob">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">new_knob</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">bit_pos</span><span class="p">,</span> <span class="n">kind</span><span class="p">):</span>
+<div class="viewcode-block" id="Controls.new_single_trol"><a class="viewcode-back" href="../../qubiter.Controls.html#qubiter.Controls.Controls.new_single_trol">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">new_single_trol</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">bit_pos</span><span class="p">,</span> <span class="n">kind</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns a single control</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        num_bits : int</span>
+<span class="sd">        num_qbits : int</span>
 <span class="sd">        bit_pos : int</span>
 <span class="sd">        kind : bool|int</span>
 
@@ -275,7 +275,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">new</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)</span>
+        <span class="n">new</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">)</span>
         <span class="n">new</span><span class="o">.</span><span class="n">set_control</span><span class="p">(</span><span class="n">bit_pos</span><span class="p">,</span> <span class="n">kind</span><span class="p">)</span>
         <span class="n">new</span><span class="o">.</span><span class="n">refresh_lists</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">new</span></div>
@@ -311,11 +311,11 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">num_controls</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bit_pos_to_kind</span><span class="p">)</span>
         <span class="c1"># must have room for num_controls + one target + one workspace bit</span>
-        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span> <span class="o">&gt;=</span> <span class="n">num_controls</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span>\
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span> <span class="o">&gt;=</span> <span class="n">num_controls</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span>\
             <span class="s2">&quot;must have more qubits to find a working space bit&quot;</span>
 
         <span class="n">li</span> <span class="o">=</span> <span class="p">[</span><span class="n">target_bit_pos</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">bit_pos</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span><span class="p">)):</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span><span class="p">)):</span>
             <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">li</span><span class="p">:</span>
                 <span class="k">break</span>
         <span class="k">return</span> <span class="n">k</span></div>
@@ -355,8 +355,8 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">bit_pos_to_kind</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span>
 
-        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span> <span class="o">==</span> <span class="n">emb</span><span class="o">.</span><span class="n">num_bits_bef</span>
-        <span class="n">new</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_aft</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span> <span class="o">==</span> <span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_bef</span>
+        <span class="n">new</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_aft</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">refresh_lists</span><span class="p">()</span>
         <span class="n">bef_num_controls</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bit_pos</span><span class="p">)</span>

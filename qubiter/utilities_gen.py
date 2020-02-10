@@ -260,7 +260,7 @@ def kron_prod(mat_list):
     return prod
 
 
-def get_eng_file_rel_path(file_prefix, num_bits):
+def get_eng_file_rel_path(file_prefix, num_qbits):
     """
     Returns path to English file
 
@@ -270,11 +270,11 @@ def get_eng_file_rel_path(file_prefix, num_bits):
 
     """
 
-    return file_prefix + '_' + str(num_bits) +\
+    return file_prefix + '_' + str(num_qbits) +\
            '_eng.txt'
 
 
-def get_pic_file_rel_path(file_prefix, num_bits, ZL=True):
+def get_pic_file_rel_path(file_prefix, num_qbits, ZL=True):
     """
     Returns path to Picture file
 
@@ -284,7 +284,7 @@ def get_pic_file_rel_path(file_prefix, num_bits, ZL=True):
 
     """
 
-    return file_prefix + '_' + str(num_bits) +\
+    return file_prefix + '_' + str(num_qbits) +\
             ('_ZL' if ZL else '_ZF') + 'pic.txt'
 
 

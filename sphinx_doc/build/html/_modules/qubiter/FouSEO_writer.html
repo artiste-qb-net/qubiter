@@ -200,18 +200,18 @@
 <span class="sd">        None</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_bef</span>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_bef</span>
 
         <span class="c1"># permutation R</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">do_perm</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_bits</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_qbits</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
                 <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">r</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">write_bit_swap</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_bits</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">write_one_bit_gate</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">had2</span><span class="p">)</span>
-            <span class="n">trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="o">.</span><span class="n">new_knob</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">):</span>
+            <span class="n">trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="o">.</span><span class="n">new_single_trol</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">):</span>
                 <span class="c1"># note r&gt;k</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span>
                     <span class="n">r</span><span class="p">,</span>  <span class="c1"># target bit pos</span>
@@ -229,11 +229,11 @@
 <span class="sd">        None</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_bef</span>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_bef</span>
 
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_bits</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
-            <span class="n">trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="o">.</span><span class="n">new_knob</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_bits</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_qbits</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="o">.</span><span class="n">new_single_trol</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_qbits</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
                 <span class="c1"># note r&gt;k</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span>
                     <span class="n">r</span><span class="p">,</span>  <span class="c1"># target bit pos</span>
@@ -243,7 +243,7 @@
                 <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">write_one_bit_gate</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">had2</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">do_perm</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">):</span>
                 <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">write_bit_swap</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span></div>
 
@@ -279,10 +279,10 @@
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-        <span class="n">num_bits_bef</span> <span class="o">=</span> <span class="mi">4</span>
-        <span class="n">num_bits_aft</span> <span class="o">=</span> <span class="mi">6</span>
-        <span class="n">bit_map</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">num_bits_bef</span><span class="p">))</span>
-        <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_bits_bef</span><span class="p">,</span> <span class="n">num_bits_aft</span><span class="p">,</span> <span class="n">bit_map</span><span class="p">)</span>
+        <span class="n">num_qbits_bef</span> <span class="o">=</span> <span class="mi">4</span>
+        <span class="n">num_qbits_aft</span> <span class="o">=</span> <span class="mi">6</span>
+        <span class="n">bit_map</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">num_qbits_bef</span><span class="p">))</span>
+        <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_qbits_bef</span><span class="p">,</span> <span class="n">num_qbits_aft</span><span class="p">,</span> <span class="n">bit_map</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">ZL</span> <span class="ow">in</span> <span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">]:</span>
             <span class="n">wr</span> <span class="o">=</span> <span class="n">FouSEO_writer</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span>

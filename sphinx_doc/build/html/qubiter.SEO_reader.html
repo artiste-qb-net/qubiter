@@ -154,7 +154,7 @@
 <span id="qubiter-seo-reader-module"></span><h1>qubiter.SEO_reader module<a class="headerlink" href="#module-qubiter.SEO_reader" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="qubiter.SEO_reader.SEO_reader">
-<em class="property">class </em><code class="sig-prename descclassname">qubiter.SEO_reader.</code><code class="sig-name descname">SEO_reader</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_bits</em>, <em class="sig-param">vars_manager=None</em>, <em class="sig-param">verbose=False</em>, <em class="sig-param">write_log=False</em>, <em class="sig-param">xfile_num=-1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_reader.html#SEO_reader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_reader.SEO_reader" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">qubiter.SEO_reader.</code><code class="sig-name descname">SEO_reader</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_qbits</em>, <em class="sig-param">vars_manager=None</em>, <em class="sig-param">verbose=False</em>, <em class="sig-param">write_log=False</em>, <em class="sig-param">xfile_num=-1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_reader.html#SEO_reader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_reader.SEO_reader" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="qubiter.SEO_pre_reader.html#qubiter.SEO_pre_reader.SEO_pre_reader" title="qubiter.SEO_pre_reader.SEO_pre_reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">qubiter.SEO_pre_reader.SEO_pre_reader</span></code></a></p>
 <p>This class inherits from the class SEO_pre_reader. It’s an abstract
 class because it has a bunch of <a href="#id5"><span class="problematic" id="id6">use_</span></a> methods that must be overridden by
@@ -192,7 +192,7 @@ haven’t been reset to <a href="#id1"><span class="problematic" id="id2">|</spa
 <li><p><strong>xfile_num</strong> (<em>int</em>) – You can ignore this if the English file has no loops. This number is
 -1 by default. If you change it to something non-negative, the class
 looks in the io_folder for a “Loop xfile” with a very specific name
-that mentions the xfile_num: file_prefix + ‘_’ + str( num_bits) +
+that mentions the xfile_num: file_prefix + ‘_’ + str( num_qbits) +
 ‘_loop’ + str(xfile_num) + “.py”. If the class can’t find that xfile
 , it will abort. Otherwise, it tries to exec() that xfile. A Loop
 xfile is a file that you write yourself from a template file called
@@ -207,13 +207,13 @@ Loop Files and Loop xfiles.</p></li>
 </dl>
 <dl class="method">
 <dt id="qubiter.SEO_reader.SEO_reader.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_bits</em>, <em class="sig-param">vars_manager=None</em>, <em class="sig-param">verbose=False</em>, <em class="sig-param">write_log=False</em>, <em class="sig-param">xfile_num=-1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_reader.html#SEO_reader.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_reader.SEO_reader.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_qbits</em>, <em class="sig-param">vars_manager=None</em>, <em class="sig-param">verbose=False</em>, <em class="sig-param">write_log=False</em>, <em class="sig-param">xfile_num=-1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_reader.html#SEO_reader.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_reader.SEO_reader.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constructor</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>file_prefix</strong> (<em>str</em>) – </p></li>
-<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>num_qbits</strong> (<em>int</em>) – </p></li>
 <li><p><strong>vars_manager</strong> (<a class="reference internal" href="qubiter.PlaceholderManager.html#qubiter.PlaceholderManager.PlaceholderManager" title="qubiter.PlaceholderManager.PlaceholderManager"><em>PlaceholderManager</em></a>) – </p></li>
 <li><p><strong>verbose</strong> (<em>bool</em>) – </p></li>
 <li><p><strong>write_log</strong> (<em>bool</em>) – </p></li>

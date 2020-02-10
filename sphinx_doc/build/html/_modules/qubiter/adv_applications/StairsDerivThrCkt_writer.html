@@ -187,7 +187,7 @@
 <span class="sd">    deriv_direc : int</span>
 <span class="sd">    dpart_name : str</span>
 <span class="sd">    gate_str_to_rads_list : dict[int, list[float]]</span>
-<span class="sd">    parent_num_bits : int</span>
+<span class="sd">    parent_num_qbits : int</span>
 <span class="sd">    subckt_to_large_small_bit_pair :  dict[(str, bool), tuple[int]]</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -223,7 +223,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">subckt_to_large_small_bit_pair</span> <span class="o">=</span> <span class="n">col</span><span class="o">.</span><span class="n">OrderedDict</span><span class="p">()</span>
 
         <span class="n">last_key</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gate_str_to_rads_list</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">parent_num_bits</span> <span class="o">=</span> <span class="mi">1</span><span class="o">+</span><span class="nb">len</span><span class="p">(</span><span class="n">last_key</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parent_num_qbits</span> <span class="o">=</span> <span class="mi">1</span><span class="o">+</span><span class="nb">len</span><span class="p">(</span><span class="n">last_key</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span>
 
         <span class="k">assert</span> <span class="n">deriv_direc</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
 
@@ -241,33 +241,33 @@
 <span class="sd">        -------</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">tot_num_bits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_tot_num_bits</span><span class="p">()</span>
+        <span class="n">tot_num_qbits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_tot_num_qbits</span><span class="p">()</span>
         <span class="n">cum_nbits</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">deriv_gate_str</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">gate_str_to_rads_list</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">deriv_gate_str</span> <span class="o">!=</span> <span class="s1">&#39;prior&#39;</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">has_neg_polarity</span> <span class="ow">in</span> <span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">]:</span>
                     <span class="n">small_bit</span> <span class="o">=</span> <span class="n">cum_nbits</span>
-                    <span class="n">cum_nbits</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_num_bits</span><span class="o">+</span><span class="mi">1</span>
+                    <span class="n">cum_nbits</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_num_qbits</span><span class="o">+</span><span class="mi">1</span>
                     <span class="n">large_bit</span> <span class="o">=</span> <span class="n">cum_nbits</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">subckt_to_large_small_bit_pair</span><span class="p">[(</span><span class="n">deriv_gate_str</span><span class="p">,</span>
                         <span class="n">has_neg_polarity</span><span class="p">)]</span> <span class="o">=</span> <span class="p">(</span><span class="n">large_bit</span><span class="p">,</span> <span class="n">small_bit</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">small_bit</span> <span class="o">=</span> <span class="n">cum_nbits</span>
-                <span class="n">cum_nbits</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_num_bits</span><span class="o">+</span><span class="mi">1</span>
+                <span class="n">cum_nbits</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_num_qbits</span><span class="o">+</span><span class="mi">1</span>
                 <span class="n">large_bit</span> <span class="o">=</span> <span class="n">cum_nbits</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">subckt_to_large_small_bit_pair</span><span class="p">[(</span><span class="n">deriv_gate_str</span><span class="p">,</span>
                     <span class="kc">None</span><span class="p">)]</span> <span class="o">=</span> <span class="p">(</span><span class="n">large_bit</span><span class="p">,</span> <span class="n">small_bit</span><span class="p">)</span>
 
-        <span class="k">assert</span> <span class="n">tot_num_bits</span> <span class="o">==</span> <span class="n">cum_nbits</span><span class="p">,</span>\
-            <span class="nb">str</span><span class="p">(</span><span class="n">tot_num_bits</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; and &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">cum_nbits</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; should be equal&#39;</span>
+        <span class="k">assert</span> <span class="n">tot_num_qbits</span> <span class="o">==</span> <span class="n">cum_nbits</span><span class="p">,</span>\
+            <span class="nb">str</span><span class="p">(</span><span class="n">tot_num_qbits</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; and &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">cum_nbits</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; should be equal&#39;</span>
 
         <span class="k">for</span> <span class="n">subckt</span><span class="p">,</span> <span class="n">bit_pair</span> <span class="ow">in</span> \
                 <span class="bp">self</span><span class="o">.</span><span class="n">subckt_to_large_small_bit_pair</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">deriv_gate_str</span><span class="p">,</span> <span class="n">has_neg_polarity</span> <span class="o">=</span> <span class="n">subckt</span>
-            <span class="n">num_bits_bef</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_num_bits</span> <span class="o">+</span> <span class="mi">1</span>
-            <span class="n">num_bits_aft</span> <span class="o">=</span> <span class="n">tot_num_bits</span>
-            <span class="n">bit_map</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span><span class="o">+</span><span class="n">bit_pair</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_bits_bef</span><span class="p">)]</span>
-            <span class="n">pre_emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_bits_bef</span><span class="p">,</span> <span class="n">num_bits_aft</span><span class="p">,</span> <span class="n">bit_map</span><span class="p">)</span>
+            <span class="n">num_qbits_bef</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_num_qbits</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">num_qbits_aft</span> <span class="o">=</span> <span class="n">tot_num_qbits</span>
+            <span class="n">bit_map</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span><span class="o">+</span><span class="n">bit_pair</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_qbits_bef</span><span class="p">)]</span>
+            <span class="n">pre_emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_qbits_bef</span><span class="p">,</span> <span class="n">num_qbits_aft</span><span class="p">,</span> <span class="n">bit_map</span><span class="p">)</span>
             <span class="n">compo_emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="o">.</span><span class="n">composition</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="p">,</span> <span class="n">pre_emb</span><span class="p">)</span>
             <span class="n">wr</span> <span class="o">=</span> <span class="n">StairsDerivCkt_writer</span><span class="p">(</span>
                 <span class="n">deriv_gate_str</span><span class="p">,</span> <span class="n">has_neg_polarity</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">deriv_direc</span><span class="p">,</span>
@@ -331,8 +331,8 @@
                     <span class="n">t_list</span><span class="p">,</span> <span class="n">deriv_direc</span><span class="p">,</span> <span class="n">dpart_name</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">fun_name_to_fun</span></div>
 
-<div class="viewcode-block" id="StairsDerivThrCkt_writer.sta_get_tot_num_bits"><a class="viewcode-back" href="../../../qubiter.adv_applications.StairsDerivThrCkt_writer.html#qubiter.adv_applications.StairsDerivThrCkt_writer.StairsDerivThrCkt_writer.sta_get_tot_num_bits">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">sta_get_tot_num_bits</span><span class="p">(</span><span class="n">parent_num_bits</span><span class="p">,</span> <span class="n">gate_str_to_rads_list</span><span class="p">):</span>
+<div class="viewcode-block" id="StairsDerivThrCkt_writer.sta_get_tot_num_qbits"><a class="viewcode-back" href="../../../qubiter.adv_applications.StairsDerivThrCkt_writer.html#qubiter.adv_applications.StairsDerivThrCkt_writer.StairsDerivThrCkt_writer.sta_get_tot_num_qbits">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">sta_get_tot_num_qbits</span><span class="p">(</span><span class="n">parent_num_qbits</span><span class="p">,</span> <span class="n">gate_str_to_rads_list</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This static (sta) method returns the total number of qbits for the</span>
 <span class="sd">        quantum circuit generated by this class, i.e., it returns the sum of</span>
@@ -340,7 +340,7 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        parent_num_bits : int</span>
+<span class="sd">        parent_num_qbits : int</span>
 <span class="sd">        gate_str_to_rads_list : dict[str, list[float]]</span>
 
 <span class="sd">        Returns</span>
@@ -353,11 +353,11 @@
             <span class="c1"># subtract one because derivative of prior has has_neg_polarity</span>
             <span class="c1"># in [None] instead of in [False, True]</span>
             <span class="n">num_subckts</span> <span class="o">-=</span> <span class="mi">1</span>
-        <span class="k">return</span> <span class="n">num_subckts</span><span class="o">*</span><span class="p">(</span><span class="n">parent_num_bits</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">num_subckts</span><span class="o">*</span><span class="p">(</span><span class="n">parent_num_qbits</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="StairsDerivThrCkt_writer.get_tot_num_bits"><a class="viewcode-back" href="../../../qubiter.adv_applications.StairsDerivThrCkt_writer.html#qubiter.adv_applications.StairsDerivThrCkt_writer.StairsDerivThrCkt_writer.get_tot_num_bits">[docs]</a>    <span class="k">def</span> <span class="nf">get_tot_num_bits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="StairsDerivThrCkt_writer.get_tot_num_qbits"><a class="viewcode-back" href="../../../qubiter.adv_applications.StairsDerivThrCkt_writer.html#qubiter.adv_applications.StairsDerivThrCkt_writer.StairsDerivThrCkt_writer.get_tot_num_qbits">[docs]</a>    <span class="k">def</span> <span class="nf">get_tot_num_qbits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        This is the self version of sta_get_tot_num_bits()</span>
+<span class="sd">        This is the self version of sta_get_tot_num_qbits()</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -365,27 +365,27 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">StairsDerivThrCkt_writer</span><span class="o">.</span>\
-            <span class="n">sta_get_tot_num_bits</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent_num_bits</span><span class="p">,</span>
+            <span class="n">sta_get_tot_num_qbits</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent_num_qbits</span><span class="p">,</span>
                                  <span class="bp">self</span><span class="o">.</span><span class="n">gate_str_to_rads_list</span><span class="p">)</span></div></div>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-        <span class="n">parent_num_bits</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="n">parent_num_qbits</span> <span class="o">=</span> <span class="mi">3</span>
 
         <span class="c1"># u2_bit_to_higher_bits = None</span>
         <span class="n">u2_bit_to_higher_bits</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">1</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">2</span><span class="p">:</span> <span class="p">[]}</span>
         <span class="n">gate_str_to_rads_list</span> <span class="o">=</span> <span class="n">StairsCkt_writer</span><span class="o">.</span>\
-            <span class="n">get_gate_str_to_rads_list</span><span class="p">(</span><span class="n">parent_num_bits</span><span class="p">,</span> <span class="s1">&#39;#int&#39;</span><span class="p">,</span>
+            <span class="n">get_gate_str_to_rads_list</span><span class="p">(</span><span class="n">parent_num_qbits</span><span class="p">,</span> <span class="s1">&#39;#int&#39;</span><span class="p">,</span>
                 <span class="n">rads_const</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span>
                 <span class="n">u2_bit_to_higher_bits</span><span class="o">=</span><span class="n">u2_bit_to_higher_bits</span><span class="p">)</span>
 
         <span class="n">file_prefix</span> <span class="o">=</span> <span class="s1">&#39;stairs_deriv_thr_writer_test&#39;</span>
 
-        <span class="n">tot_num_bits</span> <span class="o">=</span> <span class="n">StairsDerivThrCkt_writer</span><span class="o">.</span><span class="n">sta_get_tot_num_bits</span><span class="p">(</span>
-            <span class="n">parent_num_bits</span><span class="p">,</span> <span class="n">gate_str_to_rads_list</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;tot_num_bits=&quot;</span><span class="p">,</span> <span class="n">tot_num_bits</span><span class="p">)</span>
-        <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">tot_num_bits</span><span class="p">,</span> <span class="n">tot_num_bits</span><span class="p">)</span>
+        <span class="n">tot_num_qbits</span> <span class="o">=</span> <span class="n">StairsDerivThrCkt_writer</span><span class="o">.</span><span class="n">sta_get_tot_num_qbits</span><span class="p">(</span>
+            <span class="n">parent_num_qbits</span><span class="p">,</span> <span class="n">gate_str_to_rads_list</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;tot_num_qbits=&quot;</span><span class="p">,</span> <span class="n">tot_num_qbits</span><span class="p">)</span>
+        <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">tot_num_qbits</span><span class="p">,</span> <span class="n">tot_num_qbits</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">deriv_direc</span><span class="p">,</span> <span class="n">dpart_name</span> <span class="ow">in</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;single&#39;</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;s&#39;</span><span class="p">)]:</span>
             <span class="n">wr</span> <span class="o">=</span> <span class="n">StairsDerivThrCkt_writer</span><span class="p">(</span><span class="n">deriv_direc</span><span class="p">,</span>

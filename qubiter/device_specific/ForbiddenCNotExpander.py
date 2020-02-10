@@ -146,7 +146,7 @@ class ForbiddenCNotExpander(EchoingSEO_reader):
     Attributes
     ----------
     c_to_tars : dict[int, list[int]]
-        a dictionary mapping j in range(num_bits) to a list, possibly empty,
+        a dictionary mapping j in range(num_qbits) to a list, possibly empty,
         of the physically allowed targets of qubit j, when j is the control
         of a CNOT.
     graph : networkx.Graph
@@ -155,14 +155,14 @@ class ForbiddenCNotExpander(EchoingSEO_reader):
 
     """
 
-    def __init__(self, file_prefix, num_bits, c_to_tars):
+    def __init__(self, file_prefix, num_qbits, c_to_tars):
         """
         Constructor
 
         Parameters
         ----------
         file_prefix : str
-        num_bits : int
+        num_qbits : int
         c_to_tars : dict[int, list[int]]
 
         Returns
@@ -179,10 +179,10 @@ class ForbiddenCNotExpander(EchoingSEO_reader):
         # print("graph", self.graph.edges())
 
         out_file_prefix = SEO_reader.xed_file_prefix(file_prefix)
-        emb = CktEmbedder(num_bits, num_bits)
+        emb = CktEmbedder(num_qbits, num_qbits)
         wr = SEO_writer(out_file_prefix, emb)
 
-        EchoingSEO_reader.__init__(self, file_prefix, num_bits, wr)
+        EchoingSEO_reader.__init__(self, file_prefix, num_qbits, wr)
 
         self.wr.close_files()
 
@@ -332,15 +332,15 @@ if __name__ == "__main__":
         import qubiter.device_specific.chip_couplings_ibm as ibm
         file_prefix = "forbidden_cnots_ibm"
         print(file_prefix)
-        num_bits = 5
+        num_qbits = 5
         c_to_tars = ibm.ibmq5YorktownTenerife_c_to_tars
-        ForbiddenCNotExpander(file_prefix, num_bits, c_to_tars)
+        ForbiddenCNotExpander(file_prefix, num_qbits, c_to_tars)
 
         file_prefix = "forbidden_cnots1"
         print(file_prefix)
-        num_bits = 4
+        num_qbits = 4
         c_to_tars = {0: [1], 1: [2], 2: [3], 3: []}
-        ForbiddenCNotExpander(file_prefix, num_bits, c_to_tars)
+        ForbiddenCNotExpander(file_prefix, num_qbits, c_to_tars)
     main()
 
 

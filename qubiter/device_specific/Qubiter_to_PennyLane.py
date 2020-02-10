@@ -32,7 +32,7 @@ class Qubiter_to_PennyLane(Qubiter_to_AnyQasm):
 
 
     """
-    def __init__(self, file_prefix, num_bits, qnode_name='qnode',
+    def __init__(self, file_prefix, num_qbits, qnode_name='qnode',
                  fun_defs_path=None, **kwargs):
         """
         Constructor
@@ -40,7 +40,7 @@ class Qubiter_to_PennyLane(Qubiter_to_AnyQasm):
         Parameters
         ----------
         file_prefix : str
-        num_bits : int
+        num_qbits : int
         qnode_name : str
         fun_defs_path : str
         rotn_has_been_defined : bool
@@ -53,7 +53,7 @@ class Qubiter_to_PennyLane(Qubiter_to_AnyQasm):
         self.fun_defs_path = fun_defs_path
         self.rotn_has_been_defined = False
         self.indentation = 0
-        Qubiter_to_AnyQasm.__init__(self, file_prefix, num_bits,
+        Qubiter_to_AnyQasm.__init__(self, file_prefix, num_qbits,
                                     aqasm_ftype='py', **kwargs)
 
     def write_prelude(self):
@@ -444,8 +444,8 @@ if __name__ == "__main__":
 
     def main1():
         file_prefix = "qbtr2penny_test1"
-        num_bits = 3
-        emb = CktEmbedder(num_bits, num_bits)
+        num_qbits = 3
+        emb = CktEmbedder(num_qbits, num_qbits)
         wr = SEO_writer(file_prefix, emb)
         wr.write_H(0)
         wr.write_X(1)
@@ -463,15 +463,15 @@ if __name__ == "__main__":
 
         qasm_name = 'PennyL'
         qnode_name = 'Turing'
-        Qubiter_to_PennyLane(file_prefix, num_bits,
+        Qubiter_to_PennyLane(file_prefix, num_qbits,
                 qnode_name,
                 aqasm_name=qasm_name,
                 write_qubiter_files=True)
 
     def main2():
         file_prefix = "qbtr2penny_test2"
-        num_bits = 4
-        emb = CktEmbedder(num_bits, num_bits)
+        num_qbits = 4
+        emb = CktEmbedder(num_qbits, num_qbits)
         wr = SEO_writer(file_prefix, emb)
         wr.write_Rx(2, rads=np.pi/7)
         wr.write_Rx(1, rads='#2*.5')
@@ -483,7 +483,7 @@ if __name__ == "__main__":
         aqasm_name = 'PennyL'
         fun_defs_path = 'qbtr2penny_test2_fun_defs.py'
         qnode_name = 'Feynman'
-        Qubiter_to_PennyLane(file_prefix, num_bits,
+        Qubiter_to_PennyLane(file_prefix, num_qbits,
                 qnode_name,
                 fun_defs_path,
                 aqasm_name=aqasm_name,

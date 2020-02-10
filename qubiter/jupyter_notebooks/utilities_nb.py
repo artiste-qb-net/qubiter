@@ -6,7 +6,7 @@ from qubiter.SEO_simulator import *
 from qubiter.StateVec import *
 
 
-def run_sim_gui(file_prefix, num_bits, all_var_nums, fun_name_to_fun=None,
+def run_sim_gui(file_prefix, num_qbits, all_var_nums, fun_name_to_fun=None,
                 slider_max_degs=360*3, append_new=False,
                 sty_fin_desc='ALL'):
     """
@@ -14,7 +14,7 @@ def run_sim_gui(file_prefix, num_bits, all_var_nums, fun_name_to_fun=None,
     The gui has a button labelled `Run` that creates an object of
     SEO_simulator. The gui contains a slider for each placeholder variable (
     parameter) of a circuit that has been created a priori by a SEO_writer
-    using the name `file_prefix` and number of qubits `num_bits`.
+    using the name `file_prefix` and number of qubits `num_qbits`.
 
     If a parameter is labelled `#1`, then the slider value for degs_1 times
     pi/180 is substituted for `#1`
@@ -22,7 +22,7 @@ def run_sim_gui(file_prefix, num_bits, all_var_nums, fun_name_to_fun=None,
     Parameters
     ----------
     file_prefix : str
-    num_bits : int
+    num_qbits : int
     all_var_nums : list[int]
         all the placeholder variable numbers. If the circuit has exactly
         two placeholder variables #5 and #7, then all_var_nums=[5, 7]
@@ -87,7 +87,7 @@ def run_sim_gui(file_prefix, num_bits, all_var_nums, fun_name_to_fun=None,
             rads = var_num_to_rads[num]
             print('degs_' + str(num) + '(=rads)',
                   rads*180/np.pi, '(',  rads, ')')
-        sim = SEO_simulator(file_prefix, num_bits, vars_manager=vman)
+        sim = SEO_simulator(file_prefix, num_qbits, vars_manager=vman)
         print('\n-----------------------------beginning final results')
         StateVec.describe_st_vec_dict(sim.cur_st_vec_dict,
                                       **StateVec.get_style_dict(sty_fin_desc))

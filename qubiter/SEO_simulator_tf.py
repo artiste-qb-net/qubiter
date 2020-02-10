@@ -27,14 +27,14 @@ class SEO_simulator_tf(SEO_simulator):
 
     """
 
-    def __init__(self, file_prefix, num_bits, init_st_vec=None, **kwargs):
+    def __init__(self, file_prefix, num_qbits, init_st_vec=None, **kwargs):
         """
         Constructor
 
         Parameters
         ----------
         file_prefix : str
-        num_bits : int
+        num_qbits : int
         init_st_vec : StateVec
         kwargs : dict
             keyword args of SEO_simulator
@@ -44,7 +44,7 @@ class SEO_simulator_tf(SEO_simulator):
 
         """
         assert tf.executing_eagerly()
-        SEO_simulator.__init__(self, file_prefix, num_bits,
+        SEO_simulator.__init__(self, file_prefix, num_qbits,
                                init_st_vec=init_st_vec, **kwargs)
 
     def do_more_init_before_reading(self):

@@ -154,7 +154,7 @@
 <span id="qubiter-device-specific-qubiter-to-anyqasm-module"></span><h1>qubiter.device_specific.Qubiter_to_AnyQasm module<a class="headerlink" href="#module-qubiter.device_specific.Qubiter_to_AnyQasm" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="qubiter.device_specific.Qubiter_to_AnyQasm.Qubiter_to_AnyQasm">
-<em class="property">class </em><code class="sig-prename descclassname">qubiter.device_specific.Qubiter_to_AnyQasm.</code><code class="sig-name descname">Qubiter_to_AnyQasm</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_bits</em>, <em class="sig-param">aqasm_name=''</em>, <em class="sig-param">strict_mode=False</em>, <em class="sig-param">c_to_tars=None</em>, <em class="sig-param">write_qubiter_files=False</em>, <em class="sig-param">vars_manager=None</em>, <em class="sig-param">aqasm_ftype='txt'</em>, <em class="sig-param">prelude_str=None</em>, <em class="sig-param">ending_str=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/device_specific/Qubiter_to_AnyQasm.html#Qubiter_to_AnyQasm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.device_specific.Qubiter_to_AnyQasm.Qubiter_to_AnyQasm" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">qubiter.device_specific.Qubiter_to_AnyQasm.</code><code class="sig-name descname">Qubiter_to_AnyQasm</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_qbits</em>, <em class="sig-param">aqasm_name=''</em>, <em class="sig-param">strict_mode=False</em>, <em class="sig-param">c_to_tars=None</em>, <em class="sig-param">write_qubiter_files=False</em>, <em class="sig-param">vars_manager=None</em>, <em class="sig-param">aqasm_ftype='txt'</em>, <em class="sig-param">prelude_str=None</em>, <em class="sig-param">ending_str=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/device_specific/Qubiter_to_AnyQasm.html#Qubiter_to_AnyQasm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.device_specific.Qubiter_to_AnyQasm.Qubiter_to_AnyQasm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="qubiter.SEO_reader.html#qubiter.SEO_reader.SEO_reader" title="qubiter.SEO_reader.SEO_reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">qubiter.SEO_reader.SEO_reader</span></code></a></p>
 <p>This abstract class is a child of SEO_reader. It reads an input English
 file and writes an AnyQasm file that is a translation of the input
@@ -214,12 +214,12 @@ of file name, between ‘_’ and ‘.txt’</p></li>
 <li><p><strong>aqasm_path</strong> (<em>str</em>) – path to aqasm file</p></li>
 <li><p><strong>aqasm_out</strong> (<em>_io.TextIOWrapper</em>) – This output stream is used to write an aqasm file based on the input
 English file.</p></li>
-<li><p><strong>c_to_tars</strong> (<em>dict</em><em>[</em><em>int</em><em>, </em><em>list</em><em>[</em><em>int</em><em>]</em><em>]</em>) – a dictionary mapping j in range(num_bits) to a list, possibly empty,
+<li><p><strong>c_to_tars</strong> (<em>dict</em><em>[</em><em>int</em><em>, </em><em>list</em><em>[</em><em>int</em><em>]</em><em>]</em>) – a dictionary mapping j in range(num_qbits) to a list, possibly empty,
 of the physically allowed targets of qubit j, when j is the control
 of a CNOT. If c_to_tars = None, the class assumes any CNOT is
 possible.</p></li>
 <li><p><strong>file_prefix</strong> (<em>str</em>) – </p></li>
-<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>num_qbits</strong> (<em>int</em>) – </p></li>
 <li><p><strong>qbtr_wr</strong> (<a class="reference internal" href="qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer" title="qubiter.SEO_writer.SEO_writer"><em>SEO_writer</em></a>) – A SEO_writer object created iff write_qubiter_files is True.</p></li>
 <li><p><strong>strict_mode</strong> (<em>bool</em>) – </p></li>
 <li><p><strong>vprefix</strong> (<em>str</em>) – all variables in aqasm file will be called vprefix + an int</p></li>
@@ -232,13 +232,13 @@ AnyQasm file</p></li>
 </dl>
 <dl class="method">
 <dt id="qubiter.device_specific.Qubiter_to_AnyQasm.Qubiter_to_AnyQasm.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_bits</em>, <em class="sig-param">aqasm_name=''</em>, <em class="sig-param">strict_mode=False</em>, <em class="sig-param">c_to_tars=None</em>, <em class="sig-param">write_qubiter_files=False</em>, <em class="sig-param">vars_manager=None</em>, <em class="sig-param">aqasm_ftype='txt'</em>, <em class="sig-param">prelude_str=None</em>, <em class="sig-param">ending_str=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/device_specific/Qubiter_to_AnyQasm.html#Qubiter_to_AnyQasm.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.device_specific.Qubiter_to_AnyQasm.Qubiter_to_AnyQasm.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_qbits</em>, <em class="sig-param">aqasm_name=''</em>, <em class="sig-param">strict_mode=False</em>, <em class="sig-param">c_to_tars=None</em>, <em class="sig-param">write_qubiter_files=False</em>, <em class="sig-param">vars_manager=None</em>, <em class="sig-param">aqasm_ftype='txt'</em>, <em class="sig-param">prelude_str=None</em>, <em class="sig-param">ending_str=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/device_specific/Qubiter_to_AnyQasm.html#Qubiter_to_AnyQasm.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.device_specific.Qubiter_to_AnyQasm.Qubiter_to_AnyQasm.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constructor</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>file_prefix</strong> (<em>str</em>) – </p></li>
-<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>num_qbits</strong> (<em>int</em>) – </p></li>
 <li><p><strong>aqasm_name</strong> (<em>str</em>) – </p></li>
 <li><p><strong>strict_mode</strong> (<em>bool</em>) – </p></li>
 <li><p><strong>c_to_tars</strong> (<em>dict</em><em>[</em><em>int</em><em>, </em><em>list</em><em>[</em><em>int</em><em>]</em><em>]</em><em>|None</em>) – </p></li>

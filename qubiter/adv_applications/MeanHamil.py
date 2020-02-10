@@ -46,7 +46,7 @@ class MeanHamil:
         Hamiltonian
     init_st_vec : StateVec
         initial state vector
-    num_bits : int
+    num_qbits : int
         number of qubits
     num_samples : int
         number of samples (aka num_shots). If this is zero, the |psi> in
@@ -57,7 +57,7 @@ class MeanHamil:
         name of the simulator.
 
     """
-    def __init__(self, file_prefix, num_bits, hamil,
+    def __init__(self, file_prefix, num_qbits, hamil,
             all_var_nums, fun_name_to_fun, init_st_vec=None,
             simulator_name=None, num_samples=0):
         """
@@ -66,7 +66,7 @@ class MeanHamil:
         Parameters
         ----------
         file_prefix : str
-        num_bits : int
+        num_qbits : int
         hamil : QubitOperator
         all_var_nums : list[int]
         fun_name_to_fun : dict[str, function]
@@ -79,15 +79,15 @@ class MeanHamil:
 
         """
         self.file_prefix = file_prefix
-        self.num_bits = num_bits
+        self.num_qbits = num_qbits
         self.hamil = hamil
         MeanHamil.check_hamil_is_herm(hamil)
-        MeanHamil.check_hamil_is_in_range(hamil, num_bits-1)
+        MeanHamil.check_hamil_is_in_range(hamil, num_qbits-1)
         self.all_var_nums = all_var_nums
         self.fun_name_to_fun = fun_name_to_fun
         self.init_st_vec = init_st_vec
         if self.init_st_vec is None:
-            self.init_st_vec = StateVec.get_ground_st_vec(self.num_bits)
+            self.init_st_vec = StateVec.get_ground_st_vec(self.num_qbits)
         self.simulator_name = simulator_name
         self.num_samples = num_samples
 
@@ -135,7 +135,7 @@ class MeanHamil:
 
     def get_real_vec(self, term):
         """
-        Internal method that returns a numpy array, of shape [2]*num_bits,
+        Internal method that returns a numpy array, of shape [2]*num_qbits,
         that will be used as input to the method
         StateVec.get_mean_value_of_real_diag_mat()
 
@@ -152,16 +152,16 @@ class MeanHamil:
         Returns
         -------
         np.ndarray
-            shape=[2]*num_bits
+            shape=[2]*num_qbits
 
         """
         arr_plus = np.array([1., 1.])
         arr_minus = np.array([1., -1.])
-        arr_list = [arr_plus]*self.num_bits
+        arr_list = [arr_plus]*self.num_qbits
         for bit_pos, action in term:
             arr_list[bit_pos] = arr_minus
         real_arr = utg.kron_prod(arr_list)
-        real_arr = np.reshape(real_arr, tuple([2]*self.num_bits))
+        real_arr = np.reshape(real_arr, tuple([2]*self.num_qbits))
         return real_arr
 
     def get_mean_val(self, var_num_to_rads):

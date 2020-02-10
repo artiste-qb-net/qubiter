@@ -10,49 +10,49 @@ class CktEmbedder:
     Attributes
     ----------
     bit_map : list[int]
-        1-1 but not onto map of range(num_bits_bef) into range(num_bits_aft)
+        1-1 but not onto map of range(num_qbits_bef) into range(num_qbits_aft)
     extra_controls : Controls
         When embedding controls, these extra ones will be added to the before
         embedding controls
-    num_bits_aft : int
+    num_qbits_aft : int
         number of qubits after circuit embedding
-    num_bits_bef : int
+    num_qbits_bef : int
         number of qubits before circuit embedding
 
     """
 
-    def __init__(self, num_bits_bef, num_bits_aft, bit_map=None):
+    def __init__(self, num_qbits_bef, num_qbits_aft, bit_map=None):
         """
         Constructor
 
         Parameters
         ----------
-        num_bits_bef : int
-        num_bits_aft : int
+        num_qbits_bef : int
+        num_qbits_aft : int
 
         Returns
         -------
 
         """
-        self.num_bits_bef = num_bits_bef
-        self.num_bits_aft = num_bits_aft
-        assert num_bits_bef <= num_bits_aft
-        if num_bits_aft > num_bits_bef:
+        self.num_qbits_bef = num_qbits_bef
+        self.num_qbits_aft = num_qbits_aft
+        assert num_qbits_bef <= num_qbits_aft
+        if num_qbits_aft > num_qbits_bef:
             assert bit_map, "must give a bit_map"
         self.bit_map = bit_map
         from qubiter.Controls import Controls
-        self.extra_controls = Controls(num_bits_aft)
+        self.extra_controls = Controls(num_qbits_aft)
 
     def get_num_new_bits(self):
         """
-        Returns num_bits_aft - num_bits_bef
+        Returns num_qbits_aft - num_qbits_bef
 
         Returns
         -------
         int
 
         """
-        return self.num_bits_aft - self.num_bits_bef
+        return self.num_qbits_aft - self.num_qbits_bef
 
     def is_identity_map(self):
         """
@@ -125,14 +125,14 @@ class CktEmbedder:
             return emb2
         if emb2.is_identity_map():
             return emb1
-        assert emb1.num_bits_aft == emb2.num_bits_bef,\
+        assert emb1.num_qbits_aft == emb2.num_qbits_bef,\
             "can't chain embedders"
 
         bit_map = [emb2.aft(emb1.aft(k)) for
-                         k in range(emb1.num_bits_bef)]
+                         k in range(emb1.num_qbits_bef)]
         compo_emb = CktEmbedder(
-            emb1.num_bits_bef,
-            emb2.num_bits_aft,
+            emb1.num_qbits_bef,
+            emb2.num_qbits_aft,
             bit_map)
 
         # new_dict is an empty dictionary initially

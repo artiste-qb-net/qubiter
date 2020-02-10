@@ -7,7 +7,7 @@ def get_dir_edges_from_c_to_tars(c_to_tars):
     Parameters
     ----------
     c_to_tars : dict[int, list[int]]
-        a dictionary mapping j in range(num_bits) to a list, possibly
+        a dictionary mapping j in range(num_qbits) to a list, possibly
         empty, of the physically allowed targets of qubit j, when j is
         the control of a CNOT.
 

@@ -190,7 +190,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="EchoingSEO_reader.__init__"><a class="viewcode-back" href="../../qubiter.EchoingSEO_reader.html#qubiter.EchoingSEO_reader.EchoingSEO_reader.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="n">wr</span><span class="p">,</span>
+<div class="viewcode-block" id="EchoingSEO_reader.__init__"><a class="viewcode-back" href="../../qubiter.EchoingSEO_reader.html#qubiter.EchoingSEO_reader.EchoingSEO_reader.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">,</span> <span class="n">wr</span><span class="p">,</span>
                  <span class="n">vars_manager</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Constructor</span>
@@ -198,7 +198,7 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        file_prefix : str</span>
-<span class="sd">        num_bits : int</span>
+<span class="sd">        num_qbits : int</span>
 <span class="sd">        wr : SEO_writer</span>
 <span class="sd">        vars_manager : PlaceholderManager</span>
 
@@ -208,7 +208,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">wr</span> <span class="o">=</span> <span class="n">wr</span>
 
-        <span class="n">SEO_reader</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span>
+        <span class="n">SEO_reader</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">,</span>
                             <span class="n">vars_manager</span><span class="o">=</span><span class="n">vars_manager</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">wr</span><span class="o">.</span><span class="n">close_files</span><span class="p">()</span></div>
@@ -559,7 +559,7 @@
         <span class="k">pass</span></div>
 
 <div class="viewcode-block" id="EchoingSEO_reader.pic_file_from_eng_file"><a class="viewcode-back" href="../../qubiter.EchoingSEO_reader.html#qubiter.EchoingSEO_reader.EchoingSEO_reader.pic_file_from_eng_file">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">pic_file_from_eng_file</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="n">ZL</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">pic_file_from_eng_file</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">,</span> <span class="n">ZL</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This function reads an English file with file prefix = file_prefix</span>
 <span class="sd">        and it writes a Picture file for it with the same file prefix.</span>
@@ -567,7 +567,7 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        file_prefix : str</span>
-<span class="sd">        num_bits : int</span>
+<span class="sd">        num_qbits : int</span>
 <span class="sd">        ZL : bool</span>
 
 <span class="sd">        Returns</span>
@@ -575,18 +575,18 @@
 <span class="sd">        None</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">end_str</span> <span class="o">=</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;_eng.txt&#39;</span>
+        <span class="n">end_str</span> <span class="o">=</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;_eng.txt&#39;</span>
         <span class="n">file_prefix_tempo</span> <span class="o">=</span> <span class="n">file_prefix</span> <span class="o">+</span> <span class="s1">&#39;_tempo&#39;</span>
         <span class="kn">from</span> <span class="nn">shutil</span> <span class="k">import</span> <span class="n">copyfile</span>
         <span class="n">copyfile</span><span class="p">(</span><span class="n">utg</span><span class="o">.</span><span class="n">preface</span><span class="p">(</span><span class="n">file_prefix</span> <span class="o">+</span> <span class="n">end_str</span><span class="p">),</span>
                  <span class="n">utg</span><span class="o">.</span><span class="n">preface</span><span class="p">(</span><span class="n">file_prefix_tempo</span> <span class="o">+</span> <span class="n">end_str</span><span class="p">))</span>
 
-        <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">)</span>
+        <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">)</span>
         <span class="c1"># English out file must different from English in file because one</span>
         <span class="c1"># can&#39;t read a file at the same time one is writing to it</span>
         <span class="n">wr</span> <span class="o">=</span> <span class="n">SEO_writer</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">emb</span><span class="p">,</span> <span class="n">ZL</span><span class="o">=</span><span class="n">ZL</span><span class="p">)</span>
         <span class="n">vman</span> <span class="o">=</span> <span class="n">PlaceholderManager</span><span class="p">(</span><span class="n">eval_all_vars</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="n">EchoingSEO_reader</span><span class="p">(</span><span class="n">file_prefix_tempo</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="n">wr</span><span class="p">,</span> <span class="n">vars_manager</span><span class="o">=</span><span class="n">vman</span><span class="p">)</span>
+        <span class="n">EchoingSEO_reader</span><span class="p">(</span><span class="n">file_prefix_tempo</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">,</span> <span class="n">wr</span><span class="p">,</span> <span class="n">vars_manager</span><span class="o">=</span><span class="n">vman</span><span class="p">)</span>
 
         <span class="kn">import</span> <span class="nn">os</span>
         <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">utg</span><span class="o">.</span><span class="n">preface</span><span class="p">(</span><span class="n">file_prefix_tempo</span> <span class="o">+</span> <span class="n">end_str</span><span class="p">))</span></div></div>
@@ -596,15 +596,15 @@
     <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
         <span class="n">file_prefix_in</span> <span class="o">=</span> <span class="s1">&#39;echo_test&#39;</span>
         <span class="n">file_prefix_out</span> <span class="o">=</span> <span class="s1">&#39;echo_test_perm&#39;</span>
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="mi">6</span>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="mi">6</span>
 
         <span class="c1"># permute qubits by advancing their positions by 1</span>
         <span class="n">bit_map</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
-        <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="n">bit_map</span><span class="p">)</span>
+        <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">,</span> <span class="n">bit_map</span><span class="p">)</span>
         <span class="n">wr</span> <span class="o">=</span> <span class="n">SEO_writer</span><span class="p">(</span><span class="n">file_prefix_out</span><span class="p">,</span> <span class="n">emb</span><span class="p">)</span>
-        <span class="n">EchoingSEO_reader</span><span class="p">(</span><span class="n">file_prefix_in</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="n">wr</span><span class="p">)</span>
+        <span class="n">EchoingSEO_reader</span><span class="p">(</span><span class="n">file_prefix_in</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">,</span> <span class="n">wr</span><span class="p">)</span>
 
-        <span class="n">EchoingSEO_reader</span><span class="o">.</span><span class="n">pic_file_from_eng_file</span><span class="p">(</span><span class="n">file_prefix_in</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">)</span>
+        <span class="n">EchoingSEO_reader</span><span class="o">.</span><span class="n">pic_file_from_eng_file</span><span class="p">(</span><span class="n">file_prefix_in</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">)</span>
     <span class="n">main</span><span class="p">()</span>
 </pre></div>
 

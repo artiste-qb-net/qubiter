@@ -183,7 +183,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="MultiplexorExpander.__init__"><a class="viewcode-back" href="../../../qubiter.quantum_CSD_compiler.MultiplexorExpander.html#qubiter.quantum_CSD_compiler.MultiplexorExpander.MultiplexorExpander.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="n">style</span><span class="p">,</span> <span class="n">gbit_list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<div class="viewcode-block" id="MultiplexorExpander.__init__"><a class="viewcode-back" href="../../../qubiter.quantum_CSD_compiler.MultiplexorExpander.html#qubiter.quantum_CSD_compiler.MultiplexorExpander.MultiplexorExpander.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">,</span> <span class="n">style</span><span class="p">,</span> <span class="n">gbit_list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">vars_manager</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Constructor</span>
@@ -191,7 +191,7 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        file_prefix : str</span>
-<span class="sd">        num_bits : int</span>
+<span class="sd">        num_qbits : int</span>
 <span class="sd">        style : str</span>
 <span class="sd">        gbit_list : list(int)</span>
 <span class="sd">        vars_manager : PlaceholderManager</span>
@@ -209,7 +209,7 @@
             <span class="n">num_gbits</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="c1"># default embedder and rad_angles</span>
-        <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">)</span>
+        <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">)</span>
         <span class="n">rad_angles</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">out_file_prefix</span> <span class="o">=</span> <span class="n">SEO_reader</span><span class="o">.</span><span class="n">xed_file_prefix</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">)</span>
         <span class="n">wr</span> <span class="o">=</span> <span class="n">MultiplexorSEO_writer</span><span class="p">(</span><span class="n">out_file_prefix</span><span class="p">,</span> <span class="n">emb</span><span class="p">,</span>
@@ -218,7 +218,7 @@
         <span class="c1"># We set the flag eval_all_vars to False but check inside use_ method</span>
         <span class="c1"># that it has non-string arguments</span>
         <span class="n">vman</span> <span class="o">=</span> <span class="n">PlaceholderManager</span><span class="p">(</span><span class="n">eval_all_vars</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="n">EchoingSEO_reader</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="n">wr</span><span class="p">,</span>
+        <span class="n">EchoingSEO_reader</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">,</span> <span class="n">wr</span><span class="p">,</span>
                                    <span class="n">vars_manager</span><span class="o">=</span><span class="n">vman</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">wr</span><span class="o">.</span><span class="n">close_files</span><span class="p">()</span></div>
@@ -268,11 +268,11 @@
         <span class="c1"># print(&quot;bit_map&quot;, bit_map)</span>
         <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">bit_map</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">bit_map</span><span class="p">)),</span>\
             <span class="s2">&quot;bits used to define multiplexor are not unique&quot;</span>
-        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">bit_map</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">bit_map</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span>
 
         <span class="n">nt</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">T_bpos</span><span class="p">)</span>
         <span class="n">nf</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">F_bpos</span><span class="p">)</span>
-        <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">bit_map</span><span class="p">)</span>
+        <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">bit_map</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">emb</span><span class="p">,</span> <span class="n">nt</span><span class="p">,</span> <span class="n">nf</span></div>
 
 <div class="viewcode-block" id="MultiplexorExpander.use_MP_Y"><a class="viewcode-back" href="../../../qubiter.quantum_CSD_compiler.MultiplexorExpander.html#qubiter.quantum_CSD_compiler.MultiplexorExpander.MultiplexorExpander.use_MP_Y">[docs]</a>    <span class="k">def</span> <span class="nf">use_MP_Y</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span> <span class="n">rad_angles</span><span class="p">):</span>
@@ -305,15 +305,15 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">wr</span><span class="o">.</span><span class="n">write</span><span class="p">()</span>
         <span class="c1"># revert to default embedder</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">wr</span><span class="o">.</span><span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span><span class="p">)</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wr</span><span class="o">.</span><span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span><span class="p">)</span></div></div>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="mi">6</span>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="mi">6</span>
         <span class="n">file_prefix</span> <span class="o">=</span> <span class="s2">&quot;plexor_test_one_line&quot;</span>
         <span class="n">style</span> <span class="o">=</span> <span class="s1">&#39;exact&#39;</span>
-        <span class="n">xer</span> <span class="o">=</span> <span class="n">MultiplexorExpander</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="n">style</span><span class="p">)</span>
+        <span class="n">xer</span> <span class="o">=</span> <span class="n">MultiplexorExpander</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">,</span> <span class="n">style</span><span class="p">)</span>
     <span class="n">main</span><span class="p">()</span>
 
 </pre></div>

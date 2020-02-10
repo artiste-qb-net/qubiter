@@ -116,7 +116,6 @@ class RigettiTools:
             obs_vec[shot] = int(s, 2)
         return obs_vec
 
-
     def add_xy_meas_coda_to_program(prog, bit_pos_to_xy_str):
         """
         This method adds a "coda" (tail ending) to prog using data in

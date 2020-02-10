@@ -154,7 +154,7 @@
 <span id="qubiter-seo-pre-reader-module"></span><h1>qubiter.SEO_pre_reader module<a class="headerlink" href="#module-qubiter.SEO_pre_reader" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="qubiter.SEO_pre_reader.SEO_pre_reader">
-<em class="property">class </em><code class="sig-prename descclassname">qubiter.SEO_pre_reader.</code><code class="sig-name descname">SEO_pre_reader</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_bits</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_pre_reader.html#SEO_pre_reader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_pre_reader.SEO_pre_reader" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">qubiter.SEO_pre_reader.</code><code class="sig-name descname">SEO_pre_reader</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_qbits</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_pre_reader.html#SEO_pre_reader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_pre_reader.SEO_pre_reader" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>This class’ constructor scans (pre-reads) an English file (a type of txt
 file). It skips all lines except the ones starting with LOOP or NEXT. By
@@ -173,7 +173,7 @@ circuit</p></li>
 loop</p></li>
 <li><p><strong>loop_to_start_line</strong> (<em>dict</em><em>[</em><em>int</em><em>, </em><em>int</em><em>]</em>) – a dictionary mapping loop number TO loop line + 1</p></li>
 <li><p><strong>loop_to_start_offset</strong> (<em>dict</em><em>[</em><em>int</em><em>, </em><em>int</em><em>]</em>) – a dictionary mapping loop number TO offset of loop’s start</p></li>
-<li><p><strong>num_bits</strong> (<em>int</em>) – number of qubits in whole circuit</p></li>
+<li><p><strong>num_qbits</strong> (<em>int</em>) – number of qubits in whole circuit</p></li>
 <li><p><strong>split_line</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – storage space for a list of strings obtained by splitting a line</p></li>
 <li><p><strong>tot_num_lines</strong> (<em>int</em>) – number of lines in English file</p></li>
 </ul>
@@ -181,13 +181,13 @@ loop</p></li>
 </dl>
 <dl class="method">
 <dt id="qubiter.SEO_pre_reader.SEO_pre_reader.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_bits</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_pre_reader.html#SEO_pre_reader.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_pre_reader.SEO_pre_reader.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_qbits</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_pre_reader.html#SEO_pre_reader.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_pre_reader.SEO_pre_reader.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constructor</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>file_prefix</strong> (<em>str</em>) – file must be called file_prefix + ‘_’ + num_bits + “_eng.txt”</p></li>
-<li><p><strong>num_bits</strong> (<em>int</em>) – total number of qubits of circuit.</p></li>
+<li><p><strong>file_prefix</strong> (<em>str</em>) – file must be called file_prefix + ‘_’ + num_qbits + “_eng.txt”</p></li>
+<li><p><strong>num_qbits</strong> (<em>int</em>) – total number of qubits of circuit.</p></li>
 </ul>
 </dd>
 </dl>

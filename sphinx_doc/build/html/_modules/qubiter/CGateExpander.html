@@ -187,14 +187,14 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="CGateExpander.__init__"><a class="viewcode-back" href="../../qubiter.CGateExpander.html#qubiter.CGateExpander.CGateExpander.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="CGateExpander.__init__"><a class="viewcode-back" href="../../qubiter.CGateExpander.html#qubiter.CGateExpander.CGateExpander.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Constructor</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        file_prefix : str</span>
-<span class="sd">        num_bits : int</span>
+<span class="sd">        num_qbits : int</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -202,12 +202,12 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># temporary embedder</span>
-        <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">)</span>
+        <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">)</span>
         <span class="n">out_file_prefix</span> <span class="o">=</span> <span class="n">SEO_reader</span><span class="o">.</span><span class="n">xed_file_prefix</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">wr</span> <span class="o">=</span> <span class="n">CGateSEO_writer</span><span class="p">(</span><span class="n">out_file_prefix</span><span class="p">,</span> <span class="n">emb</span><span class="p">,</span>
             <span class="n">one_line</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">expand_1c_u2</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-        <span class="n">SEO_reader</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">SEO_reader</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">wr</span><span class="o">.</span><span class="n">close_files</span><span class="p">()</span></div>
 
@@ -229,10 +229,10 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">num_trols</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">controls</span><span class="o">.</span><span class="n">kinds</span><span class="p">)</span>
-        <span class="n">num_bits_bef</span> <span class="o">=</span> <span class="n">num_trols</span> <span class="o">+</span> <span class="mi">2</span>
-        <span class="n">num_bits_aft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span>
+        <span class="n">num_qbits_bef</span> <span class="o">=</span> <span class="n">num_trols</span> <span class="o">+</span> <span class="mi">2</span>
+        <span class="n">num_qbits_aft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span>
 
-        <span class="n">bit_map0</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">num_bits_bef</span>
+        <span class="n">bit_map0</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">num_qbits_bef</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_trols</span><span class="p">):</span>
             <span class="n">bit_map0</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">controls</span><span class="o">.</span><span class="n">bit_pos</span><span class="p">[</span><span class="n">num_trols</span><span class="o">-</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">bit_map0</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">bit2</span>
@@ -242,8 +242,8 @@
         <span class="n">bit_map1</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">bit1</span>
         <span class="n">bit_map1</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">bit2</span>
 
-        <span class="n">emb0</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_bits_bef</span><span class="p">,</span> <span class="n">num_bits_aft</span><span class="p">,</span> <span class="n">bit_map0</span><span class="p">)</span>
-        <span class="n">emb1</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_bits_bef</span><span class="p">,</span> <span class="n">num_bits_aft</span><span class="p">,</span> <span class="n">bit_map1</span><span class="p">)</span>
+        <span class="n">emb0</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_qbits_bef</span><span class="p">,</span> <span class="n">num_qbits_aft</span><span class="p">,</span> <span class="n">bit_map0</span><span class="p">)</span>
+        <span class="n">emb1</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_qbits_bef</span><span class="p">,</span> <span class="n">num_qbits_aft</span><span class="p">,</span> <span class="n">bit_map1</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">emb0</span><span class="p">,</span> <span class="n">emb1</span></div>
 
@@ -264,13 +264,13 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">num_trols</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">controls</span><span class="o">.</span><span class="n">kinds</span><span class="p">)</span>
-        <span class="n">num_bits_bef</span> <span class="o">=</span> <span class="n">num_trols</span> <span class="o">+</span> <span class="mi">1</span>
-        <span class="n">num_bits_aft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span>
-        <span class="n">bit_map</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">num_bits_bef</span>
+        <span class="n">num_qbits_bef</span> <span class="o">=</span> <span class="n">num_trols</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">num_qbits_aft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span>
+        <span class="n">bit_map</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">num_qbits_bef</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_trols</span><span class="p">):</span>
             <span class="n">bit_map</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">controls</span><span class="o">.</span><span class="n">bit_pos</span><span class="p">[</span><span class="n">num_trols</span><span class="o">-</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">bit_map</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">tar_bit_pos</span>
-        <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_bits_bef</span><span class="p">,</span> <span class="n">num_bits_aft</span><span class="p">,</span> <span class="n">bit_map</span><span class="p">)</span>
+        <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_qbits_bef</span><span class="p">,</span> <span class="n">num_qbits_aft</span><span class="p">,</span> <span class="n">bit_map</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">emb</span></div>
 
 <div class="viewcode-block" id="CGateExpander.write_gate_name"><a class="viewcode-back" href="../../qubiter.CGateExpander.html#qubiter.CGateExpander.CGateExpander.write_gate_name">[docs]</a>    <span class="k">def</span> <span class="nf">write_gate_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">num_trols</span><span class="p">):</span>
@@ -397,7 +397,7 @@
 <span class="sd">        None</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">wr</span><span class="o">.</span><span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wr</span><span class="o">.</span><span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span><span class="p">)</span>
         <span class="c1"># print(&quot;----&quot;, tar_bit_pos, self.wr.emb.bit_map)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">wr</span><span class="o">.</span><span class="n">write_MEAS</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">kind</span><span class="p">)</span></div>
 

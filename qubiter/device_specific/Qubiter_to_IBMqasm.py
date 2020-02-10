@@ -16,7 +16,7 @@ class Qubiter_to_IBMqasm(Qubiter_to_AnyQasm):
     ----------
 
     """
-    def __init__(self, file_prefix, num_bits, **kwargs):
+    def __init__(self, file_prefix, num_qbits, **kwargs):
         """
         Constructor
 
@@ -27,7 +27,7 @@ class Qubiter_to_IBMqasm(Qubiter_to_AnyQasm):
         -------
 
         """
-        Qubiter_to_AnyQasm.__init__(self, file_prefix, num_bits, **kwargs)
+        Qubiter_to_AnyQasm.__init__(self, file_prefix, num_qbits, **kwargs)
 
     def write_prelude(self):
         """
@@ -43,7 +43,7 @@ class Qubiter_to_IBMqasm(Qubiter_to_AnyQasm):
         s += 'from qiskit import QuantumCircuit\n'
         s += 'from qiskit import ClassicalRegister, QuantumRegister\n'
         s += 'from qiskit import execute\n\n\n'
-        s += "q = QuantumRegister(" + str(self.num_bits) + ", 'q')\n"
+        s += "q = QuantumRegister(" + str(self.num_qbits) + ", 'q')\n"
         s += 'ckt = QuantumCircuit(q)'
         self.write(s + '\n')
 
@@ -428,9 +428,9 @@ if __name__ == "__main__":
     def main():
         file_prefix = "qbtr2ibm_test"
         aqasm_name = 'IBMqasm'
-        num_bits = 5
+        num_qbits = 5
         c_to_tars = ibm.ibmq5YorktownTenerife_c_to_tars
-        Qubiter_to_IBMqasm(file_prefix, num_bits, aqasm_name=aqasm_name,
+        Qubiter_to_IBMqasm(file_prefix, num_qbits, aqasm_name=aqasm_name,
                            c_to_tars=c_to_tars, write_qubiter_files=True)
 
     main()

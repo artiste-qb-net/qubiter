@@ -154,7 +154,7 @@
 <span id="qubiter-adv-applications-meanhamil-rigetti-module"></span><h1>qubiter.adv_applications.MeanHamil_rigetti module<a class="headerlink" href="#module-qubiter.adv_applications.MeanHamil_rigetti" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="qubiter.adv_applications.MeanHamil_rigetti.MeanHamil_rigetti">
-<em class="property">class </em><code class="sig-prename descclassname">qubiter.adv_applications.MeanHamil_rigetti.</code><code class="sig-name descname">MeanHamil_rigetti</code><span class="sig-paren">(</span><em class="sig-param">qc</em>, <em class="sig-param">file_prefix</em>, <em class="sig-param">num_bits</em>, <em class="sig-param">hamil</em>, <em class="sig-param">all_var_nums</em>, <em class="sig-param">fun_name_to_fun</em>, <em class="sig-param">do_resets=True</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/adv_applications/MeanHamil_rigetti.html#MeanHamil_rigetti"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.adv_applications.MeanHamil_rigetti.MeanHamil_rigetti" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">qubiter.adv_applications.MeanHamil_rigetti.</code><code class="sig-name descname">MeanHamil_rigetti</code><span class="sig-paren">(</span><em class="sig-param">qc</em>, <em class="sig-param">file_prefix</em>, <em class="sig-param">num_qbits</em>, <em class="sig-param">hamil</em>, <em class="sig-param">all_var_nums</em>, <em class="sig-param">fun_name_to_fun</em>, <em class="sig-param">do_resets=True</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/adv_applications/MeanHamil_rigetti.html#MeanHamil_rigetti"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.adv_applications.MeanHamil_rigetti.MeanHamil_rigetti" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="qubiter.adv_applications.MeanHamil.html#qubiter.adv_applications.MeanHamil.MeanHamil" title="qubiter.adv_applications.MeanHamil.MeanHamil"><code class="xref py py-class docutils literal notranslate"><span class="pre">qubiter.adv_applications.MeanHamil.MeanHamil</span></code></a></p>
 <p>This class is a child of MeanHamil.</p>
 <p>This class uses either Rigetti’s real hardware or virtual simulator to
@@ -180,7 +180,7 @@ lines all start with “pg +=”</p></li>
 </dl>
 <dl class="method">
 <dt id="qubiter.adv_applications.MeanHamil_rigetti.MeanHamil_rigetti.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">qc</em>, <em class="sig-param">file_prefix</em>, <em class="sig-param">num_bits</em>, <em class="sig-param">hamil</em>, <em class="sig-param">all_var_nums</em>, <em class="sig-param">fun_name_to_fun</em>, <em class="sig-param">do_resets=True</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/adv_applications/MeanHamil_rigetti.html#MeanHamil_rigetti.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.adv_applications.MeanHamil_rigetti.MeanHamil_rigetti.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">qc</em>, <em class="sig-param">file_prefix</em>, <em class="sig-param">num_qbits</em>, <em class="sig-param">hamil</em>, <em class="sig-param">all_var_nums</em>, <em class="sig-param">fun_name_to_fun</em>, <em class="sig-param">do_resets=True</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/adv_applications/MeanHamil_rigetti.html#MeanHamil_rigetti.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.adv_applications.MeanHamil_rigetti.MeanHamil_rigetti.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constructor</p>
 <p>Do in constructor as much hamil indep stuff as possible so don’t
 have to redo it with every call to cost fun. Also,
@@ -193,7 +193,7 @@ term_to_exec={}</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>qc</strong> (<em>QuantumComputer</em>) – </p></li>
 <li><p><strong>file_prefix</strong> (<em>str</em>) – </p></li>
-<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>num_qbits</strong> (<em>int</em>) – </p></li>
 <li><p><strong>hamil</strong> (<em>QubitOperator</em>) – </p></li>
 <li><p><strong>all_var_nums</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – </p></li>
 <li><p><strong>fun_name_to_fun</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>function</em><em>]</em>) – </p></li>

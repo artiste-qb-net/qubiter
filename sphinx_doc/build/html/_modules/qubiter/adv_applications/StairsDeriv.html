@@ -179,7 +179,7 @@
     <span class="p">}</span>
 
 <div class="viewcode-block" id="StairsDeriv.__init__"><a class="viewcode-back" href="../../../qubiter.adv_applications.StairsDeriv.html#qubiter.adv_applications.StairsDeriv.StairsDeriv.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">deriv_gate_str</span><span class="p">,</span> <span class="n">gate_str_to_rads_list</span><span class="p">,</span>
-                 <span class="n">file_prefix</span><span class="p">,</span> <span class="n">parent_num_bits</span><span class="p">,</span> <span class="n">hamil</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                 <span class="n">file_prefix</span><span class="p">,</span> <span class="n">parent_num_qbits</span><span class="p">,</span> <span class="n">hamil</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Constructor</span>
 
@@ -188,7 +188,7 @@
 <span class="sd">        deriv_gate_str : str</span>
 <span class="sd">        gate_str_to_rads_list : dict[str, list[float|str]]</span>
 <span class="sd">        file_prefix : str</span>
-<span class="sd">        parent_num_bits : int</span>
+<span class="sd">        parent_num_qbits : int</span>
 <span class="sd">        hamil : QubitOperator</span>
 <span class="sd">        kwargs : dict</span>
 <span class="sd">            key-word arguments of MeanHamil</span>
@@ -200,10 +200,10 @@
         <span class="n">all_var_nums</span> <span class="o">=</span> <span class="n">StairsCkt_writer</span><span class="o">.</span>\
             <span class="n">get_all_var_nums</span><span class="p">(</span><span class="n">gate_str_to_rads_list</span><span class="p">)</span>
         <span class="n">fun_name_to_fun</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># filled by get_mean_val()</span>
-        <span class="n">MeanHamil</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">parent_num_bits</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">hamil</span><span class="p">,</span>
+        <span class="n">MeanHamil</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">parent_num_qbits</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">hamil</span><span class="p">,</span>
             <span class="n">all_var_nums</span><span class="p">,</span> <span class="n">fun_name_to_fun</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="c1"># ancilla at bit pos parent_num_bits</span>
-        <span class="n">MeanHamil</span><span class="o">.</span><span class="n">check_hamil_is_in_range</span><span class="p">(</span><span class="n">hamil</span><span class="p">,</span> <span class="n">parent_num_bits</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># ancilla at bit pos parent_num_qbits</span>
+        <span class="n">MeanHamil</span><span class="o">.</span><span class="n">check_hamil_is_in_range</span><span class="p">(</span><span class="n">hamil</span><span class="p">,</span> <span class="n">parent_num_qbits</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">deriv_gate_str</span> <span class="o">=</span> <span class="n">deriv_gate_str</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gate_str_to_rads_list</span> <span class="o">=</span> <span class="n">gate_str_to_rads_list</span></div>
 

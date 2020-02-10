@@ -97,11 +97,11 @@ class DiagUnitarySEO_writer(SEO_writer):
         if style == 'oracular':
             self.num_gbits = num_gbits
 
-        num_bits = emb.num_bits_bef
-        assert num_bits >= 1, "d-unitary must have at least 1 qubit"
+        num_qbits = emb.num_qbits_bef
+        assert num_qbits >= 1, "d-unitary must have at least 1 qubit"
 
         ntf = num_T_trols + num_F_trols
-        num_MP_trols = num_bits - ntf - num_gbits
+        num_MP_trols = num_qbits - ntf - num_gbits
         assert num_MP_trols > 0
         if rad_angles:
             assert len(rad_angles) == (1 << num_MP_trols), \
@@ -118,12 +118,12 @@ class DiagUnitarySEO_writer(SEO_writer):
         None
 
         """
-        num_bits = self.emb.num_bits_bef
+        num_qbits = self.emb.num_qbits_bef
         nt = self.num_T_trols
         nf = self.num_F_trols
         ntf = nt + nf
-        num_MP_trols = num_bits - ntf - self.num_gbits
-        trols = Controls(num_bits)
+        num_MP_trols = num_qbits - ntf - self.num_gbits
+        trols = Controls(num_qbits)
         trols.bit_pos_to_kind = dict(enumerate(
                 [True]*nt + [False]*nf + list(range(num_MP_trols))
             ))
@@ -141,11 +141,11 @@ class DiagUnitarySEO_writer(SEO_writer):
         None
 
         """
-        num_bits = self.emb.num_bits_bef
+        num_qbits = self.emb.num_qbits_bef
         nt = self.num_T_trols
         nf = self.num_F_trols
         ntf = nt + nf
-        num_MP_trols = num_bits - ntf - self.num_gbits
+        num_MP_trols = num_qbits - ntf - self.num_gbits
         rads_arr = np.array(self.rad_angles)
         if np.linalg.norm(rads_arr) < 1e-6:
             print("unit d-unitary")
@@ -161,10 +161,10 @@ class DiagUnitarySEO_writer(SEO_writer):
         diff_bvec = BitVector(num_MP_trols+1, 0)
 
         TF_dict = dict(enumerate([True]*nt + [False]*nf))
-        trols1 = Controls(num_bits)
+        trols1 = Controls(num_qbits)
         trols1.bit_pos_to_kind = TF_dict.copy()
         trols1.refresh_lists()
-        trols2 = Controls(num_bits)
+        trols2 = Controls(num_qbits)
 
         def write_cnots(diff_bvec1, init_prev_T_bit):
             prev_T_bit = init_prev_T_bit
@@ -281,8 +281,8 @@ if __name__ == "__main__":
             num_gbits = 0
             if style == 'oracular':
                 num_gbits = 3
-            num_bits = nt + nf + num_MP_trols + num_gbits
-            emb = CktEmbedder(num_bits, num_bits)
+            num_qbits = nt + nf + num_MP_trols + num_gbits
+            emb = CktEmbedder(num_qbits, num_qbits)
             file_prefix = "d_unitary_test_" + style
             wr = DiagUnitarySEO_writer(file_prefix, emb, style, rad_angles,
                 num_T_trols=nt, num_F_trols=nf, num_gbits=num_gbits)
@@ -290,16 +290,16 @@ if __name__ == "__main__":
             wr.close_files()
 
         file_prefix = "d_unitary_exact_check"
-        num_bits = 4
-        num_angles = (1 << num_bits)
-        emb = CktEmbedder(num_bits, num_bits)
+        num_qbits = 4
+        num_angles = (1 << num_qbits)
+        emb = CktEmbedder(num_qbits, num_qbits)
         rad_angles = list(np.random.rand(num_angles)*2*np.pi)
         # av = sum(rad_angles)/len(rad_angles)
         # rad_angles = list(np.array(rad_angles)-av)
         wr = DiagUnitarySEO_writer(file_prefix, emb, 'exact', rad_angles)
         wr.write()
         wr.close_files()
-        matpro = SEO_MatrixProduct(file_prefix, num_bits)
+        matpro = SEO_MatrixProduct(file_prefix, num_qbits)
         exact_mat = DiagUnitarySEO_writer.du_mat(rad_angles)
         print("error=", np.linalg.norm(matpro.prod_arr - exact_mat))
         # print(matpro.prod_arr)

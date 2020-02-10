@@ -291,8 +291,8 @@
 <span class="sd">        None</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_bef</span>
-        <span class="n">trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="o">.</span><span class="n">new_knob</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">trol_bit_pos</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_bef</span>
+        <span class="n">trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="o">.</span><span class="n">new_single_trol</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">trol_bit_pos</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">expand_1c_u2</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span>
                 <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot</span><span class="p">,</span> <span class="n">rads_list</span><span class="p">)</span>
@@ -424,9 +424,9 @@
 
     <span class="c1"># def write_gen_n_controlled_u2(self, n_index_list, rads_list, delta=None):</span>
     <span class="c1">#     &quot;&quot;&quot;</span>
-    <span class="c1">#     Writes an expansion for a U(2) matrix W(num_bits-1) that is</span>
+    <span class="c1">#     Writes an expansion for a U(2) matrix W(num_qbits-1) that is</span>
     <span class="c1">#     controlled by a &quot;generalized n&quot; equal to GN = n(n_index_list). Thus,</span>
-    <span class="c1">#     the gate written by this function equals W(num_bits-1)^GN.</span>
+    <span class="c1">#     the gate written by this function equals W(num_qbits-1)^GN.</span>
     <span class="c1">#     Generalized n&#39;s are defined in the reference CGateExpander.pdf</span>
     <span class="c1">#</span>
     <span class="c1">#     Parameters</span>
@@ -448,21 +448,21 @@
     <span class="c1">#</span>
     <span class="c1">#     &quot;&quot;&quot;</span>
     <span class="c1">#</span>
-    <span class="c1">#     num_bits = self.emb.num_bits_bef</span>
+    <span class="c1">#     num_qbits = self.emb.num_qbits_bef</span>
     <span class="c1">#</span>
     <span class="c1">#     for k in range(len(n_index_list)-1):</span>
     <span class="c1">#         tar_pos = n_index_list[k+1]</span>
     <span class="c1">#         trol_pos = n_index_list[k]</span>
-    <span class="c1">#         trols = Controls.new_knob(num_bits, trol_pos, True)</span>
+    <span class="c1">#         trols = Controls.new_single_trol(num_qbits, trol_pos, True)</span>
     <span class="c1">#         self.write_controlled_one_bit_gate(</span>
     <span class="c1">#             tar_pos, trols, OneBitGates.sigx)</span>
     <span class="c1">#</span>
-    <span class="c1">#     self.write_1c_u2(num_bits - 1, n_index_list[-1], rads_list, delta)</span>
+    <span class="c1">#     self.write_1c_u2(num_qbits - 1, n_index_list[-1], rads_list, delta)</span>
     <span class="c1">#</span>
     <span class="c1">#     for k in reversed(range(len(n_index_list)-1)):</span>
     <span class="c1">#         tar_pos = n_index_list[k+1]</span>
     <span class="c1">#         trol_pos = n_index_list[k]</span>
-    <span class="c1">#         trols = Controls.new_knob(num_bits, trol_pos, True)</span>
+    <span class="c1">#         trols = Controls.new_single_trol(num_qbits, trol_pos, True)</span>
     <span class="c1">#         self.write_controlled_one_bit_gate(</span>
     <span class="c1">#             tar_pos, trols, OneBitGates.sigx)</span>
     <span class="c1">#</span>
@@ -487,17 +487,17 @@
     <span class="c1">#     None</span>
     <span class="c1">#</span>
     <span class="c1">#     &quot;&quot;&quot;</span>
-    <span class="c1">#     num_bits = self.emb.num_bits_bef</span>
-    <span class="c1">#     for num_boxes in range(1, num_bits):</span>
-    <span class="c1">#         for comb in it.combinations(range(0, num_bits-1), num_boxes):</span>
+    <span class="c1">#     num_qbits = self.emb.num_qbits_bef</span>
+    <span class="c1">#     for num_boxes in range(1, num_qbits):</span>
+    <span class="c1">#         for comb in it.combinations(range(0, num_qbits-1), num_boxes):</span>
     <span class="c1">#             n_index_list = sorted(list(comb), reverse=True)</span>
     <span class="c1">#             sign = 1</span>
     <span class="c1">#             if len(comb) % 2 == 0:</span>
     <span class="c1">#                 sign = -1</span>
     <span class="c1">#             new_rads_list = list(</span>
-    <span class="c1">#                 sign*np.array(rads_list)/(1 &lt;&lt; (num_bits-2)))</span>
+    <span class="c1">#                 sign*np.array(rads_list)/(1 &lt;&lt; (num_qbits-2)))</span>
     <span class="c1">#             if delta:</span>
-    <span class="c1">#                 new_delta = sign*delta/(1 &lt;&lt; (num_bits-2))</span>
+    <span class="c1">#                 new_delta = sign*delta/(1 &lt;&lt; (num_qbits-2))</span>
     <span class="c1">#             else:</span>
     <span class="c1">#                 new_delta = None</span>
     <span class="c1">#             self.write_gen_n_controlled_u2(</span>
@@ -511,11 +511,11 @@
 
 <span class="sd">        In the CGateSEO_writer.pdf documentation, we show that any c_u2 can</span>
 <span class="sd">        be expanded into a product of several &quot;generalized n&quot; controlled U(</span>
-<span class="sd">        2) gates of the form  W(num_bits-1)^GN, wherein U(2) matrix W(</span>
-<span class="sd">        num_bits-1) is controlled by a &quot;generalized n&quot; equal to GN = n(</span>
+<span class="sd">        2) gates of the form  W(num_qbits-1)^GN, wherein U(2) matrix W(</span>
+<span class="sd">        num_qbits-1) is controlled by a &quot;generalized n&quot; equal to GN = n(</span>
 <span class="sd">        n_index_list)</span>
 
-<span class="sd">        Since the factors W(num_bits-1)^GN in the product commute amongst</span>
+<span class="sd">        Since the factors W(num_qbits-1)^GN in the product commute amongst</span>
 <span class="sd">        themselves, it is possible and convenient to order them in Gray code</span>
 <span class="sd">        order (Qubiter knows about Gray Code via its class BitVector).</span>
 <span class="sd">        Ordering them in Gray Code allows this function to cancel some cnots</span>
@@ -539,12 +539,12 @@
 <span class="sd">        None</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_bef</span>
-        <span class="n">num_trols</span> <span class="o">=</span> <span class="n">num_bits</span><span class="o">-</span><span class="mi">1</span>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_bef</span>
+        <span class="n">num_trols</span> <span class="o">=</span> <span class="n">num_qbits</span><span class="o">-</span><span class="mi">1</span>
         <span class="n">max_f</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_trols</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
 
         <span class="k">def</span> <span class="nf">write_cnot</span><span class="p">(</span><span class="n">tar_bpos</span><span class="p">,</span> <span class="n">trol_bpos</span><span class="p">):</span>
-            <span class="n">trol</span> <span class="o">=</span> <span class="n">Controls</span><span class="o">.</span><span class="n">new_knob</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">trol_bpos</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+            <span class="n">trol</span> <span class="o">=</span> <span class="n">Controls</span><span class="o">.</span><span class="n">new_single_trol</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">trol_bpos</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="n">tar_bpos</span><span class="p">,</span> <span class="n">trol</span><span class="p">,</span>
                                                <span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigx</span><span class="p">)</span>
 
@@ -570,9 +570,9 @@
             <span class="k">if</span> <span class="n">cur_bvec</span><span class="o">.</span><span class="n">get_num_T_bits</span><span class="p">()</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">sign</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
             <span class="n">new_rads_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
-                <span class="n">sign</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">rads_list</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">num_bits</span><span class="o">-</span><span class="mi">2</span><span class="p">)))</span>
+                <span class="n">sign</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">rads_list</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">num_qbits</span><span class="o">-</span><span class="mi">2</span><span class="p">)))</span>
             <span class="k">if</span> <span class="n">delta</span><span class="p">:</span>
-                <span class="n">new_delta</span> <span class="o">=</span> <span class="n">sign</span><span class="o">*</span><span class="n">delta</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">num_bits</span><span class="o">-</span><span class="mi">2</span><span class="p">))</span>
+                <span class="n">new_delta</span> <span class="o">=</span> <span class="n">sign</span><span class="o">*</span><span class="n">delta</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">num_qbits</span><span class="o">-</span><span class="mi">2</span><span class="p">))</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">new_delta</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -590,7 +590,7 @@
 
             <span class="n">u2_trol_bpos</span> <span class="o">=</span> <span class="n">min_cur_bpos</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">write_1c_u2</span><span class="p">(</span>
-                <span class="n">num_bits</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">u2_trol_bpos</span><span class="p">,</span> <span class="n">new_rads_list</span><span class="p">,</span> <span class="n">new_delta</span><span class="p">)</span>
+                <span class="n">num_qbits</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">u2_trol_bpos</span><span class="p">,</span> <span class="n">new_rads_list</span><span class="p">,</span> <span class="n">new_delta</span><span class="p">)</span>
             <span class="n">prev_bvec</span> <span class="o">=</span> <span class="n">BitVector</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">cur_bvec</span><span class="p">)</span>
             <span class="n">f</span><span class="p">,</span> <span class="n">lazy</span> <span class="o">=</span> <span class="n">BitVector</span><span class="o">.</span><span class="n">lazy_advance</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">lazy</span><span class="p">)</span>
             <span class="n">cur_bvec</span><span class="o">.</span><span class="n">dec_rep</span> <span class="o">=</span> <span class="n">lazy</span></div>
@@ -647,13 +647,13 @@
 <span class="sd">        None</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_bef</span>
-        <span class="n">tar_bit_pos</span> <span class="o">=</span> <span class="n">num_bits</span><span class="o">-</span><span class="mi">1</span>
-        <span class="n">num_trols</span> <span class="o">=</span> <span class="n">num_bits</span><span class="o">-</span><span class="mi">1</span>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_bef</span>
+        <span class="n">tar_bit_pos</span> <span class="o">=</span> <span class="n">num_qbits</span><span class="o">-</span><span class="mi">1</span>
+        <span class="n">num_trols</span> <span class="o">=</span> <span class="n">num_qbits</span><span class="o">-</span><span class="mi">1</span>
         <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">trol_kinds</span><span class="p">)</span> <span class="o">==</span> <span class="n">num_trols</span>
-        <span class="n">trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)</span>
-        <span class="n">trols</span><span class="o">.</span><span class="n">bit_pos_to_kind</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">trol_kinds</span><span class="p">[</span><span class="n">num_bits</span><span class="o">-</span><span class="n">k</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
-                                 <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_bits</span><span class="o">-</span><span class="mi">1</span><span class="p">)}</span>
+        <span class="n">trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">)</span>
+        <span class="n">trols</span><span class="o">.</span><span class="n">bit_pos_to_kind</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">trol_kinds</span><span class="p">[</span><span class="n">num_qbits</span><span class="o">-</span><span class="n">k</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+                                 <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_qbits</span><span class="o">-</span><span class="mi">1</span><span class="p">)}</span>
         <span class="n">trols</span><span class="o">.</span><span class="n">refresh_lists</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">one_line</span> <span class="ow">or</span> <span class="n">num_trols</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -671,11 +671,11 @@
             <span class="n">rads</span> <span class="o">=</span> <span class="n">fun_arg_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">write_internal</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">rads</span> <span class="o">/</span> <span class="mi">2</span><span class="p">],</span> <span class="n">rads</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">u2_fun</span> <span class="o">==</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigx</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">num_bits</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">num_qbits</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
                 <span class="c1"># If it&#39;s a CNOT, no expansion necessary</span>
                 <span class="c1"># Control must be set to True because</span>
                 <span class="c1"># opening and closing Hadamards take care of False</span>
-                <span class="n">trols1</span> <span class="o">=</span> <span class="n">Controls</span><span class="o">.</span><span class="n">new_knob</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+                <span class="n">trols1</span> <span class="o">=</span> <span class="n">Controls</span><span class="o">.</span><span class="n">new_single_trol</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span>
                     <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">trols1</span><span class="p">,</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigx</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
@@ -715,10 +715,10 @@
 
     <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
 
-        <span class="n">num_bits_bef</span> <span class="o">=</span> <span class="mi">4</span>
-        <span class="n">num_bits_aft</span> <span class="o">=</span> <span class="mi">5</span>
-        <span class="n">bit_map</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">num_bits_bef</span><span class="p">))</span>
-        <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_bits_bef</span><span class="p">,</span> <span class="n">num_bits_aft</span><span class="p">,</span> <span class="n">bit_map</span><span class="p">)</span>
+        <span class="n">num_qbits_bef</span> <span class="o">=</span> <span class="mi">4</span>
+        <span class="n">num_qbits_aft</span> <span class="o">=</span> <span class="mi">5</span>
+        <span class="n">bit_map</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">num_qbits_bef</span><span class="p">))</span>
+        <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_qbits_bef</span><span class="p">,</span> <span class="n">num_qbits_aft</span><span class="p">,</span> <span class="n">bit_map</span><span class="p">)</span>
 
         <span class="c1"># trol_kinds in ZL convention</span>
         <span class="n">trol_kinds</span> <span class="o">=</span> <span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">]</span>
@@ -756,8 +756,8 @@
         <span class="n">wr</span><span class="o">.</span><span class="n">close_files</span><span class="p">()</span>
 
         <span class="c1"># a check that an expansion multiplies to original</span>
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="mi">5</span>
-        <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">)</span>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="mi">5</span>
+        <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">)</span>
         <span class="c1"># trol_kinds in ZL convention</span>
         <span class="n">trol_kinds</span> <span class="o">=</span> <span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">]</span>
         <span class="n">file_prefix</span> <span class="o">=</span> <span class="s1">&#39;cgate_expan_mat_prod&#39;</span>
@@ -777,8 +777,8 @@
 
         <span class="n">wr</span><span class="o">.</span><span class="n">close_files</span><span class="p">()</span>
 
-        <span class="n">mp</span> <span class="o">=</span> <span class="n">SEO_MatrixProduct</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">)</span>
-        <span class="n">id_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_bits</span><span class="p">,)))</span>
+        <span class="n">mp</span> <span class="o">=</span> <span class="n">SEO_MatrixProduct</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">)</span>
+        <span class="n">id_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_qbits</span><span class="p">,)))</span>
         <span class="n">err</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">mp</span><span class="o">.</span><span class="n">prod_arr</span> <span class="o">-</span> <span class="n">id_mat</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;err=&quot;</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
     <span class="n">main</span><span class="p">()</span>

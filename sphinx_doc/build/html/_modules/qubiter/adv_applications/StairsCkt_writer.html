@@ -159,7 +159,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This class is a subclass of class SEO_writer and it writes a &quot;Stairs</span>
 <span class="sd">    Circuit&quot;. For example, this is what the Picture file of a Stairs Circuit </span>
-<span class="sd">    looks like for num_bits = 3 </span>
+<span class="sd">    looks like for num_qbits = 3 </span>
 <span class="sd">    </span>
 <span class="sd">    U   |   |</span>
 <span class="sd">    O---U   |  </span>
@@ -179,7 +179,7 @@
 <span class="sd">    This class can also be asked to construct a QB net that is **not** fully </span>
 <span class="sd">    connected, by limiting the number of controls for a given U to fewer </span>
 <span class="sd">    than all the ones to its left. For example, suppose that in the </span>
-<span class="sd">    num_bits=3 case, we restrict the parents of the U in the last step to </span>
+<span class="sd">    num_qbits=3 case, we restrict the parents of the U in the last step to </span>
 <span class="sd">    just one, instead of the 2 parents that it has in the fully connected </span>
 <span class="sd">    case. Then we get </span>
 
@@ -204,7 +204,7 @@
 <span class="sd">    gate_str_to_rads_list maps gate_str to a list of 4 floats (or </span>
 <span class="sd">    placeholder variables for those floats) for the 4 parameters of the U </span>
 <span class="sd">    matrix. For example, here are possible values for gate_str_to_rads_list </span>
-<span class="sd">    for the num_bits=3 fully connected qb net </span>
+<span class="sd">    for the num_qbits=3 fully connected qb net </span>
 <span class="sd">    </span>
 <span class="sd">    with every rads_list item filled with the same constant .3</span>
 <span class="sd">    {&#39;prior&#39;: [0.3, 0.3, 0.3, 0.3],</span>
@@ -254,7 +254,7 @@
 <span class="sd">     &#39;2T1F&#39;: [&#39;#5100&#39;, &#39;#5101&#39;, &#39;#5102&#39;, &#39;#5103&#39;],</span>
 <span class="sd">     &#39;2T1T&#39;: [&#39;#5110&#39;, &#39;#5111&#39;, &#39;#5112&#39;, &#39;#5113&#39;]}</span>
 
-<span class="sd">    This is what gate_str_to_rads_list looks like in the num_bits=3 case, </span>
+<span class="sd">    This is what gate_str_to_rads_list looks like in the num_qbits=3 case, </span>
 <span class="sd">    when the last U has only one parent (qbit 2) instead of two parents (</span>
 <span class="sd">    qbits 1 and 2): </span>
 <span class="sd">    </span>
@@ -302,7 +302,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="StairsCkt_writer.get_gate_str_to_rads_list"><a class="viewcode-back" href="../../../qubiter.adv_applications.StairsCkt_writer.html#qubiter.adv_applications.StairsCkt_writer.StairsCkt_writer.get_gate_str_to_rads_list">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_gate_str_to_rads_list</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">fill_type</span><span class="p">,</span> <span class="n">rads_const</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="k">def</span> <span class="nf">get_gate_str_to_rads_list</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">fill_type</span><span class="p">,</span> <span class="n">rads_const</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                   <span class="n">u2_bit_to_higher_bits</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This method returns a gate_str_to_rads_list constructed according to</span>
@@ -314,7 +314,7 @@
 <span class="sd">        rads_const.</span>
 
 <span class="sd">        u2_bit_to_higher_bits is used to restrict the controls of each U.</span>
-<span class="sd">        For example, for num_bits=3,</span>
+<span class="sd">        For example, for num_qbits=3,</span>
 
 <span class="sd">        u2_bit_to_higher_bits = {0: [1, 2], 1: [2], 2: []}</span>
 
@@ -326,7 +326,7 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        num_bits : int</span>
+<span class="sd">        num_qbits : int</span>
 <span class="sd">        fill_type : str</span>
 <span class="sd">            either &#39;const&#39;, &#39;rand&#39; or &#39;#int&#39;</span>
 <span class="sd">        rads_const : float | None</span>
@@ -355,21 +355,21 @@
 
         <span class="n">pair</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;F&#39;</span><span class="p">,</span> <span class="s1">&#39;T&#39;</span><span class="p">]</span>
         <span class="n">singlet</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;_&#39;</span><span class="p">]</span>
-        <span class="k">for</span> <span class="n">tup_len</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">):</span>
-            <span class="n">u2_pos</span> <span class="o">=</span> <span class="n">num_bits</span> <span class="o">-</span> <span class="n">tup_len</span> <span class="o">-</span> <span class="mi">1</span>
-            <span class="n">pa_range</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">u2_pos</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">tup_len</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">):</span>
+            <span class="n">u2_pos</span> <span class="o">=</span> <span class="n">num_qbits</span> <span class="o">-</span> <span class="n">tup_len</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="n">pa_range</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">u2_pos</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">)</span>
             <span class="n">parent_to_list</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">pair</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">pa_range</span><span class="p">}</span>
             <span class="k">if</span> <span class="n">u2_bit_to_higher_bits</span><span class="p">:</span>
                 <span class="n">parent_to_list</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">singlet</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">pa_range</span><span class="p">}</span>
                 <span class="k">for</span> <span class="n">pa_bit</span> <span class="ow">in</span> <span class="n">u2_bit_to_higher_bits</span><span class="p">[</span><span class="n">u2_pos</span><span class="p">]:</span>
-                    <span class="k">assert</span> <span class="n">u2_pos</span> <span class="o">&lt;</span> <span class="n">pa_bit</span> <span class="o">&lt;</span> <span class="n">num_bits</span>
+                    <span class="k">assert</span> <span class="n">u2_pos</span> <span class="o">&lt;</span> <span class="n">pa_bit</span> <span class="o">&lt;</span> <span class="n">num_qbits</span>
                     <span class="n">parent_to_list</span><span class="p">[</span><span class="n">pa_bit</span><span class="p">]</span> <span class="o">=</span> <span class="n">pair</span>
             <span class="n">list_of_lists</span> <span class="o">=</span> <span class="p">[</span><span class="n">parent_to_list</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">pa_range</span><span class="p">)]</span>
             <span class="c1"># print(&quot;mmmnnnnnn&quot;, list_of_lists)</span>
             <span class="k">for</span> <span class="n">tuple_of_FTs</span> <span class="ow">in</span> <span class="n">it</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="o">*</span><span class="n">list_of_lists</span><span class="p">):</span>
                 <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
                 <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">tup_len</span><span class="p">):</span>
-                    <span class="n">s</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">num_bits</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">k</span><span class="p">)</span> <span class="o">+</span> <span class="n">tuple_of_FTs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+                    <span class="n">s</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">num_qbits</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">k</span><span class="p">)</span> <span class="o">+</span> <span class="n">tuple_of_FTs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
                 <span class="k">if</span> <span class="n">fill_type</span> <span class="o">==</span> <span class="s1">&#39;const&#39;</span><span class="p">:</span>
                     <span class="n">gate_str_to_rads_list</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="o">=</span> <span class="n">const_list</span>
                 <span class="k">elif</span> <span class="n">fill_type</span> <span class="o">==</span> <span class="s1">&#39;rand&#39;</span><span class="p">:</span>
@@ -483,15 +483,15 @@
 <span class="sd">        int</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_bef</span>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_bef</span>
         <span class="k">if</span> <span class="n">gate_str</span> <span class="o">!=</span> <span class="s1">&#39;prior&#39;</span><span class="p">:</span>
-            <span class="n">u2_pos</span> <span class="o">=</span> <span class="n">num_bits</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">gate_str</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="n">u2_pos</span> <span class="o">=</span> <span class="n">num_qbits</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">gate_str</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">u2_pos</span> <span class="o">=</span> <span class="n">num_bits</span><span class="o">-</span><span class="mi">1</span>
+            <span class="n">u2_pos</span> <span class="o">=</span> <span class="n">num_qbits</span><span class="o">-</span><span class="mi">1</span>
         <span class="k">return</span> <span class="n">u2_pos</span></div>
 
 <div class="viewcode-block" id="StairsCkt_writer.get_controls_from_gate_str"><a class="viewcode-back" href="../../../qubiter.adv_applications.StairsCkt_writer.html#qubiter.adv_applications.StairsCkt_writer.StairsCkt_writer.get_controls_from_gate_str">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_controls_from_gate_str</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">gate_str</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_controls_from_gate_str</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">gate_str</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This method returns an object of class Controls, constructed from</span>
 <span class="sd">        info in the input `gate_str` (a well formed key of</span>
@@ -500,7 +500,7 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        num_bits : int</span>
+<span class="sd">        num_qbits : int</span>
 <span class="sd">        gate_str : str</span>
 
 <span class="sd">        Returns</span>
@@ -508,7 +508,7 @@
 <span class="sd">        Controls</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)</span>
+        <span class="n">trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">gate_str</span> <span class="o">!=</span> <span class="s1">&#39;prior&#39;</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">gate_str</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="p">):</span>
                 <span class="n">trol_pos</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">gate_str</span><span class="p">[</span><span class="mi">2</span> <span class="o">*</span> <span class="n">k</span><span class="p">])</span>
@@ -529,11 +529,11 @@
 <span class="sd">        -------</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_bef</span>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_bef</span>
         <span class="k">for</span> <span class="n">gate_str</span><span class="p">,</span> <span class="n">rads_list</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">gate_str_to_rads_list</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">num_bits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_bef</span>
+            <span class="n">num_qbits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_bef</span>
             <span class="n">trols</span> <span class="o">=</span> <span class="n">StairsCkt_writer</span><span class="o">.</span><span class="n">get_controls_from_gate_str</span><span class="p">(</span>
-                <span class="n">num_bits</span><span class="p">,</span> <span class="n">gate_str</span><span class="p">)</span>
+                <span class="n">num_qbits</span><span class="p">,</span> <span class="n">gate_str</span><span class="p">)</span>
             <span class="n">u2_pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_u2_pos</span><span class="p">(</span><span class="n">gate_str</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="n">u2_pos</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span>
                     <span class="n">OneBitGates</span><span class="o">.</span><span class="n">u2</span><span class="p">,</span> <span class="n">rads_list</span><span class="p">)</span></div></div>
@@ -541,15 +541,15 @@
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="mi">3</span>
         <span class="k">for</span> <span class="n">fill_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;const&#39;</span><span class="p">,</span> <span class="s1">&#39;rand&#39;</span><span class="p">,</span> <span class="s1">&#39;#int&#39;</span><span class="p">]:</span>
             <span class="n">di</span> <span class="o">=</span> <span class="n">StairsCkt_writer</span><span class="o">.</span><span class="n">get_gate_str_to_rads_list</span><span class="p">(</span>
-                <span class="n">num_bits</span><span class="p">,</span> <span class="n">fill_type</span><span class="p">,</span> <span class="n">rads_const</span><span class="o">=.</span><span class="mi">3</span><span class="p">)</span>
+                <span class="n">num_qbits</span><span class="p">,</span> <span class="n">fill_type</span><span class="p">,</span> <span class="n">rads_const</span><span class="o">=.</span><span class="mi">3</span><span class="p">)</span>
             <span class="n">pp</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">di</span><span class="p">)</span>
          
         <span class="n">u2_bit_to_higher_bits</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">1</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">2</span><span class="p">:</span> <span class="p">[]}</span>
         <span class="n">di</span> <span class="o">=</span> <span class="n">StairsCkt_writer</span><span class="o">.</span><span class="n">get_gate_str_to_rads_list</span><span class="p">(</span>
-                <span class="n">num_bits</span><span class="p">,</span> <span class="s2">&quot;#int&quot;</span><span class="p">,</span> <span class="n">u2_bit_to_higher_bits</span><span class="o">=</span><span class="n">u2_bit_to_higher_bits</span><span class="p">)</span>
+                <span class="n">num_qbits</span><span class="p">,</span> <span class="s2">&quot;#int&quot;</span><span class="p">,</span> <span class="n">u2_bit_to_higher_bits</span><span class="o">=</span><span class="n">u2_bit_to_higher_bits</span><span class="p">)</span>
         <span class="n">pp</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">di</span><span class="p">)</span>
 
         <span class="n">vn_to_r</span> <span class="o">=</span> <span class="n">StairsCkt_writer</span><span class="o">.</span><span class="n">get_var_num_to_rads</span><span class="p">(</span><span class="n">di</span><span class="p">,</span>
@@ -560,11 +560,11 @@
         <span class="n">arr</span> <span class="o">=</span> <span class="n">StairsCkt_writer</span><span class="o">.</span><span class="n">make_array_from_gate_str_to_rads_list</span><span class="p">(</span><span class="n">di</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;arr=</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">arr</span><span class="p">)</span>
 
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="mi">4</span>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="mi">4</span>
         <span class="n">gate_str_to_rads_list</span> <span class="o">=</span> <span class="n">StairsCkt_writer</span><span class="o">.</span><span class="n">get_gate_str_to_rads_list</span><span class="p">(</span>
-            <span class="n">num_bits</span><span class="p">,</span> <span class="s1">&#39;#int&#39;</span><span class="p">)</span>
+            <span class="n">num_qbits</span><span class="p">,</span> <span class="s1">&#39;#int&#39;</span><span class="p">)</span>
         <span class="n">file_prefix</span> <span class="o">=</span> <span class="s1">&#39;stairs_writer_test&#39;</span>
-        <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">)</span>
+        <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">)</span>
 
         <span class="n">wr</span> <span class="o">=</span> <span class="n">StairsCkt_writer</span><span class="p">(</span><span class="n">gate_str_to_rads_list</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">emb</span><span class="p">)</span>
         <span class="n">wr</span><span class="o">.</span><span class="n">close_files</span><span class="p">()</span>

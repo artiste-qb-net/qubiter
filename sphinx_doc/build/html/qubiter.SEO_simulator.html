@@ -154,7 +154,7 @@
 <span id="qubiter-seo-simulator-module"></span><h1>qubiter.SEO_simulator module<a class="headerlink" href="#module-qubiter.SEO_simulator" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="qubiter.SEO_simulator.SEO_simulator">
-<em class="property">class </em><code class="sig-prename descclassname">qubiter.SEO_simulator.</code><code class="sig-name descname">SEO_simulator</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_bits</em>, <em class="sig-param">init_st_vec=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">qubiter.SEO_simulator.</code><code class="sig-name descname">SEO_simulator</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_qbits</em>, <em class="sig-param">init_st_vec=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="qubiter.SEO_reader.html#qubiter.SEO_reader.SEO_reader" title="qubiter.SEO_reader.SEO_reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">qubiter.SEO_reader.SEO_reader</span></code></a></p>
 <p>This class simulates the evolution of a quantum state vector.</p>
 <p>This class has SEO_reader as a parent. Each line of an English file is
@@ -169,7 +169,7 @@ type 1 measurement inserts a projector <a href="#id3"><span class="problematic" 
 bit. A type 2 measurement stores a copy of the state vector after <a href="#id5"><span class="problematic" id="id6">|0&gt;&lt;0|</span></a>
 has been applied, and another copy after <a href="#id7"><span class="problematic" id="id8">|1&gt;&lt;1|</span></a> has been applied.</p>
 <p>self.cur_st_vec_dict is a dictionary of strings (called branch keys) to
-state vectors StateVec on num_bits qubits. We will refer to each state
+state vectors StateVec on num_qbits qubits. We will refer to each state
 vec in the dict as a branch. Initially, this dict contains a single
 branch with branch key = “pure”. A measurement MEAS of kinds 0 or 1 does
 not change the number of branches in the dict, but a measurement of kind
@@ -206,13 +206,13 @@ True and qubit 4 is False, the branch key will be ‘4F2T’.</p></li>
 </dl>
 <dl class="method">
 <dt id="qubiter.SEO_simulator.SEO_simulator.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_bits</em>, <em class="sig-param">init_st_vec=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_qbits</em>, <em class="sig-param">init_st_vec=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constructor</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>file_prefix</strong> (<em>str</em>) – </p></li>
-<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>num_qbits</strong> (<em>int</em>) – </p></li>
 <li><p><strong>init_st_vec</strong> (<a class="reference internal" href="qubiter.StateVec.html#qubiter.StateVec.StateVec" title="qubiter.StateVec.StateVec"><em>StateVec</em></a>) – get this using the functions StateVec.get_ground_st_vec() or
 StateVec.get_standard_basis_st_vec().</p></li>
 </ul>

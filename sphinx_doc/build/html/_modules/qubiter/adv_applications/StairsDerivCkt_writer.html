@@ -183,7 +183,7 @@
 
 <span class="sd">    Note that an extra &quot;ancilla&quot; qbit has been added (as the new last qubit)</span>
 <span class="sd">    to the parent stairs circuit being differentiated. So if the parent</span>
-<span class="sd">    stairs circuit has a number `parent_num_bits` of qubits, then the one</span>
+<span class="sd">    stairs circuit has a number `parent_num_qbits` of qubits, then the one</span>
 <span class="sd">    written by this class has that many qubits plus one.</span>
 
 <span class="sd">    The index r which is in range(4) is called the derivative direction (</span>
@@ -270,13 +270,13 @@
 <span class="sd">        -------</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_bef</span>
-        <span class="n">anc_bit_pos</span> <span class="o">=</span> <span class="n">num_bits</span><span class="o">-</span><span class="mi">1</span>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_bef</span>
+        <span class="n">anc_bit_pos</span> <span class="o">=</span> <span class="n">num_qbits</span><span class="o">-</span><span class="mi">1</span>
 
         <span class="k">for</span> <span class="n">gate_str</span><span class="p">,</span> <span class="n">rads_list</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">gate_str_to_rads_list</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">u2_pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_u2_pos</span><span class="p">(</span><span class="n">gate_str</span><span class="p">)</span>
             <span class="n">trols</span> <span class="o">=</span> <span class="n">StairsCkt_writer</span><span class="o">.</span><span class="n">get_controls_from_gate_str</span><span class="p">(</span>
-                <span class="n">num_bits</span><span class="p">,</span> <span class="n">gate_str</span><span class="p">)</span>
+                <span class="n">num_qbits</span><span class="p">,</span> <span class="n">gate_str</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">gate_str</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">deriv_gate_str</span><span class="p">:</span>
                 <span class="c1"># add control on ancilla qubit</span>
                 <span class="n">trols</span><span class="o">.</span><span class="n">bit_pos_to_kind</span><span class="p">[</span><span class="n">anc_bit_pos</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
@@ -326,13 +326,13 @@
 <span class="sd">        int</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># last qubit position, num_bits-1, is reserved for ancilla qubit</span>
-        <span class="c1"># &quot;prior&quot; gate_str has U2 at bit pos num_bits-2</span>
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_bef</span>
+        <span class="c1"># last qubit position, num_qbits-1, is reserved for ancilla qubit</span>
+        <span class="c1"># &quot;prior&quot; gate_str has U2 at bit pos num_qbits-2</span>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_bef</span>
         <span class="k">if</span> <span class="n">gate_str</span> <span class="o">==</span> <span class="s1">&#39;prior&#39;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">num_bits</span> <span class="o">-</span> <span class="mi">2</span>
+            <span class="k">return</span> <span class="n">num_qbits</span> <span class="o">-</span> <span class="mi">2</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">num_bits</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">gate_str</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span></div>
+            <span class="k">return</span> <span class="n">num_qbits</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">gate_str</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span></div>
 
 <div class="viewcode-block" id="StairsDerivCkt_writer.float_t_list"><a class="viewcode-back" href="../../../qubiter.adv_applications.StairsDerivCkt_writer.html#qubiter.adv_applications.StairsDerivCkt_writer.StairsDerivCkt_writer.float_t_list">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">float_t_list</span><span class="p">(</span><span class="n">t_list</span><span class="p">,</span> <span class="n">var_num_to_rads</span><span class="p">):</span>
@@ -496,14 +496,14 @@
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="mi">4</span>
-        <span class="n">parent_num_bits</span> <span class="o">=</span> <span class="n">num_bits</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c1"># one bit for ancilla</span>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="mi">4</span>
+        <span class="n">parent_num_qbits</span> <span class="o">=</span> <span class="n">num_qbits</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c1"># one bit for ancilla</span>
         <span class="n">gate_str_to_rads_list</span> <span class="o">=</span> <span class="n">StairsCkt_writer</span><span class="o">.</span>\
             <span class="n">get_gate_str_to_rads_list</span><span class="p">(</span>
-                <span class="n">parent_num_bits</span><span class="p">,</span> <span class="s1">&#39;#int&#39;</span><span class="p">,</span> <span class="n">rads_const</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+                <span class="n">parent_num_qbits</span><span class="p">,</span> <span class="s1">&#39;#int&#39;</span><span class="p">,</span> <span class="n">rads_const</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
 
         <span class="n">file_prefix</span> <span class="o">=</span> <span class="s1">&#39;stairs_deriv_writer_test&#39;</span>
-        <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">)</span>
+        <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">)</span>
         <span class="n">deriv_gate_str</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">gate_str_to_rads_list</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">2</span><span class="p">]</span>
         <span class="k">for</span> <span class="n">deriv_direc</span><span class="p">,</span> <span class="n">dpart_name</span><span class="p">,</span> <span class="n">has_neg_polarity</span> <span class="ow">in</span> \
                 <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;single&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)]:</span>

@@ -17,20 +17,20 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
     ----------
 
     """
-    def __init__(self, file_prefix, num_bits, **kwargs):
+    def __init__(self, file_prefix, num_qbits, **kwargs):
         """
         Constructor
 
         Parameters
         ----------
         file_prefix : str
-        num_bits : int
+        num_qbits : int
 
         Returns
         -------
 
         """
-        Qubiter_to_AnyQasm.__init__(self, file_prefix, num_bits, **kwargs)
+        Qubiter_to_AnyQasm.__init__(self, file_prefix, num_qbits, **kwargs)
 
     def write_prelude(self):
         """
@@ -52,7 +52,7 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
             s += vname
             s += '", memory_type="REAL")\n'
         s += 'ro = pg.declare("ro", memory_type="BIT", memory_size='
-        s += str(self.num_bits)
+        s += str(self.num_qbits)
         s += ')'
         self.write(s + '\n')
 
@@ -69,7 +69,7 @@ class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
         self.write('\n')
 
         s = ''
-        for k in range(self.num_bits):
+        for k in range(self.num_qbits):
             s += 'pg.MEASURE('
             s += str(k)
             s += ', ro['
@@ -452,9 +452,9 @@ if __name__ == "__main__":
     def main():
         file_prefix = "qbtr2rigetti_test"
         aqasm_name = 'RigPyQuil'
-        num_bits = 6
+        num_qbits = 6
         c_to_tars = rig.rigetti20_c_to_tars
-        Qubiter_to_RigettiPyQuil(file_prefix, num_bits, aqasm_name=aqasm_name,
+        Qubiter_to_RigettiPyQuil(file_prefix, num_qbits, aqasm_name=aqasm_name,
                 c_to_tars=c_to_tars, write_qubiter_files=True)
 
     main()

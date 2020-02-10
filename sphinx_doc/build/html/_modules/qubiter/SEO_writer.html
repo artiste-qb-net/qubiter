@@ -296,7 +296,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">rel_path</span> <span class="o">=</span> <span class="n">utg</span><span class="o">.</span><span class="n">get_eng_file_rel_path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_prefix</span><span class="p">,</span>
-                                             <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_aft</span><span class="p">)</span>
+                                             <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_aft</span><span class="p">)</span>
         <span class="c1"># print(&quot;..,,mmmm&quot;, rel_path)</span>
         <span class="k">return</span> <span class="n">rel_path</span> <span class="k">if</span> <span class="n">rel</span> <span class="k">else</span> <span class="n">utg</span><span class="o">.</span><span class="n">preface</span><span class="p">(</span><span class="n">rel_path</span><span class="p">)</span></div>
 
@@ -315,7 +315,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">rel_path</span> <span class="o">=</span> <span class="n">utg</span><span class="o">.</span><span class="n">get_pic_file_rel_path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_prefix</span><span class="p">,</span>
-                                             <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_aft</span><span class="p">,</span>
+                                             <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_aft</span><span class="p">,</span>
                                              <span class="n">ZL</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ZL</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">rel_path</span> <span class="k">if</span> <span class="n">rel</span> <span class="k">else</span> <span class="n">utg</span><span class="o">.</span><span class="n">preface</span><span class="p">(</span><span class="n">rel_path</span><span class="p">)</span></div>
 
@@ -444,10 +444,10 @@
 <span class="sd">        str</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_aft</span>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_aft</span>
         <span class="n">li</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">pic_line</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">bit</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">):</span>
-            <span class="n">m</span> <span class="o">=</span> <span class="mi">4</span><span class="o">*</span><span class="p">(</span><span class="n">num_bits</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">bit</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">bit</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">):</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="mi">4</span><span class="o">*</span><span class="p">(</span><span class="n">num_qbits</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">bit</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">bit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">measured_bits</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">li</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;|&quot;</span><span class="p">:</span>
                     <span class="n">li</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;:&quot;</span>
@@ -585,8 +585,8 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="c1"># num_bits_bef = self.emb.num_bits_bef</span>
-        <span class="n">num_bits_aft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_aft</span>
+        <span class="c1"># num_qbits_bef = self.emb.num_qbits_bef</span>
+        <span class="n">num_qbits_aft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_aft</span>
         <span class="n">aft_tar_bit_pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">aft</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">)</span>
 
         <span class="k">assert</span> <span class="n">kind</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="s2">&quot;unsupported measurement kind&quot;</span>
@@ -602,7 +602,7 @@
         <span class="n">biggest</span> <span class="o">=</span> <span class="n">aft_tar_bit_pos</span>
         <span class="n">smallest</span> <span class="o">=</span> <span class="n">aft_tar_bit_pos</span>
         <span class="c1"># k a bit position</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_bits_aft</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">biggest</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_qbits_aft</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">biggest</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
             <span class="n">pic_line</span> <span class="o">+=</span> <span class="s2">&quot;|   &quot;</span>
         <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">pic_line</span> <span class="o">+=</span> <span class="s2">&quot;M0  &quot;</span>
@@ -754,8 +754,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">aft_trols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_preamble</span><span class="p">(</span><span class="n">trols</span><span class="p">)</span>
 
-        <span class="c1"># num_bits_bef = self.emb.num_bits_bef</span>
-        <span class="n">num_bits_aft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_aft</span>
+        <span class="c1"># num_qbits_bef = self.emb.num_qbits_bef</span>
+        <span class="n">num_qbits_aft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_aft</span>
         <span class="n">aft_tar_bit_pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">aft</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">)</span>
 
         <span class="c1"># number of controls may be zero</span>
@@ -834,7 +834,7 @@
             <span class="n">smallest</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">aft_trols</span><span class="o">.</span><span class="n">bit_pos</span><span class="p">[</span><span class="n">num_controls</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">aft_tar_bit_pos</span><span class="p">)</span>
 
         <span class="c1"># k a bit position</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_bits_aft</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">biggest</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_qbits_aft</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">biggest</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
             <span class="n">pic_line</span> <span class="o">+=</span> <span class="s2">&quot;|   &quot;</span>
 
         <span class="n">c_int</span> <span class="o">=</span> <span class="mi">0</span>
@@ -969,16 +969,16 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">aft_trols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_preamble</span><span class="p">(</span><span class="n">trols</span><span class="p">)</span>
 
-        <span class="n">num_bits_bef</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_bef</span>
-        <span class="n">num_bits_aft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_aft</span>
+        <span class="n">num_qbits_bef</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_bef</span>
+        <span class="n">num_qbits_aft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_aft</span>
         <span class="c1"># aft_tar_bit_pos = self.emb.aft(tar_bit_pos)</span>
 
         <span class="c1"># number of controls may be zero</span>
         <span class="n">num_controls</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">aft_trols</span><span class="o">.</span><span class="n">bit_pos</span><span class="p">)</span>
 
         <span class="k">assert</span> <span class="n">bit1</span> <span class="o">!=</span> <span class="n">bit2</span><span class="p">,</span> <span class="s2">&quot;swapped bits must be different&quot;</span>
-        <span class="k">assert</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&lt;</span> <span class="n">bit1</span> <span class="o">&lt;</span> <span class="n">num_bits_bef</span>
-        <span class="k">assert</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&lt;</span> <span class="n">bit2</span> <span class="o">&lt;</span> <span class="n">num_bits_bef</span>
+        <span class="k">assert</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&lt;</span> <span class="n">bit1</span> <span class="o">&lt;</span> <span class="n">num_qbits_bef</span>
+        <span class="k">assert</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&lt;</span> <span class="n">bit2</span> <span class="o">&lt;</span> <span class="n">num_qbits_bef</span>
         <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">aft</span><span class="p">(</span><span class="n">bit1</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">aft</span><span class="p">(</span><span class="n">bit2</span><span class="p">)]</span>
         <span class="n">big</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="n">small</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
@@ -1016,7 +1016,7 @@
             <span class="n">smallest</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">aft_trols</span><span class="o">.</span><span class="n">bit_pos</span><span class="p">[</span><span class="n">num_controls</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">small</span><span class="p">)</span>
 
         <span class="c1"># k a bit position</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_bits_aft</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">biggest</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_qbits_aft</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">biggest</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
             <span class="n">pic_line</span> <span class="o">+=</span> <span class="s2">&quot;|   &quot;</span>
 
         <span class="n">c_int</span> <span class="o">=</span> <span class="mi">0</span>
@@ -1078,8 +1078,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">aft_trols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_preamble</span><span class="p">(</span><span class="n">trols</span><span class="p">)</span>
 
-        <span class="c1"># num_bits_bef = self.emb.num_bits_bef</span>
-        <span class="n">num_bits_aft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_aft</span>
+        <span class="c1"># num_qbits_bef = self.emb.num_qbits_bef</span>
+        <span class="n">num_qbits_aft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_aft</span>
         <span class="n">aft_tar_bit_pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">aft</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">)</span>
 
         <span class="c1"># number of controls may be zero</span>
@@ -1129,7 +1129,7 @@
             <span class="n">smallest</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">aft_trols</span><span class="o">.</span><span class="n">bit_pos</span><span class="p">[</span><span class="n">num_controls</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">aft_tar_bit_pos</span><span class="p">)</span>
 
         <span class="c1"># k a bit position</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_bits_aft</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">biggest</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_qbits_aft</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">biggest</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
             <span class="n">pic_line</span> <span class="o">+=</span> <span class="s2">&quot;|   &quot;</span>
 
         <span class="n">c_int</span> <span class="o">=</span> <span class="mi">0</span>
@@ -1186,8 +1186,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">aft_trols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_preamble</span><span class="p">(</span><span class="n">trols</span><span class="p">)</span>
 
-        <span class="c1"># num_bits_bef = self.emb.num_bits_bef</span>
-        <span class="n">num_bits_aft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_aft</span>
+        <span class="c1"># num_qbits_bef = self.emb.num_qbits_bef</span>
+        <span class="n">num_qbits_aft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_aft</span>
         <span class="c1"># aft_tar_bit_pos = self.emb.aft(tar_bit_pos)</span>
 
         <span class="c1"># number of controls may be zero</span>
@@ -1232,7 +1232,7 @@
         <span class="n">smallest</span> <span class="o">=</span> <span class="n">aft_trols</span><span class="o">.</span><span class="n">bit_pos</span><span class="p">[</span><span class="n">num_controls</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
         <span class="c1"># k a bit position</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_bits_aft</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">biggest</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_qbits_aft</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">biggest</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
             <span class="n">pic_line</span> <span class="o">+=</span> <span class="s2">&quot;|   &quot;</span>
 
         <span class="n">c_int</span> <span class="o">=</span> <span class="mi">0</span>
@@ -1512,8 +1512,8 @@
 <span class="sd">        None</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_aft</span>
-        <span class="n">trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="o">.</span><span class="n">new_knob</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">control_bit</span><span class="p">,</span> <span class="n">kind</span><span class="p">)</span>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_aft</span>
+        <span class="n">trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="o">.</span><span class="n">new_single_trol</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">control_bit</span><span class="p">,</span> <span class="n">kind</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="n">target_bit</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span>
             <span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigx</span><span class="p">)</span></div>
 
@@ -1533,8 +1533,8 @@
 <span class="sd">        None</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_aft</span>
-        <span class="n">trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="o">.</span><span class="n">new_knob</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">control_bit</span><span class="p">,</span> <span class="n">kind</span><span class="p">)</span>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_aft</span>
+        <span class="n">trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="o">.</span><span class="n">new_single_trol</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">control_bit</span><span class="p">,</span> <span class="n">kind</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="n">target_bit</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span>
             <span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigz</span><span class="p">)</span></div>
 
@@ -1558,8 +1558,8 @@
 <span class="sd">        None</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_aft</span>
-        <span class="n">trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="o">.</span><span class="n">new_knob</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">control_bit</span><span class="p">,</span> <span class="n">kind</span><span class="p">)</span>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_aft</span>
+        <span class="n">trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="o">.</span><span class="n">new_single_trol</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">control_bit</span><span class="p">,</span> <span class="n">kind</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="n">target_bit</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span>
             <span class="n">OneBitGates</span><span class="o">.</span><span class="n">P_1_phase_fac</span><span class="p">,</span> <span class="p">[</span><span class="n">rads</span><span class="p">])</span></div>
 
@@ -1628,9 +1628,9 @@
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="mi">5</span>
-        <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">)</span>
-        <span class="n">trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)</span>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="mi">5</span>
+        <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">)</span>
+        <span class="n">trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">)</span>
         <span class="n">trols</span><span class="o">.</span><span class="n">bit_pos_to_kind</span> <span class="o">=</span> <span class="p">{</span><span class="mi">3</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
         <span class="n">trols</span><span class="o">.</span><span class="n">refresh_lists</span><span class="p">()</span>
         <span class="n">ang_rads</span> <span class="o">=</span> <span class="mi">30</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span>
@@ -1698,13 +1698,13 @@
             <span class="n">wr</span><span class="o">.</span><span class="n">write_cnot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
             <span class="n">tar_bit_pos</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="n">trols1</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)</span>
+            <span class="n">trols1</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">)</span>
             <span class="n">trols1</span><span class="o">.</span><span class="n">bit_pos_to_kind</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
             <span class="n">trols1</span><span class="o">.</span><span class="n">refresh_lists</span><span class="p">()</span>
             <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_multiplexor_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">trols1</span><span class="p">,</span>
                 <span class="p">[</span><span class="n">ang_rads</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="n">ang_rads</span><span class="o">*</span><span class="mi">2</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="n">ang_rads</span><span class="p">,</span> <span class="n">ang_rads</span><span class="o">*</span><span class="mi">4</span><span class="o">/</span><span class="mi">3</span><span class="p">])</span>
 
-            <span class="n">trols2</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)</span>
+            <span class="n">trols2</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">)</span>
             <span class="n">trols2</span><span class="o">.</span><span class="n">bit_pos_to_kind</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
             <span class="n">trols2</span><span class="o">.</span><span class="n">refresh_lists</span><span class="p">()</span>
             <span class="n">wr</span><span class="o">.</span><span class="n">write_multiplexor_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">trols2</span><span class="p">,</span>

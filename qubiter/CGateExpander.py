@@ -36,14 +36,14 @@ class CGateExpander(SEO_reader):
 
     """
 
-    def __init__(self, file_prefix, num_bits, **kwargs):
+    def __init__(self, file_prefix, num_qbits, **kwargs):
         """
         Constructor
 
         Parameters
         ----------
         file_prefix : str
-        num_bits : int
+        num_qbits : int
 
         Returns
         -------
@@ -51,12 +51,12 @@ class CGateExpander(SEO_reader):
         """
 
         # temporary embedder
-        emb = CktEmbedder(num_bits, num_bits)
+        emb = CktEmbedder(num_qbits, num_qbits)
         out_file_prefix = SEO_reader.xed_file_prefix(file_prefix)
         self.wr = CGateSEO_writer(out_file_prefix, emb,
             one_line=False, expand_1c_u2=True)
 
-        SEO_reader.__init__(self, file_prefix, num_bits, **kwargs)
+        SEO_reader.__init__(self, file_prefix, num_qbits, **kwargs)
 
         self.wr.close_files()
 
@@ -78,10 +78,10 @@ class CGateExpander(SEO_reader):
 
         """
         num_trols = len(controls.kinds)
-        num_bits_bef = num_trols + 2
-        num_bits_aft = self.num_bits
+        num_qbits_bef = num_trols + 2
+        num_qbits_aft = self.num_qbits
 
-        bit_map0 = [0]*num_bits_bef
+        bit_map0 = [0]*num_qbits_bef
         for k in range(num_trols):
             bit_map0[k] = controls.bit_pos[num_trols-k-1]
         bit_map0[-2] = bit2
@@ -91,8 +91,8 @@ class CGateExpander(SEO_reader):
         bit_map1[-2] = bit1
         bit_map1[-1] = bit2
 
-        emb0 = CktEmbedder(num_bits_bef, num_bits_aft, bit_map0)
-        emb1 = CktEmbedder(num_bits_bef, num_bits_aft, bit_map1)
+        emb0 = CktEmbedder(num_qbits_bef, num_qbits_aft, bit_map0)
+        emb1 = CktEmbedder(num_qbits_bef, num_qbits_aft, bit_map1)
 
         return emb0, emb1
 
@@ -113,13 +113,13 @@ class CGateExpander(SEO_reader):
 
         """
         num_trols = len(controls.kinds)
-        num_bits_bef = num_trols + 1
-        num_bits_aft = self.num_bits
-        bit_map = [0]*num_bits_bef
+        num_qbits_bef = num_trols + 1
+        num_qbits_aft = self.num_qbits
+        bit_map = [0]*num_qbits_bef
         for k in range(num_trols):
             bit_map[k] = controls.bit_pos[num_trols-k-1]
         bit_map[-1] = tar_bit_pos
-        emb = CktEmbedder(num_bits_bef, num_bits_aft, bit_map)
+        emb = CktEmbedder(num_qbits_bef, num_qbits_aft, bit_map)
         return emb
 
     def write_gate_name(self, name, num_trols):
@@ -246,7 +246,7 @@ class CGateExpander(SEO_reader):
         None
 
         """
-        self.wr.emb = CktEmbedder(self.num_bits, self.num_bits)
+        self.wr.emb = CktEmbedder(self.num_qbits, self.num_qbits)
         # print("----", tar_bit_pos, self.wr.emb.bit_map)
         self.wr.write_MEAS(tar_bit_pos, kind)
 

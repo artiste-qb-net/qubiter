@@ -180,8 +180,8 @@ if __name__ == "__main__":
 
     def main():
         print("\ncs decomp example-------------")
-        num_bits = 2
-        num_rows = 1 << num_bits
+        num_qbits = 2
+        num_rows = 1 << num_qbits
         mat = FouSEO_writer.fourier_trans_mat(num_rows)
         assert UnitaryMat.is_unitary(mat)
         left_mats, central_mats, right_mats = CS_Decomp.get_csd([mat])

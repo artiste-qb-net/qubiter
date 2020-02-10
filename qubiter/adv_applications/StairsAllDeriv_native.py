@@ -16,7 +16,7 @@ class StairsAllDeriv_native(StairsDeriv_native):
 
     """
     def __init__(self, gate_str_to_rads_list,
-                 file_prefix, parent_num_bits, hamil, **kwargs):
+                 file_prefix, parent_num_qbits, hamil, **kwargs):
         """
         Constructor
 
@@ -24,7 +24,7 @@ class StairsAllDeriv_native(StairsDeriv_native):
         ----------
         gate_str_to_rads_list : dict[str, list[float|str]]
         file_prefix : str
-        parent_num_bits : int
+        parent_num_qbits : int
         hamil : QubitOperator
         kwargs : dict
             key-word arguments of MeanHamil
@@ -36,7 +36,7 @@ class StairsAllDeriv_native(StairsDeriv_native):
         deriv_gate_str = 'dummy'
         StairsDeriv_native.__init__(self, deriv_gate_str,
                                     gate_str_to_rads_list, file_prefix,
-                                    parent_num_bits, hamil, **kwargs)
+                                    parent_num_qbits, hamil, **kwargs)
 
     def get_mean_val(self, var_num_to_rads):
         """
@@ -68,13 +68,13 @@ class StairsAllDeriv_native(StairsDeriv_native):
 
 if __name__ == "__main__":
     def main():
-        num_bits = 4
-        parent_num_bits = num_bits - 1  # one bit for ancilla
+        num_qbits = 4
+        parent_num_qbits = num_qbits - 1  # one bit for ancilla
 
         # u2_bit_to_higher_bits = None
         u2_bit_to_higher_bits = {0: [2], 1: [2], 2: []}
         gate_str_to_rads_list = StairsCkt_writer.\
-            get_gate_str_to_rads_list(parent_num_bits,
+            get_gate_str_to_rads_list(parent_num_qbits,
                 '#int', rads_const=np.pi/2,
                 u2_bit_to_higher_bits=u2_bit_to_higher_bits)
         pp.pprint(gate_str_to_rads_list)
@@ -85,7 +85,7 @@ if __name__ == "__main__":
             QubitOperator('X0', .7)
 
         der = StairsAllDeriv_native(gate_str_to_rads_list, file_prefix,
-                                 parent_num_bits, hamil)
+                                 parent_num_qbits, hamil)
 
         var_num_to_rads = StairsCkt_writer.get_var_num_to_rads(
             gate_str_to_rads_list, 'const', rads_const=np.pi/2)

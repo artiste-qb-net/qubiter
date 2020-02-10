@@ -160,14 +160,14 @@
 functions are related to the Hadamard Transform.</p>
 <dl class="method">
 <dt id="qubiter.HadamardTransform.HadamardTransform.hadamard_mat">
-<em class="property">static </em><code class="sig-name descname">hadamard_mat</code><span class="sig-paren">(</span><em class="sig-param">num_bits</em>, <em class="sig-param">is_quantum=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/HadamardTransform.html#HadamardTransform.hadamard_mat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.HadamardTransform.HadamardTransform.hadamard_mat" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function return a numpy array with the num_bits-fold tensor
+<em class="property">static </em><code class="sig-name descname">hadamard_mat</code><span class="sig-paren">(</span><em class="sig-param">num_qbits</em>, <em class="sig-param">is_quantum=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/HadamardTransform.html#HadamardTransform.hadamard_mat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.HadamardTransform.HadamardTransform.hadamard_mat" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function return a numpy array with the num_qbits-fold tensor
 product of the 2 dim Hadamard matrix H. If is_quantum=True (False,
 resp.), it returns a complex (real, resp.) array.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>num_qbits</strong> (<em>int</em>) – </p></li>
 <li><p><strong>is_quantum</strong> (<em>bool</em>) – </p></li>
 </ul>
 </dd>
@@ -176,17 +176,17 @@ resp.), it returns a complex (real, resp.) array.</p>
 
 <dl class="method">
 <dt id="qubiter.HadamardTransform.HadamardTransform.ht">
-<em class="property">static </em><code class="sig-name descname">ht</code><span class="sig-paren">(</span><em class="sig-param">num_bits</em>, <em class="sig-param">in_arr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/HadamardTransform.html#HadamardTransform.ht"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.HadamardTransform.HadamardTransform.ht" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">ht</code><span class="sig-paren">(</span><em class="sig-param">num_qbits</em>, <em class="sig-param">in_arr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/HadamardTransform.html#HadamardTransform.ht"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.HadamardTransform.HadamardTransform.ht" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function calculates the Hadamard transform of in_arr. Let H be
 the 2 dimensional Hadamard matrix and let ht be the num_bit-fold
 tensor product of H. Then this function returns the matrix product
 ht*in_arr = out_arr. in_arr and out_arr both have the same shape (
-2^num_bits,).</p>
+2^num_qbits,).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>num_bits</strong> (<em>int</em>) – The number of bits. The dimension of the Hadamard tranform is
-2^num_bits</p></li>
+<li><p><strong>num_qbits</strong> (<em>int</em>) – The number of bits. The dimension of the Hadamard tranform is
+2^num_qbits</p></li>
 <li><p><strong>in_arr</strong> (<em>np.ndarray</em>) – Input array.</p></li>
 </ul>
 </dd>

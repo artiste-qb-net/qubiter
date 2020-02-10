@@ -154,7 +154,7 @@
 <span id="qubiter-cktembedder-module"></span><h1>qubiter.CktEmbedder module<a class="headerlink" href="#module-qubiter.CktEmbedder" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="qubiter.CktEmbedder.CktEmbedder">
-<em class="property">class </em><code class="sig-prename descclassname">qubiter.CktEmbedder.</code><code class="sig-name descname">CktEmbedder</code><span class="sig-paren">(</span><em class="sig-param">num_bits_bef</em>, <em class="sig-param">num_bits_aft</em>, <em class="sig-param">bit_map=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/CktEmbedder.html#CktEmbedder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.CktEmbedder.CktEmbedder" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">qubiter.CktEmbedder.</code><code class="sig-name descname">CktEmbedder</code><span class="sig-paren">(</span><em class="sig-param">num_qbits_bef</em>, <em class="sig-param">num_qbits_aft</em>, <em class="sig-param">bit_map=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/CktEmbedder.html#CktEmbedder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.CktEmbedder.CktEmbedder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>This class stores parameters for embedding a quantum circuit within a
 larger circuit (one with more qubits). Note that we will use the word
@@ -162,23 +162,23 @@ larger circuit (one with more qubits). Note that we will use the word
 <dl class="field-list simple">
 <dt class="field-odd">Variables</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>bit_map</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – 1-1 but not onto map of range(num_bits_bef) into range(num_bits_aft)</p></li>
+<li><p><strong>bit_map</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – 1-1 but not onto map of range(num_qbits_bef) into range(num_qbits_aft)</p></li>
 <li><p><strong>extra_controls</strong> (<a class="reference internal" href="qubiter.Controls.html#qubiter.Controls.Controls" title="qubiter.Controls.Controls"><em>Controls</em></a>) – When embedding controls, these extra ones will be added to the before
 embedding controls</p></li>
-<li><p><strong>num_bits_aft</strong> (<em>int</em>) – number of qubits after circuit embedding</p></li>
-<li><p><strong>num_bits_bef</strong> (<em>int</em>) – number of qubits before circuit embedding</p></li>
+<li><p><strong>num_qbits_aft</strong> (<em>int</em>) – number of qubits after circuit embedding</p></li>
+<li><p><strong>num_qbits_bef</strong> (<em>int</em>) – number of qubits before circuit embedding</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="method">
 <dt id="qubiter.CktEmbedder.CktEmbedder.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">num_bits_bef</em>, <em class="sig-param">num_bits_aft</em>, <em class="sig-param">bit_map=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/CktEmbedder.html#CktEmbedder.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.CktEmbedder.CktEmbedder.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">num_qbits_bef</em>, <em class="sig-param">num_qbits_aft</em>, <em class="sig-param">bit_map=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/CktEmbedder.html#CktEmbedder.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.CktEmbedder.CktEmbedder.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constructor</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>num_bits_bef</strong> (<em>int</em>) – </p></li>
-<li><p><strong>num_bits_aft</strong> (<em>int</em>) – </p></li>
+<li><p><strong>num_qbits_bef</strong> (<em>int</em>) – </p></li>
+<li><p><strong>num_qbits_aft</strong> (<em>int</em>) – </p></li>
 </ul>
 </dd>
 </dl>
@@ -228,7 +228,7 @@ and given to the composition.</p>
 <dl class="method">
 <dt id="qubiter.CktEmbedder.CktEmbedder.get_num_new_bits">
 <code class="sig-name descname">get_num_new_bits</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/CktEmbedder.html#CktEmbedder.get_num_new_bits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.CktEmbedder.CktEmbedder.get_num_new_bits" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns num_bits_aft - num_bits_bef</p>
+<dd><p>Returns num_qbits_aft - num_qbits_bef</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p></p>
