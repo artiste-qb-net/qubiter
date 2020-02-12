@@ -144,16 +144,16 @@ class StairsDerivCkt_writer(SEO_writer):
                 self.write_H(anc_bit_pos)
             else:
                 rads_list = self.gate_str_to_rads_list[gate_str]
-            self.write_controlled_one_bit_gate(u2_pos, trols,
-                    OneBitGates.u2, rads_list)
+            self.write_controlled_one_qbit_gate(u2_pos, trols,
+                    OneQubitGate.u2, rads_list)
             if gate_str == self.deriv_gate_str and gate_str != 'prior' and \
                     self.has_neg_polarity:
                 # remove ancilla qubit control that was added previously
                 del trols.bit_pos_to_kind[anc_bit_pos]
                 trols.refresh_lists()
                 # add controlled sigz for neg X term
-                self.write_controlled_one_bit_gate(anc_bit_pos, trols,
-                    OneBitGates.sigz)
+                self.write_controlled_one_qbit_gate(anc_bit_pos, trols,
+                    OneQubitGate.sigz)
 
     def get_u2_pos(self, gate_str):
         """

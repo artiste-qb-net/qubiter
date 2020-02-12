@@ -205,7 +205,7 @@
 
 <div class="viewcode-block" id="u2_alt"><a class="viewcode-back" href="../../../qubiter.adv_applications.setup_autograd.html#qubiter.adv_applications.setup_autograd.u2_alt">[docs]</a><span class="k">def</span> <span class="nf">u2_alt</span><span class="p">(</span><span class="o">*</span><span class="n">tlist</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    An alternative to OneBitGates.u2(). Both should return identical 2-dim</span>
+<span class="sd">    An alternative to OneQubitGate.u2(). Both should return identical 2-dim</span>
 <span class="sd">    matrices for identical arguments.</span>
 
 <span class="sd">    Parameters</span>
@@ -270,7 +270,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns the automatic (computed by backprop) derivative of 2-dim matrix</span>
 <span class="sd">    UnitaryMat.u2_alt. UnitaryMat.u2_alt is an alternative to</span>
-<span class="sd">    OneBitGates.u2. Both functions return same answer for identical input (</span>
+<span class="sd">    OneQubitGate.u2. Both functions return same answer for identical input (</span>
 <span class="sd">    input is 4 real parameters in tlist).</span>
 
 <span class="sd">    Parameters</span>
@@ -412,7 +412,7 @@
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">qubiter.OneBitGates</span> <span class="k">import</span> <span class="o">*</span>
+    <span class="kn">from</span> <span class="nn">qubiter.OneQubitGate</span> <span class="k">import</span> <span class="o">*</span>
 
     <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">u2_alt example-------------&quot;</span><span class="p">)</span>
@@ -428,7 +428,7 @@
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;sigz_=</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">sigz_</span><span class="p">)</span>
 
         <span class="n">rads_list</span> <span class="o">=</span> <span class="p">[</span><span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="o">.</span><span class="mi">2</span><span class="p">,</span> <span class="o">.</span><span class="mi">3</span><span class="p">,</span> <span class="o">.</span><span class="mi">4</span><span class="p">]</span>
-        <span class="n">err</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">OneBitGates</span><span class="o">.</span><span class="n">u2</span><span class="p">(</span><span class="o">*</span><span class="n">rads_list</span><span class="p">)</span> <span class="o">-</span>
+        <span class="n">err</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">OneQubitGate</span><span class="o">.</span><span class="n">u2</span><span class="p">(</span><span class="o">*</span><span class="n">rads_list</span><span class="p">)</span> <span class="o">-</span>
                        <span class="n">u2_alt</span><span class="p">(</span><span class="o">*</span><span class="n">rads_list</span><span class="p">))</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;err=&#39;</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
 

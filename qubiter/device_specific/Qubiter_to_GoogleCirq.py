@@ -108,8 +108,8 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
         self.aqasm_out.write("ckt.append(H(" +
                             self.bit2str(tar_bit_pos) + "))\n")
         if self.write_qubiter_files:
-            self.qbtr_wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
-                   OneBitGates.had2)
+            self.qbtr_wr.write_controlled_one_qbit_gate(tar_bit_pos, controls,
+                   OneQubitGate.had2)
 
     def use_NOTA(self, bla_str):
         """
@@ -224,13 +224,13 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
 
         if self.write_qubiter_files:
             if projection_bit == 0:
-                u2_fun = OneBitGates.P_0_phase_fac
+                u2_fun = OneQubitGate.P_0_phase_fac
             elif projection_bit == 1:
-                u2_fun = OneBitGates.P_1_phase_fac
+                u2_fun = OneQubitGate.P_1_phase_fac
             else:
                 assert False
 
-            self.qbtr_wr.write_controlled_one_bit_gate(
+            self.qbtr_wr.write_controlled_one_qbit_gate(
                 tar_bit_pos, controls, u2_fun, [angle_rads])
 
     def use_PRINT(self, style, line_num):
@@ -294,8 +294,8 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
         self.aqasm_out.write(line_str)
 
         if self.write_qubiter_files:
-            self.qbtr_wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
-                               OneBitGates.rot_ax, [angle_rads, axis])
+            self.qbtr_wr.write_controlled_one_qbit_gate(tar_bit_pos, controls,
+                               OneQubitGate.rot_ax, [angle_rads, axis])
 
     def use_ROTN(self, angle_x_rads, angle_y_rads, angle_z_rads,
                 tar_bit_pos, controls):
@@ -323,7 +323,7 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
             "With Cirq, ROTN with any of its 3 angles variable is " +\
             "not allowed. Workaround: can use 3 rotations of type " +\
             "Rx, Ry or Rz with variable angles."
-        arr = OneBitGates.rot(*rad_ang_list)
+        arr = OneQubitGate.rot(*rad_ang_list)
         delta, left_rads, center_rads, right_rads = \
             UnitaryMat.u2_zyz_decomp(arr)
 
@@ -339,12 +339,12 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
         self.aqasm_out.write(line_str)
 
         if self.write_qubiter_files:
-            self.qbtr_wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
-                               OneBitGates.rot_ax, [right_rads, 3])
-            self.qbtr_wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
-                               OneBitGates.rot_ax, [center_rads, 2])
-            self.qbtr_wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
-                               OneBitGates.rot_ax, [left_rads, 3])
+            self.qbtr_wr.write_controlled_one_qbit_gate(tar_bit_pos, controls,
+                               OneQubitGate.rot_ax, [right_rads, 3])
+            self.qbtr_wr.write_controlled_one_qbit_gate(tar_bit_pos, controls,
+                               OneQubitGate.rot_ax, [center_rads, 2])
+            self.qbtr_wr.write_controlled_one_qbit_gate(tar_bit_pos, controls,
+                               OneQubitGate.rot_ax, [left_rads, 3])
 
     def use_SIG(self, axis, tar_bit_pos, controls):
         """
@@ -382,15 +382,15 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
             self.aqasm_out.write(line_str)
             if self.write_qubiter_files:
                 if axis == 1:
-                    u2_fun = OneBitGates.sigx
+                    u2_fun = OneQubitGate.sigx
                 elif axis == 2:
-                    u2_fun = OneBitGates.sigy
+                    u2_fun = OneQubitGate.sigy
                 elif axis == 3:
-                    u2_fun = OneBitGates.sigz
+                    u2_fun = OneQubitGate.sigz
                 else:
                     assert False
 
-                self.qbtr_wr.write_controlled_one_bit_gate(tar_bit_pos,
+                self.qbtr_wr.write_controlled_one_qbit_gate(tar_bit_pos,
                                     controls, u2_fun)
         else:  # num_trols == 1
             tar_pos = tar_bit_pos
@@ -435,7 +435,7 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
         self.aqasm_out.write(line_str)
 
         if self.write_qubiter_files:
-            self.qbtr_wr.write_controlled_bit_swap(bit1, bit2, controls)
+            self.qbtr_wr.write_controlled_qbit_swap(bit1, bit2, controls)
 
 
 if __name__ == "__main__":

@@ -247,8 +247,8 @@
         <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">controls</span><span class="o">.</span><span class="n">bit_pos</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">aqasm_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;pg += H(&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;)</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_qubiter_files</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">qbtr_wr</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span>
-                   <span class="n">OneBitGates</span><span class="o">.</span><span class="n">had2</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qbtr_wr</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span>
+                   <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">had2</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Qubiter_to_RigettiPyQuil.use_NOTA"><a class="viewcode-back" href="../../../qubiter.device_specific.Qubiter_to_RigettiPyQuil.html#qubiter.device_specific.Qubiter_to_RigettiPyQuil.Qubiter_to_RigettiPyQuil.use_NOTA">[docs]</a>    <span class="k">def</span> <span class="nf">use_NOTA</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bla_str</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -360,13 +360,13 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_qubiter_files</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">projection_bit</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">u2_fun</span> <span class="o">=</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">P_0_phase_fac</span>
+                <span class="n">u2_fun</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">P_0_phase_fac</span>
             <span class="k">elif</span> <span class="n">projection_bit</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="n">u2_fun</span> <span class="o">=</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">P_1_phase_fac</span>
+                <span class="n">u2_fun</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">P_1_phase_fac</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">assert</span> <span class="kc">False</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">qbtr_wr</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qbtr_wr</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span>
                 <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span> <span class="n">u2_fun</span><span class="p">,</span> <span class="p">[</span><span class="n">angle_rads</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="Qubiter_to_RigettiPyQuil.use_PRINT"><a class="viewcode-back" href="../../../qubiter.device_specific.Qubiter_to_RigettiPyQuil.html#qubiter.device_specific.Qubiter_to_RigettiPyQuil.Qubiter_to_RigettiPyQuil.use_PRINT">[docs]</a>    <span class="k">def</span> <span class="nf">use_PRINT</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">style</span><span class="p">,</span> <span class="n">line_num</span><span class="p">):</span>
@@ -430,8 +430,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">aqasm_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line_str</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_qubiter_files</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">qbtr_wr</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span>
-                               <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span> <span class="p">[</span><span class="n">angle_rads</span><span class="p">,</span> <span class="n">axis</span><span class="p">])</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qbtr_wr</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span>
+                               <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span> <span class="p">[</span><span class="n">angle_rads</span><span class="p">,</span> <span class="n">axis</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="Qubiter_to_RigettiPyQuil.use_ROTN"><a class="viewcode-back" href="../../../qubiter.device_specific.Qubiter_to_RigettiPyQuil.html#qubiter.device_specific.Qubiter_to_RigettiPyQuil.Qubiter_to_RigettiPyQuil.use_ROTN">[docs]</a>    <span class="k">def</span> <span class="nf">use_ROTN</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">angle_x_rads</span><span class="p">,</span> <span class="n">angle_y_rads</span><span class="p">,</span> <span class="n">angle_z_rads</span><span class="p">,</span>
                 <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">controls</span><span class="p">):</span>
@@ -459,7 +459,7 @@
             <span class="s2">&quot;With Pyquil, ROTN with any of its 3 angles variable is &quot;</span> <span class="o">+</span>\
             <span class="s2">&quot;not allowed. Workaround: can use 3 rotations of type &quot;</span> <span class="o">+</span>\
             <span class="s2">&quot;Rx, Ry or Rz with variable angles.&quot;</span>
-        <span class="n">arr</span> <span class="o">=</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot</span><span class="p">(</span><span class="o">*</span><span class="n">rad_ang_list</span><span class="p">)</span>
+        <span class="n">arr</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot</span><span class="p">(</span><span class="o">*</span><span class="n">rad_ang_list</span><span class="p">)</span>
         <span class="n">delta</span><span class="p">,</span> <span class="n">left_rads</span><span class="p">,</span> <span class="n">center_rads</span><span class="p">,</span> <span class="n">right_rads</span> <span class="o">=</span> \
             <span class="n">UnitaryMat</span><span class="o">.</span><span class="n">u2_zyz_decomp</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
                   
@@ -475,12 +475,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">aqasm_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line_str</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_qubiter_files</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">qbtr_wr</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span>
-                    <span class="n">controls</span><span class="p">,</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span> <span class="p">[</span><span class="n">right_rads</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">qbtr_wr</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span>
-                    <span class="n">controls</span><span class="p">,</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span> <span class="p">[</span><span class="n">center_rads</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">qbtr_wr</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span>
-                    <span class="n">controls</span><span class="p">,</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span> <span class="p">[</span><span class="n">left_rads</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qbtr_wr</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span>
+                    <span class="n">controls</span><span class="p">,</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span> <span class="p">[</span><span class="n">right_rads</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qbtr_wr</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span>
+                    <span class="n">controls</span><span class="p">,</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span> <span class="p">[</span><span class="n">center_rads</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qbtr_wr</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span>
+                    <span class="n">controls</span><span class="p">,</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span> <span class="p">[</span><span class="n">left_rads</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="Qubiter_to_RigettiPyQuil.use_SIG"><a class="viewcode-back" href="../../../qubiter.device_specific.Qubiter_to_RigettiPyQuil.html#qubiter.device_specific.Qubiter_to_RigettiPyQuil.Qubiter_to_RigettiPyQuil.use_SIG">[docs]</a>    <span class="k">def</span> <span class="nf">use_SIG</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">controls</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -518,15 +518,15 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">aqasm_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line_str</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_qubiter_files</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">axis</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                    <span class="n">u2_fun</span> <span class="o">=</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigx</span>
+                    <span class="n">u2_fun</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">sigx</span>
                 <span class="k">elif</span> <span class="n">axis</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-                    <span class="n">u2_fun</span> <span class="o">=</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigy</span>
+                    <span class="n">u2_fun</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">sigy</span>
                 <span class="k">elif</span> <span class="n">axis</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-                    <span class="n">u2_fun</span> <span class="o">=</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigz</span>
+                    <span class="n">u2_fun</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">sigz</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="k">assert</span> <span class="kc">False</span>
 
-                <span class="bp">self</span><span class="o">.</span><span class="n">qbtr_wr</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">qbtr_wr</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span>
                                     <span class="n">controls</span><span class="p">,</span> <span class="n">u2_fun</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>  <span class="c1"># num_trols == 1</span>
             <span class="n">tar_pos</span> <span class="o">=</span> <span class="n">tar_bit_pos</span>
@@ -570,7 +570,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">aqasm_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line_str</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_qubiter_files</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">qbtr_wr</span><span class="o">.</span><span class="n">write_controlled_bit_swap</span><span class="p">(</span><span class="n">bit1</span><span class="p">,</span> <span class="n">bit2</span><span class="p">,</span> <span class="n">controls</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qbtr_wr</span><span class="o">.</span><span class="n">write_controlled_qbit_swap</span><span class="p">(</span><span class="n">bit1</span><span class="p">,</span> <span class="n">bit2</span><span class="p">,</span> <span class="n">controls</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Qubiter_to_RigettiPyQuil.use_U_2_"><a class="viewcode-back" href="../../../qubiter.device_specific.Qubiter_to_RigettiPyQuil.html#qubiter.device_specific.Qubiter_to_RigettiPyQuil.Qubiter_to_RigettiPyQuil.use_U_2_">[docs]</a>    <span class="k">def</span> <span class="nf">use_U_2_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rads0</span><span class="p">,</span> <span class="n">rads1</span><span class="p">,</span> <span class="n">rads2</span><span class="p">,</span> <span class="n">rads3</span><span class="p">,</span>
                 <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">controls</span><span class="p">):</span>

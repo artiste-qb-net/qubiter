@@ -248,7 +248,7 @@
 
         <span class="c1"># first write the Hadamards</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_probe_bits</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">write_one_bit_gate</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">had2</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write_one_qbit_gate</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">had2</span><span class="p">)</span>
 
         <span class="c1"># next write the probe controlled atoms</span>
 
@@ -259,7 +259,8 @@
         <span class="n">pre_emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_qbits_bef</span><span class="p">,</span> <span class="n">num_qbits_aft</span><span class="p">,</span> <span class="n">bit_map</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_probe_bits</span><span class="p">):</span>
-            <span class="n">pre_emb</span><span class="o">.</span><span class="n">extra_controls</span> <span class="o">=</span> <span class="n">Controls</span><span class="o">.</span><span class="n">new_single_trol</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+            <span class="n">pre_emb</span><span class="o">.</span><span class="n">extra_controls</span> <span class="o">=</span> \
+                <span class="n">Controls</span><span class="o">.</span><span class="n">new_single_trol</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
             <span class="n">compo_emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="o">.</span><span class="n">composition</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="p">,</span> <span class="n">pre_emb</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">atom_wr</span><span class="o">.</span><span class="n">emb</span> <span class="o">=</span> <span class="n">compo_emb</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">atom_wr</span><span class="o">.</span><span class="n">write_pow</span><span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">k</span><span class="p">)</span>
@@ -325,14 +326,15 @@
         <span class="n">pre_emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_qbits_bef</span><span class="p">,</span> <span class="n">num_qbits_aft</span><span class="p">,</span> <span class="n">bit_map</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_probe_bits</span><span class="p">)):</span>
-            <span class="n">pre_emb</span><span class="o">.</span><span class="n">extra_controls</span> <span class="o">=</span> <span class="n">Controls</span><span class="o">.</span><span class="n">new_single_trol</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+            <span class="n">pre_emb</span><span class="o">.</span><span class="n">extra_controls</span> <span class="o">=</span> \
+                <span class="n">Controls</span><span class="o">.</span><span class="n">new_single_trol</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
             <span class="n">compo_emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="o">.</span><span class="n">composition</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="p">,</span> <span class="n">pre_emb</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">atom_wr</span><span class="o">.</span><span class="n">emb</span> <span class="o">=</span> <span class="n">compo_emb</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">atom_wr</span><span class="o">.</span><span class="n">write_pow_hermitian</span><span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">k</span><span class="p">)</span>
 
         <span class="c1"># finally write the Hadamards</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_probe_bits</span><span class="p">)):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">write_one_bit_gate</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">had2</span><span class="p">)</span></div></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write_one_qbit_gate</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">had2</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="AtomWriter"><a class="viewcode-back" href="../../../qubiter.adv_applications.PhaseEstSEO_writer.html#qubiter.adv_applications.PhaseEstSEO_writer.AtomWriter">[docs]</a><span class="k">class</span> <span class="nc">AtomWriter</span><span class="p">(</span><span class="n">SEO_writer</span><span class="p">):</span>
@@ -398,10 +400,10 @@
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">):</span>
             <span class="n">trols</span><span class="o">.</span><span class="n">set_control</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
         <span class="n">trols</span><span class="o">.</span><span class="n">refresh_lists</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span>
             <span class="n">tar_bit_pos</span><span class="p">,</span>
             <span class="n">trols</span><span class="p">,</span>
-            <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span>
+            <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span>
             <span class="p">[</span><span class="mi">30</span><span class="o">*</span><span class="n">power</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="AtomWriter.write_pow_hermitian"><a class="viewcode-back" href="../../../qubiter.adv_applications.PhaseEstSEO_writer.html#qubiter.adv_applications.PhaseEstSEO_writer.AtomWriter.write_pow_hermitian">[docs]</a>    <span class="k">def</span> <span class="nf">write_pow_hermitian</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">power</span><span class="p">):</span>
@@ -426,10 +428,10 @@
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">):</span>
             <span class="n">trols</span><span class="o">.</span><span class="n">set_control</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
         <span class="n">trols</span><span class="o">.</span><span class="n">refresh_lists</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span>
             <span class="n">tar_bit_pos</span><span class="p">,</span>
             <span class="n">trols</span><span class="p">,</span>
-            <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span>
+            <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span>
             <span class="n">fun_arg_list</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">30</span><span class="o">*</span><span class="n">power</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="AtomWriter.write"><a class="viewcode-back" href="../../../qubiter.adv_applications.PhaseEstSEO_writer.html#qubiter.adv_applications.PhaseEstSEO_writer.AtomWriter.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

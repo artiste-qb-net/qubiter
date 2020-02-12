@@ -97,7 +97,7 @@ class PhaseEstSEO_writer(SEO_writer):
 
         # first write the Hadamards
         for k in range(self.num_probe_bits):
-            self.write_one_bit_gate(k, OneBitGates.had2)
+            self.write_one_qbit_gate(k, OneQubitGate.had2)
 
         # next write the probe controlled atoms
 
@@ -183,7 +183,7 @@ class PhaseEstSEO_writer(SEO_writer):
 
         # finally write the Hadamards
         for k in reversed(range(self.num_probe_bits)):
-            self.write_one_bit_gate(k, OneBitGates.had2)
+            self.write_one_qbit_gate(k, OneQubitGate.had2)
 
 
 class AtomWriter(SEO_writer):
@@ -249,10 +249,10 @@ class AtomWriter(SEO_writer):
         for k in range(1, num_qbits):
             trols.set_control(k, False)
         trols.refresh_lists()
-        self.write_controlled_one_bit_gate(
+        self.write_controlled_one_qbit_gate(
             tar_bit_pos,
             trols,
-            OneBitGates.rot_ax,
+            OneQubitGate.rot_ax,
             [30*power*np.pi/180, 2])
 
     def write_pow_hermitian(self, power):
@@ -277,10 +277,10 @@ class AtomWriter(SEO_writer):
         for k in range(1, num_qbits):
             trols.set_control(k, False)
         trols.refresh_lists()
-        self.write_controlled_one_bit_gate(
+        self.write_controlled_one_qbit_gate(
             tar_bit_pos,
             trols,
-            OneBitGates.rot_ax,
+            OneQubitGate.rot_ax,
             fun_arg_list=[-30*power*np.pi/180, 2])
 
     def write(self):

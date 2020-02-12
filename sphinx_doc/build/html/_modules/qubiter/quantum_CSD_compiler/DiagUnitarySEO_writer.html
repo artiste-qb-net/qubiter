@@ -326,8 +326,8 @@
                 <span class="n">trols2</span><span class="o">.</span><span class="n">bit_pos_to_kind</span> <span class="o">=</span> <span class="n">TF_dict</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
                 <span class="n">trols2</span><span class="o">.</span><span class="n">bit_pos_to_kind</span><span class="p">[</span><span class="n">cur_T_bit</span> <span class="o">+</span> <span class="n">ntf</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
                 <span class="n">trols2</span><span class="o">.</span><span class="n">refresh_lists</span><span class="p">()</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span>
-                    <span class="n">ntf</span> <span class="o">+</span> <span class="n">init_prev_T_bit</span><span class="p">,</span> <span class="n">trols2</span><span class="p">,</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigx</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span>
+                    <span class="n">ntf</span> <span class="o">+</span> <span class="n">init_prev_T_bit</span><span class="p">,</span> <span class="n">trols2</span><span class="p">,</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">sigx</span><span class="p">)</span>
                 <span class="n">prev_T_bit</span> <span class="o">=</span> <span class="n">cur_T_bit</span>
 
         <span class="n">norma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">num_MP_trols</span><span class="p">)</span>
@@ -335,8 +335,8 @@
         <span class="c1"># write conditioned global phase</span>
         <span class="n">global_ph</span> <span class="o">=</span> <span class="n">conj_rads</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">norma</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">conj_rads</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">global_ph</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">1e-6</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="n">ntf</span><span class="p">,</span> <span class="n">trols1</span><span class="p">,</span>
-                    <span class="n">OneBitGates</span><span class="o">.</span><span class="n">phase_fac</span><span class="p">,</span> <span class="p">[</span><span class="n">global_ph</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span><span class="n">ntf</span><span class="p">,</span> <span class="n">trols1</span><span class="p">,</span>
+                    <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">phase_fac</span><span class="p">,</span> <span class="p">[</span><span class="n">global_ph</span><span class="p">])</span>
 
         <span class="k">while</span> <span class="n">f</span> <span class="o">&lt;</span> <span class="n">num_factors</span><span class="p">:</span>
             <span class="n">cur_bvec</span><span class="o">.</span><span class="n">dec_rep</span> <span class="o">=</span> <span class="n">lazy</span>
@@ -364,8 +364,8 @@
                     <span class="n">write_cnots</span><span class="p">(</span><span class="n">cur_bvec</span><span class="p">,</span> <span class="n">cur_rot_bpos</span><span class="p">)</span>
                     <span class="n">diff_bvec</span> <span class="o">=</span> <span class="n">BitVector</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">cur_bvec</span><span class="p">)</span>
 
-                <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span>
-                    <span class="n">ntf</span> <span class="o">+</span> <span class="n">cur_rot_bpos</span><span class="p">,</span> <span class="n">trols1</span><span class="p">,</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span> <span class="p">[</span><span class="n">rads</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span>
+                    <span class="n">ntf</span> <span class="o">+</span> <span class="n">cur_rot_bpos</span><span class="p">,</span> <span class="n">trols1</span><span class="p">,</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span> <span class="p">[</span><span class="n">rads</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
                 <span class="n">prev_bvec</span> <span class="o">=</span> <span class="n">BitVector</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">cur_bvec</span><span class="p">)</span>
                 <span class="n">prev_rot_bpos</span> <span class="o">=</span> <span class="n">cur_rot_bpos</span>
 

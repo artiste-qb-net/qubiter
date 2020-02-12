@@ -1,7 +1,7 @@
 import copy as cp
 # import pprint as pp
 from qubiter.SEO_reader import *
-from qubiter.OneBitGates import *
+from qubiter.OneQubitGate import *
 from qubiter.StateVec import *
 # import utilities_gen as ut
 
@@ -212,7 +212,7 @@ class SEO_simulator(SEO_reader):
             new_br_key = br_key + x
         return new_br_key
 
-    def evolve_by_controlled_bit_swap(self, bit1, bit2, controls):
+    def evolve_by_controlled_qbit_swap(self, bit1, bit2, controls):
         """
         Evolve each branch of cur_st_vec_dict by controlled bit swap iff the
         bit swap line is (1) outside of any IF_M block, or (2) it is inside
@@ -285,13 +285,13 @@ class SEO_simulator(SEO_reader):
 
                 self.cur_st_vec_dict[br_key].arr[slicex] = sub_arr
 
-    def evolve_by_controlled_one_bit_gate(self,
-                tar_bit_pos, controls, one_bit_gate):
+    def evolve_by_controlled_one_qbit_gate(self,
+                tar_bit_pos, controls, one_qbit_gate):
         """
         Evolve each branch of cur_st_vec_dict by controlled one bit gate (
-        from class OneBitGates) iff the controlled one bit gate line is (1)
+        from class OneQubitGate) iff the controlled one bit gate line is (1)
         outside of an IF_M block, or (2) it is inside such a block, and it
-        satisfies self.mcase_trols. Note one_bit_gate is entered as
+        satisfies self.mcase_trols. Note one_qbit_gate is entered as
         np.ndarray.
 
         Parameters
@@ -299,7 +299,7 @@ class SEO_simulator(SEO_reader):
         tar_bit_pos : int
             bit position of target of one bit gate.
         controls : Controls
-        one_bit_gate : np.ndarray
+        one_qbit_gate : np.ndarray
 
         Returns
         -------
@@ -355,10 +355,10 @@ class SEO_simulator(SEO_reader):
                     evolve_br = True
             if evolve_br:
                 sub_arr = self.cur_st_vec_dict[br_key].arr[vec_slicex]
-                # Axes 1 of one_bit_gate and new_tar of vec are summed over.
-                #  Axis 0 of one_bit_gate goes to the front of all the axes
+                # Axes 1 of one_qbit_gate and new_tar of vec are summed over.
+                #  Axis 0 of one_qbit_gate goes to the front of all the axes
                 # of new vec. Use transpose() to realign axes.
-                sub_arr = SEO_simulator.tensordot(one_bit_gate, sub_arr,
+                sub_arr = SEO_simulator.tensordot(one_qbit_gate, sub_arr,
                                          ([1], [new_tar]))
                 sub_arr = SEO_simulator.transpose(sub_arr, perm)
 
@@ -550,7 +550,7 @@ class SEO_simulator(SEO_reader):
     def use_HAD2(self, tar_bit_pos, controls):
         """
         Overrides the parent class use_ function. Calls
-        evolve_by_controlled_one_bit_gate() for had2.
+        evolve_by_controlled_one_qbit_gate() for had2.
 
 
         Parameters
@@ -563,8 +563,8 @@ class SEO_simulator(SEO_reader):
         None
 
         """
-        gate = OneBitGates.had2(lib=self.lib)
-        self.evolve_by_controlled_one_bit_gate(tar_bit_pos, controls, gate)
+        gate = OneQubitGate.had2(lib=self.lib)
+        self.evolve_by_controlled_one_qbit_gate(tar_bit_pos, controls, gate)
 
     def use_IF_M_beg(self, controls):
         """
@@ -711,7 +711,7 @@ class SEO_simulator(SEO_reader):
     def use_PHAS(self, angle_rads, tar_bit_pos, controls):
         """
         Overrides the parent class use_ function. Calls
-        evolve_by_controlled_one_bit_gate() for PHAS.
+        evolve_by_controlled_one_qbit_gate() for PHAS.
 
         Parameters
         ----------
@@ -724,14 +724,14 @@ class SEO_simulator(SEO_reader):
         None
 
         """
-        gate = OneBitGates.phase_fac(angle_rads, lib=self.lib)
-        self.evolve_by_controlled_one_bit_gate(tar_bit_pos, controls, gate)
+        gate = OneQubitGate.phase_fac(angle_rads, lib=self.lib)
+        self.evolve_by_controlled_one_qbit_gate(tar_bit_pos, controls, gate)
 
     def use_P_PH(self, projection_bit,
                 angle_rads, tar_bit_pos, controls):
         """
         Overrides the parent class use_ function. Calls
-        evolve_by_controlled_one_bit_gate() for P_0 and P_1 phase factors.
+        evolve_by_controlled_one_qbit_gate() for P_0 and P_1 phase factors.
 
 
         Parameters
@@ -748,11 +748,11 @@ class SEO_simulator(SEO_reader):
 
         """
         fun = {
-            0: OneBitGates.P_0_phase_fac,
-            1: OneBitGates.P_1_phase_fac
+            0: OneQubitGate.P_0_phase_fac,
+            1: OneQubitGate.P_1_phase_fac
         }
         gate = fun[projection_bit](angle_rads, lib=self.lib)
-        self.evolve_by_controlled_one_bit_gate(tar_bit_pos, controls, gate)
+        self.evolve_by_controlled_one_qbit_gate(tar_bit_pos, controls, gate)
 
     def use_PRINT(self, style, line_num):
         """
@@ -785,7 +785,7 @@ class SEO_simulator(SEO_reader):
                  angle_rads, tar_bit_pos, controls):
         """
         Overrides the parent class use_ function. Calls
-        evolve_by_controlled_one_bit_gate() for rot along axes x, y, or z.
+        evolve_by_controlled_one_qbit_gate() for rot along axes x, y, or z.
 
         Parameters
         ----------
@@ -801,14 +801,14 @@ class SEO_simulator(SEO_reader):
 
         """
         # print('//////', angle_rads, axis)
-        gate = OneBitGates.rot_ax(angle_rads, axis, lib=self.lib)
-        self.evolve_by_controlled_one_bit_gate(tar_bit_pos, controls, gate)
+        gate = OneQubitGate.rot_ax(angle_rads, axis, lib=self.lib)
+        self.evolve_by_controlled_one_qbit_gate(tar_bit_pos, controls, gate)
 
     def use_ROTN(self, angle_x_rads, angle_y_rads, angle_z_rads,
                 tar_bit_pos, controls):
         """
         Overrides the parent class use_ function. Calls
-        evolve_by_controlled_one_bit_gate() for rot along arbitrary axis.
+        evolve_by_controlled_one_qbit_gate() for rot along arbitrary axis.
 
 
         Parameters
@@ -824,14 +824,14 @@ class SEO_simulator(SEO_reader):
         None
 
         """
-        gate = OneBitGates.rot(angle_x_rads, angle_y_rads, angle_z_rads,
+        gate = OneQubitGate.rot(angle_x_rads, angle_y_rads, angle_z_rads,
                                lib=self.lib)
-        self.evolve_by_controlled_one_bit_gate(tar_bit_pos, controls, gate)
+        self.evolve_by_controlled_one_qbit_gate(tar_bit_pos, controls, gate)
 
     def use_SIG(self, axis, tar_bit_pos, controls):
         """
         Overrides the parent class use_ function. Calls
-        evolve_by_controlled_one_bit_gate() for sigx, sigy, sigz.
+        evolve_by_controlled_one_qbit_gate() for sigx, sigy, sigz.
 
         Parameters
         ----------
@@ -846,17 +846,17 @@ class SEO_simulator(SEO_reader):
 
         """
         fun = {
-            1: OneBitGates.sigx,
-            2: OneBitGates.sigy,
-            3: OneBitGates.sigz
+            1: OneQubitGate.sigx,
+            2: OneQubitGate.sigy,
+            3: OneQubitGate.sigz
         }
         gate = fun[axis](lib=self.lib)
-        self.evolve_by_controlled_one_bit_gate(tar_bit_pos, controls, gate)
+        self.evolve_by_controlled_one_qbit_gate(tar_bit_pos, controls, gate)
 
     def use_SWAP(self, bit1, bit2, controls):
         """
         Overrides the parent class use_ function. Calls
-        evolve_by_controlled_bit_swap().
+        evolve_by_controlled_qbit_swap().
 
         Parameters
         ----------
@@ -869,12 +869,12 @@ class SEO_simulator(SEO_reader):
         None
 
         """
-        self.evolve_by_controlled_bit_swap(bit1, bit2, controls)
+        self.evolve_by_controlled_qbit_swap(bit1, bit2, controls)
 
     def use_SWAY(self, bit1, bit2, controls, rads_list):
         """
         Overrides the parent class use_ function. Calls
-        evolve_by_controlled_one_bit_gate() 3 times.
+        evolve_by_controlled_one_qbit_gate() 3 times.
 
         This relies on the fact that
 
@@ -911,19 +911,19 @@ class SEO_simulator(SEO_reader):
         assert len(rads_list) == 2
         rads0, rads1 = rads_list
 
-        self.evolve_by_controlled_one_bit_gate(
-            bit2, controls1, OneBitGates.sigx(lib=self.lib))
-        self.evolve_by_controlled_one_bit_gate(
-            bit1, controls2, OneBitGates.u2(rads0, rads1, 0.0, 0.0,
+        self.evolve_by_controlled_one_qbit_gate(
+            bit2, controls1, OneQubitGate.sigx(lib=self.lib))
+        self.evolve_by_controlled_one_qbit_gate(
+            bit1, controls2, OneQubitGate.u2(rads0, rads1, 0.0, 0.0,
                                             lib=self.lib))
-        self.evolve_by_controlled_one_bit_gate(
-            bit2, controls1, OneBitGates.sigx(lib=self.lib))
+        self.evolve_by_controlled_one_qbit_gate(
+            bit2, controls1, OneQubitGate.sigx(lib=self.lib))
 
     def use_U_2_(self, rads0, rads1, rads2, rads3,
                 tar_bit_pos, controls):
         """
         Overrides the parent class use_ function. Calls
-        evolve_by_controlled_one_bit_gate() for arbitrary unitary 2-dim
+        evolve_by_controlled_one_qbit_gate() for arbitrary unitary 2-dim
         matrix.
 
         Parameters
@@ -940,8 +940,8 @@ class SEO_simulator(SEO_reader):
         None
 
         """
-        gate = OneBitGates.u2(rads0, rads1, rads2, rads3, lib=self.lib)
-        self.evolve_by_controlled_one_bit_gate(tar_bit_pos, controls, gate)
+        gate = OneQubitGate.u2(rads0, rads1, rads2, rads3, lib=self.lib)
+        self.evolve_by_controlled_one_qbit_gate(tar_bit_pos, controls, gate)
 
 
 if __name__ == "__main__":

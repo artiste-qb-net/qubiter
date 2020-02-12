@@ -211,7 +211,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">wr</span><span class="o">.</span><span class="n">close_files</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="CGateExpander.two_embs_for_c_bit_swap"><a class="viewcode-back" href="../../qubiter.CGateExpander.html#qubiter.CGateExpander.CGateExpander.two_embs_for_c_bit_swap">[docs]</a>    <span class="k">def</span> <span class="nf">two_embs_for_c_bit_swap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bit1</span><span class="p">,</span> <span class="n">bit2</span><span class="p">,</span> <span class="n">controls</span><span class="p">):</span>
+<div class="viewcode-block" id="CGateExpander.two_embs_for_c_qbit_swap"><a class="viewcode-back" href="../../qubiter.CGateExpander.html#qubiter.CGateExpander.CGateExpander.two_embs_for_c_qbit_swap">[docs]</a>    <span class="k">def</span> <span class="nf">two_embs_for_c_qbit_swap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bit1</span><span class="p">,</span> <span class="n">bit2</span><span class="p">,</span> <span class="n">controls</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This internal function returns two CktEmbedder objects called emb0,</span>
 <span class="sd">        emb1 that are used to write an expansion for a controlled swap of</span>
@@ -334,7 +334,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">wr</span><span class="o">.</span><span class="n">emb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb_for_c_u2</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">controls</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">wr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">controls</span><span class="o">.</span><span class="n">kinds</span><span class="p">,</span>
-                      <span class="n">OneBitGates</span><span class="o">.</span><span class="n">had2</span><span class="p">)</span></div>
+                      <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">had2</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="CGateExpander.use_IF_M_beg"><a class="viewcode-back" href="../../qubiter.CGateExpander.html#qubiter.CGateExpander.CGateExpander.use_IF_M_beg">[docs]</a>    <span class="k">def</span> <span class="nf">use_IF_M_beg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">controls</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -471,7 +471,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">wr</span><span class="o">.</span><span class="n">emb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb_for_c_u2</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">controls</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">wr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">controls</span><span class="o">.</span><span class="n">kinds</span><span class="p">,</span>
-                      <span class="n">OneBitGates</span><span class="o">.</span><span class="n">phase_fac</span><span class="p">,</span> <span class="p">[</span><span class="n">angle_rads</span><span class="p">])</span></div>
+                      <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">phase_fac</span><span class="p">,</span> <span class="p">[</span><span class="n">angle_rads</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="CGateExpander.use_P_PH"><a class="viewcode-back" href="../../qubiter.CGateExpander.html#qubiter.CGateExpander.CGateExpander.use_P_PH">[docs]</a>    <span class="k">def</span> <span class="nf">use_P_PH</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">projection_bit</span><span class="p">,</span> <span class="n">angle_rads</span><span class="p">,</span> <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">controls</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -493,10 +493,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
         <span class="k">if</span> <span class="n">projection_bit</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">u2_fun</span> <span class="o">=</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">P_0_phase_fac</span>
+            <span class="n">u2_fun</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">P_0_phase_fac</span>
             <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;P0PH&#39;</span>
         <span class="k">elif</span> <span class="n">projection_bit</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">u2_fun</span> <span class="o">=</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">P_1_phase_fac</span>
+            <span class="n">u2_fun</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">P_1_phase_fac</span>
             <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;P1PH&#39;</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">assert</span> <span class="kc">False</span>
@@ -554,7 +554,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">wr</span><span class="o">.</span><span class="n">emb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb_for_c_u2</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">controls</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">wr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">controls</span><span class="o">.</span><span class="n">kinds</span><span class="p">,</span>
-                      <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span> <span class="p">[</span><span class="n">angle_rads</span><span class="p">,</span> <span class="n">axis</span><span class="p">])</span></div>
+                      <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span> <span class="p">[</span><span class="n">angle_rads</span><span class="p">,</span> <span class="n">axis</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="CGateExpander.use_ROTN"><a class="viewcode-back" href="../../qubiter.CGateExpander.html#qubiter.CGateExpander.CGateExpander.use_ROTN">[docs]</a>    <span class="k">def</span> <span class="nf">use_ROTN</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">angle_x_rads</span><span class="p">,</span> <span class="n">angle_y_rads</span><span class="p">,</span> <span class="n">angle_z_rads</span><span class="p">,</span>
                 <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">controls</span><span class="p">):</span>
@@ -582,7 +582,7 @@
 
         <span class="n">rad_ang_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">angle_x_rads</span><span class="p">,</span> <span class="n">angle_y_rads</span><span class="p">,</span> <span class="n">angle_z_rads</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">wr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">controls</span><span class="o">.</span><span class="n">kinds</span><span class="p">,</span>
-                      <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot</span><span class="p">,</span>
+                      <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot</span><span class="p">,</span>
                       <span class="n">rad_ang_list</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="CGateExpander.use_SIG"><a class="viewcode-back" href="../../qubiter.CGateExpander.html#qubiter.CGateExpander.CGateExpander.use_SIG">[docs]</a>    <span class="k">def</span> <span class="nf">use_SIG</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">controls</span><span class="p">):</span>
@@ -604,13 +604,13 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
         <span class="k">if</span> <span class="n">axis</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">u2_fun</span> <span class="o">=</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigx</span>
+            <span class="n">u2_fun</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">sigx</span>
             <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;SIGX&#39;</span>
         <span class="k">elif</span> <span class="n">axis</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="n">u2_fun</span> <span class="o">=</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigy</span>
+            <span class="n">u2_fun</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">sigy</span>
             <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;SIGY&#39;</span>
         <span class="k">elif</span> <span class="n">axis</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-            <span class="n">u2_fun</span> <span class="o">=</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigz</span>
+            <span class="n">u2_fun</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">sigz</span>
             <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;SIGZ&#39;</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">assert</span> <span class="kc">False</span>
@@ -646,7 +646,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">write_gate_name</span><span class="p">(</span><span class="s2">&quot;SWAP&quot;</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">use_sway</span> <span class="k">else</span> <span class="s1">&#39;SWAY&#39;</span><span class="p">,</span>
                              <span class="nb">len</span><span class="p">(</span><span class="n">controls</span><span class="o">.</span><span class="n">kinds</span><span class="p">))</span>
 
-        <span class="n">emb0</span><span class="p">,</span> <span class="n">emb1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">two_embs_for_c_bit_swap</span><span class="p">(</span><span class="n">bit1</span><span class="p">,</span> <span class="n">bit2</span><span class="p">,</span> <span class="n">controls</span><span class="p">)</span>
+        <span class="n">emb0</span><span class="p">,</span> <span class="n">emb1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">two_embs_for_c_qbit_swap</span><span class="p">(</span><span class="n">bit1</span><span class="p">,</span> <span class="n">bit2</span><span class="p">,</span> <span class="n">controls</span><span class="p">)</span>
         <span class="n">num_trols</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">controls</span><span class="o">.</span><span class="n">kinds</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">wr</span><span class="o">.</span><span class="n">emb</span> <span class="o">=</span> <span class="n">emb0</span>  <span class="c1"># intialize emb</span>
@@ -654,19 +654,19 @@
         <span class="c1"># insert opening Hadamards for controls equal to n_bar = |0&gt;&lt;0|</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">wr</span><span class="o">.</span><span class="n">write_hads</span><span class="p">(</span><span class="n">controls</span><span class="o">.</span><span class="n">kinds</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">wr</span><span class="o">.</span><span class="n">write</span><span class="p">([</span><span class="kc">True</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">num_trols</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigx</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wr</span><span class="o">.</span><span class="n">write</span><span class="p">([</span><span class="kc">True</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">num_trols</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">sigx</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">wr</span><span class="o">.</span><span class="n">emb</span> <span class="o">=</span> <span class="n">emb1</span>  <span class="c1"># change emb</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">use_sway</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">wr</span><span class="o">.</span><span class="n">write</span><span class="p">([</span><span class="kc">True</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">num_trols</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
-                          <span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigx</span><span class="p">)</span>
+                          <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">sigx</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">rads0</span><span class="p">,</span> <span class="n">rads1</span> <span class="o">=</span> <span class="n">rads_list</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">wr</span><span class="o">.</span><span class="n">write</span><span class="p">([</span><span class="kc">True</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">num_trols</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
-                         <span class="n">OneBitGates</span><span class="o">.</span><span class="n">u2</span><span class="p">,</span> <span class="p">[</span><span class="n">rads0</span><span class="p">,</span> <span class="n">rads1</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
+                         <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">u2</span><span class="p">,</span> <span class="p">[</span><span class="n">rads0</span><span class="p">,</span> <span class="n">rads1</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">wr</span><span class="o">.</span><span class="n">emb</span> <span class="o">=</span> <span class="n">emb0</span>  <span class="c1"># restore emb</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">wr</span><span class="o">.</span><span class="n">write</span><span class="p">([</span><span class="kc">True</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">num_trols</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigx</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wr</span><span class="o">.</span><span class="n">write</span><span class="p">([</span><span class="kc">True</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">num_trols</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">sigx</span><span class="p">)</span>
 
         <span class="c1"># insert closing Hadamards for controls equal to n_bar = |0&gt;&lt;0|</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">wr</span><span class="o">.</span><span class="n">write_hads</span><span class="p">(</span><span class="n">controls</span><span class="o">.</span><span class="n">kinds</span><span class="p">,</span> <span class="n">herm_conj</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
@@ -737,7 +737,7 @@
 
         <span class="n">rad_ang_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">rads0</span><span class="p">,</span> <span class="n">rads1</span><span class="p">,</span> <span class="n">rads2</span><span class="p">,</span> <span class="n">rads3</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">wr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">controls</span><span class="o">.</span><span class="n">kinds</span><span class="p">,</span>
-                      <span class="n">OneBitGates</span><span class="o">.</span><span class="n">u2</span><span class="p">,</span>
+                      <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">u2</span><span class="p">,</span>
                       <span class="n">rad_ang_list</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="CGateExpander.do_log"><a class="viewcode-back" href="../../qubiter.CGateExpander.html#qubiter.CGateExpander.CGateExpander.do_log">[docs]</a>    <span class="k">def</span> <span class="nf">do_log</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

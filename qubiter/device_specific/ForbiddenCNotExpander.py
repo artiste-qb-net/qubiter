@@ -322,7 +322,7 @@ class ForbiddenCNotExpander(EchoingSEO_reader):
         for x in sym_exp:
             if isinstance(x[1], bool):
                 if x[1]:
-                    self.wr.write_one_bit_gate(x[0], OneBitGates.had2)
+                    self.wr.write_one_qbit_gate(x[0], OneQubitGate.had2)
             else:  # x[1] is int
                 self.wr.write_cnot(x[0], x[1])
 

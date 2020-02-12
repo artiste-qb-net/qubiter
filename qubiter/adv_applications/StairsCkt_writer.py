@@ -384,8 +384,8 @@ class StairsCkt_writer(SEO_writer):
             trols = StairsCkt_writer.get_controls_from_gate_str(
                 num_qbits, gate_str)
             u2_pos = self.get_u2_pos(gate_str)
-            self.write_controlled_one_bit_gate(u2_pos, trols,
-                    OneBitGates.u2, rads_list)
+            self.write_controlled_one_qbit_gate(u2_pos, trols,
+                    OneQubitGate.u2, rads_list)
 
 
 if __name__ == "__main__":

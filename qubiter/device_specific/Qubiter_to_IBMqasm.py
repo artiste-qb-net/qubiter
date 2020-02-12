@@ -127,8 +127,8 @@ class Qubiter_to_IBMqasm(Qubiter_to_AnyQasm):
         assert len(controls.bit_pos) == 0
         self.aqasm_out.write("ckt.h(q[" + str(tar_bit_pos) + "])\n")
         if self.write_qubiter_files:
-            self.qbtr_wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
-                   OneBitGates.had2)
+            self.qbtr_wr.write_controlled_one_qbit_gate(tar_bit_pos, controls,
+                   OneQubitGate.had2)
 
     def use_NOTA(self, bla_str):
         """
@@ -245,13 +245,13 @@ class Qubiter_to_IBMqasm(Qubiter_to_AnyQasm):
 
         if self.write_qubiter_files:
             if projection_bit == 0:
-                u2_fun = OneBitGates.P_0_phase_fac
+                u2_fun = OneQubitGate.P_0_phase_fac
             elif projection_bit == 1:
-                u2_fun = OneBitGates.P_1_phase_fac
+                u2_fun = OneQubitGate.P_1_phase_fac
             else:
                 assert False
 
-            self.qbtr_wr.write_controlled_one_bit_gate(
+            self.qbtr_wr.write_controlled_one_qbit_gate(
                 tar_bit_pos, controls, u2_fun, [angle_rads])
 
     def use_PRINT(self, style, line_num):
@@ -295,13 +295,13 @@ class Qubiter_to_IBMqasm(Qubiter_to_AnyQasm):
             'At present, IBM qasm does not support variable angles'
         assert len(controls.bit_pos) == 0
 
-        arr = OneBitGates.rot_ax(angle_rads, axis)
+        arr = OneQubitGate.rot_ax(angle_rads, axis)
         line_str = Qubiter_to_IBMqasm.qasm_line_for_rot(arr, tar_bit_pos)
         self.aqasm_out.write(line_str)
 
         if self.write_qubiter_files:
-            self.qbtr_wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
-                               OneBitGates.rot_ax, [angle_rads, axis])
+            self.qbtr_wr.write_controlled_one_qbit_gate(tar_bit_pos, controls,
+                               OneQubitGate.rot_ax, [angle_rads, axis])
 
     def use_ROTN(self, angle_x_rads, angle_y_rads, angle_z_rads,
                 tar_bit_pos, controls):
@@ -327,13 +327,13 @@ class Qubiter_to_IBMqasm(Qubiter_to_AnyQasm):
         rad_ang_list = [angle_x_rads, angle_y_rads, angle_z_rads]
         assert utg.all_floats(rad_ang_list), \
             'At present, IBM qasm does not support variable angles'
-        arr = OneBitGates.rot(*rad_ang_list)
+        arr = OneQubitGate.rot(*rad_ang_list)
         line_str = Qubiter_to_IBMqasm.qasm_line_for_rot(arr, tar_bit_pos)
         self.aqasm_out.write(line_str)
 
         if self.write_qubiter_files:
-            self.qbtr_wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
-                               OneBitGates.rot, rad_ang_list)
+            self.qbtr_wr.write_controlled_one_qbit_gate(tar_bit_pos, controls,
+                               OneQubitGate.rot, rad_ang_list)
 
     def use_SIG(self, axis, tar_bit_pos, controls):
         """
@@ -369,15 +369,15 @@ class Qubiter_to_IBMqasm(Qubiter_to_AnyQasm):
             self.aqasm_out.write(prefix + str(tar_bit_pos) + "])\n")
             if self.write_qubiter_files:
                 if axis == 1:
-                    u2_fun = OneBitGates.sigx
+                    u2_fun = OneQubitGate.sigx
                 elif axis == 2:
-                    u2_fun = OneBitGates.sigy
+                    u2_fun = OneQubitGate.sigy
                 elif axis == 3:
-                    u2_fun = OneBitGates.sigz
+                    u2_fun = OneQubitGate.sigz
                 else:
                     assert False
 
-                self.qbtr_wr.write_controlled_one_bit_gate(tar_bit_pos,
+                self.qbtr_wr.write_controlled_one_qbit_gate(tar_bit_pos,
                                     controls, u2_fun)
         else:  # num_trols == 1
             tar_pos = tar_bit_pos
@@ -419,7 +419,7 @@ class Qubiter_to_IBMqasm(Qubiter_to_AnyQasm):
         self.aqasm_out.write(line_str)
 
         if self.write_qubiter_files:
-            self.qbtr_wr.write_controlled_bit_swap(bit1, bit2, controls)
+            self.qbtr_wr.write_controlled_qbit_swap(bit1, bit2, controls)
 
 
 if __name__ == "__main__":

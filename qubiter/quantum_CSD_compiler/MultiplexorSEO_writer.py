@@ -186,8 +186,8 @@ class MultiplexorSEO_writer(SEO_writer):
                 trols2.bit_pos_to_kind = TF_dict.copy()
                 trols2.bit_pos_to_kind[cur_T_bit + ntf] = True
                 trols2.refresh_lists()
-                self.write_controlled_one_bit_gate(
-                    ntf + num_MP_trols, trols2, OneBitGates.sigx)
+                self.write_controlled_one_qbit_gate(
+                    ntf + num_MP_trols, trols2, OneQubitGate.sigx)
                 prev_T_bit = cur_T_bit
 
         norma = np.power(np.sqrt(2), num_MP_trols)
@@ -200,8 +200,8 @@ class MultiplexorSEO_writer(SEO_writer):
             else:
                 diff_bvec = BitVector.new_with_T_on_diff(cur_bvec, prev_bvec)
                 write_cnots(diff_bvec)
-                self.write_controlled_one_bit_gate(
-                    ntf + num_MP_trols, trols1, OneBitGates.rot_ax, [rads, 2])
+                self.write_controlled_one_qbit_gate(
+                    ntf + num_MP_trols, trols1, OneQubitGate.rot_ax, [rads, 2])
                 prev_bvec = BitVector.copy(cur_bvec)
             f, lazy = BitVector.lazy_advance(f, lazy)
             cur_bvec.dec_rep = lazy
@@ -241,8 +241,8 @@ class MultiplexorSEO_writer(SEO_writer):
                     }
                     side_trols.bit_pos_to_kind.update(TF_dict)
                     side_trols.refresh_lists()
-                    self.write_controlled_one_bit_gate(tar_bit_pos, side_trols,
-                                                       OneBitGates.sigx)
+                    self.write_controlled_one_qbit_gate(tar_bit_pos, side_trols,
+                                                       OneQubitGate.sigx)
 
         bit_pos = ntf + num_MP_trols  # this is the target of Ry, gbits follow
         for k in range(1, bit_precision+1):
@@ -256,10 +256,10 @@ class MultiplexorSEO_writer(SEO_writer):
                 x = int(fraction*(1 << k))  # keep only int part
                 ang_bools[b] = (x & 1 == 1)
             write_omega(bit_pos, ang_bools)
-            self.write_controlled_one_bit_gate(
+            self.write_controlled_one_qbit_gate(
                     ntf + num_MP_trols,
                     center_trols,
-                    OneBitGates.rot_ax, [2*np.pi/(1 << k), 2])
+                    OneQubitGate.rot_ax, [2*np.pi/(1 << k), 2])
             write_omega(bit_pos, ang_bools)
 
     def write(self):

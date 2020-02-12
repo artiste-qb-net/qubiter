@@ -60,7 +60,7 @@ class CGateExpander(SEO_reader):
 
         self.wr.close_files()
 
-    def two_embs_for_c_bit_swap(self, bit1, bit2, controls):
+    def two_embs_for_c_qbit_swap(self, bit1, bit2, controls):
         """
         This internal function returns two CktEmbedder objects called emb0,
         emb1 that are used to write an expansion for a controlled swap of
@@ -183,7 +183,7 @@ class CGateExpander(SEO_reader):
         self.wr.emb = self.emb_for_c_u2(tar_bit_pos, controls)
 
         self.wr.write(controls.kinds,
-                      OneBitGates.had2)
+                      OneQubitGate.had2)
 
     def use_IF_M_beg(self, controls):
         """
@@ -320,7 +320,7 @@ class CGateExpander(SEO_reader):
 
         self.wr.emb = self.emb_for_c_u2(tar_bit_pos, controls)
         self.wr.write(controls.kinds,
-                      OneBitGates.phase_fac, [angle_rads])
+                      OneQubitGate.phase_fac, [angle_rads])
 
     def use_P_PH(self, projection_bit, angle_rads, tar_bit_pos, controls):
         """
@@ -342,10 +342,10 @@ class CGateExpander(SEO_reader):
         """
         name = ''
         if projection_bit == 0:
-            u2_fun = OneBitGates.P_0_phase_fac
+            u2_fun = OneQubitGate.P_0_phase_fac
             name = 'P0PH'
         elif projection_bit == 1:
-            u2_fun = OneBitGates.P_1_phase_fac
+            u2_fun = OneQubitGate.P_1_phase_fac
             name = 'P1PH'
         else:
             assert False
@@ -403,7 +403,7 @@ class CGateExpander(SEO_reader):
         self.wr.emb = self.emb_for_c_u2(tar_bit_pos, controls)
 
         self.wr.write(controls.kinds,
-                      OneBitGates.rot_ax, [angle_rads, axis])
+                      OneQubitGate.rot_ax, [angle_rads, axis])
 
     def use_ROTN(self, angle_x_rads, angle_y_rads, angle_z_rads,
                 tar_bit_pos, controls):
@@ -431,7 +431,7 @@ class CGateExpander(SEO_reader):
 
         rad_ang_list = [angle_x_rads, angle_y_rads, angle_z_rads]
         self.wr.write(controls.kinds,
-                      OneBitGates.rot,
+                      OneQubitGate.rot,
                       rad_ang_list)
 
     def use_SIG(self, axis, tar_bit_pos, controls):
@@ -453,13 +453,13 @@ class CGateExpander(SEO_reader):
         """
         name = ''
         if axis == 1:
-            u2_fun = OneBitGates.sigx
+            u2_fun = OneQubitGate.sigx
             name = 'SIGX'
         elif axis == 2:
-            u2_fun = OneBitGates.sigy
+            u2_fun = OneQubitGate.sigy
             name = 'SIGY'
         elif axis == 3:
-            u2_fun = OneBitGates.sigz
+            u2_fun = OneQubitGate.sigz
             name = 'SIGZ'
         else:
             assert False
@@ -495,7 +495,7 @@ class CGateExpander(SEO_reader):
         self.write_gate_name("SWAP" if not use_sway else 'SWAY',
                              len(controls.kinds))
 
-        emb0, emb1 = self.two_embs_for_c_bit_swap(bit1, bit2, controls)
+        emb0, emb1 = self.two_embs_for_c_qbit_swap(bit1, bit2, controls)
         num_trols = len(controls.kinds)
 
         self.wr.emb = emb0  # intialize emb
@@ -503,19 +503,19 @@ class CGateExpander(SEO_reader):
         # insert opening Hadamards for controls equal to n_bar = |0><0|
         self.wr.write_hads(controls.kinds)
 
-        self.wr.write([True] * (num_trols + 1), OneBitGates.sigx)
+        self.wr.write([True] * (num_trols + 1), OneQubitGate.sigx)
 
         self.wr.emb = emb1  # change emb
         if not use_sway:
             self.wr.write([True] * (num_trols + 1),
-                          OneBitGates.sigx)
+                          OneQubitGate.sigx)
         else:
             rads0, rads1 = rads_list
             self.wr.write([True] * (num_trols + 1),
-                         OneBitGates.u2, [rads0, rads1, 0.0, 0.0])
+                         OneQubitGate.u2, [rads0, rads1, 0.0, 0.0])
         self.wr.emb = emb0  # restore emb
 
-        self.wr.write([True] * (num_trols + 1), OneBitGates.sigx)
+        self.wr.write([True] * (num_trols + 1), OneQubitGate.sigx)
 
         # insert closing Hadamards for controls equal to n_bar = |0><0|
         self.wr.write_hads(controls.kinds, herm_conj=True)
@@ -586,7 +586,7 @@ class CGateExpander(SEO_reader):
 
         rad_ang_list = [rads0, rads1, rads2, rads3]
         self.wr.write(controls.kinds,
-                      OneBitGates.u2,
+                      OneQubitGate.u2,
                       rad_ang_list)
 
     def do_log(self):

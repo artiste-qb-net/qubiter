@@ -55,17 +55,17 @@ class FouSEO_writer(SEO_writer):
         if self.do_perm:
             for r in range(num_qbits-1, 0, -1):
                 for k in range(r-1, -1, -1):
-                    self.write_bit_swap(r, k)
+                    self.write_qbit_swap(r, k)
 
         for k in range(num_qbits):
-            self.write_one_bit_gate(k, OneBitGates.had2)
+            self.write_one_qbit_gate(k, OneQubitGate.had2)
             trols = Controls.new_single_trol(num_qbits, k, True)
             for r in range(k+1, num_qbits):
                 # note r>k
-                self.write_controlled_one_bit_gate(
+                self.write_controlled_one_qbit_gate(
                     r,  # target bit pos
                     trols,
-                    OneBitGates.P_1_phase_fac,
+                    OneQubitGate.P_1_phase_fac,
                     [np.pi/(1 << (r-k))]
                 )
 
@@ -84,17 +84,17 @@ class FouSEO_writer(SEO_writer):
             trols = Controls.new_single_trol(num_qbits, k, True)
             for r in range(num_qbits-1, k, -1):
                 # note r>k
-                self.write_controlled_one_bit_gate(
+                self.write_controlled_one_qbit_gate(
                     r,  # target bit pos
                     trols,
-                    OneBitGates.P_1_phase_fac,
+                    OneQubitGate.P_1_phase_fac,
                     [-np.pi/(1 << (r-k))]  # negative of write()
                 )
-            self.write_one_bit_gate(k, OneBitGates.had2)
+            self.write_one_qbit_gate(k, OneQubitGate.had2)
         if self.do_perm:
             for r in range(1, num_qbits):
                 for k in range(r):
-                    self.write_bit_swap(r, k)
+                    self.write_qbit_swap(r, k)
 
     @staticmethod
     def fourier_trans_mat(num_rows, herm_conj=False):

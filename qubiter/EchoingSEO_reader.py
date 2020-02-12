@@ -1,5 +1,5 @@
 from qubiter.SEO_reader import *
-from qubiter.OneBitGates import *
+from qubiter.OneQubitGate import *
 from qubiter.SEO_writer import *
 
 
@@ -94,8 +94,8 @@ class EchoingSEO_reader(SEO_reader):
         None
 
         """
-        self.wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
-                           OneBitGates.had2)
+        self.wr.write_controlled_one_qbit_gate(tar_bit_pos, controls,
+                           OneQubitGate.had2)
 
     def use_IF_M_beg(self, controls):
         """
@@ -222,8 +222,8 @@ class EchoingSEO_reader(SEO_reader):
         None
 
         """
-        self.wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
-            OneBitGates.phase_fac, [angle_rads])
+        self.wr.write_controlled_one_qbit_gate(tar_bit_pos, controls,
+            OneQubitGate.phase_fac, [angle_rads])
 
     def use_PRINT(self, style, line_num):
         """
@@ -258,13 +258,13 @@ class EchoingSEO_reader(SEO_reader):
 
         """
         if projection_bit == 0:
-            u2_fun = OneBitGates.P_0_phase_fac
+            u2_fun = OneQubitGate.P_0_phase_fac
         elif projection_bit == 1:
-            u2_fun = OneBitGates.P_1_phase_fac
+            u2_fun = OneQubitGate.P_1_phase_fac
         else:
             assert False
 
-        self.wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
+        self.wr.write_controlled_one_qbit_gate(tar_bit_pos, controls,
                                               u2_fun, [angle_rads])
 
     def use_ROTA(self, axis, angle_rads, tar_bit_pos, controls):
@@ -283,8 +283,8 @@ class EchoingSEO_reader(SEO_reader):
         None
 
         """
-        self.wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
-                           OneBitGates.rot_ax, [angle_rads, axis])
+        self.wr.write_controlled_one_qbit_gate(tar_bit_pos, controls,
+                           OneQubitGate.rot_ax, [angle_rads, axis])
 
     def use_ROTN(self, angle_x_rads, angle_y_rads, angle_z_rads,
                 tar_bit_pos, controls):
@@ -305,8 +305,8 @@ class EchoingSEO_reader(SEO_reader):
 
         """
         rad_ang_list = [angle_x_rads, angle_y_rads, angle_z_rads]
-        self.wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
-                           OneBitGates.rot, rad_ang_list)
+        self.wr.write_controlled_one_qbit_gate(tar_bit_pos, controls,
+                           OneQubitGate.rot, rad_ang_list)
 
     def use_SIG(self, axis, tar_bit_pos, controls):
         """
@@ -324,15 +324,15 @@ class EchoingSEO_reader(SEO_reader):
 
         """
         if axis == 1:
-            u2_fun = OneBitGates.sigx
+            u2_fun = OneQubitGate.sigx
         elif axis == 2:
-            u2_fun = OneBitGates.sigy
+            u2_fun = OneQubitGate.sigy
         elif axis == 3:
-            u2_fun = OneBitGates.sigz
+            u2_fun = OneQubitGate.sigz
         else:
             assert False
 
-        self.wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
+        self.wr.write_controlled_one_qbit_gate(tar_bit_pos, controls,
                                               u2_fun)
 
     def use_SWAP(self, bit1, bit2, controls):
@@ -350,7 +350,7 @@ class EchoingSEO_reader(SEO_reader):
         None
 
         """
-        self.wr.write_controlled_bit_swap(bit1, bit2, controls)
+        self.wr.write_controlled_qbit_swap(bit1, bit2, controls)
 
     def use_SWAY(self, bit1, bit2, controls, rads_list):
         """
@@ -368,7 +368,7 @@ class EchoingSEO_reader(SEO_reader):
         None
 
         """
-        self.wr.write_controlled_bit_swap(bit1, bit2, controls, rads_list)
+        self.wr.write_controlled_qbit_swap(bit1, bit2, controls, rads_list)
 
     def use_U_2_(self, rads0, rads1, rads2, rads3,
                 tar_bit_pos, controls):
@@ -390,8 +390,8 @@ class EchoingSEO_reader(SEO_reader):
 
         """
         rad_ang_list = [rads0, rads1, rads2, rads3]
-        self.wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
-                           OneBitGates.u2, rad_ang_list)
+        self.wr.write_controlled_one_qbit_gate(tar_bit_pos, controls,
+                           OneQubitGate.u2, rad_ang_list)
 
     def do_log(self):
         """

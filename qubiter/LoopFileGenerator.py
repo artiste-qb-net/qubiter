@@ -130,32 +130,32 @@ if __name__ == "__main__":
         # write the English and Picture files
         emb = CktEmbedder(num_qbits, num_qbits)
         wr = SEO_writer(file_prefix, emb)
-        wr.write_controlled_one_bit_gate(
+        wr.write_controlled_one_qbit_gate(
             0,
             Controls.new_single_trol(num_qbits, 2, False),
-            OneBitGates.rot_ax,
+            OneQubitGate.rot_ax,
             ['#1', 1])
         wr.write_LOOP(20, nreps=2)
-        wr.write_controlled_one_bit_gate(1,
+        wr.write_controlled_one_qbit_gate(1,
                                          Controls.new_single_trol(num_qbits, 2, False),
-                                         OneBitGates.rot_ax,
+                                         OneQubitGate.rot_ax,
                                          ['-my_fun1#1#2', 2])
         wr.write_LOOP(10, nreps=4)
-        wr.write_controlled_one_bit_gate(2,
+        wr.write_controlled_one_qbit_gate(2,
                                          Controls.new_single_trol(num_qbits, 3, True),
-                                         OneBitGates.rot,
+                                         OneQubitGate.rot,
                                          ['-#1*.5', '#2',  '-my_fun3#3'])
         wr.write_NEXT(10)
-        wr.write_controlled_one_bit_gate(1,
+        wr.write_controlled_one_qbit_gate(1,
                                          Controls.new_single_trol(num_qbits, 2, False),
-                                         OneBitGates.rot_ax,
+                                         OneQubitGate.rot_ax,
                                          ['my_fun1#1#2', 2])
         wr.write_NEXT(20)
-        wr.write_controlled_one_bit_gate(0,
+        wr.write_controlled_one_qbit_gate(0,
                                  Controls.new_single_trol(num_qbits, 2, False),
-                                 OneBitGates.rot_ax,
+                                 OneQubitGate.rot_ax,
                                  ['#1*.3', 1])
-        wr.write_one_bit_gate(1, OneBitGates.rot_ax, ['my_fun#1', 1])
+        wr.write_one_qbit_gate(1, OneQubitGate.rot_ax, ['my_fun#1', 1])
         wr.close_files()
 
         # write a log

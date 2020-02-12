@@ -154,7 +154,7 @@
 <span id="qubiter-controls-module"></span><h1>qubiter.Controls module<a class="headerlink" href="#module-qubiter.Controls" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="qubiter.Controls.Controls">
-<em class="property">class </em><code class="sig-prename descclassname">qubiter.Controls.</code><code class="sig-name descname">Controls</code><span class="sig-paren">(</span><em class="sig-param">num_qbits</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/Controls.html#Controls"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.Controls.Controls" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">qubiter.Controls.</code><code class="sig-name descname">Controls</code><span class="sig-paren">(</span><em class="sig-param">num_qbits</em>, <em class="sig-param">bit_pos_to_kind=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/Controls.html#Controls"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.Controls.Controls" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>This class stores a dictionary called self.bit_pos_to_kind containing
 key-value pairs of the form (a control’s qubit number: its kind). Kinds
@@ -175,11 +175,14 @@ The domain of the map bit_pos_to_kind is a subset of range(num_qbits)</p></li>
 </dl>
 <dl class="method">
 <dt id="qubiter.Controls.Controls.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">num_qbits</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/Controls.html#Controls.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.Controls.Controls.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">num_qbits</em>, <em class="sig-param">bit_pos_to_kind=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/Controls.html#Controls.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.Controls.Controls.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constructor</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>num_qbits</strong> (<em>int</em>) – </p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_qbits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>bit_pos_to_kind</strong> (<em>dict</em>) – </p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>

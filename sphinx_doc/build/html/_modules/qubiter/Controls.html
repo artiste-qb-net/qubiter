@@ -177,13 +177,14 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># combines my JAVA classes Control, TFControls, MultiControls</span>
 
-<div class="viewcode-block" id="Controls.__init__"><a class="viewcode-back" href="../../qubiter.Controls.html#qubiter.Controls.Controls.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">):</span>
+<div class="viewcode-block" id="Controls.__init__"><a class="viewcode-back" href="../../qubiter.Controls.html#qubiter.Controls.Controls.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">,</span> <span class="n">bit_pos_to_kind</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Constructor</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        num_qbits : int</span>
+<span class="sd">        bit_pos_to_kind : dict</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -191,9 +192,13 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span> <span class="o">=</span> <span class="n">num_qbits</span>
         <span class="c1"># num_controls = len(bit_pos_to_kind) = len(bit_pos) = len(kinds)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">bit_pos_to_kind</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bit_pos</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">kinds</span> <span class="o">=</span> <span class="p">[]</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kinds</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">bit_pos_to_kind</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bit_pos_to_kind</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bit_pos_to_kind</span> <span class="o">=</span> <span class="n">bit_pos_to_kind</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">refresh_lists</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Controls.copy"><a class="viewcode-back" href="../../qubiter.Controls.html#qubiter.Controls.Controls.copy">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="n">old</span><span class="p">,</span> <span class="n">extra_bits</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>

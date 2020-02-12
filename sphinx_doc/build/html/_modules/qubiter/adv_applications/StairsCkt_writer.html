@@ -159,7 +159,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This class is a subclass of class SEO_writer and it writes a &quot;Stairs</span>
 <span class="sd">    Circuit&quot;. For example, this is what the Picture file of a Stairs Circuit </span>
-<span class="sd">    looks like for num_qbits = 3 </span>
+<span class="sd">    looks like for num_qbits = 3</span>
 <span class="sd">    </span>
 <span class="sd">    U   |   |</span>
 <span class="sd">    O---U   |  </span>
@@ -179,7 +179,7 @@
 <span class="sd">    This class can also be asked to construct a QB net that is **not** fully </span>
 <span class="sd">    connected, by limiting the number of controls for a given U to fewer </span>
 <span class="sd">    than all the ones to its left. For example, suppose that in the </span>
-<span class="sd">    num_qbits=3 case, we restrict the parents of the U in the last step to </span>
+<span class="sd">    num_qbits=3 case, we restrict the parents of the U in the last step to</span>
 <span class="sd">    just one, instead of the 2 parents that it has in the fully connected </span>
 <span class="sd">    case. Then we get </span>
 
@@ -204,7 +204,7 @@
 <span class="sd">    gate_str_to_rads_list maps gate_str to a list of 4 floats (or </span>
 <span class="sd">    placeholder variables for those floats) for the 4 parameters of the U </span>
 <span class="sd">    matrix. For example, here are possible values for gate_str_to_rads_list </span>
-<span class="sd">    for the num_qbits=3 fully connected qb net </span>
+<span class="sd">    for the num_qbits=3 fully connected qb net</span>
 <span class="sd">    </span>
 <span class="sd">    with every rads_list item filled with the same constant .3</span>
 <span class="sd">    {&#39;prior&#39;: [0.3, 0.3, 0.3, 0.3],</span>
@@ -254,7 +254,7 @@
 <span class="sd">     &#39;2T1F&#39;: [&#39;#5100&#39;, &#39;#5101&#39;, &#39;#5102&#39;, &#39;#5103&#39;],</span>
 <span class="sd">     &#39;2T1T&#39;: [&#39;#5110&#39;, &#39;#5111&#39;, &#39;#5112&#39;, &#39;#5113&#39;]}</span>
 
-<span class="sd">    This is what gate_str_to_rads_list looks like in the num_qbits=3 case, </span>
+<span class="sd">    This is what gate_str_to_rads_list looks like in the num_qbits=3 case,</span>
 <span class="sd">    when the last U has only one parent (qbit 2) instead of two parents (</span>
 <span class="sd">    qbits 1 and 2): </span>
 <span class="sd">    </span>
@@ -535,8 +535,8 @@
             <span class="n">trols</span> <span class="o">=</span> <span class="n">StairsCkt_writer</span><span class="o">.</span><span class="n">get_controls_from_gate_str</span><span class="p">(</span>
                 <span class="n">num_qbits</span><span class="p">,</span> <span class="n">gate_str</span><span class="p">)</span>
             <span class="n">u2_pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_u2_pos</span><span class="p">(</span><span class="n">gate_str</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="n">u2_pos</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span>
-                    <span class="n">OneBitGates</span><span class="o">.</span><span class="n">u2</span><span class="p">,</span> <span class="n">rads_list</span><span class="p">)</span></div></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span><span class="n">u2_pos</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span>
+                    <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">u2</span><span class="p">,</span> <span class="n">rads_list</span><span class="p">)</span></div></div>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>

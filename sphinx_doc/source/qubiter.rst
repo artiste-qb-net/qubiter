@@ -29,7 +29,7 @@ Submodules
    qubiter.HadamardTransform
    qubiter.LoopFileGenerator
    qubiter.LoopyPlaceholderManager
-   qubiter.OneBitGates
+   qubiter.OneQubitGate
    qubiter.PlaceholderManager
    qubiter.Plotter
    qubiter.SEO_Lista
@@ -44,7 +44,6 @@ Submodules
    qubiter.classgraph
    qubiter.run_all_nb
    qubiter.run_all_py
-   qubiter.test
    qubiter.utilities_gen
 
 Module contents

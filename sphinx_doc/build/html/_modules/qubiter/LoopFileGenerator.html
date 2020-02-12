@@ -281,31 +281,32 @@
         <span class="c1"># write the English and Picture files</span>
         <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">)</span>
         <span class="n">wr</span> <span class="o">=</span> <span class="n">SEO_writer</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">emb</span><span class="p">)</span>
-        <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span>
-                                         <span class="n">Controls</span><span class="o">.</span><span class="n">new_single_trol</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
-                                         <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span>
-                                         <span class="p">[</span><span class="s1">&#39;#1&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span>
+            <span class="mi">0</span><span class="p">,</span>
+            <span class="n">Controls</span><span class="o">.</span><span class="n">new_single_trol</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+            <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span>
+            <span class="p">[</span><span class="s1">&#39;#1&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
         <span class="n">wr</span><span class="o">.</span><span class="n">write_LOOP</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="n">nreps</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-        <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span>
                                          <span class="n">Controls</span><span class="o">.</span><span class="n">new_single_trol</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
-                                         <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span>
+                                         <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span>
                                          <span class="p">[</span><span class="s1">&#39;-my_fun1#1#2&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
         <span class="n">wr</span><span class="o">.</span><span class="n">write_LOOP</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">nreps</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-        <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span>
                                          <span class="n">Controls</span><span class="o">.</span><span class="n">new_single_trol</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
-                                         <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot</span><span class="p">,</span>
+                                         <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot</span><span class="p">,</span>
                                          <span class="p">[</span><span class="s1">&#39;-#1*.5&#39;</span><span class="p">,</span> <span class="s1">&#39;#2&#39;</span><span class="p">,</span>  <span class="s1">&#39;-my_fun3#3&#39;</span><span class="p">])</span>
         <span class="n">wr</span><span class="o">.</span><span class="n">write_NEXT</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-        <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span>
                                          <span class="n">Controls</span><span class="o">.</span><span class="n">new_single_trol</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
-                                         <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span>
+                                         <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span>
                                          <span class="p">[</span><span class="s1">&#39;my_fun1#1#2&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
         <span class="n">wr</span><span class="o">.</span><span class="n">write_NEXT</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
-        <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span>
                                  <span class="n">Controls</span><span class="o">.</span><span class="n">new_single_trol</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
-                                 <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span>
+                                 <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span>
                                  <span class="p">[</span><span class="s1">&#39;#1*.3&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
-        <span class="n">wr</span><span class="o">.</span><span class="n">write_one_bit_gate</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;my_fun#1&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="n">wr</span><span class="o">.</span><span class="n">write_one_qbit_gate</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;my_fun#1&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
         <span class="n">wr</span><span class="o">.</span><span class="n">close_files</span><span class="p">()</span>
 
         <span class="c1"># write a log</span>

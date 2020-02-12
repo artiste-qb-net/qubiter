@@ -295,16 +295,16 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">write_H</span><span class="p">(</span><span class="n">anc_bit_pos</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">rads_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gate_str_to_rads_list</span><span class="p">[</span><span class="n">gate_str</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="n">u2_pos</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span>
-                    <span class="n">OneBitGates</span><span class="o">.</span><span class="n">u2</span><span class="p">,</span> <span class="n">rads_list</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span><span class="n">u2_pos</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span>
+                    <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">u2</span><span class="p">,</span> <span class="n">rads_list</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">gate_str</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">deriv_gate_str</span> <span class="ow">and</span> <span class="n">gate_str</span> <span class="o">!=</span> <span class="s1">&#39;prior&#39;</span> <span class="ow">and</span> \
                     <span class="bp">self</span><span class="o">.</span><span class="n">has_neg_polarity</span><span class="p">:</span>
                 <span class="c1"># remove ancilla qubit control that was added previously</span>
                 <span class="k">del</span> <span class="n">trols</span><span class="o">.</span><span class="n">bit_pos_to_kind</span><span class="p">[</span><span class="n">anc_bit_pos</span><span class="p">]</span>
                 <span class="n">trols</span><span class="o">.</span><span class="n">refresh_lists</span><span class="p">()</span>
                 <span class="c1"># add controlled sigz for neg X term</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="n">anc_bit_pos</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span>
-                    <span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigz</span><span class="p">)</span></div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span><span class="n">anc_bit_pos</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span>
+                    <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">sigz</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="StairsDerivCkt_writer.get_u2_pos"><a class="viewcode-back" href="../../../qubiter.adv_applications.StairsDerivCkt_writer.html#qubiter.adv_applications.StairsDerivCkt_writer.StairsDerivCkt_writer.get_u2_pos">[docs]</a>    <span class="k">def</span> <span class="nf">get_u2_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gate_str</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>

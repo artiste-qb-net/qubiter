@@ -150,7 +150,7 @@
             
   <h1>Source code for qubiter.UnitaryMat</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">qubiter.OneBitGates</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">qubiter.OneQubitGate</span> <span class="k">import</span> <span class="o">*</span>
 
 
 <div class="viewcode-block" id="UnitaryMat"><a class="viewcode-back" href="../../qubiter.UnitaryMat.html#qubiter.UnitaryMat.UnitaryMat">[docs]</a><span class="k">class</span> <span class="nc">UnitaryMat</span><span class="p">:</span>
@@ -235,7 +235,7 @@
         <span class="n">x_rads</span> <span class="o">=</span> <span class="n">rot_rads</span><span class="o">*</span><span class="n">unit_vec</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">y_rads</span> <span class="o">=</span> <span class="n">rot_rads</span><span class="o">*</span><span class="n">unit_vec</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">z_rads</span> <span class="o">=</span> <span class="n">rot_rads</span><span class="o">*</span><span class="n">unit_vec</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-        <span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">delta</span><span class="p">)</span><span class="o">*</span><span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot</span><span class="p">(</span><span class="n">x_rads</span><span class="p">,</span> <span class="n">y_rads</span><span class="p">,</span> <span class="n">z_rads</span><span class="p">)</span>
+        <span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">delta</span><span class="p">)</span><span class="o">*</span><span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot</span><span class="p">(</span><span class="n">x_rads</span><span class="p">,</span> <span class="n">y_rads</span><span class="p">,</span> <span class="n">z_rads</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">arr</span></div>
 
 <div class="viewcode-block" id="UnitaryMat.params_from_u2"><a class="viewcode-back" href="../../qubiter.UnitaryMat.html#qubiter.UnitaryMat.UnitaryMat.params_from_u2">[docs]</a>    <span class="nd">@staticmethod</span>

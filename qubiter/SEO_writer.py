@@ -1,6 +1,6 @@
 from qubiter.CktEmbedder import *
 from qubiter.Controls import *
-from qubiter.OneBitGates import *
+from qubiter.OneQubitGate import *
 import re
 import qubiter.utilities_gen as utg
 from qubiter.PlaceholderManager import *
@@ -582,17 +582,17 @@ class SEO_writer:
 
         return aft_trols
 
-    def write_controlled_one_bit_gate(
-            self, tar_bit_pos, trols, one_bit_gate_fun, fun_arg_list=None):
+    def write_controlled_one_qbit_gate(
+            self, tar_bit_pos, trols, one_qbit_gate_fun, fun_arg_list=None):
         """
         Writes a line in eng & pic files for a one bit gate (from class 
-        OneBitGates) with >= 0 controls. 
+        OneQubitGate) with >= 0 controls. 
 
         Parameters
         ----------
         tar_bit_pos : int
         trols : Controls
-        one_bit_gate_fun : function
+        one_qbit_gate_fun : function
             maps Any->np.ndarray
         fun_arg_list : list
 
@@ -618,18 +618,18 @@ class SEO_writer:
 
         # english file
         self.english_out.write(' '*self.indentation)
-        if one_bit_gate_fun == OneBitGates.had2:
+        if one_qbit_gate_fun == OneQubitGate.had2:
             self.english_out.write("HAD2")
-        elif one_bit_gate_fun == OneBitGates.phase_fac:
+        elif one_qbit_gate_fun == OneQubitGate.phase_fac:
             self.english_out.write("PHAS\t" +
             self.rads_to_degs_str(fun_arg_list[0]))
-        elif one_bit_gate_fun == OneBitGates.P_0_phase_fac:
+        elif one_qbit_gate_fun == OneQubitGate.P_0_phase_fac:
             self.english_out.write("P0PH\t" +
                 self.rads_to_degs_str(fun_arg_list[0]))
-        elif one_bit_gate_fun == OneBitGates.P_1_phase_fac:
+        elif one_qbit_gate_fun == OneQubitGate.P_1_phase_fac:
             self.english_out.write("P1PH\t" +
                 self.rads_to_degs_str(fun_arg_list[0]))
-        elif one_bit_gate_fun == OneBitGates.rot_ax:
+        elif one_qbit_gate_fun == OneQubitGate.rot_ax:
             ang_rads = fun_arg_list[0]
             axis = fun_arg_list[1]
             degs_str = self.rads_to_degs_str(ang_rads)
@@ -641,19 +641,19 @@ class SEO_writer:
                 self.english_out.write("ROTZ\t" + degs_str)
             else:
                 assert False
-        elif one_bit_gate_fun == OneBitGates.rot:
+        elif one_qbit_gate_fun == OneQubitGate.rot:
             x_degs = self.rads_to_degs_str(fun_arg_list[0])
             y_degs = self.rads_to_degs_str(fun_arg_list[1])
             z_degs = self.rads_to_degs_str(fun_arg_list[2])
             self.english_out.write("ROTN\t" +
                 x_degs + "\t" + y_degs + "\t" + z_degs)
-        elif one_bit_gate_fun == OneBitGates.sigx:
+        elif one_qbit_gate_fun == OneQubitGate.sigx:
             self.english_out.write("SIGX")
-        elif one_bit_gate_fun == OneBitGates.sigy:
+        elif one_qbit_gate_fun == OneQubitGate.sigy:
             self.english_out.write("SIGY")
-        elif one_bit_gate_fun == OneBitGates.sigz:
+        elif one_qbit_gate_fun == OneQubitGate.sigz:
             self.english_out.write("SIGZ")
-        elif one_bit_gate_fun == OneBitGates.u2:
+        elif one_qbit_gate_fun == OneQubitGate.u2:
             ph_degs = self.rads_to_degs_str(fun_arg_list[0])
             x_degs = self.rads_to_degs_str(fun_arg_list[1])
             y_degs = self.rads_to_degs_str(fun_arg_list[2])
@@ -662,7 +662,7 @@ class SEO_writer:
                 x_degs + "\t" + y_degs + "\t" + z_degs)
         else:
             assert False, "writing an unsupported controlled gate\n" +\
-                            one_bit_gate_fun.__name__
+                            one_qbit_gate_fun.__name__
 
         self.english_out.write("\tAT\t" + str(aft_tar_bit_pos) +
                                ("\tIF\t" if num_controls != 0 else "\n"))
@@ -708,15 +708,15 @@ class SEO_writer:
                 if not is_target:  # is not control or target
                     pic_line += "+" + tres
                 else:  # is target
-                    if one_bit_gate_fun == OneBitGates.had2:
+                    if one_qbit_gate_fun == OneQubitGate.had2:
                         pic_line += "H" + tres
-                    elif one_bit_gate_fun == OneBitGates.phase_fac:
+                    elif one_qbit_gate_fun == OneQubitGate.phase_fac:
                         pic_line += "Ph" + dos
-                    elif one_bit_gate_fun == OneBitGates.P_0_phase_fac:
+                    elif one_qbit_gate_fun == OneQubitGate.P_0_phase_fac:
                         pic_line += "OP" + dos
-                    elif one_bit_gate_fun == OneBitGates.P_1_phase_fac:
+                    elif one_qbit_gate_fun == OneQubitGate.P_1_phase_fac:
                         pic_line += "@P" + dos
-                    elif one_bit_gate_fun == OneBitGates.rot_ax:
+                    elif one_qbit_gate_fun == OneQubitGate.rot_ax:
                         axis = fun_arg_list[1]
                         if axis == 1:
                             pic_line += "Rx" + dos
@@ -726,15 +726,15 @@ class SEO_writer:
                             pic_line += "Rz" + dos
                         else:
                             assert False
-                    elif one_bit_gate_fun == OneBitGates.rot:
+                    elif one_qbit_gate_fun == OneQubitGate.rot:
                         pic_line += "R" + tres
-                    elif one_bit_gate_fun == OneBitGates.sigx:
+                    elif one_qbit_gate_fun == OneQubitGate.sigx:
                         pic_line += "X" + tres
-                    elif one_bit_gate_fun == OneBitGates.sigy:
+                    elif one_qbit_gate_fun == OneQubitGate.sigy:
                         pic_line += "Y" + tres
-                    elif one_bit_gate_fun == OneBitGates.sigz:
+                    elif one_qbit_gate_fun == OneQubitGate.sigz:
                         pic_line += "Z" + tres
-                    elif one_bit_gate_fun == OneBitGates.u2:
+                    elif one_qbit_gate_fun == OneQubitGate.u2:
                         rads1 = fun_arg_list[1]
                         rads2 = fun_arg_list[2]
                         rads3 = fun_arg_list[3]
@@ -763,7 +763,7 @@ class SEO_writer:
                     else:
                         assert False, \
                             "writing an unsupported controlled gate\n" +\
-                            one_bit_gate_fun.__name__
+                            one_qbit_gate_fun.__name__
 
         for k in range(smallest-1, -1, -1):
             pic_line += "|   "
@@ -772,7 +772,7 @@ class SEO_writer:
         self.write_ZF_or_ZL_pic_line(pic_line)
         self.picture_out.write("\n")
 
-    def write_controlled_bit_swap(self, bit1, bit2, trols, rads_list=None):
+    def write_controlled_qbit_swap(self, bit1, bit2, trols, rads_list=None):
         """
         If rads_list=None, this method writes a line in eng & pic files for
         a 'SWAP' with >= 0 controls
@@ -1116,16 +1116,16 @@ class SEO_writer:
         self.write_ZF_or_ZL_pic_line(pic_line)
         self.picture_out.write("\n")
 
-    def write_one_bit_gate(
-            self, tar_bit_pos, one_bit_gate_fun, fun_arg_list=None):
+    def write_one_qbit_gate(
+            self, tar_bit_pos, one_qbit_gate_fun, fun_arg_list=None):
         """
         Write a line in eng & pic files for a one qubit gate (from class
-        OneBitGates) with no controls.
+        OneQubitGate) with no controls.
 
         Parameters
         ----------
         tar_bit_pos : int
-        one_bit_gate_fun : function
+        one_qbit_gate_fun : function
         fun_arg_list : list
 
         Returns
@@ -1134,10 +1134,10 @@ class SEO_writer:
 
         """
         trols = Controls(2)  # dummy with zero controls
-        self.write_controlled_one_bit_gate(
-            tar_bit_pos, trols, one_bit_gate_fun, fun_arg_list)
+        self.write_controlled_one_qbit_gate(
+            tar_bit_pos, trols, one_qbit_gate_fun, fun_arg_list)
 
-    def write_bit_swap(self, bit1, bit2, rads_list=None):
+    def write_qbit_swap(self, bit1, bit2, rads_list=None):
         """
         Write a line in eng & pic files for a 'SWAP' if rads_list=None or
         'SWAY' if rads_list!=None, with no controls.
@@ -1154,7 +1154,7 @@ class SEO_writer:
 
         """
         trols = Controls(2)  # dummy with zero controls
-        self.write_controlled_bit_swap(bit1, bit2, trols, rads_list)
+        self.write_controlled_qbit_swap(bit1, bit2, trols, rads_list)
 
     def write_H(self, tar_bit_pos):
         """
@@ -1169,7 +1169,7 @@ class SEO_writer:
         None
 
         """
-        self.write_one_bit_gate(tar_bit_pos, OneBitGates.had2)
+        self.write_one_qbit_gate(tar_bit_pos, OneQubitGate.had2)
 
     def write_Rx(self, tar_bit_pos, rads):
         """
@@ -1185,7 +1185,7 @@ class SEO_writer:
         None
 
         """
-        self.write_one_bit_gate(tar_bit_pos, OneBitGates.rot_ax, [rads, 1])
+        self.write_one_qbit_gate(tar_bit_pos, OneQubitGate.rot_ax, [rads, 1])
 
     def write_Ry(self, tar_bit_pos, rads):
         """
@@ -1201,7 +1201,7 @@ class SEO_writer:
         None
 
         """
-        self.write_one_bit_gate(tar_bit_pos, OneBitGates.rot_ax, [rads, 2])
+        self.write_one_qbit_gate(tar_bit_pos, OneQubitGate.rot_ax, [rads, 2])
 
     def write_Rz(self, tar_bit_pos, rads):
         """
@@ -1217,7 +1217,7 @@ class SEO_writer:
         None
 
         """
-        self.write_one_bit_gate(tar_bit_pos, OneBitGates.rot_ax, [rads, 3])
+        self.write_one_qbit_gate(tar_bit_pos, OneQubitGate.rot_ax, [rads, 3])
 
     def write_Rn(self, tar_bit_pos, rads_list):
         """
@@ -1238,7 +1238,7 @@ class SEO_writer:
         None
 
         """
-        self.write_one_bit_gate(tar_bit_pos, OneBitGates.rot, rads_list)
+        self.write_one_qbit_gate(tar_bit_pos, OneQubitGate.rot, rads_list)
 
     def write_S(self, tar_bit_pos, herm=False):
         """
@@ -1257,7 +1257,7 @@ class SEO_writer:
         sign = +1
         if herm:
             sign = -1
-        self.write_one_bit_gate(tar_bit_pos, OneBitGates.P_1_phase_fac,
+        self.write_one_qbit_gate(tar_bit_pos, OneQubitGate.P_1_phase_fac,
                                 [sign*np.pi/2])
 
     def write_T(self, tar_bit_pos, herm=False):
@@ -1277,7 +1277,7 @@ class SEO_writer:
         sign = +1
         if herm:
             sign = -1
-        self.write_one_bit_gate(tar_bit_pos, OneBitGates.P_1_phase_fac,
+        self.write_one_qbit_gate(tar_bit_pos, OneQubitGate.P_1_phase_fac,
                                 [sign*np.pi/4])
 
     def write_U2(self, tar_bit_pos, rads_list):
@@ -1299,7 +1299,7 @@ class SEO_writer:
         None
 
         """
-        self.write_one_bit_gate(tar_bit_pos, OneBitGates.u2, rads_list)
+        self.write_one_qbit_gate(tar_bit_pos, OneQubitGate.u2, rads_list)
 
     def write_X(self, tar_bit_pos):
         """
@@ -1314,7 +1314,7 @@ class SEO_writer:
         None
 
         """
-        self.write_one_bit_gate(tar_bit_pos, OneBitGates.sigx)
+        self.write_one_qbit_gate(tar_bit_pos, OneQubitGate.sigx)
 
     def write_Y(self, tar_bit_pos):
         """
@@ -1329,7 +1329,7 @@ class SEO_writer:
         None
 
         """
-        self.write_one_bit_gate(tar_bit_pos, OneBitGates.sigy)
+        self.write_one_qbit_gate(tar_bit_pos, OneQubitGate.sigy)
 
     def write_Z(self, tar_bit_pos):
         """
@@ -1344,7 +1344,7 @@ class SEO_writer:
         None
 
         """
-        self.write_one_bit_gate(tar_bit_pos, OneBitGates.sigz)
+        self.write_one_qbit_gate(tar_bit_pos, OneQubitGate.sigz)
 
     def write_cnot(self, control_bit, target_bit, kind=True):
         """
@@ -1364,8 +1364,8 @@ class SEO_writer:
         """
         num_qbits = self.emb.num_qbits_aft
         trols = Controls.new_single_trol(num_qbits, control_bit, kind)
-        self.write_controlled_one_bit_gate(target_bit, trols,
-            OneBitGates.sigx)
+        self.write_controlled_one_qbit_gate(target_bit, trols,
+            OneQubitGate.sigx)
 
     def write_cz(self, control_bit, target_bit, kind=True):
         """
@@ -1385,8 +1385,8 @@ class SEO_writer:
         """
         num_qbits = self.emb.num_qbits_aft
         trols = Controls.new_single_trol(num_qbits, control_bit, kind)
-        self.write_controlled_one_bit_gate(target_bit, trols,
-            OneBitGates.sigz)
+        self.write_controlled_one_qbit_gate(target_bit, trols,
+            OneQubitGate.sigz)
 
     def write_c_P1PH(self, control_bit, target_bit, rads=np.pi, kind=True):
         """
@@ -1410,8 +1410,8 @@ class SEO_writer:
         """
         num_qbits = self.emb.num_qbits_aft
         trols = Controls.new_single_trol(num_qbits, control_bit, kind)
-        self.write_controlled_one_bit_gate(target_bit, trols,
-            OneBitGates.P_1_phase_fac, [rads])
+        self.write_controlled_one_qbit_gate(target_bit, trols,
+            OneQubitGate.P_1_phase_fac, [rads])
 
     def write_global_phase_fac(self, ang_rads):
         """
@@ -1429,8 +1429,8 @@ class SEO_writer:
         """
         tar_bit_pos = 0  # anyone will do
         trols = Controls(2)  # dummy with zero controls
-        gate_fun = OneBitGates.phase_fac
-        self.write_controlled_one_bit_gate(
+        gate_fun = OneQubitGate.phase_fac
+        self.write_controlled_one_qbit_gate(
             tar_bit_pos, trols, gate_fun, [ang_rads])
         
     def write_multiplexor_gate(self, tar_bit_pos, controls, rad_angles):
@@ -1502,48 +1502,48 @@ if __name__ == "__main__":
 
             wr.write_PRINT('F2')
 
-            wr.write_controlled_bit_swap(0, 2, trols)
+            wr.write_controlled_qbit_swap(0, 2, trols)
 
-            wr.write_bit_swap(1, 2)
+            wr.write_qbit_swap(1, 2)
 
-            gate = OneBitGates.phase_fac
-            wr.write_controlled_one_bit_gate(2, trols, gate, [ang_rads])
+            gate = OneQubitGate.phase_fac
+            wr.write_controlled_one_qbit_gate(2, trols, gate, [ang_rads])
 
             wr.write_global_phase_fac(30*np.pi/180)
 
-            gate = OneBitGates.P_0_phase_fac
-            wr.write_controlled_one_bit_gate(2, trols, gate, [ang_rads])
+            gate = OneQubitGate.P_0_phase_fac
+            wr.write_controlled_one_qbit_gate(2, trols, gate, [ang_rads])
 
-            gate = OneBitGates.P_1_phase_fac
-            wr.write_controlled_one_bit_gate(2, trols, gate, [ang_rads])
+            gate = OneQubitGate.P_1_phase_fac
+            wr.write_controlled_one_qbit_gate(2, trols, gate, [ang_rads])
 
-            gate = OneBitGates.sigx
-            wr.write_controlled_one_bit_gate(2, trols, gate)
+            gate = OneQubitGate.sigx
+            wr.write_controlled_one_qbit_gate(2, trols, gate)
 
-            gate = OneBitGates.sigy
-            wr.write_controlled_one_bit_gate(2, trols, gate)
+            gate = OneQubitGate.sigy
+            wr.write_controlled_one_qbit_gate(2, trols, gate)
 
-            gate = OneBitGates.sigz
-            wr.write_controlled_one_bit_gate(2, trols, gate)
+            gate = OneQubitGate.sigz
+            wr.write_controlled_one_qbit_gate(2, trols, gate)
 
-            gate = OneBitGates.had2
-            wr.write_controlled_one_bit_gate(2, trols, gate)
+            gate = OneQubitGate.had2
+            wr.write_controlled_one_qbit_gate(2, trols, gate)
 
-            gate = OneBitGates.rot_ax
-            wr.write_controlled_one_bit_gate(2, trols, gate, [ang_rads, 1])
+            gate = OneQubitGate.rot_ax
+            wr.write_controlled_one_qbit_gate(2, trols, gate, [ang_rads, 1])
 
-            gate = OneBitGates.rot_ax
-            wr.write_controlled_one_bit_gate(2, trols, gate, [ang_rads, 2])
+            gate = OneQubitGate.rot_ax
+            wr.write_controlled_one_qbit_gate(2, trols, gate, [ang_rads, 2])
 
-            gate = OneBitGates.rot_ax
-            wr.write_controlled_one_bit_gate(2, trols, gate, [ang_rads, 3])
+            gate = OneQubitGate.rot_ax
+            wr.write_controlled_one_qbit_gate(2, trols, gate, [ang_rads, 3])
 
-            gate = OneBitGates.rot
-            wr.write_controlled_one_bit_gate(2, trols, gate,
+            gate = OneQubitGate.rot
+            wr.write_controlled_one_qbit_gate(2, trols, gate,
                 [ang_rads/3, ang_rads*2/3, ang_rads])
 
-            gate = OneBitGates.sigx
-            wr.write_one_bit_gate(2, gate)
+            gate = OneQubitGate.sigx
+            wr.write_one_qbit_gate(2, gate)
 
             wr.write_cnot(2, 1)
 

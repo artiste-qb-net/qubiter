@@ -143,26 +143,26 @@ class CGateSEO_writer(SEO_writer):
         num_qbits = self.emb.num_qbits_bef
         trols = Controls.new_single_trol(num_qbits, trol_bit_pos, True)
         if not self.expand_1c_u2:
-            self.write_controlled_one_bit_gate(
-                tar_bit_pos, trols, OneBitGates.rot, rads_list)
+            self.write_controlled_one_qbit_gate(
+                tar_bit_pos, trols, OneQubitGate.rot, rads_list)
             return
 
         def write_delta_rot():
             if delta:
-                self.write_one_bit_gate(
-                    trol_bit_pos, OneBitGates.rot_ax, [-delta/2, 3])
+                self.write_one_qbit_gate(
+                    trol_bit_pos, OneQubitGate.rot_ax, [-delta/2, 3])
 
         def write_cnot():
-            self.write_controlled_one_bit_gate(
-                tar_bit_pos, trols, OneBitGates.sigx)
+            self.write_controlled_one_qbit_gate(
+                tar_bit_pos, trols, OneQubitGate.sigx)
 
         def write_rot(rads_list1, herm_conj=False):
             if not herm_conj:
                 rads_list2 = rads_list
             else:
                 rads_list2 = list(-np.array(rads_list1))
-            self.write_one_bit_gate(
-                tar_bit_pos, OneBitGates.rot, rads_list2)
+            self.write_one_qbit_gate(
+                tar_bit_pos, OneQubitGate.rot, rads_list2)
 
         rads_x, rads_y, rads_z = rads_list
         theta_w = np.sqrt(rads_x**2 + rads_y**2 + rads_z**2)
@@ -188,9 +188,9 @@ class CGateSEO_writer(SEO_writer):
                 write_delta_rot()
 
                 if self.do_checking:
-                    mat_w = np.matrix(OneBitGates.rot(*rads_list))
-                    mat_a = np.matrix(OneBitGates.rot(*rads_list_a))
-                    mat_sigx = np.matrix(OneBitGates.sigx())
+                    mat_w = np.matrix(OneQubitGate.rot(*rads_list))
+                    mat_a = np.matrix(OneQubitGate.rot(*rads_list_a))
+                    mat_sigx = np.matrix(OneQubitGate.sigx())
                     diff = mat_w - mat_a*mat_sigx*mat_a.getH()
                     err = np.linalg.norm(diff)
                     if err > TOL:
@@ -216,9 +216,9 @@ class CGateSEO_writer(SEO_writer):
             write_delta_rot()
 
             if self.do_checking:
-                mat_w = np.matrix(OneBitGates.rot(*rads_list))
-                mat_a = np.matrix(OneBitGates.rot(*rads_list_a))
-                mat_sigx = np.matrix(OneBitGates.sigx())
+                mat_w = np.matrix(OneQubitGate.rot(*rads_list))
+                mat_a = np.matrix(OneQubitGate.rot(*rads_list_a))
+                mat_sigx = np.matrix(OneQubitGate.sigx())
                 diff = mat_w - mat_a*mat_sigx*mat_a.getH()*mat_sigx
                 err = np.linalg.norm(diff)
                 if err > TOL:
@@ -252,12 +252,12 @@ class CGateSEO_writer(SEO_writer):
             write_delta_rot()
 
             if self.do_checking:
-                mat_id = np.matrix(OneBitGates.phase_fac(0.0))
-                mat_w = np.matrix(OneBitGates.rot(*rads_list))
-                mat_a = np.matrix(OneBitGates.rot(*rads_list_a))
-                mat_b = np.matrix(OneBitGates.rot(*rads_list_b))
-                mat_c = np.matrix(OneBitGates.rot(*rads_list_c))
-                mat_sigx = np.matrix(OneBitGates.sigx())
+                mat_id = np.matrix(OneQubitGate.phase_fac(0.0))
+                mat_w = np.matrix(OneQubitGate.rot(*rads_list))
+                mat_a = np.matrix(OneQubitGate.rot(*rads_list_a))
+                mat_b = np.matrix(OneQubitGate.rot(*rads_list_b))
+                mat_c = np.matrix(OneQubitGate.rot(*rads_list_c))
+                mat_sigx = np.matrix(OneQubitGate.sigx())
                 diff = mat_w - mat_a*mat_sigx*mat_b*mat_sigx*mat_c
                 err = np.linalg.norm(diff)
                 if err > TOL:
@@ -303,8 +303,8 @@ class CGateSEO_writer(SEO_writer):
     #         tar_pos = n_index_list[k+1]
     #         trol_pos = n_index_list[k]
     #         trols = Controls.new_single_trol(num_qbits, trol_pos, True)
-    #         self.write_controlled_one_bit_gate(
-    #             tar_pos, trols, OneBitGates.sigx)
+    #         self.write_controlled_one_qbit_gate(
+    #             tar_pos, trols, OneQubitGate.sigx)
     #
     #     self.write_1c_u2(num_qbits - 1, n_index_list[-1], rads_list, delta)
     #
@@ -312,8 +312,8 @@ class CGateSEO_writer(SEO_writer):
     #         tar_pos = n_index_list[k+1]
     #         trol_pos = n_index_list[k]
     #         trols = Controls.new_single_trol(num_qbits, trol_pos, True)
-    #         self.write_controlled_one_bit_gate(
-    #             tar_pos, trols, OneBitGates.sigx)
+    #         self.write_controlled_one_qbit_gate(
+    #             tar_pos, trols, OneQubitGate.sigx)
     #
     # def write_internal(self, rads_list, delta=None):
     #     """
@@ -394,8 +394,8 @@ class CGateSEO_writer(SEO_writer):
 
         def write_cnot(tar_bpos, trol_bpos):
             trol = Controls.new_single_trol(num_qbits, trol_bpos, True)
-            self.write_controlled_one_bit_gate(tar_bpos, trol,
-                                               OneBitGates.sigx)
+            self.write_controlled_one_qbit_gate(tar_bpos, trol,
+                                               OneQubitGate.sigx)
 
         def write_cnot_stair(bvec):
             tar_bpos = bvec.find_rightmost_T_bit()
@@ -470,7 +470,7 @@ class CGateSEO_writer(SEO_writer):
             range1 = reversed(range(num_trols))
         for k in range1:
             if not trol_kinds[k]:
-                self.write_one_bit_gate(num_trols-k-1, OneBitGates.sigx)
+                self.write_one_qbit_gate(num_trols-k-1, OneQubitGate.sigx)
 
     def write(self, trol_kinds, u2_fun, fun_arg_list=None):
         """
@@ -479,7 +479,7 @@ class CGateSEO_writer(SEO_writer):
         This function achieves the main goal of the class, which is to give
         various expansions of an c_u2 (controlled U(2) matrix). For
         one_line=True, this function just calls
-        write_controlled_one_bit_gate() of the parent class. For
+        write_controlled_one_qbit_gate() of the parent class. For
         one_line=False, it gives an expansion of the c_u2.
 
         Parameters
@@ -487,7 +487,7 @@ class CGateSEO_writer(SEO_writer):
         trol_kinds : list[bool]
             list of control types. Type is False if nbar=P_0 and True if n=P_1
         u2_fun : function
-            One of the functions in class OneBitGates
+            One of the functions in class OneQubitGate
         fun_arg_list : list[int|float]
             list of arguments of u2_fun
 
@@ -506,37 +506,37 @@ class CGateSEO_writer(SEO_writer):
         trols.refresh_lists()
 
         if self.one_line or num_trols == 0:
-            self.write_controlled_one_bit_gate(tar_bit_pos,
+            self.write_controlled_one_qbit_gate(tar_bit_pos,
                     trols, u2_fun, fun_arg_list)
             return
 
         # insert opening Hadamards for controls equal to n_bar = |0><0|
         self.write_hads(trols.kinds)
 
-        if u2_fun == OneBitGates.P_0_phase_fac:
+        if u2_fun == OneQubitGate.P_0_phase_fac:
             rads = fun_arg_list[0]
             self.write_internal([0, 0, rads / 2], rads / 2)
-        elif u2_fun == OneBitGates.P_1_phase_fac:
+        elif u2_fun == OneQubitGate.P_1_phase_fac:
             rads = fun_arg_list[0]
             self.write_internal([0, 0, -rads / 2], rads / 2)
-        elif u2_fun == OneBitGates.sigx:
+        elif u2_fun == OneQubitGate.sigx:
             if num_qbits == 2:
                 # If it's a CNOT, no expansion necessary
                 # Control must be set to True because
                 # opening and closing Hadamards take care of False
                 trols1 = Controls.new_single_trol(num_qbits, 0, True)
-                self.write_controlled_one_bit_gate(
-                    tar_bit_pos, trols1, OneBitGates.sigx)
+                self.write_controlled_one_qbit_gate(
+                    tar_bit_pos, trols1, OneQubitGate.sigx)
             else:
                 self.write_internal([np.pi / 2, 0, 0], -np.pi / 2)
-        elif u2_fun == OneBitGates.sigy:
+        elif u2_fun == OneQubitGate.sigy:
             self.write_internal([0, np.pi / 2, 0], -np.pi / 2)
-        elif u2_fun == OneBitGates.sigz:
+        elif u2_fun == OneQubitGate.sigz:
             self.write_internal([0, 0, np.pi / 2], -np.pi / 2)
-        elif u2_fun == OneBitGates.had2:
+        elif u2_fun == OneQubitGate.had2:
             rads = np.pi/(2*np.sqrt(2))
             self.write_internal([rads, 0, rads], -np.pi / 2)
-        elif u2_fun == OneBitGates.rot_ax:
+        elif u2_fun == OneQubitGate.rot_ax:
             rads = fun_arg_list[0]
             axis = fun_arg_list[1]
             if axis == 1:
@@ -547,9 +547,9 @@ class CGateSEO_writer(SEO_writer):
                 self.write_internal([0, 0, rads])
             else:
                 assert False
-        elif u2_fun == OneBitGates.rot:
+        elif u2_fun == OneQubitGate.rot:
             self.write_internal(fun_arg_list)
-        elif u2_fun == OneBitGates.u2:
+        elif u2_fun == OneQubitGate.u2:
             self.write_internal(fun_arg_list[1:], fun_arg_list[0])
         else:
             assert False, "writing an unsupported controlled gate"
@@ -560,7 +560,7 @@ class CGateSEO_writer(SEO_writer):
 
 if __name__ == "__main__":
     from qubiter.SEO_MatrixProduct import *
-    from qubiter.OneBitGates import *
+    from qubiter.OneQubitGate import *
 
     def main():
 
@@ -576,14 +576,14 @@ if __name__ == "__main__":
                 do_checking=True, verbose=False)
 
         u2_fun_to_fun_arg_list = co.OrderedDict((
-            (OneBitGates.P_0_phase_fac, [np.pi/3]),
-            (OneBitGates.P_1_phase_fac, [np.pi/3]),
-            (OneBitGates.sigx, None),
-            (OneBitGates.sigy, None),
-            (OneBitGates.sigz, None),
-            (OneBitGates.had2, None),
-            (OneBitGates.rot_ax, [np.pi/3, 2]),
-            (OneBitGates.rot, [np.pi/3, np.pi/6, np.pi/3])
+            (OneQubitGate.P_0_phase_fac, [np.pi/3]),
+            (OneQubitGate.P_1_phase_fac, [np.pi/3]),
+            (OneQubitGate.sigx, None),
+            (OneQubitGate.sigy, None),
+            (OneQubitGate.sigz, None),
+            (OneQubitGate.had2, None),
+            (OneQubitGate.rot_ax, [np.pi/3, 2]),
+            (OneQubitGate.rot, [np.pi/3, np.pi/6, np.pi/3])
         ))
 
         for u2_fun, fun_arg_list in u2_fun_to_fun_arg_list.items():
@@ -613,7 +613,7 @@ if __name__ == "__main__":
 
         wr = CGateSEO_writer(file_prefix, emb)
 
-        u2_fun = OneBitGates.rot_ax
+        u2_fun = OneQubitGate.rot_ax
         rads = np.pi/3
 
         wr.one_line = True

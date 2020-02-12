@@ -175,8 +175,8 @@ class DiagUnitarySEO_writer(SEO_writer):
                 trols2.bit_pos_to_kind = TF_dict.copy()
                 trols2.bit_pos_to_kind[cur_T_bit + ntf] = True
                 trols2.refresh_lists()
-                self.write_controlled_one_bit_gate(
-                    ntf + init_prev_T_bit, trols2, OneBitGates.sigx)
+                self.write_controlled_one_qbit_gate(
+                    ntf + init_prev_T_bit, trols2, OneQubitGate.sigx)
                 prev_T_bit = cur_T_bit
 
         norma = np.power(np.sqrt(2), num_MP_trols)
@@ -184,8 +184,8 @@ class DiagUnitarySEO_writer(SEO_writer):
         # write conditioned global phase
         global_ph = conj_rads[0]*norma/len(conj_rads)
         if abs(global_ph) > 1e-6:
-            self.write_controlled_one_bit_gate(ntf, trols1,
-                    OneBitGates.phase_fac, [global_ph])
+            self.write_controlled_one_qbit_gate(ntf, trols1,
+                    OneQubitGate.phase_fac, [global_ph])
 
         while f < num_factors:
             cur_bvec.dec_rep = lazy
@@ -213,8 +213,8 @@ class DiagUnitarySEO_writer(SEO_writer):
                     write_cnots(cur_bvec, cur_rot_bpos)
                     diff_bvec = BitVector.copy(cur_bvec)
 
-                self.write_controlled_one_bit_gate(
-                    ntf + cur_rot_bpos, trols1, OneBitGates.rot_ax, [rads, 3])
+                self.write_controlled_one_qbit_gate(
+                    ntf + cur_rot_bpos, trols1, OneQubitGate.rot_ax, [rads, 3])
                 prev_bvec = BitVector.copy(cur_bvec)
                 prev_rot_bpos = cur_rot_bpos
 
