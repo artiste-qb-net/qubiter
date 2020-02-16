@@ -85,8 +85,10 @@ def run_sim_gui(file_prefix, num_qbits, all_var_nums, fun_name_to_fun=None,
             display(hbox)
         for num in all_var_nums:
             rads = var_num_to_rads[num]
-            print('degs_' + str(num) + '(=rads)',
-                  rads*180/np.pi, '(',  rads, ')')
+            degs_str = '{0:6f}'.format(rads*180/np.pi)
+            rads_str = '{0:6f}'.format(rads)
+            print('degs_' + str(num) + " = " + degs_str
+                + ' (' + rads_str + ' rads)')
         sim = SEO_simulator(file_prefix, num_qbits, vars_manager=vman)
         print('\n-----------------------------beginning final results')
         StateVec.describe_st_vec_dict(sim.cur_st_vec_dict,
