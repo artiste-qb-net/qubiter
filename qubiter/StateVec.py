@@ -82,8 +82,8 @@ class StateVec:
     @staticmethod
     def get_ground_st_vec(num_qbits):
         """
-        Returns StateVec for the ground state `|0>|0>|0>...|0>`, where `|0>
-        = [ 1,0]^t` and `|1> = [0,1]^t`, t = transpose.
+        Returns StateVec for the ground state ``|0>|0>|0>...|0>``, where ``|0>
+        = [ 1,0]^t`` and ``|1> = [0,1]^t``, t = transpose.
 
         Parameters
         ----------
@@ -104,8 +104,9 @@ class StateVec:
     @staticmethod
     def get_random_st_vec(num_qbits, rand_seed=None):
         """
-        Returns StateVec for random state `\sum_b^n A(b^n)|b^n>`, `b^n \in {
-        0, 1}^n`, where n=num_qbits and `\sum_b^n |A( b^n)|^2 = 1`.
+        Returns StateVec for random state ``\sum_b^n A(b^n)|b^n>``,
+        ``b^n \in { 0, 1}^n``, where n=num_qbits and ``\sum_b^n |A( b^n)|^2
+        = 1``.
 
         Parameters
         ----------
@@ -131,10 +132,10 @@ class StateVec:
     @staticmethod
     def get_standard_basis_st_vec(spin_dir_list, ZL=True):
         """
-        If ZL = True, returns StateVec for state `...|s2>|s1>|s0>`,
-        where `spin_dir_list=[...,s2, s1, s0], s_j \in {0, 1}` for all j,
-        `|0> = [1, 0]^t` and `|1> = [0,1]^t`, t = transpose. If ZL = False,
-        same except `spin_dir_list=reversed([...,s2, s1, s0])`.
+        If ZL = True, returns StateVec for state ``...|s2>|s1>|s0>``,
+        where ``spin_dir_list=[...,s2, s1, s0], s_j \in {0, 1}`` for all j,
+        ``|0> = [1, 0]^t`` and ``|1> = [0,1]^t``, t = transpose. If ZL = False,
+        same except ``spin_dir_list=reversed([...,s2, s1, s0])``.
 
         Parameters
         ----------
@@ -159,13 +160,14 @@ class StateVec:
         arr[tuple(spin_dir_list)] = 1
         return StateVec(num_qbits, arr)
 
+    @property
     def get_traditional_st_vec(self):
         """
 
         **IMPORTANT: Internally, self.arr in Qubiter has shape [2]*num_qbits
         and assumes ZF convention because that way a numpy axis and a qubit
         number are the same thing. However, the traditional way of writing a
-        state vector is as a column array of dimension `1<< num_qbits` in the
+        state vector is as a column array of dimension 1<< num_qbits in the
         ZL convention.**
 
         This function returns the traditional view. So it reshapes (
@@ -177,13 +179,12 @@ class StateVec:
         One can go from digital to binary labels and vice versa
         using
 
-        ```
         >>> x = np.binary_repr(3, width=4)
         >>> x
         '0011'
         >>> int(x, 2)
         3
-        ```
+
 
         Parameters
         ----------
@@ -225,7 +226,7 @@ class StateVec:
         for br_key in st_vec_dict:
             if StateVec.is_zero(st_vec_dict[br_key]):
                 continue
-            vec = st_vec_dict[br_key].get_traditional_st_vec()
+            vec = st_vec_dict[br_key].get_traditional_st_vec
             assert vec.shape == (dim,)
             den_mat += np.outer(vec, np.conj(vec))
             # print(',,..', br_key, vec)
@@ -277,7 +278,7 @@ class StateVec:
         """
         Returns abs(trace(den_mat^2) -1). This is zero iff the density
         matrix den_mat represents a pure state. For example, for a pure
-        state `den_mat = |a><a|`, `den_mat^2 = den_mat = |a><a|` so this
+        state ``den_mat = |a><a|``, ``den_mat^2 = den_mat = |a><a|`` so this
         quantity is indeed zero.
 
         Parameters
@@ -361,16 +362,16 @@ class StateVec:
             be indexed in ZL convention.
 
         """
-        x = self.get_traditional_st_vec()
+        x = self.get_traditional_st_vec
         return np.real(x*np.conj(x))
 
     def get_mean_value_of_real_diag_mat(self, real_arr):
         """
         In Quantum Mechanics, one often needs to calculate the mean value of
-        a Hermitian operator H, `mean= <psi|H|psi>`. Let `H = U^\dag D U`,
-        where U is unitary and D is real diagonal matrix. If `self = U|psi>`,
-        then this reduces to finding `mean= <self|D|self>`. So must decompose
-        U into a SEO and evolve, using SEO_simulator, to the state `U|psi>`.
+        a Hermitian operator H, ``mean= <psi|H|psi>``. Let ``H = U^\dag D U``,
+        where U is unitary and D is real diagonal matrix. If ``self = U|psi>``,
+        then this reduces to finding ``mean= <self|D|self>``. So must decompose
+        U into a SEO and evolve, using SEO_simulator, to the state ``U|psi>``.
 
         Parameters
         ----------
@@ -790,15 +791,15 @@ if __name__ == "__main__":
         gs = StateVec(num_qbits,
                       arr=StateVec.get_ground_st_vec(num_qbits).arr)
         print('gs=\n', gs.arr)
-        print("gs_trad=\n", gs.get_traditional_st_vec())
+        print("gs_trad=\n", gs.get_traditional_st_vec)
 
         S0100_ZL = StateVec(4,
             arr=StateVec.get_standard_basis_st_vec([0, 1, 0, 0], ZL=True).arr)
-        print("S0100_ZL=\n", S0100_ZL.get_traditional_st_vec())
+        print("S0100_ZL=\n", S0100_ZL.get_traditional_st_vec)
 
         S0100_ZF = StateVec(4,
             arr=StateVec.get_standard_basis_st_vec([0, 1, 0, 0], ZL=False).arr)
-        print("S0100_ZF=\n", S0100_ZF.get_traditional_st_vec())
+        print("S0100_ZF=\n", S0100_ZF.get_traditional_st_vec)
 
         st_vec0 = StateVec(num_qbits,
             arr=StateVec.get_random_st_vec(num_qbits).arr)
@@ -808,7 +809,7 @@ if __name__ == "__main__":
                        'br1': st_vec1,
                        'br3': None}
 
-        trad_st_vec = st_vec0.get_traditional_st_vec()
+        trad_st_vec = st_vec0.get_traditional_st_vec
 
         den_mat = StateVec.get_den_mat(num_qbits, st_vec_dict)
         print("den_mat\n", den_mat)

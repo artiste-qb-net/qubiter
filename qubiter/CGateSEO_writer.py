@@ -71,7 +71,7 @@ class CGateSEO_writer(SEO_writer):
     def su2_mat_prod(su2_pair1, su2_pair2):
         """
         An SU(2) matrix can be expressed as exp(i*theta*sig_n) where theta
-        is a real number and `sig_n = n \cdot sigma`. Here n is a 3 dim real
+        is a real number and ``sig_n = n \cdot sigma``. Here n is a 3 dim real
         UNIT vector and sigma = [sigx, sigy, sigz], where sigx, sigy and
         sigz are the 3 Pauli matrices. We define the su2_pair of this SU(2)
         matrix as the list [theta, n], with n expressed as a numpy array.

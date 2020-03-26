@@ -23,10 +23,11 @@ class SEO_simulator(SEO_reader):
     set to the ground state automatically by the constructor.
 
     3 kinds (called 0, 1, 2) of measurements MEAS are allowed. A type 0
-    measurement inserts a projector `|0><0| = n = P_0` at the target bit. A
-    type 1 measurement inserts a projector `|1><1| = nbar = P_1` at the target
-    bit. A type 2 measurement stores a copy of the state vector after `|0><0|`
-    has been applied, and another copy after `|1><1|` has been applied.
+    measurement inserts a projector ``|0><0| = n = P_0`` at the target bit.
+    A type 1 measurement inserts a projector ``|1><1| = nbar = P_1`` at the
+    target bit. A type 2 measurement stores a copy of the state vector after
+    ``|0><0|`` has been applied, and another copy after ``|1><1|`` has been
+    applied.
 
     self.cur_st_vec_dict is a dictionary of strings (called branch keys) to
     state vectors StateVec on num_qbits qubits. We will refer to each state
@@ -39,12 +40,12 @@ class SEO_simulator(SEO_reader):
     cur_st_vec_dict are not expected have normalized state vectors as values
     except when there is only a single branch.
 
-    If cur_st_vec_dict contains as values the states `|br0>, |br1>, |br2>,
-    ...`, then one can construct the density matrix of that state as `rho =
-    |br0><br0| + |br1><br1| + |br2><br2| + ...` divided by a number so that
-    trace(rho)=1. In other words, cur_st_vec_dict is just a particular way
-    of storing the density matrix of a state. A state with a single branch
-    is a pure state, but a state with more than one branch may not be.
+    If cur_st_vec_dict contains as values the states ``|br0>, |br1>, |br2>,
+    ...``, then one can construct the density matrix of that state as ``rho
+    = |br0><br0| + |br1><br1| + |br2><br2| + ...`` divided by a number so
+    that trace(rho)=1. In other words, cur_st_vec_dict is just a particular
+    way of storing the density matrix of a state. A state with a single
+    branch is a pure state, but a state with more than one branch may not be.
 
     An item of cur_st_vec_dict may be key=some string, value=None. This
     means the state vector of that branch is zero.
@@ -600,8 +601,8 @@ class SEO_simulator(SEO_reader):
         """
         Overrides the parent class use_ function.
 
-        For kind 0 (resp., 1) measurements, it applies `P_0=|0><0|` (resp.,
-        `P_1=|1><1|`) to each branch of cur_st_vec_dict.
+        For kind 0 (resp., 1) measurements, it applies ``P_0=|0><0|`` (
+        resp., ``P_1=|1><1|``) to each branch of cur_st_vec_dict.
 
         For kind 2 measurements, it first doubles the number of branches in
         cur_st_vec_dict by adding a deep copy of each branch. Next,

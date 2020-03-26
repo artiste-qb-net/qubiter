@@ -319,7 +319,7 @@ if __name__ == "__main__":
                        'br1': st_vec1,
                        'br3': None}
 
-        trad_st_vec = st_vec0.get_traditional_st_vec()
+        trad_st_vec = st_vec0.get_traditional_st_vec
         den_mat = StateVec.get_den_mat(num_qbits, st_vec_dict)
         # print("den_mat", den_mat)
         st_vec_pd = st_vec0.get_pd()
@@ -327,7 +327,7 @@ if __name__ == "__main__":
         bit_probs_vec = StateVec.get_bit_probs(num_qbits, st_vec_pd)
         bit_probs_dm = StateVec.get_bit_probs(num_qbits, den_mat_pd)
 
-        st_vec_df = Plotter.get_st_vec_df(st_vec0.get_traditional_st_vec())
+        st_vec_df = Plotter.get_st_vec_df(st_vec0.get_traditional_st_vec)
         den_mat_df = Plotter.get_den_mat_df(num_qbits, den_mat)
         # print("den_mat_df", den_mat_df)
         st_vec_pd_df = Plotter.get_pd_df(num_qbits, st_vec_pd)

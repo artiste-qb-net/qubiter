@@ -55,7 +55,7 @@ class DiagUnitarySEO_writer(SEO_writer):
     num_gbits : int
         number of gbits (grounded bits). This is only needed for the
         oracular approximation. Grounded bits are extra ancilla bits that
-        have been initialized to the ground state (state |0>).
+        have been initialized to the ground state (state ``|0>``).
     num_of_T_trols : int
         The number of True controls of the controlled d-unitary.
     rad_angles : list(float)

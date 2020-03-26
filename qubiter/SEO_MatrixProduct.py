@@ -109,7 +109,7 @@ class SEO_MatrixProduct:
             sim = SEO_simulator_mp(file_prefix, num_qbits,
                                    init_st_vec=init_st_vec)
             fin_st_vec = sim.cur_st_vec_dict["pure"]
-            fin = StateVec.get_traditional_st_vec(fin_st_vec)
+            fin = StateVec.get_traditional_st_vec
             fin_list.append(fin)
             # print(fin_st_vec)
             # print(fin)

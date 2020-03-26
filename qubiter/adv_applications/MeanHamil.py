@@ -20,11 +20,12 @@ class MeanHamil:
 
     file_prefix identifies the location of an English file that specifies a
     quantum circuit. If init_st_vec=None, we assume that the initial state
-    of that quantum circuit is the ground state (all qubits in state |0>).
-    Let |psi> be the final state vector that evolves from that circuit. Let
-    hamil be a Hamiltonian suitable for that circuit and stored as an object
-    of QubitOperator (a class of the open-source lib OpenFermion). Then the
-    mean value evaluated by this class is <psi|hamil|psi>.
+    of that quantum circuit is the ground state (all qubits in state
+    ``|0>``). Let ``|psi>`` be the final state vector that evolves from that
+    circuit. Let hamil be a Hamiltonian suitable for that circuit and stored
+    as an object of QubitOperator (a class of the open-source lib
+    OpenFermion). Then the mean value evaluated by this class is
+    ``<psi|hamil|psi>``.
 
     Subclasses of this class use different methods to evaluate this mean
     value. They might change the tensor lib (numpy, PyTorch, TensorFlow) or
@@ -49,9 +50,9 @@ class MeanHamil:
     num_qbits : int
         number of qubits
     num_samples : int
-        number of samples (aka num_shots). If this is zero, the `|psi>` in
-        `<psi|H|psi>` is calculated exactly from theory. If this is >0,
-        the `|psi>` is calculated empirically from a number num_samples of
+        number of samples (aka num_shots). If this is zero, the ``|psi>`` in
+        ``<psi|H|psi>`` is calculated exactly from theory. If this is >0,
+        the ``|psi>`` is calculated empirically from a number num_samples of
         "one-shot" experiments.
     simulator_name : str | None
         name of the simulator.

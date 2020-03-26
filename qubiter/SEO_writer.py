@@ -62,10 +62,11 @@ class SEO_writer:
     The Picture file examples follow the ZL convention.
 
     3 kinds (called 0, 1, 2) of measurements MEAS are allowed. A type 0
-    measurement inserts a projector `|0><0| = n = P_0` at the target bit. A
-    type 1 measurement inserts a projector `|1><1| = nbar = P_1` at the target
-    bit. A type 2 measurement stores a copy of the state vector after `|0><0|`
-    has been applied, and another copy after `|1><1|` has been applied.
+    measurement inserts a projector ``|0><0| = n = P_0`` at the target bit.
+    A type 1 measurement inserts a projector ``|1><1| = nbar = P_1`` at the
+    target bit. A type 2 measurement stores a copy of the state vector after
+    ``|0><0|`` has been applied, and another copy after ``|1><1|`` has been
+    applied.
 
     If a vertical wire hasn't been measured as type 2 measurement,
     it is drawn in pic file as "|";  otherwise, it is drawn as ":".

@@ -7,8 +7,8 @@ class Controls:
     This class stores a dictionary called self.bit_pos_to_kind containing
     key-value pairs of the form (a control's qubit number: its kind). Kinds
     can be either a bool or a non-negative integer. Kind is True if control
-    is `P_1 = n = |1><1|`. Kind is False if control is `P_0 = nbar = |0><0|`.
-    Kind is a non-negative integer for MP_Y and DIAG controls.
+    is ``P_1 = n = |1><1|``. Kind is False if control is ``P_0 = nbar =
+    |0><0|``. Kind is a non-negative integer for MP_Y and DIAG controls.
 
     Attributes
     ----------

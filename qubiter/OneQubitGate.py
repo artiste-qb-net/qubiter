@@ -453,7 +453,7 @@ class OneQubitGate:
     @staticmethod
     def mat_Sdag(lib='np'):
         """
-        returns `S^\dag`.
+        returns ``S^\dag``.
 
         Parameters
         ----------
@@ -494,7 +494,7 @@ class OneQubitGate:
     @staticmethod
     def mat_Tdag(lib='np'):
         """
-        returns `T^\dag`.
+        returns ``T^\dag``.
 
         Parameters
         ----------

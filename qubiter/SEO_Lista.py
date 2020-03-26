@@ -19,7 +19,7 @@ class SEO_Lista:
 
     In this class, we support Qubiter's version of PyQuil's and Cirq's gate
     lists. In Qubiter, we use simply a Python list of the lines, stored as
-    strings, with the ending \\n removed, of the circuit's English file.
+    strings, with the ending ```\\n``` removed, of the circuit's English file.
 
     Attributes
     ----------
@@ -113,7 +113,7 @@ class SEO_Lista:
         """
         This static method reads an English file with file prefix
         `file_prefix` and it returns a list of its line strings. Note that
-        the '\\n' at the end of each line in the English file is removed
+        the ```\\n``` at the end of each line in the English file is removed
         before adding it to the line list.
 
         Parameters
@@ -136,7 +136,7 @@ class SEO_Lista:
         """
         This method does the reverse of eng_file_to_line_list(). It writes
         both an English file and a Picture file with file
-        prefix=file_prefix. Note that an '\\n' is added at the end of each
+        prefix=file_prefix. Note that an ```\\n``` is added at the end of each
         line in the line list before writing the line to the English file.
 
         Parameters
