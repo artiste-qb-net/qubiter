@@ -44,7 +44,7 @@ class SEO_reader(SEO_pre_reader):
         if_m case
     measured_bits : list(int)
         list of bits that have been measured with type 2 measurement and
-        haven't been reset to `|0>` or `|1>`
+        haven't been reset to ``|0>`` or ``|1>``
     num_cnots : int
     num_ops : int
     split_line : list[str]

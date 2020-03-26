@@ -447,9 +447,9 @@ class CGateSEO_writer(SEO_writer):
     def write_hads(self, trol_kinds, herm_conj=False):
         """
         Writes a chain of cnots that are useful when some of the controls of
-        the c_u2 being considered are `n_bar = P_0 = |0><0|` instead of `n =
-        P_1 = |1><1|`. We are using the identity sigx n sigx = nbar to
-        convert n's to nbar's.
+        the c_u2 being considered are ``n_bar = P_0 = |0><0|`` instead of
+        ``n = P_1 = |1><1|``. We are using the identity sigx n sigx = nbar
+        to convert n's to nbar's.
 
         Parameters
         ----------

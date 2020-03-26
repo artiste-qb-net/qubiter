@@ -82,8 +82,8 @@ class StateVec:
     @staticmethod
     def get_ground_st_vec(num_qbits):
         """
-        Returns StateVec for the ground state ``|0>|0>|0>...|0>``, where ``|0>
-        = [ 1,0]^t`` and ``|1> = [0,1]^t``, t = transpose.
+        Returns StateVec for the ground state ``|0>|0>|0>...|0>``,
+        where ``|0> = [ 1,0]^t`` and ``|1> = [0,1]^t``, t = transpose.
 
         Parameters
         ----------
@@ -134,8 +134,8 @@ class StateVec:
         """
         If ZL = True, returns StateVec for state ``...|s2>|s1>|s0>``,
         where ``spin_dir_list=[...,s2, s1, s0], s_j \in {0, 1}`` for all j,
-        ``|0> = [1, 0]^t`` and ``|1> = [0,1]^t``, t = transpose. If ZL = False,
-        same except ``spin_dir_list=reversed([...,s2, s1, s0])``.
+        ``|0> = [1, 0]^t`` and ``|1> = [0,1]^t``, t = transpose. If ZL =
+        False, same except ``spin_dir_list=reversed([...,s2, s1, s0])``.
 
         Parameters
         ----------

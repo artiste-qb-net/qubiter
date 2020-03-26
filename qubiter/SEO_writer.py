@@ -85,7 +85,7 @@ class SEO_writer:
         at beginning of each write_NEXT
     measured_bits : list(int)
         list of bits that have been measured with type 2 measurement and
-        haven't been reset to `|0>` or `|1>`
+        haven't been reset to ``|0>`` or ``|1>``
     picture_out : _io.TextIOWrapper
         file object for output text file that stores ASCII Picture
         description of circuit
@@ -1351,7 +1351,7 @@ class SEO_writer:
     def write_cnot(self, control_bit, target_bit, kind=True):
         """
         Writes a simple singly controlled not. If kind=True (resp. False),
-        cnot fires when control is `|1>` (resp. `|0>`).
+        cnot fires when control is ``|1>`` (resp. ``|0>``).
 
         Parameters
         ----------
@@ -1372,7 +1372,7 @@ class SEO_writer:
     def write_cz(self, control_bit, target_bit, kind=True):
         """
         Writes a simple singly controlled Z. If kind=True (resp. False),
-        cz fires when control is `|1>` (resp. `|0>`).
+        cz fires when control is ``|1>`` (resp. ``|0>``).
 
         Parameters
         ----------
@@ -1393,10 +1393,10 @@ class SEO_writer:
     def write_c_P1PH(self, control_bit, target_bit, rads=np.pi, kind=True):
         """
         Writes a simple singly controlled P1PH. If kind=True (resp. False),
-        c_P1PH fires when control is `|1>` (resp. `|0>`). When kind= True and
-        rads=p1, c_P1PH equals `(-1)^{n(t)n(c)} = sigz(t)^{n(c)}` where c is
-        the control and t is the target. This is often called a controlled
-        Z, and denoted by Cz.
+        c_P1PH fires when control is ``|1>`` (resp. ``|0>``). When kind=
+        True and rads=p1, c_P1PH equals ``(-1)^{n(t)n(c)} = sigz(t)^{n(c)}``
+        where c is the control and t is the target. This is often called a
+        controlled Z, and denoted by Cz.
 
         Parameters
         ----------

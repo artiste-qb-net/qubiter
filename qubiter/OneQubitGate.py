@@ -135,8 +135,8 @@ class OneQubitGate:
     @staticmethod
     def P_0(is_quantum=True, lib='np'):
         """
-        Returns projection operator `P_0 = |0><0| = nbar`, where `|0> = [1,
-        0]^T` and `|1> = [0, 1]^T`, T = transpose
+        Returns projection operator ``P_0 = |0><0| = nbar``, where ``|0> = [
+        1, 0]^T`` and ``|1> = [0, 1]^T``, T = transpose
 
         Parameters
         ----------
@@ -159,8 +159,8 @@ class OneQubitGate:
     @staticmethod
     def P_1(is_quantum=True, lib='np'):
         """
-        Returns projection operator `P_1 = |1><1| = n`, where `|0> = [1,
-        0]^T` and `|1> = [0, 1]^T`, T = transpose
+        Returns projection operator ``P_1 = |1><1| = n``, where ``|0> = [1,
+        0]^T`` and ``|1> = [0, 1]^T``, T = transpose
 
         Parameters
         ----------
