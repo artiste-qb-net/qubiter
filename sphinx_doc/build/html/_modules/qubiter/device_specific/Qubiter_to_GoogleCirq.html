@@ -157,7 +157,7 @@
 
 <div class="viewcode-block" id="Qubiter_to_GoogleCirq"><a class="viewcode-back" href="../../../qubiter.device_specific.Qubiter_to_GoogleCirq.html#qubiter.device_specific.Qubiter_to_GoogleCirq.Qubiter_to_GoogleCirq">[docs]</a><span class="k">class</span> <span class="nc">Qubiter_to_GoogleCirq</span><span class="p">(</span><span class="n">Qubiter_to_AnyQasm</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    See docstring of parent class Qubiter_to_AnyQasm</span>
+<span class="sd">    See docstring of parent class Qubiter_to_AnyQasm.</span>
 
 <span class="sd">    If input c_to_tars = None, all CNOTs allowed. If c_to_tars = &#39;do_fill&#39;,</span>
 <span class="sd">    class fills c_to_tars.</span>
@@ -242,8 +242,8 @@
 
 <div class="viewcode-block" id="Qubiter_to_GoogleCirq.use_HAD2"><a class="viewcode-back" href="../../../qubiter.device_specific.Qubiter_to_GoogleCirq.html#qubiter.device_specific.Qubiter_to_GoogleCirq.Qubiter_to_GoogleCirq.use_HAD2">[docs]</a>    <span class="k">def</span> <span class="nf">use_HAD2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">controls</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Writes line in Cirq file corresponding to an English file line</span>
-<span class="sd">        of type: HAD2 with no controls.</span>
+<span class="sd">        Writes line in Cirq file corresponding to an English file line of</span>
+<span class="sd">        type: HAD2 with no controls.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -264,8 +264,8 @@
 
 <div class="viewcode-block" id="Qubiter_to_GoogleCirq.use_NOTA"><a class="viewcode-back" href="../../../qubiter.device_specific.Qubiter_to_GoogleCirq.html#qubiter.device_specific.Qubiter_to_GoogleCirq.Qubiter_to_GoogleCirq.use_NOTA">[docs]</a>    <span class="k">def</span> <span class="nf">use_NOTA</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bla_str</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Writes line in Cirq file corresponding to an English file line</span>
-<span class="sd">        of type: NOTA</span>
+<span class="sd">        Writes line in Cirq file corresponding to an English file line of</span>
+<span class="sd">        type: NOTA</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -282,11 +282,11 @@
 
 <div class="viewcode-block" id="Qubiter_to_GoogleCirq.use_PHAS"><a class="viewcode-back" href="../../../qubiter.device_specific.Qubiter_to_GoogleCirq.html#qubiter.device_specific.Qubiter_to_GoogleCirq.Qubiter_to_GoogleCirq.use_PHAS">[docs]</a>    <span class="k">def</span> <span class="nf">use_PHAS</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">angle_rads</span><span class="p">,</span> <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">controls</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        If called for a controlled phase, this function will halt execution </span>
-<span class="sd">        of program. If it&#39;s just a global phase with no controls, </span>
-<span class="sd">        the function will comment the phase out in the output files (Cirq </span>
-<span class="sd">        and output Qubiter English and Picture files.) and move on to the </span>
-<span class="sd">        next line. </span>
+<span class="sd">        If called for a controlled phase, this function will halt execution</span>
+<span class="sd">        of program. If it&#39;s just a global phase with no controls,</span>
+<span class="sd">        the function will comment the phase out in the output files (Cirq</span>
+<span class="sd">        and output Qubiter English and Picture files.) and move on to the</span>
+<span class="sd">        next line.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -313,7 +313,7 @@
 
 <div class="viewcode-block" id="Qubiter_to_GoogleCirq.use_P_PH"><a class="viewcode-back" href="../../../qubiter.device_specific.Qubiter_to_GoogleCirq.html#qubiter.device_specific.Qubiter_to_GoogleCirq.Qubiter_to_GoogleCirq.use_P_PH">[docs]</a>    <span class="k">def</span> <span class="nf">use_P_PH</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">projection_bit</span><span class="p">,</span> <span class="n">angle_rads</span><span class="p">,</span> <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">controls</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        0Writes line in Cirq file corresponding to an English file line of</span>
+<span class="sd">        Writes line in Cirq file corresponding to an English file line of</span>
 <span class="sd">        type: P0PH or P1PH with 0 or 1 controls.</span>
 
 <span class="sd">        Parameters</span>
@@ -386,8 +386,8 @@
 
 <div class="viewcode-block" id="Qubiter_to_GoogleCirq.use_PRINT"><a class="viewcode-back" href="../../../qubiter.device_specific.Qubiter_to_GoogleCirq.html#qubiter.device_specific.Qubiter_to_GoogleCirq.Qubiter_to_GoogleCirq.use_PRINT">[docs]</a>    <span class="k">def</span> <span class="nf">use_PRINT</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">style</span><span class="p">,</span> <span class="n">line_num</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Writes line in Cirq file corresponding to an English file line</span>
-<span class="sd">        of type: PRINT</span>
+<span class="sd">        Writes line in Cirq file corresponding to an English file line of</span>
+<span class="sd">        type: PRINT</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -406,8 +406,8 @@
 
 <div class="viewcode-block" id="Qubiter_to_GoogleCirq.use_ROTA"><a class="viewcode-back" href="../../../qubiter.device_specific.Qubiter_to_GoogleCirq.html#qubiter.device_specific.Qubiter_to_GoogleCirq.Qubiter_to_GoogleCirq.use_ROTA">[docs]</a>    <span class="k">def</span> <span class="nf">use_ROTA</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">angle_rads</span><span class="p">,</span> <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">controls</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Writes line in Cirq file corresponding to an English file line</span>
-<span class="sd">        of type: ROTX, ROTY or ROTZ with no controls.</span>
+<span class="sd">        Writes line in Cirq file corresponding to an English file line of</span>
+<span class="sd">        type: ROTX, ROTY or ROTZ with no controls.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -451,8 +451,8 @@
 <div class="viewcode-block" id="Qubiter_to_GoogleCirq.use_ROTN"><a class="viewcode-back" href="../../../qubiter.device_specific.Qubiter_to_GoogleCirq.html#qubiter.device_specific.Qubiter_to_GoogleCirq.Qubiter_to_GoogleCirq.use_ROTN">[docs]</a>    <span class="k">def</span> <span class="nf">use_ROTN</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">angle_x_rads</span><span class="p">,</span> <span class="n">angle_y_rads</span><span class="p">,</span> <span class="n">angle_z_rads</span><span class="p">,</span>
                 <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">controls</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Writes line in Cirq file corresponding to an English file line</span>
-<span class="sd">        of type: ROTN with no controls.</span>
+<span class="sd">        Writes line in Cirq file corresponding to an English file line of</span>
+<span class="sd">        type: ROTN with no controls.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -499,8 +499,8 @@
 
 <div class="viewcode-block" id="Qubiter_to_GoogleCirq.use_SIG"><a class="viewcode-back" href="../../../qubiter.device_specific.Qubiter_to_GoogleCirq.html#qubiter.device_specific.Qubiter_to_GoogleCirq.Qubiter_to_GoogleCirq.use_SIG">[docs]</a>    <span class="k">def</span> <span class="nf">use_SIG</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">controls</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Writes line in Cirq file corresponding to an English file line</span>
-<span class="sd">        of type: SIGX, SIGY or SIGZ with no controls, or else SIGX with one</span>
+<span class="sd">        Writes line in Cirq file corresponding to an English file line of</span>
+<span class="sd">        type: SIGX, SIGY or SIGZ with no controls, or else SIGX with one</span>
 <span class="sd">        True control (i.e., simple CNOT).</span>
 
 <span class="sd">        Parameters</span>
@@ -562,8 +562,8 @@
 
 <div class="viewcode-block" id="Qubiter_to_GoogleCirq.use_SWAP"><a class="viewcode-back" href="../../../qubiter.device_specific.Qubiter_to_GoogleCirq.html#qubiter.device_specific.Qubiter_to_GoogleCirq.Qubiter_to_GoogleCirq.use_SWAP">[docs]</a>    <span class="k">def</span> <span class="nf">use_SWAP</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bit1</span><span class="p">,</span> <span class="n">bit2</span><span class="p">,</span> <span class="n">controls</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Writes line in PyQuil file corresponding to an English file line</span>
-<span class="sd">        of type: SWAP with no controls.</span>
+<span class="sd">        Writes line in Cirq file corresponding to an English file line of</span>
+<span class="sd">        type: SWAP with no controls.</span>
 
 
 <span class="sd">        Parameters</span>

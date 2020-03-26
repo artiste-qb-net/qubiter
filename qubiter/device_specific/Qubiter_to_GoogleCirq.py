@@ -6,7 +6,7 @@ import qubiter.utilities_gen as utg
 
 class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
     """
-    See docstring of parent class Qubiter_to_AnyQasm
+    See docstring of parent class Qubiter_to_AnyQasm.
 
     If input c_to_tars = None, all CNOTs allowed. If c_to_tars = 'do_fill',
     class fills c_to_tars.
@@ -91,8 +91,8 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
 
     def use_HAD2(self, tar_bit_pos, controls):
         """
-        Writes line in Cirq file corresponding to an English file line
-        of type: HAD2 with no controls.
+        Writes line in Cirq file corresponding to an English file line of
+        type: HAD2 with no controls.
 
         Parameters
         ----------
@@ -113,8 +113,8 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
 
     def use_NOTA(self, bla_str):
         """
-        Writes line in Cirq file corresponding to an English file line
-        of type: NOTA
+        Writes line in Cirq file corresponding to an English file line of
+        type: NOTA
 
         Parameters
         ----------
@@ -131,11 +131,11 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
 
     def use_PHAS(self, angle_rads, tar_bit_pos, controls):
         """
-        If called for a controlled phase, this function will halt execution 
-        of program. If it's just a global phase with no controls, 
-        the function will comment the phase out in the output files (Cirq 
-        and output Qubiter English and Picture files.) and move on to the 
-        next line. 
+        If called for a controlled phase, this function will halt execution
+        of program. If it's just a global phase with no controls,
+        the function will comment the phase out in the output files (Cirq
+        and output Qubiter English and Picture files.) and move on to the
+        next line.
 
         Parameters
         ----------
@@ -162,7 +162,7 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
 
     def use_P_PH(self, projection_bit, angle_rads, tar_bit_pos, controls):
         """
-        0Writes line in Cirq file corresponding to an English file line of
+        Writes line in Cirq file corresponding to an English file line of
         type: P0PH or P1PH with 0 or 1 controls.
 
         Parameters
@@ -235,8 +235,8 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
 
     def use_PRINT(self, style, line_num):
         """
-        Writes line in Cirq file corresponding to an English file line
-        of type: PRINT
+        Writes line in Cirq file corresponding to an English file line of
+        type: PRINT
 
         Parameters
         ----------
@@ -255,8 +255,8 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
 
     def use_ROTA(self, axis, angle_rads, tar_bit_pos, controls):
         """
-        Writes line in Cirq file corresponding to an English file line
-        of type: ROTX, ROTY or ROTZ with no controls.
+        Writes line in Cirq file corresponding to an English file line of
+        type: ROTX, ROTY or ROTZ with no controls.
 
         Parameters
         ----------
@@ -300,8 +300,8 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
     def use_ROTN(self, angle_x_rads, angle_y_rads, angle_z_rads,
                 tar_bit_pos, controls):
         """
-        Writes line in Cirq file corresponding to an English file line
-        of type: ROTN with no controls.
+        Writes line in Cirq file corresponding to an English file line of
+        type: ROTN with no controls.
 
         Parameters
         ----------
@@ -348,8 +348,8 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
 
     def use_SIG(self, axis, tar_bit_pos, controls):
         """
-        Writes line in Cirq file corresponding to an English file line
-        of type: SIGX, SIGY or SIGZ with no controls, or else SIGX with one
+        Writes line in Cirq file corresponding to an English file line of
+        type: SIGX, SIGY or SIGZ with no controls, or else SIGX with one
         True control (i.e., simple CNOT).
 
         Parameters
@@ -411,8 +411,8 @@ class Qubiter_to_GoogleCirq(Qubiter_to_AnyQasm):
 
     def use_SWAP(self, bit1, bit2, controls):
         """
-        Writes line in PyQuil file corresponding to an English file line
-        of type: SWAP with no controls.
+        Writes line in Cirq file corresponding to an English file line of
+        type: SWAP with no controls.
 
 
         Parameters

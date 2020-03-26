@@ -81,7 +81,3 @@ with open(orp_name, 'w') as fi:
     fi.write('</ol>\n')
     fi.write('</body></html>')
 
-
-
-
-

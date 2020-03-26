@@ -18,10 +18,10 @@ class MultiplexorExpander(EchoingSEO_reader):
     analogous one for DIAG, then use class CGateExpander.
 
     If the input English file has in_file_prefix as file prefix, then the
-    output English & Picture files have as file prefix in_file_prefix + '_X1',
-    assuming that '_X' + str(k) for some integer k is not already the ending
-    of in_file_prefix. If it is, then the ending is changed to '_X' + str(
-    k+1).
+    output English & Picture files have as file prefix in_file_prefix +
+    '_X1', assuming that '_X' + str(k) for some integer k is not already the
+    ending of in_file_prefix. If it is, then the ending is changed to '_X' +
+    str( k+1).
 
 
     Attributes

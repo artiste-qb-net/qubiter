@@ -168,29 +168,29 @@ class Plotter:
         num_titles = len(titles)
 
         def single_pd(ax, title, pd_df):
-                y_pos = np.arange(len(pd_df.index)) + .5
-                plt.sca(ax)
-                plt.yticks(y_pos, pd_df.index)
-                ax.invert_yaxis()
+            y_pos = np.arange(len(pd_df.index)) + .5
+            plt.sca(ax)
+            plt.yticks(y_pos, pd_df.index)
+            ax.invert_yaxis()
 
-                ax.set_xticks([0, .25, .5, .75, 1])
-                ax.set_xlim(0, 1)
+            ax.set_xticks([0, .25, .5, .75, 1])
+            ax.set_xlim(0, 1)
 
-                for row in range(len(y_pos)):
-                    val = pd_df.values[row]
-                    if isinstance(val, np.ndarray):
-                        val = val[0]
-                    ax.text(val, y_pos[row], '{:.3f}'.format(val))
+            for row in range(len(y_pos)):
+                val = pd_df.values[row]
+                if isinstance(val, np.ndarray):
+                    val = val[0]
+                ax.text(val, y_pos[row], '{:.3f}'.format(val))
 
-                ax.grid(True)
-                ax.set_title(title)
-                # new version of python/matplotlib has bug here.
-                # The following used to work but no longer does.
-                # ax.barh(y_pos, pd_df.values, align='center')
-                # work around
-                for b in range(len(y_pos)):
-                    ax.barh(y_pos[b], pd_df.values[b],
-                            align='center', color='blue')
+            ax.grid(True)
+            ax.set_title(title)
+            # new version of python/matplotlib has bug here.
+            # The following used to work but no longer does.
+            # ax.barh(y_pos, pd_df.values, align='center')
+            # work around
+            for b in range(len(y_pos)):
+                ax.barh(y_pos[b], pd_df.values[b],
+                        align='center', color='blue')
         plt.close('all')
         fig, ax_list = plt.subplots(nrows=num_titles, ncols=1)
         # print("***", ax_list[0])

@@ -55,8 +55,8 @@ class PhaseEstSEO_writer(SEO_writer):
         Parameters
         ----------
         do_write : bool
-            True if want constructor to write automatically without
-            being asked.
+            True if want constructor to write automatically without being
+            asked.
         atom_writer : AtomWriter
         num_probe_bits : int
         file_prefix : str
@@ -135,7 +135,7 @@ class PhaseEstSEO_writer(SEO_writer):
 
     def write_hermitian(self):
         """
-        Write Hermitian conjugate of circuit written by write()
+        Write Hermitian conjugate of circuit written by write().
 
         Returns
         -------
@@ -257,7 +257,7 @@ class AtomWriter(SEO_writer):
 
     def write_pow_hermitian(self, power):
         """
-        Write Hermitian conjugate of circuit written by write_pow()
+        Write Hermitian conjugate of circuit written by write_pow().
 
         Parameters
         ----------
@@ -296,7 +296,7 @@ class AtomWriter(SEO_writer):
 
     def write_hermitian(self):
         """
-        Write Hermitian conjugate of circuit written by write()
+        Write Hermitian conjugate of circuit written by write().
 
         Returns
         -------

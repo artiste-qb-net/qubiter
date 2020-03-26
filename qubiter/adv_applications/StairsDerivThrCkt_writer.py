@@ -206,7 +206,7 @@ class StairsDerivThrCkt_writer(SEO_writer):
 
     def get_tot_num_qbits(self):
         """
-        This is the self version of sta_get_tot_num_qbits()
+        This is the self version of sta_get_tot_num_qbits().
 
         Returns
         -------

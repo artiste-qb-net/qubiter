@@ -1,3 +1,16 @@
+autograd
+#cuncsd_sq
+graphviz
+IPython
+#ipywidget
 matplotlib
-scipy
+nbformat
+nbconvert
+networkx
 numpy
+openfermion
+pandas
+#pennylane
+#pyquil
+tensorflow
+scipy

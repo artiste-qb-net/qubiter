@@ -159,7 +159,7 @@ class UnitaryMat:
 
 
 if __name__ == "__main__":
-    from FouSEO_writer import *
+    from qubiter.FouSEO_writer import *
 
     def main():
         unit_vec = np.array([1, 2, 3])

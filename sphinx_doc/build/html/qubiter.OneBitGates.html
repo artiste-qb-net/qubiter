@@ -166,8 +166,8 @@ to choose between a float or complex array.</p>
 <dl class="method">
 <dt id="qubiter.OneQubitGate.OneQubitGate.P_0">
 <em class="property">static </em><code class="sig-name descname">P_0</code><span class="sig-paren">(</span><em class="sig-param">is_quantum=True</em>, <em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneQubitGate.html#OneQubitGate.P_0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneQubitGate.OneQubitGate.P_0" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns projection operator P_0 = <a href="#id9"><span class="problematic" id="id10">|0&gt;&lt;0|</span></a> = nbar, where <a href="#id1"><span class="problematic" id="id2">|</span></a>0&gt; = [1,
-0]^T and <a href="#id3"><span class="problematic" id="id4">|</span></a>1&gt; = [0, 1]^T, T = transpose</p>
+<dd><p>Returns projection operator <cite>P_0 = |0&gt;&lt;0| = nbar</cite>, where <cite>|0&gt; = [1,
+0]^T</cite> and <cite>|1&gt; = [0, 1]^T</cite>, T = transpose</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -208,8 +208,8 @@ to choose between a float or complex array.</p>
 <dl class="method">
 <dt id="qubiter.OneQubitGate.OneQubitGate.P_1">
 <em class="property">static </em><code class="sig-name descname">P_1</code><span class="sig-paren">(</span><em class="sig-param">is_quantum=True</em>, <em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneQubitGate.html#OneQubitGate.P_1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneQubitGate.OneQubitGate.P_1" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns projection operator P_1 = <a href="#id11"><span class="problematic" id="id12">|1&gt;&lt;1|</span></a> = n, where <a href="#id5"><span class="problematic" id="id6">|</span></a>0&gt; = [1,
-0]^T and <a href="#id7"><span class="problematic" id="id8">|</span></a>1&gt; = [0, 1]^T, T = transpose</p>
+<dd><p>Returns projection operator <cite>P_1 = |1&gt;&lt;1| = n</cite>, where <cite>|0&gt; = [1,
+0]^T</cite> and <cite>|1&gt; = [0, 1]^T</cite>, T = transpose</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -315,7 +315,7 @@ mat_dict.</p>
 <dl class="method">
 <dt id="qubiter.OneQubitGate.OneQubitGate.had2">
 <em class="property">static </em><code class="sig-name descname">had2</code><span class="sig-paren">(</span><em class="sig-param">is_quantum=True</em>, <em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneQubitGate.html#OneQubitGate.had2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneQubitGate.OneQubitGate.had2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns 2 dimensional Hadamard matrix (sigma_x + sigma_z)/sqrt(2)</p>
+<dd><p>Returns 2 dimensional Hadamard matrix (sigma_x + sigma_z)/sqrt(2).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -337,7 +337,7 @@ mat_dict.</p>
 <em class="property">static </em><code class="sig-name descname">mat_S</code><span class="sig-paren">(</span><em class="sig-param">herm=False</em>, <em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneQubitGate.html#OneQubitGate.mat_S"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneQubitGate.OneQubitGate.mat_S" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns</p>
 <p>[[1, 0],[0, x*sign]] where x=exp(j*pi/2)=j</p>
-<p>where sign = 1 if herm=False and sign = -1 if herm=True</p>
+<p>where sign = 1 if herm=False and sign = -1 if herm=True.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -357,7 +357,7 @@ mat_dict.</p>
 <dl class="method">
 <dt id="qubiter.OneQubitGate.OneQubitGate.mat_Sdag">
 <em class="property">static </em><code class="sig-name descname">mat_Sdag</code><span class="sig-paren">(</span><em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneQubitGate.html#OneQubitGate.mat_Sdag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneQubitGate.OneQubitGate.mat_Sdag" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns S^dag</p>
+<dd><p>returns <cite>S^dag</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>lib</strong> (<em>str</em>) – </p>
@@ -376,7 +376,7 @@ mat_dict.</p>
 <em class="property">static </em><code class="sig-name descname">mat_T</code><span class="sig-paren">(</span><em class="sig-param">herm=False</em>, <em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneQubitGate.html#OneQubitGate.mat_T"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneQubitGate.OneQubitGate.mat_T" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns</p>
 <p>[[1, 0],[0, exp(j*pi/4*sign)]]</p>
-<p>where sign = 1 if herm=False and sign = -1 if herm=True</p>
+<p>where sign = 1 if herm=False and sign = -1 if herm=True.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -396,7 +396,7 @@ mat_dict.</p>
 <dl class="method">
 <dt id="qubiter.OneQubitGate.OneQubitGate.mat_Tdag">
 <em class="property">static </em><code class="sig-name descname">mat_Tdag</code><span class="sig-paren">(</span><em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneQubitGate.html#OneQubitGate.mat_Tdag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneQubitGate.OneQubitGate.mat_Tdag" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns T^dag</p>
+<dd><p>returns <cite>T^dag</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>lib</strong> (<em>str</em>) – </p>

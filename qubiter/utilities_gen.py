@@ -9,8 +9,8 @@ else:
 
 # def centered_rads(ang_rads):
 #     """
-#     takes any real number and returns a number between -pi and pi that is
-#     equal to the original one mod 2pi
+#     Takes any real number and returns a number between -pi and pi that is
+#     equal to the original one mod 2pi.
 #
 #     Parameters
 #     ----------
@@ -47,7 +47,7 @@ else:
 
 def is_prob_dist(pd):
     """
-    Returns True iff pd is a probability distribution
+    Returns True iff pd is a probability distribution.
 
     Parameters
     ----------
@@ -63,7 +63,7 @@ def is_prob_dist(pd):
 
 def increment_dict(di, key, inc, initial=0):
     """
-    Increments dictionary entry at position 'key' by inc. If item at
+    Increments dictionary entry at position `key` by inc. If item at
     position key does not exist coming in, first creates one with value
     initial, then increments it by inc.
 
@@ -102,7 +102,7 @@ def is_arr(x):
 
 def is_diag_mat(arr):
     """
-    Returns True iff arr is numpy array for diagonal square matrix
+    Returns True iff arr is numpy array for diagonal square matrix.
 
     Parameters
     ----------
@@ -148,7 +148,7 @@ def is_const_mat(arr):
 def log_print(x):
     """
     Prints file name of log_print() call, then file line of log_print()
-    call, then x
+    call, then x.
 
     Parameters
     ----------
@@ -166,7 +166,7 @@ def log_print(x):
 
 def all_strings(li):
     """
-    Returns True iff all items in list are strings
+    Returns True iff all items in list are strings.
 
     Parameters
     ----------
@@ -182,7 +182,7 @@ def all_strings(li):
 
 def all_floats(li):
     """
-    Returns True iff all items in list are floats
+    Returns True iff all items in list are floats.
 
     Parameters
     ----------
@@ -198,7 +198,7 @@ def all_floats(li):
 
 def is_non_neg_int(s):
     """
-    Returns True iff string s is a non-negative number
+    Returns True iff string s is a non-negative number.
 
     Parameters
     ----------
@@ -242,7 +242,7 @@ def scalar_prod(scalars_list):
 def kron_prod(mat_list):
     """
     This method returns the Kronecker product of the list of matrices which
-    is has as input.
+    it has as input.
 
     Parameters
     ----------
@@ -262,7 +262,7 @@ def kron_prod(mat_list):
 
 def get_eng_file_rel_path(file_prefix, num_qbits):
     """
-    Returns path to English file
+    Returns path to English file.
 
     Returns
     -------
@@ -276,7 +276,7 @@ def get_eng_file_rel_path(file_prefix, num_qbits):
 
 def get_pic_file_rel_path(file_prefix, num_qbits, ZL=True):
     """
-    Returns path to Picture file
+    Returns path to Picture file.
 
     Returns
     -------
@@ -315,7 +315,7 @@ def get_value(kwargs, key_str, default_val=None):
 
 def find_path_to_qubiter():
     """
-    Returns absolute path to this file
+    Returns absolute path to this file.
 
     Returns
     ------
@@ -334,16 +334,16 @@ def preface(a_str):
     relative path equal to (hence, it shows up in the current working
     directory)
 
-    ./file_prefix + ending
+    `./file_prefix + ending`
 
     If file_prefix doesn't start with `_`, then the file is created with
     absolute path equal to (hence, it shows up in qubiter's io_folder)
 
-    absolute_path_to_io_folder/file_prefix + ending.
+    `absolute_path_to_io_folder/file_prefix + ending`.
 
     Given a_str, if it doesn't start with `_`, this method returns
-    absolute_path_to_io_folder/a_str. Otherwise, this method just returns
-    a_str
+    `absolute_path_to_io_folder/a_str`. Otherwise, this method just returns
+    a_str.
 
     Parameters
     ----------

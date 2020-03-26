@@ -32,7 +32,7 @@ class SEO_simulator_mp(SEO_simulator):
 
     def use_PRINT(self, style, line_num):
         """
-        If circuit has any PRINT statements, skip them
+        If circuit has any PRINT statements, skip them.
 
         Parameters
         ----------

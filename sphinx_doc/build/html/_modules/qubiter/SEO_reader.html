@@ -195,7 +195,7 @@
 <span class="sd">        if_m case</span>
 <span class="sd">    measured_bits : list(int)</span>
 <span class="sd">        list of bits that have been measured with type 2 measurement and</span>
-<span class="sd">        haven&#39;t been reset to |0&gt; or |1&gt;</span>
+<span class="sd">        haven&#39;t been reset to `|0&gt;` or `|1&gt;`</span>
 <span class="sd">    num_cnots : int</span>
 <span class="sd">    num_ops : int</span>
 <span class="sd">    split_line : list[str]</span>
@@ -334,9 +334,9 @@
 <div class="viewcode-block" id="SEO_reader.get_log_file_path"><a class="viewcode-back" href="../../qubiter.SEO_reader.html#qubiter.SEO_reader.SEO_reader.get_log_file_path">[docs]</a>    <span class="k">def</span> <span class="nf">get_log_file_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rel</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns path (relative if rel is True, absolute if rel is False) of</span>
-<span class="sd">        log file</span>
+<span class="sd">        log file.</span>
 
-<span class="sd">        Attributes</span>
+<span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        rel : bool</span>
 
@@ -363,7 +363,7 @@
 
 <div class="viewcode-block" id="SEO_reader.degs_str_to_rads"><a class="viewcode-back" href="../../qubiter.SEO_reader.html#qubiter.SEO_reader.SEO_reader.degs_str_to_rads">[docs]</a>    <span class="k">def</span> <span class="nf">degs_str_to_rads</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">degs_str</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Wrapper for function of same name in PlaceholderManager</span>
+<span class="sd">        Wrapper for function of same name in PlaceholderManager.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -384,7 +384,7 @@
 <span class="sd">        English file via classes LoopFileGenerator and</span>
 <span class="sd">        LoopyPlaceholderManager, and created a Loop xfile by editing that</span>
 <span class="sd">        Loop File. This class executes the Loop xfile to fill its history</span>
-<span class="sd">        dictionaries (the ones that end in _hist)</span>
+<span class="sd">        dictionaries (the ones that end in _hist).</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -642,7 +642,7 @@
 
 <div class="viewcode-block" id="SEO_reader.finalize_next_line"><a class="viewcode-back" href="../../qubiter.SEO_reader.html#qubiter.SEO_reader.SEO_reader.finalize_next_line">[docs]</a>    <span class="k">def</span> <span class="nf">finalize_next_line</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Useful for intercepting the end of each call to next_line()</span>
+<span class="sd">        Useful for intercepting the end of each call to next_line().</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>

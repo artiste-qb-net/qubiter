@@ -155,6 +155,7 @@
 <span class="kn">from</span> <span class="nn">qubiter.SEO_MatrixProduct</span> <span class="k">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">qubiter.BitVector</span> <span class="k">import</span> <span class="o">*</span>
 
+
 <div class="viewcode-block" id="MultiplexorSEO_writer"><a class="viewcode-back" href="../../../qubiter.quantum_CSD_compiler.MultiplexorSEO_writer.html#qubiter.quantum_CSD_compiler.MultiplexorSEO_writer.MultiplexorSEO_writer">[docs]</a><span class="k">class</span> <span class="nc">MultiplexorSEO_writer</span><span class="p">(</span><span class="n">SEO_writer</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A multiplexor is a matrix of the form</span>
@@ -392,8 +393,8 @@
                     <span class="p">}</span>
                     <span class="n">side_trols</span><span class="o">.</span><span class="n">bit_pos_to_kind</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">TF_dict</span><span class="p">)</span>
                     <span class="n">side_trols</span><span class="o">.</span><span class="n">refresh_lists</span><span class="p">()</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">side_trols</span><span class="p">,</span>
-                                                       <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">sigx</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span>
+                        <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">side_trols</span><span class="p">,</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">sigx</span><span class="p">)</span>
 
         <span class="n">bit_pos</span> <span class="o">=</span> <span class="n">ntf</span> <span class="o">+</span> <span class="n">num_MP_trols</span>  <span class="c1"># this is the target of Ry, gbits follow</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">bit_precision</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
@@ -445,7 +446,8 @@
 <span class="sd">            [ cc, ss]</span>
 <span class="sd">            [-ss, cc]</span>
 
-<span class="sd">        in it, where cc (ss) is the component-wise cosine (sine) of rad_angles</span>
+<span class="sd">        in it, where cc (ss) is the component-wise cosine (sine) of</span>
+<span class="sd">        rad_angles.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>

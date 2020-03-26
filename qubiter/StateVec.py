@@ -24,7 +24,7 @@ class StateVec:
     dim square numpy array of dimension 2^num_qbits.
 
     IMPORTANT: See docstring of method get_traditional_st_vec() for
-    explanation of qubit ordering conventions and shape of self.arr
+    explanation of qubit ordering conventions and shape of self.arr.
     
     Attributes
     ----------
@@ -55,7 +55,7 @@ class StateVec:
     def is_zero(st_vec):
         """
         Returns True iff an object of this class is None or its parameter
-        'arr' is None
+        `arr` is None.
 
         Parameters
         ----------
@@ -70,7 +70,7 @@ class StateVec:
 
     def __str__(self):
         """
-        Returns str(self.arr)
+        Returns str(self.arr).
 
         Returns
         -------
@@ -82,8 +82,8 @@ class StateVec:
     @staticmethod
     def get_ground_st_vec(num_qbits):
         """
-        Returns StateVec for the ground state |0>|0>|0>...|0>, where |0> = [
-        1,0]^t and |1> = [0,1]^t, t = transpose
+        Returns StateVec for the ground state `|0>|0>|0>...|0>`, where `|0>
+        = [ 1,0]^t` and `|1> = [0,1]^t`, t = transpose.
 
         Parameters
         ----------
@@ -104,8 +104,8 @@ class StateVec:
     @staticmethod
     def get_random_st_vec(num_qbits, rand_seed=None):
         """
-        Returns StateVec for random state \sum_b^n A(b^n)|b^n>, b^n \in {0,
-        1}^n, where n=num_qbits and \sum_b^n |A( b^n)|^2 = 1
+        Returns StateVec for random state `\sum_b^n A(b^n)|b^n>`, `b^n \in {
+        0, 1}^n`, where n=num_qbits and `\sum_b^n |A( b^n)|^2 = 1`.
 
         Parameters
         ----------
@@ -131,10 +131,10 @@ class StateVec:
     @staticmethod
     def get_standard_basis_st_vec(spin_dir_list, ZL=True):
         """
-        If ZL = True, returns StateVec for state ...|s2>|s1>|s0>,
-        where spin_dir_list=[...,s2, s1, s0], s_j \in {0, 1} for all j,
-        |0> = [1, 0]^t and |1> = [0,1]^t, t = transpose. If ZL = False,
-        same except spin_dir_list=reversed([...,s2, s1, s0]).
+        If ZL = True, returns StateVec for state `...|s2>|s1>|s0>`,
+        where `spin_dir_list=[...,s2, s1, s0], s_j \in {0, 1}` for all j,
+        `|0> = [1, 0]^t` and `|1> = [0,1]^t`, t = transpose. If ZL = False,
+        same except `spin_dir_list=reversed([...,s2, s1, s0])`.
 
         Parameters
         ----------
@@ -165,7 +165,7 @@ class StateVec:
         **IMPORTANT: Internally, self.arr in Qubiter has shape [2]*num_qbits
         and assumes ZF convention because that way a numpy axis and a qubit
         number are the same thing. However, the traditional way of writing a
-        state vector is as a column array of dimension 1<< num_qbits in the
+        state vector is as a column array of dimension `1<< num_qbits` in the
         ZL convention.**
 
         This function returns the traditional view. So it reshapes (
@@ -177,13 +177,13 @@ class StateVec:
         One can go from digital to binary labels and vice versa
         using
 
-        Examples
-        --------
+        ```
         >>> x = np.binary_repr(3, width=4)
         >>> x
         '0011'
         >>> int(x, 2)
         3
+        ```
 
         Parameters
         ----------
@@ -238,7 +238,7 @@ class StateVec:
         """
         Returns the partial trace of a density matrix den_mat. Traces over
         qubits in set traced_bits_set. To get full trace, just do np.trace(
-        den_mat)
+        den_mat).
 
         Parameters
         ----------
@@ -277,7 +277,7 @@ class StateVec:
         """
         Returns abs(trace(den_mat^2) -1). This is zero iff the density
         matrix den_mat represents a pure state. For example, for a pure
-        state den_mat = |a><a|, den_mat^2 = den_mat = |a><a| so this
+        state `den_mat = |a><a|`, `den_mat^2 = den_mat = |a><a|` so this
         quantity is indeed zero.
 
         Parameters
@@ -301,9 +301,9 @@ class StateVec:
         Parameters
         ----------
         den_mat : np.ndarray
-            Density matrix. Eigenvalues must be non-negative and sum to 1
+            Density matrix. Eigenvalues must be non-negative and sum to 1.
         method : str
-            method used to calculate log of array. Either 'eigen' or 'pade'
+            method used to calculate log of array. Either 'eigen' or 'pade'.
 
         Returns
         -------
@@ -328,8 +328,8 @@ class StateVec:
     @staticmethod
     def get_den_mat_pd(den_mat):
         """
-        Returns the diagonal of den_mat (so indexed in ZL convention) .
-        den_mat is expected to be a density matrix returned by get_den_mat()
+        Returns the diagonal of den_mat (so indexed in ZL convention).
+        den_mat is expected to be a density matrix returned by get_den_mat().
 
         Parameters
         ----------
@@ -358,7 +358,7 @@ class StateVec:
         -------
         np.ndarray
             probability distribution of shape (2^num_qbits,) IMP: will
-            be indexed in ZL convention
+            be indexed in ZL convention.
 
         """
         x = self.get_traditional_st_vec()
@@ -367,10 +367,10 @@ class StateVec:
     def get_mean_value_of_real_diag_mat(self, real_arr):
         """
         In Quantum Mechanics, one often needs to calculate the mean value of
-        a Hermitian operator H, mean= <psi|H|psi>. Let H = U^\dag D U,
-        where U is unitary and D is real diagonal matrix. If self = U|psi>,
-        then this reduces to finding mean= <self|D|self>. So must decompose
-        U into a SEO and evolve, using SEO_simulator, to the state U|psi>.
+        a Hermitian operator H, `mean= <psi|H|psi>`. Let `H = U^\dag D U`,
+        where U is unitary and D is real diagonal matrix. If `self = U|psi>`,
+        then this reduces to finding `mean= <self|D|self>`. So must decompose
+        U into a SEO and evolve, using SEO_simulator, to the state `U|psi>`.
 
         Parameters
         ----------
@@ -411,7 +411,7 @@ class StateVec:
         number of samples.
 
         For num_shots=1, this method returns an int (actually, a 1 X 1 array
-        with an int in it) in range(1<<num_qbits) chosen according to the
+        with an int in it) in `range(1<<num_qbits)` chosen according to the
         probability distribution pd for num_qbits qubits. If the output int
         were to be expressed in binary notation, its last, rightmost bit
         would be the measurement of the 0th qubit (because pd is assumed to
@@ -633,9 +633,9 @@ class StateVec:
         Parameters
         ----------
         omit_zero_amps : bool
-            If True, will not list states with zero amplitude
+            If True, will not list states with zero amplitude.
         show_pp_probs : bool
-            If True, will show probability of each amplitude
+            If True, will show probability of each amplitude.
 
         ZL : bool
             If True, multi-index in ZL (Zero bit Last) convention. If False,
@@ -721,12 +721,12 @@ class StateVec:
             If print_st_vec=True, pp=True and this parameter is True too,
             will omit states with zero amplitude
         show_pp_probs : bool
-            If True, will show probability of each standard basis state
+            If True, will show probability of each standard basis state.
         ZL : bool
             If True, multi-index of ket in ZL (Zero bit Last) convention.
             If False, multi-index of ket in ZF (Zero bit First) convention.
         plot_st_vec_pd : bool
-            If True, plots state vector's probability distribution
+            If True, plots state vector's probability distribution.
 
         Returns
         -------
@@ -763,7 +763,7 @@ class StateVec:
     @staticmethod
     def describe_st_vec_dict(st_vec_dict, **kwargs):
         """
-        Calls describe_self() for each branch of st_vec_dict
+        Calls describe_self() for each branch of st_vec_dict.
 
         Parameters
         ----------

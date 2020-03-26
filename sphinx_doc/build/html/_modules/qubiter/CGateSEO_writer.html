@@ -222,7 +222,7 @@
     <span class="k">def</span> <span class="nf">su2_mat_prod</span><span class="p">(</span><span class="n">su2_pair1</span><span class="p">,</span> <span class="n">su2_pair2</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        An SU(2) matrix can be expressed as exp(i*theta*sig_n) where theta</span>
-<span class="sd">        is a real number and sig_n = n \cdot sigma. Here n is a 3 dim real</span>
+<span class="sd">        is a real number and `sig_n = n \cdot sigma`. Here n is a 3 dim real</span>
 <span class="sd">        UNIT vector and sigma = [sigx, sigy, sigz], where sigx, sigy and</span>
 <span class="sd">        sigz are the 3 Pauli matrices. We define the su2_pair of this SU(2)</span>
 <span class="sd">        matrix as the list [theta, n], with n expressed as a numpy array.</span>
@@ -598,8 +598,8 @@
 <div class="viewcode-block" id="CGateSEO_writer.write_hads"><a class="viewcode-back" href="../../qubiter.CGateSEO_writer.html#qubiter.CGateSEO_writer.CGateSEO_writer.write_hads">[docs]</a>    <span class="k">def</span> <span class="nf">write_hads</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trol_kinds</span><span class="p">,</span> <span class="n">herm_conj</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Writes a chain of cnots that are useful when some of the controls of</span>
-<span class="sd">        the c_u2 being considered are n_bar = P_0 = |0&gt;&lt;0| instead of n =</span>
-<span class="sd">        P_1 = |1&gt;&lt;1|. We are using the identity sigx n sigx = nbar to</span>
+<span class="sd">        the c_u2 being considered are `n_bar = P_0 = |0&gt;&lt;0|` instead of `n =</span>
+<span class="sd">        P_1 = |1&gt;&lt;1|`. We are using the identity sigx n sigx = nbar to</span>
 <span class="sd">        convert n&#39;s to nbar&#39;s.</span>
 
 <span class="sd">        Parameters</span>

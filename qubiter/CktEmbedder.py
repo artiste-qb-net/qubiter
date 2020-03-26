@@ -45,7 +45,7 @@ class CktEmbedder:
 
     def get_num_new_bits(self):
         """
-        Returns num_qbits_aft - num_qbits_bef
+        Returns num_qbits_aft - num_qbits_bef.
 
         Returns
         -------
@@ -56,7 +56,7 @@ class CktEmbedder:
 
     def is_identity_map(self):
         """
-        Returns True (False) if bit_map is None (list)
+        Returns True (False) if bit_map is None (list).
 
         Returns
         -------
@@ -67,8 +67,8 @@ class CktEmbedder:
 
     def aft(self, bef):
         """
-        Returns bit_map[bef] if bit_map is list. If bit_map
-        is None, returns input 'bef' untouched.
+        Returns bit_map[bef] if bit_map is list. If bit_map is None, returns
+        input 'bef' untouched.
 
         Parameters
         ----------

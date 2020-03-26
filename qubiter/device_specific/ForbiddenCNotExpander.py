@@ -189,9 +189,9 @@ class ForbiddenCNotExpander(EchoingSEO_reader):
     def edge_type(self, x, y):
         """
         Returns 0 if C(x->y) and C(y->x) are both allowed.
-        Returns 1 if C(x->y) but not C(y->x) are allowed
-        Returns -1 if C(y->x) but not C(x->y) are allowed
-        Returns error message if neither is allowed
+        Returns 1 if C(x->y) but not C(y->x) are allowed.
+        Returns -1 if C(y->x) but not C(x->y) are allowed.
+        Returns error message if neither is allowed.
 
         Parameters
         ----------

@@ -4,6 +4,7 @@ from qubiter.HadamardTransform import *
 from qubiter.SEO_MatrixProduct import *
 from qubiter.BitVector import *
 
+
 class MultiplexorSEO_writer(SEO_writer):
     """
     A multiplexor is a matrix of the form
@@ -241,8 +242,8 @@ class MultiplexorSEO_writer(SEO_writer):
                     }
                     side_trols.bit_pos_to_kind.update(TF_dict)
                     side_trols.refresh_lists()
-                    self.write_controlled_one_qbit_gate(tar_bit_pos, side_trols,
-                                                       OneQubitGate.sigx)
+                    self.write_controlled_one_qbit_gate(
+                        tar_bit_pos, side_trols, OneQubitGate.sigx)
 
         bit_pos = ntf + num_MP_trols  # this is the target of Ry, gbits follow
         for k in range(1, bit_precision+1):
@@ -294,7 +295,8 @@ class MultiplexorSEO_writer(SEO_writer):
             [ cc, ss]
             [-ss, cc]
 
-        in it, where cc (ss) is the component-wise cosine (sine) of rad_angles
+        in it, where cc (ss) is the component-wise cosine (sine) of
+        rad_angles.
 
         Parameters
         ----------

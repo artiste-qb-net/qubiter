@@ -193,8 +193,8 @@ class MeanHamilMinimizer(CostMinimizer):
                 number of iterations (an iteration is every time call
                 cost_fun)
             descent_rate : float
-                positive float, constant that multiplies gradient of
-                cost function being minimized. Often denoted as eta
+                positive float, constant that multiplies gradient of cost
+                function being minimized. Often denoted as eta
 
         Parameters
         ----------

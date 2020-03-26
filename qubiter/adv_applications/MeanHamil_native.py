@@ -127,7 +127,6 @@ class MeanHamil_native(MeanHamil):
                 mean_val += coef*tf.reduce_sum(
                     tf.math.real(tf.math.conj(arr) * real_arr * arr))
 
-
         # create this writer in order to delete final files
         wr1 = SEO_writer(fin_file_prefix,
                 CktEmbedder(self.num_qbits, self.num_qbits))

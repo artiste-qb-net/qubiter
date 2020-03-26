@@ -161,7 +161,7 @@ facilitate the interaction between Qubiter and PyQuil and the Rigetti
 Cloud.</p>
 <dl class="method">
 <dt id="qubiter.device_specific.RigettiTools.RigettiTools.add_xy_meas_coda_to_program">
-<code class="sig-name descname">add_xy_meas_coda_to_program</code><span class="sig-paren">(</span><em class="sig-param">bit_pos_to_xy_str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/device_specific/RigettiTools.html#RigettiTools.add_xy_meas_coda_to_program"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.device_specific.RigettiTools.RigettiTools.add_xy_meas_coda_to_program" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">add_xy_meas_coda_to_program</code><span class="sig-paren">(</span><em class="sig-param">prog</em>, <em class="sig-param">bit_pos_to_xy_str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/device_specific/RigettiTools.html#RigettiTools.add_xy_meas_coda_to_program"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.device_specific.RigettiTools.RigettiTools.add_xy_meas_coda_to_program" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method adds a “coda” (tail ending) to prog using data in
 bit_pos_to_xy_str to determine what coda will be.</p>
 <dl class="field-list simple">
@@ -190,7 +190,7 @@ num_shots (aka num_samples) times by what it calls an observation
 vector. An obs vec is a 1-dim array, num_shots long, whose entries
 are integers which are the decimal representation of a string,
 num_qbits long, of zeros and ones. This string of zeros and ones
-gives the state of each qubit in the ZL convention</p>
+gives the state of each qubit in the ZL convention.</p>
 <p>PyQuil likes to state the results of an experiment repeated num_shots
 times by what it calls bitstrings. A bitstrings is a dict that maps
 qubit number to a 1-dim array, num_shots long, of zeros and ones.

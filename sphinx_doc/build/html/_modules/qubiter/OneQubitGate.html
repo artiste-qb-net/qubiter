@@ -262,7 +262,7 @@
 <div class="viewcode-block" id="OneQubitGate.had2"><a class="viewcode-back" href="../../qubiter.OneQubitGate.html#qubiter.OneQubitGate.OneQubitGate.had2">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">had2</span><span class="p">(</span><span class="n">is_quantum</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">lib</span><span class="o">=</span><span class="s1">&#39;np&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns 2 dimensional Hadamard matrix (\sigma_x + \sigma_z)/sqrt(2)</span>
+<span class="sd">        Returns 2 dimensional Hadamard matrix (sigma_x + sigma_z)/sqrt(2).</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -286,8 +286,8 @@
 <div class="viewcode-block" id="OneQubitGate.P_0"><a class="viewcode-back" href="../../qubiter.OneQubitGate.html#qubiter.OneQubitGate.OneQubitGate.P_0">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">P_0</span><span class="p">(</span><span class="n">is_quantum</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">lib</span><span class="o">=</span><span class="s1">&#39;np&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns projection operator P_0 = |0&gt;&lt;0| = nbar, where |0&gt; = [1,</span>
-<span class="sd">        0]^T and |1&gt; = [0, 1]^T, T = transpose</span>
+<span class="sd">        Returns projection operator `P_0 = |0&gt;&lt;0| = nbar`, where `|0&gt; = [1,</span>
+<span class="sd">        0]^T` and `|1&gt; = [0, 1]^T`, T = transpose</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -310,8 +310,8 @@
 <div class="viewcode-block" id="OneQubitGate.P_1"><a class="viewcode-back" href="../../qubiter.OneQubitGate.html#qubiter.OneQubitGate.OneQubitGate.P_1">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">P_1</span><span class="p">(</span><span class="n">is_quantum</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">lib</span><span class="o">=</span><span class="s1">&#39;np&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns projection operator P_1 = |1&gt;&lt;1| = n, where |0&gt; = [1,</span>
-<span class="sd">        0]^T and |1&gt; = [0, 1]^T, T = transpose</span>
+<span class="sd">        Returns projection operator `P_1 = |1&gt;&lt;1| = n`, where `|0&gt; = [1,</span>
+<span class="sd">        0]^T` and `|1&gt; = [0, 1]^T`, T = transpose</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -443,7 +443,8 @@
 
         <span class="n">mat_dict</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">const_dict</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">vec</span> <span class="o">=</span> <span class="p">[</span><span class="n">rad_ang_x</span><span class="p">,</span> <span class="n">rad_ang_y</span><span class="p">,</span> <span class="n">rad_ang_z</span><span class="p">]</span>
-        <span class="n">n</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">get_fun</span><span class="p">(</span><span class="n">lib</span><span class="p">,</span> <span class="s1">&#39;sqrt&#39;</span><span class="p">)(</span><span class="n">vec</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">vec</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">vec</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">get_fun</span><span class="p">(</span><span class="n">lib</span><span class="p">,</span> <span class="s1">&#39;sqrt&#39;</span><span class="p">)(</span>
+            <span class="n">vec</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">vec</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">vec</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-8</span><span class="p">:</span>
             <span class="n">mat_dict</span><span class="p">[</span><span class="s1">&#39;00&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
             <span class="n">mat_dict</span><span class="p">[</span><span class="s1">&#39;11&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
@@ -511,7 +512,7 @@
 <div class="viewcode-block" id="OneQubitGate.sigx"><a class="viewcode-back" href="../../qubiter.OneQubitGate.html#qubiter.OneQubitGate.OneQubitGate.sigx">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">sigx</span><span class="p">(</span><span class="n">is_quantum</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">lib</span><span class="o">=</span><span class="s1">&#39;np&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns \sigma_x Pauli matrix.</span>
+<span class="sd">        Returns sigma_x Pauli matrix.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -535,7 +536,7 @@
 <div class="viewcode-block" id="OneQubitGate.sigy"><a class="viewcode-back" href="../../qubiter.OneQubitGate.html#qubiter.OneQubitGate.OneQubitGate.sigy">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">sigy</span><span class="p">(</span><span class="n">lib</span><span class="o">=</span><span class="s1">&#39;np&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns \sigma_y Pauli matrix.</span>
+<span class="sd">        Returns sigma_y Pauli matrix.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -554,7 +555,7 @@
 <div class="viewcode-block" id="OneQubitGate.sigz"><a class="viewcode-back" href="../../qubiter.OneQubitGate.html#qubiter.OneQubitGate.OneQubitGate.sigz">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">sigz</span><span class="p">(</span><span class="n">is_quantum</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">lib</span><span class="o">=</span><span class="s1">&#39;np&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns \sigma_z Pauli matrix.</span>
+<span class="sd">        Returns sigma_z Pauli matrix.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -582,7 +583,7 @@
 
 <span class="sd">        [[1, 0],[0, x*sign]] where x=exp(j*pi/2)=j</span>
 
-<span class="sd">        where sign = 1 if herm=False and sign = -1 if herm=True</span>
+<span class="sd">        where sign = 1 if herm=False and sign = -1 if herm=True.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -603,7 +604,7 @@
 <div class="viewcode-block" id="OneQubitGate.mat_Sdag"><a class="viewcode-back" href="../../qubiter.OneQubitGate.html#qubiter.OneQubitGate.OneQubitGate.mat_Sdag">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">mat_Sdag</span><span class="p">(</span><span class="n">lib</span><span class="o">=</span><span class="s1">&#39;np&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        returns S^\dag</span>
+<span class="sd">        returns `S^\dag`.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -623,7 +624,7 @@
 
 <span class="sd">        [[1, 0],[0, exp(j*pi/4*sign)]]</span>
 
-<span class="sd">        where sign = 1 if herm=False and sign = -1 if herm=True</span>
+<span class="sd">        where sign = 1 if herm=False and sign = -1 if herm=True.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -644,7 +645,7 @@
 <div class="viewcode-block" id="OneQubitGate.mat_Tdag"><a class="viewcode-back" href="../../qubiter.OneQubitGate.html#qubiter.OneQubitGate.OneQubitGate.mat_Tdag">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">mat_Tdag</span><span class="p">(</span><span class="n">lib</span><span class="o">=</span><span class="s1">&#39;np&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        returns T^\dag</span>
+<span class="sd">        returns `T^\dag`.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>

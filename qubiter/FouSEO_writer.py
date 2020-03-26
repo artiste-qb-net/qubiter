@@ -71,7 +71,7 @@ class FouSEO_writer(SEO_writer):
 
     def write_hermitian(self):
         """
-        Write Hermitian conjugate of circuit written by write()
+        Write Hermitian conjugate of circuit written by write().
 
         Returns
         -------

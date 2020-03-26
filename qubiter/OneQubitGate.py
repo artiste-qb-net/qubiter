@@ -111,7 +111,7 @@ class OneQubitGate:
     @staticmethod
     def had2(is_quantum=True, lib='np'):
         """
-        Returns 2 dimensional Hadamard matrix (\sigma_x + \sigma_z)/sqrt(2)
+        Returns 2 dimensional Hadamard matrix (sigma_x + sigma_z)/sqrt(2).
 
         Parameters
         ----------
@@ -135,8 +135,8 @@ class OneQubitGate:
     @staticmethod
     def P_0(is_quantum=True, lib='np'):
         """
-        Returns projection operator P_0 = |0><0| = nbar, where |0> = [1,
-        0]^T and |1> = [0, 1]^T, T = transpose
+        Returns projection operator `P_0 = |0><0| = nbar`, where `|0> = [1,
+        0]^T` and `|1> = [0, 1]^T`, T = transpose
 
         Parameters
         ----------
@@ -159,8 +159,8 @@ class OneQubitGate:
     @staticmethod
     def P_1(is_quantum=True, lib='np'):
         """
-        Returns projection operator P_1 = |1><1| = n, where |0> = [1,
-        0]^T and |1> = [0, 1]^T, T = transpose
+        Returns projection operator `P_1 = |1><1| = n`, where `|0> = [1,
+        0]^T` and `|1> = [0, 1]^T`, T = transpose
 
         Parameters
         ----------
@@ -292,7 +292,8 @@ class OneQubitGate:
 
         mat_dict = OneQubitGate.const_dict(0)
         vec = [rad_ang_x, rad_ang_y, rad_ang_z]
-        n = OneQubitGate.get_fun(lib, 'sqrt')(vec[0]**2 + vec[1]**2 + vec[2]**2)
+        n = OneQubitGate.get_fun(lib, 'sqrt')(
+            vec[0]**2 + vec[1]**2 + vec[2]**2)
         if abs(n) < 1e-8:
             mat_dict['00'] = 1
             mat_dict['11'] = 1
@@ -360,7 +361,7 @@ class OneQubitGate:
     @staticmethod
     def sigx(is_quantum=True, lib='np'):
         """
-        Returns \sigma_x Pauli matrix.
+        Returns sigma_x Pauli matrix.
 
         Parameters
         ----------
@@ -384,7 +385,7 @@ class OneQubitGate:
     @staticmethod
     def sigy(lib='np'):
         """
-        Returns \sigma_y Pauli matrix.
+        Returns sigma_y Pauli matrix.
 
         Parameters
         ----------
@@ -403,7 +404,7 @@ class OneQubitGate:
     @staticmethod
     def sigz(is_quantum=True, lib='np'):
         """
-        Returns \sigma_z Pauli matrix.
+        Returns sigma_z Pauli matrix.
 
         Parameters
         ----------
@@ -431,7 +432,7 @@ class OneQubitGate:
 
         [[1, 0],[0, x*sign]] where x=exp(j*pi/2)=j
 
-        where sign = 1 if herm=False and sign = -1 if herm=True
+        where sign = 1 if herm=False and sign = -1 if herm=True.
 
         Parameters
         ----------
@@ -452,7 +453,7 @@ class OneQubitGate:
     @staticmethod
     def mat_Sdag(lib='np'):
         """
-        returns S^\dag
+        returns `S^\dag`.
 
         Parameters
         ----------
@@ -472,7 +473,7 @@ class OneQubitGate:
 
         [[1, 0],[0, exp(j*pi/4*sign)]]
 
-        where sign = 1 if herm=False and sign = -1 if herm=True
+        where sign = 1 if herm=False and sign = -1 if herm=True.
 
         Parameters
         ----------
@@ -493,7 +494,7 @@ class OneQubitGate:
     @staticmethod
     def mat_Tdag(lib='np'):
         """
-        returns T^\dag
+        returns `T^\dag`.
 
         Parameters
         ----------

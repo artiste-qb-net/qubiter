@@ -224,7 +224,7 @@ class SEO_Lista:
 
     def print(self):
         """
-        prints self.line_list, one item per line
+        Prints self.line_list, one item per line.
 
         Returns
         -------
@@ -264,7 +264,7 @@ class SEO_Lista:
 
     def __add__(self, other):
         """
-        define + of two SEO_Lista objects
+        Define + of two SEO_Lista objects.
 
         Parameters
         ----------
@@ -281,7 +281,7 @@ class SEO_Lista:
 
     def __iadd__(self, other):
         """
-        define += for inplace addition of an SEO_Lista object to self
+        Define += for inplace addition of an SEO_Lista object to self.
 
         Parameters
         ----------
@@ -298,7 +298,7 @@ class SEO_Lista:
 
     def __getitem__(self, item):
         """
-        define self[item]
+        Define self[item].
 
         Parameters
         ----------

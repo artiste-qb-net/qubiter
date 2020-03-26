@@ -57,7 +57,7 @@ class BitVector:
 
     def bit_is_T(self, bpos):
         """
-        Returns True iff bit at position bpos is 1 (True)
+        Returns True iff bit at position bpos is 1 (True).
 
         Parameters
         ----------
@@ -109,8 +109,8 @@ class BitVector:
 
     def set_all_bits_T(self):
         """
-        Sets to 1 (True) the bits of self at position bpos
-        from 0 to len-1 inclusive.
+        Sets to 1 (True) the bits of self at position bpos from 0 to len-1
+        inclusive.
 
         Returns
         -------
@@ -122,8 +122,8 @@ class BitVector:
 
     def set_all_bits_F(self):
         """
-        Sets to 0 (False) the bits of self at positions bpos
-        from 0 to len-1 inclusive.
+        Sets to 0 (False) the bits of self at positions bpos from 0 to len-1
+        inclusive.
 
         Returns
         -------
@@ -134,8 +134,8 @@ class BitVector:
 
     def get_num_T_bits(self):
         """
-        Returns the number of 1 (True) bits at positions bpos
-        from 0 to len-1 inclusive.
+        Returns the number of 1 (True) bits at positions bpos from 0 to
+        len-1 inclusive.
 
         Returns
         -------
@@ -267,7 +267,7 @@ class BitVector:
 
     def __str__(self):
         """
-        Readable representation of self
+        Readable representation of self.
 
         Returns
         -------

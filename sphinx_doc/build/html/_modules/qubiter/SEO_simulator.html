@@ -174,10 +174,10 @@
 <span class="sd">    set to the ground state automatically by the constructor.</span>
 
 <span class="sd">    3 kinds (called 0, 1, 2) of measurements MEAS are allowed. A type 0</span>
-<span class="sd">    measurement inserts a projector |0&gt;&lt;0| = n = P_0 at the target bit. A</span>
-<span class="sd">    type 1 measurement inserts a projector |1&gt;&lt;1| = nbar = P_1 at the target</span>
-<span class="sd">    bit. A type 2 measurement stores a copy of the state vector after |0&gt;&lt;0|</span>
-<span class="sd">    has been applied, and another copy after |1&gt;&lt;1| has been applied.</span>
+<span class="sd">    measurement inserts a projector `|0&gt;&lt;0| = n = P_0` at the target bit. A</span>
+<span class="sd">    type 1 measurement inserts a projector `|1&gt;&lt;1| = nbar = P_1` at the target</span>
+<span class="sd">    bit. A type 2 measurement stores a copy of the state vector after `|0&gt;&lt;0|`</span>
+<span class="sd">    has been applied, and another copy after `|1&gt;&lt;1|` has been applied.</span>
 
 <span class="sd">    self.cur_st_vec_dict is a dictionary of strings (called branch keys) to</span>
 <span class="sd">    state vectors StateVec on num_qbits qubits. We will refer to each state</span>
@@ -190,9 +190,9 @@
 <span class="sd">    cur_st_vec_dict are not expected have normalized state vectors as values</span>
 <span class="sd">    except when there is only a single branch.</span>
 
-<span class="sd">    If cur_st_vec_dict contains as values the states |br0&gt;, |br1&gt;, |br2&gt;,</span>
-<span class="sd">    ...], then one can construct the density matrix of that state as rho =</span>
-<span class="sd">    |br0&gt;&lt;br0| + |br1&gt;&lt;br1| + |br2&gt;&lt;br2| + ... divided by a number so that</span>
+<span class="sd">    If cur_st_vec_dict contains as values the states `|br0&gt;, |br1&gt;, |br2&gt;,</span>
+<span class="sd">    ...`, then one can construct the density matrix of that state as `rho =</span>
+<span class="sd">    |br0&gt;&lt;br0| + |br1&gt;&lt;br1| + |br2&gt;&lt;br2| + ...` divided by a number so that</span>
 <span class="sd">    trace(rho)=1. In other words, cur_st_vec_dict is just a particular way</span>
 <span class="sd">    of storing the density matrix of a state. A state with a single branch</span>
 <span class="sd">    is a pure state, but a state with more than one branch may not be.</span>
@@ -239,7 +239,7 @@
 <span class="sd">        file_prefix : str</span>
 <span class="sd">        num_qbits : int</span>
 <span class="sd">        init_st_vec : StateVec</span>
-<span class="sd">            get this using the functions StateVec.get_ground_st_vec() or</span>
+<span class="sd">            Get this using the functions StateVec.get_ground_st_vec() or</span>
 <span class="sd">            StateVec.get_standard_basis_st_vec().</span>
 
 <span class="sd">        Returns</span>
@@ -308,7 +308,7 @@
 <div class="viewcode-block" id="SEO_simulator.get_controls_from_br_key"><a class="viewcode-back" href="../../qubiter.SEO_simulator.html#qubiter.SEO_simulator.SEO_simulator.get_controls_from_br_key">[docs]</a>    <span class="k">def</span> <span class="nf">get_controls_from_br_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">br_key</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns a Controls object built from br_key. br_key is assumed to be</span>
-<span class="sd">        a str key for self.cur_st_vec_dict</span>
+<span class="sd">        a str key for self.cur_st_vec_dict.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -343,7 +343,7 @@
     <span class="k">def</span> <span class="nf">get_br_key_with_new_link</span><span class="p">(</span><span class="n">br_key</span><span class="p">,</span> <span class="n">new_bit_pos</span><span class="p">,</span> <span class="n">new_kind</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Say new_bit_pos=2 and new_kind=True. This returns a new branch key</span>
-<span class="sd">        with &#39;2T&#39; added to the end of the string br_key</span>
+<span class="sd">        with &#39;2T&#39; added to the end of the string br_key.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -525,7 +525,7 @@
 
 <div class="viewcode-block" id="SEO_simulator.do_array_assignment_workaround"><a class="viewcode-back" href="../../qubiter.SEO_simulator.html#qubiter.SEO_simulator.SEO_simulator.do_array_assignment_workaround">[docs]</a>    <span class="k">def</span> <span class="nf">do_array_assignment_workaround</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">br_key</span><span class="p">,</span> <span class="n">slicex</span><span class="p">,</span> <span class="n">sub_arr</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        internal function used in evolve_ methods iff autograd is on or</span>
+<span class="sd">        Internal function used in evolve_ methods iff autograd is on or</span>
 <span class="sd">        use_tf is True. Should have same effect as</span>
 
 <span class="sd">        self.cur_st_vec_dict[br_key].arr[slicex] = sub_arr</span>
@@ -666,7 +666,8 @@
             <span class="c1"># print(&#39;..,,mm&#39;, &#39;was here&#39;)</span>
             <span class="n">pd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cur_st_vec_dict</span><span class="p">[</span><span class="s1">&#39;pure&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get_pd</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">den_mat</span> <span class="o">=</span> <span class="n">StateVec</span><span class="o">.</span><span class="n">get_den_mat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cur_st_vec_dict</span><span class="p">)</span>
+            <span class="n">den_mat</span> <span class="o">=</span> <span class="n">StateVec</span><span class="o">.</span><span class="n">get_den_mat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span><span class="p">,</span>
+                                           <span class="bp">self</span><span class="o">.</span><span class="n">cur_st_vec_dict</span><span class="p">)</span>
             <span class="n">pd</span> <span class="o">=</span> <span class="n">StateVec</span><span class="o">.</span><span class="n">get_den_mat_pd</span><span class="p">(</span><span class="n">den_mat</span><span class="p">)</span>
         <span class="c1"># print(&#39;....,,,&#39;, pd.shape)</span>
         <span class="n">obs_vec</span> <span class="o">=</span> <span class="n">StateVec</span><span class="o">.</span><span class="n">get_observations_vec</span><span class="p">(</span>
@@ -750,8 +751,8 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Overrides the parent class use_ function.</span>
 
-<span class="sd">        For kind 0 (resp., 1) measurements, it applies |0&gt;&lt;0| (resp.,</span>
-<span class="sd">        |1&gt;&lt;1|) to each branch of cur_st_vec_dict.</span>
+<span class="sd">        For kind 0 (resp., 1) measurements, it applies `P_0=|0&gt;&lt;0|` (resp.,</span>
+<span class="sd">        `P_1=|1&gt;&lt;1|`) to each branch of cur_st_vec_dict.</span>
 
 <span class="sd">        For kind 2 measurements, it first doubles the number of branches in</span>
 <span class="sd">        cur_st_vec_dict by adding a deep copy of each branch. Next,</span>

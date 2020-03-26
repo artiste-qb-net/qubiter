@@ -194,10 +194,10 @@ English and Picture files.</p>
 <p>This pdf gives examples of lines in analytic/Picture/English formats.
 The Picture file examples follow the ZL convention.</p>
 <p>3 kinds (called 0, 1, 2) of measurements MEAS are allowed. A type 0
-measurement inserts a projector <a href="#id17"><span class="problematic" id="id18">|0&gt;&lt;0|</span></a> = n = P_0 at the target bit. A
-type 1 measurement inserts a projector <a href="#id19"><span class="problematic" id="id20">|1&gt;&lt;1|</span></a> = nbar = P_1 at the target
-bit. A type 2 measurement stores a copy of the state vector after <a href="#id21"><span class="problematic" id="id22">|0&gt;&lt;0|</span></a>
-has been applied, and another copy after <a href="#id23"><span class="problematic" id="id24">|1&gt;&lt;1|</span></a> has been applied.</p>
+measurement inserts a projector <cite>|0&gt;&lt;0| = n = P_0</cite> at the target bit. A
+type 1 measurement inserts a projector <cite>|1&gt;&lt;1| = nbar = P_1</cite> at the target
+bit. A type 2 measurement stores a copy of the state vector after <cite>|0&gt;&lt;0|</cite>
+has been applied, and another copy after <cite>|1&gt;&lt;1|</cite> has been applied.</p>
 <p>If a vertical wire hasn’t been measured as type 2 measurement,
 it is drawn in pic file as “|”;  otherwise, it is drawn as “:”.</p>
 <dl class="field-list simple">
@@ -211,7 +211,7 @@ circuit</p></li>
 <li><p><strong>indentation</strong> (<em>int</em>) – Starts at 0, Grows by 4 at end of each write_LOOP and decrease by 4
 at beginning of each write_NEXT</p></li>
 <li><p><strong>measured_bits</strong> (<em>list</em><em>(</em><em>int</em><em>)</em>) – list of bits that have been measured with type 2 measurement and
-haven’t been reset to <a href="#id1"><span class="problematic" id="id2">|</span></a>0&gt; or <a href="#id3"><span class="problematic" id="id4">|</span></a>1&gt;</p></li>
+haven’t been reset to <cite>|0&gt;</cite> or <cite>|1&gt;</cite></p></li>
 <li><p><strong>picture_out</strong> (<em>_io.TextIOWrapper</em>) – file object for output text file that stores ASCII Picture
 description of circuit</p></li>
 <li><p><strong>ZL</strong> (<em>bool</em>) – </p></li>
@@ -309,7 +309,7 @@ The first column gives the line numbers starting from 1.</p>
 <dt id="qubiter.SEO_writer.SEO_writer.get_eng_file_path">
 <code class="sig-name descname">get_eng_file_path</code><span class="sig-paren">(</span><em class="sig-param">rel=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_writer.html#SEO_writer.get_eng_file_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_writer.SEO_writer.get_eng_file_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns path (relative if rel is True, absolute if rel is False) of
-English file</p>
+English file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Variables</dt>
 <dd class="field-odd"><p><strong>rel</strong> (<em>bool</em>) – </p>
@@ -327,7 +327,7 @@ English file</p>
 <dt id="qubiter.SEO_writer.SEO_writer.get_pic_file_path">
 <code class="sig-name descname">get_pic_file_path</code><span class="sig-paren">(</span><em class="sig-param">rel=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_writer.html#SEO_writer.get_pic_file_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_writer.SEO_writer.get_pic_file_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns path (relative if rel is True, absolute if rel is False) of
-Picture file</p>
+Picture file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Variables</dt>
 <dd class="field-odd"><p><strong>rel</strong> (<em>bool</em>) – </p>
@@ -381,9 +381,9 @@ notebook a table with line numbers starting at 1</p>
 <dt id="qubiter.SEO_writer.SEO_writer.rads_to_degs_str">
 <code class="sig-name descname">rads_to_degs_str</code><span class="sig-paren">(</span><em class="sig-param">rads</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_writer.html#SEO_writer.rads_to_degs_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_writer.SEO_writer.rads_to_degs_str" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method returns</p>
-<p>str(rads*180/pi) if isinstance(rads, float)
-rads if is_legal_var_name(rads) (this implies rads is str)
-aborts otherwise.</p>
+<p>str(rads*180/pi) if isinstance(rads, float)</p>
+<p>rads if is_legal_var_name(rads) (this implies rads is str)</p>
+<p>aborts otherwise.</p>
 <p>The method is only used inside this class so I am making it
 non-static even though it doesn’t use self.</p>
 <dl class="field-list simple">
@@ -402,7 +402,7 @@ non-static even though it doesn’t use self.</p>
 <dl class="method">
 <dt id="qubiter.SEO_writer.SEO_writer.write_H">
 <code class="sig-name descname">write_H</code><span class="sig-paren">(</span><em class="sig-param">tar_bit_pos</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_writer.html#SEO_writer.write_H"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_writer.SEO_writer.write_H" title="Permalink to this definition">¶</a></dt>
-<dd><p>writes HAD2 with no controls</p>
+<dd><p>Writes HAD2 with no controls.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>tar_bit_pos</strong> (<em>int</em>) – </p>
@@ -549,9 +549,9 @@ not a gate.</p>
 <dl class="method">
 <dt id="qubiter.SEO_writer.SEO_writer.write_Rn">
 <code class="sig-name descname">write_Rn</code><span class="sig-paren">(</span><em class="sig-param">tar_bit_pos</em>, <em class="sig-param">rads_list</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_writer.html#SEO_writer.write_Rn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_writer.SEO_writer.write_Rn" title="Permalink to this definition">¶</a></dt>
-<dd><p>writes</p>
+<dd><p>Writes</p>
 <p>ROTN = exp(1j*(rads_x*sig_x + rads_y*sig_y + rads_z*sig_z))</p>
-<p>with no controls</p>
+<p>with no controls.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -571,7 +571,7 @@ not a gate.</p>
 <dl class="method">
 <dt id="qubiter.SEO_writer.SEO_writer.write_Rx">
 <code class="sig-name descname">write_Rx</code><span class="sig-paren">(</span><em class="sig-param">tar_bit_pos</em>, <em class="sig-param">rads</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_writer.html#SEO_writer.write_Rx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_writer.SEO_writer.write_Rx" title="Permalink to this definition">¶</a></dt>
-<dd><p>writes ROTX = exp(1j*rads*sig_x) with no controls</p>
+<dd><p>writes ROTX = exp(1j*rads*sig_x) with no controls.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -591,7 +591,7 @@ not a gate.</p>
 <dl class="method">
 <dt id="qubiter.SEO_writer.SEO_writer.write_Ry">
 <code class="sig-name descname">write_Ry</code><span class="sig-paren">(</span><em class="sig-param">tar_bit_pos</em>, <em class="sig-param">rads</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_writer.html#SEO_writer.write_Ry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_writer.SEO_writer.write_Ry" title="Permalink to this definition">¶</a></dt>
-<dd><p>writes ROTY = exp(1j*rads*sig_y) with no controls</p>
+<dd><p>Writes ROTY = exp(1j*rads*sig_y) with no controls.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -611,7 +611,7 @@ not a gate.</p>
 <dl class="method">
 <dt id="qubiter.SEO_writer.SEO_writer.write_Rz">
 <code class="sig-name descname">write_Rz</code><span class="sig-paren">(</span><em class="sig-param">tar_bit_pos</em>, <em class="sig-param">rads</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_writer.html#SEO_writer.write_Rz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_writer.SEO_writer.write_Rz" title="Permalink to this definition">¶</a></dt>
-<dd><p>writes ROTZ = exp(1j*rads*sig_z) with no controls</p>
+<dd><p>Writes ROTZ = exp(1j*rads*sig_z) with no controls.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -631,7 +631,7 @@ not a gate.</p>
 <dl class="method">
 <dt id="qubiter.SEO_writer.SEO_writer.write_S">
 <code class="sig-name descname">write_S</code><span class="sig-paren">(</span><em class="sig-param">tar_bit_pos</em>, <em class="sig-param">herm=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_writer.html#SEO_writer.write_S"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_writer.SEO_writer.write_S" title="Permalink to this definition">¶</a></dt>
-<dd><p>writes P1PH = exp(1j*P_1*pi/2) or its Hermitian with no controls</p>
+<dd><p>Writes P1PH = exp(1j*P_1*pi/2) or its Hermitian with no controls.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -651,7 +651,7 @@ not a gate.</p>
 <dl class="method">
 <dt id="qubiter.SEO_writer.SEO_writer.write_T">
 <code class="sig-name descname">write_T</code><span class="sig-paren">(</span><em class="sig-param">tar_bit_pos</em>, <em class="sig-param">herm=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_writer.html#SEO_writer.write_T"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_writer.SEO_writer.write_T" title="Permalink to this definition">¶</a></dt>
-<dd><p>writes P1PH = exp(1j*P_1*pi/4) or its Hermitian with no controls</p>
+<dd><p>Writes P1PH = exp(1j*P_1*pi/4) or its Hermitian with no controls.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -671,9 +671,9 @@ not a gate.</p>
 <dl class="method">
 <dt id="qubiter.SEO_writer.SEO_writer.write_U2">
 <code class="sig-name descname">write_U2</code><span class="sig-paren">(</span><em class="sig-param">tar_bit_pos</em>, <em class="sig-param">rads_list</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_writer.html#SEO_writer.write_U2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_writer.SEO_writer.write_U2" title="Permalink to this definition">¶</a></dt>
-<dd><p>writes</p>
+<dd><p>Writes</p>
 <p>UN_2= exp(1j*(rads0 + rads1*sig_x + rads2*sig_y + rads3*sig_z))</p>
-<p>with no controls</p>
+<p>with no controls.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -693,7 +693,7 @@ not a gate.</p>
 <dl class="method">
 <dt id="qubiter.SEO_writer.SEO_writer.write_X">
 <code class="sig-name descname">write_X</code><span class="sig-paren">(</span><em class="sig-param">tar_bit_pos</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_writer.html#SEO_writer.write_X"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_writer.SEO_writer.write_X" title="Permalink to this definition">¶</a></dt>
-<dd><p>writes SIGX with no controls</p>
+<dd><p>Writes SIGX with no controls.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>tar_bit_pos</strong> (<em>int</em>) – </p>
@@ -710,7 +710,7 @@ not a gate.</p>
 <dl class="method">
 <dt id="qubiter.SEO_writer.SEO_writer.write_Y">
 <code class="sig-name descname">write_Y</code><span class="sig-paren">(</span><em class="sig-param">tar_bit_pos</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_writer.html#SEO_writer.write_Y"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_writer.SEO_writer.write_Y" title="Permalink to this definition">¶</a></dt>
-<dd><p>writes SIGY with no controls</p>
+<dd><p>Writes SIGY with no controls.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>tar_bit_pos</strong> (<em>int</em>) – </p>
@@ -727,7 +727,7 @@ not a gate.</p>
 <dl class="method">
 <dt id="qubiter.SEO_writer.SEO_writer.write_Z">
 <code class="sig-name descname">write_Z</code><span class="sig-paren">(</span><em class="sig-param">tar_bit_pos</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_writer.html#SEO_writer.write_Z"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_writer.SEO_writer.write_Z" title="Permalink to this definition">¶</a></dt>
-<dd><p>writes SIGZ with no controls</p>
+<dd><p>Writes SIGZ with no controls.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>tar_bit_pos</strong> (<em>int</em>) – </p>
@@ -765,8 +765,8 @@ order of gates if ZF option chosen.</p>
 <dt id="qubiter.SEO_writer.SEO_writer.write_c_P1PH">
 <code class="sig-name descname">write_c_P1PH</code><span class="sig-paren">(</span><em class="sig-param">control_bit</em>, <em class="sig-param">target_bit</em>, <em class="sig-param">rads=numpy.pi</em>, <em class="sig-param">kind=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_writer.html#SEO_writer.write_c_P1PH"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_writer.SEO_writer.write_c_P1PH" title="Permalink to this definition">¶</a></dt>
 <dd><p>Writes a simple singly controlled P1PH. If kind=True (resp. False),
-c_P1PH fires when control is <a href="#id5"><span class="problematic" id="id6">|</span></a>1&gt; (resp. <a href="#id7"><span class="problematic" id="id8">|</span></a>0&gt;). When kind= True and
-rads=p1, c_P1PH equals (-1)^{n(t)n(c)} = sigz(t)^{n(c)} where c is
+c_P1PH fires when control is <cite>|1&gt;</cite> (resp. <cite>|0&gt;</cite>). When kind= True and
+rads=p1, c_P1PH equals <cite>(-1)^{n(t)n(c)} = sigz(t)^{n(c)}</cite> where c is
 the control and t is the target. This is often called a controlled
 Z, and denoted by Cz.</p>
 <dl class="field-list simple">
@@ -791,7 +791,7 @@ Z, and denoted by Cz.</p>
 <dt id="qubiter.SEO_writer.SEO_writer.write_cnot">
 <code class="sig-name descname">write_cnot</code><span class="sig-paren">(</span><em class="sig-param">control_bit</em>, <em class="sig-param">target_bit</em>, <em class="sig-param">kind=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_writer.html#SEO_writer.write_cnot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_writer.SEO_writer.write_cnot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Writes a simple singly controlled not. If kind=True (resp. False),
-cnot fires when control is <a href="#id9"><span class="problematic" id="id10">|</span></a>1&gt; (resp. <a href="#id11"><span class="problematic" id="id12">|</span></a>0&gt;)</p>
+cnot fires when control is <cite>|1&gt;</cite> (resp. <cite>|0&gt;</cite>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -880,7 +880,7 @@ OneQubitGate) with &gt;= 0 controls.</p>
 <dt id="qubiter.SEO_writer.SEO_writer.write_controlled_preamble">
 <code class="sig-name descname">write_controlled_preamble</code><span class="sig-paren">(</span><em class="sig-param">trols</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_writer.html#SEO_writer.write_controlled_preamble"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_writer.SEO_writer.write_controlled_preamble" title="Permalink to this definition">¶</a></dt>
 <dd><p>This is an internal function, used as preamble to all methods that
-are named <a href="#id25"><span class="problematic" id="id26">write_controlled_</span></a>…()</p>
+are named <a href="#id1"><span class="problematic" id="id2">write_controlled_</span></a>…()</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>trols</strong> (<a class="reference internal" href="qubiter.Controls.html#qubiter.Controls.Controls" title="qubiter.Controls.Controls"><em>Controls</em></a>) – </p>
@@ -937,7 +937,7 @@ sqrt(PSWAP) etc.</p>
 <dt id="qubiter.SEO_writer.SEO_writer.write_cz">
 <code class="sig-name descname">write_cz</code><span class="sig-paren">(</span><em class="sig-param">control_bit</em>, <em class="sig-param">target_bit</em>, <em class="sig-param">kind=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_writer.html#SEO_writer.write_cz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_writer.SEO_writer.write_cz" title="Permalink to this definition">¶</a></dt>
 <dd><p>Writes a simple singly controlled Z. If kind=True (resp. False),
-cz fires when control is <a href="#id13"><span class="problematic" id="id14">|</span></a>1&gt; (resp. <a href="#id15"><span class="problematic" id="id16">|</span></a>0&gt;)</p>
+cz fires when control is <cite>|1&gt;</cite> (resp. <cite>|0&gt;</cite>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">

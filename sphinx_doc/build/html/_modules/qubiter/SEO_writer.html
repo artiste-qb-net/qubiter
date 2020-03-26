@@ -213,10 +213,10 @@
 <span class="sd">    The Picture file examples follow the ZL convention.</span>
 
 <span class="sd">    3 kinds (called 0, 1, 2) of measurements MEAS are allowed. A type 0</span>
-<span class="sd">    measurement inserts a projector |0&gt;&lt;0| = n = P_0 at the target bit. A</span>
-<span class="sd">    type 1 measurement inserts a projector |1&gt;&lt;1| = nbar = P_1 at the target</span>
-<span class="sd">    bit. A type 2 measurement stores a copy of the state vector after |0&gt;&lt;0|</span>
-<span class="sd">    has been applied, and another copy after |1&gt;&lt;1| has been applied.</span>
+<span class="sd">    measurement inserts a projector `|0&gt;&lt;0| = n = P_0` at the target bit. A</span>
+<span class="sd">    type 1 measurement inserts a projector `|1&gt;&lt;1| = nbar = P_1` at the target</span>
+<span class="sd">    bit. A type 2 measurement stores a copy of the state vector after `|0&gt;&lt;0|`</span>
+<span class="sd">    has been applied, and another copy after `|1&gt;&lt;1|` has been applied.</span>
 
 <span class="sd">    If a vertical wire hasn&#39;t been measured as type 2 measurement,</span>
 <span class="sd">    it is drawn in pic file as &quot;|&quot;;  otherwise, it is drawn as &quot;:&quot;.</span>
@@ -235,7 +235,7 @@
 <span class="sd">        at beginning of each write_NEXT</span>
 <span class="sd">    measured_bits : list(int)</span>
 <span class="sd">        list of bits that have been measured with type 2 measurement and</span>
-<span class="sd">        haven&#39;t been reset to |0&gt; or |1&gt;</span>
+<span class="sd">        haven&#39;t been reset to `|0&gt;` or `|1&gt;`</span>
 <span class="sd">    picture_out : _io.TextIOWrapper</span>
 <span class="sd">        file object for output text file that stores ASCII Picture</span>
 <span class="sd">        description of circuit</span>
@@ -284,7 +284,7 @@
 <div class="viewcode-block" id="SEO_writer.get_eng_file_path"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.get_eng_file_path">[docs]</a>    <span class="k">def</span> <span class="nf">get_eng_file_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rel</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns path (relative if rel is True, absolute if rel is False) of</span>
-<span class="sd">        English file</span>
+<span class="sd">        English file.</span>
 
 <span class="sd">        Attributes</span>
 <span class="sd">        ----------</span>
@@ -303,7 +303,7 @@
 <div class="viewcode-block" id="SEO_writer.get_pic_file_path"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.get_pic_file_path">[docs]</a>    <span class="k">def</span> <span class="nf">get_pic_file_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rel</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns path (relative if rel is True, absolute if rel is False) of</span>
-<span class="sd">        Picture file</span>
+<span class="sd">        Picture file.</span>
 
 <span class="sd">        Attributes</span>
 <span class="sd">        ----------</span>
@@ -411,7 +411,6 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        jup : bool</span>
-
 <span class="sd">            If jup=False, it prints text. Otherwise, it draws in a jupyter</span>
 <span class="sd">            notebook a table with line numbers starting at 1</span>
 
@@ -680,7 +679,9 @@
 <span class="sd">        This method returns</span>
 
 <span class="sd">        str(rads*180/pi) if isinstance(rads, float)</span>
+
 <span class="sd">        rads if is_legal_var_name(rads) (this implies rads is str)</span>
+
 <span class="sd">        aborts otherwise.</span>
 
 <span class="sd">        The method is only used inside this class so I am making it</span>
@@ -1309,7 +1310,7 @@
 
 <div class="viewcode-block" id="SEO_writer.write_H"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.write_H">[docs]</a>    <span class="k">def</span> <span class="nf">write_H</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tar_bit_pos</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        writes HAD2 with no controls</span>
+<span class="sd">        Writes HAD2 with no controls.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1324,7 +1325,7 @@
 
 <div class="viewcode-block" id="SEO_writer.write_Rx"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.write_Rx">[docs]</a>    <span class="k">def</span> <span class="nf">write_Rx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">rads</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        writes ROTX = exp(1j*rads*sig_x) with no controls</span>
+<span class="sd">        writes ROTX = exp(1j*rads*sig_x) with no controls.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1340,7 +1341,7 @@
 
 <div class="viewcode-block" id="SEO_writer.write_Ry"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.write_Ry">[docs]</a>    <span class="k">def</span> <span class="nf">write_Ry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">rads</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        writes ROTY = exp(1j*rads*sig_y) with no controls</span>
+<span class="sd">        Writes ROTY = exp(1j*rads*sig_y) with no controls.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1356,7 +1357,7 @@
 
 <div class="viewcode-block" id="SEO_writer.write_Rz"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.write_Rz">[docs]</a>    <span class="k">def</span> <span class="nf">write_Rz</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">rads</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        writes ROTZ = exp(1j*rads*sig_z) with no controls</span>
+<span class="sd">        Writes ROTZ = exp(1j*rads*sig_z) with no controls.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1372,11 +1373,11 @@
 
 <div class="viewcode-block" id="SEO_writer.write_Rn"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.write_Rn">[docs]</a>    <span class="k">def</span> <span class="nf">write_Rn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">rads_list</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        writes</span>
+<span class="sd">        Writes</span>
 
 <span class="sd">        ROTN = exp(1j*(rads_x*sig_x + rads_y*sig_y + rads_z*sig_z))</span>
 
-<span class="sd">        with no controls</span>
+<span class="sd">        with no controls.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1393,7 +1394,7 @@
 
 <div class="viewcode-block" id="SEO_writer.write_S"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.write_S">[docs]</a>    <span class="k">def</span> <span class="nf">write_S</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">herm</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        writes P1PH = exp(1j*P_1*pi/2) or its Hermitian with no controls</span>
+<span class="sd">        Writes P1PH = exp(1j*P_1*pi/2) or its Hermitian with no controls.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1413,7 +1414,7 @@
 
 <div class="viewcode-block" id="SEO_writer.write_T"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.write_T">[docs]</a>    <span class="k">def</span> <span class="nf">write_T</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">herm</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        writes P1PH = exp(1j*P_1*pi/4) or its Hermitian with no controls</span>
+<span class="sd">        Writes P1PH = exp(1j*P_1*pi/4) or its Hermitian with no controls.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1433,11 +1434,11 @@
 
 <div class="viewcode-block" id="SEO_writer.write_U2"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.write_U2">[docs]</a>    <span class="k">def</span> <span class="nf">write_U2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">rads_list</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        writes</span>
+<span class="sd">        Writes</span>
 
 <span class="sd">        UN_2= exp(1j*(rads0 + rads1*sig_x + rads2*sig_y + rads3*sig_z))</span>
 
-<span class="sd">        with no controls</span>
+<span class="sd">        with no controls.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1454,7 +1455,7 @@
 
 <div class="viewcode-block" id="SEO_writer.write_X"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.write_X">[docs]</a>    <span class="k">def</span> <span class="nf">write_X</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tar_bit_pos</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        writes SIGX with no controls</span>
+<span class="sd">        Writes SIGX with no controls.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1469,7 +1470,7 @@
 
 <div class="viewcode-block" id="SEO_writer.write_Y"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.write_Y">[docs]</a>    <span class="k">def</span> <span class="nf">write_Y</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tar_bit_pos</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        writes SIGY with no controls</span>
+<span class="sd">        Writes SIGY with no controls.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1484,7 +1485,7 @@
 
 <div class="viewcode-block" id="SEO_writer.write_Z"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.write_Z">[docs]</a>    <span class="k">def</span> <span class="nf">write_Z</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tar_bit_pos</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        writes SIGZ with no controls</span>
+<span class="sd">        Writes SIGZ with no controls.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1500,7 +1501,7 @@
 <div class="viewcode-block" id="SEO_writer.write_cnot"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.write_cnot">[docs]</a>    <span class="k">def</span> <span class="nf">write_cnot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">control_bit</span><span class="p">,</span> <span class="n">target_bit</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Writes a simple singly controlled not. If kind=True (resp. False),</span>
-<span class="sd">        cnot fires when control is |1&gt; (resp. |0&gt;)</span>
+<span class="sd">        cnot fires when control is `|1&gt;` (resp. `|0&gt;`).</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1521,7 +1522,7 @@
 <div class="viewcode-block" id="SEO_writer.write_cz"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.write_cz">[docs]</a>    <span class="k">def</span> <span class="nf">write_cz</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">control_bit</span><span class="p">,</span> <span class="n">target_bit</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Writes a simple singly controlled Z. If kind=True (resp. False),</span>
-<span class="sd">        cz fires when control is |1&gt; (resp. |0&gt;)</span>
+<span class="sd">        cz fires when control is `|1&gt;` (resp. `|0&gt;`).</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1542,8 +1543,8 @@
 <div class="viewcode-block" id="SEO_writer.write_c_P1PH"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.write_c_P1PH">[docs]</a>    <span class="k">def</span> <span class="nf">write_c_P1PH</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">control_bit</span><span class="p">,</span> <span class="n">target_bit</span><span class="p">,</span> <span class="n">rads</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Writes a simple singly controlled P1PH. If kind=True (resp. False),</span>
-<span class="sd">        c_P1PH fires when control is |1&gt; (resp. |0&gt;). When kind= True and</span>
-<span class="sd">        rads=p1, c_P1PH equals (-1)^{n(t)n(c)} = sigz(t)^{n(c)} where c is</span>
+<span class="sd">        c_P1PH fires when control is `|1&gt;` (resp. `|0&gt;`). When kind= True and</span>
+<span class="sd">        rads=p1, c_P1PH equals `(-1)^{n(t)n(c)} = sigz(t)^{n(c)}` where c is</span>
 <span class="sd">        the control and t is the target. This is often called a controlled</span>
 <span class="sd">        Z, and denoted by Cz.</span>
 

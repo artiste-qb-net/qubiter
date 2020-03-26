@@ -49,7 +49,7 @@ class SEO_simulator_tf(SEO_simulator):
 
     def do_more_init_before_reading(self):
         """
-        overrides method in parent SEO_simulator
+        Overrides method in parent SEO_simulator.
 
         Returns
         -------

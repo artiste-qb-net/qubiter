@@ -49,9 +49,9 @@ class MeanHamil:
     num_qbits : int
         number of qubits
     num_samples : int
-        number of samples (aka num_shots). If this is zero, the |psi> in
-        <psi|H|psi> is calculated exactly from theory. If this is >0,
-        the |psi> is calculated empirically from a number num_samples of
+        number of samples (aka num_shots). If this is zero, the `|psi>` in
+        `<psi|H|psi>` is calculated exactly from theory. If this is >0,
+        the `|psi>` is calculated empirically from a number num_samples of
         "one-shot" experiments.
     simulator_name : str | None
         name of the simulator.

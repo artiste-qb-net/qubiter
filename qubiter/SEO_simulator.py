@@ -23,10 +23,10 @@ class SEO_simulator(SEO_reader):
     set to the ground state automatically by the constructor.
 
     3 kinds (called 0, 1, 2) of measurements MEAS are allowed. A type 0
-    measurement inserts a projector |0><0| = n = P_0 at the target bit. A
-    type 1 measurement inserts a projector |1><1| = nbar = P_1 at the target
-    bit. A type 2 measurement stores a copy of the state vector after |0><0|
-    has been applied, and another copy after |1><1| has been applied.
+    measurement inserts a projector `|0><0| = n = P_0` at the target bit. A
+    type 1 measurement inserts a projector `|1><1| = nbar = P_1` at the target
+    bit. A type 2 measurement stores a copy of the state vector after `|0><0|`
+    has been applied, and another copy after `|1><1|` has been applied.
 
     self.cur_st_vec_dict is a dictionary of strings (called branch keys) to
     state vectors StateVec on num_qbits qubits. We will refer to each state
@@ -39,9 +39,9 @@ class SEO_simulator(SEO_reader):
     cur_st_vec_dict are not expected have normalized state vectors as values
     except when there is only a single branch.
 
-    If cur_st_vec_dict contains as values the states |br0>, |br1>, |br2>,
-    ...], then one can construct the density matrix of that state as rho =
-    |br0><br0| + |br1><br1| + |br2><br2| + ... divided by a number so that
+    If cur_st_vec_dict contains as values the states `|br0>, |br1>, |br2>,
+    ...`, then one can construct the density matrix of that state as `rho =
+    |br0><br0| + |br1><br1| + |br2><br2| + ...` divided by a number so that
     trace(rho)=1. In other words, cur_st_vec_dict is just a particular way
     of storing the density matrix of a state. A state with a single branch
     is a pure state, but a state with more than one branch may not be.
@@ -88,7 +88,7 @@ class SEO_simulator(SEO_reader):
         file_prefix : str
         num_qbits : int
         init_st_vec : StateVec
-            get this using the functions StateVec.get_ground_st_vec() or
+            Get this using the functions StateVec.get_ground_st_vec() or
             StateVec.get_standard_basis_st_vec().
 
         Returns
@@ -157,7 +157,7 @@ class SEO_simulator(SEO_reader):
     def get_controls_from_br_key(self, br_key):
         """
         Returns a Controls object built from br_key. br_key is assumed to be
-        a str key for self.cur_st_vec_dict
+        a str key for self.cur_st_vec_dict.
 
         Parameters
         ----------
@@ -192,7 +192,7 @@ class SEO_simulator(SEO_reader):
     def get_br_key_with_new_link(br_key, new_bit_pos, new_kind):
         """
         Say new_bit_pos=2 and new_kind=True. This returns a new branch key
-        with '2T' added to the end of the string br_key
+        with '2T' added to the end of the string br_key.
 
         Parameters
         ----------
@@ -374,7 +374,7 @@ class SEO_simulator(SEO_reader):
 
     def do_array_assignment_workaround(self, br_key, slicex, sub_arr):
         """
-        internal function used in evolve_ methods iff autograd is on or
+        Internal function used in evolve_ methods iff autograd is on or
         use_tf is True. Should have same effect as
 
         self.cur_st_vec_dict[br_key].arr[slicex] = sub_arr
@@ -515,7 +515,8 @@ class SEO_simulator(SEO_reader):
             # print('..,,mm', 'was here')
             pd = self.cur_st_vec_dict['pure'].get_pd()
         else:
-            den_mat = StateVec.get_den_mat(self.num_qbits, self.cur_st_vec_dict)
+            den_mat = StateVec.get_den_mat(self.num_qbits,
+                                           self.cur_st_vec_dict)
             pd = StateVec.get_den_mat_pd(den_mat)
         # print('....,,,', pd.shape)
         obs_vec = StateVec.get_observations_vec(
@@ -599,8 +600,8 @@ class SEO_simulator(SEO_reader):
         """
         Overrides the parent class use_ function.
 
-        For kind 0 (resp., 1) measurements, it applies |0><0| (resp.,
-        |1><1|) to each branch of cur_st_vec_dict.
+        For kind 0 (resp., 1) measurements, it applies `P_0=|0><0|` (resp.,
+        `P_1=|1><1|`) to each branch of cur_st_vec_dict.
 
         For kind 2 measurements, it first doubles the number of branches in
         cur_st_vec_dict by adding a deep copy of each branch. Next,

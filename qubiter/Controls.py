@@ -7,7 +7,7 @@ class Controls:
     This class stores a dictionary called self.bit_pos_to_kind containing
     key-value pairs of the form (a control's qubit number: its kind). Kinds
     can be either a bool or a non-negative integer. Kind is True if control
-    is P_1 = n = |1><1|. Kind is False if control is P_0 = nbar = |0><0|.
+    is `P_1 = n = |1><1|`. Kind is False if control is `P_0 = nbar = |0><0|`.
     Kind is a non-negative integer for MP_Y and DIAG controls.
 
     Attributes
@@ -73,7 +73,7 @@ class Controls:
 
     def set_control(self, bit_pos, kind, do_refresh=False):
         """
-        Add key-value pair (bit_pos: kind) to self.bit_pos_to_kind dictionary
+        Add key-value pair (bit_pos: kind) to self.bit_pos_to_kind dictionary.
 
         Parameters
         ----------
@@ -115,7 +115,7 @@ class Controls:
     @staticmethod
     def new_single_trol(num_qbits, bit_pos, kind):
         """
-        Returns a single control
+        Returns a single control.
 
         Parameters
         ----------

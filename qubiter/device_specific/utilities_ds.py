@@ -1,7 +1,7 @@
 
 def get_dir_edges_from_c_to_tars(c_to_tars):
     """
-    returns tuple of all allowed directed edges (c, t) where c control
+    Returns tuple of all allowed directed edges (c, t) where c control
     and t target.
 
     Parameters

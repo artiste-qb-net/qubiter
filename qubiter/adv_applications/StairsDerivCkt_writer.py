@@ -249,7 +249,7 @@ class StairsDerivCkt_writer(SEO_writer):
             if dpart_name == '1':
                 if t > 1e-6:
                     for k in range(1, 4):
-                            rads_array[k] += (np.pi/2 + t)*t_list[k]/t
+                        rads_array[k] += (np.pi/2 + t)*t_list[k]/t
             elif dpart_name == 's':
                 rads_array[deriv_direc] += np.pi/2
             elif dpart_name == '1s':

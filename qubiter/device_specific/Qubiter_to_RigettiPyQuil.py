@@ -5,7 +5,7 @@ import qubiter.utilities_gen as utg
 
 class Qubiter_to_RigettiPyQuil(Qubiter_to_AnyQasm):
     """
-    See docstring of parent class Qubiter_to_AnyQasm
+    See docstring of parent class Qubiter_to_AnyQasm.
 
     If input c_to_tars = None, all CNOTs allowed.
 

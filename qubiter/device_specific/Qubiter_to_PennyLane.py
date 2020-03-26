@@ -4,7 +4,7 @@ import qubiter.utilities_gen as utg
 
 class Qubiter_to_PennyLane(Qubiter_to_AnyQasm):
     """
-    See docstring of parent class Qubiter_to_AnyQasm
+    See docstring of parent class Qubiter_to_AnyQasm.
 
     If input c_to_tars = None, all CNOTs and CZs are allowed.
 
@@ -121,8 +121,8 @@ class Qubiter_to_PennyLane(Qubiter_to_AnyQasm):
 
     def use_NOTA(self, bla_str):
         """
-        Writes line in PennyL file corresponding to an English file line
-        of type: NOTA
+        Writes line in PennyL file corresponding to an English file line of
+        type: NOTA
 
         Parameters
         ----------

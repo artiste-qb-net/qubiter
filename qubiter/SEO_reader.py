@@ -44,7 +44,7 @@ class SEO_reader(SEO_pre_reader):
         if_m case
     measured_bits : list(int)
         list of bits that have been measured with type 2 measurement and
-        haven't been reset to |0> or |1>
+        haven't been reset to `|0>` or `|1>`
     num_cnots : int
     num_ops : int
     split_line : list[str]
@@ -183,9 +183,9 @@ class SEO_reader(SEO_pre_reader):
     def get_log_file_path(self, rel=False):
         """
         Returns path (relative if rel is True, absolute if rel is False) of
-        log file
+        log file.
 
-        Attributes
+        Parameters
         ----------
         rel : bool
 
@@ -212,7 +212,7 @@ class SEO_reader(SEO_pre_reader):
 
     def degs_str_to_rads(self, degs_str):
         """
-        Wrapper for function of same name in PlaceholderManager
+        Wrapper for function of same name in PlaceholderManager.
 
         Parameters
         ----------
@@ -233,7 +233,7 @@ class SEO_reader(SEO_pre_reader):
         English file via classes LoopFileGenerator and
         LoopyPlaceholderManager, and created a Loop xfile by editing that
         Loop File. This class executes the Loop xfile to fill its history
-        dictionaries (the ones that end in _hist)
+        dictionaries (the ones that end in _hist).
 
         Returns
         -------
@@ -491,7 +491,7 @@ class SEO_reader(SEO_pre_reader):
 
     def finalize_next_line(self):
         """
-        Useful for intercepting the end of each call to next_line()
+        Useful for intercepting the end of each call to next_line().
 
         Returns
         -------

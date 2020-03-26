@@ -158,16 +158,16 @@
 <dd><p>Bases: <a class="reference internal" href="qubiter.SEO_reader.html#qubiter.SEO_reader.SEO_reader" title="qubiter.SEO_reader.SEO_reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">qubiter.SEO_reader.SEO_reader</span></code></a></p>
 <p>This class simulates the evolution of a quantum state vector.</p>
 <p>This class has SEO_reader as a parent. Each line of an English file is
-read by the parent class and handed over to the <a href="#id19"><span class="problematic" id="id20">use_</span></a> functions of this
-simulator class. The <a href="#id21"><span class="problematic" id="id22">use_</span></a>  functions multiply the current state vector by
+read by the parent class and handed over to the <a href="#id1"><span class="problematic" id="id2">use_</span></a> functions of this
+simulator class. The <a href="#id3"><span class="problematic" id="id4">use_</span></a>  functions multiply the current state vector by
 the unitary matrix that represents the latest line read.</p>
 <p>An initial state vector can be entered via the constructor or else it is
 set to the ground state automatically by the constructor.</p>
 <p>3 kinds (called 0, 1, 2) of measurements MEAS are allowed. A type 0
-measurement inserts a projector <a href="#id1"><span class="problematic" id="id2">|0&gt;&lt;0|</span></a> = n = P_0 at the target bit. A
-type 1 measurement inserts a projector <a href="#id3"><span class="problematic" id="id4">|1&gt;&lt;1|</span></a> = nbar = P_1 at the target
-bit. A type 2 measurement stores a copy of the state vector after <a href="#id5"><span class="problematic" id="id6">|0&gt;&lt;0|</span></a>
-has been applied, and another copy after <a href="#id7"><span class="problematic" id="id8">|1&gt;&lt;1|</span></a> has been applied.</p>
+measurement inserts a projector <cite>|0&gt;&lt;0| = n = P_0</cite> at the target bit. A
+type 1 measurement inserts a projector <cite>|1&gt;&lt;1| = nbar = P_1</cite> at the target
+bit. A type 2 measurement stores a copy of the state vector after <cite>|0&gt;&lt;0|</cite>
+has been applied, and another copy after <cite>|1&gt;&lt;1|</cite> has been applied.</p>
 <p>self.cur_st_vec_dict is a dictionary of strings (called branch keys) to
 state vectors StateVec on num_qbits qubits. We will refer to each state
 vec in the dict as a branch. Initially, this dict contains a single
@@ -177,9 +177,9 @@ not change the number of branches in the dict, but a measurement of kind
 <p>Note that since projectors are not unitary matrices, the branches of
 cur_st_vec_dict are not expected have normalized state vectors as values
 except when there is only a single branch.</p>
-<p>If cur_st_vec_dict contains as values the states <a href="#id9"><span class="problematic" id="id10">|br0&gt;, |br1&gt;, |br2&gt;,
-...], then one can construct the density matrix of that state as rho =
-|br0&gt;&lt;br0|</span></a> + <a href="#id11"><span class="problematic" id="id12">|br1&gt;&lt;br1|</span></a> + <a href="#id13"><span class="problematic" id="id14">|br2&gt;&lt;br2|</span></a> + … divided by a number so that
+<p>If cur_st_vec_dict contains as values the states <cite>|br0&gt;, |br1&gt;, |br2&gt;,
+…</cite>, then one can construct the density matrix of that state as <cite>rho =
+|br0&gt;&lt;br0| + |br1&gt;&lt;br1| + |br2&gt;&lt;br2| + …</cite> divided by a number so that
 trace(rho)=1. In other words, cur_st_vec_dict is just a particular way
 of storing the density matrix of a state. A state with a single branch
 is a pure state, but a state with more than one branch may not be.</p>
@@ -213,7 +213,7 @@ True and qubit 4 is False, the branch key will be ‘4F2T’.</p></li>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>file_prefix</strong> (<em>str</em>) – </p></li>
 <li><p><strong>num_qbits</strong> (<em>int</em>) – </p></li>
-<li><p><strong>init_st_vec</strong> (<a class="reference internal" href="qubiter.StateVec.html#qubiter.StateVec.StateVec" title="qubiter.StateVec.StateVec"><em>StateVec</em></a>) – get this using the functions StateVec.get_ground_st_vec() or
+<li><p><strong>init_st_vec</strong> (<a class="reference internal" href="qubiter.StateVec.html#qubiter.StateVec.StateVec" title="qubiter.StateVec.StateVec"><em>StateVec</em></a>) – Get this using the functions StateVec.get_ground_st_vec() or
 StateVec.get_standard_basis_st_vec().</p></li>
 </ul>
 </dd>
@@ -278,7 +278,7 @@ the end, after running through whole circuit.</p>
 <dl class="method">
 <dt id="qubiter.SEO_simulator.SEO_simulator.do_array_assignment_workaround">
 <code class="sig-name descname">do_array_assignment_workaround</code><span class="sig-paren">(</span><em class="sig-param">br_key</em>, <em class="sig-param">slicex</em>, <em class="sig-param">sub_arr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator.do_array_assignment_workaround"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.do_array_assignment_workaround" title="Permalink to this definition">¶</a></dt>
-<dd><p>internal function used in <a href="#id23"><span class="problematic" id="id24">evolve_</span></a> methods iff autograd is on or
+<dd><p>Internal function used in <a href="#id5"><span class="problematic" id="id6">evolve_</span></a> methods iff autograd is on or
 use_tf is True. Should have same effect as</p>
 <p>self.cur_st_vec_dict[br_key].arr[slicex] = sub_arr</p>
 <dl class="field-list simple">
@@ -379,7 +379,7 @@ such a block, and it satisfies self.mcase_trols.</p>
 <dt id="qubiter.SEO_simulator.SEO_simulator.get_br_key_with_new_link">
 <em class="property">static </em><code class="sig-name descname">get_br_key_with_new_link</code><span class="sig-paren">(</span><em class="sig-param">br_key</em>, <em class="sig-param">new_bit_pos</em>, <em class="sig-param">new_kind</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator.get_br_key_with_new_link"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.get_br_key_with_new_link" title="Permalink to this definition">¶</a></dt>
 <dd><p>Say new_bit_pos=2 and new_kind=True. This returns a new branch key
-with ‘2T’ added to the end of the string br_key</p>
+with ‘2T’ added to the end of the string br_key.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -401,7 +401,7 @@ with ‘2T’ added to the end of the string br_key</p>
 <dt id="qubiter.SEO_simulator.SEO_simulator.get_controls_from_br_key">
 <code class="sig-name descname">get_controls_from_br_key</code><span class="sig-paren">(</span><em class="sig-param">br_key</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator.get_controls_from_br_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.get_controls_from_br_key" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a Controls object built from br_key. br_key is assumed to be
-a str key for self.cur_st_vec_dict</p>
+a str key for self.cur_st_vec_dict.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>br_key</strong> (<em>str</em>) – </p>
@@ -480,7 +480,7 @@ shouldn’t be called.</p>
 <dl class="method">
 <dt id="qubiter.SEO_simulator.SEO_simulator.use_HAD2">
 <code class="sig-name descname">use_HAD2</code><span class="sig-paren">(</span><em class="sig-param">tar_bit_pos</em>, <em class="sig-param">controls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator.use_HAD2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.use_HAD2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Overrides the parent class <a href="#id25"><span class="problematic" id="id26">use_</span></a> function. Calls
+<dd><p>Overrides the parent class <a href="#id7"><span class="problematic" id="id8">use_</span></a> function. Calls
 evolve_by_controlled_one_qbit_gate() for had2.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -532,9 +532,9 @@ evolve_by_controlled_one_qbit_gate() for had2.</p>
 <dl class="method">
 <dt id="qubiter.SEO_simulator.SEO_simulator.use_MEAS">
 <code class="sig-name descname">use_MEAS</code><span class="sig-paren">(</span><em class="sig-param">tar_bit_pos</em>, <em class="sig-param">kind</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator.use_MEAS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.use_MEAS" title="Permalink to this definition">¶</a></dt>
-<dd><p>Overrides the parent class <a href="#id27"><span class="problematic" id="id28">use_</span></a> function.</p>
-<p>For kind 0 (resp., 1) measurements, it applies <a href="#id15"><span class="problematic" id="id16">|0&gt;&lt;0|</span></a> (resp.,
-<a href="#id17"><span class="problematic" id="id18">|1&gt;&lt;1|</span></a>) to each branch of cur_st_vec_dict.</p>
+<dd><p>Overrides the parent class <a href="#id9"><span class="problematic" id="id10">use_</span></a> function.</p>
+<p>For kind 0 (resp., 1) measurements, it applies <cite>P_0=|0&gt;&lt;0|</cite> (resp.,
+<cite>P_1=|1&gt;&lt;1|</cite>) to each branch of cur_st_vec_dict.</p>
 <p>For kind 2 measurements, it first doubles the number of branches in
 cur_st_vec_dict by adding a deep copy of each branch. Next,
 it applies P_0 to half of the branches of the dict and P_1 to the
@@ -591,7 +591,7 @@ shouldn’t be called.</p>
 <dl class="method">
 <dt id="qubiter.SEO_simulator.SEO_simulator.use_PHAS">
 <code class="sig-name descname">use_PHAS</code><span class="sig-paren">(</span><em class="sig-param">angle_rads</em>, <em class="sig-param">tar_bit_pos</em>, <em class="sig-param">controls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator.use_PHAS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.use_PHAS" title="Permalink to this definition">¶</a></dt>
-<dd><p>Overrides the parent class <a href="#id29"><span class="problematic" id="id30">use_</span></a> function. Calls
+<dd><p>Overrides the parent class <a href="#id11"><span class="problematic" id="id12">use_</span></a> function. Calls
 evolve_by_controlled_one_qbit_gate() for PHAS.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -633,7 +633,7 @@ evolve_by_controlled_one_qbit_gate() for PHAS.</p>
 <dl class="method">
 <dt id="qubiter.SEO_simulator.SEO_simulator.use_P_PH">
 <code class="sig-name descname">use_P_PH</code><span class="sig-paren">(</span><em class="sig-param">projection_bit</em>, <em class="sig-param">angle_rads</em>, <em class="sig-param">tar_bit_pos</em>, <em class="sig-param">controls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator.use_P_PH"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.use_P_PH" title="Permalink to this definition">¶</a></dt>
-<dd><p>Overrides the parent class <a href="#id31"><span class="problematic" id="id32">use_</span></a> function. Calls
+<dd><p>Overrides the parent class <a href="#id13"><span class="problematic" id="id14">use_</span></a> function. Calls
 evolve_by_controlled_one_qbit_gate() for P_0 and P_1 phase factors.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -656,7 +656,7 @@ evolve_by_controlled_one_qbit_gate() for P_0 and P_1 phase factors.</p>
 <dl class="method">
 <dt id="qubiter.SEO_simulator.SEO_simulator.use_ROTA">
 <code class="sig-name descname">use_ROTA</code><span class="sig-paren">(</span><em class="sig-param">axis</em>, <em class="sig-param">angle_rads</em>, <em class="sig-param">tar_bit_pos</em>, <em class="sig-param">controls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator.use_ROTA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.use_ROTA" title="Permalink to this definition">¶</a></dt>
-<dd><p>Overrides the parent class <a href="#id33"><span class="problematic" id="id34">use_</span></a> function. Calls
+<dd><p>Overrides the parent class <a href="#id15"><span class="problematic" id="id16">use_</span></a> function. Calls
 evolve_by_controlled_one_qbit_gate() for rot along axes x, y, or z.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -679,7 +679,7 @@ evolve_by_controlled_one_qbit_gate() for rot along axes x, y, or z.</p>
 <dl class="method">
 <dt id="qubiter.SEO_simulator.SEO_simulator.use_ROTN">
 <code class="sig-name descname">use_ROTN</code><span class="sig-paren">(</span><em class="sig-param">angle_x_rads</em>, <em class="sig-param">angle_y_rads</em>, <em class="sig-param">angle_z_rads</em>, <em class="sig-param">tar_bit_pos</em>, <em class="sig-param">controls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator.use_ROTN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.use_ROTN" title="Permalink to this definition">¶</a></dt>
-<dd><p>Overrides the parent class <a href="#id35"><span class="problematic" id="id36">use_</span></a> function. Calls
+<dd><p>Overrides the parent class <a href="#id17"><span class="problematic" id="id18">use_</span></a> function. Calls
 evolve_by_controlled_one_qbit_gate() for rot along arbitrary axis.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -703,7 +703,7 @@ evolve_by_controlled_one_qbit_gate() for rot along arbitrary axis.</p>
 <dl class="method">
 <dt id="qubiter.SEO_simulator.SEO_simulator.use_SIG">
 <code class="sig-name descname">use_SIG</code><span class="sig-paren">(</span><em class="sig-param">axis</em>, <em class="sig-param">tar_bit_pos</em>, <em class="sig-param">controls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator.use_SIG"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.use_SIG" title="Permalink to this definition">¶</a></dt>
-<dd><p>Overrides the parent class <a href="#id37"><span class="problematic" id="id38">use_</span></a> function. Calls
+<dd><p>Overrides the parent class <a href="#id19"><span class="problematic" id="id20">use_</span></a> function. Calls
 evolve_by_controlled_one_qbit_gate() for sigx, sigy, sigz.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -725,7 +725,7 @@ evolve_by_controlled_one_qbit_gate() for sigx, sigy, sigz.</p>
 <dl class="method">
 <dt id="qubiter.SEO_simulator.SEO_simulator.use_SWAP">
 <code class="sig-name descname">use_SWAP</code><span class="sig-paren">(</span><em class="sig-param">bit1</em>, <em class="sig-param">bit2</em>, <em class="sig-param">controls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator.use_SWAP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.use_SWAP" title="Permalink to this definition">¶</a></dt>
-<dd><p>Overrides the parent class <a href="#id39"><span class="problematic" id="id40">use_</span></a> function. Calls
+<dd><p>Overrides the parent class <a href="#id21"><span class="problematic" id="id22">use_</span></a> function. Calls
 evolve_by_controlled_qbit_swap().</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -747,7 +747,7 @@ evolve_by_controlled_qbit_swap().</p>
 <dl class="method">
 <dt id="qubiter.SEO_simulator.SEO_simulator.use_SWAY">
 <code class="sig-name descname">use_SWAY</code><span class="sig-paren">(</span><em class="sig-param">bit1</em>, <em class="sig-param">bit2</em>, <em class="sig-param">controls</em>, <em class="sig-param">rads_list</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator.use_SWAY"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.use_SWAY" title="Permalink to this definition">¶</a></dt>
-<dd><p>Overrides the parent class <a href="#id41"><span class="problematic" id="id42">use_</span></a> function. Calls
+<dd><p>Overrides the parent class <a href="#id23"><span class="problematic" id="id24">use_</span></a> function. Calls
 evolve_by_controlled_one_qbit_gate() 3 times.</p>
 <p>This relies on the fact that</p>
 <p>SWAY(0, 1) = SWAY(1, 0) =
@@ -777,7 +777,7 @@ X—&#64;</p>
 <dl class="method">
 <dt id="qubiter.SEO_simulator.SEO_simulator.use_U_2_">
 <code class="sig-name descname">use_U_2_</code><span class="sig-paren">(</span><em class="sig-param">rads0</em>, <em class="sig-param">rads1</em>, <em class="sig-param">rads2</em>, <em class="sig-param">rads3</em>, <em class="sig-param">tar_bit_pos</em>, <em class="sig-param">controls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_simulator.html#SEO_simulator.use_U_2_"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_simulator.SEO_simulator.use_U_2_" title="Permalink to this definition">¶</a></dt>
-<dd><p>Overrides the parent class <a href="#id43"><span class="problematic" id="id44">use_</span></a> function. Calls
+<dd><p>Overrides the parent class <a href="#id25"><span class="problematic" id="id26">use_</span></a> function. Calls
 evolve_by_controlled_one_qbit_gate() for arbitrary unitary 2-dim
 matrix.</p>
 <dl class="field-list simple">

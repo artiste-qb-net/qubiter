@@ -175,7 +175,7 @@ class Qubiter_to_AnyQasm(SEO_reader):
 
     def write(self, s):
         """
-        Writes string s to aqasm and qubiter out files
+        Writes string s to aqasm and qubiter out files.
 
         Parameters
         ----------
@@ -195,7 +195,7 @@ class Qubiter_to_AnyQasm(SEO_reader):
 
     def write_prelude(self):
         """
-        abstract function, writes AnyQasm's opening statements before calls
+        Abstract function, writes AnyQasm's opening statements before calls
         to use_ methods for gates.
 
         Returns
@@ -208,7 +208,7 @@ class Qubiter_to_AnyQasm(SEO_reader):
 
     def write_ending(self):
         """
-        abstract function, writes AnyQasm's ending statements after calls to
+        Abstract function, writes AnyQasm's ending statements after calls to
         use_ methods for gates.
 
         Returns

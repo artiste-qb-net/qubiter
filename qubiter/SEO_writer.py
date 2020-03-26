@@ -62,10 +62,10 @@ class SEO_writer:
     The Picture file examples follow the ZL convention.
 
     3 kinds (called 0, 1, 2) of measurements MEAS are allowed. A type 0
-    measurement inserts a projector |0><0| = n = P_0 at the target bit. A
-    type 1 measurement inserts a projector |1><1| = nbar = P_1 at the target
-    bit. A type 2 measurement stores a copy of the state vector after |0><0|
-    has been applied, and another copy after |1><1| has been applied.
+    measurement inserts a projector `|0><0| = n = P_0` at the target bit. A
+    type 1 measurement inserts a projector `|1><1| = nbar = P_1` at the target
+    bit. A type 2 measurement stores a copy of the state vector after `|0><0|`
+    has been applied, and another copy after `|1><1|` has been applied.
 
     If a vertical wire hasn't been measured as type 2 measurement,
     it is drawn in pic file as "|";  otherwise, it is drawn as ":".
@@ -84,7 +84,7 @@ class SEO_writer:
         at beginning of each write_NEXT
     measured_bits : list(int)
         list of bits that have been measured with type 2 measurement and
-        haven't been reset to |0> or |1>
+        haven't been reset to `|0>` or `|1>`
     picture_out : _io.TextIOWrapper
         file object for output text file that stores ASCII Picture
         description of circuit
@@ -133,7 +133,7 @@ class SEO_writer:
     def get_eng_file_path(self, rel=False):
         """
         Returns path (relative if rel is True, absolute if rel is False) of
-        English file
+        English file.
 
         Attributes
         ----------
@@ -152,7 +152,7 @@ class SEO_writer:
     def get_pic_file_path(self, rel=False):
         """
         Returns path (relative if rel is True, absolute if rel is False) of
-        Picture file
+        Picture file.
 
         Attributes
         ----------
@@ -260,7 +260,6 @@ class SEO_writer:
         Parameters
         ----------
         jup : bool
-
             If jup=False, it prints text. Otherwise, it draws in a jupyter
             notebook a table with line numbers starting at 1
 
@@ -529,7 +528,9 @@ class SEO_writer:
         This method returns
 
         str(rads*180/pi) if isinstance(rads, float)
+
         rads if is_legal_var_name(rads) (this implies rads is str)
+
         aborts otherwise.
 
         The method is only used inside this class so I am making it
@@ -1158,7 +1159,7 @@ class SEO_writer:
 
     def write_H(self, tar_bit_pos):
         """
-        writes HAD2 with no controls
+        Writes HAD2 with no controls.
 
         Parameters
         ----------
@@ -1173,7 +1174,7 @@ class SEO_writer:
 
     def write_Rx(self, tar_bit_pos, rads):
         """
-        writes ROTX = exp(1j*rads*sig_x) with no controls
+        writes ROTX = exp(1j*rads*sig_x) with no controls.
 
         Parameters
         ----------
@@ -1189,7 +1190,7 @@ class SEO_writer:
 
     def write_Ry(self, tar_bit_pos, rads):
         """
-        writes ROTY = exp(1j*rads*sig_y) with no controls
+        Writes ROTY = exp(1j*rads*sig_y) with no controls.
 
         Parameters
         ----------
@@ -1205,7 +1206,7 @@ class SEO_writer:
 
     def write_Rz(self, tar_bit_pos, rads):
         """
-        writes ROTZ = exp(1j*rads*sig_z) with no controls
+        Writes ROTZ = exp(1j*rads*sig_z) with no controls.
 
         Parameters
         ----------
@@ -1221,11 +1222,11 @@ class SEO_writer:
 
     def write_Rn(self, tar_bit_pos, rads_list):
         """
-        writes
+        Writes
 
         ROTN = exp(1j*(rads_x*sig_x + rads_y*sig_y + rads_z*sig_z))
 
-        with no controls
+        with no controls.
 
         Parameters
         ----------
@@ -1242,7 +1243,7 @@ class SEO_writer:
 
     def write_S(self, tar_bit_pos, herm=False):
         """
-        writes P1PH = exp(1j*P_1*pi/2) or its Hermitian with no controls
+        Writes P1PH = exp(1j*P_1*pi/2) or its Hermitian with no controls.
 
         Parameters
         ----------
@@ -1262,7 +1263,7 @@ class SEO_writer:
 
     def write_T(self, tar_bit_pos, herm=False):
         """
-        writes P1PH = exp(1j*P_1*pi/4) or its Hermitian with no controls
+        Writes P1PH = exp(1j*P_1*pi/4) or its Hermitian with no controls.
 
         Parameters
         ----------
@@ -1282,11 +1283,11 @@ class SEO_writer:
 
     def write_U2(self, tar_bit_pos, rads_list):
         """
-        writes
+        Writes
 
         UN_2= exp(1j*(rads0 + rads1*sig_x + rads2*sig_y + rads3*sig_z))
 
-        with no controls
+        with no controls.
 
         Parameters
         ----------
@@ -1303,7 +1304,7 @@ class SEO_writer:
 
     def write_X(self, tar_bit_pos):
         """
-        writes SIGX with no controls
+        Writes SIGX with no controls.
 
         Parameters
         ----------
@@ -1318,7 +1319,7 @@ class SEO_writer:
 
     def write_Y(self, tar_bit_pos):
         """
-        writes SIGY with no controls
+        Writes SIGY with no controls.
 
         Parameters
         ----------
@@ -1333,7 +1334,7 @@ class SEO_writer:
 
     def write_Z(self, tar_bit_pos):
         """
-        writes SIGZ with no controls
+        Writes SIGZ with no controls.
 
         Parameters
         ----------
@@ -1349,7 +1350,7 @@ class SEO_writer:
     def write_cnot(self, control_bit, target_bit, kind=True):
         """
         Writes a simple singly controlled not. If kind=True (resp. False),
-        cnot fires when control is |1> (resp. |0>)
+        cnot fires when control is `|1>` (resp. `|0>`).
 
         Parameters
         ----------
@@ -1370,7 +1371,7 @@ class SEO_writer:
     def write_cz(self, control_bit, target_bit, kind=True):
         """
         Writes a simple singly controlled Z. If kind=True (resp. False),
-        cz fires when control is |1> (resp. |0>)
+        cz fires when control is `|1>` (resp. `|0>`).
 
         Parameters
         ----------
@@ -1391,8 +1392,8 @@ class SEO_writer:
     def write_c_P1PH(self, control_bit, target_bit, rads=np.pi, kind=True):
         """
         Writes a simple singly controlled P1PH. If kind=True (resp. False),
-        c_P1PH fires when control is |1> (resp. |0>). When kind= True and
-        rads=p1, c_P1PH equals (-1)^{n(t)n(c)} = sigz(t)^{n(c)} where c is
+        c_P1PH fires when control is `|1>` (resp. `|0>`). When kind= True and
+        rads=p1, c_P1PH equals `(-1)^{n(t)n(c)} = sigz(t)^{n(c)}` where c is
         the control and t is the target. This is often called a controlled
         Z, and denoted by Cz.
 
