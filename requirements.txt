@@ -12,5 +12,5 @@ openfermion
 pandas
 #pennylane
 #pyquil
-tensorflow
+#tensorflow
 scipy
