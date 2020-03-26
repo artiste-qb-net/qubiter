@@ -63,18 +63,18 @@ class RigettiTools:
         PyQuil likes to state the results of an experiment repeated num_shots
         times by what it calls bitstrings. A bitstrings is a dict that maps
         qubit number to a 1-dim array, num_shots long, of zeros and ones.
-        Here is an example:
+        Here is an example::
 
-        # [1]:
-        #
-        # bitstrings = qc.run_and_measure(program, trials=10)
-        # bitstrings
-        #
-        # [2]:
-        #
-        # {0: array([1, 0, 0, 1, 1, 1, 1, 0, 1, 0]),
-        #  1: array([1, 0, 0, 1, 1, 1, 1, 0, 1, 0]),
-        #  2: array([1, 0, 0, 1, 1, 1, 1, 0, 1, 0])}
+            [1]:
+
+            bitstrings = qc.run_and_measure(program, trials=10)
+            bitstrings
+
+            [2]:
+
+            {0: array([1, 0, 0, 1, 1, 1, 1, 0, 1, 0]),
+             1: array([1, 0, 0, 1, 1, 1, 1, 0, 1, 0]),
+             2: array([1, 0, 0, 1, 1, 1, 1, 0, 1, 0])}
 
         However, qc.run() returns a numpy array of zeros and ones and shape
         (num_shots, num_qbits), formed from the bitstrings dict just

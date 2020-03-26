@@ -39,99 +39,114 @@ class ForbiddenCNotExpander(EchoingSEO_reader):
 
     Note that if C(a, b) is forbidden but C(b, a) is allowed, we can express
     the forbidden one in terms of the allowed one and four Hadamard matrices
-    using the identity (X is the target SIGX and @ is the True control)
+    using the identity (X is the target SIGX and @ is the True control)::
 
-    X---@
-    equals
-    H   H
-    @---X
-    H   H
+        X---@
+    equals::
 
-    Note that
+        H   H
+        @---X
+        H   H
 
-    X---+---@
-    equals
-    X---@   |
-    |   X---@
-    X---@   |
-    |   X---@
-    equals
-    |   X---@
-    X---@   |
-    |   X---@
-    X---@   |
+    Note that::
 
-    One can generalize the previous identity as follows:
+        X---+---@
 
-    X---+---+---@
-    equals
-    X---+---@   |
-    |   |   X---@
-    X---+---@   |
-    |   |   X---@
-    equals
-    |   X---@   |
-    X---@   |   |
-    |   X---@   |
-    X---@   |   |
-    |   |   X---@
-    X---@   |   |
-    |   X---@   |
-    X---@   |   |
-    |   X---@   |
-    |   |   X---@
-    equals (cancel two internal CNots)
-    |   X---@   |
-    X---@   |   |
-    |   X---@   |
-    |   |   X---@
-    |   X---@   |
-    X---@   |   |
-    |   X---@   |
-    |   |   X---@
+    equals::
 
-    One can generalize the previous identity as follows:
+        X---@   |
+        |   X---@
+        X---@   |
+        |   X---@
 
-    X---+---+---+---@
-    equals
-    |   |   X---@   |
-    |   X---@   |   |
-    X---@   |   |   |
-    |   X---@   |   |
-    |   |   X---@   |
-    |   |   |   X---@
-    |   |   X---@   |
-    |   X---@   |   |
-    X---@   |   |   |
-    |   X---@   |   |
-    |   |   X---@   |
-    |   |   |   X---@
+    equals::
+
+        |   X---@
+        X---@   |
+        |   X---@
+        X---@   |
+
+    One can generalize the previous identity as follows::
+
+        X---+---+---@
+
+    equals::
+
+        X---+---@   |
+        |   |   X---@
+        X---+---@   |
+        |   |   X---@
+
+    equals::
+
+        |   X---@   |
+        X---@   |   |
+        |   X---@   |
+        X---@   |   |
+        |   |   X---@
+        X---@   |   |
+        |   X---@   |
+        X---@   |   |
+        |   X---@   |
+        |   |   X---@
+
+    equals (cancel two internal CNots)::
+
+        |   X---@   |
+        X---@   |   |
+        |   X---@   |
+        |   |   X---@
+        |   X---@   |
+        X---@   |   |
+        |   X---@   |
+        |   |   X---@
+
+    One can generalize the previous identity as follows::
+
+        X---+---+---+---@
+
+    equals::
+
+        |   |   X---@   |
+        |   X---@   |   |
+        X---@   |   |   |
+        |   X---@   |   |
+        |   |   X---@   |
+        |   |   |   X---@
+        |   |   X---@   |
+        |   X---@   |   |
+        X---@   |   |   |
+        |   X---@   |   |
+        |   |   X---@   |
+        |   |   |   X---@
 
     In general, let's define a composite V gate (called V because it looks
-    like a V lying on its side) as follows:
+    like a V lying on its side) as follows::
 
-    V(0->4) =
-    |   |   |   X---@
-    |   |   X---@   |
-    |   X---@   |   |
-    X---@   |   |   |
-    |   X---@   |   |
-    |   |   X---@   |
-    |   |   |   X---@
+        V(0->4) =
+        |   |   |   X---@
+        |   |   X---@   |
+        |   X---@   |   |
+        X---@   |   |   |
+        |   X---@   |   |
+        |   |   X---@   |
+        |   |   |   X---@
 
     Above, 0, 1, 2, 3, 4 can be replaced by any other distinct qubits. Also,
     on can define an analogous V for any number >= 2 of qubits.
 
-    If
-    C(0->4)=
-    X---+---+---+---@
-    then we proved above that
+    If::
 
-    C(0->4)= V(0->4)V(1->4)
+        C(0->4)=
+        X---+---+---+---@
 
-    In fact, we also proved
+    then we proved above that::
 
-    C(0->j)= V(0->j)V(1->j) for j = 2, 3, 4, ...
+        C(0->4)= V(0->4)V(1->4)
+
+    In fact, we also proved::
+
+        C(0->j)= V(0->j)V(1->j) for j = 2, 3, 4, ...
 
     We like to refer to the last equation as the vv expansion of C(0->j). In
     this class, we expand a forbidden CNot C(trol->targ) using the last
@@ -189,8 +204,11 @@ class ForbiddenCNotExpander(EchoingSEO_reader):
     def edge_type(self, x, y):
         """
         Returns 0 if C(x->y) and C(y->x) are both allowed.
+
         Returns 1 if C(x->y) but not C(y->x) are allowed.
+
         Returns -1 if C(y->x) but not C(x->y) are allowed.
+
         Returns error message if neither is allowed.
 
         Parameters
@@ -342,6 +360,3 @@ if __name__ == "__main__":
         c_to_tars = {0: [1], 1: [2], 2: [3], 3: []}
         ForbiddenCNotExpander(file_prefix, num_qbits, c_to_tars)
     main()
-
-
-

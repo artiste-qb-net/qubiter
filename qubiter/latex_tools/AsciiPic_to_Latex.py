@@ -42,44 +42,44 @@ class AsciiPic_to_Latex:
     time points downwards. Each line (row) represents one gate, or one unit
     of time. Columns 0, 4, 8, ... represent a qubit in the Qubiter native pic.
 
-    Qubiter native pic:
+    Qubiter native pic::
 
-    |   X---+---+---@   |   |
-    |   Y---+---O---@---O   |
-    |   H   |   |   |   |   |
-    |   <---+---+--->   |   |
-    M   |   |   |   |   |   |
-    @---X   |   |   |   |   |
-    @---+---+---+---+---X   |
-    @---+---+---O---+---X   |
+        |   X---+---+---@   |   |
+        |   Y---+---O---@---O   |
+        |   H   |   |   |   |   |
+        |   <---+---+--->   |   |
+        M   |   |   |   |   |   |
+        @---X   |   |   |   |   |
+        @---+---+---+---+---X   |
+        @---+---+---O---+---X   |
 
-    Mosaic pic:
+    Mosaic pic::
 
-    |X++@||
-    |Y+O@O|
-    |H|||||
-    |<++>||
-    M||||||
-    @X|||||
-    @++++X|
-    @++O+X|
+        |X++@||
+        |Y+O@O|
+        |H|||||
+        |<++>||
+        M||||||
+        @X|||||
+        @++++X|
+        @++O+X|
 
     As you can see, in the Mosaic pic, the white spaces and hyphens are
-    omitted. The following symbols are kept:
+    omitted. The following symbols are kept::
 
-    kept = [
-        'H',  # Hadamard matrix
-        'M',  # measurement of type 2
-        'O',  # Control of type False
-        '@',  # Control of type True
-        'X',  # sigma_X Pauli matrix
-        'Y',  # sigma_Y Pauli matrix
-        'Z',  # sigma_Z Pauli matrix
-        '<',  # left edge of swap gate
-        '>',  # right edge of swap gate
-        '|',  # wire connecting two times
-        '+',  # '|' connecting 2 times crossed by a '-' connecting two qubits
-        '$']  # place holder to be replaced in Latex by initial ket of a qubit
+        kept = [
+            'H',  # Hadamard matrix
+            'M',  # measurement of type 2
+            'O',  # Control of type False
+            '@',  # Control of type True
+            'X',  # sigma_X Pauli matrix
+            'Y',  # sigma_Y Pauli matrix
+            'Z',  # sigma_Z Pauli matrix
+            '<',  # left edge of swap gate
+            '>',  # right edge of swap gate
+            '|',  # wire connecting two times
+            '+',  # '|' connecting 2 times crossed by a '-' connecting two qubits
+            '$']  # place holder to be replaced in Latex by initial ket of a qubit
 
     In translating a Mosaic picture to Latex, this class will try to
     interpret each character of a Mosaic pic by using the "kept" list above.
@@ -87,7 +87,7 @@ class AsciiPic_to_Latex:
     'A', it will translate that character to a Latex one qubit box with an
     'A' inside it. If a gate (=time=mosaic pic row) has at least one '?' in
     the mosaic pic, it will be drawn in the Latex with inter-qubit wiring.
-    For example, a mosaic row |AA|?| will be drawn in the Latex with a box
+    For example, a mosaic row ``|AA|?|`` will be drawn in the Latex with a box
     around each A and a box around the ? and a wire connecting all 3 boxes.
 
     In Qubiter native pics and Mosaic pics, time points down, the way we

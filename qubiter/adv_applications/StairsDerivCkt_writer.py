@@ -14,16 +14,16 @@ class StairsDerivCkt_writer(SEO_writer):
     parameters. To take the derivative wrt t_r of a given multi-controlled
     gate U in a stairs circuit, we need to evaluate several circuits (we
     call them dparts, which stands for derivative parts). Say, for instance,
-    that GATE= @---O---+---U. To calculate d/dt_r GATE(t_0, t_1, t_2, t_3),
+    that ``GATE= @---O---+---U``. To calculate d/dt_r GATE(t_0, t_1, t_2, t_3),
     for r=0,1, 2, 3, we need to calculate a new circuit wherein the GATE in
-    the parent circuit is replaced by
+    the parent circuit is replaced by::
 
-    sum_k  c_k  @---@---O---+---U_k
+        sum_k  c_k  @---@---O---+---U_k
 
-    (which is said to have `has_neg_polarity`=False) and
+    (which is said to have `has_neg_polarity`=False) and::
 
-    sum_k  c_k  @---@---O---+---U_k
-                Z---@---O   |   |
+        sum_k  c_k  @---@---O---+---U_k
+                    Z---@---O   |   |
 
     (which is said to have `has_neg_polarity`=True)
 
