@@ -4,13 +4,13 @@ graphviz
 IPython
 #ipywidget
 matplotlib
-nbformat
 nbconvert
+nbformat
 networkx
 numpy
 openfermion
 pandas
 #pennylane
 #pyquil
-#tensorflow
 scipy
+#tensorflow
