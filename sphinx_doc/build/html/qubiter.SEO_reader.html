@@ -154,12 +154,12 @@
 <span id="qubiter-seo-reader-module"></span><h1>qubiter.SEO_reader module<a class="headerlink" href="#module-qubiter.SEO_reader" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="qubiter.SEO_reader.SEO_reader">
-<em class="property">class </em><code class="sig-prename descclassname">qubiter.SEO_reader.</code><code class="sig-name descname">SEO_reader</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_bits</em>, <em class="sig-param">vars_manager=None</em>, <em class="sig-param">verbose=False</em>, <em class="sig-param">write_log=False</em>, <em class="sig-param">xfile_num=-1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_reader.html#SEO_reader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_reader.SEO_reader" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">qubiter.SEO_reader.</code><code class="sig-name descname">SEO_reader</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_qbits</em>, <em class="sig-param">vars_manager=None</em>, <em class="sig-param">verbose=False</em>, <em class="sig-param">write_log=False</em>, <em class="sig-param">xfile_num=-1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_reader.html#SEO_reader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_reader.SEO_reader" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="qubiter.SEO_pre_reader.html#qubiter.SEO_pre_reader.SEO_pre_reader" title="qubiter.SEO_pre_reader.SEO_pre_reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">qubiter.SEO_pre_reader.SEO_pre_reader</span></code></a></p>
 <p>This class inherits from the class SEO_pre_reader. It’s an abstract
-class because it has a bunch of <a href="#id5"><span class="problematic" id="id6">use_</span></a> methods that must be overridden by
+class because it has a bunch of <a href="#id1"><span class="problematic" id="id2">use_</span></a> methods that must be overridden by
 a child class. This class reads each line of an English file, parses it,
-and sends the info obtained to a <a href="#id7"><span class="problematic" id="id8">use_</span></a> method for further processing. One
+and sends the info obtained to a <a href="#id3"><span class="problematic" id="id4">use_</span></a> method for further processing. One
 very important child of this class is SEO_simulator which uses each line
 of the English file to evolve by one further step a quantum state vector.</p>
 <p>See the docstring for the class SEO_writer for more info about English
@@ -182,7 +182,7 @@ circuit</p></li>
 <li><p><strong>loop_to_cur_rep</strong> (<em>dict</em><em>[</em><em>int</em><em>, </em><em>int</em><em>]</em>) – a dictionary mapping loop number TO current repetition</p></li>
 <li><p><strong>if outside if_m block</strong><strong>, </strong><strong>else a control specifying the current</strong> (<em>mcase_trols</em>) – if_m case</p></li>
 <li><p><strong>measured_bits</strong> (<em>list</em><em>(</em><em>int</em><em>)</em>) – list of bits that have been measured with type 2 measurement and
-haven’t been reset to <a href="#id1"><span class="problematic" id="id2">|</span></a>0&gt; or <a href="#id3"><span class="problematic" id="id4">|</span></a>1&gt;</p></li>
+haven’t been reset to <cite>|0&gt;</cite> or <cite>|1&gt;</cite></p></li>
 <li><p><strong>num_cnots</strong> (<em>int</em>) – </p></li>
 <li><p><strong>num_ops</strong> (<em>int</em>) – </p></li>
 <li><p><strong>split_line</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – </p></li>
@@ -192,7 +192,7 @@ haven’t been reset to <a href="#id1"><span class="problematic" id="id2">|</spa
 <li><p><strong>xfile_num</strong> (<em>int</em>) – You can ignore this if the English file has no loops. This number is
 -1 by default. If you change it to something non-negative, the class
 looks in the io_folder for a “Loop xfile” with a very specific name
-that mentions the xfile_num: file_prefix + ‘_’ + str( num_bits) +
+that mentions the xfile_num: file_prefix + ‘_’ + str( num_qbits) +
 ‘_loop’ + str(xfile_num) + “.py”. If the class can’t find that xfile
 , it will abort. Otherwise, it tries to exec() that xfile. A Loop
 xfile is a file that you write yourself from a template file called
@@ -207,13 +207,13 @@ Loop Files and Loop xfiles.</p></li>
 </dl>
 <dl class="method">
 <dt id="qubiter.SEO_reader.SEO_reader.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_bits</em>, <em class="sig-param">vars_manager=None</em>, <em class="sig-param">verbose=False</em>, <em class="sig-param">write_log=False</em>, <em class="sig-param">xfile_num=-1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_reader.html#SEO_reader.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_reader.SEO_reader.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_qbits</em>, <em class="sig-param">vars_manager=None</em>, <em class="sig-param">verbose=False</em>, <em class="sig-param">write_log=False</em>, <em class="sig-param">xfile_num=-1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_reader.html#SEO_reader.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_reader.SEO_reader.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constructor</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>file_prefix</strong> (<em>str</em>) – </p></li>
-<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>num_qbits</strong> (<em>int</em>) – </p></li>
 <li><p><strong>vars_manager</strong> (<a class="reference internal" href="qubiter.PlaceholderManager.html#qubiter.PlaceholderManager.PlaceholderManager" title="qubiter.PlaceholderManager.PlaceholderManager"><em>PlaceholderManager</em></a>) – </p></li>
 <li><p><strong>verbose</strong> (<em>bool</em>) – </p></li>
 <li><p><strong>write_log</strong> (<em>bool</em>) – </p></li>
@@ -226,7 +226,7 @@ Loop Files and Loop xfiles.</p></li>
 <dl class="method">
 <dt id="qubiter.SEO_reader.SEO_reader.degs_str_to_rads">
 <code class="sig-name descname">degs_str_to_rads</code><span class="sig-paren">(</span><em class="sig-param">degs_str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_reader.html#SEO_reader.degs_str_to_rads"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_reader.SEO_reader.degs_str_to_rads" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wrapper for function of same name in PlaceholderManager</p>
+<dd><p>Wrapper for function of same name in PlaceholderManager.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>degs_str</strong> (<em>str</em>) – </p>
@@ -263,7 +263,7 @@ method, user is expected to have generated a Loop File from an
 English file via classes LoopFileGenerator and
 LoopyPlaceholderManager, and created a Loop xfile by editing that
 Loop File. This class executes the Loop xfile to fill its history
-dictionaries (the ones that end in _hist)</p>
+dictionaries (the ones that end in _hist).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p></p>
@@ -277,16 +277,16 @@ dictionaries (the ones that end in _hist)</p>
 <dl class="method">
 <dt id="qubiter.SEO_reader.SEO_reader.finalize_next_line">
 <code class="sig-name descname">finalize_next_line</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_reader.html#SEO_reader.finalize_next_line"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_reader.SEO_reader.finalize_next_line" title="Permalink to this definition">¶</a></dt>
-<dd><p>Useful for intercepting the end of each call to next_line()</p>
+<dd><p>Useful for intercepting the end of each call to next_line().</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="qubiter.SEO_reader.SEO_reader.get_log_file_path">
 <code class="sig-name descname">get_log_file_path</code><span class="sig-paren">(</span><em class="sig-param">rel=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_reader.html#SEO_reader.get_log_file_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_reader.SEO_reader.get_log_file_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns path (relative if rel is True, absolute if rel is False) of
-log file</p>
+log file.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Variables</dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>rel</strong> (<em>bool</em>) – </p>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -301,7 +301,7 @@ log file</p>
 <dl class="method">
 <dt id="qubiter.SEO_reader.SEO_reader.next_line">
 <code class="sig-name descname">next_line</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_reader.html#SEO_reader.next_line"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_reader.SEO_reader.next_line" title="Permalink to this definition">¶</a></dt>
-<dd><p>Analyze the inputted line. Send info to <a href="#id9"><span class="problematic" id="id10">use_</span></a> methods labelled by
+<dd><p>Analyze the inputted line. Send info to <a href="#id5"><span class="problematic" id="id6">use_</span></a> methods labelled by
 first four letters of line) for further use.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -331,7 +331,7 @@ first four letters of line) for further use.</p>
 <dt id="qubiter.SEO_reader.SEO_reader.read_P_phase_factor">
 <code class="sig-name descname">read_P_phase_factor</code><span class="sig-paren">(</span><em class="sig-param">projection_bit</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_reader.html#SEO_reader.read_P_phase_factor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_reader.SEO_reader.read_P_phase_factor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Collect useful info from P0PH or P1PH split_line and forward it to
-<a href="#id11"><span class="problematic" id="id12">use_</span></a> method.</p>
+<a href="#id7"><span class="problematic" id="id8">use_</span></a> method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>projection_bit</strong> (<em>int</em>) – </p>
@@ -349,7 +349,7 @@ first four letters of line) for further use.</p>
 <dt id="qubiter.SEO_reader.SEO_reader.read_ROT">
 <code class="sig-name descname">read_ROT</code><span class="sig-paren">(</span><em class="sig-param">axis</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_reader.html#SEO_reader.read_ROT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_reader.SEO_reader.read_ROT" title="Permalink to this definition">¶</a></dt>
 <dd><p>Collect useful info from ROTX, ROTY, or ROTZ split_line and forward
-it to <a href="#id13"><span class="problematic" id="id14">use_</span></a> method.</p>
+it to <a href="#id9"><span class="problematic" id="id10">use_</span></a> method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>axis</strong> (<em>int</em>) – </p>
@@ -367,7 +367,7 @@ it to <a href="#id13"><span class="problematic" id="id14">use_</span></a> method
 <dt id="qubiter.SEO_reader.SEO_reader.read_SIG">
 <code class="sig-name descname">read_SIG</code><span class="sig-paren">(</span><em class="sig-param">axis</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_reader.html#SEO_reader.read_SIG"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_reader.SEO_reader.read_SIG" title="Permalink to this definition">¶</a></dt>
 <dd><p>Collect useful info from SIGX, SIGY, or SIGZ split_line and forward
-it to <a href="#id15"><span class="problematic" id="id16">use_</span></a> method.</p>
+it to <a href="#id11"><span class="problematic" id="id12">use_</span></a> method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>axis</strong> (<em>int</em>) – </p>
@@ -424,7 +424,7 @@ it to <a href="#id15"><span class="problematic" id="id16">use_</span></a> method
 <dl class="method">
 <dt id="qubiter.SEO_reader.SEO_reader.use_DIAG">
 <code class="sig-name descname">use_DIAG</code><span class="sig-paren">(</span><em class="sig-param">trols</em>, <em class="sig-param">rad_angles</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_reader.html#SEO_reader.use_DIAG"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_reader.SEO_reader.use_DIAG" title="Permalink to this definition">¶</a></dt>
-<dd><p>Abstract <a href="#id17"><span class="problematic" id="id18">use_</span></a> method that must be overridden by child class.</p>
+<dd><p>Abstract <a href="#id13"><span class="problematic" id="id14">use_</span></a> method that must be overridden by child class.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -444,7 +444,7 @@ it to <a href="#id15"><span class="problematic" id="id16">use_</span></a> method
 <dl class="method">
 <dt id="qubiter.SEO_reader.SEO_reader.use_HAD2">
 <code class="sig-name descname">use_HAD2</code><span class="sig-paren">(</span><em class="sig-param">tar_bit_pos</em>, <em class="sig-param">controls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_reader.html#SEO_reader.use_HAD2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_reader.SEO_reader.use_HAD2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Abstract <a href="#id19"><span class="problematic" id="id20">use_</span></a> method that must be overridden by child class.</p>
+<dd><p>Abstract <a href="#id15"><span class="problematic" id="id16">use_</span></a> method that must be overridden by child class.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -464,7 +464,7 @@ it to <a href="#id15"><span class="problematic" id="id16">use_</span></a> method
 <dl class="method">
 <dt id="qubiter.SEO_reader.SEO_reader.use_IF_M_beg">
 <code class="sig-name descname">use_IF_M_beg</code><span class="sig-paren">(</span><em class="sig-param">controls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_reader.html#SEO_reader.use_IF_M_beg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_reader.SEO_reader.use_IF_M_beg" title="Permalink to this definition">¶</a></dt>
-<dd><p>Abstract <a href="#id21"><span class="problematic" id="id22">use_</span></a> method that must be overridden by child class.</p>
+<dd><p>Abstract <a href="#id17"><span class="problematic" id="id18">use_</span></a> method that must be overridden by child class.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>controls</strong> (<a class="reference internal" href="qubiter.Controls.html#qubiter.Controls.Controls" title="qubiter.Controls.Controls"><em>Controls</em></a>) – </p>
@@ -481,7 +481,7 @@ it to <a href="#id15"><span class="problematic" id="id16">use_</span></a> method
 <dl class="method">
 <dt id="qubiter.SEO_reader.SEO_reader.use_IF_M_end">
 <code class="sig-name descname">use_IF_M_end</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_reader.html#SEO_reader.use_IF_M_end"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_reader.SEO_reader.use_IF_M_end" title="Permalink to this definition">¶</a></dt>
-<dd><p>Abstract <a href="#id23"><span class="problematic" id="id24">use_</span></a> method that must be overridden by child class.</p>
+<dd><p>Abstract <a href="#id19"><span class="problematic" id="id20">use_</span></a> method that must be overridden by child class.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p></p>
@@ -517,7 +517,7 @@ embedded loops.</p>
 <dl class="method">
 <dt id="qubiter.SEO_reader.SEO_reader.use_MEAS">
 <code class="sig-name descname">use_MEAS</code><span class="sig-paren">(</span><em class="sig-param">tar_bit_pos</em>, <em class="sig-param">kind</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_reader.html#SEO_reader.use_MEAS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_reader.SEO_reader.use_MEAS" title="Permalink to this definition">¶</a></dt>
-<dd><p>Abstract <a href="#id25"><span class="problematic" id="id26">use_</span></a> method that must be overridden by child class.</p>
+<dd><p>Abstract <a href="#id21"><span class="problematic" id="id22">use_</span></a> method that must be overridden by child class.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -537,7 +537,7 @@ embedded loops.</p>
 <dl class="method">
 <dt id="qubiter.SEO_reader.SEO_reader.use_MP_Y">
 <code class="sig-name descname">use_MP_Y</code><span class="sig-paren">(</span><em class="sig-param">tar_bit_pos</em>, <em class="sig-param">trols</em>, <em class="sig-param">rad_angles</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_reader.html#SEO_reader.use_MP_Y"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_reader.SEO_reader.use_MP_Y" title="Permalink to this definition">¶</a></dt>
-<dd><p>Abstract <a href="#id27"><span class="problematic" id="id28">use_</span></a> method that must be overridden by child class.</p>
+<dd><p>Abstract <a href="#id23"><span class="problematic" id="id24">use_</span></a> method that must be overridden by child class.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -577,7 +577,7 @@ embedded loops.</p>
 <dl class="method">
 <dt id="qubiter.SEO_reader.SEO_reader.use_NOTA">
 <code class="sig-name descname">use_NOTA</code><span class="sig-paren">(</span><em class="sig-param">bla_str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_reader.html#SEO_reader.use_NOTA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_reader.SEO_reader.use_NOTA" title="Permalink to this definition">¶</a></dt>
-<dd><p>Abstract <a href="#id29"><span class="problematic" id="id30">use_</span></a> method that must be overridden by child class.</p>
+<dd><p>Abstract <a href="#id25"><span class="problematic" id="id26">use_</span></a> method that must be overridden by child class.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>bla_str</strong> (<em>str</em>) – </p>
@@ -594,7 +594,7 @@ embedded loops.</p>
 <dl class="method">
 <dt id="qubiter.SEO_reader.SEO_reader.use_PHAS">
 <code class="sig-name descname">use_PHAS</code><span class="sig-paren">(</span><em class="sig-param">angle_rads</em>, <em class="sig-param">tar_bit_pos</em>, <em class="sig-param">controls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_reader.html#SEO_reader.use_PHAS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_reader.SEO_reader.use_PHAS" title="Permalink to this definition">¶</a></dt>
-<dd><p>Abstract <a href="#id31"><span class="problematic" id="id32">use_</span></a> method that must be overridden by child class.</p>
+<dd><p>Abstract <a href="#id27"><span class="problematic" id="id28">use_</span></a> method that must be overridden by child class.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -615,7 +615,7 @@ embedded loops.</p>
 <dl class="method">
 <dt id="qubiter.SEO_reader.SEO_reader.use_PRINT">
 <code class="sig-name descname">use_PRINT</code><span class="sig-paren">(</span><em class="sig-param">style</em>, <em class="sig-param">line_num</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_reader.html#SEO_reader.use_PRINT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_reader.SEO_reader.use_PRINT" title="Permalink to this definition">¶</a></dt>
-<dd><p>Abstract <a href="#id33"><span class="problematic" id="id34">use_</span></a> method that must be overridden by child class.</p>
+<dd><p>Abstract <a href="#id29"><span class="problematic" id="id30">use_</span></a> method that must be overridden by child class.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -635,7 +635,7 @@ embedded loops.</p>
 <dl class="method">
 <dt id="qubiter.SEO_reader.SEO_reader.use_P_PH">
 <code class="sig-name descname">use_P_PH</code><span class="sig-paren">(</span><em class="sig-param">projection_bit</em>, <em class="sig-param">angle_rads</em>, <em class="sig-param">tar_bit_pos</em>, <em class="sig-param">controls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_reader.html#SEO_reader.use_P_PH"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_reader.SEO_reader.use_P_PH" title="Permalink to this definition">¶</a></dt>
-<dd><p>Abstract <a href="#id35"><span class="problematic" id="id36">use_</span></a> method that must be overridden by child class.</p>
+<dd><p>Abstract <a href="#id31"><span class="problematic" id="id32">use_</span></a> method that must be overridden by child class.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -657,7 +657,7 @@ embedded loops.</p>
 <dl class="method">
 <dt id="qubiter.SEO_reader.SEO_reader.use_ROTA">
 <code class="sig-name descname">use_ROTA</code><span class="sig-paren">(</span><em class="sig-param">axis</em>, <em class="sig-param">angle_rads</em>, <em class="sig-param">tar_bit_pos</em>, <em class="sig-param">controls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_reader.html#SEO_reader.use_ROTA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_reader.SEO_reader.use_ROTA" title="Permalink to this definition">¶</a></dt>
-<dd><p>Abstract <a href="#id37"><span class="problematic" id="id38">use_</span></a> method that must be overridden by child class.</p>
+<dd><p>Abstract <a href="#id33"><span class="problematic" id="id34">use_</span></a> method that must be overridden by child class.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -679,7 +679,7 @@ embedded loops.</p>
 <dl class="method">
 <dt id="qubiter.SEO_reader.SEO_reader.use_ROTN">
 <code class="sig-name descname">use_ROTN</code><span class="sig-paren">(</span><em class="sig-param">angle_x_rads</em>, <em class="sig-param">angle_y_rads</em>, <em class="sig-param">angle_z_rads</em>, <em class="sig-param">tar_bit_pos</em>, <em class="sig-param">controls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_reader.html#SEO_reader.use_ROTN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_reader.SEO_reader.use_ROTN" title="Permalink to this definition">¶</a></dt>
-<dd><p>Abstract <a href="#id39"><span class="problematic" id="id40">use_</span></a> method that must be overridden by child class.</p>
+<dd><p>Abstract <a href="#id35"><span class="problematic" id="id36">use_</span></a> method that must be overridden by child class.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -702,7 +702,7 @@ embedded loops.</p>
 <dl class="method">
 <dt id="qubiter.SEO_reader.SEO_reader.use_SIG">
 <code class="sig-name descname">use_SIG</code><span class="sig-paren">(</span><em class="sig-param">axis</em>, <em class="sig-param">tar_bit_pos</em>, <em class="sig-param">controls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_reader.html#SEO_reader.use_SIG"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_reader.SEO_reader.use_SIG" title="Permalink to this definition">¶</a></dt>
-<dd><p>Abstract <a href="#id41"><span class="problematic" id="id42">use_</span></a> method that must be overridden by child class.</p>
+<dd><p>Abstract <a href="#id37"><span class="problematic" id="id38">use_</span></a> method that must be overridden by child class.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -723,7 +723,7 @@ embedded loops.</p>
 <dl class="method">
 <dt id="qubiter.SEO_reader.SEO_reader.use_SWAP">
 <code class="sig-name descname">use_SWAP</code><span class="sig-paren">(</span><em class="sig-param">bit1</em>, <em class="sig-param">bit2</em>, <em class="sig-param">controls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_reader.html#SEO_reader.use_SWAP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_reader.SEO_reader.use_SWAP" title="Permalink to this definition">¶</a></dt>
-<dd><p>Abstract <a href="#id43"><span class="problematic" id="id44">use_</span></a> method that must be overridden by child class.</p>
+<dd><p>Abstract <a href="#id39"><span class="problematic" id="id40">use_</span></a> method that must be overridden by child class.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -744,7 +744,7 @@ embedded loops.</p>
 <dl class="method">
 <dt id="qubiter.SEO_reader.SEO_reader.use_SWAY">
 <code class="sig-name descname">use_SWAY</code><span class="sig-paren">(</span><em class="sig-param">bit1</em>, <em class="sig-param">bit2</em>, <em class="sig-param">controls</em>, <em class="sig-param">rads_list</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_reader.html#SEO_reader.use_SWAY"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_reader.SEO_reader.use_SWAY" title="Permalink to this definition">¶</a></dt>
-<dd><p>Abstract <a href="#id45"><span class="problematic" id="id46">use_</span></a> method that must be overridden by child class.</p>
+<dd><p>Abstract <a href="#id41"><span class="problematic" id="id42">use_</span></a> method that must be overridden by child class.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -766,7 +766,7 @@ embedded loops.</p>
 <dl class="method">
 <dt id="qubiter.SEO_reader.SEO_reader.use_U_2_">
 <code class="sig-name descname">use_U_2_</code><span class="sig-paren">(</span><em class="sig-param">rads0</em>, <em class="sig-param">rads1</em>, <em class="sig-param">rads2</em>, <em class="sig-param">rads3</em>, <em class="sig-param">tar_bit_pos</em>, <em class="sig-param">controls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_reader.html#SEO_reader.use_U_2_"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_reader.SEO_reader.use_U_2_" title="Permalink to this definition">¶</a></dt>
-<dd><p>Abstract <a href="#id47"><span class="problematic" id="id48">use_</span></a> method that must be overridden by child class.</p>
+<dd><p>Abstract <a href="#id43"><span class="problematic" id="id44">use_</span></a> method that must be overridden by child class.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">

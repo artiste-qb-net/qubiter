@@ -33,7 +33,7 @@ class DiagUnitaryExpander(EchoingSEO_reader):
 
     """
 
-    def __init__(self, file_prefix, num_bits, style, gbit_list=None,
+    def __init__(self, file_prefix, num_qbits, style, gbit_list=None,
                  vars_manager=None, **kwargs):
         """
         Constructor
@@ -41,7 +41,7 @@ class DiagUnitaryExpander(EchoingSEO_reader):
         Parameters
         ----------
         file_prefix : str
-        num_bits : int
+        num_qbits : int
         style : str
         gbit_list : list(int)
 
@@ -57,7 +57,7 @@ class DiagUnitaryExpander(EchoingSEO_reader):
             num_gbits = 0
 
         # default embedder and rad_angles
-        emb = CktEmbedder(num_bits, num_bits)
+        emb = CktEmbedder(num_qbits, num_qbits)
         rad_angles = None
         out_file_prefix = SEO_reader.xed_file_prefix(file_prefix)
         wr = DiagUnitarySEO_writer(out_file_prefix, emb,
@@ -66,7 +66,7 @@ class DiagUnitaryExpander(EchoingSEO_reader):
         # We set the flag eval_all_vars to False but check inside use_ method
         # that it has non-string arguments
         vman = PlaceholderManager(eval_all_vars=False)
-        EchoingSEO_reader.__init__(self, file_prefix, num_bits, wr,
+        EchoingSEO_reader.__init__(self, file_prefix, num_qbits, wr,
                                    vars_manager=vman, **kwargs)
 
         self.wr.close_files()
@@ -114,11 +114,11 @@ class DiagUnitaryExpander(EchoingSEO_reader):
         # print("bit_map", bit_map)
         assert len(bit_map) == len(set(bit_map)),\
             "bits used to define d-unitary are not unique"
-        assert len(bit_map) <= self.num_bits
+        assert len(bit_map) <= self.num_qbits
 
         nt = len(T_bpos)
         nf = len(F_bpos)
-        emb = CktEmbedder(self.num_bits, self.num_bits, bit_map)
+        emb = CktEmbedder(self.num_qbits, self.num_qbits, bit_map)
         return emb, nt, nf
 
     def use_DIAG(self, controls, rad_angles):
@@ -150,14 +150,15 @@ class DiagUnitaryExpander(EchoingSEO_reader):
 
         self.wr.write()
         # revert to default embedder
-        self.wr.emb = CktEmbedder(self.num_bits, self.num_bits)
+        self.wr.emb = CktEmbedder(self.num_qbits, self.num_qbits)
+
 
 if __name__ == "__main__":
     def main():
-        num_bits = 6
+        num_qbits = 6
         file_prefix = "d_unitary_test_one_line"
         style = 'exact'
-        xer = DiagUnitaryExpander(file_prefix, num_bits, style)
+        xer = DiagUnitaryExpander(file_prefix, num_qbits, style)
     main()
 
 

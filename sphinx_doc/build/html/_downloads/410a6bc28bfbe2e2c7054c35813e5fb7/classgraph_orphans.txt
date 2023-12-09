@@ -6,7 +6,7 @@ CktEmbedder
 Controls
 HadamardTransform
 Node
-OneBitGates
+OneQubitGate
 Plotter
 QbitPlanarLattice
 RigettiTools

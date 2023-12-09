@@ -18,10 +18,10 @@ class MultiplexorExpander(EchoingSEO_reader):
     analogous one for DIAG, then use class CGateExpander.
 
     If the input English file has in_file_prefix as file prefix, then the
-    output English & Picture files have as file prefix in_file_prefix + '_X1',
-    assuming that '_X' + str(k) for some integer k is not already the ending
-    of in_file_prefix. If it is, then the ending is changed to '_X' + str(
-    k+1).
+    output English & Picture files have as file prefix in_file_prefix +
+    '_X1', assuming that '_X' + str(k) for some integer k is not already the
+    ending of in_file_prefix. If it is, then the ending is changed to '_X' +
+    str( k+1).
 
 
     Attributes
@@ -32,7 +32,7 @@ class MultiplexorExpander(EchoingSEO_reader):
 
     """
 
-    def __init__(self, file_prefix, num_bits, style, gbit_list=None,
+    def __init__(self, file_prefix, num_qbits, style, gbit_list=None,
                  vars_manager=None, **kwargs):
         """
         Constructor
@@ -40,7 +40,7 @@ class MultiplexorExpander(EchoingSEO_reader):
         Parameters
         ----------
         file_prefix : str
-        num_bits : int
+        num_qbits : int
         style : str
         gbit_list : list(int)
         vars_manager : PlaceholderManager
@@ -58,7 +58,7 @@ class MultiplexorExpander(EchoingSEO_reader):
             num_gbits = 0
 
         # default embedder and rad_angles
-        emb = CktEmbedder(num_bits, num_bits)
+        emb = CktEmbedder(num_qbits, num_qbits)
         rad_angles = None
         out_file_prefix = SEO_reader.xed_file_prefix(file_prefix)
         wr = MultiplexorSEO_writer(out_file_prefix, emb,
@@ -67,7 +67,7 @@ class MultiplexorExpander(EchoingSEO_reader):
         # We set the flag eval_all_vars to False but check inside use_ method
         # that it has non-string arguments
         vman = PlaceholderManager(eval_all_vars=False)
-        EchoingSEO_reader.__init__(self, file_prefix, num_bits, wr,
+        EchoingSEO_reader.__init__(self, file_prefix, num_qbits, wr,
                                    vars_manager=vman, **kwargs)
 
         self.wr.close_files()
@@ -117,11 +117,11 @@ class MultiplexorExpander(EchoingSEO_reader):
         # print("bit_map", bit_map)
         assert len(bit_map) == len(set(bit_map)),\
             "bits used to define multiplexor are not unique"
-        assert len(bit_map) <= self.num_bits
+        assert len(bit_map) <= self.num_qbits
 
         nt = len(T_bpos)
         nf = len(F_bpos)
-        emb = CktEmbedder(self.num_bits, self.num_bits, bit_map)
+        emb = CktEmbedder(self.num_qbits, self.num_qbits, bit_map)
         return emb, nt, nf
 
     def use_MP_Y(self, tar_bit_pos, controls, rad_angles):
@@ -154,13 +154,14 @@ class MultiplexorExpander(EchoingSEO_reader):
 
         self.wr.write()
         # revert to default embedder
-        self.wr.emb = CktEmbedder(self.num_bits, self.num_bits)
+        self.wr.emb = CktEmbedder(self.num_qbits, self.num_qbits)
+
 
 if __name__ == "__main__":
     def main():
-        num_bits = 6
+        num_qbits = 6
         file_prefix = "plexor_test_one_line"
         style = 'exact'
-        xer = MultiplexorExpander(file_prefix, num_bits, style)
+        xer = MultiplexorExpander(file_prefix, num_qbits, style)
     main()
 

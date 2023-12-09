@@ -166,47 +166,47 @@
 <div class="viewcode-block" id="StateVec"><a class="viewcode-back" href="../../qubiter.StateVec.html#qubiter.StateVec.StateVec">[docs]</a><span class="k">class</span> <span class="nc">StateVec</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This class is a wrapper for its main attribute, a complex numpy array</span>
-<span class="sd">    self.arr with shape [2]*num_bits. The class also provides functions for</span>
+<span class="sd">    self.arr with shape [2]*num_qbits. The class also provides functions for</span>
 <span class="sd">    performing calculations on dictionaries of the objects of this class</span>
 <span class="sd">    StateVec. The keys of these dictionaries of state vectors are strings</span>
 <span class="sd">    that we call branch_keys, because they name &quot;branches&quot; in class</span>
 <span class="sd">    SEO_simulation. This class also provides a function for constructing</span>
 <span class="sd">    from such dictionaries of state vectors, a density matrix which is a 2</span>
-<span class="sd">    dim square numpy array of dimension 2^num_bits.</span>
+<span class="sd">    dim square numpy array of dimension 2^num_qbits.</span>
 
 <span class="sd">    IMPORTANT: See docstring of method get_traditional_st_vec() for</span>
-<span class="sd">    explanation of qubit ordering conventions and shape of self.arr</span>
+<span class="sd">    explanation of qubit ordering conventions and shape of self.arr.</span>
 <span class="sd">    </span>
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
 <span class="sd">    arr : np.ndarray</span>
-<span class="sd">         a complex array of shape [2]*num_bits</span>
-<span class="sd">    num_bits : int</span>
+<span class="sd">         a complex array of shape [2]*num_qbits</span>
+<span class="sd">    num_qbits : int</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="StateVec.__init__"><a class="viewcode-back" href="../../qubiter.StateVec.html#qubiter.StateVec.StateVec.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="n">arr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="StateVec.__init__"><a class="viewcode-back" href="../../qubiter.StateVec.html#qubiter.StateVec.StateVec.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">,</span> <span class="n">arr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Constructor</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        num_bits : int</span>
+<span class="sd">        num_qbits : int</span>
 <span class="sd">        arr : np.ndarray</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span> <span class="o">=</span> <span class="n">num_bits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span> <span class="o">=</span> <span class="n">num_qbits</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">arr</span> <span class="o">=</span> <span class="n">arr</span>
         <span class="k">if</span> <span class="n">arr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">arr</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="nb">tuple</span><span class="p">([</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span><span class="p">)</span></div>
+            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">arr</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="nb">tuple</span><span class="p">([</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="StateVec.is_zero"><a class="viewcode-back" href="../../qubiter.StateVec.html#qubiter.StateVec.StateVec.is_zero">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">is_zero</span><span class="p">(</span><span class="n">st_vec</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns True iff an object of this class is None or its parameter</span>
-<span class="sd">        &#39;arr&#39; is None</span>
+<span class="sd">        `arr` is None.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -221,7 +221,7 @@
 
 <div class="viewcode-block" id="StateVec.__str__"><a class="viewcode-back" href="../../qubiter.StateVec.html#qubiter.StateVec.StateVec.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns str(self.arr)</span>
+<span class="sd">        Returns str(self.arr).</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -231,14 +231,14 @@
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arr</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="StateVec.get_ground_st_vec"><a class="viewcode-back" href="../../qubiter.StateVec.html#qubiter.StateVec.StateVec.get_ground_st_vec">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_ground_st_vec</span><span class="p">(</span><span class="n">num_bits</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_ground_st_vec</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns StateVec for the ground state |0&gt;|0&gt;|0&gt;...|0&gt;, where |0&gt; = [</span>
-<span class="sd">        1,0]^t and |1&gt; = [0,1]^t, t = transpose</span>
+<span class="sd">        Returns StateVec for the ground state `|0&gt;|0&gt;|0&gt;...|0&gt;`, where `|0&gt;</span>
+<span class="sd">        = [ 1,0]^t` and `|1&gt; = [0,1]^t`, t = transpose.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        num_bits : int</span>
+<span class="sd">        num_qbits : int</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -246,21 +246,21 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ty</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">complex128</span>
-        <span class="k">assert</span> <span class="n">num_bits</span> <span class="o">&gt;</span> <span class="mi">0</span>
-        <span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_bits</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">ty</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">num_qbits</span> <span class="o">&gt;</span> <span class="mi">0</span>
+        <span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_qbits</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">ty</span><span class="p">)</span>
         <span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-        <span class="n">arr</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">reshape</span><span class="p">([</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">num_bits</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">StateVec</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">arr</span><span class="p">)</span></div>
+        <span class="n">arr</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">reshape</span><span class="p">([</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">num_qbits</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">StateVec</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">arr</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="StateVec.get_random_st_vec"><a class="viewcode-back" href="../../qubiter.StateVec.html#qubiter.StateVec.StateVec.get_random_st_vec">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_random_st_vec</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">rand_seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_random_st_vec</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">rand_seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns StateVec for random state \sum_b^n A(b^n)|b^n&gt;, b^n \in {0,</span>
-<span class="sd">        1}^n, where n=num_bits and \sum_b^n |A( b^n)|^2 = 1</span>
+<span class="sd">        Returns StateVec for random state `\sum_b^n A(b^n)|b^n&gt;`, `b^n \in {</span>
+<span class="sd">        0, 1}^n`, where n=num_qbits and `\sum_b^n |A( b^n)|^2 = 1`.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        num_bits : int</span>
+<span class="sd">        num_qbits : int</span>
 <span class="sd">        rand_seed : int</span>
 
 <span class="sd">        Returns</span>
@@ -271,21 +271,21 @@
         <span class="k">if</span> <span class="n">rand_seed</span><span class="p">:</span>
             <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">rand_seed</span><span class="p">)</span>
         <span class="c1"># returns array of random numbers in [0, 1] interval</span>
-        <span class="n">mat_phi</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_bits</span><span class="p">)</span>
-        <span class="n">mat_r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_bits</span><span class="p">)</span>
+        <span class="n">mat_phi</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_qbits</span><span class="p">)</span>
+        <span class="n">mat_r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_qbits</span><span class="p">)</span>
         <span class="n">arr</span> <span class="o">=</span> <span class="n">mat_r</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">mat_phi</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">mat_phi</span><span class="p">))</span>
         <span class="n">magnitude</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
         <span class="n">arr</span> <span class="o">/=</span> <span class="n">magnitude</span>
-        <span class="n">arr</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">reshape</span><span class="p">([</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">num_bits</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">StateVec</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">arr</span><span class="p">)</span></div>
+        <span class="n">arr</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">reshape</span><span class="p">([</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">num_qbits</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">StateVec</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">arr</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="StateVec.get_standard_basis_st_vec"><a class="viewcode-back" href="../../qubiter.StateVec.html#qubiter.StateVec.StateVec.get_standard_basis_st_vec">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_standard_basis_st_vec</span><span class="p">(</span><span class="n">spin_dir_list</span><span class="p">,</span> <span class="n">ZL</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        If ZL = True, returns StateVec for state ...|s2&gt;|s1&gt;|s0&gt;,</span>
-<span class="sd">        where spin_dir_list=[...,s2, s1, s0], s_j \in {0, 1} for all j,</span>
-<span class="sd">        |0&gt; = [1, 0]^t and |1&gt; = [0,1]^t, t = transpose. If ZL = False,</span>
-<span class="sd">        same except spin_dir_list=reversed([...,s2, s1, s0]).</span>
+<span class="sd">        If ZL = True, returns StateVec for state `...|s2&gt;|s1&gt;|s0&gt;`,</span>
+<span class="sd">        where `spin_dir_list=[...,s2, s1, s0], s_j \in {0, 1}` for all j,</span>
+<span class="sd">        `|0&gt; = [1, 0]^t` and `|1&gt; = [0,1]^t`, t = transpose. If ZL = False,</span>
+<span class="sd">        same except `spin_dir_list=reversed([...,s2, s1, s0])`.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -299,24 +299,24 @@
 <span class="sd">        StateVec</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">spin_dir_list</span><span class="p">)</span>
-        <span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_bits</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">)</span>
-        <span class="n">arr</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">reshape</span><span class="p">([</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">num_bits</span><span class="p">)</span>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">spin_dir_list</span><span class="p">)</span>
+        <span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_qbits</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">)</span>
+        <span class="n">arr</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">reshape</span><span class="p">([</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">num_qbits</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">ZL</span><span class="p">:</span>
             <span class="n">spin_dir_list</span> <span class="o">=</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">spin_dir_list</span><span class="p">)</span>
 
         <span class="c1"># print(&quot;spins&quot;, list(spin_dir_list))</span>
         <span class="c1"># print(&quot;arr&quot;, arr.shape)</span>
         <span class="n">arr</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">spin_dir_list</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">1</span>
-        <span class="k">return</span> <span class="n">StateVec</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">arr</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">StateVec</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">arr</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="StateVec.get_traditional_st_vec"><a class="viewcode-back" href="../../qubiter.StateVec.html#qubiter.StateVec.StateVec.get_traditional_st_vec">[docs]</a>    <span class="k">def</span> <span class="nf">get_traditional_st_vec</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="sd">        **IMPORTANT: Internally, self.arr in Qubiter has shape [2]*num_bits</span>
+<span class="sd">        **IMPORTANT: Internally, self.arr in Qubiter has shape [2]*num_qbits</span>
 <span class="sd">        and assumes ZF convention because that way a numpy axis and a qubit</span>
 <span class="sd">        number are the same thing. However, the traditional way of writing a</span>
-<span class="sd">        state vector is as a column array of dimension 1&lt;&lt; num_bits in the</span>
+<span class="sd">        state vector is as a column array of dimension `1&lt;&lt; num_qbits` in the</span>
 <span class="sd">        ZL convention.**</span>
 
 <span class="sd">        This function returns the traditional view. So it reshapes (</span>
@@ -328,13 +328,13 @@
 <span class="sd">        One can go from digital to binary labels and vice versa</span>
 <span class="sd">        using</span>
 
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
+<span class="sd">        ```</span>
 <span class="sd">        &gt;&gt;&gt; x = np.binary_repr(3, width=4)</span>
 <span class="sd">        &gt;&gt;&gt; x</span>
 <span class="sd">        &#39;0011&#39;</span>
 <span class="sd">        &gt;&gt;&gt; int(x, 2)</span>
 <span class="sd">        3</span>
+<span class="sd">        ```</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -344,11 +344,11 @@
 <span class="sd">        np.array</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">perm</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span><span class="p">)))</span>
+        <span class="n">perm</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span><span class="p">)))</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arr</span><span class="p">,</span> <span class="n">perm</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="StateVec.get_den_mat"><a class="viewcode-back" href="../../qubiter.StateVec.html#qubiter.StateVec.StateVec.get_den_mat">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_den_mat</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">st_vec_dict</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_den_mat</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">st_vec_dict</span><span class="p">):</span>
 
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns a density matrix (indexed in ZL convention) constructed from</span>
@@ -361,7 +361,7 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        num_bits : int</span>
+<span class="sd">        num_qbits : int</span>
 <span class="sd">        st_vec_dict : dict[str, StateVec]</span>
 
 <span class="sd">        Returns</span>
@@ -370,7 +370,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">dim</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_bits</span>
+        <span class="n">dim</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_qbits</span>
         <span class="n">den_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dim</span><span class="p">,</span> <span class="n">dim</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
         <span class="c1"># print(&quot;,,,&quot;, den_mat)</span>
         <span class="k">for</span> <span class="n">br_key</span> <span class="ow">in</span> <span class="n">st_vec_dict</span><span class="p">:</span>
@@ -385,19 +385,19 @@
         <span class="k">return</span> <span class="n">den_mat</span><span class="o">/</span><span class="n">tr</span></div>
 
 <div class="viewcode-block" id="StateVec.get_partial_tr"><a class="viewcode-back" href="../../qubiter.StateVec.html#qubiter.StateVec.StateVec.get_partial_tr">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_partial_tr</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">den_mat</span><span class="p">,</span> <span class="n">traced_bits_set</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_partial_tr</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">den_mat</span><span class="p">,</span> <span class="n">traced_bits_set</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the partial trace of a density matrix den_mat. Traces over</span>
 <span class="sd">        qubits in set traced_bits_set. To get full trace, just do np.trace(</span>
-<span class="sd">        den_mat)</span>
+<span class="sd">        den_mat).</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        num_bits : int</span>
+<span class="sd">        num_qbits : int</span>
 <span class="sd">        den_mat : np.ndarray</span>
-<span class="sd">            if dim=2^num_bits, this function assumes that den_mat has shape</span>
+<span class="sd">            if dim=2^num_qbits, this function assumes that den_mat has shape</span>
 <span class="sd">            (dim, dim) and that it&#39;s indexed in the ZL convention so qubit 0</span>
-<span class="sd">            corresponds to axis num_bits-1.</span>
+<span class="sd">            corresponds to axis num_qbits-1.</span>
 <span class="sd">        traced_bits_set : set[int]</span>
 <span class="sd">             Set of qubits being traced over</span>
 
@@ -406,20 +406,20 @@
 <span class="sd">        np.ndarray</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">dim</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_bits</span>
+        <span class="n">dim</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_qbits</span>
         <span class="k">assert</span> <span class="n">den_mat</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">dim</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="nb">set</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">num_bits</span><span class="p">))</span> <span class="o">&gt;</span> <span class="n">traced_bits_set</span>
-        <span class="n">dm</span> <span class="o">=</span> <span class="n">den_mat</span><span class="o">.</span><span class="n">reshape</span><span class="p">([</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">num_bits</span><span class="p">))</span>
-        <span class="c1"># bit 0 corresponds to axis num_bits - 1</span>
-        <span class="n">traced_axes</span> <span class="o">=</span> <span class="p">[</span><span class="n">num_bits</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">traced_bits_set</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="nb">set</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">))</span> <span class="o">&gt;</span> <span class="n">traced_bits_set</span>
+        <span class="n">dm</span> <span class="o">=</span> <span class="n">den_mat</span><span class="o">.</span><span class="n">reshape</span><span class="p">([</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">num_qbits</span><span class="p">))</span>
+        <span class="c1"># bit 0 corresponds to axis num_qbits - 1</span>
+        <span class="n">traced_axes</span> <span class="o">=</span> <span class="p">[</span><span class="n">num_qbits</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">traced_bits_set</span><span class="p">]</span>
         <span class="n">num_traces</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">traced_axes</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_traces</span><span class="p">):</span>
             <span class="n">ax</span> <span class="o">=</span> <span class="n">traced_axes</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-            <span class="n">dm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">dm</span><span class="p">,</span> <span class="n">axis1</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">axis2</span><span class="o">=</span><span class="n">ax</span> <span class="o">+</span> <span class="n">num_bits</span> <span class="o">-</span> <span class="n">k</span><span class="p">)</span>
+            <span class="n">dm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">dm</span><span class="p">,</span> <span class="n">axis1</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">axis2</span><span class="o">=</span><span class="n">ax</span> <span class="o">+</span> <span class="n">num_qbits</span> <span class="o">-</span> <span class="n">k</span><span class="p">)</span>
             <span class="n">traced_axes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span> <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="n">ax</span> <span class="k">else</span> <span class="n">x</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span>
                                            <span class="n">traced_axes</span><span class="p">))</span>
-        <span class="n">new_num_bits</span> <span class="o">=</span> <span class="n">num_bits</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">traced_bits_set</span><span class="p">)</span>
-        <span class="n">dim</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">new_num_bits</span>
+        <span class="n">new_num_qbits</span> <span class="o">=</span> <span class="n">num_qbits</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">traced_bits_set</span><span class="p">)</span>
+        <span class="n">dim</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">new_num_qbits</span>
         <span class="n">dm</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">dim</span><span class="p">,</span> <span class="n">dim</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">dm</span></div>
 
@@ -428,13 +428,13 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns abs(trace(den_mat^2) -1). This is zero iff the density</span>
 <span class="sd">        matrix den_mat represents a pure state. For example, for a pure</span>
-<span class="sd">        state den_mat = |a&gt;&lt;a|, den_mat^2 = den_mat = |a&gt;&lt;a| so this</span>
+<span class="sd">        state `den_mat = |a&gt;&lt;a|`, `den_mat^2 = den_mat = |a&gt;&lt;a|` so this</span>
 <span class="sd">        quantity is indeed zero.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        den_mat : np.nparray</span>
-<span class="sd">            density matrix, shape=(dim, dim) where dim=2^num_bits</span>
+<span class="sd">            density matrix, shape=(dim, dim) where dim=2^num_qbits</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -452,9 +452,9 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        den_mat : np.ndarray</span>
-<span class="sd">            Density matrix. Eigenvalues must be non-negative and sum to 1</span>
+<span class="sd">            Density matrix. Eigenvalues must be non-negative and sum to 1.</span>
 <span class="sd">        method : str</span>
-<span class="sd">            method used to calculate log of array. Either &#39;eigen&#39; or &#39;pade&#39;</span>
+<span class="sd">            method used to calculate log of array. Either &#39;eigen&#39; or &#39;pade&#39;.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -479,13 +479,13 @@
 <div class="viewcode-block" id="StateVec.get_den_mat_pd"><a class="viewcode-back" href="../../qubiter.StateVec.html#qubiter.StateVec.StateVec.get_den_mat_pd">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_den_mat_pd</span><span class="p">(</span><span class="n">den_mat</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns the diagonal of den_mat (so indexed in ZL convention) .</span>
-<span class="sd">        den_mat is expected to be a density matrix returned by get_den_mat()</span>
+<span class="sd">        Returns the diagonal of den_mat (so indexed in ZL convention).</span>
+<span class="sd">        den_mat is expected to be a density matrix returned by get_den_mat().</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        den_mat : np.ndarray</span>
-<span class="sd">            density matrix, shape=(dim, dim) where dim=2^num_bits, indexed</span>
+<span class="sd">            density matrix, shape=(dim, dim) where dim=2^num_qbits, indexed</span>
 <span class="sd">            in ZL convention.</span>
 
 <span class="sd">        Returns</span>
@@ -508,8 +508,8 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        np.ndarray</span>
-<span class="sd">            probability distribution of shape (2^num_bits,) IMP: will</span>
-<span class="sd">            be indexed in ZL convention</span>
+<span class="sd">            probability distribution of shape (2^num_qbits,) IMP: will</span>
+<span class="sd">            be indexed in ZL convention.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_traditional_st_vec</span><span class="p">()</span>
@@ -518,15 +518,15 @@
 <div class="viewcode-block" id="StateVec.get_mean_value_of_real_diag_mat"><a class="viewcode-back" href="../../qubiter.StateVec.html#qubiter.StateVec.StateVec.get_mean_value_of_real_diag_mat">[docs]</a>    <span class="k">def</span> <span class="nf">get_mean_value_of_real_diag_mat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">real_arr</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        In Quantum Mechanics, one often needs to calculate the mean value of</span>
-<span class="sd">        a Hermitian operator H, mean= &lt;psi|H|psi&gt;. Let H = U^\dag D U,</span>
-<span class="sd">        where U is unitary and D is real diagonal matrix. If self = U|psi&gt;,</span>
-<span class="sd">        then this reduces to finding mean= &lt;self|D|self&gt;. So must decompose</span>
-<span class="sd">        U into a SEO and evolve, using SEO_simulator, to the state U|psi&gt;.</span>
+<span class="sd">        a Hermitian operator H, `mean= &lt;psi|H|psi&gt;`. Let `H = U^\dag D U`,</span>
+<span class="sd">        where U is unitary and D is real diagonal matrix. If `self = U|psi&gt;`,</span>
+<span class="sd">        then this reduces to finding `mean= &lt;self|D|self&gt;`. So must decompose</span>
+<span class="sd">        U into a SEO and evolve, using SEO_simulator, to the state `U|psi&gt;`.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        real_arr : np.ndarray</span>
-<span class="sd">             a real array of shape=[2]^num_bits (same shape as self.arr). If</span>
+<span class="sd">             a real array of shape=[2]^num_qbits (same shape as self.arr). If</span>
 <span class="sd">             flattened, real_arr contains the diagonal of the matrix D. If U</span>
 <span class="sd">             is a Kronecker prod of 2-dim unitary matrices, the flattened</span>
 <span class="sd">             real_arr can be obtained as Kronecker product of spinors, i.e.,</span>
@@ -554,7 +554,7 @@
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arr</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">arr</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="StateVec.get_observations_vec"><a class="viewcode-back" href="../../qubiter.StateVec.html#qubiter.StateVec.StateVec.get_observations_vec">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_observations_vec</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">pd</span><span class="p">,</span> <span class="n">num_shots</span><span class="p">,</span> <span class="n">rand_seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_observations_vec</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">pd</span><span class="p">,</span> <span class="n">num_shots</span><span class="p">,</span> <span class="n">rand_seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        vec = vector</span>
 
@@ -562,8 +562,8 @@
 <span class="sd">        number of samples.</span>
 
 <span class="sd">        For num_shots=1, this method returns an int (actually, a 1 X 1 array</span>
-<span class="sd">        with an int in it) in range(1&lt;&lt;num_bits) chosen according to the</span>
-<span class="sd">        probability distribution pd for num_bits qubits. If the output int</span>
+<span class="sd">        with an int in it) in `range(1&lt;&lt;num_qbits)` chosen according to the</span>
+<span class="sd">        probability distribution pd for num_qbits qubits. If the output int</span>
 <span class="sd">        were to be expressed in binary notation, its last, rightmost bit</span>
 <span class="sd">        would be the measurement of the 0th qubit (because pd is assumed to</span>
 <span class="sd">        be in ZL convention).</span>
@@ -576,9 +576,9 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        num_bits : int</span>
+<span class="sd">        num_qbits : int</span>
 <span class="sd">        pd : np.ndarray</span>
-<span class="sd">            probability distribution of shape (2^num_bits,) IMP: assumed to</span>
+<span class="sd">            probability distribution of shape (2^num_qbits,) IMP: assumed to</span>
 <span class="sd">            be indexed in ZL convention</span>
 <span class="sd">        num_shots : int</span>
 <span class="sd">        rand_seed : int</span>
@@ -591,7 +591,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">rand_seed</span><span class="p">:</span>
             <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">rand_seed</span><span class="p">)</span>
-        <span class="n">len_pd</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_bits</span>
+        <span class="n">len_pd</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_qbits</span>
         <span class="k">assert</span> <span class="n">pd</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">len_pd</span><span class="p">,)</span>
         <span class="n">tot_prob</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">pd</span><span class="p">)</span>
         <span class="n">p</span> <span class="o">=</span> <span class="n">pd</span>
@@ -600,7 +600,7 @@
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">len_pd</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="n">num_shots</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="StateVec.get_counts_from_obs_vec"><a class="viewcode-back" href="../../qubiter.StateVec.html#qubiter.StateVec.StateVec.get_counts_from_obs_vec">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_counts_from_obs_vec</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">obs_vec</span><span class="p">,</span>
+    <span class="k">def</span> <span class="nf">get_counts_from_obs_vec</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">obs_vec</span><span class="p">,</span>
                     <span class="n">use_bin_labels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">omit_zero_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This method takes as input an observations vector obs_vec such as</span>
@@ -608,13 +608,13 @@
 <span class="sd">        get_observations_vec(). This method returns an OrderedDict called</span>
 <span class="sd">        state_name_to_count that maps the names of states to the number of</span>
 <span class="sd">        times they occur in obs_vec. If use_bin_labels=True, state names are</span>
-<span class="sd">        a string composed of a binary number that is num_bits long, followed</span>
+<span class="sd">        a string composed of a binary number that is num_qbits long, followed</span>
 <span class="sd">        by &#39;ZL&#39; because ZL convention is assumed. If use_bin_labels=False,</span>
 <span class="sd">        state names are &#39;0&#39;, &#39;1&#39;, &#39;2&#39;, etc.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        num_bits : int</span>
+<span class="sd">        num_qbits : int</span>
 <span class="sd">        obs_vec : np.ndarray</span>
 <span class="sd">        use_bin_labels : bool</span>
 <span class="sd">        omit_zero_counts : bool</span>
@@ -625,13 +625,13 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">obs_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">obs_vec</span><span class="p">)</span>
-        <span class="n">num_states</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_bits</span>
+        <span class="n">num_states</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_qbits</span>
         <span class="n">state_name_to_count</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_states</span><span class="p">):</span>
             <span class="n">s_count</span> <span class="o">=</span> <span class="n">obs_list</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">use_bin_labels</span><span class="p">:</span>
                 <span class="c1"># this returns string</span>
-                <span class="n">key</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">binary_repr</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">num_bits</span><span class="p">)</span>
+                <span class="n">key</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">binary_repr</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">num_qbits</span><span class="p">)</span>
                 <span class="n">key</span> <span class="o">+=</span> <span class="s1">&#39;ZL&#39;</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">key</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
@@ -640,7 +640,7 @@
         <span class="k">return</span> <span class="n">state_name_to_count</span></div>
 
 <div class="viewcode-block" id="StateVec.get_empirical_pd_from_counts"><a class="viewcode-back" href="../../qubiter.StateVec.html#qubiter.StateVec.StateVec.get_empirical_pd_from_counts">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_empirical_pd_from_counts</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">state_name_to_count</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_empirical_pd_from_counts</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">state_name_to_count</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This method takes as input &quot;the counts dict&quot; (i.e., an OrderedDict</span>
 <span class="sd">        called state_name_to_count which is produced by another method in</span>
@@ -651,16 +651,16 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        num_bits : int</span>
+<span class="sd">        num_qbits : int</span>
 <span class="sd">        state_name_to_count : OrderedDict[str, int]</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        emp_pd : np.ndarray</span>
-<span class="sd">            its shape is (1&lt;&lt;num_bits,)</span>
+<span class="sd">            its shape is (1&lt;&lt;num_qbits,)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">emp_pd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_bits</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="n">emp_pd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_qbits</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
         <span class="n">tot_counts</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">st_name</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">state_name_to_count</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="c1"># state name ends in ZL so trim last two chars</span>
@@ -670,11 +670,11 @@
         <span class="k">return</span> <span class="n">emp_pd</span><span class="o">/</span><span class="n">tot_counts</span></div>
 
 <div class="viewcode-block" id="StateVec.get_emp_state_vec_from_emp_pd"><a class="viewcode-back" href="../../qubiter.StateVec.html#qubiter.StateVec.StateVec.get_emp_state_vec_from_emp_pd">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_emp_state_vec_from_emp_pd</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">emp_pd</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_emp_state_vec_from_emp_pd</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">emp_pd</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This method takes as input an empirical probability distribution</span>
 <span class="sd">        emp_pd and it returns an empirical state vector calculated from</span>
-<span class="sd">        emp_pd. This requires reshaping emp_pd to the shape [2]*num_bits,</span>
+<span class="sd">        emp_pd. This requires reshaping emp_pd to the shape [2]*num_qbits,</span>
 <span class="sd">        permuting its indices from the ZL to the ZF convention, and then</span>
 <span class="sd">        taking the sqrt of the components to get an amplitude instead of a</span>
 <span class="sd">        probability. All amplitudes of the output state vector are real</span>
@@ -682,24 +682,24 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        num_bits : int</span>
+<span class="sd">        num_qbits : int</span>
 <span class="sd">        emp_pd : np.ndarray</span>
-<span class="sd">            its shape is (1&lt;&lt;num_bits,)</span>
+<span class="sd">            its shape is (1&lt;&lt;num_qbits,)</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        StateVec</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="n">emp_pd</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_bits</span><span class="p">,)</span>
-        <span class="n">arr</span> <span class="o">=</span> <span class="n">emp_pd</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="nb">tuple</span><span class="p">([</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">num_bits</span><span class="p">))</span>
-        <span class="n">perm</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)))</span>
+        <span class="k">assert</span> <span class="n">emp_pd</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_qbits</span><span class="p">,)</span>
+        <span class="n">arr</span> <span class="o">=</span> <span class="n">emp_pd</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="nb">tuple</span><span class="p">([</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">num_qbits</span><span class="p">))</span>
+        <span class="n">perm</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">)))</span>
         <span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">perm</span><span class="p">)</span>
         <span class="n">sqrt_probs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">StateVec</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">sqrt_probs</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">StateVec</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">sqrt_probs</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="StateVec.get_bit_probs"><a class="viewcode-back" href="../../qubiter.StateVec.html#qubiter.StateVec.StateVec.get_bit_probs">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_bit_probs</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">pd</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_bit_probs</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">pd</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns a list whose jth item is, for the jth qubit, the pair (p,</span>
 <span class="sd">        1-p), where p is the probability that the jth qubit is 0, if the</span>
@@ -709,9 +709,9 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        num_bits : int</span>
+<span class="sd">        num_qbits : int</span>
 <span class="sd">        pd : np.ndarray</span>
-<span class="sd">            probability distribution of shape (2^num_bits,) IMP: assumed to</span>
+<span class="sd">            probability distribution of shape (2^num_qbits,) IMP: assumed to</span>
 <span class="sd">            be indexed in ZL convention</span>
 
 <span class="sd">        Returns</span>
@@ -719,9 +719,9 @@
 <span class="sd">        list[tuple[float, float]]</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="n">pd</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_bits</span><span class="p">,)</span>
+        <span class="k">assert</span> <span class="n">pd</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_qbits</span><span class="p">,)</span>
         <span class="n">probs</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">arr</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">reshape</span><span class="p">([</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">num_bits</span><span class="p">)</span>
+        <span class="n">arr</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">reshape</span><span class="p">([</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">num_qbits</span><span class="p">)</span>
         <span class="c1"># tot_prob may not be one</span>
         <span class="c1"># if a measurement has been done</span>
         <span class="n">tot_prob</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
@@ -729,11 +729,11 @@
             <span class="n">arr</span> <span class="o">/=</span> <span class="n">tot_prob</span>
         <span class="c1"># slicex is a portmanteau of slice index</span>
         <span class="c1"># print(&quot;state_vec_pd=\n&quot;, vec)</span>
-        <span class="n">slicex</span> <span class="o">=</span> <span class="p">[</span><span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">)]</span><span class="o">*</span><span class="n">num_bits</span>
+        <span class="n">slicex</span> <span class="o">=</span> <span class="p">[</span><span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">)]</span><span class="o">*</span><span class="n">num_qbits</span>
         <span class="c1"># pd is assumed to be in ZL convention</span>
-        <span class="c1"># so when reshape, bit k has axis= num_bits -1 - k</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_bits</span><span class="p">):</span>
-            <span class="n">k_axis</span> <span class="o">=</span> <span class="n">num_bits</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">k</span>
+        <span class="c1"># so when reshape, bit k has axis= num_qbits -1 - k</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">):</span>
+            <span class="n">k_axis</span> <span class="o">=</span> <span class="n">num_qbits</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">k</span>
             <span class="n">slicex</span><span class="p">[</span><span class="n">k_axis</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">slicex</span><span class="p">)])</span>
             <span class="n">probs</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">p</span><span class="p">,</span> <span class="mi">1</span><span class="o">-</span><span class="n">p</span><span class="p">))</span>
@@ -766,9 +766,9 @@
     <span class="c1">#     &quot;&quot;&quot;</span>
     <span class="c1">#     if rand_seed:</span>
     <span class="c1">#         np.random.seed(rand_seed)</span>
-    <span class="c1">#     num_bits = len(bit_probs)</span>
+    <span class="c1">#     num_qbits = len(bit_probs)</span>
     <span class="c1">#     counts = []</span>
-    <span class="c1">#     for bit in range(num_bits):</span>
+    <span class="c1">#     for bit in range(num_qbits):</span>
     <span class="c1">#         x1 = np.random.binomial(n=num_shots, p=bit_probs[bit][1])</span>
     <span class="c1">#         x0 = num_shots - x1</span>
     <span class="c1">#         counts.append((x0, x1))</span>
@@ -784,9 +784,9 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        omit_zero_amps : bool</span>
-<span class="sd">            If True, will not list states with zero amplitude</span>
+<span class="sd">            If True, will not list states with zero amplitude.</span>
 <span class="sd">        show_pp_probs : bool</span>
-<span class="sd">            If True, will show probability of each amplitude</span>
+<span class="sd">            If True, will show probability of each amplitude.</span>
 
 <span class="sd">        ZL : bool</span>
 <span class="sd">            If True, multi-index in ZL (Zero bit Last) convention. If False,</span>
@@ -808,12 +808,15 @@
             <span class="n">mag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
             <span class="n">extra_str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
             <span class="k">if</span> <span class="n">show_pp_probs</span><span class="p">:</span>
-                <span class="n">extra_str</span> <span class="o">=</span> <span class="s1">&#39;, prob=&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">mag</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+                <span class="n">extra_str</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1"> prob=&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="si">{0:6f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mag</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">x_str</span> <span class="o">=</span> <span class="s1">&#39; (&#39;</span> <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">real</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s1">&#39; ( &#39;</span>
+            <span class="n">x_str</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="si">{0:.6f}</span><span class="s1"> </span><span class="si">{1}</span><span class="s1"> </span><span class="si">{2:.6f}</span><span class="s1">j)&#39;</span><span class="o">.</span>\
+                <span class="nb">format</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span> <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">imag</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">imag</span><span class="p">))</span>
             <span class="k">if</span> <span class="n">omit_zero_amps</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">mag</span> <span class="o">&gt;</span> <span class="mf">1E-6</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="n">ind_str</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">extra_str</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">ind_str</span> <span class="o">+</span> <span class="n">x_str</span> <span class="o">+</span> <span class="n">extra_str</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">ind_str</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">extra_str</span><span class="p">)</span></div>
+                <span class="nb">print</span><span class="p">(</span><span class="n">ind_str</span> <span class="o">+</span> <span class="n">x_str</span> <span class="o">+</span> <span class="n">extra_str</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="StateVec.get_style_dict"><a class="viewcode-back" href="../../qubiter.StateVec.html#qubiter.StateVec.StateVec.get_style_dict">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_style_dict</span><span class="p">(</span><span class="n">style</span><span class="p">):</span>
@@ -869,12 +872,12 @@
 <span class="sd">            If print_st_vec=True, pp=True and this parameter is True too,</span>
 <span class="sd">            will omit states with zero amplitude</span>
 <span class="sd">        show_pp_probs : bool</span>
-<span class="sd">            If True, will show probability of each standard basis state</span>
+<span class="sd">            If True, will show probability of each standard basis state.</span>
 <span class="sd">        ZL : bool</span>
 <span class="sd">            If True, multi-index of ket in ZL (Zero bit Last) convention.</span>
 <span class="sd">            If False, multi-index of ket in ZF (Zero bit First) convention.</span>
 <span class="sd">        plot_st_vec_pd : bool</span>
-<span class="sd">            If True, plots state vector&#39;s probability distribution</span>
+<span class="sd">            If True, plots state vector&#39;s probability distribution.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -896,20 +899,22 @@
                 <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arr</span><span class="p">)</span>
 
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;total probability of state vector &#39;</span> <span class="o">+</span>
-              <span class="s1">&#39;(=one if no measurements)=&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_total_prob</span><span class="p">())</span>
+              <span class="s1">&#39;(=one if no measurements)=&#39;</span><span class="p">,</span>
+              <span class="s2">&quot;</span><span class="si">{0:0.6f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_total_prob</span><span class="p">()))</span>
 
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;dictionary with key=qubit, value=(Prob(0), Prob(1))&#39;</span><span class="p">)</span>
-        <span class="n">bit_probs</span> <span class="o">=</span> <span class="n">StateVec</span><span class="o">.</span><span class="n">get_bit_probs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pd</span><span class="p">())</span>
+        <span class="n">bit_probs</span> <span class="o">=</span> <span class="n">StateVec</span><span class="o">.</span><span class="n">get_bit_probs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pd</span><span class="p">())</span>
+        <span class="n">bit_probs</span> <span class="o">=</span> <span class="p">[(</span><span class="nb">round</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="nb">round</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">bit_probs</span><span class="p">]</span>
         <span class="n">pp</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="n">bit_probs</span><span class="p">)))</span>
         <span class="k">if</span> <span class="n">plot_st_vec_pd</span><span class="p">:</span>
             <span class="n">st_vec_pd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pd</span><span class="p">()</span>
-            <span class="n">st_vec_pd_df</span> <span class="o">=</span> <span class="n">Plotter</span><span class="o">.</span><span class="n">get_pd_df</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">st_vec_pd</span><span class="p">)</span>
+            <span class="n">st_vec_pd_df</span> <span class="o">=</span> <span class="n">Plotter</span><span class="o">.</span><span class="n">get_pd_df</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">st_vec_pd</span><span class="p">)</span>
             <span class="n">Plotter</span><span class="o">.</span><span class="n">plot_probs_col</span><span class="p">([</span><span class="s1">&#39;st_vec_pd&#39;</span><span class="p">],</span> <span class="p">[</span><span class="n">st_vec_pd_df</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="StateVec.describe_st_vec_dict"><a class="viewcode-back" href="../../qubiter.StateVec.html#qubiter.StateVec.StateVec.describe_st_vec_dict">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">describe_st_vec_dict</span><span class="p">(</span><span class="n">st_vec_dict</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Calls describe_self() for each branch of st_vec_dict</span>
+<span class="sd">        Calls describe_self() for each branch of st_vec_dict.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -932,9 +937,9 @@
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="mi">3</span>
-        <span class="n">gs</span> <span class="o">=</span> <span class="n">StateVec</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span>
-                      <span class="n">arr</span><span class="o">=</span><span class="n">StateVec</span><span class="o">.</span><span class="n">get_ground_st_vec</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)</span><span class="o">.</span><span class="n">arr</span><span class="p">)</span>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="n">gs</span> <span class="o">=</span> <span class="n">StateVec</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span>
+                      <span class="n">arr</span><span class="o">=</span><span class="n">StateVec</span><span class="o">.</span><span class="n">get_ground_st_vec</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">)</span><span class="o">.</span><span class="n">arr</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;gs=</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">gs</span><span class="o">.</span><span class="n">arr</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;gs_trad=</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">gs</span><span class="o">.</span><span class="n">get_traditional_st_vec</span><span class="p">())</span>
 
@@ -946,35 +951,35 @@
             <span class="n">arr</span><span class="o">=</span><span class="n">StateVec</span><span class="o">.</span><span class="n">get_standard_basis_st_vec</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">ZL</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">arr</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;S0100_ZF=</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">S0100_ZF</span><span class="o">.</span><span class="n">get_traditional_st_vec</span><span class="p">())</span>
 
-        <span class="n">st_vec0</span> <span class="o">=</span> <span class="n">StateVec</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span>
-            <span class="n">arr</span><span class="o">=</span><span class="n">StateVec</span><span class="o">.</span><span class="n">get_random_st_vec</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)</span><span class="o">.</span><span class="n">arr</span><span class="p">)</span>
-        <span class="n">st_vec1</span> <span class="o">=</span> <span class="n">StateVec</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span>
-            <span class="n">arr</span><span class="o">=</span><span class="n">StateVec</span><span class="o">.</span><span class="n">get_random_st_vec</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)</span><span class="o">.</span><span class="n">arr</span><span class="p">)</span>
+        <span class="n">st_vec0</span> <span class="o">=</span> <span class="n">StateVec</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span>
+            <span class="n">arr</span><span class="o">=</span><span class="n">StateVec</span><span class="o">.</span><span class="n">get_random_st_vec</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">)</span><span class="o">.</span><span class="n">arr</span><span class="p">)</span>
+        <span class="n">st_vec1</span> <span class="o">=</span> <span class="n">StateVec</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span>
+            <span class="n">arr</span><span class="o">=</span><span class="n">StateVec</span><span class="o">.</span><span class="n">get_random_st_vec</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">)</span><span class="o">.</span><span class="n">arr</span><span class="p">)</span>
         <span class="n">st_vec_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;br0&#39;</span><span class="p">:</span> <span class="n">st_vec0</span><span class="p">,</span>
                        <span class="s1">&#39;br1&#39;</span><span class="p">:</span> <span class="n">st_vec1</span><span class="p">,</span>
                        <span class="s1">&#39;br3&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
 
         <span class="n">trad_st_vec</span> <span class="o">=</span> <span class="n">st_vec0</span><span class="o">.</span><span class="n">get_traditional_st_vec</span><span class="p">()</span>
 
-        <span class="n">den_mat</span> <span class="o">=</span> <span class="n">StateVec</span><span class="o">.</span><span class="n">get_den_mat</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">st_vec_dict</span><span class="p">)</span>
+        <span class="n">den_mat</span> <span class="o">=</span> <span class="n">StateVec</span><span class="o">.</span><span class="n">get_den_mat</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">st_vec_dict</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;den_mat</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">den_mat</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;trace_02 den_mat</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span>
-              <span class="n">StateVec</span><span class="o">.</span><span class="n">get_partial_tr</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">den_mat</span><span class="p">,</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">}))</span>
+              <span class="n">StateVec</span><span class="o">.</span><span class="n">get_partial_tr</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">den_mat</span><span class="p">,</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">}))</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;impurity=&quot;</span><span class="p">,</span> <span class="n">StateVec</span><span class="o">.</span><span class="n">get_impurity</span><span class="p">(</span><span class="n">den_mat</span><span class="p">))</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;entropy=&quot;</span><span class="p">,</span> <span class="n">StateVec</span><span class="o">.</span><span class="n">get_entropy</span><span class="p">(</span><span class="n">den_mat</span><span class="p">))</span>
         <span class="n">den_mat_pd</span> <span class="o">=</span> <span class="n">StateVec</span><span class="o">.</span><span class="n">get_den_mat_pd</span><span class="p">(</span><span class="n">den_mat</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;den_mat_pd=&#39;</span><span class="p">,</span> <span class="n">den_mat_pd</span><span class="p">)</span>
 
         <span class="n">st_vec_pd</span> <span class="o">=</span> <span class="n">st_vec0</span><span class="o">.</span><span class="n">get_pd</span><span class="p">()</span>
-        <span class="n">bit_probs_vec</span> <span class="o">=</span> <span class="n">StateVec</span><span class="o">.</span><span class="n">get_bit_probs</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">st_vec_pd</span><span class="p">)</span>
-        <span class="n">bit_probs_dm</span> <span class="o">=</span> <span class="n">StateVec</span><span class="o">.</span><span class="n">get_bit_probs</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">den_mat_pd</span><span class="p">)</span>
+        <span class="n">bit_probs_vec</span> <span class="o">=</span> <span class="n">StateVec</span><span class="o">.</span><span class="n">get_bit_probs</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">st_vec_pd</span><span class="p">)</span>
+        <span class="n">bit_probs_dm</span> <span class="o">=</span> <span class="n">StateVec</span><span class="o">.</span><span class="n">get_bit_probs</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">den_mat_pd</span><span class="p">)</span>
 
         <span class="c1"># print(&quot;counts_dm=\n&quot;, StateVec.get_bit_counts(bit_probs_dm, 10))</span>
 
         <span class="n">obs_vec</span> <span class="o">=</span> <span class="n">StateVec</span><span class="o">.</span><span class="n">get_observations_vec</span><span class="p">(</span>
-            <span class="n">num_bits</span><span class="p">,</span> <span class="n">st_vec_pd</span><span class="p">,</span> <span class="n">num_shots</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+            <span class="n">num_qbits</span><span class="p">,</span> <span class="n">st_vec_pd</span><span class="p">,</span> <span class="n">num_shots</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;observations vec</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">obs_vec</span><span class="p">)</span>
-        <span class="n">counts</span> <span class="o">=</span> <span class="n">StateVec</span><span class="o">.</span><span class="n">get_counts_from_obs_vec</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">obs_vec</span><span class="p">)</span>
+        <span class="n">counts</span> <span class="o">=</span> <span class="n">StateVec</span><span class="o">.</span><span class="n">get_counts_from_obs_vec</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">obs_vec</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;counts from obs_vec</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">counts</span><span class="p">)</span>
 
         <span class="n">StateVec</span><span class="o">.</span><span class="n">describe_st_vec_dict</span><span class="p">(</span><span class="n">st_vec_dict</span><span class="p">,</span>

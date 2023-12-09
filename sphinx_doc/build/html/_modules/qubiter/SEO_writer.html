@@ -151,12 +151,13 @@
   <h1>Source code for qubiter.SEO_writer</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">qubiter.CktEmbedder</span> <span class="k">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">qubiter.Controls</span> <span class="k">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">qubiter.OneBitGates</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">qubiter.OneQubitGate</span> <span class="k">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">qubiter.utilities_gen</span> <span class="k">as</span> <span class="nn">utg</span>
 <span class="kn">from</span> <span class="nn">qubiter.PlaceholderManager</span> <span class="k">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="k">import</span> <span class="n">HTML</span><span class="p">,</span> <span class="n">display</span>
 <span class="k">if</span> <span class="s1">&#39;autograd.numpy&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
@@ -212,10 +213,10 @@
 <span class="sd">    The Picture file examples follow the ZL convention.</span>
 
 <span class="sd">    3 kinds (called 0, 1, 2) of measurements MEAS are allowed. A type 0</span>
-<span class="sd">    measurement inserts a projector |0&gt;&lt;0| = n = P_0 at the target bit. A</span>
-<span class="sd">    type 1 measurement inserts a projector |1&gt;&lt;1| = nbar = P_1 at the target</span>
-<span class="sd">    bit. A type 2 measurement stores a copy of the state vector after |0&gt;&lt;0|</span>
-<span class="sd">    has been applied, and another copy after |1&gt;&lt;1| has been applied.</span>
+<span class="sd">    measurement inserts a projector `|0&gt;&lt;0| = n = P_0` at the target bit. A</span>
+<span class="sd">    type 1 measurement inserts a projector `|1&gt;&lt;1| = nbar = P_1` at the target</span>
+<span class="sd">    bit. A type 2 measurement stores a copy of the state vector after `|0&gt;&lt;0|`</span>
+<span class="sd">    has been applied, and another copy after `|1&gt;&lt;1|` has been applied.</span>
 
 <span class="sd">    If a vertical wire hasn&#39;t been measured as type 2 measurement,</span>
 <span class="sd">    it is drawn in pic file as &quot;|&quot;;  otherwise, it is drawn as &quot;:&quot;.</span>
@@ -234,7 +235,7 @@
 <span class="sd">        at beginning of each write_NEXT</span>
 <span class="sd">    measured_bits : list(int)</span>
 <span class="sd">        list of bits that have been measured with type 2 measurement and</span>
-<span class="sd">        haven&#39;t been reset to |0&gt; or |1&gt;</span>
+<span class="sd">        haven&#39;t been reset to `|0&gt;` or `|1&gt;`</span>
 <span class="sd">    picture_out : _io.TextIOWrapper</span>
 <span class="sd">        file object for output text file that stores ASCII Picture</span>
 <span class="sd">        description of circuit</span>
@@ -283,7 +284,7 @@
 <div class="viewcode-block" id="SEO_writer.get_eng_file_path"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.get_eng_file_path">[docs]</a>    <span class="k">def</span> <span class="nf">get_eng_file_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rel</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns path (relative if rel is True, absolute if rel is False) of</span>
-<span class="sd">        English file</span>
+<span class="sd">        English file.</span>
 
 <span class="sd">        Attributes</span>
 <span class="sd">        ----------</span>
@@ -295,14 +296,14 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">rel_path</span> <span class="o">=</span> <span class="n">utg</span><span class="o">.</span><span class="n">get_eng_file_rel_path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_prefix</span><span class="p">,</span>
-                                             <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_aft</span><span class="p">)</span>
+                                             <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_aft</span><span class="p">)</span>
         <span class="c1"># print(&quot;..,,mmmm&quot;, rel_path)</span>
         <span class="k">return</span> <span class="n">rel_path</span> <span class="k">if</span> <span class="n">rel</span> <span class="k">else</span> <span class="n">utg</span><span class="o">.</span><span class="n">preface</span><span class="p">(</span><span class="n">rel_path</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SEO_writer.get_pic_file_path"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.get_pic_file_path">[docs]</a>    <span class="k">def</span> <span class="nf">get_pic_file_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rel</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns path (relative if rel is True, absolute if rel is False) of</span>
-<span class="sd">        Picture file</span>
+<span class="sd">        Picture file.</span>
 
 <span class="sd">        Attributes</span>
 <span class="sd">        ----------</span>
@@ -314,7 +315,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">rel_path</span> <span class="o">=</span> <span class="n">utg</span><span class="o">.</span><span class="n">get_pic_file_rel_path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_prefix</span><span class="p">,</span>
-                                             <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_aft</span><span class="p">,</span>
+                                             <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_aft</span><span class="p">,</span>
                                              <span class="n">ZL</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ZL</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">rel_path</span> <span class="k">if</span> <span class="n">rel</span> <span class="k">else</span> <span class="n">utg</span><span class="o">.</span><span class="n">preface</span><span class="p">(</span><span class="n">rel_path</span><span class="p">)</span></div>
 
@@ -347,29 +348,83 @@
         <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_eng_file_path</span><span class="p">())</span>
         <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_pic_file_path</span><span class="p">())</span></div>
 
-<div class="viewcode-block" id="SEO_writer.print_eng_file"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.print_eng_file">[docs]</a>    <span class="k">def</span> <span class="nf">print_eng_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="SEO_writer.gen_html_from_eng_or_pic_file"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.gen_html_from_eng_or_pic_file">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">gen_html_from_eng_or_pic_file</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function returns a string for an html table generated from an</span>
+<span class="sd">        English or Picture file. The table has two columns.</span>
+<span class="sd">        The first column gives the line numbers starting from 1.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        f : file</span>
+<span class="sd">            f is file object returned by open()</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+        <span class="n">all_lines</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">td0</span> <span class="o">=</span> <span class="s2">&quot;&lt;td style=&#39;border-right:1px solid red;&#39;&gt;&quot;</span>
+        <span class="n">td1</span> <span class="o">=</span> <span class="s2">&quot;&lt;td style=&#39;text-align:left;&#39;&gt;&quot;</span>
+        <span class="k">while</span> <span class="n">line</span><span class="p">:</span>
+            <span class="n">all_lines</span> <span class="o">+=</span> <span class="n">td0</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;&lt;/td&gt;&quot;</span> <span class="o">+</span> <span class="n">td1</span> <span class="o">+</span>\
+                         <span class="s2">&quot;&lt;pre&gt;&quot;</span> <span class="o">+</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;&lt;/pre&gt;&quot;</span> <span class="o">+</span>\
+                         <span class="s1">&#39;&lt;/td&gt;&lt;/tr&gt;&#39;</span>
+            <span class="n">k</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+        <span class="n">table</span> <span class="o">=</span> <span class="s2">&quot;&lt;table style=&#39;font-family:monospace&#39;&gt;&lt;tr&gt;&quot;</span> <span class="o">+</span>\
+                <span class="n">all_lines</span> <span class="o">+</span> <span class="s1">&#39;&lt;/table&gt;&#39;</span>
+        <span class="c1"># print(table)</span>
+        <span class="k">return</span> <span class="n">table</span></div>
+
+<div class="viewcode-block" id="SEO_writer.print_eng_file"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.print_eng_file">[docs]</a>    <span class="k">def</span> <span class="nf">print_eng_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jup</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Prints English file.</span>
 
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        jup : bool</span>
+
+<span class="sd">            If jup=False, it prints text. Otherwise, it draws in a jupyter</span>
+<span class="sd">            notebook a table with line numbers starting at 1</span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        None</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">utg</span><span class="o">.</span><span class="n">preface</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_eng_file_path</span><span class="p">(</span><span class="n">rel</span><span class="o">=</span><span class="kc">True</span><span class="p">)))</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span></div>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">utg</span><span class="o">.</span><span class="n">preface</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_eng_file_path</span><span class="p">(</span><span class="n">rel</span><span class="o">=</span><span class="kc">True</span><span class="p">)),</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">jup</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">dis_obj</span> <span class="o">=</span> <span class="n">HTML</span><span class="p">(</span><span class="n">SEO_writer</span><span class="o">.</span><span class="n">gen_html_from_eng_or_pic_file</span><span class="p">(</span><span class="n">f</span><span class="p">))</span>
+                <span class="n">display</span><span class="p">(</span><span class="n">dis_obj</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SEO_writer.print_pic_file"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.print_pic_file">[docs]</a>    <span class="k">def</span> <span class="nf">print_pic_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="SEO_writer.print_pic_file"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.print_pic_file">[docs]</a>    <span class="k">def</span> <span class="nf">print_pic_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jup</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Prints Picture file.</span>
 
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        jup : bool</span>
+<span class="sd">            If jup=False, it prints text. Otherwise, it draws in a jupyter</span>
+<span class="sd">            notebook a table with line numbers starting at 1</span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        None</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">utg</span><span class="o">.</span><span class="n">preface</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_pic_file_path</span><span class="p">(</span><span class="n">rel</span><span class="o">=</span><span class="kc">True</span><span class="p">)))</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span></div>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">utg</span><span class="o">.</span><span class="n">preface</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_pic_file_path</span><span class="p">(</span><span class="n">rel</span><span class="o">=</span><span class="kc">True</span><span class="p">)),</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">jup</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">dis_obj</span> <span class="o">=</span> <span class="n">HTML</span><span class="p">(</span><span class="n">SEO_writer</span><span class="o">.</span><span class="n">gen_html_from_eng_or_pic_file</span><span class="p">(</span><span class="n">f</span><span class="p">))</span>
+                <span class="n">display</span><span class="p">(</span><span class="n">dis_obj</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SEO_writer.colonize"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.colonize">[docs]</a>    <span class="k">def</span> <span class="nf">colonize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pic_line</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -388,10 +443,10 @@
 <span class="sd">        str</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_aft</span>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_aft</span>
         <span class="n">li</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">pic_line</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">bit</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">):</span>
-            <span class="n">m</span> <span class="o">=</span> <span class="mi">4</span><span class="o">*</span><span class="p">(</span><span class="n">num_bits</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">bit</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">bit</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">):</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="mi">4</span><span class="o">*</span><span class="p">(</span><span class="n">num_qbits</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">bit</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">bit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">measured_bits</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">li</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;|&quot;</span><span class="p">:</span>
                     <span class="n">li</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;:&quot;</span>
@@ -529,8 +584,8 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="c1"># num_bits_bef = self.emb.num_bits_bef</span>
-        <span class="n">num_bits_aft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_aft</span>
+        <span class="c1"># num_qbits_bef = self.emb.num_qbits_bef</span>
+        <span class="n">num_qbits_aft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_aft</span>
         <span class="n">aft_tar_bit_pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">aft</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">)</span>
 
         <span class="k">assert</span> <span class="n">kind</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="s2">&quot;unsupported measurement kind&quot;</span>
@@ -546,7 +601,7 @@
         <span class="n">biggest</span> <span class="o">=</span> <span class="n">aft_tar_bit_pos</span>
         <span class="n">smallest</span> <span class="o">=</span> <span class="n">aft_tar_bit_pos</span>
         <span class="c1"># k a bit position</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_bits_aft</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">biggest</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_qbits_aft</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">biggest</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
             <span class="n">pic_line</span> <span class="o">+=</span> <span class="s2">&quot;|   &quot;</span>
         <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">pic_line</span> <span class="o">+=</span> <span class="s2">&quot;M0  &quot;</span>
@@ -624,7 +679,9 @@
 <span class="sd">        This method returns</span>
 
 <span class="sd">        str(rads*180/pi) if isinstance(rads, float)</span>
+
 <span class="sd">        rads if is_legal_var_name(rads) (this implies rads is str)</span>
+
 <span class="sd">        aborts otherwise.</span>
 
 <span class="sd">        The method is only used inside this class so I am making it</span>
@@ -643,7 +700,7 @@
         <span class="c1"># np.float types are different from float!!!</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rads</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">floating</span><span class="p">)):</span>
             <span class="c1"># print(&quot;--nnn&quot;, str(rads*180/np.pi))</span>
-            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">rads</span><span class="o">*</span><span class="mi">180</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+            <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{0:0.6f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">rads</span><span class="o">*</span><span class="mi">180</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">assert</span> <span class="n">PlaceholderManager</span><span class="o">.</span><span class="n">is_legal_var_name</span><span class="p">(</span><span class="n">rads</span><span class="p">),</span> \
                 <span class="s2">&quot;attempting to write an illegal variable name: &#39;&quot;</span> <span class="o">+</span>\
@@ -677,17 +734,17 @@
 
         <span class="k">return</span> <span class="n">aft_trols</span></div>
 
-<div class="viewcode-block" id="SEO_writer.write_controlled_one_bit_gate"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.write_controlled_one_bit_gate">[docs]</a>    <span class="k">def</span> <span class="nf">write_controlled_one_bit_gate</span><span class="p">(</span>
-            <span class="bp">self</span><span class="p">,</span> <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span> <span class="n">one_bit_gate_fun</span><span class="p">,</span> <span class="n">fun_arg_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="SEO_writer.write_controlled_one_qbit_gate"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.write_controlled_one_qbit_gate">[docs]</a>    <span class="k">def</span> <span class="nf">write_controlled_one_qbit_gate</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span> <span class="n">one_qbit_gate_fun</span><span class="p">,</span> <span class="n">fun_arg_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Writes a line in eng &amp; pic files for a one bit gate (from class </span>
-<span class="sd">        OneBitGates) with &gt;= 0 controls. </span>
+<span class="sd">        OneQubitGate) with &gt;= 0 controls. </span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        tar_bit_pos : int</span>
 <span class="sd">        trols : Controls</span>
-<span class="sd">        one_bit_gate_fun : function</span>
+<span class="sd">        one_qbit_gate_fun : function</span>
 <span class="sd">            maps Any-&gt;np.ndarray</span>
 <span class="sd">        fun_arg_list : list</span>
 
@@ -698,8 +755,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">aft_trols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_preamble</span><span class="p">(</span><span class="n">trols</span><span class="p">)</span>
 
-        <span class="c1"># num_bits_bef = self.emb.num_bits_bef</span>
-        <span class="n">num_bits_aft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_aft</span>
+        <span class="c1"># num_qbits_bef = self.emb.num_qbits_bef</span>
+        <span class="n">num_qbits_aft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_aft</span>
         <span class="n">aft_tar_bit_pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">aft</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">)</span>
 
         <span class="c1"># number of controls may be zero</span>
@@ -713,18 +770,18 @@
 
         <span class="c1"># english file</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">english_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">indentation</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">one_bit_gate_fun</span> <span class="o">==</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">had2</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">one_qbit_gate_fun</span> <span class="o">==</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">had2</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">english_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;HAD2&quot;</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">one_bit_gate_fun</span> <span class="o">==</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">phase_fac</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">one_qbit_gate_fun</span> <span class="o">==</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">phase_fac</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">english_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;PHAS</span><span class="se">\t</span><span class="s2">&quot;</span> <span class="o">+</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">rads_to_degs_str</span><span class="p">(</span><span class="n">fun_arg_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-        <span class="k">elif</span> <span class="n">one_bit_gate_fun</span> <span class="o">==</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">P_0_phase_fac</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">one_qbit_gate_fun</span> <span class="o">==</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">P_0_phase_fac</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">english_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;P0PH</span><span class="se">\t</span><span class="s2">&quot;</span> <span class="o">+</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">rads_to_degs_str</span><span class="p">(</span><span class="n">fun_arg_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-        <span class="k">elif</span> <span class="n">one_bit_gate_fun</span> <span class="o">==</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">P_1_phase_fac</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">one_qbit_gate_fun</span> <span class="o">==</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">P_1_phase_fac</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">english_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;P1PH</span><span class="se">\t</span><span class="s2">&quot;</span> <span class="o">+</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">rads_to_degs_str</span><span class="p">(</span><span class="n">fun_arg_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-        <span class="k">elif</span> <span class="n">one_bit_gate_fun</span> <span class="o">==</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">one_qbit_gate_fun</span> <span class="o">==</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">:</span>
             <span class="n">ang_rads</span> <span class="o">=</span> <span class="n">fun_arg_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">axis</span> <span class="o">=</span> <span class="n">fun_arg_list</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
             <span class="n">degs_str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rads_to_degs_str</span><span class="p">(</span><span class="n">ang_rads</span><span class="p">)</span>
@@ -736,19 +793,19 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">english_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;ROTZ</span><span class="se">\t</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">degs_str</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">assert</span> <span class="kc">False</span>
-        <span class="k">elif</span> <span class="n">one_bit_gate_fun</span> <span class="o">==</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">one_qbit_gate_fun</span> <span class="o">==</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot</span><span class="p">:</span>
             <span class="n">x_degs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rads_to_degs_str</span><span class="p">(</span><span class="n">fun_arg_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
             <span class="n">y_degs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rads_to_degs_str</span><span class="p">(</span><span class="n">fun_arg_list</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
             <span class="n">z_degs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rads_to_degs_str</span><span class="p">(</span><span class="n">fun_arg_list</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">english_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;ROTN</span><span class="se">\t</span><span class="s2">&quot;</span> <span class="o">+</span>
                 <span class="n">x_degs</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">y_degs</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">z_degs</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">one_bit_gate_fun</span> <span class="o">==</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigx</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">one_qbit_gate_fun</span> <span class="o">==</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">sigx</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">english_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;SIGX&quot;</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">one_bit_gate_fun</span> <span class="o">==</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigy</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">one_qbit_gate_fun</span> <span class="o">==</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">sigy</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">english_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;SIGY&quot;</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">one_bit_gate_fun</span> <span class="o">==</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigz</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">one_qbit_gate_fun</span> <span class="o">==</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">sigz</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">english_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;SIGZ&quot;</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">one_bit_gate_fun</span> <span class="o">==</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">u2</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">one_qbit_gate_fun</span> <span class="o">==</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">u2</span><span class="p">:</span>
             <span class="n">ph_degs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rads_to_degs_str</span><span class="p">(</span><span class="n">fun_arg_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
             <span class="n">x_degs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rads_to_degs_str</span><span class="p">(</span><span class="n">fun_arg_list</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
             <span class="n">y_degs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rads_to_degs_str</span><span class="p">(</span><span class="n">fun_arg_list</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
@@ -757,7 +814,7 @@
                 <span class="n">x_degs</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">y_degs</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">z_degs</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">assert</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;writing an unsupported controlled gate</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>\
-                            <span class="n">one_bit_gate_fun</span><span class="o">.</span><span class="vm">__name__</span>
+                            <span class="n">one_qbit_gate_fun</span><span class="o">.</span><span class="vm">__name__</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">english_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">AT</span><span class="se">\t</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">aft_tar_bit_pos</span><span class="p">)</span> <span class="o">+</span>
                                <span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">IF</span><span class="se">\t</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">num_controls</span> <span class="o">!=</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
@@ -778,7 +835,7 @@
             <span class="n">smallest</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">aft_trols</span><span class="o">.</span><span class="n">bit_pos</span><span class="p">[</span><span class="n">num_controls</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">aft_tar_bit_pos</span><span class="p">)</span>
 
         <span class="c1"># k a bit position</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_bits_aft</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">biggest</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_qbits_aft</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">biggest</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
             <span class="n">pic_line</span> <span class="o">+=</span> <span class="s2">&quot;|   &quot;</span>
 
         <span class="n">c_int</span> <span class="o">=</span> <span class="mi">0</span>
@@ -803,15 +860,15 @@
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">is_target</span><span class="p">:</span>  <span class="c1"># is not control or target</span>
                     <span class="n">pic_line</span> <span class="o">+=</span> <span class="s2">&quot;+&quot;</span> <span class="o">+</span> <span class="n">tres</span>
                 <span class="k">else</span><span class="p">:</span>  <span class="c1"># is target</span>
-                    <span class="k">if</span> <span class="n">one_bit_gate_fun</span> <span class="o">==</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">had2</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">one_qbit_gate_fun</span> <span class="o">==</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">had2</span><span class="p">:</span>
                         <span class="n">pic_line</span> <span class="o">+=</span> <span class="s2">&quot;H&quot;</span> <span class="o">+</span> <span class="n">tres</span>
-                    <span class="k">elif</span> <span class="n">one_bit_gate_fun</span> <span class="o">==</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">phase_fac</span><span class="p">:</span>
+                    <span class="k">elif</span> <span class="n">one_qbit_gate_fun</span> <span class="o">==</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">phase_fac</span><span class="p">:</span>
                         <span class="n">pic_line</span> <span class="o">+=</span> <span class="s2">&quot;Ph&quot;</span> <span class="o">+</span> <span class="n">dos</span>
-                    <span class="k">elif</span> <span class="n">one_bit_gate_fun</span> <span class="o">==</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">P_0_phase_fac</span><span class="p">:</span>
+                    <span class="k">elif</span> <span class="n">one_qbit_gate_fun</span> <span class="o">==</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">P_0_phase_fac</span><span class="p">:</span>
                         <span class="n">pic_line</span> <span class="o">+=</span> <span class="s2">&quot;OP&quot;</span> <span class="o">+</span> <span class="n">dos</span>
-                    <span class="k">elif</span> <span class="n">one_bit_gate_fun</span> <span class="o">==</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">P_1_phase_fac</span><span class="p">:</span>
+                    <span class="k">elif</span> <span class="n">one_qbit_gate_fun</span> <span class="o">==</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">P_1_phase_fac</span><span class="p">:</span>
                         <span class="n">pic_line</span> <span class="o">+=</span> <span class="s2">&quot;@P&quot;</span> <span class="o">+</span> <span class="n">dos</span>
-                    <span class="k">elif</span> <span class="n">one_bit_gate_fun</span> <span class="o">==</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">:</span>
+                    <span class="k">elif</span> <span class="n">one_qbit_gate_fun</span> <span class="o">==</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">:</span>
                         <span class="n">axis</span> <span class="o">=</span> <span class="n">fun_arg_list</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
                         <span class="k">if</span> <span class="n">axis</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
                             <span class="n">pic_line</span> <span class="o">+=</span> <span class="s2">&quot;Rx&quot;</span> <span class="o">+</span> <span class="n">dos</span>
@@ -821,15 +878,15 @@
                             <span class="n">pic_line</span> <span class="o">+=</span> <span class="s2">&quot;Rz&quot;</span> <span class="o">+</span> <span class="n">dos</span>
                         <span class="k">else</span><span class="p">:</span>
                             <span class="k">assert</span> <span class="kc">False</span>
-                    <span class="k">elif</span> <span class="n">one_bit_gate_fun</span> <span class="o">==</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot</span><span class="p">:</span>
+                    <span class="k">elif</span> <span class="n">one_qbit_gate_fun</span> <span class="o">==</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot</span><span class="p">:</span>
                         <span class="n">pic_line</span> <span class="o">+=</span> <span class="s2">&quot;R&quot;</span> <span class="o">+</span> <span class="n">tres</span>
-                    <span class="k">elif</span> <span class="n">one_bit_gate_fun</span> <span class="o">==</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigx</span><span class="p">:</span>
+                    <span class="k">elif</span> <span class="n">one_qbit_gate_fun</span> <span class="o">==</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">sigx</span><span class="p">:</span>
                         <span class="n">pic_line</span> <span class="o">+=</span> <span class="s2">&quot;X&quot;</span> <span class="o">+</span> <span class="n">tres</span>
-                    <span class="k">elif</span> <span class="n">one_bit_gate_fun</span> <span class="o">==</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigy</span><span class="p">:</span>
+                    <span class="k">elif</span> <span class="n">one_qbit_gate_fun</span> <span class="o">==</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">sigy</span><span class="p">:</span>
                         <span class="n">pic_line</span> <span class="o">+=</span> <span class="s2">&quot;Y&quot;</span> <span class="o">+</span> <span class="n">tres</span>
-                    <span class="k">elif</span> <span class="n">one_bit_gate_fun</span> <span class="o">==</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigz</span><span class="p">:</span>
+                    <span class="k">elif</span> <span class="n">one_qbit_gate_fun</span> <span class="o">==</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">sigz</span><span class="p">:</span>
                         <span class="n">pic_line</span> <span class="o">+=</span> <span class="s2">&quot;Z&quot;</span> <span class="o">+</span> <span class="n">tres</span>
-                    <span class="k">elif</span> <span class="n">one_bit_gate_fun</span> <span class="o">==</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">u2</span><span class="p">:</span>
+                    <span class="k">elif</span> <span class="n">one_qbit_gate_fun</span> <span class="o">==</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">u2</span><span class="p">:</span>
                         <span class="n">rads1</span> <span class="o">=</span> <span class="n">fun_arg_list</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
                         <span class="n">rads2</span> <span class="o">=</span> <span class="n">fun_arg_list</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
                         <span class="n">rads3</span> <span class="o">=</span> <span class="n">fun_arg_list</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
@@ -858,7 +915,7 @@
                     <span class="k">else</span><span class="p">:</span>
                         <span class="k">assert</span> <span class="kc">False</span><span class="p">,</span> \
                             <span class="s2">&quot;writing an unsupported controlled gate</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>\
-                            <span class="n">one_bit_gate_fun</span><span class="o">.</span><span class="vm">__name__</span>
+                            <span class="n">one_qbit_gate_fun</span><span class="o">.</span><span class="vm">__name__</span>
 
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">smallest</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
             <span class="n">pic_line</span> <span class="o">+=</span> <span class="s2">&quot;|   &quot;</span>
@@ -867,7 +924,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">write_ZF_or_ZL_pic_line</span><span class="p">(</span><span class="n">pic_line</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">picture_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SEO_writer.write_controlled_bit_swap"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.write_controlled_bit_swap">[docs]</a>    <span class="k">def</span> <span class="nf">write_controlled_bit_swap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bit1</span><span class="p">,</span> <span class="n">bit2</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span> <span class="n">rads_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="SEO_writer.write_controlled_qbit_swap"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.write_controlled_qbit_swap">[docs]</a>    <span class="k">def</span> <span class="nf">write_controlled_qbit_swap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bit1</span><span class="p">,</span> <span class="n">bit2</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span> <span class="n">rads_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        If rads_list=None, this method writes a line in eng &amp; pic files for</span>
 <span class="sd">        a &#39;SWAP&#39; with &gt;= 0 controls</span>
@@ -913,16 +970,16 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">aft_trols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_preamble</span><span class="p">(</span><span class="n">trols</span><span class="p">)</span>
 
-        <span class="n">num_bits_bef</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_bef</span>
-        <span class="n">num_bits_aft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_aft</span>
+        <span class="n">num_qbits_bef</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_bef</span>
+        <span class="n">num_qbits_aft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_aft</span>
         <span class="c1"># aft_tar_bit_pos = self.emb.aft(tar_bit_pos)</span>
 
         <span class="c1"># number of controls may be zero</span>
         <span class="n">num_controls</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">aft_trols</span><span class="o">.</span><span class="n">bit_pos</span><span class="p">)</span>
 
         <span class="k">assert</span> <span class="n">bit1</span> <span class="o">!=</span> <span class="n">bit2</span><span class="p">,</span> <span class="s2">&quot;swapped bits must be different&quot;</span>
-        <span class="k">assert</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&lt;</span> <span class="n">bit1</span> <span class="o">&lt;</span> <span class="n">num_bits_bef</span>
-        <span class="k">assert</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&lt;</span> <span class="n">bit2</span> <span class="o">&lt;</span> <span class="n">num_bits_bef</span>
+        <span class="k">assert</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&lt;</span> <span class="n">bit1</span> <span class="o">&lt;</span> <span class="n">num_qbits_bef</span>
+        <span class="k">assert</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&lt;</span> <span class="n">bit2</span> <span class="o">&lt;</span> <span class="n">num_qbits_bef</span>
         <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">aft</span><span class="p">(</span><span class="n">bit1</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">aft</span><span class="p">(</span><span class="n">bit2</span><span class="p">)]</span>
         <span class="n">big</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="n">small</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
@@ -941,7 +998,8 @@
         <span class="k">if</span> <span class="n">use_sway</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">english_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">BY&#39;</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">english_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">rads_list</span><span class="p">[</span><span class="n">k</span><span class="p">]))</span>
+                <span class="n">deg_str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rads_to_degs_str</span><span class="p">(</span><span class="n">rads_list</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">english_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">deg_str</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">english_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">IF</span><span class="se">\t</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">num_controls</span> <span class="o">!=</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="c1"># list bit-positions in decreasing order</span>
@@ -960,7 +1018,7 @@
             <span class="n">smallest</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">aft_trols</span><span class="o">.</span><span class="n">bit_pos</span><span class="p">[</span><span class="n">num_controls</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">small</span><span class="p">)</span>
 
         <span class="c1"># k a bit position</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_bits_aft</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">biggest</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_qbits_aft</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">biggest</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
             <span class="n">pic_line</span> <span class="o">+=</span> <span class="s2">&quot;|   &quot;</span>
 
         <span class="n">c_int</span> <span class="o">=</span> <span class="mi">0</span>
@@ -1022,8 +1080,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">aft_trols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_preamble</span><span class="p">(</span><span class="n">trols</span><span class="p">)</span>
 
-        <span class="c1"># num_bits_bef = self.emb.num_bits_bef</span>
-        <span class="n">num_bits_aft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_aft</span>
+        <span class="c1"># num_qbits_bef = self.emb.num_qbits_bef</span>
+        <span class="n">num_qbits_aft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_aft</span>
         <span class="n">aft_tar_bit_pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">aft</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">)</span>
 
         <span class="c1"># number of controls may be zero</span>
@@ -1073,7 +1131,7 @@
             <span class="n">smallest</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">aft_trols</span><span class="o">.</span><span class="n">bit_pos</span><span class="p">[</span><span class="n">num_controls</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">aft_tar_bit_pos</span><span class="p">)</span>
 
         <span class="c1"># k a bit position</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_bits_aft</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">biggest</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_qbits_aft</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">biggest</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
             <span class="n">pic_line</span> <span class="o">+=</span> <span class="s2">&quot;|   &quot;</span>
 
         <span class="n">c_int</span> <span class="o">=</span> <span class="mi">0</span>
@@ -1130,8 +1188,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">aft_trols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_preamble</span><span class="p">(</span><span class="n">trols</span><span class="p">)</span>
 
-        <span class="c1"># num_bits_bef = self.emb.num_bits_bef</span>
-        <span class="n">num_bits_aft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_aft</span>
+        <span class="c1"># num_qbits_bef = self.emb.num_qbits_bef</span>
+        <span class="n">num_qbits_aft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_aft</span>
         <span class="c1"># aft_tar_bit_pos = self.emb.aft(tar_bit_pos)</span>
 
         <span class="c1"># number of controls may be zero</span>
@@ -1176,7 +1234,7 @@
         <span class="n">smallest</span> <span class="o">=</span> <span class="n">aft_trols</span><span class="o">.</span><span class="n">bit_pos</span><span class="p">[</span><span class="n">num_controls</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
         <span class="c1"># k a bit position</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_bits_aft</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">biggest</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_qbits_aft</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">biggest</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
             <span class="n">pic_line</span> <span class="o">+=</span> <span class="s2">&quot;|   &quot;</span>
 
         <span class="n">c_int</span> <span class="o">=</span> <span class="mi">0</span>
@@ -1210,16 +1268,16 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">write_ZF_or_ZL_pic_line</span><span class="p">(</span><span class="n">pic_line</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">picture_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SEO_writer.write_one_bit_gate"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.write_one_bit_gate">[docs]</a>    <span class="k">def</span> <span class="nf">write_one_bit_gate</span><span class="p">(</span>
-            <span class="bp">self</span><span class="p">,</span> <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">one_bit_gate_fun</span><span class="p">,</span> <span class="n">fun_arg_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="SEO_writer.write_one_qbit_gate"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.write_one_qbit_gate">[docs]</a>    <span class="k">def</span> <span class="nf">write_one_qbit_gate</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">one_qbit_gate_fun</span><span class="p">,</span> <span class="n">fun_arg_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Write a line in eng &amp; pic files for a one qubit gate (from class</span>
-<span class="sd">        OneBitGates) with no controls.</span>
+<span class="sd">        OneQubitGate) with no controls.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        tar_bit_pos : int</span>
-<span class="sd">        one_bit_gate_fun : function</span>
+<span class="sd">        one_qbit_gate_fun : function</span>
 <span class="sd">        fun_arg_list : list</span>
 
 <span class="sd">        Returns</span>
@@ -1228,10 +1286,10 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># dummy with zero controls</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span>
-            <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span> <span class="n">one_bit_gate_fun</span><span class="p">,</span> <span class="n">fun_arg_list</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span>
+            <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span> <span class="n">one_qbit_gate_fun</span><span class="p">,</span> <span class="n">fun_arg_list</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SEO_writer.write_bit_swap"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.write_bit_swap">[docs]</a>    <span class="k">def</span> <span class="nf">write_bit_swap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bit1</span><span class="p">,</span> <span class="n">bit2</span><span class="p">,</span> <span class="n">rads_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="SEO_writer.write_qbit_swap"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.write_qbit_swap">[docs]</a>    <span class="k">def</span> <span class="nf">write_qbit_swap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bit1</span><span class="p">,</span> <span class="n">bit2</span><span class="p">,</span> <span class="n">rads_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Write a line in eng &amp; pic files for a &#39;SWAP&#39; if rads_list=None or</span>
 <span class="sd">        &#39;SWAY&#39; if rads_list!=None, with no controls.</span>
@@ -1248,11 +1306,11 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># dummy with zero controls</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_bit_swap</span><span class="p">(</span><span class="n">bit1</span><span class="p">,</span> <span class="n">bit2</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span> <span class="n">rads_list</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_qbit_swap</span><span class="p">(</span><span class="n">bit1</span><span class="p">,</span> <span class="n">bit2</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span> <span class="n">rads_list</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SEO_writer.write_H"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.write_H">[docs]</a>    <span class="k">def</span> <span class="nf">write_H</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tar_bit_pos</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        writes HAD2 with no controls</span>
+<span class="sd">        Writes HAD2 with no controls.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1263,11 +1321,11 @@
 <span class="sd">        None</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">write_one_bit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">had2</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_one_qbit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">had2</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SEO_writer.write_Rx"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.write_Rx">[docs]</a>    <span class="k">def</span> <span class="nf">write_Rx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">rads</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        writes ROTX = exp(1j*rads*sig_x) with no controls</span>
+<span class="sd">        writes ROTX = exp(1j*rads*sig_x) with no controls.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1279,11 +1337,11 @@
 <span class="sd">        None</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">write_one_bit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span> <span class="p">[</span><span class="n">rads</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_one_qbit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span> <span class="p">[</span><span class="n">rads</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="SEO_writer.write_Ry"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.write_Ry">[docs]</a>    <span class="k">def</span> <span class="nf">write_Ry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">rads</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        writes ROTY = exp(1j*rads*sig_y) with no controls</span>
+<span class="sd">        Writes ROTY = exp(1j*rads*sig_y) with no controls.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1295,11 +1353,11 @@
 <span class="sd">        None</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">write_one_bit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span> <span class="p">[</span><span class="n">rads</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_one_qbit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span> <span class="p">[</span><span class="n">rads</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="SEO_writer.write_Rz"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.write_Rz">[docs]</a>    <span class="k">def</span> <span class="nf">write_Rz</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">rads</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        writes ROTZ = exp(1j*rads*sig_z) with no controls</span>
+<span class="sd">        Writes ROTZ = exp(1j*rads*sig_z) with no controls.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1311,15 +1369,15 @@
 <span class="sd">        None</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">write_one_bit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span> <span class="p">[</span><span class="n">rads</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_one_qbit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span> <span class="p">[</span><span class="n">rads</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="SEO_writer.write_Rn"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.write_Rn">[docs]</a>    <span class="k">def</span> <span class="nf">write_Rn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">rads_list</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        writes</span>
+<span class="sd">        Writes</span>
 
 <span class="sd">        ROTN = exp(1j*(rads_x*sig_x + rads_y*sig_y + rads_z*sig_z))</span>
 
-<span class="sd">        with no controls</span>
+<span class="sd">        with no controls.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1332,11 +1390,11 @@
 <span class="sd">        None</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">write_one_bit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot</span><span class="p">,</span> <span class="n">rads_list</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_one_qbit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot</span><span class="p">,</span> <span class="n">rads_list</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SEO_writer.write_S"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.write_S">[docs]</a>    <span class="k">def</span> <span class="nf">write_S</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">herm</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        writes P1PH = exp(1j*P_1*pi/2) or its Hermitian with no controls</span>
+<span class="sd">        Writes P1PH = exp(1j*P_1*pi/2) or its Hermitian with no controls.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1351,12 +1409,12 @@
         <span class="n">sign</span> <span class="o">=</span> <span class="o">+</span><span class="mi">1</span>
         <span class="k">if</span> <span class="n">herm</span><span class="p">:</span>
             <span class="n">sign</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">write_one_bit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">P_1_phase_fac</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_one_qbit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">P_1_phase_fac</span><span class="p">,</span>
                                 <span class="p">[</span><span class="n">sign</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="SEO_writer.write_T"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.write_T">[docs]</a>    <span class="k">def</span> <span class="nf">write_T</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">herm</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        writes P1PH = exp(1j*P_1*pi/4) or its Hermitian with no controls</span>
+<span class="sd">        Writes P1PH = exp(1j*P_1*pi/4) or its Hermitian with no controls.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1371,16 +1429,16 @@
         <span class="n">sign</span> <span class="o">=</span> <span class="o">+</span><span class="mi">1</span>
         <span class="k">if</span> <span class="n">herm</span><span class="p">:</span>
             <span class="n">sign</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">write_one_bit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">P_1_phase_fac</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_one_qbit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">P_1_phase_fac</span><span class="p">,</span>
                                 <span class="p">[</span><span class="n">sign</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">4</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="SEO_writer.write_U2"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.write_U2">[docs]</a>    <span class="k">def</span> <span class="nf">write_U2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">rads_list</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        writes</span>
+<span class="sd">        Writes</span>
 
 <span class="sd">        UN_2= exp(1j*(rads0 + rads1*sig_x + rads2*sig_y + rads3*sig_z))</span>
 
-<span class="sd">        with no controls</span>
+<span class="sd">        with no controls.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1393,11 +1451,11 @@
 <span class="sd">        None</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">write_one_bit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">u2</span><span class="p">,</span> <span class="n">rads_list</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_one_qbit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">u2</span><span class="p">,</span> <span class="n">rads_list</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SEO_writer.write_X"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.write_X">[docs]</a>    <span class="k">def</span> <span class="nf">write_X</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tar_bit_pos</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        writes SIGX with no controls</span>
+<span class="sd">        Writes SIGX with no controls.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1408,11 +1466,11 @@
 <span class="sd">        None</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">write_one_bit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigx</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_one_qbit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">sigx</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SEO_writer.write_Y"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.write_Y">[docs]</a>    <span class="k">def</span> <span class="nf">write_Y</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tar_bit_pos</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        writes SIGY with no controls</span>
+<span class="sd">        Writes SIGY with no controls.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1423,11 +1481,11 @@
 <span class="sd">        None</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">write_one_bit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigy</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_one_qbit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">sigy</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SEO_writer.write_Z"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.write_Z">[docs]</a>    <span class="k">def</span> <span class="nf">write_Z</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tar_bit_pos</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        writes SIGZ with no controls</span>
+<span class="sd">        Writes SIGZ with no controls.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1438,12 +1496,12 @@
 <span class="sd">        None</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">write_one_bit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigz</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_one_qbit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">sigz</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SEO_writer.write_cnot"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.write_cnot">[docs]</a>    <span class="k">def</span> <span class="nf">write_cnot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">control_bit</span><span class="p">,</span> <span class="n">target_bit</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Writes a simple singly controlled not. If kind=True (resp. False),</span>
-<span class="sd">        cnot fires when control is |1&gt; (resp. |0&gt;)</span>
+<span class="sd">        cnot fires when control is `|1&gt;` (resp. `|0&gt;`).</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1456,15 +1514,15 @@
 <span class="sd">        None</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_aft</span>
-        <span class="n">trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="o">.</span><span class="n">new_knob</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">control_bit</span><span class="p">,</span> <span class="n">kind</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="n">target_bit</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span>
-            <span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigx</span><span class="p">)</span></div>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_aft</span>
+        <span class="n">trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="o">.</span><span class="n">new_single_trol</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">control_bit</span><span class="p">,</span> <span class="n">kind</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span><span class="n">target_bit</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span>
+            <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">sigx</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SEO_writer.write_cz"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.write_cz">[docs]</a>    <span class="k">def</span> <span class="nf">write_cz</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">control_bit</span><span class="p">,</span> <span class="n">target_bit</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Writes a simple singly controlled Z. If kind=True (resp. False),</span>
-<span class="sd">        cz fires when control is |1&gt; (resp. |0&gt;)</span>
+<span class="sd">        cz fires when control is `|1&gt;` (resp. `|0&gt;`).</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1477,16 +1535,16 @@
 <span class="sd">        None</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_aft</span>
-        <span class="n">trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="o">.</span><span class="n">new_knob</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">control_bit</span><span class="p">,</span> <span class="n">kind</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="n">target_bit</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span>
-            <span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigz</span><span class="p">)</span></div>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_aft</span>
+        <span class="n">trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="o">.</span><span class="n">new_single_trol</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">control_bit</span><span class="p">,</span> <span class="n">kind</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span><span class="n">target_bit</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span>
+            <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">sigz</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SEO_writer.write_c_P1PH"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.write_c_P1PH">[docs]</a>    <span class="k">def</span> <span class="nf">write_c_P1PH</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">control_bit</span><span class="p">,</span> <span class="n">target_bit</span><span class="p">,</span> <span class="n">rads</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Writes a simple singly controlled P1PH. If kind=True (resp. False),</span>
-<span class="sd">        c_P1PH fires when control is |1&gt; (resp. |0&gt;). When kind= True and</span>
-<span class="sd">        rads=p1, c_P1PH equals (-1)^{n(t)n(c)} = sigz(t)^{n(c)} where c is</span>
+<span class="sd">        c_P1PH fires when control is `|1&gt;` (resp. `|0&gt;`). When kind= True and</span>
+<span class="sd">        rads=p1, c_P1PH equals `(-1)^{n(t)n(c)} = sigz(t)^{n(c)}` where c is</span>
 <span class="sd">        the control and t is the target. This is often called a controlled</span>
 <span class="sd">        Z, and denoted by Cz.</span>
 
@@ -1502,10 +1560,10 @@
 <span class="sd">        None</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_aft</span>
-        <span class="n">trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="o">.</span><span class="n">new_knob</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">control_bit</span><span class="p">,</span> <span class="n">kind</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="n">target_bit</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span>
-            <span class="n">OneBitGates</span><span class="o">.</span><span class="n">P_1_phase_fac</span><span class="p">,</span> <span class="p">[</span><span class="n">rads</span><span class="p">])</span></div>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_aft</span>
+        <span class="n">trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="o">.</span><span class="n">new_single_trol</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">control_bit</span><span class="p">,</span> <span class="n">kind</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span><span class="n">target_bit</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span>
+            <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">P_1_phase_fac</span><span class="p">,</span> <span class="p">[</span><span class="n">rads</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="SEO_writer.write_global_phase_fac"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.write_global_phase_fac">[docs]</a>    <span class="k">def</span> <span class="nf">write_global_phase_fac</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ang_rads</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -1523,8 +1581,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">tar_bit_pos</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># anyone will do</span>
         <span class="n">trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># dummy with zero controls</span>
-        <span class="n">gate_fun</span> <span class="o">=</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">phase_fac</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span>
+        <span class="n">gate_fun</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">phase_fac</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span>
             <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span> <span class="n">gate_fun</span><span class="p">,</span> <span class="p">[</span><span class="n">ang_rads</span><span class="p">])</span></div>
         
 <div class="viewcode-block" id="SEO_writer.write_multiplexor_gate"><a class="viewcode-back" href="../../qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer.write_multiplexor_gate">[docs]</a>    <span class="k">def</span> <span class="nf">write_multiplexor_gate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span> <span class="n">rad_angles</span><span class="p">):</span>
@@ -1572,9 +1630,9 @@
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="mi">5</span>
-        <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">)</span>
-        <span class="n">trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)</span>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="mi">5</span>
+        <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">)</span>
+        <span class="n">trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">)</span>
         <span class="n">trols</span><span class="o">.</span><span class="n">bit_pos_to_kind</span> <span class="o">=</span> <span class="p">{</span><span class="mi">3</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
         <span class="n">trols</span><span class="o">.</span><span class="n">refresh_lists</span><span class="p">()</span>
         <span class="n">ang_rads</span> <span class="o">=</span> <span class="mi">30</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span>
@@ -1596,59 +1654,59 @@
 
             <span class="n">wr</span><span class="o">.</span><span class="n">write_PRINT</span><span class="p">(</span><span class="s1">&#39;F2&#39;</span><span class="p">)</span>
 
-            <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_bit_swap</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">trols</span><span class="p">)</span>
+            <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_qbit_swap</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">trols</span><span class="p">)</span>
 
-            <span class="n">wr</span><span class="o">.</span><span class="n">write_bit_swap</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="n">wr</span><span class="o">.</span><span class="n">write_qbit_swap</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 
-            <span class="n">gate</span> <span class="o">=</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">phase_fac</span>
-            <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span> <span class="n">gate</span><span class="p">,</span> <span class="p">[</span><span class="n">ang_rads</span><span class="p">])</span>
+            <span class="n">gate</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">phase_fac</span>
+            <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span> <span class="n">gate</span><span class="p">,</span> <span class="p">[</span><span class="n">ang_rads</span><span class="p">])</span>
 
             <span class="n">wr</span><span class="o">.</span><span class="n">write_global_phase_fac</span><span class="p">(</span><span class="mi">30</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span><span class="p">)</span>
 
-            <span class="n">gate</span> <span class="o">=</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">P_0_phase_fac</span>
-            <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span> <span class="n">gate</span><span class="p">,</span> <span class="p">[</span><span class="n">ang_rads</span><span class="p">])</span>
+            <span class="n">gate</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">P_0_phase_fac</span>
+            <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span> <span class="n">gate</span><span class="p">,</span> <span class="p">[</span><span class="n">ang_rads</span><span class="p">])</span>
 
-            <span class="n">gate</span> <span class="o">=</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">P_1_phase_fac</span>
-            <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span> <span class="n">gate</span><span class="p">,</span> <span class="p">[</span><span class="n">ang_rads</span><span class="p">])</span>
+            <span class="n">gate</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">P_1_phase_fac</span>
+            <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span> <span class="n">gate</span><span class="p">,</span> <span class="p">[</span><span class="n">ang_rads</span><span class="p">])</span>
 
-            <span class="n">gate</span> <span class="o">=</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigx</span>
-            <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span> <span class="n">gate</span><span class="p">)</span>
+            <span class="n">gate</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">sigx</span>
+            <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span> <span class="n">gate</span><span class="p">)</span>
 
-            <span class="n">gate</span> <span class="o">=</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigy</span>
-            <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span> <span class="n">gate</span><span class="p">)</span>
+            <span class="n">gate</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">sigy</span>
+            <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span> <span class="n">gate</span><span class="p">)</span>
 
-            <span class="n">gate</span> <span class="o">=</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigz</span>
-            <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span> <span class="n">gate</span><span class="p">)</span>
+            <span class="n">gate</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">sigz</span>
+            <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span> <span class="n">gate</span><span class="p">)</span>
 
-            <span class="n">gate</span> <span class="o">=</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">had2</span>
-            <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span> <span class="n">gate</span><span class="p">)</span>
+            <span class="n">gate</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">had2</span>
+            <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span> <span class="n">gate</span><span class="p">)</span>
 
-            <span class="n">gate</span> <span class="o">=</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot_ax</span>
-            <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span> <span class="n">gate</span><span class="p">,</span> <span class="p">[</span><span class="n">ang_rads</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="n">gate</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot_ax</span>
+            <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span> <span class="n">gate</span><span class="p">,</span> <span class="p">[</span><span class="n">ang_rads</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
 
-            <span class="n">gate</span> <span class="o">=</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot_ax</span>
-            <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span> <span class="n">gate</span><span class="p">,</span> <span class="p">[</span><span class="n">ang_rads</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+            <span class="n">gate</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot_ax</span>
+            <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span> <span class="n">gate</span><span class="p">,</span> <span class="p">[</span><span class="n">ang_rads</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
 
-            <span class="n">gate</span> <span class="o">=</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot_ax</span>
-            <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span> <span class="n">gate</span><span class="p">,</span> <span class="p">[</span><span class="n">ang_rads</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+            <span class="n">gate</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot_ax</span>
+            <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span> <span class="n">gate</span><span class="p">,</span> <span class="p">[</span><span class="n">ang_rads</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
 
-            <span class="n">gate</span> <span class="o">=</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot</span>
-            <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span> <span class="n">gate</span><span class="p">,</span>
+            <span class="n">gate</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot</span>
+            <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">trols</span><span class="p">,</span> <span class="n">gate</span><span class="p">,</span>
                 <span class="p">[</span><span class="n">ang_rads</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="n">ang_rads</span><span class="o">*</span><span class="mi">2</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="n">ang_rads</span><span class="p">])</span>
 
-            <span class="n">gate</span> <span class="o">=</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigx</span>
-            <span class="n">wr</span><span class="o">.</span><span class="n">write_one_bit_gate</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">gate</span><span class="p">)</span>
+            <span class="n">gate</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">sigx</span>
+            <span class="n">wr</span><span class="o">.</span><span class="n">write_one_qbit_gate</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">gate</span><span class="p">)</span>
 
             <span class="n">wr</span><span class="o">.</span><span class="n">write_cnot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
             <span class="n">tar_bit_pos</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="n">trols1</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)</span>
+            <span class="n">trols1</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">)</span>
             <span class="n">trols1</span><span class="o">.</span><span class="n">bit_pos_to_kind</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
             <span class="n">trols1</span><span class="o">.</span><span class="n">refresh_lists</span><span class="p">()</span>
             <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_multiplexor_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">trols1</span><span class="p">,</span>
                 <span class="p">[</span><span class="n">ang_rads</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="n">ang_rads</span><span class="o">*</span><span class="mi">2</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="n">ang_rads</span><span class="p">,</span> <span class="n">ang_rads</span><span class="o">*</span><span class="mi">4</span><span class="o">/</span><span class="mi">3</span><span class="p">])</span>
 
-            <span class="n">trols2</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)</span>
+            <span class="n">trols2</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">)</span>
             <span class="n">trols2</span><span class="o">.</span><span class="n">bit_pos_to_kind</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
             <span class="n">trols2</span><span class="o">.</span><span class="n">refresh_lists</span><span class="p">()</span>
             <span class="n">wr</span><span class="o">.</span><span class="n">write_multiplexor_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">trols2</span><span class="p">,</span>

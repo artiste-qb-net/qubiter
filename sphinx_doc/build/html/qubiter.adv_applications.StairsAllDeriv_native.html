@@ -154,7 +154,7 @@
 <span id="qubiter-adv-applications-stairsallderiv-native-module"></span><h1>qubiter.adv_applications.StairsAllDeriv_native module<a class="headerlink" href="#module-qubiter.adv_applications.StairsAllDeriv_native" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="qubiter.adv_applications.StairsAllDeriv_native.StairsAllDeriv_native">
-<em class="property">class </em><code class="sig-prename descclassname">qubiter.adv_applications.StairsAllDeriv_native.</code><code class="sig-name descname">StairsAllDeriv_native</code><span class="sig-paren">(</span><em class="sig-param">gate_str_to_rads_list</em>, <em class="sig-param">file_prefix</em>, <em class="sig-param">parent_num_bits</em>, <em class="sig-param">hamil</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/adv_applications/StairsAllDeriv_native.html#StairsAllDeriv_native"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.adv_applications.StairsAllDeriv_native.StairsAllDeriv_native" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">qubiter.adv_applications.StairsAllDeriv_native.</code><code class="sig-name descname">StairsAllDeriv_native</code><span class="sig-paren">(</span><em class="sig-param">gate_str_to_rads_list</em>, <em class="sig-param">file_prefix</em>, <em class="sig-param">parent_num_qbits</em>, <em class="sig-param">hamil</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/adv_applications/StairsAllDeriv_native.html#StairsAllDeriv_native"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.adv_applications.StairsAllDeriv_native.StairsAllDeriv_native" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="qubiter.adv_applications.StairsDeriv_native.html#qubiter.adv_applications.StairsDeriv_native.StairsDeriv_native" title="qubiter.adv_applications.StairsDeriv_native.StairsDeriv_native"><code class="xref py py-class docutils literal notranslate"><span class="pre">qubiter.adv_applications.StairsDeriv_native.StairsDeriv_native</span></code></a></p>
 <p>This class is a child of StairsDeriv_native. For the parent class,
 the get_mean_val() method returns a list of 4 partial derivatives
@@ -168,14 +168,14 @@ ordered dictionary mapping each gate_str to its 4 partials.</p>
 </dl>
 <dl class="method">
 <dt id="qubiter.adv_applications.StairsAllDeriv_native.StairsAllDeriv_native.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">gate_str_to_rads_list</em>, <em class="sig-param">file_prefix</em>, <em class="sig-param">parent_num_bits</em>, <em class="sig-param">hamil</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/adv_applications/StairsAllDeriv_native.html#StairsAllDeriv_native.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.adv_applications.StairsAllDeriv_native.StairsAllDeriv_native.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">gate_str_to_rads_list</em>, <em class="sig-param">file_prefix</em>, <em class="sig-param">parent_num_qbits</em>, <em class="sig-param">hamil</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/adv_applications/StairsAllDeriv_native.html#StairsAllDeriv_native.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.adv_applications.StairsAllDeriv_native.StairsAllDeriv_native.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constructor</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>gate_str_to_rads_list</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>list</em><em>[</em><em>float|str</em><em>]</em><em>]</em>) – </p></li>
 <li><p><strong>file_prefix</strong> (<em>str</em>) – </p></li>
-<li><p><strong>parent_num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>parent_num_qbits</strong> (<em>int</em>) – </p></li>
 <li><p><strong>hamil</strong> (<em>QubitOperator</em>) – </p></li>
 <li><p><strong>kwargs</strong> (<em>dict</em>) – key-word arguments of MeanHamil</p></li>
 </ul>

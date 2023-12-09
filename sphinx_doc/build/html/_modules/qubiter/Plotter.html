@@ -170,15 +170,15 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="Plotter.get_states"><a class="viewcode-back" href="../../qubiter.Plotter.html#qubiter.Plotter.Plotter.get_states">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_states</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">use_bin_labels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ZL</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_states</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">use_bin_labels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ZL</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns list of strings [&#39;0&#39;, &#39;1&#39;, ..] with 2^num_bits entries if</span>
+<span class="sd">        Returns list of strings [&#39;0&#39;, &#39;1&#39;, ..] with 2^num_qbits entries if</span>
 <span class="sd">        use_bin_labels=False, or the binary string equivalents if</span>
 <span class="sd">        use_bin_labels=True.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        num_bits : int</span>
+<span class="sd">        num_qbits : int</span>
 <span class="sd">        use_bin_labels : bool</span>
 <span class="sd">        ZL : bool</span>
 <span class="sd">            If True, appends &quot;(ZL)&quot; to state labels. Else appends &quot;(ZF)&quot;</span>
@@ -189,23 +189,23 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">str1</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">num_bits</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">num_qbits</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">ZL</span><span class="p">:</span>
                 <span class="n">str1</span> <span class="o">=</span> <span class="s2">&quot;ZL&quot;</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">str1</span> <span class="o">=</span> <span class="s2">&quot;ZF&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">use_bin_labels</span><span class="p">:</span>
-            <span class="n">states</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_bits</span><span class="p">)]</span>
+            <span class="n">states</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_qbits</span><span class="p">)]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">states</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">binary_repr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">num_bits</span><span class="p">)</span> <span class="o">+</span> <span class="n">str1</span>
-                      <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_bits</span><span class="p">)]</span>
+            <span class="n">states</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">binary_repr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">num_qbits</span><span class="p">)</span> <span class="o">+</span> <span class="n">str1</span>
+                      <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_qbits</span><span class="p">)]</span>
         <span class="k">return</span> <span class="n">states</span></div>
 
 <div class="viewcode-block" id="Plotter.get_st_vec_df"><a class="viewcode-back" href="../../qubiter.Plotter.html#qubiter.Plotter.Plotter.get_st_vec_df">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_st_vec_df</span><span class="p">(</span><span class="n">trad_st_vec</span><span class="p">,</span> <span class="n">use_bin_labels</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Admits as input trad_st_vec which is a complex numpy array with</span>
-<span class="sd">        shape (dim,) where dim= 2^num_bits and ZL convention is assumed.</span>
+<span class="sd">        shape (dim,) where dim= 2^num_qbits and ZL convention is assumed.</span>
 <span class="sd">        Returns a dataframe with a single column with 2^num_bit rows. The</span>
 <span class="sd">        rows are labelled by 0, 1, 2, ... or their binary equivalents,</span>
 <span class="sd">        depending on the bool value of use_bin_labels.</span>
@@ -220,22 +220,22 @@
 <span class="sd">        pan.DataFrame</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="n">trad_st_vec</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span>
-        <span class="n">states</span> <span class="o">=</span> <span class="n">Plotter</span><span class="o">.</span><span class="n">get_states</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">use_bin_labels</span><span class="p">)</span>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="n">trad_st_vec</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">states</span> <span class="o">=</span> <span class="n">Plotter</span><span class="o">.</span><span class="n">get_states</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">use_bin_labels</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">pan</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">trad_st_vec</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">states</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Plotter.get_den_mat_df"><a class="viewcode-back" href="../../qubiter.Plotter.html#qubiter.Plotter.Plotter.get_den_mat_df">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_den_mat_df</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">den_mat</span><span class="p">,</span> <span class="n">use_bin_labels</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_den_mat_df</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">den_mat</span><span class="p">,</span> <span class="n">use_bin_labels</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Admits as input a numpy array den_mat (a density matrix) of shape (</span>
-<span class="sd">        dim, dim), where dim= 2^num_bits and ZL convention is assumed.</span>
+<span class="sd">        dim, dim), where dim= 2^num_qbits and ZL convention is assumed.</span>
 <span class="sd">        Returns square dataframe with entries of den_mat. The rows and</span>
 <span class="sd">        columns are labelled by 0, 1, 2, ... or their binary equivalents,</span>
 <span class="sd">        depending on the bool value of use_bin_labels.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        num_bits : int</span>
+<span class="sd">        num_qbits : int</span>
 <span class="sd">        den_mat : np.ndarray</span>
 <span class="sd">        use_bin_labels : bool</span>
 
@@ -244,22 +244,22 @@
 <span class="sd">        pan.DataFrame</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_bits</span> <span class="o">==</span> <span class="n">den_mat</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">states</span> <span class="o">=</span> <span class="n">Plotter</span><span class="o">.</span><span class="n">get_states</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">use_bin_labels</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_qbits</span> <span class="o">==</span> <span class="n">den_mat</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">states</span> <span class="o">=</span> <span class="n">Plotter</span><span class="o">.</span><span class="n">get_states</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">use_bin_labels</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">pan</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">den_mat</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">states</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">states</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Plotter.get_pd_df"><a class="viewcode-back" href="../../qubiter.Plotter.html#qubiter.Plotter.Plotter.get_pd_df">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_pd_df</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">pd</span><span class="p">,</span> <span class="n">use_bin_labels</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_pd_df</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">pd</span><span class="p">,</span> <span class="n">use_bin_labels</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Admits as input a 1-dim numpy array pd (probability distribution)</span>
-<span class="sd">        with shape ( 2^num_bits, ) and ZL convention is assumed. Returns a</span>
+<span class="sd">        with shape ( 2^num_qbits, ) and ZL convention is assumed. Returns a</span>
 <span class="sd">        dataframe with its entries. The rows are labelled by 0, 1, 2,</span>
 <span class="sd">        ... or their binary equivalents, depending on the bool value of</span>
 <span class="sd">        use_bin_labels.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        num_bits : int</span>
+<span class="sd">        num_qbits : int</span>
 <span class="sd">        pd : np.ndarray</span>
 <span class="sd">        use_bin_labels : bool</span>
 
@@ -269,16 +269,16 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># print(pd)</span>
-        <span class="k">assert</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_bits</span> <span class="o">==</span> <span class="n">pd</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">states</span> <span class="o">=</span> <span class="n">Plotter</span><span class="o">.</span><span class="n">get_states</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">use_bin_labels</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_qbits</span> <span class="o">==</span> <span class="n">pd</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">states</span> <span class="o">=</span> <span class="n">Plotter</span><span class="o">.</span><span class="n">get_states</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">use_bin_labels</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">pan</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">pd</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">states</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Plotter.get_bit_probs_df"><a class="viewcode-back" href="../../qubiter.Plotter.html#qubiter.Plotter.Plotter.get_bit_probs_df">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_bit_probs_df</span><span class="p">(</span><span class="n">bit_probs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Admits as input a list bit_probs with num_bits items consisting of</span>
+<span class="sd">        Admits as input a list bit_probs with num_qbits items consisting of</span>
 <span class="sd">        pairs of two floats. Returns a dataframe with two columns and</span>
-<span class="sd">        num_bits rows. The rows are labelled by 0, 1, 2, ...</span>
+<span class="sd">        num_qbits rows. The rows are labelled by 0, 1, 2, ...</span>
 <span class="sd">      </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -319,29 +319,29 @@
         <span class="n">num_titles</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">titles</span><span class="p">)</span>
 
         <span class="k">def</span> <span class="nf">single_pd</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">pd_df</span><span class="p">):</span>
-                <span class="n">y_pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pd_df</span><span class="o">.</span><span class="n">index</span><span class="p">))</span> <span class="o">+</span> <span class="o">.</span><span class="mi">5</span>
-                <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
-                <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">y_pos</span><span class="p">,</span> <span class="n">pd_df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
-                <span class="n">ax</span><span class="o">.</span><span class="n">invert_yaxis</span><span class="p">()</span>
+            <span class="n">y_pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pd_df</span><span class="o">.</span><span class="n">index</span><span class="p">))</span> <span class="o">+</span> <span class="o">.</span><span class="mi">5</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">y_pos</span><span class="p">,</span> <span class="n">pd_df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">invert_yaxis</span><span class="p">()</span>
 
-                <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="o">.</span><span class="mi">25</span><span class="p">,</span> <span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="o">.</span><span class="mi">75</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
-                <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="o">.</span><span class="mi">25</span><span class="p">,</span> <span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="o">.</span><span class="mi">75</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
-                <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_pos</span><span class="p">)):</span>
-                    <span class="n">val</span> <span class="o">=</span> <span class="n">pd_df</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">row</span><span class="p">]</span>
-                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
-                        <span class="n">val</span> <span class="o">=</span> <span class="n">val</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">y_pos</span><span class="p">[</span><span class="n">row</span><span class="p">],</span> <span class="s1">&#39;</span><span class="si">{:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">val</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_pos</span><span class="p">)):</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="n">pd_df</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">row</span><span class="p">]</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+                    <span class="n">val</span> <span class="o">=</span> <span class="n">val</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">y_pos</span><span class="p">[</span><span class="n">row</span><span class="p">],</span> <span class="s1">&#39;</span><span class="si">{:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">val</span><span class="p">))</span>
 
-                <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-                <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
-                <span class="c1"># new version of python/matplotlib has bug here.</span>
-                <span class="c1"># The following used to work but no longer does.</span>
-                <span class="c1"># ax.barh(y_pos, pd_df.values, align=&#39;center&#39;)</span>
-                <span class="c1"># work around</span>
-                <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_pos</span><span class="p">)):</span>
-                    <span class="n">ax</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span><span class="n">y_pos</span><span class="p">[</span><span class="n">b</span><span class="p">],</span> <span class="n">pd_df</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">b</span><span class="p">],</span>
-                            <span class="n">align</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+            <span class="c1"># new version of python/matplotlib has bug here.</span>
+            <span class="c1"># The following used to work but no longer does.</span>
+            <span class="c1"># ax.barh(y_pos, pd_df.values, align=&#39;center&#39;)</span>
+            <span class="c1"># work around</span>
+            <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_pos</span><span class="p">)):</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span><span class="n">y_pos</span><span class="p">[</span><span class="n">b</span><span class="p">],</span> <span class="n">pd_df</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">b</span><span class="p">],</span>
+                        <span class="n">align</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>
         <span class="n">fig</span><span class="p">,</span> <span class="n">ax_list</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="n">num_titles</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="c1"># print(&quot;***&quot;, ax_list[0])</span>
@@ -359,7 +359,7 @@
 <span class="sd">        Admits as input a list of dataframes called &#39;st_vec_df_list&#39; or one</span>
 <span class="sd">        called &#39;den_mat_df_list&#39; but not both. Exactly one of these lists</span>
 <span class="sd">        must be None. The names of the dataframes are given by the list of</span>
-<span class="sd">        strings &#39;titles&#39;. Let dim = 2^num_bits. The dataframes in</span>
+<span class="sd">        strings &#39;titles&#39;. Let dim = 2^num_qbits. The dataframes in</span>
 <span class="sd">        st_vec_df_list have one column with dim rows, whereas those for</span>
 <span class="sd">        den_mat_df_list are square with dim rows and columns. This function</span>
 <span class="sd">        plots each dataframe in the list as a quiver plot (phasor-&gt;arrow)</span>
@@ -461,28 +461,28 @@
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
 
     <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="mi">3</span>
-        <span class="n">st_vec0</span> <span class="o">=</span> <span class="n">StateVec</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span>
-            <span class="n">arr</span><span class="o">=</span><span class="n">StateVec</span><span class="o">.</span><span class="n">get_random_st_vec</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)</span><span class="o">.</span><span class="n">arr</span><span class="p">)</span>
-        <span class="n">st_vec1</span> <span class="o">=</span> <span class="n">StateVec</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span>
-            <span class="n">arr</span><span class="o">=</span><span class="n">StateVec</span><span class="o">.</span><span class="n">get_random_st_vec</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)</span><span class="o">.</span><span class="n">arr</span><span class="p">)</span>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="n">st_vec0</span> <span class="o">=</span> <span class="n">StateVec</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span>
+            <span class="n">arr</span><span class="o">=</span><span class="n">StateVec</span><span class="o">.</span><span class="n">get_random_st_vec</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">)</span><span class="o">.</span><span class="n">arr</span><span class="p">)</span>
+        <span class="n">st_vec1</span> <span class="o">=</span> <span class="n">StateVec</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span>
+            <span class="n">arr</span><span class="o">=</span><span class="n">StateVec</span><span class="o">.</span><span class="n">get_random_st_vec</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">)</span><span class="o">.</span><span class="n">arr</span><span class="p">)</span>
         <span class="n">st_vec_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;br0&#39;</span><span class="p">:</span> <span class="n">st_vec0</span><span class="p">,</span>
                        <span class="s1">&#39;br1&#39;</span><span class="p">:</span> <span class="n">st_vec1</span><span class="p">,</span>
                        <span class="s1">&#39;br3&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
 
         <span class="n">trad_st_vec</span> <span class="o">=</span> <span class="n">st_vec0</span><span class="o">.</span><span class="n">get_traditional_st_vec</span><span class="p">()</span>
-        <span class="n">den_mat</span> <span class="o">=</span> <span class="n">StateVec</span><span class="o">.</span><span class="n">get_den_mat</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">st_vec_dict</span><span class="p">)</span>
+        <span class="n">den_mat</span> <span class="o">=</span> <span class="n">StateVec</span><span class="o">.</span><span class="n">get_den_mat</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">st_vec_dict</span><span class="p">)</span>
         <span class="c1"># print(&quot;den_mat&quot;, den_mat)</span>
         <span class="n">st_vec_pd</span> <span class="o">=</span> <span class="n">st_vec0</span><span class="o">.</span><span class="n">get_pd</span><span class="p">()</span>
         <span class="n">den_mat_pd</span> <span class="o">=</span> <span class="n">StateVec</span><span class="o">.</span><span class="n">get_den_mat_pd</span><span class="p">(</span><span class="n">den_mat</span><span class="p">)</span>
-        <span class="n">bit_probs_vec</span> <span class="o">=</span> <span class="n">StateVec</span><span class="o">.</span><span class="n">get_bit_probs</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">st_vec_pd</span><span class="p">)</span>
-        <span class="n">bit_probs_dm</span> <span class="o">=</span> <span class="n">StateVec</span><span class="o">.</span><span class="n">get_bit_probs</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">den_mat_pd</span><span class="p">)</span>
+        <span class="n">bit_probs_vec</span> <span class="o">=</span> <span class="n">StateVec</span><span class="o">.</span><span class="n">get_bit_probs</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">st_vec_pd</span><span class="p">)</span>
+        <span class="n">bit_probs_dm</span> <span class="o">=</span> <span class="n">StateVec</span><span class="o">.</span><span class="n">get_bit_probs</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">den_mat_pd</span><span class="p">)</span>
 
         <span class="n">st_vec_df</span> <span class="o">=</span> <span class="n">Plotter</span><span class="o">.</span><span class="n">get_st_vec_df</span><span class="p">(</span><span class="n">st_vec0</span><span class="o">.</span><span class="n">get_traditional_st_vec</span><span class="p">())</span>
-        <span class="n">den_mat_df</span> <span class="o">=</span> <span class="n">Plotter</span><span class="o">.</span><span class="n">get_den_mat_df</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">den_mat</span><span class="p">)</span>
+        <span class="n">den_mat_df</span> <span class="o">=</span> <span class="n">Plotter</span><span class="o">.</span><span class="n">get_den_mat_df</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">den_mat</span><span class="p">)</span>
         <span class="c1"># print(&quot;den_mat_df&quot;, den_mat_df)</span>
-        <span class="n">st_vec_pd_df</span> <span class="o">=</span> <span class="n">Plotter</span><span class="o">.</span><span class="n">get_pd_df</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">st_vec_pd</span><span class="p">)</span>
-        <span class="n">den_mat_pd_df</span> <span class="o">=</span> <span class="n">Plotter</span><span class="o">.</span><span class="n">get_pd_df</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">den_mat_pd</span><span class="p">)</span>
+        <span class="n">st_vec_pd_df</span> <span class="o">=</span> <span class="n">Plotter</span><span class="o">.</span><span class="n">get_pd_df</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">st_vec_pd</span><span class="p">)</span>
+        <span class="n">den_mat_pd_df</span> <span class="o">=</span> <span class="n">Plotter</span><span class="o">.</span><span class="n">get_pd_df</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">den_mat_pd</span><span class="p">)</span>
         <span class="n">bit_probs_df1</span> <span class="o">=</span> <span class="n">Plotter</span><span class="o">.</span><span class="n">get_bit_probs_df</span><span class="p">(</span><span class="n">bit_probs_vec</span><span class="p">)</span>
         <span class="n">bit_probs_df2</span> <span class="o">=</span> <span class="n">Plotter</span><span class="o">.</span><span class="n">get_bit_probs_df</span><span class="p">(</span><span class="n">bit_probs_dm</span><span class="p">)</span>
 

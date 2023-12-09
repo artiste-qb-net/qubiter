@@ -4,7 +4,7 @@ import qubiter.utilities_gen as utg
 
 class Qubiter_to_PennyLane(Qubiter_to_AnyQasm):
     """
-    See docstring of parent class Qubiter_to_AnyQasm
+    See docstring of parent class Qubiter_to_AnyQasm.
 
     If input c_to_tars = None, all CNOTs and CZs are allowed.
 
@@ -32,7 +32,7 @@ class Qubiter_to_PennyLane(Qubiter_to_AnyQasm):
 
 
     """
-    def __init__(self, file_prefix, num_bits, qnode_name='qnode',
+    def __init__(self, file_prefix, num_qbits, qnode_name='qnode',
                  fun_defs_path=None, **kwargs):
         """
         Constructor
@@ -40,7 +40,7 @@ class Qubiter_to_PennyLane(Qubiter_to_AnyQasm):
         Parameters
         ----------
         file_prefix : str
-        num_bits : int
+        num_qbits : int
         qnode_name : str
         fun_defs_path : str
         rotn_has_been_defined : bool
@@ -53,7 +53,7 @@ class Qubiter_to_PennyLane(Qubiter_to_AnyQasm):
         self.fun_defs_path = fun_defs_path
         self.rotn_has_been_defined = False
         self.indentation = 0
-        Qubiter_to_AnyQasm.__init__(self, file_prefix, num_bits,
+        Qubiter_to_AnyQasm.__init__(self, file_prefix, num_qbits,
                                     aqasm_ftype='py', **kwargs)
 
     def write_prelude(self):
@@ -121,8 +121,8 @@ class Qubiter_to_PennyLane(Qubiter_to_AnyQasm):
 
     def use_NOTA(self, bla_str):
         """
-        Writes line in PennyL file corresponding to an English file line
-        of type: NOTA
+        Writes line in PennyL file corresponding to an English file line of
+        type: NOTA
 
         Parameters
         ----------
@@ -208,13 +208,13 @@ class Qubiter_to_PennyLane(Qubiter_to_AnyQasm):
 
         if self.write_qubiter_files:
             if projection_bit == 0:
-                u2_fun = OneBitGates.P_0_phase_fac
+                u2_fun = OneQubitGate.P_0_phase_fac
             elif projection_bit == 1:
-                u2_fun = OneBitGates.P_1_phase_fac
+                u2_fun = OneQubitGate.P_1_phase_fac
             else:
                 assert False
 
-            self.qbtr_wr.write_controlled_one_bit_gate(
+            self.qbtr_wr.write_controlled_one_qbit_gate(
                 tar_bit_pos, controls, u2_fun, [angle_rads])
 
     def use_PRINT(self, style, line_num):
@@ -279,8 +279,8 @@ class Qubiter_to_PennyLane(Qubiter_to_AnyQasm):
         self.aqasm_out.write(line_str)
 
         if self.write_qubiter_files:
-            self.qbtr_wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
-                               OneBitGates.rot_ax, [angle_rads, axis])
+            self.qbtr_wr.write_controlled_one_qbit_gate(tar_bit_pos, controls,
+                               OneQubitGate.rot_ax, [angle_rads, axis])
 
     def use_ROTN(self, angle_x_rads, angle_y_rads, angle_z_rads,
                 tar_bit_pos, controls):
@@ -308,7 +308,7 @@ class Qubiter_to_PennyLane(Qubiter_to_AnyQasm):
             import inspect
             # gives tuple of list so need 0th component
             # first line is @staticmethod, omit it
-            lines = inspect.getsourcelines(OneBitGates.rot)[0][1:]
+            lines = inspect.getsourcelines(OneQubitGate.rot)[0][1:]
             # print(",999999999999999,0", lines)
             s = ''
             for line in lines:
@@ -340,8 +340,8 @@ class Qubiter_to_PennyLane(Qubiter_to_AnyQasm):
         self.aqasm_out.write(line_str)
 
         if self.write_qubiter_files:
-            self.qbtr_wr.write_controlled_one_bit_gate(tar_bit_pos,
-                    controls, OneBitGates.rot, rad_ang_list)
+            self.qbtr_wr.write_controlled_one_qbit_gate(tar_bit_pos,
+                    controls, OneQubitGate.rot, rad_ang_list)
 
     def use_SIG(self, axis, tar_bit_pos, controls):
         """
@@ -366,11 +366,11 @@ class Qubiter_to_PennyLane(Qubiter_to_AnyQasm):
             assert axis in [1, 3]
             assert controls.bit_pos_to_kind[controls.bit_pos[0]] == True
         if axis == 1:
-            u2_fun = OneBitGates.sigx
+            u2_fun = OneQubitGate.sigx
         elif axis == 2:
-            u2_fun = OneBitGates.sigy
+            u2_fun = OneQubitGate.sigy
         elif axis == 3:
-            u2_fun = OneBitGates.sigz
+            u2_fun = OneQubitGate.sigz
         else:
             assert False
         if num_trols == 0:
@@ -386,7 +386,7 @@ class Qubiter_to_PennyLane(Qubiter_to_AnyQasm):
             line_str += str(tar_bit_pos) + ")\n"
             self.aqasm_out.write(line_str)
             if self.write_qubiter_files:
-                self.qbtr_wr.write_controlled_one_bit_gate(
+                self.qbtr_wr.write_controlled_one_qbit_gate(
                     tar_bit_pos, controls, u2_fun)
         else:  # num_trols == 1
             tar_pos = tar_bit_pos
@@ -403,7 +403,7 @@ class Qubiter_to_PennyLane(Qubiter_to_AnyQasm):
                 line_str += str(tar_pos) + '])\n'
                 self.aqasm_out.write(line_str)
                 if self.write_qubiter_files:
-                    self.qbtr_wr.write_controlled_one_bit_gate(
+                    self.qbtr_wr.write_controlled_one_qbit_gate(
                         tar_bit_pos, controls, u2_fun)
             else:
                 assert False, "Forbidden CNOT detected: " \
@@ -437,14 +437,15 @@ class Qubiter_to_PennyLane(Qubiter_to_AnyQasm):
         self.aqasm_out.write(line_str)
 
         if self.write_qubiter_files:
-            self.qbtr_wr.write_controlled_bit_swap(bit1, bit2, controls)
+            self.qbtr_wr.write_controlled_qbit_swap(bit1, bit2, controls)
+
 
 if __name__ == "__main__":
 
     def main1():
         file_prefix = "qbtr2penny_test1"
-        num_bits = 3
-        emb = CktEmbedder(num_bits, num_bits)
+        num_qbits = 3
+        emb = CktEmbedder(num_qbits, num_qbits)
         wr = SEO_writer(file_prefix, emb)
         wr.write_H(0)
         wr.write_X(1)
@@ -452,25 +453,25 @@ if __name__ == "__main__":
         wr.write_Z(1)
         wr.write_cnot(0, 1)
         wr.write_cz(0, 1)
-        wr.write_bit_swap(1, 0)
+        wr.write_qbit_swap(1, 0)
         wr.write_Rx(2, rads=np.pi)
         wr.write_Ry(2, rads=np.pi)
         wr.write_Rz(2, rads=np.pi)
-        wr.write_one_bit_gate(1, OneBitGates.P_1_phase_fac, [np.pi])
+        wr.write_one_qbit_gate(1, OneQubitGate.P_1_phase_fac, [np.pi])
         wr.write_Rn(0, rads_list=[np.pi, np.pi, np.pi])
         wr.close_files()
 
         qasm_name = 'PennyL'
         qnode_name = 'Turing'
-        Qubiter_to_PennyLane(file_prefix, num_bits,
+        Qubiter_to_PennyLane(file_prefix, num_qbits,
                 qnode_name,
                 aqasm_name=qasm_name,
                 write_qubiter_files=True)
 
     def main2():
         file_prefix = "qbtr2penny_test2"
-        num_bits = 4
-        emb = CktEmbedder(num_bits, num_bits)
+        num_qbits = 4
+        emb = CktEmbedder(num_qbits, num_qbits)
         wr = SEO_writer(file_prefix, emb)
         wr.write_Rx(2, rads=np.pi/7)
         wr.write_Rx(1, rads='#2*.5')
@@ -482,7 +483,7 @@ if __name__ == "__main__":
         aqasm_name = 'PennyL'
         fun_defs_path = 'qbtr2penny_test2_fun_defs.py'
         qnode_name = 'Feynman'
-        Qubiter_to_PennyLane(file_prefix, num_bits,
+        Qubiter_to_PennyLane(file_prefix, num_qbits,
                 qnode_name,
                 fun_defs_path,
                 aqasm_name=aqasm_name,

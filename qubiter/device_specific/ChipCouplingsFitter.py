@@ -26,7 +26,7 @@ class ChipCouplingsFitter:
     undirected graphs. The class attempts to find a map phi() from the
     vertices of GE to the vertices of GP, so that phi(x_GE) is a subset of
     x_GP with x=V, E. If the search for phi() succeeds, then phi induces a
-    permutation map, call it bit_map: range(num_bits)->range(num_bits),
+    permutation map, call it bit_map: range(num_qbits)->range(num_qbits),
     bit_ge->bit_gp, of the qubits of the circuit from which GE was
     assembled. Under this permutation, the CNots of the permuted circuit are
     all allowed** by the chip constraint c_to_tars. In that sense, the map
@@ -43,7 +43,7 @@ class ChipCouplingsFitter:
         of the graph GE to the bits bit_gp of the graph GP.
 
     """
-    def __init__(self, file_prefix, num_bits, c_to_tars, verbose=False):
+    def __init__(self, file_prefix, num_qbits, c_to_tars, verbose=False):
         """
         Constructor
 
@@ -52,16 +52,16 @@ class ChipCouplingsFitter:
         file_prefix : str
             file prefix of English file which is to be read to assemble
             a list of CNots used in the file.
-        num_bits : int
+        num_qbits : int
             Number of qubits used in English file with file prefix
             `file_prefix`. IMP: We assume that c_to_tars refers to a chip with
-            num_bits too. Both the English file and the chip must have the
+            num_qbits too. Both the English file and the chip must have the
             same number of qubits. This is no loss of generality. As long as
-            the English file doesn't mention qubit positions >= num_bits,
+            the English file doesn't mention qubit positions >= num_qbits,
             all you have to do to conform is to change the name of the
-            English file so that it claims to pertain to num_bits qubits.
+            English file so that it claims to pertain to num_qbits qubits.
         c_to_tars : dict[int, list[int]]
-            a dictionary mapping j in range(num_bits) to a list, possibly
+            a dictionary mapping j in range(num_qbits) to a list, possibly
             empty, of the physically allowed targets of qubit j, when j is
             the control of a CNOT.
 
@@ -74,16 +74,16 @@ class ChipCouplingsFitter:
         """
 
         old_cnots = ChipCouplingsFitter.get_cnots_in_file(
-            file_prefix, num_bits, verbose)
+            file_prefix, num_qbits, verbose)
         self.bit_map = ChipCouplingsFitter.get_bit_map_from_c_to_tars(
-            num_bits, old_cnots, c_to_tars, verbose)
-        emb = CktEmbedder(num_bits, num_bits, self.bit_map)
+            num_qbits, old_cnots, c_to_tars, verbose)
+        emb = CktEmbedder(num_qbits, num_qbits, self.bit_map)
         out_file_prefix = SEO_reader.xed_file_prefix(file_prefix)
         wr = SEO_writer(out_file_prefix, emb)
-        EchoingSEO_reader(file_prefix, num_bits, wr)
+        EchoingSEO_reader(file_prefix, num_qbits, wr)
 
     @staticmethod
-    def get_cnots_in_file(file_prefix, num_bits, verbose=False):
+    def get_cnots_in_file(file_prefix, num_qbits, verbose=False):
         """
         This function reads an English file with file prefix `file_prefix`
         pertaining to a circuit with num_bit many qubits. It returns a tuple
@@ -94,7 +94,7 @@ class ChipCouplingsFitter:
         Parameters
         ----------
         file_prefix : str
-        num_bits : int
+        num_qbits : int
         verbose : bool
 
         Returns
@@ -104,7 +104,7 @@ class ChipCouplingsFitter:
         """
         old_cnots = []
         english_in = open(utg.preface(
-            file_prefix + '_' + str(num_bits) + '_eng.txt'), 'rt')
+            file_prefix + '_' + str(num_qbits) + '_eng.txt'), 'rt')
 
         while not english_in.closed:
             line = english_in.readline()
@@ -129,7 +129,7 @@ class ChipCouplingsFitter:
         return tuple(old_cnots)
 
     @staticmethod
-    def draw_phys_and_eng_graphs(file_prefix, num_bits, c_to_tars):
+    def draw_phys_and_eng_graphs(file_prefix, num_qbits, c_to_tars):
         """
         Draws the Physical and English undirected graphs. This is useful in
         case you want to try to use human pattern recognition to embed the
@@ -138,7 +138,7 @@ class ChipCouplingsFitter:
         Parameters
         ----------
         file_prefix : str
-        num_bits : int
+        num_qbits : int
         c_to_tars : dict[int, list[int]]
 
         Returns
@@ -157,7 +157,7 @@ class ChipCouplingsFitter:
 
         plt.figure(2)
         old_cnots = ChipCouplingsFitter.get_cnots_in_file(file_prefix,
-                                                          num_bits)
+                                                          num_qbits)
         GE = nx.Graph()
         GE.add_edges_from(old_cnots)
         plt.title('English graph')
@@ -167,14 +167,14 @@ class ChipCouplingsFitter:
 
     @staticmethod
     def get_bit_map_from_c_to_tars(
-            num_bits, old_cnots, c_to_tars, verbose=False):
+            num_qbits, old_cnots, c_to_tars, verbose=False):
         """
         This function has as inputs `old_cnot` describing the CNots in an
-        English file for a circuit with num_bits qubits and `c_to_tars`
-        describing the couplings of a chip with num_bits qubits. The
+        English file for a circuit with num_qbits qubits and `c_to_tars`
+        describing the couplings of a chip with num_qbits qubits. The
         function returns a list `bit_map` of num_bit many ints that
-        describes a permutation map mapping range(num_bits)->range(
-        num_bits), bit_ge->bit_gp. Under this permutation, the CNots of the
+        describes a permutation map mapping range(num_qbits)->range(
+        num_qbits), bit_ge->bit_gp. Under this permutation, the CNots of the
         circuit described by the input English file are mapped into new
         CNots which are all allowed** by the chip couplings constraint
         c_to_tars.
@@ -183,7 +183,7 @@ class ChipCouplingsFitter:
 
         Parameters
         ----------
-        num_bits : int
+        num_qbits : int
         old_cnots : tuple[tuple[int, int]]
         c_to_tars : dict[int, list[int]]
         verbose : bool
@@ -220,35 +220,36 @@ class ChipCouplingsFitter:
         gp_bit_to_ge_bit = g_match.mapping
         if verbose:
             print('gp_bit_to_ge_bit=', gp_bit_to_ge_bit)
-        bit_map = [-1]*num_bits
+        bit_map = [-1]*num_qbits
         gp_bits, ge_bits = zip(*gp_bit_to_ge_bit.items())
         for k, ge_bit in enumerate(ge_bits):
             bit_map[ge_bit] = gp_bits[k]
-        undefined_domain = [k for k in range(num_bits) if bit_map[k] == -1]
-        complement_of_range = [k for k in range(num_bits) if k not in bit_map]
+        undefined_domain = [k for k in range(num_qbits) if bit_map[k] == -1]
+        complement_of_range = [k for k in range(num_qbits) if k not in bit_map]
         for y, x in enumerate(undefined_domain):
             bit_map[x] = complement_of_range[y]
         if verbose:
             print("bit_map=", bit_map)
         return bit_map
-            
+
+
 if __name__ == "__main__":
     def main():
         import qubiter.device_specific.chip_couplings_ibm as ibm
         c_to_tars = ibm.ibmq5YorktownTenerife_c_to_tars
-        num_bits = 5
+        num_qbits = 5
         file_prefix = "couplings_fitter"
 
         print("control_to_targets=", c_to_tars)
 
         verbose = True
         fitter = ChipCouplingsFitter(
-            file_prefix, num_bits, c_to_tars, verbose=verbose)
+            file_prefix, num_qbits, c_to_tars, verbose=verbose)
 
         print("Must close or save/close all matplotlib "
               "windows in order to finish execution of script.")
         ChipCouplingsFitter.draw_phys_and_eng_graphs(file_prefix,
-                                                     num_bits,
+                                                     num_qbits,
                                                      c_to_tars)
     main()
 

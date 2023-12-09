@@ -154,12 +154,12 @@
 <span id="qubiter-controls-module"></span><h1>qubiter.Controls module<a class="headerlink" href="#module-qubiter.Controls" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="qubiter.Controls.Controls">
-<em class="property">class </em><code class="sig-prename descclassname">qubiter.Controls.</code><code class="sig-name descname">Controls</code><span class="sig-paren">(</span><em class="sig-param">num_bits</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/Controls.html#Controls"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.Controls.Controls" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">qubiter.Controls.</code><code class="sig-name descname">Controls</code><span class="sig-paren">(</span><em class="sig-param">num_qbits</em>, <em class="sig-param">bit_pos_to_kind=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/Controls.html#Controls"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.Controls.Controls" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>This class stores a dictionary called self.bit_pos_to_kind containing
 key-value pairs of the form (a control’s qubit number: its kind). Kinds
 can be either a bool or a non-negative integer. Kind is True if control
-is P_1 = n = <a href="#id1"><span class="problematic" id="id2">|1&gt;&lt;1|</span></a>. Kind is False if control is P_0 = nbar = <a href="#id3"><span class="problematic" id="id4">|0&gt;&lt;0|</span></a>.
+is <cite>P_1 = n = |1&gt;&lt;1|</cite>. Kind is False if control is <cite>P_0 = nbar = |0&gt;&lt;0|</cite>.
 Kind is a non-negative integer for MP_Y and DIAG controls.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Variables</dt>
@@ -167,19 +167,22 @@ Kind is a non-negative integer for MP_Y and DIAG controls.</p>
 <li><p><strong>bit_pos</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – This is the key’s half if you unzip bit_pos_to_kind, in decreasing
 order</p></li>
 <li><p><strong>bit_pos_to_kind</strong> (<em>dict</em><em>[</em><em>int</em><em>, </em><em>bool|int</em><em>]</em>) – Dictionary matching control bit position with its kind.
-The domain of the map bit_pos_to_kind is a subset of range(num_bits)</p></li>
+The domain of the map bit_pos_to_kind is a subset of range(num_qbits)</p></li>
 <li><p><strong>kinds</strong> (<em>list</em><em>[</em><em>bool|int</em><em>]</em>) – this is the value’s half if you unzip bit_pos_to_kind.</p></li>
-<li><p><strong>num_bits</strong> (<em>int</em>) – number of qubits in full quantum circuit</p></li>
+<li><p><strong>num_qbits</strong> (<em>int</em>) – number of qubits in full quantum circuit</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="method">
 <dt id="qubiter.Controls.Controls.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">num_bits</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/Controls.html#Controls.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.Controls.Controls.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">num_qbits</em>, <em class="sig-param">bit_pos_to_kind=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/Controls.html#Controls.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.Controls.Controls.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constructor</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>num_bits</strong> (<em>int</em>) – </p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_qbits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>bit_pos_to_kind</strong> (<em>dict</em>) – </p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -273,13 +276,13 @@ Also add extra controls carried by emb.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="qubiter.Controls.Controls.new_knob">
-<em class="property">static </em><code class="sig-name descname">new_knob</code><span class="sig-paren">(</span><em class="sig-param">num_bits</em>, <em class="sig-param">bit_pos</em>, <em class="sig-param">kind</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/Controls.html#Controls.new_knob"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.Controls.Controls.new_knob" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a single control</p>
+<dt id="qubiter.Controls.Controls.new_single_trol">
+<em class="property">static </em><code class="sig-name descname">new_single_trol</code><span class="sig-paren">(</span><em class="sig-param">num_qbits</em>, <em class="sig-param">bit_pos</em>, <em class="sig-param">kind</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/Controls.html#Controls.new_single_trol"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.Controls.Controls.new_single_trol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a single control.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>num_qbits</strong> (<em>int</em>) – </p></li>
 <li><p><strong>bit_pos</strong> (<em>int</em>) – </p></li>
 <li><p><strong>kind</strong> (<em>bool|int</em>) – </p></li>
 </ul>
@@ -311,7 +314,7 @@ does both zip and unzip) the dictionary bit_pos_to_kind.</p>
 <dl class="method">
 <dt id="qubiter.Controls.Controls.set_control">
 <code class="sig-name descname">set_control</code><span class="sig-paren">(</span><em class="sig-param">bit_pos</em>, <em class="sig-param">kind</em>, <em class="sig-param">do_refresh=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/Controls.html#Controls.set_control"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.Controls.Controls.set_control" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add key-value pair (bit_pos: kind) to self.bit_pos_to_kind dictionary</p>
+<dd><p>Add key-value pair (bit_pos: kind) to self.bit_pos_to_kind dictionary.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">

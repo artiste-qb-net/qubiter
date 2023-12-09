@@ -154,7 +154,7 @@
 <span id="qubiter-quantum-csd-compiler-multiplexorexpander-module"></span><h1>qubiter.quantum_CSD_compiler.MultiplexorExpander module<a class="headerlink" href="#module-qubiter.quantum_CSD_compiler.MultiplexorExpander" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="qubiter.quantum_CSD_compiler.MultiplexorExpander.MultiplexorExpander">
-<em class="property">class </em><code class="sig-prename descclassname">qubiter.quantum_CSD_compiler.MultiplexorExpander.</code><code class="sig-name descname">MultiplexorExpander</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_bits</em>, <em class="sig-param">style</em>, <em class="sig-param">gbit_list=None</em>, <em class="sig-param">vars_manager=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/quantum_CSD_compiler/MultiplexorExpander.html#MultiplexorExpander"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.quantum_CSD_compiler.MultiplexorExpander.MultiplexorExpander" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">qubiter.quantum_CSD_compiler.MultiplexorExpander.</code><code class="sig-name descname">MultiplexorExpander</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_qbits</em>, <em class="sig-param">style</em>, <em class="sig-param">gbit_list=None</em>, <em class="sig-param">vars_manager=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/quantum_CSD_compiler/MultiplexorExpander.html#MultiplexorExpander"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.quantum_CSD_compiler.MultiplexorExpander.MultiplexorExpander" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="qubiter.EchoingSEO_reader.html#qubiter.EchoingSEO_reader.EchoingSEO_reader" title="qubiter.EchoingSEO_reader.EchoingSEO_reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">qubiter.EchoingSEO_reader.EchoingSEO_reader</span></code></a></p>
 <p>This class is a child of EchoingSEO_reader. The class reads any
 previously created Qubiter English file and it writes new English &amp;
@@ -166,10 +166,10 @@ into a sequence in the style specified as input to the class constructor.</p>
 into just CNOTs and qubit rotations, first use this class and the
 analogous one for DIAG, then use class CGateExpander.</p>
 <p>If the input English file has in_file_prefix as file prefix, then the
-output English &amp; Picture files have as file prefix in_file_prefix + ‘_X1’,
-assuming that ‘_X’ + str(k) for some integer k is not already the ending
-of in_file_prefix. If it is, then the ending is changed to ‘_X’ + str(
-k+1).</p>
+output English &amp; Picture files have as file prefix in_file_prefix +
+‘_X1’, assuming that ‘_X’ + str(k) for some integer k is not already the
+ending of in_file_prefix. If it is, then the ending is changed to ‘_X’ +
+str( k+1).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Variables</dt>
 <dd class="field-odd"><ul class="simple">
@@ -180,13 +180,13 @@ k+1).</p>
 </dl>
 <dl class="method">
 <dt id="qubiter.quantum_CSD_compiler.MultiplexorExpander.MultiplexorExpander.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_bits</em>, <em class="sig-param">style</em>, <em class="sig-param">gbit_list=None</em>, <em class="sig-param">vars_manager=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/quantum_CSD_compiler/MultiplexorExpander.html#MultiplexorExpander.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.quantum_CSD_compiler.MultiplexorExpander.MultiplexorExpander.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_qbits</em>, <em class="sig-param">style</em>, <em class="sig-param">gbit_list=None</em>, <em class="sig-param">vars_manager=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/quantum_CSD_compiler/MultiplexorExpander.html#MultiplexorExpander.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.quantum_CSD_compiler.MultiplexorExpander.MultiplexorExpander.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constructor</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>file_prefix</strong> (<em>str</em>) – </p></li>
-<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>num_qbits</strong> (<em>int</em>) – </p></li>
 <li><p><strong>style</strong> (<em>str</em>) – </p></li>
 <li><p><strong>gbit_list</strong> (<em>list</em><em>(</em><em>int</em><em>)</em>) – </p></li>
 <li><p><strong>vars_manager</strong> (<a class="reference internal" href="qubiter.PlaceholderManager.html#qubiter.PlaceholderManager.PlaceholderManager" title="qubiter.PlaceholderManager.PlaceholderManager"><em>PlaceholderManager</em></a>) – </p></li>

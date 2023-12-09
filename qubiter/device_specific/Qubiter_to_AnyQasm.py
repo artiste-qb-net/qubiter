@@ -81,12 +81,12 @@ class Qubiter_to_AnyQasm(SEO_reader):
         This output stream is used to write an aqasm file based on the input
         English file.
     c_to_tars : dict[int, list[int]]
-        a dictionary mapping j in range(num_bits) to a list, possibly empty,
+        a dictionary mapping j in range(num_qbits) to a list, possibly empty,
         of the physically allowed targets of qubit j, when j is the control
         of a CNOT. If c_to_tars = None, the class assumes any CNOT is
         possible.
     file_prefix : str
-    num_bits : int
+    num_qbits : int
     qbtr_wr : SEO_writer
         A SEO_writer object created iff write_qubiter_files is True.
     strict_mode : bool
@@ -100,7 +100,7 @@ class Qubiter_to_AnyQasm(SEO_reader):
 
 
     """
-    def __init__(self, file_prefix, num_bits, aqasm_name='',
+    def __init__(self, file_prefix, num_qbits, aqasm_name='',
             strict_mode=False, c_to_tars=None, write_qubiter_files=False,
                  vars_manager=None, aqasm_ftype='txt',
                  prelude_str=None, ending_str=None, **kwargs):
@@ -110,7 +110,7 @@ class Qubiter_to_AnyQasm(SEO_reader):
         Parameters
         ----------
         file_prefix : str
-        num_bits : int
+        num_qbits : int
         aqasm_name : str
         strict_mode : bool
         c_to_tars : dict[int, list[int]]|None
@@ -131,10 +131,10 @@ class Qubiter_to_AnyQasm(SEO_reader):
 
         """
         self.file_prefix = file_prefix
-        self.num_bits = num_bits
+        self.num_qbits = num_qbits
 
         vman = PlaceholderManager(eval_all_vars=False)
-        rdr = SEO_reader(file_prefix, num_bits, vars_manager=vman,
+        rdr = SEO_reader(file_prefix, num_qbits, vars_manager=vman,
                         write_log=True)
         self.all_var_nums = rdr.vars_manager.all_var_nums
         self.all_fun_names = rdr.vars_manager.all_fun_names
@@ -151,7 +151,7 @@ class Qubiter_to_AnyQasm(SEO_reader):
 
         self.qbtr_wr = None
         if write_qubiter_files:
-            emb = CktEmbedder(num_bits, num_bits)
+            emb = CktEmbedder(num_qbits, num_qbits)
             out_file_prefix = SEO_reader.xed_file_prefix(file_prefix)
             self.qbtr_wr = SEO_writer(out_file_prefix, emb)
 
@@ -161,7 +161,7 @@ class Qubiter_to_AnyQasm(SEO_reader):
             self.write_prelude()
 
         vman1 = PlaceholderManager(eval_all_vars=False)
-        SEO_reader.__init__(self, file_prefix, num_bits,
+        SEO_reader.__init__(self, file_prefix, num_qbits,
                             vars_manager=vman1, **kwargs)
 
         if ending_str is not None:
@@ -175,7 +175,7 @@ class Qubiter_to_AnyQasm(SEO_reader):
 
     def write(self, s):
         """
-        Writes string s to aqasm and qubiter out files
+        Writes string s to aqasm and qubiter out files.
 
         Parameters
         ----------
@@ -195,7 +195,7 @@ class Qubiter_to_AnyQasm(SEO_reader):
 
     def write_prelude(self):
         """
-        abstract function, writes AnyQasm's opening statements before calls
+        Abstract function, writes AnyQasm's opening statements before calls
         to use_ methods for gates.
 
         Returns
@@ -208,7 +208,7 @@ class Qubiter_to_AnyQasm(SEO_reader):
 
     def write_ending(self):
         """
-        abstract function, writes AnyQasm's ending statements after calls to
+        Abstract function, writes AnyQasm's ending statements after calls to
         use_ methods for gates.
 
         Returns
@@ -297,6 +297,7 @@ class Qubiter_to_AnyQasm(SEO_reader):
         """
         with open(utg.preface(self.aqasm_path)) as f:
             print(f.read())
+
 
 if __name__ == "__main__":
     def main():

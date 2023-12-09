@@ -3,7 +3,7 @@ from nbconvert.preprocessors import ExecutePreprocessor
 import os
 
 '''This script tries to run all jupyter notebooks in the jupyter_notebooks 
-folder. The notebooks are executed but not saved (i.e., overwritten) '''
+folder. The notebooks are executed but not saved (i.e., overwritten). '''
 
 dir_name = 'jupyter_notebooks'
 for fname in os.listdir(dir_name):

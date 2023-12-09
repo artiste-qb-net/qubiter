@@ -152,7 +152,7 @@
 <span></span><span class="kn">import</span> <span class="nn">copy</span> <span class="k">as</span> <span class="nn">cp</span>
 <span class="c1"># import pprint as pp</span>
 <span class="kn">from</span> <span class="nn">qubiter.SEO_reader</span> <span class="k">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">qubiter.OneBitGates</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">qubiter.OneQubitGate</span> <span class="k">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">qubiter.StateVec</span> <span class="k">import</span> <span class="o">*</span>
 <span class="c1"># import utilities_gen as ut</span>
 
@@ -174,13 +174,13 @@
 <span class="sd">    set to the ground state automatically by the constructor.</span>
 
 <span class="sd">    3 kinds (called 0, 1, 2) of measurements MEAS are allowed. A type 0</span>
-<span class="sd">    measurement inserts a projector |0&gt;&lt;0| = n = P_0 at the target bit. A</span>
-<span class="sd">    type 1 measurement inserts a projector |1&gt;&lt;1| = nbar = P_1 at the target</span>
-<span class="sd">    bit. A type 2 measurement stores a copy of the state vector after |0&gt;&lt;0|</span>
-<span class="sd">    has been applied, and another copy after |1&gt;&lt;1| has been applied.</span>
+<span class="sd">    measurement inserts a projector `|0&gt;&lt;0| = n = P_0` at the target bit. A</span>
+<span class="sd">    type 1 measurement inserts a projector `|1&gt;&lt;1| = nbar = P_1` at the target</span>
+<span class="sd">    bit. A type 2 measurement stores a copy of the state vector after `|0&gt;&lt;0|`</span>
+<span class="sd">    has been applied, and another copy after `|1&gt;&lt;1|` has been applied.</span>
 
 <span class="sd">    self.cur_st_vec_dict is a dictionary of strings (called branch keys) to</span>
-<span class="sd">    state vectors StateVec on num_bits qubits. We will refer to each state</span>
+<span class="sd">    state vectors StateVec on num_qbits qubits. We will refer to each state</span>
 <span class="sd">    vec in the dict as a branch. Initially, this dict contains a single</span>
 <span class="sd">    branch with branch key = &quot;pure&quot;. A measurement MEAS of kinds 0 or 1 does</span>
 <span class="sd">    not change the number of branches in the dict, but a measurement of kind</span>
@@ -190,9 +190,9 @@
 <span class="sd">    cur_st_vec_dict are not expected have normalized state vectors as values</span>
 <span class="sd">    except when there is only a single branch.</span>
 
-<span class="sd">    If cur_st_vec_dict contains as values the states |br0&gt;, |br1&gt;, |br2&gt;,</span>
-<span class="sd">    ...], then one can construct the density matrix of that state as rho =</span>
-<span class="sd">    |br0&gt;&lt;br0| + |br1&gt;&lt;br1| + |br2&gt;&lt;br2| + ... divided by a number so that</span>
+<span class="sd">    If cur_st_vec_dict contains as values the states `|br0&gt;, |br1&gt;, |br2&gt;,</span>
+<span class="sd">    ...`, then one can construct the density matrix of that state as `rho =</span>
+<span class="sd">    |br0&gt;&lt;br0| + |br1&gt;&lt;br1| + |br2&gt;&lt;br2| + ...` divided by a number so that</span>
 <span class="sd">    trace(rho)=1. In other words, cur_st_vec_dict is just a particular way</span>
 <span class="sd">    of storing the density matrix of a state. A state with a single branch</span>
 <span class="sd">    is a pure state, but a state with more than one branch may not be.</span>
@@ -229,7 +229,7 @@
     <span class="c1"># rrtucci: combines my java classes:</span>
     <span class="c1"># LineList, UnitaryMat, SEO_readerMu</span>
 
-<div class="viewcode-block" id="SEO_simulator.__init__"><a class="viewcode-back" href="../../qubiter.SEO_simulator.html#qubiter.SEO_simulator.SEO_simulator.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span>
+<div class="viewcode-block" id="SEO_simulator.__init__"><a class="viewcode-back" href="../../qubiter.SEO_simulator.html#qubiter.SEO_simulator.SEO_simulator.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">,</span>
                  <span class="n">init_st_vec</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Constructor</span>
@@ -237,9 +237,9 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        file_prefix : str</span>
-<span class="sd">        num_bits : int</span>
+<span class="sd">        num_qbits : int</span>
 <span class="sd">        init_st_vec : StateVec</span>
-<span class="sd">            get this using the functions StateVec.get_ground_st_vec() or</span>
+<span class="sd">            Get this using the functions StateVec.get_ground_st_vec() or</span>
 <span class="sd">            StateVec.get_standard_basis_st_vec().</span>
 
 <span class="sd">        Returns</span>
@@ -247,7 +247,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">StateVec</span><span class="o">.</span><span class="n">is_zero</span><span class="p">(</span><span class="n">init_st_vec</span><span class="p">):</span>
-            <span class="n">init_st_vec</span> <span class="o">=</span> <span class="n">StateVec</span><span class="o">.</span><span class="n">get_ground_st_vec</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)</span>
+            <span class="n">init_st_vec</span> <span class="o">=</span> <span class="n">StateVec</span><span class="o">.</span><span class="n">get_ground_st_vec</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cur_st_vec_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;pure&quot;</span><span class="p">:</span> <span class="n">init_st_vec</span><span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cached_sts</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">use_tf</span> <span class="o">=</span> <span class="kc">False</span>
@@ -255,7 +255,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">do_more_init_before_reading</span><span class="p">()</span>
 
-        <span class="n">SEO_reader</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+        <span class="n">SEO_reader</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SEO_simulator.do_more_init_before_reading"><a class="viewcode-back" href="../../qubiter.SEO_simulator.html#qubiter.SEO_simulator.SEO_simulator.do_more_init_before_reading">[docs]</a>    <span class="k">def</span> <span class="nf">do_more_init_before_reading</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -308,7 +308,7 @@
 <div class="viewcode-block" id="SEO_simulator.get_controls_from_br_key"><a class="viewcode-back" href="../../qubiter.SEO_simulator.html#qubiter.SEO_simulator.SEO_simulator.get_controls_from_br_key">[docs]</a>    <span class="k">def</span> <span class="nf">get_controls_from_br_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">br_key</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns a Controls object built from br_key. br_key is assumed to be</span>
-<span class="sd">        a str key for self.cur_st_vec_dict</span>
+<span class="sd">        a str key for self.cur_st_vec_dict.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -334,7 +334,7 @@
                     <span class="n">kinds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">kinds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
-        <span class="n">trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span><span class="p">)</span>
+        <span class="n">trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span><span class="p">)</span>
         <span class="n">trols</span><span class="o">.</span><span class="n">bit_pos_to_kind</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">bit_pos</span><span class="p">,</span> <span class="n">kinds</span><span class="p">))</span>
         <span class="n">trols</span><span class="o">.</span><span class="n">refresh_lists</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">trols</span></div>
@@ -343,7 +343,7 @@
     <span class="k">def</span> <span class="nf">get_br_key_with_new_link</span><span class="p">(</span><span class="n">br_key</span><span class="p">,</span> <span class="n">new_bit_pos</span><span class="p">,</span> <span class="n">new_kind</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Say new_bit_pos=2 and new_kind=True. This returns a new branch key</span>
-<span class="sd">        with &#39;2T&#39; added to the end of the string br_key</span>
+<span class="sd">        with &#39;2T&#39; added to the end of the string br_key.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -363,7 +363,7 @@
             <span class="n">new_br_key</span> <span class="o">=</span> <span class="n">br_key</span> <span class="o">+</span> <span class="n">x</span>
         <span class="k">return</span> <span class="n">new_br_key</span></div>
 
-<div class="viewcode-block" id="SEO_simulator.evolve_by_controlled_bit_swap"><a class="viewcode-back" href="../../qubiter.SEO_simulator.html#qubiter.SEO_simulator.SEO_simulator.evolve_by_controlled_bit_swap">[docs]</a>    <span class="k">def</span> <span class="nf">evolve_by_controlled_bit_swap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bit1</span><span class="p">,</span> <span class="n">bit2</span><span class="p">,</span> <span class="n">controls</span><span class="p">):</span>
+<div class="viewcode-block" id="SEO_simulator.evolve_by_controlled_qbit_swap"><a class="viewcode-back" href="../../qubiter.SEO_simulator.html#qubiter.SEO_simulator.SEO_simulator.evolve_by_controlled_qbit_swap">[docs]</a>    <span class="k">def</span> <span class="nf">evolve_by_controlled_qbit_swap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bit1</span><span class="p">,</span> <span class="n">bit2</span><span class="p">,</span> <span class="n">controls</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Evolve each branch of cur_st_vec_dict by controlled bit swap iff the</span>
 <span class="sd">        bit swap line is (1) outside of any IF_M block, or (2) it is inside</span>
@@ -383,10 +383,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">assert</span> <span class="n">bit1</span> <span class="o">!=</span> <span class="n">bit2</span><span class="p">,</span> <span class="s2">&quot;swapped bits must be different&quot;</span>
         <span class="k">for</span> <span class="n">bit</span> <span class="ow">in</span> <span class="p">[</span><span class="n">bit1</span><span class="p">,</span> <span class="n">bit2</span><span class="p">]:</span>
-            <span class="k">assert</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&lt;</span> <span class="n">bit</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span>
+            <span class="k">assert</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&lt;</span> <span class="n">bit</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span>
             <span class="k">assert</span> <span class="n">bit</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">controls</span><span class="o">.</span><span class="n">bit_pos</span>
  
-        <span class="n">slicex</span> <span class="o">=</span> <span class="p">[</span><span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">)]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span>
+        <span class="n">slicex</span> <span class="o">=</span> <span class="p">[</span><span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">)]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span>
         <span class="n">num_controls</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">controls</span><span class="o">.</span><span class="n">bit_pos_to_kind</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_controls</span><span class="p">):</span>
             <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">controls</span><span class="o">.</span><span class="n">kinds</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="nb">bool</span><span class="p">)</span>
@@ -398,7 +398,7 @@
 
         <span class="c1"># components that are fixed are no longer axes</span>
         <span class="n">scout</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">for</span> <span class="n">bit</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">bit</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">bit</span> <span class="o">==</span> <span class="n">bit1</span><span class="p">:</span>
                 <span class="n">new1</span> <span class="o">=</span> <span class="n">scout</span>
             <span class="k">if</span> <span class="n">bit</span> <span class="o">==</span> <span class="n">bit2</span><span class="p">:</span>
@@ -436,13 +436,13 @@
 
                 <span class="bp">self</span><span class="o">.</span><span class="n">cur_st_vec_dict</span><span class="p">[</span><span class="n">br_key</span><span class="p">]</span><span class="o">.</span><span class="n">arr</span><span class="p">[</span><span class="n">slicex</span><span class="p">]</span> <span class="o">=</span> <span class="n">sub_arr</span></div>
 
-<div class="viewcode-block" id="SEO_simulator.evolve_by_controlled_one_bit_gate"><a class="viewcode-back" href="../../qubiter.SEO_simulator.html#qubiter.SEO_simulator.SEO_simulator.evolve_by_controlled_one_bit_gate">[docs]</a>    <span class="k">def</span> <span class="nf">evolve_by_controlled_one_bit_gate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
-                <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span> <span class="n">one_bit_gate</span><span class="p">):</span>
+<div class="viewcode-block" id="SEO_simulator.evolve_by_controlled_one_qbit_gate"><a class="viewcode-back" href="../../qubiter.SEO_simulator.html#qubiter.SEO_simulator.SEO_simulator.evolve_by_controlled_one_qbit_gate">[docs]</a>    <span class="k">def</span> <span class="nf">evolve_by_controlled_one_qbit_gate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span> <span class="n">one_qbit_gate</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Evolve each branch of cur_st_vec_dict by controlled one bit gate (</span>
-<span class="sd">        from class OneBitGates) iff the controlled one bit gate line is (1)</span>
+<span class="sd">        from class OneQubitGate) iff the controlled one bit gate line is (1)</span>
 <span class="sd">        outside of an IF_M block, or (2) it is inside such a block, and it</span>
-<span class="sd">        satisfies self.mcase_trols. Note one_bit_gate is entered as</span>
+<span class="sd">        satisfies self.mcase_trols. Note one_qbit_gate is entered as</span>
 <span class="sd">        np.ndarray.</span>
 
 <span class="sd">        Parameters</span>
@@ -450,16 +450,16 @@
 <span class="sd">        tar_bit_pos : int</span>
 <span class="sd">            bit position of target of one bit gate.</span>
 <span class="sd">        controls : Controls</span>
-<span class="sd">        one_bit_gate : np.ndarray</span>
+<span class="sd">        one_qbit_gate : np.ndarray</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        None</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&lt;</span> <span class="n">tar_bit_pos</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span>
+        <span class="k">assert</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&lt;</span> <span class="n">tar_bit_pos</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span>
 
-        <span class="n">vec_slicex</span> <span class="o">=</span> <span class="p">[</span><span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">)]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span>
+        <span class="n">vec_slicex</span> <span class="o">=</span> <span class="p">[</span><span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">)]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span>
         <span class="n">num_controls</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">controls</span><span class="o">.</span><span class="n">bit_pos_to_kind</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_controls</span><span class="p">):</span>
             <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">controls</span><span class="o">.</span><span class="n">kinds</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="nb">bool</span><span class="p">)</span>
@@ -471,7 +471,7 @@
 
         <span class="c1"># components that are fixed are no longer axes</span>
         <span class="n">scout</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">for</span> <span class="n">bit</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">bit</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">bit</span> <span class="o">==</span> <span class="n">tar_bit_pos</span><span class="p">:</span>
                 <span class="n">new_tar</span> <span class="o">=</span> <span class="n">scout</span>
             <span class="k">if</span> <span class="n">bit</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">controls</span><span class="o">.</span><span class="n">bit_pos</span><span class="p">:</span>
@@ -506,10 +506,10 @@
                     <span class="n">evolve_br</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="k">if</span> <span class="n">evolve_br</span><span class="p">:</span>
                 <span class="n">sub_arr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cur_st_vec_dict</span><span class="p">[</span><span class="n">br_key</span><span class="p">]</span><span class="o">.</span><span class="n">arr</span><span class="p">[</span><span class="n">vec_slicex</span><span class="p">]</span>
-                <span class="c1"># Axes 1 of one_bit_gate and new_tar of vec are summed over.</span>
-                <span class="c1">#  Axis 0 of one_bit_gate goes to the front of all the axes</span>
+                <span class="c1"># Axes 1 of one_qbit_gate and new_tar of vec are summed over.</span>
+                <span class="c1">#  Axis 0 of one_qbit_gate goes to the front of all the axes</span>
                 <span class="c1"># of new vec. Use transpose() to realign axes.</span>
-                <span class="n">sub_arr</span> <span class="o">=</span> <span class="n">SEO_simulator</span><span class="o">.</span><span class="n">tensordot</span><span class="p">(</span><span class="n">one_bit_gate</span><span class="p">,</span> <span class="n">sub_arr</span><span class="p">,</span>
+                <span class="n">sub_arr</span> <span class="o">=</span> <span class="n">SEO_simulator</span><span class="o">.</span><span class="n">tensordot</span><span class="p">(</span><span class="n">one_qbit_gate</span><span class="p">,</span> <span class="n">sub_arr</span><span class="p">,</span>
                                          <span class="p">([</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="n">new_tar</span><span class="p">]))</span>
                 <span class="n">sub_arr</span> <span class="o">=</span> <span class="n">SEO_simulator</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">sub_arr</span><span class="p">,</span> <span class="n">perm</span><span class="p">)</span>
 
@@ -525,7 +525,7 @@
 
 <div class="viewcode-block" id="SEO_simulator.do_array_assignment_workaround"><a class="viewcode-back" href="../../qubiter.SEO_simulator.html#qubiter.SEO_simulator.SEO_simulator.do_array_assignment_workaround">[docs]</a>    <span class="k">def</span> <span class="nf">do_array_assignment_workaround</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">br_key</span><span class="p">,</span> <span class="n">slicex</span><span class="p">,</span> <span class="n">sub_arr</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        internal function used in evolve_ methods iff autograd is on or</span>
+<span class="sd">        Internal function used in evolve_ methods iff autograd is on or</span>
 <span class="sd">        use_tf is True. Should have same effect as</span>
 
 <span class="sd">        self.cur_st_vec_dict[br_key].arr[slicex] = sub_arr</span>
@@ -553,7 +553,7 @@
             <span class="c1"># print(&#39;arr1 aft&#39;, arr1_np)</span>
         <span class="n">on_slicex</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">arr</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="kc">False</span><span class="p">)</span>
         <span class="n">on_slicex</span><span class="p">[</span><span class="n">slicex</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="n">bigger_shape</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span>  <span class="c1"># slicex is num_bits long</span>
+        <span class="n">bigger_shape</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span>  <span class="c1"># slicex is num_qbits long</span>
         <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="c1"># print(&#39;wwwww&#39;, sub_arr.shape, slicex)</span>
         <span class="k">for</span> <span class="n">bit</span><span class="p">,</span> <span class="n">kind</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">slicex</span><span class="p">):</span>
@@ -666,13 +666,14 @@
             <span class="c1"># print(&#39;..,,mm&#39;, &#39;was here&#39;)</span>
             <span class="n">pd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cur_st_vec_dict</span><span class="p">[</span><span class="s1">&#39;pure&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get_pd</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">den_mat</span> <span class="o">=</span> <span class="n">StateVec</span><span class="o">.</span><span class="n">get_den_mat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cur_st_vec_dict</span><span class="p">)</span>
+            <span class="n">den_mat</span> <span class="o">=</span> <span class="n">StateVec</span><span class="o">.</span><span class="n">get_den_mat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span><span class="p">,</span>
+                                           <span class="bp">self</span><span class="o">.</span><span class="n">cur_st_vec_dict</span><span class="p">)</span>
             <span class="n">pd</span> <span class="o">=</span> <span class="n">StateVec</span><span class="o">.</span><span class="n">get_den_mat_pd</span><span class="p">(</span><span class="n">den_mat</span><span class="p">)</span>
         <span class="c1"># print(&#39;....,,,&#39;, pd.shape)</span>
         <span class="n">obs_vec</span> <span class="o">=</span> <span class="n">StateVec</span><span class="o">.</span><span class="n">get_observations_vec</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">pd</span><span class="p">,</span> <span class="n">num_shots</span><span class="p">,</span> <span class="n">rand_seed</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">pd</span><span class="p">,</span> <span class="n">num_shots</span><span class="p">,</span> <span class="n">rand_seed</span><span class="p">)</span>
 
-        <span class="n">out</span> <span class="o">=</span> <span class="n">StateVec</span><span class="o">.</span><span class="n">get_counts_from_obs_vec</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">obs_vec</span><span class="p">,</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">StateVec</span><span class="o">.</span><span class="n">get_counts_from_obs_vec</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">obs_vec</span><span class="p">,</span>
                         <span class="n">use_bin_labels</span><span class="p">,</span> <span class="n">omit_zero_counts</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">convert_tensors_to_tf</span><span class="p">()</span>
 
@@ -701,7 +702,7 @@
 <div class="viewcode-block" id="SEO_simulator.use_HAD2"><a class="viewcode-back" href="../../qubiter.SEO_simulator.html#qubiter.SEO_simulator.SEO_simulator.use_HAD2">[docs]</a>    <span class="k">def</span> <span class="nf">use_HAD2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">controls</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Overrides the parent class use_ function. Calls</span>
-<span class="sd">        evolve_by_controlled_one_bit_gate() for had2.</span>
+<span class="sd">        evolve_by_controlled_one_qbit_gate() for had2.</span>
 
 
 <span class="sd">        Parameters</span>
@@ -714,8 +715,8 @@
 <span class="sd">        None</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">gate</span> <span class="o">=</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">had2</span><span class="p">(</span><span class="n">lib</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">evolve_by_controlled_one_bit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span> <span class="n">gate</span><span class="p">)</span></div>
+        <span class="n">gate</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">had2</span><span class="p">(</span><span class="n">lib</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evolve_by_controlled_one_qbit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span> <span class="n">gate</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SEO_simulator.use_IF_M_beg"><a class="viewcode-back" href="../../qubiter.SEO_simulator.html#qubiter.SEO_simulator.SEO_simulator.use_IF_M_beg">[docs]</a>    <span class="k">def</span> <span class="nf">use_IF_M_beg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">controls</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -750,8 +751,8 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Overrides the parent class use_ function.</span>
 
-<span class="sd">        For kind 0 (resp., 1) measurements, it applies |0&gt;&lt;0| (resp.,</span>
-<span class="sd">        |1&gt;&lt;1|) to each branch of cur_st_vec_dict.</span>
+<span class="sd">        For kind 0 (resp., 1) measurements, it applies `P_0=|0&gt;&lt;0|` (resp.,</span>
+<span class="sd">        `P_1=|1&gt;&lt;1|`) to each branch of cur_st_vec_dict.</span>
 
 <span class="sd">        For kind 2 measurements, it first doubles the number of branches in</span>
 <span class="sd">        cur_st_vec_dict by adding a deep copy of each branch. Next,</span>
@@ -770,7 +771,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">convert_tensors_to_numpy</span><span class="p">()</span>
         <span class="c1"># slicex = slice index</span>
-        <span class="n">slicex</span> <span class="o">=</span> <span class="p">[</span><span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">)]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span>
+        <span class="n">slicex</span> <span class="o">=</span> <span class="p">[</span><span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">)]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span>
         <span class="c1"># br = branch</span>
         <span class="k">if</span> <span class="n">kind</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span>
             <span class="n">b</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
@@ -862,7 +863,7 @@
 <div class="viewcode-block" id="SEO_simulator.use_PHAS"><a class="viewcode-back" href="../../qubiter.SEO_simulator.html#qubiter.SEO_simulator.SEO_simulator.use_PHAS">[docs]</a>    <span class="k">def</span> <span class="nf">use_PHAS</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">angle_rads</span><span class="p">,</span> <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">controls</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Overrides the parent class use_ function. Calls</span>
-<span class="sd">        evolve_by_controlled_one_bit_gate() for PHAS.</span>
+<span class="sd">        evolve_by_controlled_one_qbit_gate() for PHAS.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -875,14 +876,14 @@
 <span class="sd">        None</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">gate</span> <span class="o">=</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">phase_fac</span><span class="p">(</span><span class="n">angle_rads</span><span class="p">,</span> <span class="n">lib</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">evolve_by_controlled_one_bit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span> <span class="n">gate</span><span class="p">)</span></div>
+        <span class="n">gate</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">phase_fac</span><span class="p">(</span><span class="n">angle_rads</span><span class="p">,</span> <span class="n">lib</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evolve_by_controlled_one_qbit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span> <span class="n">gate</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SEO_simulator.use_P_PH"><a class="viewcode-back" href="../../qubiter.SEO_simulator.html#qubiter.SEO_simulator.SEO_simulator.use_P_PH">[docs]</a>    <span class="k">def</span> <span class="nf">use_P_PH</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">projection_bit</span><span class="p">,</span>
                 <span class="n">angle_rads</span><span class="p">,</span> <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">controls</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Overrides the parent class use_ function. Calls</span>
-<span class="sd">        evolve_by_controlled_one_bit_gate() for P_0 and P_1 phase factors.</span>
+<span class="sd">        evolve_by_controlled_one_qbit_gate() for P_0 and P_1 phase factors.</span>
 
 
 <span class="sd">        Parameters</span>
@@ -899,11 +900,11 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">fun</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="mi">0</span><span class="p">:</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">P_0_phase_fac</span><span class="p">,</span>
-            <span class="mi">1</span><span class="p">:</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">P_1_phase_fac</span>
+            <span class="mi">0</span><span class="p">:</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">P_0_phase_fac</span><span class="p">,</span>
+            <span class="mi">1</span><span class="p">:</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">P_1_phase_fac</span>
         <span class="p">}</span>
         <span class="n">gate</span> <span class="o">=</span> <span class="n">fun</span><span class="p">[</span><span class="n">projection_bit</span><span class="p">](</span><span class="n">angle_rads</span><span class="p">,</span> <span class="n">lib</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">evolve_by_controlled_one_bit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span> <span class="n">gate</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evolve_by_controlled_one_qbit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span> <span class="n">gate</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SEO_simulator.use_PRINT"><a class="viewcode-back" href="../../qubiter.SEO_simulator.html#qubiter.SEO_simulator.SEO_simulator.use_PRINT">[docs]</a>    <span class="k">def</span> <span class="nf">use_PRINT</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">style</span><span class="p">,</span> <span class="n">line_num</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -936,7 +937,7 @@
                  <span class="n">angle_rads</span><span class="p">,</span> <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">controls</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Overrides the parent class use_ function. Calls</span>
-<span class="sd">        evolve_by_controlled_one_bit_gate() for rot along axes x, y, or z.</span>
+<span class="sd">        evolve_by_controlled_one_qbit_gate() for rot along axes x, y, or z.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -952,14 +953,14 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># print(&#39;//////&#39;, angle_rads, axis)</span>
-        <span class="n">gate</span> <span class="o">=</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">(</span><span class="n">angle_rads</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">lib</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">evolve_by_controlled_one_bit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span> <span class="n">gate</span><span class="p">)</span></div>
+        <span class="n">gate</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">(</span><span class="n">angle_rads</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">lib</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evolve_by_controlled_one_qbit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span> <span class="n">gate</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SEO_simulator.use_ROTN"><a class="viewcode-back" href="../../qubiter.SEO_simulator.html#qubiter.SEO_simulator.SEO_simulator.use_ROTN">[docs]</a>    <span class="k">def</span> <span class="nf">use_ROTN</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">angle_x_rads</span><span class="p">,</span> <span class="n">angle_y_rads</span><span class="p">,</span> <span class="n">angle_z_rads</span><span class="p">,</span>
                 <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">controls</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Overrides the parent class use_ function. Calls</span>
-<span class="sd">        evolve_by_controlled_one_bit_gate() for rot along arbitrary axis.</span>
+<span class="sd">        evolve_by_controlled_one_qbit_gate() for rot along arbitrary axis.</span>
 
 
 <span class="sd">        Parameters</span>
@@ -975,14 +976,14 @@
 <span class="sd">        None</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">gate</span> <span class="o">=</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot</span><span class="p">(</span><span class="n">angle_x_rads</span><span class="p">,</span> <span class="n">angle_y_rads</span><span class="p">,</span> <span class="n">angle_z_rads</span><span class="p">,</span>
+        <span class="n">gate</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot</span><span class="p">(</span><span class="n">angle_x_rads</span><span class="p">,</span> <span class="n">angle_y_rads</span><span class="p">,</span> <span class="n">angle_z_rads</span><span class="p">,</span>
                                <span class="n">lib</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">evolve_by_controlled_one_bit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span> <span class="n">gate</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evolve_by_controlled_one_qbit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span> <span class="n">gate</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SEO_simulator.use_SIG"><a class="viewcode-back" href="../../qubiter.SEO_simulator.html#qubiter.SEO_simulator.SEO_simulator.use_SIG">[docs]</a>    <span class="k">def</span> <span class="nf">use_SIG</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">controls</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Overrides the parent class use_ function. Calls</span>
-<span class="sd">        evolve_by_controlled_one_bit_gate() for sigx, sigy, sigz.</span>
+<span class="sd">        evolve_by_controlled_one_qbit_gate() for sigx, sigy, sigz.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -997,17 +998,17 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">fun</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="mi">1</span><span class="p">:</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigx</span><span class="p">,</span>
-            <span class="mi">2</span><span class="p">:</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigy</span><span class="p">,</span>
-            <span class="mi">3</span><span class="p">:</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigz</span>
+            <span class="mi">1</span><span class="p">:</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">sigx</span><span class="p">,</span>
+            <span class="mi">2</span><span class="p">:</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">sigy</span><span class="p">,</span>
+            <span class="mi">3</span><span class="p">:</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">sigz</span>
         <span class="p">}</span>
         <span class="n">gate</span> <span class="o">=</span> <span class="n">fun</span><span class="p">[</span><span class="n">axis</span><span class="p">](</span><span class="n">lib</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">evolve_by_controlled_one_bit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span> <span class="n">gate</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evolve_by_controlled_one_qbit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span> <span class="n">gate</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SEO_simulator.use_SWAP"><a class="viewcode-back" href="../../qubiter.SEO_simulator.html#qubiter.SEO_simulator.SEO_simulator.use_SWAP">[docs]</a>    <span class="k">def</span> <span class="nf">use_SWAP</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bit1</span><span class="p">,</span> <span class="n">bit2</span><span class="p">,</span> <span class="n">controls</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Overrides the parent class use_ function. Calls</span>
-<span class="sd">        evolve_by_controlled_bit_swap().</span>
+<span class="sd">        evolve_by_controlled_qbit_swap().</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1020,12 +1021,12 @@
 <span class="sd">        None</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">evolve_by_controlled_bit_swap</span><span class="p">(</span><span class="n">bit1</span><span class="p">,</span> <span class="n">bit2</span><span class="p">,</span> <span class="n">controls</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evolve_by_controlled_qbit_swap</span><span class="p">(</span><span class="n">bit1</span><span class="p">,</span> <span class="n">bit2</span><span class="p">,</span> <span class="n">controls</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SEO_simulator.use_SWAY"><a class="viewcode-back" href="../../qubiter.SEO_simulator.html#qubiter.SEO_simulator.SEO_simulator.use_SWAY">[docs]</a>    <span class="k">def</span> <span class="nf">use_SWAY</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bit1</span><span class="p">,</span> <span class="n">bit2</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span> <span class="n">rads_list</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Overrides the parent class use_ function. Calls</span>
-<span class="sd">        evolve_by_controlled_one_bit_gate() 3 times.</span>
+<span class="sd">        evolve_by_controlled_one_qbit_gate() 3 times.</span>
 
 <span class="sd">        This relies on the fact that</span>
 
@@ -1062,19 +1063,19 @@
         <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">rads_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
         <span class="n">rads0</span><span class="p">,</span> <span class="n">rads1</span> <span class="o">=</span> <span class="n">rads_list</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">evolve_by_controlled_one_bit_gate</span><span class="p">(</span>
-            <span class="n">bit2</span><span class="p">,</span> <span class="n">controls1</span><span class="p">,</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigx</span><span class="p">(</span><span class="n">lib</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">evolve_by_controlled_one_bit_gate</span><span class="p">(</span>
-            <span class="n">bit1</span><span class="p">,</span> <span class="n">controls2</span><span class="p">,</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">u2</span><span class="p">(</span><span class="n">rads0</span><span class="p">,</span> <span class="n">rads1</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evolve_by_controlled_one_qbit_gate</span><span class="p">(</span>
+            <span class="n">bit2</span><span class="p">,</span> <span class="n">controls1</span><span class="p">,</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">sigx</span><span class="p">(</span><span class="n">lib</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evolve_by_controlled_one_qbit_gate</span><span class="p">(</span>
+            <span class="n">bit1</span><span class="p">,</span> <span class="n">controls2</span><span class="p">,</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">u2</span><span class="p">(</span><span class="n">rads0</span><span class="p">,</span> <span class="n">rads1</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span>
                                             <span class="n">lib</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">evolve_by_controlled_one_bit_gate</span><span class="p">(</span>
-            <span class="n">bit2</span><span class="p">,</span> <span class="n">controls1</span><span class="p">,</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigx</span><span class="p">(</span><span class="n">lib</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="p">))</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evolve_by_controlled_one_qbit_gate</span><span class="p">(</span>
+            <span class="n">bit2</span><span class="p">,</span> <span class="n">controls1</span><span class="p">,</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">sigx</span><span class="p">(</span><span class="n">lib</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="SEO_simulator.use_U_2_"><a class="viewcode-back" href="../../qubiter.SEO_simulator.html#qubiter.SEO_simulator.SEO_simulator.use_U_2_">[docs]</a>    <span class="k">def</span> <span class="nf">use_U_2_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rads0</span><span class="p">,</span> <span class="n">rads1</span><span class="p">,</span> <span class="n">rads2</span><span class="p">,</span> <span class="n">rads3</span><span class="p">,</span>
                 <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">controls</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Overrides the parent class use_ function. Calls</span>
-<span class="sd">        evolve_by_controlled_one_bit_gate() for arbitrary unitary 2-dim</span>
+<span class="sd">        evolve_by_controlled_one_qbit_gate() for arbitrary unitary 2-dim</span>
 <span class="sd">        matrix.</span>
 
 <span class="sd">        Parameters</span>
@@ -1091,8 +1092,9 @@
 <span class="sd">        None</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">gate</span> <span class="o">=</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">u2</span><span class="p">(</span><span class="n">rads0</span><span class="p">,</span> <span class="n">rads1</span><span class="p">,</span> <span class="n">rads2</span><span class="p">,</span> <span class="n">rads3</span><span class="p">,</span> <span class="n">lib</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">evolve_by_controlled_one_bit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span> <span class="n">gate</span><span class="p">)</span></div></div>
+        <span class="n">gate</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">u2</span><span class="p">(</span><span class="n">rads0</span><span class="p">,</span> <span class="n">rads1</span><span class="p">,</span> <span class="n">rads2</span><span class="p">,</span> <span class="n">rads3</span><span class="p">,</span> <span class="n">lib</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evolve_by_controlled_one_qbit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span> <span class="n">gate</span><span class="p">)</span></div></div>
+
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>

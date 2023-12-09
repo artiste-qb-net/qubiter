@@ -55,8 +55,8 @@ class PhaseEstSEO_writer(SEO_writer):
         Parameters
         ----------
         do_write : bool
-            True if want constructor to write automatically without
-            being asked.
+            True if want constructor to write automatically without being
+            asked.
         atom_writer : AtomWriter
         num_probe_bits : int
         file_prefix : str
@@ -91,24 +91,25 @@ class PhaseEstSEO_writer(SEO_writer):
 
         """
 
-        num_bits = self.emb.num_bits_bef
-        num_atom_bits = num_bits - self.num_probe_bits
+        num_qbits = self.emb.num_qbits_bef
+        num_atom_bits = num_qbits - self.num_probe_bits
         assert num_atom_bits >= 1, "must have >=1 probe bits"
 
         # first write the Hadamards
         for k in range(self.num_probe_bits):
-            self.write_one_bit_gate(k, OneBitGates.had2)
+            self.write_one_qbit_gate(k, OneQubitGate.had2)
 
         # next write the probe controlled atoms
 
         # this pre_emb maps atom -> (atom + probes)
-        num_bits_bef = num_atom_bits
-        num_bits_aft = num_bits
-        bit_map = list(range(self.num_probe_bits, num_bits))
-        pre_emb = CktEmbedder(num_bits_bef, num_bits_aft, bit_map)
+        num_qbits_bef = num_atom_bits
+        num_qbits_aft = num_qbits
+        bit_map = list(range(self.num_probe_bits, num_qbits))
+        pre_emb = CktEmbedder(num_qbits_bef, num_qbits_aft, bit_map)
 
         for k in range(self.num_probe_bits):
-            pre_emb.extra_controls = Controls.new_knob(num_bits, k, True)
+            pre_emb.extra_controls = \
+                Controls.new_single_trol(num_qbits, k, True)
             compo_emb = CktEmbedder.composition(self.emb, pre_emb)
             self.atom_wr.emb = compo_emb
             self.atom_wr.write_pow(1 << k)
@@ -116,10 +117,10 @@ class PhaseEstSEO_writer(SEO_writer):
         # finally write the inverse Fourier transform
 
         # this pre_emb maps probe bits -> (atom + probes)
-        num_bits_bef = self.num_probe_bits
-        num_bits_aft = num_bits
-        bit_map = list(range(num_bits_bef))
-        pre_emb = CktEmbedder(num_bits_bef, num_bits_aft, bit_map)
+        num_qbits_bef = self.num_probe_bits
+        num_qbits_aft = num_qbits
+        bit_map = list(range(num_qbits_bef))
+        pre_emb = CktEmbedder(num_qbits_bef, num_qbits_aft, bit_map)
 
         compo_emb = CktEmbedder.composition(self.emb, pre_emb)
         fou_writer = FouSEO_writer(
@@ -134,7 +135,7 @@ class PhaseEstSEO_writer(SEO_writer):
 
     def write_hermitian(self):
         """
-        Write Hermitian conjugate of circuit written by write()
+        Write Hermitian conjugate of circuit written by write().
 
         Returns
         -------
@@ -142,17 +143,17 @@ class PhaseEstSEO_writer(SEO_writer):
 
         """
 
-        num_bits = self.emb.num_bits_bef
-        num_atom_bits = num_bits - self.num_probe_bits
+        num_qbits = self.emb.num_qbits_bef
+        num_atom_bits = num_qbits - self.num_probe_bits
         assert num_atom_bits >= 1, "must have >=1 probe bits"
 
         # first write the Fourier transform
 
         # this pre_emb maps probe bits -> (atom + probes)
-        num_bits_bef = self.num_probe_bits
-        num_bits_aft = num_bits
-        bit_map = list(range(num_bits_bef))
-        pre_emb = CktEmbedder(num_bits_bef, num_bits_aft, bit_map)
+        num_qbits_bef = self.num_probe_bits
+        num_qbits_aft = num_qbits
+        bit_map = list(range(num_qbits_bef))
+        pre_emb = CktEmbedder(num_qbits_bef, num_qbits_aft, bit_map)
 
         compo_emb = CktEmbedder.composition(self.emb, pre_emb)
         fou_writer = FouSEO_writer(
@@ -168,20 +169,21 @@ class PhaseEstSEO_writer(SEO_writer):
         # next write the probe controlled atoms
 
         # this pre_emb maps atom -> (atom + probes)
-        num_bits_bef = num_atom_bits
-        num_bits_aft = num_bits
-        bit_map = list(range(self.num_probe_bits, num_bits))
-        pre_emb = CktEmbedder(num_bits_bef, num_bits_aft, bit_map)
+        num_qbits_bef = num_atom_bits
+        num_qbits_aft = num_qbits
+        bit_map = list(range(self.num_probe_bits, num_qbits))
+        pre_emb = CktEmbedder(num_qbits_bef, num_qbits_aft, bit_map)
 
         for k in reversed(range(self.num_probe_bits)):
-            pre_emb.extra_controls = Controls.new_knob(num_bits, k, True)
+            pre_emb.extra_controls = \
+                Controls.new_single_trol(num_qbits, k, True)
             compo_emb = CktEmbedder.composition(self.emb, pre_emb)
             self.atom_wr.emb = compo_emb
             self.atom_wr.write_pow_hermitian(1 << k)
 
         # finally write the Hadamards
         for k in reversed(range(self.num_probe_bits)):
-            self.write_one_bit_gate(k, OneBitGates.had2)
+            self.write_one_qbit_gate(k, OneQubitGate.had2)
 
 
 class AtomWriter(SEO_writer):
@@ -241,21 +243,21 @@ class AtomWriter(SEO_writer):
         if not self.test:
             assert False
 
-        num_bits = self.emb.num_bits_bef
-        trols = Controls(num_bits)
+        num_qbits = self.emb.num_qbits_bef
+        trols = Controls(num_qbits)
         tar_bit_pos = 0
-        for k in range(1, num_bits):
+        for k in range(1, num_qbits):
             trols.set_control(k, False)
         trols.refresh_lists()
-        self.write_controlled_one_bit_gate(
+        self.write_controlled_one_qbit_gate(
             tar_bit_pos,
             trols,
-            OneBitGates.rot_ax,
+            OneQubitGate.rot_ax,
             [30*power*np.pi/180, 2])
 
     def write_pow_hermitian(self, power):
         """
-        Write Hermitian conjugate of circuit written by write_pow()
+        Write Hermitian conjugate of circuit written by write_pow().
 
         Parameters
         ----------
@@ -269,16 +271,16 @@ class AtomWriter(SEO_writer):
         if not self.test:
             assert False
 
-        num_bits = self.emb.num_bits_bef
-        trols = Controls(num_bits)
+        num_qbits = self.emb.num_qbits_bef
+        trols = Controls(num_qbits)
         tar_bit_pos = 0
-        for k in range(1, num_bits):
+        for k in range(1, num_qbits):
             trols.set_control(k, False)
         trols.refresh_lists()
-        self.write_controlled_one_bit_gate(
+        self.write_controlled_one_qbit_gate(
             tar_bit_pos,
             trols,
-            OneBitGates.rot_ax,
+            OneQubitGate.rot_ax,
             fun_arg_list=[-30*power*np.pi/180, 2])
 
     def write(self):
@@ -294,7 +296,7 @@ class AtomWriter(SEO_writer):
 
     def write_hermitian(self):
         """
-        Write Hermitian conjugate of circuit written by write()
+        Write Hermitian conjugate of circuit written by write().
 
         Returns
         -------
@@ -302,6 +304,7 @@ class AtomWriter(SEO_writer):
 
         """
         self.write_pow_hermitian(1)
+
 
 if __name__ == "__main__":
     def main():

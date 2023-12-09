@@ -19,15 +19,15 @@ class Plotter:
 
     """
     @staticmethod
-    def get_states(num_bits, use_bin_labels=True, ZL=True):
+    def get_states(num_qbits, use_bin_labels=True, ZL=True):
         """
-        Returns list of strings ['0', '1', ..] with 2^num_bits entries if
+        Returns list of strings ['0', '1', ..] with 2^num_qbits entries if
         use_bin_labels=False, or the binary string equivalents if
         use_bin_labels=True.
 
         Parameters
         ----------
-        num_bits : int
+        num_qbits : int
         use_bin_labels : bool
         ZL : bool
             If True, appends "(ZL)" to state labels. Else appends "(ZF)"
@@ -38,23 +38,23 @@ class Plotter:
 
         """
         str1 = ""
-        if num_bits > 1:
+        if num_qbits > 1:
             if ZL:
                 str1 = "ZL"
             else:
                 str1 = "ZF"
         if not use_bin_labels:
-            states = [str(x) for x in range(0, 1 << num_bits)]
+            states = [str(x) for x in range(0, 1 << num_qbits)]
         else:
-            states = [np.binary_repr(x, width=num_bits) + str1
-                      for x in range(0, 1 << num_bits)]
+            states = [np.binary_repr(x, width=num_qbits) + str1
+                      for x in range(0, 1 << num_qbits)]
         return states
 
     @staticmethod
     def get_st_vec_df(trad_st_vec, use_bin_labels=True):
         """
         Admits as input trad_st_vec which is a complex numpy array with
-        shape (dim,) where dim= 2^num_bits and ZL convention is assumed.
+        shape (dim,) where dim= 2^num_qbits and ZL convention is assumed.
         Returns a dataframe with a single column with 2^num_bit rows. The
         rows are labelled by 0, 1, 2, ... or their binary equivalents,
         depending on the bool value of use_bin_labels.
@@ -69,22 +69,22 @@ class Plotter:
         pan.DataFrame
 
         """
-        num_bits = trad_st_vec.shape[0].bit_length() - 1
-        states = Plotter.get_states(num_bits, use_bin_labels)
+        num_qbits = trad_st_vec.shape[0].bit_length() - 1
+        states = Plotter.get_states(num_qbits, use_bin_labels)
         return pan.DataFrame(trad_st_vec, index=states)
 
     @staticmethod
-    def get_den_mat_df(num_bits, den_mat, use_bin_labels=True):
+    def get_den_mat_df(num_qbits, den_mat, use_bin_labels=True):
         """
         Admits as input a numpy array den_mat (a density matrix) of shape (
-        dim, dim), where dim= 2^num_bits and ZL convention is assumed.
+        dim, dim), where dim= 2^num_qbits and ZL convention is assumed.
         Returns square dataframe with entries of den_mat. The rows and
         columns are labelled by 0, 1, 2, ... or their binary equivalents,
         depending on the bool value of use_bin_labels.
 
         Parameters
         ----------
-        num_bits : int
+        num_qbits : int
         den_mat : np.ndarray
         use_bin_labels : bool
 
@@ -93,22 +93,22 @@ class Plotter:
         pan.DataFrame
 
         """
-        assert 1 << num_bits == den_mat.shape[0]
-        states = Plotter.get_states(num_bits, use_bin_labels)
+        assert 1 << num_qbits == den_mat.shape[0]
+        states = Plotter.get_states(num_qbits, use_bin_labels)
         return pan.DataFrame(den_mat, columns=states, index=states)
 
     @staticmethod
-    def get_pd_df(num_bits, pd, use_bin_labels=True):
+    def get_pd_df(num_qbits, pd, use_bin_labels=True):
         """
         Admits as input a 1-dim numpy array pd (probability distribution)
-        with shape ( 2^num_bits, ) and ZL convention is assumed. Returns a
+        with shape ( 2^num_qbits, ) and ZL convention is assumed. Returns a
         dataframe with its entries. The rows are labelled by 0, 1, 2,
         ... or their binary equivalents, depending on the bool value of
         use_bin_labels.
 
         Parameters
         ----------
-        num_bits : int
+        num_qbits : int
         pd : np.ndarray
         use_bin_labels : bool
 
@@ -118,16 +118,16 @@ class Plotter:
 
         """
         # print(pd)
-        assert 1 << num_bits == pd.shape[0]
-        states = Plotter.get_states(num_bits, use_bin_labels)
+        assert 1 << num_qbits == pd.shape[0]
+        states = Plotter.get_states(num_qbits, use_bin_labels)
         return pan.DataFrame(pd, index=states)
 
     @staticmethod
     def get_bit_probs_df(bit_probs):
         """
-        Admits as input a list bit_probs with num_bits items consisting of
+        Admits as input a list bit_probs with num_qbits items consisting of
         pairs of two floats. Returns a dataframe with two columns and
-        num_bits rows. The rows are labelled by 0, 1, 2, ...
+        num_qbits rows. The rows are labelled by 0, 1, 2, ...
       
         Parameters
         ----------
@@ -168,29 +168,29 @@ class Plotter:
         num_titles = len(titles)
 
         def single_pd(ax, title, pd_df):
-                y_pos = np.arange(len(pd_df.index)) + .5
-                plt.sca(ax)
-                plt.yticks(y_pos, pd_df.index)
-                ax.invert_yaxis()
+            y_pos = np.arange(len(pd_df.index)) + .5
+            plt.sca(ax)
+            plt.yticks(y_pos, pd_df.index)
+            ax.invert_yaxis()
 
-                ax.set_xticks([0, .25, .5, .75, 1])
-                ax.set_xlim(0, 1)
+            ax.set_xticks([0, .25, .5, .75, 1])
+            ax.set_xlim(0, 1)
 
-                for row in range(len(y_pos)):
-                    val = pd_df.values[row]
-                    if isinstance(val, np.ndarray):
-                        val = val[0]
-                    ax.text(val, y_pos[row], '{:.3f}'.format(val))
+            for row in range(len(y_pos)):
+                val = pd_df.values[row]
+                if isinstance(val, np.ndarray):
+                    val = val[0]
+                ax.text(val, y_pos[row], '{:.3f}'.format(val))
 
-                ax.grid(True)
-                ax.set_title(title)
-                # new version of python/matplotlib has bug here.
-                # The following used to work but no longer does.
-                # ax.barh(y_pos, pd_df.values, align='center')
-                # work around
-                for b in range(len(y_pos)):
-                    ax.barh(y_pos[b], pd_df.values[b],
-                            align='center', color='blue')
+            ax.grid(True)
+            ax.set_title(title)
+            # new version of python/matplotlib has bug here.
+            # The following used to work but no longer does.
+            # ax.barh(y_pos, pd_df.values, align='center')
+            # work around
+            for b in range(len(y_pos)):
+                ax.barh(y_pos[b], pd_df.values[b],
+                        align='center', color='blue')
         plt.close('all')
         fig, ax_list = plt.subplots(nrows=num_titles, ncols=1)
         # print("***", ax_list[0])
@@ -208,7 +208,7 @@ class Plotter:
         Admits as input a list of dataframes called 'st_vec_df_list' or one
         called 'den_mat_df_list' but not both. Exactly one of these lists
         must be None. The names of the dataframes are given by the list of
-        strings 'titles'. Let dim = 2^num_bits. The dataframes in
+        strings 'titles'. Let dim = 2^num_qbits. The dataframes in
         st_vec_df_list have one column with dim rows, whereas those for
         den_mat_df_list are square with dim rows and columns. This function
         plots each dataframe in the list as a quiver plot (phasor->arrow)
@@ -310,28 +310,28 @@ class Plotter:
 if __name__ == "__main__":
 
     def main():
-        num_bits = 3
-        st_vec0 = StateVec(num_bits,
-            arr=StateVec.get_random_st_vec(num_bits).arr)
-        st_vec1 = StateVec(num_bits,
-            arr=StateVec.get_random_st_vec(num_bits).arr)
+        num_qbits = 3
+        st_vec0 = StateVec(num_qbits,
+            arr=StateVec.get_random_st_vec(num_qbits).arr)
+        st_vec1 = StateVec(num_qbits,
+            arr=StateVec.get_random_st_vec(num_qbits).arr)
         st_vec_dict = {'br0': st_vec0,
                        'br1': st_vec1,
                        'br3': None}
 
-        trad_st_vec = st_vec0.get_traditional_st_vec()
-        den_mat = StateVec.get_den_mat(num_bits, st_vec_dict)
+        trad_st_vec = st_vec0.get_traditional_st_vec
+        den_mat = StateVec.get_den_mat(num_qbits, st_vec_dict)
         # print("den_mat", den_mat)
         st_vec_pd = st_vec0.get_pd()
         den_mat_pd = StateVec.get_den_mat_pd(den_mat)
-        bit_probs_vec = StateVec.get_bit_probs(num_bits, st_vec_pd)
-        bit_probs_dm = StateVec.get_bit_probs(num_bits, den_mat_pd)
+        bit_probs_vec = StateVec.get_bit_probs(num_qbits, st_vec_pd)
+        bit_probs_dm = StateVec.get_bit_probs(num_qbits, den_mat_pd)
 
-        st_vec_df = Plotter.get_st_vec_df(st_vec0.get_traditional_st_vec())
-        den_mat_df = Plotter.get_den_mat_df(num_bits, den_mat)
+        st_vec_df = Plotter.get_st_vec_df(st_vec0.get_traditional_st_vec)
+        den_mat_df = Plotter.get_den_mat_df(num_qbits, den_mat)
         # print("den_mat_df", den_mat_df)
-        st_vec_pd_df = Plotter.get_pd_df(num_bits, st_vec_pd)
-        den_mat_pd_df = Plotter.get_pd_df(num_bits, den_mat_pd)
+        st_vec_pd_df = Plotter.get_pd_df(num_qbits, st_vec_pd)
+        den_mat_pd_df = Plotter.get_pd_df(num_qbits, den_mat_pd)
         bit_probs_df1 = Plotter.get_bit_probs_df(bit_probs_vec)
         bit_probs_df2 = Plotter.get_bit_probs_df(bit_probs_dm)
 

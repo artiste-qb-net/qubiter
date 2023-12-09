@@ -154,7 +154,7 @@
 <span id="qubiter-echoingseo-reader-module"></span><h1>qubiter.EchoingSEO_reader module<a class="headerlink" href="#module-qubiter.EchoingSEO_reader" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="qubiter.EchoingSEO_reader.EchoingSEO_reader">
-<em class="property">class </em><code class="sig-prename descclassname">qubiter.EchoingSEO_reader.</code><code class="sig-name descname">EchoingSEO_reader</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_bits</em>, <em class="sig-param">wr</em>, <em class="sig-param">vars_manager=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/EchoingSEO_reader.html#EchoingSEO_reader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.EchoingSEO_reader.EchoingSEO_reader" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">qubiter.EchoingSEO_reader.</code><code class="sig-name descname">EchoingSEO_reader</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_qbits</em>, <em class="sig-param">wr</em>, <em class="sig-param">vars_manager=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/EchoingSEO_reader.html#EchoingSEO_reader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.EchoingSEO_reader.EchoingSEO_reader" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="qubiter.SEO_reader.html#qubiter.SEO_reader.SEO_reader" title="qubiter.SEO_reader.SEO_reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">qubiter.SEO_reader.SEO_reader</span></code></a></p>
 <p>This class is a child of SEO_reader. The class reads any previously
 created Qubiter English file and it writes new English &amp; Picture files
@@ -184,13 +184,13 @@ do some writing in the output files.</p>
 </dl>
 <dl class="method">
 <dt id="qubiter.EchoingSEO_reader.EchoingSEO_reader.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_bits</em>, <em class="sig-param">wr</em>, <em class="sig-param">vars_manager=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/EchoingSEO_reader.html#EchoingSEO_reader.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.EchoingSEO_reader.EchoingSEO_reader.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_qbits</em>, <em class="sig-param">wr</em>, <em class="sig-param">vars_manager=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/EchoingSEO_reader.html#EchoingSEO_reader.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.EchoingSEO_reader.EchoingSEO_reader.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constructor</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>file_prefix</strong> (<em>str</em>) – </p></li>
-<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>num_qbits</strong> (<em>int</em>) – </p></li>
 <li><p><strong>wr</strong> (<a class="reference internal" href="qubiter.SEO_writer.html#qubiter.SEO_writer.SEO_writer" title="qubiter.SEO_writer.SEO_writer"><em>SEO_writer</em></a>) – </p></li>
 <li><p><strong>vars_manager</strong> (<a class="reference internal" href="qubiter.PlaceholderManager.html#qubiter.PlaceholderManager.PlaceholderManager" title="qubiter.PlaceholderManager.PlaceholderManager"><em>PlaceholderManager</em></a>) – </p></li>
 </ul>
@@ -217,14 +217,14 @@ log file can always be obtained by creating a SEO_reader object.</p>
 
 <dl class="method">
 <dt id="qubiter.EchoingSEO_reader.EchoingSEO_reader.pic_file_from_eng_file">
-<em class="property">static </em><code class="sig-name descname">pic_file_from_eng_file</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_bits</em>, <em class="sig-param">ZL=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/EchoingSEO_reader.html#EchoingSEO_reader.pic_file_from_eng_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.EchoingSEO_reader.EchoingSEO_reader.pic_file_from_eng_file" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">pic_file_from_eng_file</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_qbits</em>, <em class="sig-param">ZL=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/EchoingSEO_reader.html#EchoingSEO_reader.pic_file_from_eng_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.EchoingSEO_reader.EchoingSEO_reader.pic_file_from_eng_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function reads an English file with file prefix = file_prefix
 and it writes a Picture file for it with the same file prefix.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>file_prefix</strong> (<em>str</em>) – </p></li>
-<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>num_qbits</strong> (<em>int</em>) – </p></li>
 <li><p><strong>ZL</strong> (<em>bool</em>) – </p></li>
 </ul>
 </dd>

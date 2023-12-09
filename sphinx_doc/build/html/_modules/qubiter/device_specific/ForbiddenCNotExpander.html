@@ -297,7 +297,7 @@
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
 <span class="sd">    c_to_tars : dict[int, list[int]]</span>
-<span class="sd">        a dictionary mapping j in range(num_bits) to a list, possibly empty,</span>
+<span class="sd">        a dictionary mapping j in range(num_qbits) to a list, possibly empty,</span>
 <span class="sd">        of the physically allowed targets of qubit j, when j is the control</span>
 <span class="sd">        of a CNOT.</span>
 <span class="sd">    graph : networkx.Graph</span>
@@ -306,14 +306,14 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="ForbiddenCNotExpander.__init__"><a class="viewcode-back" href="../../../qubiter.device_specific.ForbiddenCNotExpander.html#qubiter.device_specific.ForbiddenCNotExpander.ForbiddenCNotExpander.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="n">c_to_tars</span><span class="p">):</span>
+<div class="viewcode-block" id="ForbiddenCNotExpander.__init__"><a class="viewcode-back" href="../../../qubiter.device_specific.ForbiddenCNotExpander.html#qubiter.device_specific.ForbiddenCNotExpander.ForbiddenCNotExpander.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">,</span> <span class="n">c_to_tars</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Constructor</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        file_prefix : str</span>
-<span class="sd">        num_bits : int</span>
+<span class="sd">        num_qbits : int</span>
 <span class="sd">        c_to_tars : dict[int, list[int]]</span>
 
 <span class="sd">        Returns</span>
@@ -330,19 +330,19 @@
         <span class="c1"># print(&quot;graph&quot;, self.graph.edges())</span>
 
         <span class="n">out_file_prefix</span> <span class="o">=</span> <span class="n">SEO_reader</span><span class="o">.</span><span class="n">xed_file_prefix</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">)</span>
-        <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">)</span>
+        <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">)</span>
         <span class="n">wr</span> <span class="o">=</span> <span class="n">SEO_writer</span><span class="p">(</span><span class="n">out_file_prefix</span><span class="p">,</span> <span class="n">emb</span><span class="p">)</span>
 
-        <span class="n">EchoingSEO_reader</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="n">wr</span><span class="p">)</span>
+        <span class="n">EchoingSEO_reader</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">,</span> <span class="n">wr</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">wr</span><span class="o">.</span><span class="n">close_files</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="ForbiddenCNotExpander.edge_type"><a class="viewcode-back" href="../../../qubiter.device_specific.ForbiddenCNotExpander.html#qubiter.device_specific.ForbiddenCNotExpander.ForbiddenCNotExpander.edge_type">[docs]</a>    <span class="k">def</span> <span class="nf">edge_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns 0 if C(x-&gt;y) and C(y-&gt;x) are both allowed.</span>
-<span class="sd">        Returns 1 if C(x-&gt;y) but not C(y-&gt;x) are allowed</span>
-<span class="sd">        Returns -1 if C(y-&gt;x) but not C(x-&gt;y) are allowed</span>
-<span class="sd">        Returns error message if neither is allowed</span>
+<span class="sd">        Returns 1 if C(x-&gt;y) but not C(y-&gt;x) are allowed.</span>
+<span class="sd">        Returns -1 if C(y-&gt;x) but not C(x-&gt;y) are allowed.</span>
+<span class="sd">        Returns error message if neither is allowed.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -473,24 +473,25 @@
         <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">sym_exp</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">bool</span><span class="p">):</span>
                 <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">wr</span><span class="o">.</span><span class="n">write_one_bit_gate</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">had2</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">wr</span><span class="o">.</span><span class="n">write_one_qbit_gate</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">had2</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>  <span class="c1"># x[1] is int</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">wr</span><span class="o">.</span><span class="n">write_cnot</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span></div></div>
+
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
         <span class="kn">import</span> <span class="nn">qubiter.device_specific.chip_couplings_ibm</span> <span class="k">as</span> <span class="nn">ibm</span>
         <span class="n">file_prefix</span> <span class="o">=</span> <span class="s2">&quot;forbidden_cnots_ibm&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">)</span>
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="mi">5</span>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="mi">5</span>
         <span class="n">c_to_tars</span> <span class="o">=</span> <span class="n">ibm</span><span class="o">.</span><span class="n">ibmq5YorktownTenerife_c_to_tars</span>
-        <span class="n">ForbiddenCNotExpander</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="n">c_to_tars</span><span class="p">)</span>
+        <span class="n">ForbiddenCNotExpander</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">,</span> <span class="n">c_to_tars</span><span class="p">)</span>
 
         <span class="n">file_prefix</span> <span class="o">=</span> <span class="s2">&quot;forbidden_cnots1&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">)</span>
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="mi">4</span>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="mi">4</span>
         <span class="n">c_to_tars</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">2</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="mi">3</span><span class="p">:</span> <span class="p">[]}</span>
-        <span class="n">ForbiddenCNotExpander</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="n">c_to_tars</span><span class="p">)</span>
+        <span class="n">ForbiddenCNotExpander</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">,</span> <span class="n">c_to_tars</span><span class="p">)</span>
     <span class="n">main</span><span class="p">()</span>
 
 

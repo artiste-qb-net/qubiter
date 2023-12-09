@@ -174,14 +174,14 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="LoopFileGenerator.__init__"><a class="viewcode-back" href="../../qubiter.LoopFileGenerator.html#qubiter.LoopFileGenerator.LoopFileGenerator.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="LoopFileGenerator.__init__"><a class="viewcode-back" href="../../qubiter.LoopFileGenerator.html#qubiter.LoopFileGenerator.LoopFileGenerator.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Constructor</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        file_prefix : str</span>
-<span class="sd">        num_bits : int</span>
+<span class="sd">        num_qbits : int</span>
 <span class="sd">        kwargs : dict</span>
 
 <span class="sd">        Returns</span>
@@ -189,7 +189,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">loop_out</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">utg</span><span class="o">.</span><span class="n">preface</span><span class="p">(</span>
-            <span class="n">file_prefix</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;_loop.py&#39;</span><span class="p">),</span> <span class="s1">&#39;wt&#39;</span><span class="p">)</span>
+            <span class="n">file_prefix</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;_loop.py&#39;</span><span class="p">),</span> <span class="s1">&#39;wt&#39;</span><span class="p">)</span>
 
         <span class="c1"># to pass integer by reference, must put inside a list</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">indentation_li</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -202,7 +202,7 @@
         <span class="c1"># Must set write_log to True or else SEO_reader will abort. However,</span>
         <span class="c1">#  we also override do_log in this class to prevent log from being</span>
         <span class="c1"># written.</span>
-        <span class="n">SEO_reader</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="n">write_log</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">SEO_reader</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">,</span> <span class="n">write_log</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                             <span class="n">vars_manager</span><span class="o">=</span><span class="n">vman</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="n">vman</span><span class="o">.</span><span class="n">write_loop_file_ending</span><span class="p">()</span>
@@ -276,46 +276,51 @@
 
     <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
         <span class="n">file_prefix</span> <span class="o">=</span> <span class="s1">&#39;loop_gen_test&#39;</span>
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="mi">4</span>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="mi">4</span>
 
         <span class="c1"># write the English and Picture files</span>
-        <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">)</span>
+        <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">)</span>
         <span class="n">wr</span> <span class="o">=</span> <span class="n">SEO_writer</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">emb</span><span class="p">)</span>
-        <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span>
-                                         <span class="n">Controls</span><span class="o">.</span><span class="n">new_knob</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
-                                         <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span>
-                                         <span class="p">[</span><span class="s1">&#39;#1&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span>
+            <span class="mi">0</span><span class="p">,</span>
+            <span class="n">Controls</span><span class="o">.</span><span class="n">new_single_trol</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+            <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span>
+            <span class="p">[</span><span class="s1">&#39;#1&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
         <span class="n">wr</span><span class="o">.</span><span class="n">write_LOOP</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="n">nreps</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-        <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span>
-                                         <span class="n">Controls</span><span class="o">.</span><span class="n">new_knob</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
-                                         <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span>
-                                         <span class="p">[</span><span class="s1">&#39;-my_fun1#1#2&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+        <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span>
+            <span class="mi">1</span><span class="p">,</span>
+            <span class="n">Controls</span><span class="o">.</span><span class="n">new_single_trol</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+            <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span>
+            <span class="p">[</span><span class="s1">&#39;-my_fun1#1#2&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
         <span class="n">wr</span><span class="o">.</span><span class="n">write_LOOP</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">nreps</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-        <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span>
-                                         <span class="n">Controls</span><span class="o">.</span><span class="n">new_knob</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
-                                         <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot</span><span class="p">,</span>
-                                         <span class="p">[</span><span class="s1">&#39;-#1*.5&#39;</span><span class="p">,</span> <span class="s1">&#39;#2&#39;</span><span class="p">,</span>  <span class="s1">&#39;-my_fun3#3&#39;</span><span class="p">])</span>
+        <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span>
+            <span class="mi">2</span><span class="p">,</span>
+            <span class="n">Controls</span><span class="o">.</span><span class="n">new_single_trol</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+            <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot</span><span class="p">,</span>
+            <span class="p">[</span><span class="s1">&#39;-#1*.5&#39;</span><span class="p">,</span> <span class="s1">&#39;#2&#39;</span><span class="p">,</span>  <span class="s1">&#39;-my_fun3#3&#39;</span><span class="p">])</span>
         <span class="n">wr</span><span class="o">.</span><span class="n">write_NEXT</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-        <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span>
-                                         <span class="n">Controls</span><span class="o">.</span><span class="n">new_knob</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
-                                         <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span>
-                                         <span class="p">[</span><span class="s1">&#39;my_fun1#1#2&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+        <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span>
+            <span class="mi">1</span><span class="p">,</span>
+            <span class="n">Controls</span><span class="o">.</span><span class="n">new_single_trol</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+            <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span>
+            <span class="p">[</span><span class="s1">&#39;my_fun1#1#2&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
         <span class="n">wr</span><span class="o">.</span><span class="n">write_NEXT</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
-        <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span>
-                                 <span class="n">Controls</span><span class="o">.</span><span class="n">new_knob</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
-                                 <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span>
-                                 <span class="p">[</span><span class="s1">&#39;#1*.3&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
-        <span class="n">wr</span><span class="o">.</span><span class="n">write_one_bit_gate</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;my_fun#1&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="n">wr</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span>
+            <span class="mi">0</span><span class="p">,</span>
+            <span class="n">Controls</span><span class="o">.</span><span class="n">new_single_trol</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+            <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span>
+            <span class="p">[</span><span class="s1">&#39;#1*.3&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="n">wr</span><span class="o">.</span><span class="n">write_one_qbit_gate</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;my_fun#1&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
         <span class="n">wr</span><span class="o">.</span><span class="n">close_files</span><span class="p">()</span>
 
         <span class="c1"># write a log</span>
-        <span class="n">SEO_reader</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="n">write_log</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">SEO_reader</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">,</span> <span class="n">write_log</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="c1"># write a Loop File</span>
-        <span class="n">LoopFileGenerator</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">)</span>
+        <span class="n">LoopFileGenerator</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">)</span>
 
         <span class="c1"># read a Loop xfile and do simulation</span>
-        <span class="n">sim</span> <span class="o">=</span> <span class="n">SEO_simulator</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">sim</span> <span class="o">=</span> <span class="n">SEO_simulator</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                             <span class="n">xfile_num</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">----------------------------------------&quot;</span><span class="p">)</span>
         <span class="n">StateVec</span><span class="o">.</span><span class="n">describe_st_vec_dict</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">cur_st_vec_dict</span><span class="p">)</span>

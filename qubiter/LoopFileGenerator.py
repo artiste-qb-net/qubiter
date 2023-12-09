@@ -23,14 +23,14 @@ class LoopFileGenerator(SEO_reader):
 
     """
 
-    def __init__(self, file_prefix, num_bits, **kwargs):
+    def __init__(self, file_prefix, num_qbits, **kwargs):
         """
         Constructor
 
         Parameters
         ----------
         file_prefix : str
-        num_bits : int
+        num_qbits : int
         kwargs : dict
 
         Returns
@@ -38,7 +38,7 @@ class LoopFileGenerator(SEO_reader):
 
         """
         self.loop_out = open(utg.preface(
-            file_prefix + '_' + str(num_bits) + '_loop.py'), 'wt')
+            file_prefix + '_' + str(num_qbits) + '_loop.py'), 'wt')
 
         # to pass integer by reference, must put inside a list
         self.indentation_li = [0]
@@ -51,7 +51,7 @@ class LoopFileGenerator(SEO_reader):
         # Must set write_log to True or else SEO_reader will abort. However,
         #  we also override do_log in this class to prevent log from being
         # written.
-        SEO_reader.__init__(self, file_prefix, num_bits, write_log=True,
+        SEO_reader.__init__(self, file_prefix, num_qbits, write_log=True,
                             vars_manager=vman, **kwargs)
 
         vman.write_loop_file_ending()
@@ -125,46 +125,51 @@ if __name__ == "__main__":
 
     def main():
         file_prefix = 'loop_gen_test'
-        num_bits = 4
+        num_qbits = 4
 
         # write the English and Picture files
-        emb = CktEmbedder(num_bits, num_bits)
+        emb = CktEmbedder(num_qbits, num_qbits)
         wr = SEO_writer(file_prefix, emb)
-        wr.write_controlled_one_bit_gate(0,
-                                         Controls.new_knob(num_bits, 2, False),
-                                         OneBitGates.rot_ax,
-                                         ['#1', 1])
+        wr.write_controlled_one_qbit_gate(
+            0,
+            Controls.new_single_trol(num_qbits, 2, False),
+            OneQubitGate.rot_ax,
+            ['#1', 1])
         wr.write_LOOP(20, nreps=2)
-        wr.write_controlled_one_bit_gate(1,
-                                         Controls.new_knob(num_bits, 2, False),
-                                         OneBitGates.rot_ax,
-                                         ['-my_fun1#1#2', 2])
+        wr.write_controlled_one_qbit_gate(
+            1,
+            Controls.new_single_trol(num_qbits, 2, False),
+            OneQubitGate.rot_ax,
+            ['-my_fun1#1#2', 2])
         wr.write_LOOP(10, nreps=4)
-        wr.write_controlled_one_bit_gate(2,
-                                         Controls.new_knob(num_bits, 3, True),
-                                         OneBitGates.rot,
-                                         ['-#1*.5', '#2',  '-my_fun3#3'])
+        wr.write_controlled_one_qbit_gate(
+            2,
+            Controls.new_single_trol(num_qbits, 3, True),
+            OneQubitGate.rot,
+            ['-#1*.5', '#2',  '-my_fun3#3'])
         wr.write_NEXT(10)
-        wr.write_controlled_one_bit_gate(1,
-                                         Controls.new_knob(num_bits, 2, False),
-                                         OneBitGates.rot_ax,
-                                         ['my_fun1#1#2', 2])
+        wr.write_controlled_one_qbit_gate(
+            1,
+            Controls.new_single_trol(num_qbits, 2, False),
+            OneQubitGate.rot_ax,
+            ['my_fun1#1#2', 2])
         wr.write_NEXT(20)
-        wr.write_controlled_one_bit_gate(0,
-                                 Controls.new_knob(num_bits, 2, False),
-                                 OneBitGates.rot_ax,
-                                 ['#1*.3', 1])
-        wr.write_one_bit_gate(1, OneBitGates.rot_ax, ['my_fun#1', 1])
+        wr.write_controlled_one_qbit_gate(
+            0,
+            Controls.new_single_trol(num_qbits, 2, False),
+            OneQubitGate.rot_ax,
+            ['#1*.3', 1])
+        wr.write_one_qbit_gate(1, OneQubitGate.rot_ax, ['my_fun#1', 1])
         wr.close_files()
 
         # write a log
-        SEO_reader(file_prefix, num_bits, write_log=True)
+        SEO_reader(file_prefix, num_qbits, write_log=True)
 
         # write a Loop File
-        LoopFileGenerator(file_prefix, num_bits)
+        LoopFileGenerator(file_prefix, num_qbits)
 
         # read a Loop xfile and do simulation
-        sim = SEO_simulator(file_prefix, num_bits, verbose=False,
+        sim = SEO_simulator(file_prefix, num_qbits, verbose=False,
                             xfile_num=1)
         print("\n----------------------------------------")
         StateVec.describe_st_vec_dict(sim.cur_st_vec_dict)

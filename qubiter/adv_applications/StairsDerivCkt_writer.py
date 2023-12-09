@@ -14,16 +14,16 @@ class StairsDerivCkt_writer(SEO_writer):
     parameters. To take the derivative wrt t_r of a given multi-controlled
     gate U in a stairs circuit, we need to evaluate several circuits (we
     call them dparts, which stands for derivative parts). Say, for instance,
-    that GATE= @---O---+---U. To calculate d/dt_r GATE(t_0, t_1, t_2, t_3),
+    that ``GATE= @---O---+---U``. To calculate d/dt_r GATE(t_0, t_1, t_2, t_3),
     for r=0,1, 2, 3, we need to calculate a new circuit wherein the GATE in
-    the parent circuit is replaced by
+    the parent circuit is replaced by::
 
-    sum_k  c_k  @---@---O---+---U_k
+        sum_k  c_k  @---@---O---+---U_k
 
-    (which is said to have `has_neg_polarity`=False) and
+    (which is said to have `has_neg_polarity`=False) and::
 
-    sum_k  c_k  @---@---O---+---U_k
-                Z---@---O   |   |
+        sum_k  c_k  @---@---O---+---U_k
+                    Z---@---O   |   |
 
     (which is said to have `has_neg_polarity`=True)
 
@@ -32,7 +32,7 @@ class StairsDerivCkt_writer(SEO_writer):
 
     Note that an extra "ancilla" qbit has been added (as the new last qubit)
     to the parent stairs circuit being differentiated. So if the parent
-    stairs circuit has a number `parent_num_bits` of qubits, then the one
+    stairs circuit has a number `parent_num_qbits` of qubits, then the one
     written by this class has that many qubits plus one.
 
     The index r which is in range(4) is called the derivative direction (
@@ -119,13 +119,13 @@ class StairsDerivCkt_writer(SEO_writer):
         -------
 
         """
-        num_bits = self.emb.num_bits_bef
-        anc_bit_pos = num_bits-1
+        num_qbits = self.emb.num_qbits_bef
+        anc_bit_pos = num_qbits-1
 
         for gate_str, rads_list in self.gate_str_to_rads_list.items():
             u2_pos = self.get_u2_pos(gate_str)
             trols = StairsCkt_writer.get_controls_from_gate_str(
-                num_bits, gate_str)
+                num_qbits, gate_str)
             if gate_str == self.deriv_gate_str:
                 # add control on ancilla qubit
                 trols.bit_pos_to_kind[anc_bit_pos] = True
@@ -144,16 +144,16 @@ class StairsDerivCkt_writer(SEO_writer):
                 self.write_H(anc_bit_pos)
             else:
                 rads_list = self.gate_str_to_rads_list[gate_str]
-            self.write_controlled_one_bit_gate(u2_pos, trols,
-                    OneBitGates.u2, rads_list)
+            self.write_controlled_one_qbit_gate(u2_pos, trols,
+                    OneQubitGate.u2, rads_list)
             if gate_str == self.deriv_gate_str and gate_str != 'prior' and \
                     self.has_neg_polarity:
                 # remove ancilla qubit control that was added previously
                 del trols.bit_pos_to_kind[anc_bit_pos]
                 trols.refresh_lists()
                 # add controlled sigz for neg X term
-                self.write_controlled_one_bit_gate(anc_bit_pos, trols,
-                    OneBitGates.sigz)
+                self.write_controlled_one_qbit_gate(anc_bit_pos, trols,
+                    OneQubitGate.sigz)
 
     def get_u2_pos(self, gate_str):
         """
@@ -175,13 +175,13 @@ class StairsDerivCkt_writer(SEO_writer):
         int
 
         """
-        # last qubit position, num_bits-1, is reserved for ancilla qubit
-        # "prior" gate_str has U2 at bit pos num_bits-2
-        num_bits = self.emb.num_bits_bef
+        # last qubit position, num_qbits-1, is reserved for ancilla qubit
+        # "prior" gate_str has U2 at bit pos num_qbits-2
+        num_qbits = self.emb.num_qbits_bef
         if gate_str == 'prior':
-            return num_bits - 2
+            return num_qbits - 2
         else:
-            return num_bits - 2 - len(gate_str) // 2
+            return num_qbits - 2 - len(gate_str) // 2
 
     @staticmethod
     def float_t_list(t_list, var_num_to_rads):
@@ -249,7 +249,7 @@ class StairsDerivCkt_writer(SEO_writer):
             if dpart_name == '1':
                 if t > 1e-6:
                     for k in range(1, 4):
-                            rads_array[k] += (np.pi/2 + t)*t_list[k]/t
+                        rads_array[k] += (np.pi/2 + t)*t_list[k]/t
             elif dpart_name == 's':
                 rads_array[deriv_direc] += np.pi/2
             elif dpart_name == '1s':
@@ -345,14 +345,14 @@ class StairsDerivCkt_writer(SEO_writer):
 
 if __name__ == "__main__":
     def main():
-        num_bits = 4
-        parent_num_bits = num_bits - 1  # one bit for ancilla
+        num_qbits = 4
+        parent_num_qbits = num_qbits - 1  # one bit for ancilla
         gate_str_to_rads_list = StairsCkt_writer.\
             get_gate_str_to_rads_list(
-                parent_num_bits, '#int', rads_const=np.pi/2)
+                parent_num_qbits, '#int', rads_const=np.pi/2)
 
         file_prefix = 'stairs_deriv_writer_test'
-        emb = CktEmbedder(num_bits, num_bits)
+        emb = CktEmbedder(num_qbits, num_qbits)
         deriv_gate_str = list(gate_str_to_rads_list.keys())[2]
         for deriv_direc, dpart_name, has_neg_polarity in \
                 [(0, 'single', None), (3, 's', True)]:

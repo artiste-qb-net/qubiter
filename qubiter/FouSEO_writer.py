@@ -49,52 +49,52 @@ class FouSEO_writer(SEO_writer):
         None
 
         """
-        num_bits = self.emb.num_bits_bef
+        num_qbits = self.emb.num_qbits_bef
 
         # permutation R
         if self.do_perm:
-            for r in range(num_bits-1, 0, -1):
+            for r in range(num_qbits-1, 0, -1):
                 for k in range(r-1, -1, -1):
-                    self.write_bit_swap(r, k)
+                    self.write_qbit_swap(r, k)
 
-        for k in range(num_bits):
-            self.write_one_bit_gate(k, OneBitGates.had2)
-            trols = Controls.new_knob(num_bits, k, True)
-            for r in range(k+1, num_bits):
+        for k in range(num_qbits):
+            self.write_one_qbit_gate(k, OneQubitGate.had2)
+            trols = Controls.new_single_trol(num_qbits, k, True)
+            for r in range(k+1, num_qbits):
                 # note r>k
-                self.write_controlled_one_bit_gate(
+                self.write_controlled_one_qbit_gate(
                     r,  # target bit pos
                     trols,
-                    OneBitGates.P_1_phase_fac,
+                    OneQubitGate.P_1_phase_fac,
                     [np.pi/(1 << (r-k))]
                 )
 
     def write_hermitian(self):
         """
-        Write Hermitian conjugate of circuit written by write()
+        Write Hermitian conjugate of circuit written by write().
 
         Returns
         -------
         None
 
         """
-        num_bits = self.emb.num_bits_bef
+        num_qbits = self.emb.num_qbits_bef
 
-        for k in range(num_bits-1, -1, -1):
-            trols = Controls.new_knob(num_bits, k, True)
-            for r in range(num_bits-1, k, -1):
+        for k in range(num_qbits-1, -1, -1):
+            trols = Controls.new_single_trol(num_qbits, k, True)
+            for r in range(num_qbits-1, k, -1):
                 # note r>k
-                self.write_controlled_one_bit_gate(
+                self.write_controlled_one_qbit_gate(
                     r,  # target bit pos
                     trols,
-                    OneBitGates.P_1_phase_fac,
+                    OneQubitGate.P_1_phase_fac,
                     [-np.pi/(1 << (r-k))]  # negative of write()
                 )
-            self.write_one_bit_gate(k, OneBitGates.had2)
+            self.write_one_qbit_gate(k, OneQubitGate.had2)
         if self.do_perm:
-            for r in range(1, num_bits):
+            for r in range(1, num_qbits):
                 for k in range(r):
-                    self.write_bit_swap(r, k)
+                    self.write_qbit_swap(r, k)
 
     @staticmethod
     def fourier_trans_mat(num_rows, herm_conj=False):
@@ -125,12 +125,13 @@ class FouSEO_writer(SEO_writer):
                 mat[r, s] = np.exp(1j*sign*2*np.pi*r*s/num_rows)/norma
         return mat
 
+
 if __name__ == "__main__":
     def main():
-        num_bits_bef = 4
-        num_bits_aft = 6
-        bit_map = list(range(num_bits_bef))
-        emb = CktEmbedder(num_bits_bef, num_bits_aft, bit_map)
+        num_qbits_bef = 4
+        num_qbits_aft = 6
+        bit_map = list(range(num_qbits_bef))
+        emb = CktEmbedder(num_qbits_bef, num_qbits_aft, bit_map)
 
         for ZL in [True, False]:
             wr = FouSEO_writer(True,

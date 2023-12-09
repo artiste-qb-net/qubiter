@@ -12,19 +12,19 @@ class HadamardTransform:
     """
 
     @staticmethod
-    def ht(num_bits, in_arr):
+    def ht(num_qbits, in_arr):
         """
         This function calculates the Hadamard transform of in_arr. Let H be
         the 2 dimensional Hadamard matrix and let ht be the num_bit-fold
         tensor product of H. Then this function returns the matrix product
         ht*in_arr = out_arr. in_arr and out_arr both have the same shape (
-        2^num_bits,).
+        2^num_qbits,).
 
         Parameters
         ----------
-        num_bits : int
+        num_qbits : int
             The number of bits. The dimension of the Hadamard tranform is
-            2^num_bits
+            2^num_qbits
 
         in_arr : np.ndarray
             Input array.
@@ -34,14 +34,14 @@ class HadamardTransform:
         np.ndarray
 
         """
-        length = (1 << num_bits)
+        length = (1 << num_qbits)
         half_len = (length >> 1)
         assert len(in_arr) == length, \
             "in_arr for Hadamard Transform has wrong length"
         prev_arr = np.zeros(length, dtype=float)
         root2 = np.sqrt(2)
         out_arr = np.copy(in_arr)
-        for beta in range(num_bits):
+        for beta in range(num_qbits):
             prev_arr[:] = out_arr[:]
             for k in range(half_len):
                 x = prev_arr[2*k]
@@ -51,22 +51,22 @@ class HadamardTransform:
         return out_arr
 
     @staticmethod
-    def hadamard_mat(num_bits, is_quantum=True):
+    def hadamard_mat(num_qbits, is_quantum=True):
         """
-        This function return a numpy array with the num_bits-fold tensor
+        This function return a numpy array with the num_qbits-fold tensor
         product of the 2 dim Hadamard matrix H. If is_quantum=True (False,
         resp.), it returns a complex (real, resp.) array.
 
         Parameters
         ----------
-        num_bits : int
+        num_qbits : int
         is_quantum : bool
 
         Returns
         -------
 
         """
-        num_rows = (1 << num_bits)
+        num_rows = (1 << num_qbits)
         norma = np.sqrt(num_rows)
         if is_quantum:
             ty = complex
@@ -74,7 +74,7 @@ class HadamardTransform:
             ty = float
         mat = np.full((num_rows, num_rows),
                       fill_value=1/norma, dtype=ty)
-        bvec = BitVector(num_bits, 0)
+        bvec = BitVector(num_qbits, 0)
         for j in range(num_rows):
             for k in range(num_rows):
                 bvec.dec_rep = j & k
@@ -85,11 +85,11 @@ class HadamardTransform:
 
 if __name__ == "__main__":
     def main():
-        num_bits = 3
-        length = 1 << num_bits
+        num_qbits = 3
+        length = 1 << num_qbits
         in_arr = np.random.rand(length) - 0.5
-        out_arr = HadamardTransform.ht(num_bits, in_arr)
-        in_arr1 = HadamardTransform.ht(num_bits, out_arr)
+        out_arr = HadamardTransform.ht(num_qbits, in_arr)
+        in_arr1 = HadamardTransform.ht(num_qbits, out_arr)
         # print("in_arr=", in_arr)
         # print("out_arr=", out_arr)
         err = np.linalg.norm(in_arr-in_arr1)

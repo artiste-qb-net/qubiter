@@ -42,7 +42,7 @@ class MeanHamil_rigetti(MeanHamil):
 
     """
 
-    def __init__(self, qc, file_prefix, num_bits, hamil,
+    def __init__(self, qc, file_prefix, num_qbits, hamil,
                 all_var_nums, fun_name_to_fun,
                 do_resets=True, **kwargs):
         """
@@ -59,7 +59,7 @@ class MeanHamil_rigetti(MeanHamil):
         ----------
         qc : QuantumComputer
         file_prefix : str
-        num_bits : int
+        num_qbits : int
         hamil : QubitOperator
         all_var_nums : list[int]
         fun_name_to_fun : dict[str, function]
@@ -72,7 +72,7 @@ class MeanHamil_rigetti(MeanHamil):
 
         """
 
-        MeanHamil.__init__(self, file_prefix, num_bits, hamil,
+        MeanHamil.__init__(self, file_prefix, num_qbits, hamil,
                            all_var_nums, fun_name_to_fun, **kwargs)
         self.qc = qc
         self.do_resets = do_resets
@@ -80,7 +80,7 @@ class MeanHamil_rigetti(MeanHamil):
         # this creates a file with all PyQuil gates that
         # are independent of hamil. Gates may contain free parameters
         self.translator = Qubiter_to_RigettiPyQuil(
-            self.file_prefix, self.num_bits,
+            self.file_prefix, self.num_qbits,
             aqasm_name='RigPyQuil', prelude_str='', ending_str='')
         with open(utg.preface(self.translator.aqasm_path), 'r') as fi:
             self.translation_line_list = fi.readlines()
@@ -93,7 +93,7 @@ class MeanHamil_rigetti(MeanHamil):
             pg += Pragma('INITIAL_REWIRING', ['"PARTIAL"'])
             if self.do_resets:
                 pg += RESET()
-            ro = pg.declare('ro', 'BIT', self.num_bits)
+            ro = pg.declare('ro', 'BIT', self.num_qbits)
             s = ''
             for var_num in self.all_var_nums:
                 vname = self.translator.vprefix + str(var_num)
@@ -130,7 +130,7 @@ class MeanHamil_rigetti(MeanHamil):
                     pg, bit_pos_to_xy_str)
 
                 # request measurements
-                for i in range(self.num_bits):
+                for i in range(self.num_qbits):
                     pg += MEASURE(i, ro[i])
 
                 pg.wrap_in_numshots_loop(shots=self.num_samples)
@@ -170,21 +170,21 @@ class MeanHamil_rigetti(MeanHamil):
                 bitstrings = self.qc.run(self.term_to_exec[term],
                                          memory_map=var_name_to_rads)
                 obs_vec = RigettiTools.obs_vec_from_bitstrings(
-                        bitstrings, self.num_bits, bs_is_array=True)
+                        bitstrings, self.num_qbits, bs_is_array=True)
 
                 # go from obs_vec to effective state vec
-                counts_dict = StateVec.get_counts_from_obs_vec(self.num_bits,
+                counts_dict = StateVec.get_counts_from_obs_vec(self.num_qbits,
                                                                obs_vec)
-                emp_pd = StateVec.get_empirical_pd_from_counts(self.num_bits,
+                emp_pd = StateVec.get_empirical_pd_from_counts(self.num_qbits,
                                                                counts_dict)
                 effective_st_vec = StateVec.get_emp_state_vec_from_emp_pd(
-                        self.num_bits, emp_pd)
+                        self.num_qbits, emp_pd)
             else:  # num_samples = 0
                 sim = WavefunctionSimulator()
                 pg = Program()
                 # don't know how to declare number of qubits
                 # so do this
-                for k in range(self.num_bits):
+                for k in range(self.num_qbits):
                     pg += I(k)
                 for key, val in var_name_to_rads.items():
                     exec(key + '=' + str(val[0]))
@@ -197,10 +197,10 @@ class MeanHamil_rigetti(MeanHamil):
                 RigettiTools.add_xy_meas_coda_to_program(
                     pg, bit_pos_to_xy_str)
                 st_vec_arr = sim.wavefunction(pg).amplitudes
-                st_vec_arr = st_vec_arr.reshape([2]*self.num_bits)
-                perm = list(reversed(range(self.num_bits)))
+                st_vec_arr = st_vec_arr.reshape([2]*self.num_qbits)
+                perm = list(reversed(range(self.num_qbits)))
                 st_vec_arr = np.transpose(st_vec_arr, perm)
-                effective_st_vec = StateVec(self.num_bits, st_vec_arr)
+                effective_st_vec = StateVec(self.num_qbits, st_vec_arr)
 
             # add contribution to mean
             real_arr = self.get_real_vec(term)
@@ -208,6 +208,7 @@ class MeanHamil_rigetti(MeanHamil):
                     get_mean_value_of_real_diag_mat(real_arr)
 
         return mean_val
+
 
 if __name__ == "__main__":
     def main():

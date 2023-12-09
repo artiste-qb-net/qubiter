@@ -269,8 +269,8 @@ self.write_node() for each node.</p>
 <dt id="qubiter.quantum_CSD_compiler.Tree.Tree.write_node">
 <code class="sig-name descname">write_node</code><span class="sig-paren">(</span><em class="sig-param">nd</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/quantum_CSD_compiler/Tree.html#Tree.write_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.quantum_CSD_compiler.Tree.Tree.write_node" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function is called by self.write() for each node of the tree.
-For a node with level &lt;= num_bits, the function writes an MP_Y line,
-whereas if level = num_bits + 1, it writes a DIAG line.</p>
+For a node with level &lt;= num_qbits, the function writes an MP_Y line,
+whereas if level = num_qbits + 1, it writes a DIAG line.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>nd</strong> (<a class="reference internal" href="qubiter.quantum_CSD_compiler.Node.html#qubiter.quantum_CSD_compiler.Node.Node" title="qubiter.quantum_CSD_compiler.Node.Node"><em>Node</em></a>) – </p>

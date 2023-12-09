@@ -161,53 +161,53 @@
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
 <span class="sd">    bit_map : list[int]</span>
-<span class="sd">        1-1 but not onto map of range(num_bits_bef) into range(num_bits_aft)</span>
+<span class="sd">        1-1 but not onto map of range(num_qbits_bef) into range(num_qbits_aft)</span>
 <span class="sd">    extra_controls : Controls</span>
 <span class="sd">        When embedding controls, these extra ones will be added to the before</span>
 <span class="sd">        embedding controls</span>
-<span class="sd">    num_bits_aft : int</span>
+<span class="sd">    num_qbits_aft : int</span>
 <span class="sd">        number of qubits after circuit embedding</span>
-<span class="sd">    num_bits_bef : int</span>
+<span class="sd">    num_qbits_bef : int</span>
 <span class="sd">        number of qubits before circuit embedding</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="CktEmbedder.__init__"><a class="viewcode-back" href="../../qubiter.CktEmbedder.html#qubiter.CktEmbedder.CktEmbedder.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_bits_bef</span><span class="p">,</span> <span class="n">num_bits_aft</span><span class="p">,</span> <span class="n">bit_map</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="CktEmbedder.__init__"><a class="viewcode-back" href="../../qubiter.CktEmbedder.html#qubiter.CktEmbedder.CktEmbedder.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_qbits_bef</span><span class="p">,</span> <span class="n">num_qbits_aft</span><span class="p">,</span> <span class="n">bit_map</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Constructor</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        num_bits_bef : int</span>
-<span class="sd">        num_bits_aft : int</span>
+<span class="sd">        num_qbits_bef : int</span>
+<span class="sd">        num_qbits_aft : int</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">num_bits_bef</span> <span class="o">=</span> <span class="n">num_bits_bef</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">num_bits_aft</span> <span class="o">=</span> <span class="n">num_bits_aft</span>
-        <span class="k">assert</span> <span class="n">num_bits_bef</span> <span class="o">&lt;=</span> <span class="n">num_bits_aft</span>
-        <span class="k">if</span> <span class="n">num_bits_aft</span> <span class="o">&gt;</span> <span class="n">num_bits_bef</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_qbits_bef</span> <span class="o">=</span> <span class="n">num_qbits_bef</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_qbits_aft</span> <span class="o">=</span> <span class="n">num_qbits_aft</span>
+        <span class="k">assert</span> <span class="n">num_qbits_bef</span> <span class="o">&lt;=</span> <span class="n">num_qbits_aft</span>
+        <span class="k">if</span> <span class="n">num_qbits_aft</span> <span class="o">&gt;</span> <span class="n">num_qbits_bef</span><span class="p">:</span>
             <span class="k">assert</span> <span class="n">bit_map</span><span class="p">,</span> <span class="s2">&quot;must give a bit_map&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bit_map</span> <span class="o">=</span> <span class="n">bit_map</span>
         <span class="kn">from</span> <span class="nn">qubiter.Controls</span> <span class="k">import</span> <span class="n">Controls</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">extra_controls</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="n">num_bits_aft</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">extra_controls</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="n">num_qbits_aft</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="CktEmbedder.get_num_new_bits"><a class="viewcode-back" href="../../qubiter.CktEmbedder.html#qubiter.CktEmbedder.CktEmbedder.get_num_new_bits">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_new_bits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns num_bits_aft - num_bits_bef</span>
+<span class="sd">        Returns num_qbits_aft - num_qbits_bef.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        int</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_bits_aft</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_bits_bef</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_qbits_aft</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_qbits_bef</span></div>
 
 <div class="viewcode-block" id="CktEmbedder.is_identity_map"><a class="viewcode-back" href="../../qubiter.CktEmbedder.html#qubiter.CktEmbedder.CktEmbedder.is_identity_map">[docs]</a>    <span class="k">def</span> <span class="nf">is_identity_map</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns True (False) if bit_map is None (list)</span>
+<span class="sd">        Returns True (False) if bit_map is None (list).</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -218,8 +218,8 @@
 
 <div class="viewcode-block" id="CktEmbedder.aft"><a class="viewcode-back" href="../../qubiter.CktEmbedder.html#qubiter.CktEmbedder.CktEmbedder.aft">[docs]</a>    <span class="k">def</span> <span class="nf">aft</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bef</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns bit_map[bef] if bit_map is list. If bit_map</span>
-<span class="sd">        is None, returns input &#39;bef&#39; untouched.</span>
+<span class="sd">        Returns bit_map[bef] if bit_map is list. If bit_map is None, returns</span>
+<span class="sd">        input &#39;bef&#39; untouched.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -276,14 +276,14 @@
             <span class="k">return</span> <span class="n">emb2</span>
         <span class="k">if</span> <span class="n">emb2</span><span class="o">.</span><span class="n">is_identity_map</span><span class="p">():</span>
             <span class="k">return</span> <span class="n">emb1</span>
-        <span class="k">assert</span> <span class="n">emb1</span><span class="o">.</span><span class="n">num_bits_aft</span> <span class="o">==</span> <span class="n">emb2</span><span class="o">.</span><span class="n">num_bits_bef</span><span class="p">,</span>\
+        <span class="k">assert</span> <span class="n">emb1</span><span class="o">.</span><span class="n">num_qbits_aft</span> <span class="o">==</span> <span class="n">emb2</span><span class="o">.</span><span class="n">num_qbits_bef</span><span class="p">,</span>\
             <span class="s2">&quot;can&#39;t chain embedders&quot;</span>
 
         <span class="n">bit_map</span> <span class="o">=</span> <span class="p">[</span><span class="n">emb2</span><span class="o">.</span><span class="n">aft</span><span class="p">(</span><span class="n">emb1</span><span class="o">.</span><span class="n">aft</span><span class="p">(</span><span class="n">k</span><span class="p">))</span> <span class="k">for</span>
-                         <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">emb1</span><span class="o">.</span><span class="n">num_bits_bef</span><span class="p">)]</span>
+                         <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">emb1</span><span class="o">.</span><span class="n">num_qbits_bef</span><span class="p">)]</span>
         <span class="n">compo_emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span>
-            <span class="n">emb1</span><span class="o">.</span><span class="n">num_bits_bef</span><span class="p">,</span>
-            <span class="n">emb2</span><span class="o">.</span><span class="n">num_bits_aft</span><span class="p">,</span>
+            <span class="n">emb1</span><span class="o">.</span><span class="n">num_qbits_bef</span><span class="p">,</span>
+            <span class="n">emb2</span><span class="o">.</span><span class="n">num_qbits_aft</span><span class="p">,</span>
             <span class="n">bit_map</span><span class="p">)</span>
 
         <span class="c1"># new_dict is an empty dictionary initially</span>
@@ -298,6 +298,7 @@
         <span class="n">compo_emb</span><span class="o">.</span><span class="n">extra_controls</span><span class="o">.</span><span class="n">refresh_lists</span><span class="p">()</span>
 
         <span class="k">return</span> <span class="n">compo_emb</span></div></div>
+
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>

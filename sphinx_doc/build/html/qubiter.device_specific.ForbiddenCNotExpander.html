@@ -154,7 +154,7 @@
 <span id="qubiter-device-specific-forbiddencnotexpander-module"></span><h1>qubiter.device_specific.ForbiddenCNotExpander module<a class="headerlink" href="#module-qubiter.device_specific.ForbiddenCNotExpander" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="qubiter.device_specific.ForbiddenCNotExpander.ForbiddenCNotExpander">
-<em class="property">class </em><code class="sig-prename descclassname">qubiter.device_specific.ForbiddenCNotExpander.</code><code class="sig-name descname">ForbiddenCNotExpander</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_bits</em>, <em class="sig-param">c_to_tars</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/device_specific/ForbiddenCNotExpander.html#ForbiddenCNotExpander"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.device_specific.ForbiddenCNotExpander.ForbiddenCNotExpander" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">qubiter.device_specific.ForbiddenCNotExpander.</code><code class="sig-name descname">ForbiddenCNotExpander</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_qbits</em>, <em class="sig-param">c_to_tars</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/device_specific/ForbiddenCNotExpander.html#ForbiddenCNotExpander"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.device_specific.ForbiddenCNotExpander.ForbiddenCNotExpander" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="qubiter.EchoingSEO_reader.html#qubiter.EchoingSEO_reader.EchoingSEO_reader" title="qubiter.EchoingSEO_reader.EchoingSEO_reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">qubiter.EchoingSEO_reader.EchoingSEO_reader</span></code></a></p>
 <p>Most chips are not fully connected (not all pairs of qubits are
 physically connected). Furthermore, even if two qubits are connected,
@@ -272,7 +272,7 @@ has as edges all pairs of qubits that are coupled according to the input
 <dl class="field-list simple">
 <dt class="field-odd">Variables</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>c_to_tars</strong> (<em>dict</em><em>[</em><em>int</em><em>, </em><em>list</em><em>[</em><em>int</em><em>]</em><em>]</em>) – a dictionary mapping j in range(num_bits) to a list, possibly empty,
+<li><p><strong>c_to_tars</strong> (<em>dict</em><em>[</em><em>int</em><em>, </em><em>list</em><em>[</em><em>int</em><em>]</em><em>]</em>) – a dictionary mapping j in range(num_qbits) to a list, possibly empty,
 of the physically allowed targets of qubit j, when j is the control
 of a CNOT.</p></li>
 <li><p><strong>graph</strong> (<em>networkx.Graph</em>) – A networkx undirected graph derived from <cite>c_to_tars</cite> by taking all
@@ -282,13 +282,13 @@ items in get_dir_edges_from_c_to_tars(c_to_tars) as edges.</p></li>
 </dl>
 <dl class="method">
 <dt id="qubiter.device_specific.ForbiddenCNotExpander.ForbiddenCNotExpander.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_bits</em>, <em class="sig-param">c_to_tars</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/device_specific/ForbiddenCNotExpander.html#ForbiddenCNotExpander.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.device_specific.ForbiddenCNotExpander.ForbiddenCNotExpander.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_qbits</em>, <em class="sig-param">c_to_tars</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/device_specific/ForbiddenCNotExpander.html#ForbiddenCNotExpander.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.device_specific.ForbiddenCNotExpander.ForbiddenCNotExpander.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constructor</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>file_prefix</strong> (<em>str</em>) – </p></li>
-<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>num_qbits</strong> (<em>int</em>) – </p></li>
 <li><p><strong>c_to_tars</strong> (<em>dict</em><em>[</em><em>int</em><em>, </em><em>list</em><em>[</em><em>int</em><em>]</em><em>]</em>) – </p></li>
 </ul>
 </dd>
@@ -299,9 +299,9 @@ items in get_dir_edges_from_c_to_tars(c_to_tars) as edges.</p></li>
 <dt id="qubiter.device_specific.ForbiddenCNotExpander.ForbiddenCNotExpander.edge_type">
 <code class="sig-name descname">edge_type</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/device_specific/ForbiddenCNotExpander.html#ForbiddenCNotExpander.edge_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.device_specific.ForbiddenCNotExpander.ForbiddenCNotExpander.edge_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns 0 if C(x-&gt;y) and C(y-&gt;x) are both allowed.
-Returns 1 if C(x-&gt;y) but not C(y-&gt;x) are allowed
-Returns -1 if C(y-&gt;x) but not C(x-&gt;y) are allowed
-Returns error message if neither is allowed</p>
+Returns 1 if C(x-&gt;y) but not C(y-&gt;x) are allowed.
+Returns -1 if C(y-&gt;x) but not C(x-&gt;y) are allowed.
+Returns error message if neither is allowed.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">

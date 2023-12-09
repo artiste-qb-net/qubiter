@@ -1,3 +1,4 @@
+import math
 import cuncsd_sq as csd
 from qubiter.UnitaryMat import *
 
@@ -7,10 +8,12 @@ class CS_Decomp:
     @staticmethod
     def get_csd(unitary_mats):
         """
-        This function does a CS (cosine-sine) decomposition (by calling the LAPACK function cuncsd.f. The old C++
-        Qubiter called zggsvd.f instead) of each unitary matrix in the list of arrays unitary_mats. This function is
-        called by the constructor of the class Node and is fundamental for decomposing a unitary matrix into
-        multiplexors and diagonal unitaries.
+        This function does a CS (cosine-sine) decomposition (by calling the
+        LAPACK function cuncsd.f. The old C++ Qubiter called zggsvd.f
+        instead) of each unitary matrix in the list of arrays unitary_mats.
+        This function is called by the constructor of the class Node and is
+        fundamental for decomposing a unitary matrix into multiplexors and
+        diagonal unitaries.
 
         Parameters
         ----------
@@ -170,13 +173,15 @@ class CS_Decomp:
                 right_mats.append(v2t)
         return left_mats, central_mats, right_mats
 
+
 if __name__ == "__main__":
     from qubiter.FouSEO_writer import *
+    from qubiter.quantum_CSD_compiler.MultiplexorSEO_writer import *
 
     def main():
         print("\ncs decomp example-------------")
-        num_bits = 2
-        num_rows = 1 << num_bits
+        num_qbits = 2
+        num_rows = 1 << num_qbits
         mat = FouSEO_writer.fourier_trans_mat(num_rows)
         assert UnitaryMat.is_unitary(mat)
         left_mats, central_mats, right_mats = CS_Decomp.get_csd([mat])
@@ -185,13 +190,14 @@ if __name__ == "__main__":
         # print('right_mats\n', right_mats)
 
         left = np.zeros((num_rows, num_rows), dtype=complex)
-        left[0:num_rows / 2, 0:num_rows / 2] = left_mats[0]
-        left[num_rows / 2:num_rows, num_rows / 2:num_rows] = left_mats[1]
+        half_nrows = num_rows // 2
+        left[0:half_nrows, 0:half_nrows] = left_mats[0]
+        left[half_nrows:num_rows, half_nrows:num_rows] = left_mats[1]
         # print('left', left)
 
         right = np.zeros((num_rows, num_rows), dtype=complex)
-        right[0:num_rows / 2, 0:num_rows / 2] = right_mats[0]
-        right[num_rows / 2:num_rows, num_rows / 2:num_rows] = right_mats[1]
+        right[0:half_nrows, 0:half_nrows] = right_mats[0]
+        right[half_nrows:num_rows, half_nrows:num_rows] = right_mats[1]
 
         center = MultiplexorSEO_writer.mp_mat(central_mats[0])
         # print('center', center)

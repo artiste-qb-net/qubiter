@@ -7,8 +7,8 @@ class Controls:
     This class stores a dictionary called self.bit_pos_to_kind containing
     key-value pairs of the form (a control's qubit number: its kind). Kinds
     can be either a bool or a non-negative integer. Kind is True if control
-    is P_1 = n = |1><1|. Kind is False if control is P_0 = nbar = |0><0|.
-    Kind is a non-negative integer for MP_Y and DIAG controls.
+    is ``P_1 = n = |1><1|``. Kind is False if control is ``P_0 = nbar =
+    |0><0|``. Kind is a non-negative integer for MP_Y and DIAG controls.
 
     Attributes
     ----------
@@ -17,32 +17,37 @@ class Controls:
         order
     bit_pos_to_kind : dict[int, bool|int]
         Dictionary matching control bit position with its kind.
-        The domain of the map bit_pos_to_kind is a subset of range(num_bits)
+        The domain of the map bit_pos_to_kind is a subset of range(num_qbits)
     kinds : list[bool|int]
         this is the value's half if you unzip bit_pos_to_kind.
-    num_bits : int
+    num_qbits : int
         number of qubits in full quantum circuit
 
     """
     # combines my JAVA classes Control, TFControls, MultiControls
 
-    def __init__(self, num_bits):
+    def __init__(self, num_qbits, bit_pos_to_kind=None):
         """
         Constructor
 
         Parameters
         ----------
-        num_bits : int
+        num_qbits : int
+        bit_pos_to_kind : dict
 
         Returns
         -------
 
         """
-        self.num_bits = num_bits
+        self.num_qbits = num_qbits
         # num_controls = len(bit_pos_to_kind) = len(bit_pos) = len(kinds)
-        self.bit_pos_to_kind = {}
         self.bit_pos = []
         self.kinds = []
+        if not bit_pos_to_kind:
+            self.bit_pos_to_kind = {}
+        else:
+            self.bit_pos_to_kind = bit_pos_to_kind
+            self.refresh_lists()
 
     @staticmethod
     def copy(old, extra_bits=0):
@@ -60,7 +65,7 @@ class Controls:
         Controls
 
         """
-        new = Controls(old.num_bits + extra_bits)
+        new = Controls(old.num_qbits + extra_bits)
         new.bit_pos_to_kind = cp.copy(old.bit_pos_to_kind)
         new.bit_pos = cp.copy(old.bit_pos)
         new.kinds = cp.copy(old.kinds)
@@ -68,7 +73,7 @@ class Controls:
 
     def set_control(self, bit_pos, kind, do_refresh=False):
         """
-        Add key-value pair (bit_pos: kind) to self.bit_pos_to_kind dictionary
+        Add key-value pair (bit_pos: kind) to self.bit_pos_to_kind dictionary.
 
         Parameters
         ----------
@@ -81,7 +86,7 @@ class Controls:
         None
 
         """
-        assert -1 < bit_pos < self.num_bits, \
+        assert -1 < bit_pos < self.num_qbits, \
             "bit position is out of range"
         self.bit_pos_to_kind[bit_pos] = kind
         if do_refresh:
@@ -108,13 +113,13 @@ class Controls:
         self.bit_pos, self.kinds = zip(*li)
 
     @staticmethod
-    def new_knob(num_bits, bit_pos, kind):
+    def new_single_trol(num_qbits, bit_pos, kind):
         """
-        Returns a single control
+        Returns a single control.
 
         Parameters
         ----------
-        num_bits : int
+        num_qbits : int
         bit_pos : int
         kind : bool|int
 
@@ -124,7 +129,7 @@ class Controls:
 
         """
 
-        new = Controls(num_bits)
+        new = Controls(num_qbits)
         new.set_control(bit_pos, kind)
         new.refresh_lists()
         return new
@@ -160,11 +165,11 @@ class Controls:
         """
         num_controls = len(self.bit_pos_to_kind)
         # must have room for num_controls + one target + one workspace bit
-        assert self.num_bits >= num_controls + 2,\
+        assert self.num_qbits >= num_controls + 2,\
             "must have more qubits to find a working space bit"
 
         li = [target_bit_pos] + self.bit_pos
-        for k in reversed(range(self.num_bits)):
+        for k in reversed(range(self.num_qbits)):
             if k not in li:
                 break
         return k
@@ -204,8 +209,8 @@ class Controls:
         if not self.bit_pos_to_kind:
             return self
 
-        assert self.num_bits == emb.num_bits_bef
-        new = Controls(emb.num_bits_aft)
+        assert self.num_qbits == emb.num_qbits_bef
+        new = Controls(emb.num_qbits_aft)
 
         self.refresh_lists()
         bef_num_controls = len(self.bit_pos)
@@ -217,6 +222,7 @@ class Controls:
             new.bit_pos_to_kind.update(extra_trols)
         new.refresh_lists()
         return new
+
 
 if __name__ == "__main__":
     def main():

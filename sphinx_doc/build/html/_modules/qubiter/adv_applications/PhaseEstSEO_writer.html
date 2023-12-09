@@ -206,8 +206,8 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        do_write : bool</span>
-<span class="sd">            True if want constructor to write automatically without</span>
-<span class="sd">            being asked.</span>
+<span class="sd">            True if want constructor to write automatically without being</span>
+<span class="sd">            asked.</span>
 <span class="sd">        atom_writer : AtomWriter</span>
 <span class="sd">        num_probe_bits : int</span>
 <span class="sd">        file_prefix : str</span>
@@ -242,24 +242,25 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_bef</span>
-        <span class="n">num_atom_bits</span> <span class="o">=</span> <span class="n">num_bits</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_probe_bits</span>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_bef</span>
+        <span class="n">num_atom_bits</span> <span class="o">=</span> <span class="n">num_qbits</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_probe_bits</span>
         <span class="k">assert</span> <span class="n">num_atom_bits</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;must have &gt;=1 probe bits&quot;</span>
 
         <span class="c1"># first write the Hadamards</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_probe_bits</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">write_one_bit_gate</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">had2</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write_one_qbit_gate</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">had2</span><span class="p">)</span>
 
         <span class="c1"># next write the probe controlled atoms</span>
 
         <span class="c1"># this pre_emb maps atom -&gt; (atom + probes)</span>
-        <span class="n">num_bits_bef</span> <span class="o">=</span> <span class="n">num_atom_bits</span>
-        <span class="n">num_bits_aft</span> <span class="o">=</span> <span class="n">num_bits</span>
-        <span class="n">bit_map</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_probe_bits</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">))</span>
-        <span class="n">pre_emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_bits_bef</span><span class="p">,</span> <span class="n">num_bits_aft</span><span class="p">,</span> <span class="n">bit_map</span><span class="p">)</span>
+        <span class="n">num_qbits_bef</span> <span class="o">=</span> <span class="n">num_atom_bits</span>
+        <span class="n">num_qbits_aft</span> <span class="o">=</span> <span class="n">num_qbits</span>
+        <span class="n">bit_map</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_probe_bits</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">))</span>
+        <span class="n">pre_emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_qbits_bef</span><span class="p">,</span> <span class="n">num_qbits_aft</span><span class="p">,</span> <span class="n">bit_map</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_probe_bits</span><span class="p">):</span>
-            <span class="n">pre_emb</span><span class="o">.</span><span class="n">extra_controls</span> <span class="o">=</span> <span class="n">Controls</span><span class="o">.</span><span class="n">new_knob</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+            <span class="n">pre_emb</span><span class="o">.</span><span class="n">extra_controls</span> <span class="o">=</span> \
+                <span class="n">Controls</span><span class="o">.</span><span class="n">new_single_trol</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
             <span class="n">compo_emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="o">.</span><span class="n">composition</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="p">,</span> <span class="n">pre_emb</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">atom_wr</span><span class="o">.</span><span class="n">emb</span> <span class="o">=</span> <span class="n">compo_emb</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">atom_wr</span><span class="o">.</span><span class="n">write_pow</span><span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">k</span><span class="p">)</span>
@@ -267,10 +268,10 @@
         <span class="c1"># finally write the inverse Fourier transform</span>
 
         <span class="c1"># this pre_emb maps probe bits -&gt; (atom + probes)</span>
-        <span class="n">num_bits_bef</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_probe_bits</span>
-        <span class="n">num_bits_aft</span> <span class="o">=</span> <span class="n">num_bits</span>
-        <span class="n">bit_map</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">num_bits_bef</span><span class="p">))</span>
-        <span class="n">pre_emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_bits_bef</span><span class="p">,</span> <span class="n">num_bits_aft</span><span class="p">,</span> <span class="n">bit_map</span><span class="p">)</span>
+        <span class="n">num_qbits_bef</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_probe_bits</span>
+        <span class="n">num_qbits_aft</span> <span class="o">=</span> <span class="n">num_qbits</span>
+        <span class="n">bit_map</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">num_qbits_bef</span><span class="p">))</span>
+        <span class="n">pre_emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_qbits_bef</span><span class="p">,</span> <span class="n">num_qbits_aft</span><span class="p">,</span> <span class="n">bit_map</span><span class="p">)</span>
 
         <span class="n">compo_emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="o">.</span><span class="n">composition</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="p">,</span> <span class="n">pre_emb</span><span class="p">)</span>
         <span class="n">fou_writer</span> <span class="o">=</span> <span class="n">FouSEO_writer</span><span class="p">(</span>
@@ -285,7 +286,7 @@
 
 <div class="viewcode-block" id="PhaseEstSEO_writer.write_hermitian"><a class="viewcode-back" href="../../../qubiter.adv_applications.PhaseEstSEO_writer.html#qubiter.adv_applications.PhaseEstSEO_writer.PhaseEstSEO_writer.write_hermitian">[docs]</a>    <span class="k">def</span> <span class="nf">write_hermitian</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Write Hermitian conjugate of circuit written by write()</span>
+<span class="sd">        Write Hermitian conjugate of circuit written by write().</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -293,17 +294,17 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_bef</span>
-        <span class="n">num_atom_bits</span> <span class="o">=</span> <span class="n">num_bits</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_probe_bits</span>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_bef</span>
+        <span class="n">num_atom_bits</span> <span class="o">=</span> <span class="n">num_qbits</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_probe_bits</span>
         <span class="k">assert</span> <span class="n">num_atom_bits</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;must have &gt;=1 probe bits&quot;</span>
 
         <span class="c1"># first write the Fourier transform</span>
 
         <span class="c1"># this pre_emb maps probe bits -&gt; (atom + probes)</span>
-        <span class="n">num_bits_bef</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_probe_bits</span>
-        <span class="n">num_bits_aft</span> <span class="o">=</span> <span class="n">num_bits</span>
-        <span class="n">bit_map</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">num_bits_bef</span><span class="p">))</span>
-        <span class="n">pre_emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_bits_bef</span><span class="p">,</span> <span class="n">num_bits_aft</span><span class="p">,</span> <span class="n">bit_map</span><span class="p">)</span>
+        <span class="n">num_qbits_bef</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_probe_bits</span>
+        <span class="n">num_qbits_aft</span> <span class="o">=</span> <span class="n">num_qbits</span>
+        <span class="n">bit_map</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">num_qbits_bef</span><span class="p">))</span>
+        <span class="n">pre_emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_qbits_bef</span><span class="p">,</span> <span class="n">num_qbits_aft</span><span class="p">,</span> <span class="n">bit_map</span><span class="p">)</span>
 
         <span class="n">compo_emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="o">.</span><span class="n">composition</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="p">,</span> <span class="n">pre_emb</span><span class="p">)</span>
         <span class="n">fou_writer</span> <span class="o">=</span> <span class="n">FouSEO_writer</span><span class="p">(</span>
@@ -319,20 +320,21 @@
         <span class="c1"># next write the probe controlled atoms</span>
 
         <span class="c1"># this pre_emb maps atom -&gt; (atom + probes)</span>
-        <span class="n">num_bits_bef</span> <span class="o">=</span> <span class="n">num_atom_bits</span>
-        <span class="n">num_bits_aft</span> <span class="o">=</span> <span class="n">num_bits</span>
-        <span class="n">bit_map</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_probe_bits</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">))</span>
-        <span class="n">pre_emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_bits_bef</span><span class="p">,</span> <span class="n">num_bits_aft</span><span class="p">,</span> <span class="n">bit_map</span><span class="p">)</span>
+        <span class="n">num_qbits_bef</span> <span class="o">=</span> <span class="n">num_atom_bits</span>
+        <span class="n">num_qbits_aft</span> <span class="o">=</span> <span class="n">num_qbits</span>
+        <span class="n">bit_map</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_probe_bits</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">))</span>
+        <span class="n">pre_emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_qbits_bef</span><span class="p">,</span> <span class="n">num_qbits_aft</span><span class="p">,</span> <span class="n">bit_map</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_probe_bits</span><span class="p">)):</span>
-            <span class="n">pre_emb</span><span class="o">.</span><span class="n">extra_controls</span> <span class="o">=</span> <span class="n">Controls</span><span class="o">.</span><span class="n">new_knob</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+            <span class="n">pre_emb</span><span class="o">.</span><span class="n">extra_controls</span> <span class="o">=</span> \
+                <span class="n">Controls</span><span class="o">.</span><span class="n">new_single_trol</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
             <span class="n">compo_emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="o">.</span><span class="n">composition</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="p">,</span> <span class="n">pre_emb</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">atom_wr</span><span class="o">.</span><span class="n">emb</span> <span class="o">=</span> <span class="n">compo_emb</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">atom_wr</span><span class="o">.</span><span class="n">write_pow_hermitian</span><span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">k</span><span class="p">)</span>
 
         <span class="c1"># finally write the Hadamards</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_probe_bits</span><span class="p">)):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">write_one_bit_gate</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">had2</span><span class="p">)</span></div></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write_one_qbit_gate</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">had2</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="AtomWriter"><a class="viewcode-back" href="../../../qubiter.adv_applications.PhaseEstSEO_writer.html#qubiter.adv_applications.PhaseEstSEO_writer.AtomWriter">[docs]</a><span class="k">class</span> <span class="nc">AtomWriter</span><span class="p">(</span><span class="n">SEO_writer</span><span class="p">):</span>
@@ -392,21 +394,21 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">test</span><span class="p">:</span>
             <span class="k">assert</span> <span class="kc">False</span>
 
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_bef</span>
-        <span class="n">trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)</span>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_bef</span>
+        <span class="n">trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">)</span>
         <span class="n">tar_bit_pos</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">):</span>
             <span class="n">trols</span><span class="o">.</span><span class="n">set_control</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
         <span class="n">trols</span><span class="o">.</span><span class="n">refresh_lists</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span>
             <span class="n">tar_bit_pos</span><span class="p">,</span>
             <span class="n">trols</span><span class="p">,</span>
-            <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span>
+            <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span>
             <span class="p">[</span><span class="mi">30</span><span class="o">*</span><span class="n">power</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="AtomWriter.write_pow_hermitian"><a class="viewcode-back" href="../../../qubiter.adv_applications.PhaseEstSEO_writer.html#qubiter.adv_applications.PhaseEstSEO_writer.AtomWriter.write_pow_hermitian">[docs]</a>    <span class="k">def</span> <span class="nf">write_pow_hermitian</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">power</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Write Hermitian conjugate of circuit written by write_pow()</span>
+<span class="sd">        Write Hermitian conjugate of circuit written by write_pow().</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -420,16 +422,16 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">test</span><span class="p">:</span>
             <span class="k">assert</span> <span class="kc">False</span>
 
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_bef</span>
-        <span class="n">trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)</span>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_bef</span>
+        <span class="n">trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">)</span>
         <span class="n">tar_bit_pos</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">):</span>
             <span class="n">trols</span><span class="o">.</span><span class="n">set_control</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
         <span class="n">trols</span><span class="o">.</span><span class="n">refresh_lists</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span>
             <span class="n">tar_bit_pos</span><span class="p">,</span>
             <span class="n">trols</span><span class="p">,</span>
-            <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span>
+            <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span>
             <span class="n">fun_arg_list</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">30</span><span class="o">*</span><span class="n">power</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="AtomWriter.write"><a class="viewcode-back" href="../../../qubiter.adv_applications.PhaseEstSEO_writer.html#qubiter.adv_applications.PhaseEstSEO_writer.AtomWriter.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -445,7 +447,7 @@
 
 <div class="viewcode-block" id="AtomWriter.write_hermitian"><a class="viewcode-back" href="../../../qubiter.adv_applications.PhaseEstSEO_writer.html#qubiter.adv_applications.PhaseEstSEO_writer.AtomWriter.write_hermitian">[docs]</a>    <span class="k">def</span> <span class="nf">write_hermitian</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Write Hermitian conjugate of circuit written by write()</span>
+<span class="sd">        Write Hermitian conjugate of circuit written by write().</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -453,6 +455,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">write_pow_hermitian</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></div></div>
+
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>

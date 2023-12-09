@@ -11,10 +11,10 @@ SIGZ	AT	1
 SIGX	AT	1	IF	0T
 SIGZ	AT	1	IF	0T
 SWAP	1	0
-ROTX	180.0	AT	2
-ROTY	180.0	AT	2
-ROTZ	180.0	AT	2
-P1PH	180.0	AT	1
+ROTX	180.000000	AT	2
+ROTY	180.000000	AT	2
+ROTZ	180.000000	AT	2
+P1PH	180.000000	AT	1
 NOTA	    def rot(rad_ang_x, rad_ang_y, rad_ang_z, lib='np'):
 NOTA	        """
 NOTA	        Returns
@@ -40,9 +40,9 @@ NOTA	        if 'autograd.numpy' in sys.modules:
 NOTA	            tlist = [0., rad_ang_x, rad_ang_y, rad_ang_z]
 NOTA	            return pu2(*tlist)
 NOTA	
-NOTA	        mat_dict = OneBitGates.const_dict(0)
+NOTA	        mat_dict = OneQubitGate.const_dict(0)
 NOTA	        vec = [rad_ang_x, rad_ang_y, rad_ang_z]
-NOTA	        n = OneBitGates.get_fun(lib, 'sqrt')(vec[0]**2 + vec[1]**2 + vec[2]**2)
+NOTA	        n = OneQubitGate.get_fun(lib, 'sqrt')(vec[0]**2 + vec[1]**2 + vec[2]**2)
 NOTA	        if abs(n) < 1e-8:
 NOTA	            mat_dict['00'] = 1
 NOTA	            mat_dict['11'] = 1
@@ -50,12 +50,12 @@ NOTA	        else:
 NOTA	            nx = rad_ang_x/n
 NOTA	            ny = rad_ang_y/n
 NOTA	            nz = rad_ang_z/n
-NOTA	            c = OneBitGates.get_fun(lib, 'cos')(n)
-NOTA	            s = OneBitGates.get_fun(lib, 'sin')(n)
+NOTA	            c = OneQubitGate.get_fun(lib, 'cos')(n)
+NOTA	            s = OneQubitGate.get_fun(lib, 'sin')(n)
 NOTA	            mat_dict['00'] = c + 1j*s*nz
 NOTA	            mat_dict['01'] = s*ny + 1j*s*nx
 NOTA	            mat_dict['10'] = -s*ny + 1j*s*nx
 NOTA	            mat_dict['11'] = c - 1j*s*nz
-NOTA	        return OneBitGates.get_mat(lib, mat_dict)
-ROTN	180.0	180.0	180.0	AT	0
+NOTA	        return OneQubitGate.get_mat(lib, mat_dict)
+ROTN	180.000000	180.000000	180.000000	AT	0
 NOTA	    return qml.expval.Hermitian(hamil)

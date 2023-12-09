@@ -19,15 +19,15 @@ class SEO_Lista:
 
     In this class, we support Qubiter's version of PyQuil's and Cirq's gate
     lists. In Qubiter, we use simply a Python list of the lines, stored as
-    strings, with the ending \\n removed, of the circuit's English file.
+    strings, with the ending ```\\n``` removed, of the circuit's English file.
 
     Attributes
     ----------
     line_list : list[str]
-    num_bits : int
+    num_qbits : int
 
     """
-    def __init__(self, num_bits, line_list=None):
+    def __init__(self, num_qbits, line_list=None):
         """
         Constructor
 
@@ -35,7 +35,7 @@ class SEO_Lista:
         -------
 
         """
-        self.num_bits = num_bits
+        self.num_qbits = num_qbits
         self.line_list = line_list
         if not line_list:
             self.line_list = []
@@ -70,7 +70,7 @@ class SEO_Lista:
         if emb:
             emb1 = emb
         else:
-            emb1 = CktEmbedder(self.num_bits, self.num_bits)
+            emb1 = CktEmbedder(self.num_qbits, self.num_qbits)
         eng_out = StringIO()
         pic_out = StringIO()
 
@@ -109,54 +109,54 @@ class SEO_Lista:
                             xy_str + "' Should be either 'X' or 'Y'"
 
     @staticmethod
-    def eng_file_to_line_list(file_prefix, num_bits):
+    def eng_file_to_line_list(file_prefix, num_qbits):
         """
         This static method reads an English file with file prefix
         `file_prefix` and it returns a list of its line strings. Note that
-        the '\\n' at the end of each line in the English file is removed
+        the ```\\n``` at the end of each line in the English file is removed
         before adding it to the line list.
 
         Parameters
         ----------
         file_prefix : str
-        num_bits : int
+        num_qbits : int
 
         Returns
         -------
         list[str]
 
         """
-        path = file_prefix + '_' + str(num_bits) + '_eng.txt'
+        path = file_prefix + '_' + str(num_qbits) + '_eng.txt'
         with open(utg.preface(path), 'r') as f:
             line_list = [line.rstrip('\n') for line in f]
         return line_list
 
     @staticmethod
-    def line_list_to_eng_and_pic_files(line_list, file_prefix, num_bits):
+    def line_list_to_eng_and_pic_files(line_list, file_prefix, num_qbits):
         """
         This method does the reverse of eng_file_to_line_list(). It writes
         both an English file and a Picture file with file
-        prefix=file_prefix. Note that an '\\n' is added at the end of each
+        prefix=file_prefix. Note that an ```\\n``` is added at the end of each
         line in the line list before writing the line to the English file.
 
         Parameters
         ----------
         line_list : list[str]
         file_prefix : str
-        num_bits : int
+        num_qbits : int
 
         Returns
         -------
         None
 
         """
-        end_str = '_' + str(num_bits) + '_eng.txt'
+        end_str = '_' + str(num_qbits) + '_eng.txt'
         with open(utg.preface(file_prefix + end_str), 'w') as f:
             for line in line_list:
                 f.write(line + '\n')
 
         # this writes a Picture file from the English file just created
-        EchoingSEO_reader.pic_file_from_eng_file(file_prefix, num_bits)
+        EchoingSEO_reader.pic_file_from_eng_file(file_prefix, num_qbits)
 
     def write_eng_and_pic_files(self, file_prefix):
         """
@@ -174,7 +174,7 @@ class SEO_Lista:
 
         """
         SEO_Lista.line_list_to_eng_and_pic_files(
-            self.line_list, file_prefix, self.num_bits)
+            self.line_list, file_prefix, self.num_qbits)
 
     def simulate(self, **kwargs1):
         """
@@ -195,20 +195,20 @@ class SEO_Lista:
 
         """
         file_prefix = '610935122304'
-        end_str = '_' + str(self.num_bits) + '_eng.txt'
+        end_str = '_' + str(self.num_qbits) + '_eng.txt'
         fname = file_prefix + end_str
         with open(utg.preface(fname), 'w') as f:
             for line in self.line_list:
                 f.write(line + '\n')
 
-        sim = SEO_simulator(file_prefix, self.num_bits, **kwargs1)
+        sim = SEO_simulator(file_prefix, self.num_qbits, **kwargs1)
         os.remove(utg.preface(fname))
         return sim
 
         # this doesn't work, maybe because temp file opened twice
 
         # file_prefix = '610935122304'
-        # end_str = '_' + str(self.num_bits) + '_eng.txt'
+        # end_str = '_' + str(self.num_qbits) + '_eng.txt'
         # fname = file_prefix + end_str
         # fi = tempfile.NamedTemporaryFile(mode='w+b',
         #                                  prefix=file_prefix,
@@ -218,13 +218,13 @@ class SEO_Lista:
         # for line in self.line_list:
         #     fi.write(line + '\n')
         # # sim opens file by name
-        # sim = SEO_simulator(file_prefix, self.num_bits, **kwargs1)
+        # sim = SEO_simulator(file_prefix, self.num_qbits, **kwargs1)
         # # sim closes file
         # return sim
 
     def print(self):
         """
-        prints self.line_list, one item per line
+        Prints self.line_list, one item per line.
 
         Returns
         -------
@@ -264,7 +264,7 @@ class SEO_Lista:
 
     def __add__(self, other):
         """
-        define + of two SEO_Lista objects
+        Define + of two SEO_Lista objects.
 
         Parameters
         ----------
@@ -275,13 +275,13 @@ class SEO_Lista:
         SEO_Lista
 
         """
-        assert self.num_bits == other.num_bits
-        return SEO_Lista(self.num_bits,
+        assert self.num_qbits == other.num_qbits
+        return SEO_Lista(self.num_qbits,
                          self.line_list + other.line_list)
 
     def __iadd__(self, other):
         """
-        define += for inplace addition of an SEO_Lista object to self
+        Define += for inplace addition of an SEO_Lista object to self.
 
         Parameters
         ----------
@@ -292,13 +292,13 @@ class SEO_Lista:
         SEO_Lista
 
         """
-        assert self.num_bits == other.num_bits
+        assert self.num_qbits == other.num_qbits
         self.line_list += other.line_list
         return self
 
     def __getitem__(self, item):
         """
-        define self[item]
+        Define self[item].
 
         Parameters
         ----------
@@ -309,7 +309,7 @@ class SEO_Lista:
         SEO_Lista
 
         """
-        return SEO_Lista(self.num_bits, self.line_list[item])
+        return SEO_Lista(self.num_qbits, self.line_list[item])
 
     def herm(self):
         """
@@ -322,7 +322,7 @@ class SEO_Lista:
 
         """
         rev_li = list(reversed(self.line_list))
-        lista = SEO_Lista(self.num_bits, rev_li)
+        lista = SEO_Lista(self.num_qbits, rev_li)
 
         def minus(in_str):
             if in_str[0] == '-':
@@ -396,9 +396,9 @@ class SEO_Lista:
 
 if __name__ == "__main__":
     def main():
-        num_bits = 4
+        num_qbits = 4
         file_prefix = 'eng_file_line_list_test'
-        emb = CktEmbedder(num_bits, num_bits)
+        emb = CktEmbedder(num_qbits, num_qbits)
         wr = SEO_writer(file_prefix, emb)
         wr.write_Rx(2, rads=np.pi/7)
         wr.write_Rx(1, rads='#2*.5')
@@ -408,8 +408,8 @@ if __name__ == "__main__":
         wr.write_cnot(2, 3)
         wr.close_files()
 
-        lili = SEO_Lista.eng_file_to_line_list(file_prefix, num_bits)
-        lista = SEO_Lista(num_bits, lili)
+        lili = SEO_Lista.eng_file_to_line_list(file_prefix, num_qbits)
+        lista = SEO_Lista(num_qbits, lili)
 
         print("\nlista print")
         lista.print()
@@ -430,7 +430,7 @@ if __name__ == "__main__":
         print("lista_twice's all_var_nums=\n", nums)
         print("lista_twice's all_fun_names=\n", names)
 
-        lista_0 = SEO_Lista(num_bits)
+        lista_0 = SEO_Lista(num_qbits)
         lista_0 += lista
 
         print("\nlista_0 print")

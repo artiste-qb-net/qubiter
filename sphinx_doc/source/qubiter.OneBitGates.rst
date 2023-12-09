@@ -1,7 +1,7 @@
-qubiter.OneBitGates module
+qubiter.OneQubitGate module
 ==========================
 
-.. automodule:: qubiter.OneBitGates
+.. automodule:: qubiter.OneQubitGate
    :members:
    :undoc-members:
    :show-inheritance:

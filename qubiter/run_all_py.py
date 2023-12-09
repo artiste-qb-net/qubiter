@@ -16,7 +16,7 @@ file_blacklist = [
     '__init__.py',
     'run_all_nb.py',
     'run_all_py.py',
-    'class_diagram.py'
+    'classgraph.py'
 ]
 for dir_name in dir_whitelist:
     for fname in os.listdir(dir_name):

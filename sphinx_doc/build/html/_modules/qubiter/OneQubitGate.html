@@ -1,0 +1,769 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qubiter.OneQubitGate &mdash; qubiter 1.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> qubiter
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+        
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../rosetta.html">Rosetta Stone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../classgraph.html">Class Graph</a></li>
+</ul>
+
+            
+          
+        <a href="py-modindex.html">Module Index</a>
+    
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">qubiter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>qubiter.OneQubitGate</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qubiter.OneQubitGate</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="k">if</span> <span class="s1">&#39;autograd.numpy&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;loaded OneQubitGate, WITHOUT autograd.numpy&#39;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;loaded OneQubitGate, WITH autograd.numpy&#39;</span><span class="p">)</span>
+    <span class="kn">from</span> <span class="nn">qubiter.adv_applications.setup_autograd</span> <span class="k">import</span> <span class="n">pu2</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;pu2 in dir&#39;</span><span class="p">,</span> <span class="s1">&#39;pu2&#39;</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">())</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;pu2 in sys.modules&#39;</span><span class="p">,</span> <span class="s1">&#39;pu2&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">)</span>
+    <span class="kn">import</span> <span class="nn">autograd.numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<div class="viewcode-block" id="OneQubitGate"><a class="viewcode-back" href="../../qubiter.OneQubitGate.html#qubiter.OneQubitGate.OneQubitGate">[docs]</a><span class="k">class</span> <span class="nc">OneQubitGate</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class has no attributes or constructor. It is simply a collection </span>
+<span class="sd">    of static methods, all of which return a complex 2 by 2 matrix (numpy </span>
+<span class="sd">    array or array from some other tensor library). In cases where the </span>
+<span class="sd">    entries of the matrix are all real, an is_quantum bool option is given </span>
+<span class="sd">    to choose between a float or complex array. </span>
+
+<span class="sd">    All gates have a tensor library `lib` option. lib equals &#39;np&#39; for numpy, </span>
+<span class="sd">    &#39;tf&#39; for tensorflow </span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="OneQubitGate.get_mat"><a class="viewcode-back" href="../../qubiter.OneQubitGate.html#qubiter.OneQubitGate.OneQubitGate.get_mat">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_mat</span><span class="p">(</span><span class="n">lib</span><span class="p">,</span> <span class="n">mat_dict</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Internal function that creates a tensor of type lib, based on a dict</span>
+<span class="sd">        mat_dict.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        lib : str</span>
+<span class="sd">        mat_dict : dict</span>
+<span class="sd">        dtype : dtype | None</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lili</span> <span class="o">=</span> <span class="p">[[</span><span class="n">mat_dict</span><span class="p">[</span><span class="s1">&#39;00&#39;</span><span class="p">],</span> <span class="n">mat_dict</span><span class="p">[</span><span class="s1">&#39;01&#39;</span><span class="p">]],</span>
+               <span class="p">[</span><span class="n">mat_dict</span><span class="p">[</span><span class="s1">&#39;10&#39;</span><span class="p">],</span> <span class="n">mat_dict</span><span class="p">[</span><span class="s1">&#39;11&#39;</span><span class="p">]]]</span>
+        <span class="k">if</span> <span class="n">lib</span> <span class="o">==</span> <span class="s1">&#39;np&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">lili</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">lib</span> <span class="o">==</span> <span class="s1">&#39;tf&#39;</span><span class="p">:</span>
+            <span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+            <span class="n">convert</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">convert_to_tensor</span>
+            <span class="k">return</span> <span class="n">convert</span><span class="p">(</span><span class="n">lili</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">complex128</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;unsupported tensor lib&quot;</span></div>
+
+<div class="viewcode-block" id="OneQubitGate.const_dict"><a class="viewcode-back" href="../../qubiter.OneQubitGate.html#qubiter.OneQubitGate.OneQubitGate.const_dict">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">const_dict</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns dictionary with all values equal to x. Dict is destined to</span>
+<span class="sd">        fill a future 2-dim matrix.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x :</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;00&#39;</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span> <span class="s1">&#39;01&#39;</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span> <span class="s1">&#39;10&#39;</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span> <span class="s1">&#39;11&#39;</span><span class="p">:</span> <span class="n">x</span><span class="p">}</span></div>
+
+<div class="viewcode-block" id="OneQubitGate.get_fun"><a class="viewcode-back" href="../../qubiter.OneQubitGate.html#qubiter.OneQubitGate.OneQubitGate.get_fun">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_fun</span><span class="p">(</span><span class="n">lib</span><span class="p">,</span> <span class="n">fun_name</span><span class="p">,</span> <span class="n">lib_to_fun_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        If lib is &#39;np&#39;, this method returns eval(lib + &#39;.&#39; + fun_name).</span>
+<span class="sd">        Else, if lib is not &#39;np&#39; then: if lib_to_fun_name is None,</span>
+<span class="sd">        it returns eval(lib + &#39;.&#39; + fun_name), but if lib_to_fun_name is not</span>
+<span class="sd">        None, it returns eval(lib + &#39;.&#39; + lib_to_fun_name[lib]). It aborts</span>
+<span class="sd">        if lib_to_fun_name[ lib] doesn&#39;t exist.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        lib : str</span>
+<span class="sd">            tensor library, either &#39;np&#39; for numpy or &#39;tp&#39; for tensorflow</span>
+<span class="sd">        fun_name : str</span>
+<span class="sd">            function name</span>
+<span class="sd">        lib_to_fun_name : dict[str, str]</span>
+<span class="sd">            dictionary mapping lib to fun_name. For example {&#39;tf&#39;: &#39;cos&#39;}</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        function</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">lib</span> <span class="o">==</span> <span class="s1">&#39;tf&#39;</span><span class="p">:</span>
+            <span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+        <span class="k">if</span> <span class="n">lib</span> <span class="o">==</span> <span class="s1">&#39;np&#39;</span> <span class="ow">or</span> <span class="n">lib_to_fun_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">fun</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">lib</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="n">fun_name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">lib</span> <span class="ow">in</span> <span class="n">lib_to_fun_name</span>
+            <span class="n">fun</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">lib</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="n">lib_to_fun_name</span><span class="p">[</span><span class="n">lib</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="n">lib</span> <span class="o">==</span> <span class="s1">&#39;tf&#39;</span><span class="p">:</span>
+            <span class="n">fun1</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">fun</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">complex128</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fun1</span> <span class="o">=</span> <span class="n">fun</span>
+
+        <span class="k">return</span> <span class="n">fun1</span></div>
+
+<div class="viewcode-block" id="OneQubitGate.had2"><a class="viewcode-back" href="../../qubiter.OneQubitGate.html#qubiter.OneQubitGate.OneQubitGate.had2">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">had2</span><span class="p">(</span><span class="n">is_quantum</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">lib</span><span class="o">=</span><span class="s1">&#39;np&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns 2 dimensional Hadamard matrix (sigma_x + sigma_z)/sqrt(2).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        is_quantum : bool</span>
+<span class="sd">        lib : str</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_quantum</span><span class="p">:</span>
+            <span class="n">ty</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ty</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">complex128</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">mat_dict</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">const_dict</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">mat_dict</span><span class="p">[</span><span class="s1">&#39;11&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">x</span>
+        <span class="k">return</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">get_mat</span><span class="p">(</span><span class="n">lib</span><span class="p">,</span> <span class="n">mat_dict</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">ty</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OneQubitGate.P_0"><a class="viewcode-back" href="../../qubiter.OneQubitGate.html#qubiter.OneQubitGate.OneQubitGate.P_0">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">P_0</span><span class="p">(</span><span class="n">is_quantum</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">lib</span><span class="o">=</span><span class="s1">&#39;np&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns projection operator `P_0 = |0&gt;&lt;0| = nbar`, where `|0&gt; = [1,</span>
+<span class="sd">        0]^T` and `|1&gt; = [0, 1]^T`, T = transpose</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        is_quantum : bool</span>
+<span class="sd">        lib : str</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_quantum</span><span class="p">:</span>
+            <span class="n">ty</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ty</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">complex128</span>
+        <span class="n">mat_dict</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">const_dict</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">mat_dict</span><span class="p">[</span><span class="s1">&#39;00&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">get_mat</span><span class="p">(</span><span class="n">lib</span><span class="p">,</span> <span class="n">mat_dict</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">ty</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OneQubitGate.P_1"><a class="viewcode-back" href="../../qubiter.OneQubitGate.html#qubiter.OneQubitGate.OneQubitGate.P_1">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">P_1</span><span class="p">(</span><span class="n">is_quantum</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">lib</span><span class="o">=</span><span class="s1">&#39;np&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns projection operator `P_1 = |1&gt;&lt;1| = n`, where `|0&gt; = [1,</span>
+<span class="sd">        0]^T` and `|1&gt; = [0, 1]^T`, T = transpose</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        is_quantum : bool</span>
+<span class="sd">        lib : str</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_quantum</span><span class="p">:</span>
+            <span class="n">ty</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ty</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">complex128</span>
+        <span class="n">mat_dict</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">const_dict</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">mat_dict</span><span class="p">[</span><span class="s1">&#39;11&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">get_mat</span><span class="p">(</span><span class="n">lib</span><span class="p">,</span> <span class="n">mat_dict</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">ty</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OneQubitGate.P_0_phase_fac"><a class="viewcode-back" href="../../qubiter.OneQubitGate.html#qubiter.OneQubitGate.OneQubitGate.P_0_phase_fac">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">P_0_phase_fac</span><span class="p">(</span><span class="n">ang_rads</span><span class="p">,</span> <span class="n">lib</span><span class="o">=</span><span class="s1">&#39;np&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns</span>
+
+<span class="sd">        exp(1j*ang_rads*P_0) = [[x, 0],[0, 1]] with x = exp(1j*ang_rads)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ang_rads : float</span>
+<span class="sd">        lib : str</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s1">&#39;autograd.numpy&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
+            <span class="n">tlist</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span>
+            <span class="n">tlist</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">ang_rads</span><span class="o">/</span><span class="mi">2</span>
+            <span class="n">tlist</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">ang_rads</span><span class="o">/</span><span class="mi">2</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">ang_rads</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">pu2</span><span class="p">(</span><span class="o">*</span><span class="n">tlist</span><span class="p">)</span>
+        <span class="n">mat_dict</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">const_dict</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">get_fun</span><span class="p">(</span><span class="n">lib</span><span class="p">,</span> <span class="s1">&#39;exp&#39;</span><span class="p">)(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">ang_rads</span><span class="p">)</span>
+        <span class="n">mat_dict</span><span class="p">[</span><span class="s1">&#39;00&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="n">mat_dict</span><span class="p">[</span><span class="s1">&#39;11&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">get_mat</span><span class="p">(</span><span class="n">lib</span><span class="p">,</span> <span class="n">mat_dict</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OneQubitGate.P_1_phase_fac"><a class="viewcode-back" href="../../qubiter.OneQubitGate.html#qubiter.OneQubitGate.OneQubitGate.P_1_phase_fac">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">P_1_phase_fac</span><span class="p">(</span><span class="n">ang_rads</span><span class="p">,</span> <span class="n">lib</span><span class="o">=</span><span class="s1">&#39;np&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns</span>
+
+<span class="sd">        exp(1j*ang_rads*P_1) = [[1, 0],[0, x]] with x = exp(1j*ang_rads)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ang_rads : float</span>
+<span class="sd">        lib : str</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s1">&#39;autograd.numpy&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
+            <span class="n">tlist</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span>
+            <span class="n">tlist</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">ang_rads</span><span class="o">/</span><span class="mi">2</span>
+            <span class="n">tlist</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">ang_rads</span><span class="o">/</span><span class="mi">2</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">ang_rads</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">pu2</span><span class="p">(</span><span class="o">*</span><span class="n">tlist</span><span class="p">)</span>
+        <span class="n">mat_dict</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">const_dict</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">get_fun</span><span class="p">(</span><span class="n">lib</span><span class="p">,</span> <span class="s1">&#39;exp&#39;</span><span class="p">)(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">ang_rads</span><span class="p">)</span>
+        <span class="n">mat_dict</span><span class="p">[</span><span class="s1">&#39;11&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="n">mat_dict</span><span class="p">[</span><span class="s1">&#39;00&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">get_mat</span><span class="p">(</span><span class="n">lib</span><span class="p">,</span> <span class="n">mat_dict</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OneQubitGate.phase_fac"><a class="viewcode-back" href="../../qubiter.OneQubitGate.html#qubiter.OneQubitGate.OneQubitGate.phase_fac">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">phase_fac</span><span class="p">(</span><span class="n">ang_rads</span><span class="p">,</span> <span class="n">lib</span><span class="o">=</span><span class="s1">&#39;np&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns</span>
+
+<span class="sd">        exp(1j*ang_rads*I_2) = [[x, 0],[0, x]] with x = exp(1j*ang_rads)</span>
+
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ang_rads : float</span>
+<span class="sd">        lib : str</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s1">&#39;autograd.numpy&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
+            <span class="n">tlist</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span>
+            <span class="n">tlist</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">ang_rads</span>
+            <span class="k">return</span> <span class="n">pu2</span><span class="p">(</span><span class="o">*</span><span class="n">tlist</span><span class="p">)</span>
+        <span class="n">mat_dict</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">const_dict</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">get_fun</span><span class="p">(</span><span class="n">lib</span><span class="p">,</span> <span class="s1">&#39;exp&#39;</span><span class="p">)(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">ang_rads</span><span class="p">)</span>
+        <span class="n">mat_dict</span><span class="p">[</span><span class="s1">&#39;11&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="n">mat_dict</span><span class="p">[</span><span class="s1">&#39;00&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="k">return</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">get_mat</span><span class="p">(</span><span class="n">lib</span><span class="p">,</span> <span class="n">mat_dict</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OneQubitGate.rot"><a class="viewcode-back" href="../../qubiter.OneQubitGate.html#qubiter.OneQubitGate.OneQubitGate.rot">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">rot</span><span class="p">(</span><span class="n">rad_ang_x</span><span class="p">,</span> <span class="n">rad_ang_y</span><span class="p">,</span> <span class="n">rad_ang_z</span><span class="p">,</span> <span class="n">lib</span><span class="o">=</span><span class="s1">&#39;np&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns</span>
+
+<span class="sd">        exp(1j*(rad_ang_x*sig_x + rad_ang_y*sig_y + rad_ang_z*sig_z))</span>
+
+<span class="sd">        where rad_ang_x is an angle in radians and sig_x is the x Pauli</span>
+<span class="sd">        matrix, etc.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        rad_ang_x : float</span>
+<span class="sd">        rad_ang_y : float</span>
+<span class="sd">        rad_ang_z : float</span>
+<span class="sd">        lib : str</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s1">&#39;autograd.numpy&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
+            <span class="n">tlist</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="n">rad_ang_x</span><span class="p">,</span> <span class="n">rad_ang_y</span><span class="p">,</span> <span class="n">rad_ang_z</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">pu2</span><span class="p">(</span><span class="o">*</span><span class="n">tlist</span><span class="p">)</span>
+
+        <span class="n">mat_dict</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">const_dict</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">vec</span> <span class="o">=</span> <span class="p">[</span><span class="n">rad_ang_x</span><span class="p">,</span> <span class="n">rad_ang_y</span><span class="p">,</span> <span class="n">rad_ang_z</span><span class="p">]</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">get_fun</span><span class="p">(</span><span class="n">lib</span><span class="p">,</span> <span class="s1">&#39;sqrt&#39;</span><span class="p">)(</span>
+            <span class="n">vec</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">vec</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">vec</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-8</span><span class="p">:</span>
+            <span class="n">mat_dict</span><span class="p">[</span><span class="s1">&#39;00&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">mat_dict</span><span class="p">[</span><span class="s1">&#39;11&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">nx</span> <span class="o">=</span> <span class="n">rad_ang_x</span><span class="o">/</span><span class="n">n</span>
+            <span class="n">ny</span> <span class="o">=</span> <span class="n">rad_ang_y</span><span class="o">/</span><span class="n">n</span>
+            <span class="n">nz</span> <span class="o">=</span> <span class="n">rad_ang_z</span><span class="o">/</span><span class="n">n</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">get_fun</span><span class="p">(</span><span class="n">lib</span><span class="p">,</span> <span class="s1">&#39;cos&#39;</span><span class="p">)(</span><span class="n">n</span><span class="p">)</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">get_fun</span><span class="p">(</span><span class="n">lib</span><span class="p">,</span> <span class="s1">&#39;sin&#39;</span><span class="p">)(</span><span class="n">n</span><span class="p">)</span>
+            <span class="n">mat_dict</span><span class="p">[</span><span class="s1">&#39;00&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">s</span><span class="o">*</span><span class="n">nz</span>
+            <span class="n">mat_dict</span><span class="p">[</span><span class="s1">&#39;01&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span><span class="o">*</span><span class="n">ny</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">s</span><span class="o">*</span><span class="n">nx</span>
+            <span class="n">mat_dict</span><span class="p">[</span><span class="s1">&#39;10&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">s</span><span class="o">*</span><span class="n">ny</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">s</span><span class="o">*</span><span class="n">nx</span>
+            <span class="n">mat_dict</span><span class="p">[</span><span class="s1">&#39;11&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span> <span class="o">-</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">s</span><span class="o">*</span><span class="n">nz</span>
+        <span class="k">return</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">get_mat</span><span class="p">(</span><span class="n">lib</span><span class="p">,</span> <span class="n">mat_dict</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OneQubitGate.rot_ax"><a class="viewcode-back" href="../../qubiter.OneQubitGate.html#qubiter.OneQubitGate.OneQubitGate.rot_ax">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">rot_ax</span><span class="p">(</span><span class="n">rad_ang</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">lib</span><span class="o">=</span><span class="s1">&#39;np&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns</span>
+
+<span class="sd">        exp(1j*rad_ang*sig_n)</span>
+
+<span class="sd">        where n = x if axis = 1, n = y if axis = 2 and n = z if axis = 3</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        rad_ang : float</span>
+<span class="sd">        axis : int</span>
+<span class="sd">        lib : str</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s1">&#39;autograd.numpy&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">axis</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+            <span class="n">tlist</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span>
+            <span class="n">tlist</span><span class="p">[</span><span class="n">axis</span><span class="p">]</span> <span class="o">=</span> <span class="n">rad_ang</span>
+            <span class="c1"># print(&#39;mmbbvv&#39;, axis, pu2(*tlist))</span>
+            <span class="k">return</span> <span class="n">pu2</span><span class="p">(</span><span class="o">*</span><span class="n">tlist</span><span class="p">)</span>
+
+        <span class="n">mat_dict</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">const_dict</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">get_fun</span><span class="p">(</span><span class="n">lib</span><span class="p">,</span> <span class="s1">&#39;cos&#39;</span><span class="p">)(</span><span class="n">rad_ang</span><span class="p">)</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">get_fun</span><span class="p">(</span><span class="n">lib</span><span class="p">,</span> <span class="s1">&#39;sin&#39;</span><span class="p">)(</span><span class="n">rad_ang</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">axis</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">mat_dict</span><span class="p">[</span><span class="s1">&#39;00&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span>
+            <span class="n">mat_dict</span><span class="p">[</span><span class="s1">&#39;01&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">s</span>
+            <span class="n">mat_dict</span><span class="p">[</span><span class="s1">&#39;10&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">s</span>
+            <span class="n">mat_dict</span><span class="p">[</span><span class="s1">&#39;11&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span>
+        <span class="k">elif</span> <span class="n">axis</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">mat_dict</span><span class="p">[</span><span class="s1">&#39;00&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span>
+            <span class="n">mat_dict</span><span class="p">[</span><span class="s1">&#39;01&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span>
+            <span class="n">mat_dict</span><span class="p">[</span><span class="s1">&#39;10&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">s</span>
+            <span class="n">mat_dict</span><span class="p">[</span><span class="s1">&#39;11&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span>
+        <span class="k">elif</span> <span class="n">axis</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">mat_dict</span><span class="p">[</span><span class="s1">&#39;00&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">s</span>
+            <span class="n">mat_dict</span><span class="p">[</span><span class="s1">&#39;11&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span> <span class="o">-</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">s</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;axis not in [1,2,3]&quot;</span>
+
+        <span class="k">return</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">get_mat</span><span class="p">(</span><span class="n">lib</span><span class="p">,</span> <span class="n">mat_dict</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OneQubitGate.sigx"><a class="viewcode-back" href="../../qubiter.OneQubitGate.html#qubiter.OneQubitGate.OneQubitGate.sigx">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">sigx</span><span class="p">(</span><span class="n">is_quantum</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">lib</span><span class="o">=</span><span class="s1">&#39;np&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns sigma_x Pauli matrix.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        is_quantum : bool</span>
+<span class="sd">        lib : str</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_quantum</span><span class="p">:</span>
+            <span class="n">ty</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ty</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">complex128</span>
+        <span class="n">mat_dict</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">const_dict</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">mat_dict</span><span class="p">[</span><span class="s1">&#39;01&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">mat_dict</span><span class="p">[</span><span class="s1">&#39;10&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">get_mat</span><span class="p">(</span><span class="n">lib</span><span class="p">,</span> <span class="n">mat_dict</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">ty</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OneQubitGate.sigy"><a class="viewcode-back" href="../../qubiter.OneQubitGate.html#qubiter.OneQubitGate.OneQubitGate.sigy">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">sigy</span><span class="p">(</span><span class="n">lib</span><span class="o">=</span><span class="s1">&#39;np&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns sigma_y Pauli matrix.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        lib : str</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mat_dict</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">const_dict</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">mat_dict</span><span class="p">[</span><span class="s1">&#39;01&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="n">j</span>
+        <span class="n">mat_dict</span><span class="p">[</span><span class="s1">&#39;10&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="n">j</span>
+        <span class="k">return</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">get_mat</span><span class="p">(</span><span class="n">lib</span><span class="p">,</span> <span class="n">mat_dict</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OneQubitGate.sigz"><a class="viewcode-back" href="../../qubiter.OneQubitGate.html#qubiter.OneQubitGate.OneQubitGate.sigz">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">sigz</span><span class="p">(</span><span class="n">is_quantum</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">lib</span><span class="o">=</span><span class="s1">&#39;np&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns sigma_z Pauli matrix.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        is_quantum : bool</span>
+<span class="sd">        lib : str</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_quantum</span><span class="p">:</span>
+            <span class="n">ty</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ty</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">complex128</span>
+        <span class="n">mat_dict</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">const_dict</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">mat_dict</span><span class="p">[</span><span class="s1">&#39;00&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">mat_dict</span><span class="p">[</span><span class="s1">&#39;11&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="k">return</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">get_mat</span><span class="p">(</span><span class="n">lib</span><span class="p">,</span> <span class="n">mat_dict</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">ty</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OneQubitGate.mat_S"><a class="viewcode-back" href="../../qubiter.OneQubitGate.html#qubiter.OneQubitGate.OneQubitGate.mat_S">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">mat_S</span><span class="p">(</span><span class="n">herm</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">lib</span><span class="o">=</span><span class="s1">&#39;np&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns</span>
+
+<span class="sd">        [[1, 0],[0, x*sign]] where x=exp(j*pi/2)=j</span>
+
+<span class="sd">        where sign = 1 if herm=False and sign = -1 if herm=True.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        herm : bool</span>
+<span class="sd">        lib : str</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">herm</span><span class="p">:</span>
+            <span class="n">sign</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sign</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="k">return</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">P_1_phase_fac</span><span class="p">(</span><span class="n">sign</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">lib</span><span class="o">=</span><span class="n">lib</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OneQubitGate.mat_Sdag"><a class="viewcode-back" href="../../qubiter.OneQubitGate.html#qubiter.OneQubitGate.OneQubitGate.mat_Sdag">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">mat_Sdag</span><span class="p">(</span><span class="n">lib</span><span class="o">=</span><span class="s1">&#39;np&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        returns `S^\dag`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        lib : str</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">mat_S</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">lib</span><span class="o">=</span><span class="n">lib</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OneQubitGate.mat_T"><a class="viewcode-back" href="../../qubiter.OneQubitGate.html#qubiter.OneQubitGate.OneQubitGate.mat_T">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">mat_T</span><span class="p">(</span><span class="n">herm</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">lib</span><span class="o">=</span><span class="s1">&#39;np&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns</span>
+
+<span class="sd">        [[1, 0],[0, exp(j*pi/4*sign)]]</span>
+
+<span class="sd">        where sign = 1 if herm=False and sign = -1 if herm=True.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        herm : bool</span>
+<span class="sd">        lib : str</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">herm</span><span class="p">:</span>
+            <span class="n">sign</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sign</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="k">return</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">P_1_phase_fac</span><span class="p">(</span><span class="n">sign</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">4</span><span class="p">,</span> <span class="n">lib</span><span class="o">=</span><span class="n">lib</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OneQubitGate.mat_Tdag"><a class="viewcode-back" href="../../qubiter.OneQubitGate.html#qubiter.OneQubitGate.OneQubitGate.mat_Tdag">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">mat_Tdag</span><span class="p">(</span><span class="n">lib</span><span class="o">=</span><span class="s1">&#39;np&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        returns `T^\dag`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        lib : str</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">mat_T</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">lib</span><span class="o">=</span><span class="n">lib</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OneQubitGate.u2"><a class="viewcode-back" href="../../qubiter.OneQubitGate.html#qubiter.OneQubitGate.OneQubitGate.u2">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">u2</span><span class="p">(</span><span class="n">rads0</span><span class="p">,</span> <span class="n">rads1</span><span class="p">,</span> <span class="n">rads2</span><span class="p">,</span> <span class="n">rads3</span><span class="p">,</span> <span class="n">lib</span><span class="o">=</span><span class="s1">&#39;np&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns arbitrary 2-dim unitary matrix (U(2) group) parametrized as</span>
+<span class="sd">        follows:</span>
+
+<span class="sd">        exp(1j*(rads0 + rads1*sig_x + rads2*sig_y + rads3*sig_z))</span>
+
+<span class="sd">        where rads1 is an angle in radians and sig_x is the x Pauli</span>
+<span class="sd">        matrix, etc.</span>
+
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        rads0 : float</span>
+<span class="sd">        rads1 : float</span>
+<span class="sd">        rads2 : float</span>
+<span class="sd">        rads3 : float</span>
+<span class="sd">        lib : str</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s1">&#39;autograd.numpy&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
+            <span class="n">tlist</span> <span class="o">=</span> <span class="p">[</span><span class="n">rads0</span><span class="p">,</span> <span class="n">rads1</span><span class="p">,</span> <span class="n">rads2</span><span class="p">,</span> <span class="n">rads3</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">pu2</span><span class="p">(</span><span class="o">*</span><span class="n">tlist</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">get_fun</span><span class="p">(</span><span class="n">lib</span><span class="p">,</span> <span class="s1">&#39;exp&#39;</span><span class="p">)(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">rads0</span><span class="p">)</span> <span class="o">*</span> \
+               <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot</span><span class="p">(</span><span class="n">rads1</span><span class="p">,</span> <span class="n">rads2</span><span class="p">,</span> <span class="n">rads3</span><span class="p">,</span> <span class="n">lib</span><span class="o">=</span><span class="n">lib</span><span class="p">)</span></div></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;sigx= &#39;</span><span class="p">,</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">sigx</span><span class="p">(</span><span class="n">is_quantum</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;sigy= &#39;</span><span class="p">,</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">sigy</span><span class="p">())</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;sigz= &#39;</span><span class="p">,</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">sigz</span><span class="p">())</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;had2= &#39;</span><span class="p">,</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">had2</span><span class="p">())</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;P_0= &#39;</span><span class="p">,</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">P_0</span><span class="p">())</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;P_1= &#39;</span><span class="p">,</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">P_1</span><span class="p">())</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;P_0_phase_fac= &#39;</span><span class="p">,</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">P_0_phase_fac</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;P_1_phase_fac= &#39;</span><span class="p">,</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">P_1_phase_fac</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;phase_fac= &#39;</span><span class="p">,</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">phase_fac</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+
+        <span class="n">mat</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;rot*rot^H= &#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">mat</span><span class="p">,</span> <span class="n">mat</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">))</span>
+
+        <span class="n">mat</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;rotx*rotx^H= &#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">mat</span><span class="p">,</span> <span class="n">mat</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">))</span>
+
+        <span class="n">mat</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;roty*roty^H= &#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">mat</span><span class="p">,</span> <span class="n">mat</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">))</span>
+
+        <span class="n">mat</span> <span class="o">=</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;rotz*rotz^H= &#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">mat</span><span class="p">,</span> <span class="n">mat</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">))</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;mat_S=&#39;</span><span class="p">,</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">mat_S</span><span class="p">())</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;mat_Sdag=&#39;</span><span class="p">,</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">mat_Sdag</span><span class="p">())</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;mat_T=&#39;</span><span class="p">,</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">mat_T</span><span class="p">())</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;mat_Tdag=&#39;</span><span class="p">,</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">mat_Tdag</span><span class="p">())</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;u2(5, 10, 20, 30)=&#39;</span><span class="p">,</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">u2</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">))</span>
+
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Robert R. Tucci &amp; Qubiter contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

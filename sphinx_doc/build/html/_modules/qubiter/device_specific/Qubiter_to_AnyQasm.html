@@ -232,12 +232,12 @@
 <span class="sd">        This output stream is used to write an aqasm file based on the input</span>
 <span class="sd">        English file.</span>
 <span class="sd">    c_to_tars : dict[int, list[int]]</span>
-<span class="sd">        a dictionary mapping j in range(num_bits) to a list, possibly empty,</span>
+<span class="sd">        a dictionary mapping j in range(num_qbits) to a list, possibly empty,</span>
 <span class="sd">        of the physically allowed targets of qubit j, when j is the control</span>
 <span class="sd">        of a CNOT. If c_to_tars = None, the class assumes any CNOT is</span>
 <span class="sd">        possible.</span>
 <span class="sd">    file_prefix : str</span>
-<span class="sd">    num_bits : int</span>
+<span class="sd">    num_qbits : int</span>
 <span class="sd">    qbtr_wr : SEO_writer</span>
 <span class="sd">        A SEO_writer object created iff write_qubiter_files is True.</span>
 <span class="sd">    strict_mode : bool</span>
@@ -251,7 +251,7 @@
 
 
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="Qubiter_to_AnyQasm.__init__"><a class="viewcode-back" href="../../../qubiter.device_specific.Qubiter_to_AnyQasm.html#qubiter.device_specific.Qubiter_to_AnyQasm.Qubiter_to_AnyQasm.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="n">aqasm_name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+<div class="viewcode-block" id="Qubiter_to_AnyQasm.__init__"><a class="viewcode-back" href="../../../qubiter.device_specific.Qubiter_to_AnyQasm.html#qubiter.device_specific.Qubiter_to_AnyQasm.Qubiter_to_AnyQasm.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">,</span> <span class="n">aqasm_name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
             <span class="n">strict_mode</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">c_to_tars</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">write_qubiter_files</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                  <span class="n">vars_manager</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">aqasm_ftype</span><span class="o">=</span><span class="s1">&#39;txt&#39;</span><span class="p">,</span>
                  <span class="n">prelude_str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ending_str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -261,7 +261,7 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        file_prefix : str</span>
-<span class="sd">        num_bits : int</span>
+<span class="sd">        num_qbits : int</span>
 <span class="sd">        aqasm_name : str</span>
 <span class="sd">        strict_mode : bool</span>
 <span class="sd">        c_to_tars : dict[int, list[int]]|None</span>
@@ -282,10 +282,10 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">file_prefix</span> <span class="o">=</span> <span class="n">file_prefix</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span> <span class="o">=</span> <span class="n">num_bits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span> <span class="o">=</span> <span class="n">num_qbits</span>
 
         <span class="n">vman</span> <span class="o">=</span> <span class="n">PlaceholderManager</span><span class="p">(</span><span class="n">eval_all_vars</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="n">rdr</span> <span class="o">=</span> <span class="n">SEO_reader</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="n">vars_manager</span><span class="o">=</span><span class="n">vman</span><span class="p">,</span>
+        <span class="n">rdr</span> <span class="o">=</span> <span class="n">SEO_reader</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">,</span> <span class="n">vars_manager</span><span class="o">=</span><span class="n">vman</span><span class="p">,</span>
                         <span class="n">write_log</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">all_var_nums</span> <span class="o">=</span> <span class="n">rdr</span><span class="o">.</span><span class="n">vars_manager</span><span class="o">.</span><span class="n">all_var_nums</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">all_fun_names</span> <span class="o">=</span> <span class="n">rdr</span><span class="o">.</span><span class="n">vars_manager</span><span class="o">.</span><span class="n">all_fun_names</span>
@@ -302,7 +302,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">qbtr_wr</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">write_qubiter_files</span><span class="p">:</span>
-            <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">)</span>
+            <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">)</span>
             <span class="n">out_file_prefix</span> <span class="o">=</span> <span class="n">SEO_reader</span><span class="o">.</span><span class="n">xed_file_prefix</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">qbtr_wr</span> <span class="o">=</span> <span class="n">SEO_writer</span><span class="p">(</span><span class="n">out_file_prefix</span><span class="p">,</span> <span class="n">emb</span><span class="p">)</span>
 
@@ -312,7 +312,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">write_prelude</span><span class="p">()</span>
 
         <span class="n">vman1</span> <span class="o">=</span> <span class="n">PlaceholderManager</span><span class="p">(</span><span class="n">eval_all_vars</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="n">SEO_reader</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span>
+        <span class="n">SEO_reader</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">,</span>
                             <span class="n">vars_manager</span><span class="o">=</span><span class="n">vman1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">ending_str</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -326,7 +326,7 @@
 
 <div class="viewcode-block" id="Qubiter_to_AnyQasm.write"><a class="viewcode-back" href="../../../qubiter.device_specific.Qubiter_to_AnyQasm.html#qubiter.device_specific.Qubiter_to_AnyQasm.Qubiter_to_AnyQasm.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Writes string s to aqasm and qubiter out files</span>
+<span class="sd">        Writes string s to aqasm and qubiter out files.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -346,7 +346,7 @@
 
 <div class="viewcode-block" id="Qubiter_to_AnyQasm.write_prelude"><a class="viewcode-back" href="../../../qubiter.device_specific.Qubiter_to_AnyQasm.html#qubiter.device_specific.Qubiter_to_AnyQasm.Qubiter_to_AnyQasm.write_prelude">[docs]</a>    <span class="k">def</span> <span class="nf">write_prelude</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        abstract function, writes AnyQasm&#39;s opening statements before calls</span>
+<span class="sd">        Abstract function, writes AnyQasm&#39;s opening statements before calls</span>
 <span class="sd">        to use_ methods for gates.</span>
 
 <span class="sd">        Returns</span>
@@ -359,7 +359,7 @@
 
 <div class="viewcode-block" id="Qubiter_to_AnyQasm.write_ending"><a class="viewcode-back" href="../../../qubiter.device_specific.Qubiter_to_AnyQasm.html#qubiter.device_specific.Qubiter_to_AnyQasm.Qubiter_to_AnyQasm.write_ending">[docs]</a>    <span class="k">def</span> <span class="nf">write_ending</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        abstract function, writes AnyQasm&#39;s ending statements after calls to</span>
+<span class="sd">        Abstract function, writes AnyQasm&#39;s ending statements after calls to</span>
 <span class="sd">        use_ methods for gates.</span>
 
 <span class="sd">        Returns</span>
@@ -448,6 +448,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">utg</span><span class="o">.</span><span class="n">preface</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">aqasm_path</span><span class="p">))</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span></div></div>
+
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>

@@ -1,5 +1,5 @@
-Number of lines in file = 17
-Number of Elem. Ops = 16
+Number of lines in file = 18
+Number of Elem. Ops = 17
 Number of CNOTS (SIGX with single control) = 1
 List of distinct variable numbers encountered (length=0)=
 []

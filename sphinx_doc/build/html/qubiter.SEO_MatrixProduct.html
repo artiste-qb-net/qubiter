@@ -154,7 +154,7 @@
 <span id="qubiter-seo-matrixproduct-module"></span><h1>qubiter.SEO_MatrixProduct module<a class="headerlink" href="#module-qubiter.SEO_MatrixProduct" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="qubiter.SEO_MatrixProduct.SEO_MatrixProduct">
-<em class="property">class </em><code class="sig-prename descclassname">qubiter.SEO_MatrixProduct.</code><code class="sig-name descname">SEO_MatrixProduct</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_bits</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_MatrixProduct.html#SEO_MatrixProduct"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_MatrixProduct.SEO_MatrixProduct" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">qubiter.SEO_MatrixProduct.</code><code class="sig-name descname">SEO_MatrixProduct</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_qbits</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_MatrixProduct.html#SEO_MatrixProduct"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_MatrixProduct.SEO_MatrixProduct" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>The class SEO_simulator has an initial state vector as an input, and it
 calculates the evolution of that state vector after each line of an
@@ -164,8 +164,8 @@ product of the matrices corresponding to each line (gate) of an English
 file.</p>
 <p>In order to accomplish this goal, this class calls SEO_simulalor_mp
 repeatedly using as initial state vector all the standard basis vectors
-(2^num_bits of them). Then the class assembles the product matrix that
-we seek by stacking on top of each other all the 2^num_bits final
+(2^num_qbits of them). Then the class assembles the product matrix that
+we seek by stacking on top of each other all the 2^num_qbits final
 evolved state vectors. Admittedly, this is a very slow, inefficient way
 of finding the sought for matrix product. However, it works fine for a
 small number of qubits. It can be used to check that gate expansions
@@ -182,13 +182,13 @@ English file.</p>
 </dl>
 <dl class="method">
 <dt id="qubiter.SEO_MatrixProduct.SEO_MatrixProduct.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_bits</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_MatrixProduct.html#SEO_MatrixProduct.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_MatrixProduct.SEO_MatrixProduct.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_qbits</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_MatrixProduct.html#SEO_MatrixProduct.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_MatrixProduct.SEO_MatrixProduct.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constructor</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>file_prefix</strong> (<em>str</em>) – Prefix of English file being read</p></li>
-<li><p><strong>num_bits</strong> (<em>int</em>) – number of bits in English file begin read.</p></li>
+<li><p><strong>num_qbits</strong> (<em>int</em>) – number of bits in English file begin read.</p></li>
 </ul>
 </dd>
 </dl>
@@ -198,7 +198,7 @@ English file.</p>
 
 <dl class="class">
 <dt id="qubiter.SEO_MatrixProduct.SEO_simulator_mp">
-<em class="property">class </em><code class="sig-prename descclassname">qubiter.SEO_MatrixProduct.</code><code class="sig-name descname">SEO_simulator_mp</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_bits</em>, <em class="sig-param">init_st_vec=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_MatrixProduct.html#SEO_simulator_mp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_MatrixProduct.SEO_simulator_mp" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">qubiter.SEO_MatrixProduct.</code><code class="sig-name descname">SEO_simulator_mp</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_qbits</em>, <em class="sig-param">init_st_vec=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_MatrixProduct.html#SEO_simulator_mp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_MatrixProduct.SEO_simulator_mp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="qubiter.SEO_simulator.html#qubiter.SEO_simulator.SEO_simulator" title="qubiter.SEO_simulator.SEO_simulator"><code class="xref py py-class docutils literal notranslate"><span class="pre">qubiter.SEO_simulator.SEO_simulator</span></code></a></p>
 <p>This class is a mp (matrix product) child of class SEO_simulator. An
 object of this class is created inside class SEO_MatrixProduct. The
@@ -229,7 +229,7 @@ being read.</p>
 <dl class="method">
 <dt id="qubiter.SEO_MatrixProduct.SEO_simulator_mp.use_PRINT">
 <code class="sig-name descname">use_PRINT</code><span class="sig-paren">(</span><em class="sig-param">style</em>, <em class="sig-param">line_num</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/SEO_MatrixProduct.html#SEO_simulator_mp.use_PRINT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.SEO_MatrixProduct.SEO_simulator_mp.use_PRINT" title="Permalink to this definition">¶</a></dt>
-<dd><p>If circuit has any PRINT statements, skip them</p>
+<dd><p>If circuit has any PRINT statements, skip them.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">

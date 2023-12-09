@@ -26,14 +26,14 @@ class CodaSEO_writer(SEO_writer):
     """
 
     def __init__(self, init_file_prefix, fin_file_prefix,
-                 num_bits, ZL=True, fin_emb=None):
+                 num_qbits, ZL=True, fin_emb=None):
         """
 
         Parameters
         ----------
         init_file_prefix : str
         fin_file_prefix : str
-        num_bits : int
+        num_qbits : int
         ZL : bool
         fin_emb : CktEmbedder
             circuit embedder for the writer of the final English and Picture
@@ -51,11 +51,11 @@ class CodaSEO_writer(SEO_writer):
 
         def eng_path(file_prefix):
             return file_prefix +\
-                   '_' + str(num_bits) + '_eng.txt'
+                   '_' + str(num_qbits) + '_eng.txt'
 
         def pic_path(file_prefix):
             return file_prefix +\
-                   '_' + str(num_bits) + '_' + ZL_str + 'pic.txt'
+                   '_' + str(num_qbits) + '_' + ZL_str + 'pic.txt'
 
         init_eng_path = eng_path(init_file_prefix)
         fin_eng_path = eng_path(fin_file_prefix)
@@ -89,7 +89,7 @@ class CodaSEO_writer(SEO_writer):
         except:
             assert False, 'Could not open file\n' + fin_pic_path
 
-        emb = CktEmbedder(num_bits, num_bits)
+        emb = CktEmbedder(num_qbits, num_qbits)
         if fin_emb:
             emb = fin_emb
 
@@ -149,13 +149,14 @@ class CodaSEO_writer(SEO_writer):
                 assert False, "Unsupported qbit measurement. '" + \
                             xy_str + "' Should be either 'X' or 'Y'"
 
+
 if __name__ == "__main__":
     def main():
         init_file_prefix = 'coda_writer_test_init'
         fin_file_prefix = 'coda_writer_test_fin'
-        num_bits = 4
+        num_qbits = 4
 
-        wr = CodaSEO_writer(init_file_prefix, fin_file_prefix, num_bits)
+        wr = CodaSEO_writer(init_file_prefix, fin_file_prefix, num_qbits)
         wr.write_NOTA('the coda follows')
         wr.write_H(2)
         wr.write_cnot(0, 1)

@@ -44,7 +44,7 @@ class SEO_reader(SEO_pre_reader):
         if_m case
     measured_bits : list(int)
         list of bits that have been measured with type 2 measurement and
-        haven't been reset to |0> or |1>
+        haven't been reset to ``|0>`` or ``|1>``
     num_cnots : int
     num_ops : int
     split_line : list[str]
@@ -56,7 +56,7 @@ class SEO_reader(SEO_pre_reader):
         You can ignore this if the English file has no loops. This number is
         -1 by default. If you change it to something non-negative, the class
         looks in the io_folder for a "Loop xfile" with a very specific name
-        that mentions the xfile_num: file_prefix + '_' + str( num_bits) +
+        that mentions the xfile_num: file_prefix + '_' + str( num_qbits) +
         '_loop' + str(xfile_num) + ".py". If the class can't find that xfile
         , it will abort. Otherwise, it tries to exec() that xfile. A Loop
         xfile is a file that you write yourself from a template file called
@@ -69,7 +69,7 @@ class SEO_reader(SEO_pre_reader):
 
     """
 
-    def __init__(self, file_prefix, num_bits, vars_manager=None,
+    def __init__(self, file_prefix, num_qbits, vars_manager=None,
                  verbose=False, write_log=False, xfile_num=-1):
         """
         Constructor
@@ -77,7 +77,7 @@ class SEO_reader(SEO_pre_reader):
         Parameters
         ----------
         file_prefix : str
-        num_bits : int
+        num_qbits : int
         vars_manager : PlaceholderManager
         verbose : bool
         write_log : bool
@@ -87,7 +87,7 @@ class SEO_reader(SEO_pre_reader):
         -------
 
         """
-        SEO_pre_reader.__init__(self, file_prefix, num_bits)
+        SEO_pre_reader.__init__(self, file_prefix, num_qbits)
         self.split_line = None
         self.vars_manager = vars_manager
         if vars_manager is None:
@@ -108,7 +108,7 @@ class SEO_reader(SEO_pre_reader):
         self.mcase_trols = None
 
         self.english_in = open(utg.preface(
-            file_prefix + '_' + str(num_bits) + '_eng.txt'), 'rt')
+            file_prefix + '_' + str(num_qbits) + '_eng.txt'), 'rt')
 
         self.loop_to_cur_rep = {loop_num: 0 for
                                 loop_num in self.loop_to_nreps.keys()}
@@ -159,7 +159,7 @@ class SEO_reader(SEO_pre_reader):
 
         """
         log = open(utg.preface(
-            self.file_prefix + '_' + str(self.num_bits) + '_log.txt'), 'wt')
+            self.file_prefix + '_' + str(self.num_qbits) + '_log.txt'), 'wt')
         s = ''
         s += "Number of lines in file = " + str(self.tot_num_lines) + '\n'
         s += "Number of Elem. Ops = " + str(self.num_ops) + '\n'
@@ -183,9 +183,9 @@ class SEO_reader(SEO_pre_reader):
     def get_log_file_path(self, rel=False):
         """
         Returns path (relative if rel is True, absolute if rel is False) of
-        log file
+        log file.
 
-        Attributes
+        Parameters
         ----------
         rel : bool
 
@@ -194,7 +194,7 @@ class SEO_reader(SEO_pre_reader):
         str
 
         """
-        rel_path = self.file_prefix + '_' + str(self.num_bits) + '_log.txt'
+        rel_path = self.file_prefix + '_' + str(self.num_qbits) + '_log.txt'
         return rel_path if rel else utg.preface(rel_path)
 
     def print_log_file(self):
@@ -212,7 +212,7 @@ class SEO_reader(SEO_pre_reader):
 
     def degs_str_to_rads(self, degs_str):
         """
-        Wrapper for function of same name in PlaceholderManager
+        Wrapper for function of same name in PlaceholderManager.
 
         Parameters
         ----------
@@ -233,7 +233,7 @@ class SEO_reader(SEO_pre_reader):
         English file via classes LoopFileGenerator and
         LoopyPlaceholderManager, and created a Loop xfile by editing that
         Loop File. This class executes the Loop xfile to fill its history
-        dictionaries (the ones that end in _hist)
+        dictionaries (the ones that end in _hist).
 
         Returns
         -------
@@ -246,7 +246,7 @@ class SEO_reader(SEO_pre_reader):
         all_fun_names = []
         var_num_to_hist = defaultdict(list)
         fun_name_to_hist = defaultdict(list)
-        xfile_name = self.file_prefix + '_' + str(self.num_bits) +\
+        xfile_name = self.file_prefix + '_' + str(self.num_qbits) +\
             '_loop' + str(self.xfile_num) + '.py'
         try:
             loopx_in = open(utg.preface(xfile_name), 'rt')
@@ -491,7 +491,7 @@ class SEO_reader(SEO_pre_reader):
 
     def finalize_next_line(self):
         """
-        Useful for intercepting the end of each call to next_line()
+        Useful for intercepting the end of each call to next_line().
 
         Returns
         -------
@@ -520,7 +520,7 @@ class SEO_reader(SEO_pre_reader):
         """
         # safe to use when no "IF"
         # when no "IF", will return controls with _numControls=0
-        controls = Controls(self.num_bits)
+        controls = Controls(self.num_qbits)
         if tokens:
             for t in tokens:
                 t_end = t[-1]
@@ -974,6 +974,6 @@ class SEO_reader(SEO_pre_reader):
 if __name__ == "__main__":
     def main():
         file_prefix = 'expansions_examples_X1'
-        num_bits = 3
-        SEO_reader(file_prefix, num_bits, write_log=True)
+        num_qbits = 3
+        SEO_reader(file_prefix, num_qbits, write_log=True)
     main()

@@ -161,7 +161,7 @@
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
-<span class="sd">    num_bits : int</span>
+<span class="sd">    num_qbits : int</span>
 <span class="sd">    qbit_2d_coords : list[tuple[int, int]]</span>
 <span class="sd">        List of 2d coords for each qubit</span>
 
@@ -195,7 +195,7 @@
             <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">char</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()):</span>
                 <span class="k">if</span> <span class="n">char</span> <span class="o">!=</span> <span class="s1">&#39;-&#39;</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">qbit_2d_coords</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qbit_2d_coords</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qbit_2d_coords</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="QbitPlanarLattice.two2one"><a class="viewcode-back" href="../../../qubiter.device_specific.QbitPlanarLattice.html#qubiter.device_specific.QbitPlanarLattice.QbitPlanarLattice.two2one">[docs]</a>    <span class="k">def</span> <span class="nf">two2one</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pair</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -228,7 +228,7 @@
 <span class="sd">        tuple[int, int]</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span>
+        <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">qbit_2d_coords</span><span class="p">[</span><span class="n">index</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="QbitPlanarLattice.is_empty"><a class="viewcode-back" href="../../../qubiter.device_specific.QbitPlanarLattice.html#qubiter.device_specific.QbitPlanarLattice.QbitPlanarLattice.is_empty">[docs]</a>    <span class="k">def</span> <span class="nf">is_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pair</span><span class="p">):</span>
@@ -281,9 +281,9 @@
         <span class="n">r</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">one2two</span><span class="p">(</span><span class="n">ind</span><span class="p">)</span>
         <span class="n">nbors</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">r1</span><span class="p">,</span> <span class="n">c1</span> <span class="ow">in</span> <span class="p">[(</span><span class="n">r</span><span class="p">,</span> <span class="n">c</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">c</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="n">r</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">c</span><span class="p">),</span> <span class="p">(</span><span class="n">r</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">c</span><span class="p">)]:</span>
-                <span class="n">ind1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">two2one</span><span class="p">((</span><span class="n">r1</span><span class="p">,</span> <span class="n">c1</span><span class="p">))</span>
-                <span class="k">if</span> <span class="n">ind1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">nbors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ind1</span><span class="p">)</span>
+            <span class="n">ind1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">two2one</span><span class="p">((</span><span class="n">r1</span><span class="p">,</span> <span class="n">c1</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">ind1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">nbors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ind1</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">nbors</span></div>
 
 <div class="viewcode-block" id="QbitPlanarLattice.get_c_to_tars"><a class="viewcode-back" href="../../../qubiter.device_specific.QbitPlanarLattice.html#qubiter.device_specific.QbitPlanarLattice.QbitPlanarLattice.get_c_to_tars">[docs]</a>    <span class="k">def</span> <span class="nf">get_c_to_tars</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -298,9 +298,10 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">c_to_tars</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span><span class="p">):</span>
             <span class="n">c_to_tars</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">neighbors_of</span><span class="p">(</span><span class="n">ind</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">c_to_tars</span></div></div>
+
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">qubiter.device_specific.chip_couplings_google</span> <span class="k">as</span> <span class="nn">cc</span>
@@ -309,7 +310,7 @@
     <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
         <span class="n">lattice</span> <span class="o">=</span> <span class="n">QbitPlanarLattice</span><span class="p">(</span><span class="n">cc</span><span class="o">.</span><span class="n">BRISTLECONE_GRID</span><span class="p">)</span>
         <span class="n">pp</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">lattice</span><span class="o">.</span><span class="n">qbit_2d_coords</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">num_bits=&#39;</span><span class="p">,</span> <span class="n">lattice</span><span class="o">.</span><span class="n">num_bits</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">num_qbits=&#39;</span><span class="p">,</span> <span class="n">lattice</span><span class="o">.</span><span class="n">num_qbits</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="n">c_to_tars</span> <span class="o">=</span> <span class="n">lattice</span><span class="o">.</span><span class="n">get_c_to_tars</span><span class="p">()</span>
         <span class="n">pp</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">c_to_tars</span><span class="p">)</span>
     <span class="n">main</span><span class="p">()</span>

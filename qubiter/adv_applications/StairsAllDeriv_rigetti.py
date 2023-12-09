@@ -16,7 +16,7 @@ class StairsAllDeriv_rigetti(StairsDeriv_rigetti):
 
     """
     def __init__(self, qc, gate_str_to_rads_list,
-                 file_prefix, parent_num_bits, hamil, **kwargs):
+                 file_prefix, parent_num_qbits, hamil, **kwargs):
         """
         Constructor
 
@@ -25,7 +25,7 @@ class StairsAllDeriv_rigetti(StairsDeriv_rigetti):
         qc : QuantumComputer
         gate_str_to_rads_list : dict[str, list[float|str]]
         file_prefix : str
-        parent_num_bits : int
+        parent_num_qbits : int
         hamil : QubitOperator
         kwargs : dict
             key-word arguments of MeanHamil
@@ -37,7 +37,7 @@ class StairsAllDeriv_rigetti(StairsDeriv_rigetti):
         deriv_gate_str = 'dummy'
         StairsDeriv_rigetti.__init__(self, qc, deriv_gate_str,
                                     gate_str_to_rads_list, file_prefix,
-                                    parent_num_bits, hamil, **kwargs)
+                                    parent_num_qbits, hamil, **kwargs)
 
     def get_mean_val(self, var_num_to_rads):
         """
@@ -65,6 +65,7 @@ class StairsAllDeriv_rigetti(StairsDeriv_rigetti):
             gate_str_to_partials_list[gate_str] =\
                 StairsDeriv_rigetti.get_mean_val(self, var_num_to_rads)
         return gate_str_to_partials_list
+
 
 if __name__ == "__main__":
     def main():

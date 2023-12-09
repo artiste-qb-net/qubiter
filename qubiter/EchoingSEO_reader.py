@@ -1,5 +1,5 @@
 from qubiter.SEO_reader import *
-from qubiter.OneBitGates import *
+from qubiter.OneQubitGate import *
 from qubiter.SEO_writer import *
 
 
@@ -39,7 +39,7 @@ class EchoingSEO_reader(SEO_reader):
 
     """
 
-    def __init__(self, file_prefix, num_bits, wr,
+    def __init__(self, file_prefix, num_qbits, wr,
                  vars_manager=None, **kwargs):
         """
         Constructor
@@ -47,7 +47,7 @@ class EchoingSEO_reader(SEO_reader):
         Parameters
         ----------
         file_prefix : str
-        num_bits : int
+        num_qbits : int
         wr : SEO_writer
         vars_manager : PlaceholderManager
 
@@ -57,7 +57,7 @@ class EchoingSEO_reader(SEO_reader):
         """
         self.wr = wr
 
-        SEO_reader.__init__(self, file_prefix, num_bits,
+        SEO_reader.__init__(self, file_prefix, num_qbits,
                             vars_manager=vars_manager, **kwargs)
 
         self.wr.close_files()
@@ -94,8 +94,8 @@ class EchoingSEO_reader(SEO_reader):
         None
 
         """
-        self.wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
-                           OneBitGates.had2)
+        self.wr.write_controlled_one_qbit_gate(tar_bit_pos, controls,
+                           OneQubitGate.had2)
 
     def use_IF_M_beg(self, controls):
         """
@@ -222,8 +222,8 @@ class EchoingSEO_reader(SEO_reader):
         None
 
         """
-        self.wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
-            OneBitGates.phase_fac, [angle_rads])
+        self.wr.write_controlled_one_qbit_gate(tar_bit_pos, controls,
+            OneQubitGate.phase_fac, [angle_rads])
 
     def use_PRINT(self, style, line_num):
         """
@@ -258,13 +258,13 @@ class EchoingSEO_reader(SEO_reader):
 
         """
         if projection_bit == 0:
-            u2_fun = OneBitGates.P_0_phase_fac
+            u2_fun = OneQubitGate.P_0_phase_fac
         elif projection_bit == 1:
-            u2_fun = OneBitGates.P_1_phase_fac
+            u2_fun = OneQubitGate.P_1_phase_fac
         else:
             assert False
 
-        self.wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
+        self.wr.write_controlled_one_qbit_gate(tar_bit_pos, controls,
                                               u2_fun, [angle_rads])
 
     def use_ROTA(self, axis, angle_rads, tar_bit_pos, controls):
@@ -283,8 +283,8 @@ class EchoingSEO_reader(SEO_reader):
         None
 
         """
-        self.wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
-                           OneBitGates.rot_ax, [angle_rads, axis])
+        self.wr.write_controlled_one_qbit_gate(tar_bit_pos, controls,
+                           OneQubitGate.rot_ax, [angle_rads, axis])
 
     def use_ROTN(self, angle_x_rads, angle_y_rads, angle_z_rads,
                 tar_bit_pos, controls):
@@ -305,8 +305,8 @@ class EchoingSEO_reader(SEO_reader):
 
         """
         rad_ang_list = [angle_x_rads, angle_y_rads, angle_z_rads]
-        self.wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
-                           OneBitGates.rot, rad_ang_list)
+        self.wr.write_controlled_one_qbit_gate(tar_bit_pos, controls,
+                           OneQubitGate.rot, rad_ang_list)
 
     def use_SIG(self, axis, tar_bit_pos, controls):
         """
@@ -324,15 +324,15 @@ class EchoingSEO_reader(SEO_reader):
 
         """
         if axis == 1:
-            u2_fun = OneBitGates.sigx
+            u2_fun = OneQubitGate.sigx
         elif axis == 2:
-            u2_fun = OneBitGates.sigy
+            u2_fun = OneQubitGate.sigy
         elif axis == 3:
-            u2_fun = OneBitGates.sigz
+            u2_fun = OneQubitGate.sigz
         else:
             assert False
 
-        self.wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
+        self.wr.write_controlled_one_qbit_gate(tar_bit_pos, controls,
                                               u2_fun)
 
     def use_SWAP(self, bit1, bit2, controls):
@@ -350,7 +350,7 @@ class EchoingSEO_reader(SEO_reader):
         None
 
         """
-        self.wr.write_controlled_bit_swap(bit1, bit2, controls)
+        self.wr.write_controlled_qbit_swap(bit1, bit2, controls)
 
     def use_SWAY(self, bit1, bit2, controls, rads_list):
         """
@@ -368,7 +368,7 @@ class EchoingSEO_reader(SEO_reader):
         None
 
         """
-        self.wr.write_controlled_bit_swap(bit1, bit2, controls, rads_list)
+        self.wr.write_controlled_qbit_swap(bit1, bit2, controls, rads_list)
 
     def use_U_2_(self, rads0, rads1, rads2, rads3,
                 tar_bit_pos, controls):
@@ -390,8 +390,8 @@ class EchoingSEO_reader(SEO_reader):
 
         """
         rad_ang_list = [rads0, rads1, rads2, rads3]
-        self.wr.write_controlled_one_bit_gate(tar_bit_pos, controls,
-                           OneBitGates.u2, rad_ang_list)
+        self.wr.write_controlled_one_qbit_gate(tar_bit_pos, controls,
+                           OneQubitGate.u2, rad_ang_list)
 
     def do_log(self):
         """
@@ -408,7 +408,7 @@ class EchoingSEO_reader(SEO_reader):
         pass
 
     @staticmethod
-    def pic_file_from_eng_file(file_prefix, num_bits, ZL=True):
+    def pic_file_from_eng_file(file_prefix, num_qbits, ZL=True):
         """
         This function reads an English file with file prefix = file_prefix
         and it writes a Picture file for it with the same file prefix.
@@ -416,7 +416,7 @@ class EchoingSEO_reader(SEO_reader):
         Parameters
         ----------
         file_prefix : str
-        num_bits : int
+        num_qbits : int
         ZL : bool
 
         Returns
@@ -424,33 +424,34 @@ class EchoingSEO_reader(SEO_reader):
         None
 
         """
-        end_str = '_' + str(num_bits) + '_eng.txt'
+        end_str = '_' + str(num_qbits) + '_eng.txt'
         file_prefix_tempo = file_prefix + '_tempo'
         from shutil import copyfile
         copyfile(utg.preface(file_prefix + end_str),
                  utg.preface(file_prefix_tempo + end_str))
 
-        emb = CktEmbedder(num_bits, num_bits)
+        emb = CktEmbedder(num_qbits, num_qbits)
         # English out file must different from English in file because one
         # can't read a file at the same time one is writing to it
         wr = SEO_writer(file_prefix, emb, ZL=ZL)
         vman = PlaceholderManager(eval_all_vars=False)
-        EchoingSEO_reader(file_prefix_tempo, num_bits, wr, vars_manager=vman)
+        EchoingSEO_reader(file_prefix_tempo, num_qbits, wr, vars_manager=vman)
 
         import os
         os.remove(utg.preface(file_prefix_tempo + end_str))
+
 
 if __name__ == "__main__":
     def main():
         file_prefix_in = 'echo_test'
         file_prefix_out = 'echo_test_perm'
-        num_bits = 6
+        num_qbits = 6
 
         # permute qubits by advancing their positions by 1
         bit_map = [1, 2, 3, 4, 5, 0]
-        emb = CktEmbedder(num_bits, num_bits, bit_map)
+        emb = CktEmbedder(num_qbits, num_qbits, bit_map)
         wr = SEO_writer(file_prefix_out, emb)
-        EchoingSEO_reader(file_prefix_in, num_bits, wr)
+        EchoingSEO_reader(file_prefix_in, num_qbits, wr)
 
-        EchoingSEO_reader.pic_file_from_eng_file(file_prefix_in, num_bits)
+        EchoingSEO_reader.pic_file_from_eng_file(file_prefix_in, num_qbits)
     main()

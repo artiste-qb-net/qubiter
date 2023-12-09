@@ -1,5 +1,4 @@
 """
-
 The purpose of this file is to install autograd and its dependencies and to
 provide utility functions that are used when it is used in conjunction with
 Qubiter.
@@ -54,7 +53,7 @@ def sig_all():
 
 def u2_alt(*tlist):
     """
-    An alternative to OneBitGates.u2(). Both should return identical 2-dim
+    An alternative to OneQubitGate.u2(). Both should return identical 2-dim
     matrices for identical arguments.
 
     Parameters
@@ -119,7 +118,7 @@ def d_auto_u2(dwrt, *tlist):
     """
     Returns the automatic (computed by backprop) derivative of 2-dim matrix
     UnitaryMat.u2_alt. UnitaryMat.u2_alt is an alternative to
-    OneBitGates.u2. Both functions return same answer for identical input (
+    OneQubitGate.u2. Both functions return same answer for identical input (
     input is 4 real parameters in tlist).
 
     Parameters
@@ -209,6 +208,7 @@ def pu2(*tlist):
     # print('mmbbvv, pu2', pu2r(*tlist) +1j* pu2r(*tlist))
     return pu2r(*tlist) + 1j*pu2i(*tlist)
 
+
 defvjp(pu2r,
        # defines vector-jacobian-product of pu2r
        # g.shape == pu2r.shape
@@ -258,8 +258,9 @@ def d_auto_pu2(dwrt, *tlist):
     assert dwrt in range(4)
     return jacobian(pu2r, dwrt)(*tlist) + 1j*jacobian(pu2i, dwrt)(*tlist)
 
+
 if __name__ == "__main__":
-    from qubiter.OneBitGates import *
+    from qubiter.OneQubitGate import *
 
     def main():
         print("\nu2_alt example-------------")
@@ -275,7 +276,7 @@ if __name__ == "__main__":
         print('sigz_=\n', sigz_)
 
         rads_list = [.1, .2, .3, .4]
-        err = np.linalg.norm(OneBitGates.u2(*rads_list) -
+        err = np.linalg.norm(OneQubitGate.u2(*rads_list) -
                        u2_alt(*rads_list))
         print('err=', err)
 

@@ -70,7 +70,7 @@ class MeanHamil_native(MeanHamil):
 
             # add measurement coda for this term of hamil
             wr = CodaSEO_writer(self.file_prefix,
-                                fin_file_prefix, self.num_bits)
+                                fin_file_prefix, self.num_qbits)
             bit_pos_to_xy_str =\
                 {bit: action for bit, action in term if action != 'Z'}
             wr.write_xy_measurements(bit_pos_to_xy_str)
@@ -84,11 +84,11 @@ class MeanHamil_native(MeanHamil):
             # fresh copy of it each time
             init_st_vec = cp.deepcopy(self.init_st_vec)
             if self.simulator_name == 'SEO_simulator':
-                sim = SEO_simulator(fin_file_prefix, self.num_bits,
+                sim = SEO_simulator(fin_file_prefix, self.num_qbits,
                                     init_st_vec, vars_manager=vman)
             elif self.simulator_name == 'SEO_simulator_tf':
                 init_st_vec.arr = tf.convert_to_tensor(init_st_vec.arr)
-                sim = SEO_simulator_tf(fin_file_prefix, self.num_bits,
+                sim = SEO_simulator_tf(fin_file_prefix, self.num_qbits,
                                     init_st_vec, vars_manager=vman)
             else:
                 assert False, 'unsupported native simulator'
@@ -103,15 +103,15 @@ class MeanHamil_native(MeanHamil):
                 # if num_samples !=0, then
                 # sample qubiter-generated empirical prob dist
                 pd = fin_st_vec.get_pd()
-                obs_vec = StateVec.get_observations_vec(self.num_bits,
+                obs_vec = StateVec.get_observations_vec(self.num_qbits,
                         pd, self.num_samples)
-                counts_dict = StateVec.get_counts_from_obs_vec(self.num_bits,
+                counts_dict = StateVec.get_counts_from_obs_vec(self.num_qbits,
                                                                obs_vec)
-                emp_pd = StateVec.get_empirical_pd_from_counts(self.num_bits,
+                emp_pd = StateVec.get_empirical_pd_from_counts(self.num_qbits,
                                                                counts_dict)
                 # print('mmmmmmmm,,,', np.linalg.norm(pd-emp_pd))
                 emp_st_vec = StateVec.get_emp_state_vec_from_emp_pd(
-                        self.num_bits, emp_pd)
+                        self.num_qbits, emp_pd)
                 effective_st_vec = emp_st_vec
             else:  # num_samples = 0
                 effective_st_vec = fin_st_vec
@@ -125,15 +125,15 @@ class MeanHamil_native(MeanHamil):
                 real_arr = tf.convert_to_tensor(real_arr, dtype=tf.complex128)
                 arr = effective_st_vec.arr
                 mean_val += coef*tf.reduce_sum(
-                    tf.real(tf.conj(arr) * real_arr * arr))
-
+                    tf.math.real(tf.math.conj(arr) * real_arr * arr))
 
         # create this writer in order to delete final files
         wr1 = SEO_writer(fin_file_prefix,
-                CktEmbedder(self.num_bits, self.num_bits))
+                CktEmbedder(self.num_qbits, self.num_qbits))
         wr1.delete_files()
 
         return mean_val
+
 
 if __name__ == "__main__":
     def main():

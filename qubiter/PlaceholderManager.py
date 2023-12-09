@@ -501,6 +501,7 @@ class PlaceholderManager:
             assert PlaceholderManager.have_resolved_history(
                 self.fun_name_to_hist[fun_name])
 
+
 if __name__ == "__main__":
     from qubiter.SEO_writer import *
     from qubiter.SEO_reader import *
@@ -515,9 +516,9 @@ if __name__ == "__main__":
         # instead of floats. In the English file, you will see those legal
         # names where the numerical values of those angles would have been.
 
-        num_bits = 4
+        num_qbits = 4
         file_prefix = 'placeholder_test'
-        emb = CktEmbedder(num_bits, num_bits)
+        emb = CktEmbedder(num_qbits, num_qbits)
         wr = SEO_writer(file_prefix, emb)
         wr.write_Rx(2, rads=np.pi/7)
         wr.write_Rx(1, rads='#2*.5')
@@ -533,7 +534,7 @@ if __name__ == "__main__":
         # (1) a list of distinct variable numbers
         # (2) a list of distinct function names
         # encountered in the English file
-        SEO_reader(file_prefix, num_bits, write_log=True)
+        SEO_reader(file_prefix, num_qbits, write_log=True)
 
         def my_fun1(x):
             return x*.5
@@ -548,7 +549,7 @@ if __name__ == "__main__":
                     var_num_to_rads={1: np.pi/6, 2: np.pi/3},
                     fun_name_to_fun={'my_fun1': my_fun1})
         wr = SEO_writer(file_prefix + '_eval01', emb)
-        EchoingSEO_reader(file_prefix, num_bits, wr,
+        EchoingSEO_reader(file_prefix, num_qbits, wr,
                           vars_manager=vman)
 
         # this runs the simulator after substituting
@@ -557,7 +558,7 @@ if __name__ == "__main__":
             var_num_to_rads={1: np.pi/6, 2: np.pi/3, 3: np.pi/2},
             fun_name_to_fun={'my_fun1': my_fun1, 'my_fun2': my_fun2}
         )
-        sim = SEO_simulator(file_prefix, num_bits, verbose=True,
+        sim = SEO_simulator(file_prefix, num_qbits, verbose=True,
                             vars_manager=vman)
         print("\n----------------------------------------")
         StateVec.describe_st_vec_dict(sim.cur_st_vec_dict)

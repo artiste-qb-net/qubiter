@@ -154,7 +154,7 @@
 <span id="qubiter-cgateexpander-module"></span><h1>qubiter.CGateExpander module<a class="headerlink" href="#module-qubiter.CGateExpander" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="qubiter.CGateExpander.CGateExpander">
-<em class="property">class </em><code class="sig-prename descclassname">qubiter.CGateExpander.</code><code class="sig-name descname">CGateExpander</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_bits</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/CGateExpander.html#CGateExpander"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.CGateExpander.CGateExpander" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">qubiter.CGateExpander.</code><code class="sig-name descname">CGateExpander</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_qbits</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/CGateExpander.html#CGateExpander"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.CGateExpander.CGateExpander" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="qubiter.SEO_reader.html#qubiter.SEO_reader.SEO_reader" title="qubiter.SEO_reader.SEO_reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">qubiter.SEO_reader.SEO_reader</span></code></a></p>
 <p>Qubiter English and Picture files allow single lines that represent U(2)
 matrices of numerous types with 0, 1 or multiple controls of either the
@@ -184,13 +184,13 @@ files.</p>
 </dl>
 <dl class="method">
 <dt id="qubiter.CGateExpander.CGateExpander.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_bits</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/CGateExpander.html#CGateExpander.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.CGateExpander.CGateExpander.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">file_prefix</em>, <em class="sig-param">num_qbits</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/CGateExpander.html#CGateExpander.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.CGateExpander.CGateExpander.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constructor</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>file_prefix</strong> (<em>str</em>) – </p></li>
-<li><p><strong>num_bits</strong> (<em>int</em>) – </p></li>
+<li><p><strong>num_qbits</strong> (<em>int</em>) – </p></li>
 </ul>
 </dd>
 </dl>
@@ -236,8 +236,8 @@ target at tar_bit_pos.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="qubiter.CGateExpander.CGateExpander.two_embs_for_c_bit_swap">
-<code class="sig-name descname">two_embs_for_c_bit_swap</code><span class="sig-paren">(</span><em class="sig-param">bit1</em>, <em class="sig-param">bit2</em>, <em class="sig-param">controls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/CGateExpander.html#CGateExpander.two_embs_for_c_bit_swap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.CGateExpander.CGateExpander.two_embs_for_c_bit_swap" title="Permalink to this definition">¶</a></dt>
+<dt id="qubiter.CGateExpander.CGateExpander.two_embs_for_c_qbit_swap">
+<code class="sig-name descname">two_embs_for_c_qbit_swap</code><span class="sig-paren">(</span><em class="sig-param">bit1</em>, <em class="sig-param">bit2</em>, <em class="sig-param">controls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/CGateExpander.html#CGateExpander.two_embs_for_c_qbit_swap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.CGateExpander.CGateExpander.two_embs_for_c_qbit_swap" title="Permalink to this definition">¶</a></dt>
 <dd><p>This internal function returns two CktEmbedder objects called emb0,
 emb1 that are used to write an expansion for a controlled swap of
 bits bit1, bit2.</p>

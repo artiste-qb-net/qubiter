@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>qubiter.OneBitGates module &mdash; qubiter 1.0.1 documentation</title>
+  <title>qubiter.OneQubitGate module &mdash; qubiter 1.0.1 documentation</title>
   
 
   
@@ -131,7 +131,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>qubiter.OneBitGates module</li>
+      <li>qubiter.OneQubitGate module</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -150,11 +150,11 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-qubiter.OneBitGates">
-<span id="qubiter-onebitgates-module"></span><h1>qubiter.OneBitGates module<a class="headerlink" href="#module-qubiter.OneBitGates" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="qubiter.OneBitGates.OneBitGates">
-<em class="property">class </em><code class="sig-prename descclassname">qubiter.OneBitGates.</code><code class="sig-name descname">OneBitGates</code><a class="reference internal" href="_modules/qubiter/OneBitGates.html#OneBitGates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneBitGates.OneBitGates" title="Permalink to this definition">¶</a></dt>
+  <div class="section" id="qubiter-onequbitgate-module">
+<h1>qubiter.OneQubitGate module<a class="headerlink" href="#qubiter-onequbitgate-module" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-qubiter.OneQubitGate"></span><dl class="class">
+<dt id="qubiter.OneQubitGate.OneQubitGate">
+<em class="property">class </em><code class="sig-prename descclassname">qubiter.OneQubitGate.</code><code class="sig-name descname">OneQubitGate</code><a class="reference internal" href="_modules/qubiter/OneQubitGate.html#OneQubitGate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneQubitGate.OneQubitGate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>This class has no attributes or constructor. It is simply a collection
 of static methods, all of which return a complex 2 by 2 matrix (numpy
@@ -164,10 +164,10 @@ to choose between a float or complex array.</p>
 <p>All gates have a tensor library <cite>lib</cite> option. lib equals ‘np’ for numpy,
 ‘tf’ for tensorflow</p>
 <dl class="method">
-<dt id="qubiter.OneBitGates.OneBitGates.P_0">
-<em class="property">static </em><code class="sig-name descname">P_0</code><span class="sig-paren">(</span><em class="sig-param">is_quantum=True</em>, <em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneBitGates.html#OneBitGates.P_0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneBitGates.OneBitGates.P_0" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns projection operator P_0 = <a href="#id9"><span class="problematic" id="id10">|0&gt;&lt;0|</span></a> = nbar, where <a href="#id1"><span class="problematic" id="id2">|</span></a>0&gt; = [1,
-0]^T and <a href="#id3"><span class="problematic" id="id4">|</span></a>1&gt; = [0, 1]^T, T = transpose</p>
+<dt id="qubiter.OneQubitGate.OneQubitGate.P_0">
+<em class="property">static </em><code class="sig-name descname">P_0</code><span class="sig-paren">(</span><em class="sig-param">is_quantum=True</em>, <em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneQubitGate.html#OneQubitGate.P_0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneQubitGate.OneQubitGate.P_0" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns projection operator <cite>P_0 = |0&gt;&lt;0| = nbar</cite>, where <cite>|0&gt; = [1,
+0]^T</cite> and <cite>|1&gt; = [0, 1]^T</cite>, T = transpose</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -185,8 +185,8 @@ to choose between a float or complex array.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="qubiter.OneBitGates.OneBitGates.P_0_phase_fac">
-<em class="property">static </em><code class="sig-name descname">P_0_phase_fac</code><span class="sig-paren">(</span><em class="sig-param">ang_rads</em>, <em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneBitGates.html#OneBitGates.P_0_phase_fac"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneBitGates.OneBitGates.P_0_phase_fac" title="Permalink to this definition">¶</a></dt>
+<dt id="qubiter.OneQubitGate.OneQubitGate.P_0_phase_fac">
+<em class="property">static </em><code class="sig-name descname">P_0_phase_fac</code><span class="sig-paren">(</span><em class="sig-param">ang_rads</em>, <em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneQubitGate.html#OneQubitGate.P_0_phase_fac"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneQubitGate.OneQubitGate.P_0_phase_fac" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns</p>
 <p>exp(1j*ang_rads*P_0) = [[x, 0],[0, 1]] with x = exp(1j*ang_rads)</p>
 <dl class="field-list simple">
@@ -206,10 +206,10 @@ to choose between a float or complex array.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="qubiter.OneBitGates.OneBitGates.P_1">
-<em class="property">static </em><code class="sig-name descname">P_1</code><span class="sig-paren">(</span><em class="sig-param">is_quantum=True</em>, <em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneBitGates.html#OneBitGates.P_1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneBitGates.OneBitGates.P_1" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns projection operator P_1 = <a href="#id11"><span class="problematic" id="id12">|1&gt;&lt;1|</span></a> = n, where <a href="#id5"><span class="problematic" id="id6">|</span></a>0&gt; = [1,
-0]^T and <a href="#id7"><span class="problematic" id="id8">|</span></a>1&gt; = [0, 1]^T, T = transpose</p>
+<dt id="qubiter.OneQubitGate.OneQubitGate.P_1">
+<em class="property">static </em><code class="sig-name descname">P_1</code><span class="sig-paren">(</span><em class="sig-param">is_quantum=True</em>, <em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneQubitGate.html#OneQubitGate.P_1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneQubitGate.OneQubitGate.P_1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns projection operator <cite>P_1 = |1&gt;&lt;1| = n</cite>, where <cite>|0&gt; = [1,
+0]^T</cite> and <cite>|1&gt; = [0, 1]^T</cite>, T = transpose</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -227,8 +227,8 @@ to choose between a float or complex array.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="qubiter.OneBitGates.OneBitGates.P_1_phase_fac">
-<em class="property">static </em><code class="sig-name descname">P_1_phase_fac</code><span class="sig-paren">(</span><em class="sig-param">ang_rads</em>, <em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneBitGates.html#OneBitGates.P_1_phase_fac"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneBitGates.OneBitGates.P_1_phase_fac" title="Permalink to this definition">¶</a></dt>
+<dt id="qubiter.OneQubitGate.OneQubitGate.P_1_phase_fac">
+<em class="property">static </em><code class="sig-name descname">P_1_phase_fac</code><span class="sig-paren">(</span><em class="sig-param">ang_rads</em>, <em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneQubitGate.html#OneQubitGate.P_1_phase_fac"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneQubitGate.OneQubitGate.P_1_phase_fac" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns</p>
 <p>exp(1j*ang_rads*P_1) = [[1, 0],[0, x]] with x = exp(1j*ang_rads)</p>
 <dl class="field-list simple">
@@ -248,8 +248,8 @@ to choose between a float or complex array.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="qubiter.OneBitGates.OneBitGates.const_dict">
-<em class="property">static </em><code class="sig-name descname">const_dict</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneBitGates.html#OneBitGates.const_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneBitGates.OneBitGates.const_dict" title="Permalink to this definition">¶</a></dt>
+<dt id="qubiter.OneQubitGate.OneQubitGate.const_dict">
+<em class="property">static </em><code class="sig-name descname">const_dict</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneQubitGate.html#OneQubitGate.const_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneQubitGate.OneQubitGate.const_dict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns dictionary with all values equal to x. Dict is destined to
 fill a future 2-dim matrix.</p>
 <dl class="field-list simple">
@@ -266,8 +266,8 @@ fill a future 2-dim matrix.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="qubiter.OneBitGates.OneBitGates.get_fun">
-<em class="property">static </em><code class="sig-name descname">get_fun</code><span class="sig-paren">(</span><em class="sig-param">lib</em>, <em class="sig-param">fun_name</em>, <em class="sig-param">lib_to_fun_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneBitGates.html#OneBitGates.get_fun"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneBitGates.OneBitGates.get_fun" title="Permalink to this definition">¶</a></dt>
+<dt id="qubiter.OneQubitGate.OneQubitGate.get_fun">
+<em class="property">static </em><code class="sig-name descname">get_fun</code><span class="sig-paren">(</span><em class="sig-param">lib</em>, <em class="sig-param">fun_name</em>, <em class="sig-param">lib_to_fun_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneQubitGate.html#OneQubitGate.get_fun"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneQubitGate.OneQubitGate.get_fun" title="Permalink to this definition">¶</a></dt>
 <dd><p>If lib is ‘np’, this method returns eval(lib + ‘.’ + fun_name).
 Else, if lib is not ‘np’ then: if lib_to_fun_name is None,
 it returns eval(lib + ‘.’ + fun_name), but if lib_to_fun_name is not
@@ -291,8 +291,8 @@ if lib_to_fun_name[ lib] doesn’t exist.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="qubiter.OneBitGates.OneBitGates.get_mat">
-<em class="property">static </em><code class="sig-name descname">get_mat</code><span class="sig-paren">(</span><em class="sig-param">lib</em>, <em class="sig-param">mat_dict</em>, <em class="sig-param">dtype=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneBitGates.html#OneBitGates.get_mat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneBitGates.OneBitGates.get_mat" title="Permalink to this definition">¶</a></dt>
+<dt id="qubiter.OneQubitGate.OneQubitGate.get_mat">
+<em class="property">static </em><code class="sig-name descname">get_mat</code><span class="sig-paren">(</span><em class="sig-param">lib</em>, <em class="sig-param">mat_dict</em>, <em class="sig-param">dtype=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneQubitGate.html#OneQubitGate.get_mat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneQubitGate.OneQubitGate.get_mat" title="Permalink to this definition">¶</a></dt>
 <dd><p>Internal function that creates a tensor of type lib, based on a dict
 mat_dict.</p>
 <dl class="field-list simple">
@@ -313,9 +313,9 @@ mat_dict.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="qubiter.OneBitGates.OneBitGates.had2">
-<em class="property">static </em><code class="sig-name descname">had2</code><span class="sig-paren">(</span><em class="sig-param">is_quantum=True</em>, <em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneBitGates.html#OneBitGates.had2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneBitGates.OneBitGates.had2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns 2 dimensional Hadamard matrix (sigma_x + sigma_z)/sqrt(2)</p>
+<dt id="qubiter.OneQubitGate.OneQubitGate.had2">
+<em class="property">static </em><code class="sig-name descname">had2</code><span class="sig-paren">(</span><em class="sig-param">is_quantum=True</em>, <em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneQubitGate.html#OneQubitGate.had2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneQubitGate.OneQubitGate.had2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns 2 dimensional Hadamard matrix (sigma_x + sigma_z)/sqrt(2).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -333,11 +333,11 @@ mat_dict.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="qubiter.OneBitGates.OneBitGates.mat_S">
-<em class="property">static </em><code class="sig-name descname">mat_S</code><span class="sig-paren">(</span><em class="sig-param">herm=False</em>, <em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneBitGates.html#OneBitGates.mat_S"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneBitGates.OneBitGates.mat_S" title="Permalink to this definition">¶</a></dt>
+<dt id="qubiter.OneQubitGate.OneQubitGate.mat_S">
+<em class="property">static </em><code class="sig-name descname">mat_S</code><span class="sig-paren">(</span><em class="sig-param">herm=False</em>, <em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneQubitGate.html#OneQubitGate.mat_S"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneQubitGate.OneQubitGate.mat_S" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns</p>
 <p>[[1, 0],[0, x*sign]] where x=exp(j*pi/2)=j</p>
-<p>where sign = 1 if herm=False and sign = -1 if herm=True</p>
+<p>where sign = 1 if herm=False and sign = -1 if herm=True.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -355,9 +355,9 @@ mat_dict.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="qubiter.OneBitGates.OneBitGates.mat_Sdag">
-<em class="property">static </em><code class="sig-name descname">mat_Sdag</code><span class="sig-paren">(</span><em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneBitGates.html#OneBitGates.mat_Sdag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneBitGates.OneBitGates.mat_Sdag" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns S^dag</p>
+<dt id="qubiter.OneQubitGate.OneQubitGate.mat_Sdag">
+<em class="property">static </em><code class="sig-name descname">mat_Sdag</code><span class="sig-paren">(</span><em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneQubitGate.html#OneQubitGate.mat_Sdag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneQubitGate.OneQubitGate.mat_Sdag" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns <cite>S^dag</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>lib</strong> (<em>str</em>) – </p>
@@ -372,11 +372,11 @@ mat_dict.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="qubiter.OneBitGates.OneBitGates.mat_T">
-<em class="property">static </em><code class="sig-name descname">mat_T</code><span class="sig-paren">(</span><em class="sig-param">herm=False</em>, <em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneBitGates.html#OneBitGates.mat_T"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneBitGates.OneBitGates.mat_T" title="Permalink to this definition">¶</a></dt>
+<dt id="qubiter.OneQubitGate.OneQubitGate.mat_T">
+<em class="property">static </em><code class="sig-name descname">mat_T</code><span class="sig-paren">(</span><em class="sig-param">herm=False</em>, <em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneQubitGate.html#OneQubitGate.mat_T"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneQubitGate.OneQubitGate.mat_T" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns</p>
 <p>[[1, 0],[0, exp(j*pi/4*sign)]]</p>
-<p>where sign = 1 if herm=False and sign = -1 if herm=True</p>
+<p>where sign = 1 if herm=False and sign = -1 if herm=True.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -394,9 +394,9 @@ mat_dict.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="qubiter.OneBitGates.OneBitGates.mat_Tdag">
-<em class="property">static </em><code class="sig-name descname">mat_Tdag</code><span class="sig-paren">(</span><em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneBitGates.html#OneBitGates.mat_Tdag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneBitGates.OneBitGates.mat_Tdag" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns T^dag</p>
+<dt id="qubiter.OneQubitGate.OneQubitGate.mat_Tdag">
+<em class="property">static </em><code class="sig-name descname">mat_Tdag</code><span class="sig-paren">(</span><em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneQubitGate.html#OneQubitGate.mat_Tdag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneQubitGate.OneQubitGate.mat_Tdag" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns <cite>T^dag</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>lib</strong> (<em>str</em>) – </p>
@@ -411,8 +411,8 @@ mat_dict.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="qubiter.OneBitGates.OneBitGates.phase_fac">
-<em class="property">static </em><code class="sig-name descname">phase_fac</code><span class="sig-paren">(</span><em class="sig-param">ang_rads</em>, <em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneBitGates.html#OneBitGates.phase_fac"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneBitGates.OneBitGates.phase_fac" title="Permalink to this definition">¶</a></dt>
+<dt id="qubiter.OneQubitGate.OneQubitGate.phase_fac">
+<em class="property">static </em><code class="sig-name descname">phase_fac</code><span class="sig-paren">(</span><em class="sig-param">ang_rads</em>, <em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneQubitGate.html#OneQubitGate.phase_fac"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneQubitGate.OneQubitGate.phase_fac" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns</p>
 <p>exp(1j*ang_rads*I_2) = [[x, 0],[0, x]] with x = exp(1j*ang_rads)</p>
 <dl class="field-list simple">
@@ -432,8 +432,8 @@ mat_dict.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="qubiter.OneBitGates.OneBitGates.rot">
-<em class="property">static </em><code class="sig-name descname">rot</code><span class="sig-paren">(</span><em class="sig-param">rad_ang_x</em>, <em class="sig-param">rad_ang_y</em>, <em class="sig-param">rad_ang_z</em>, <em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneBitGates.html#OneBitGates.rot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneBitGates.OneBitGates.rot" title="Permalink to this definition">¶</a></dt>
+<dt id="qubiter.OneQubitGate.OneQubitGate.rot">
+<em class="property">static </em><code class="sig-name descname">rot</code><span class="sig-paren">(</span><em class="sig-param">rad_ang_x</em>, <em class="sig-param">rad_ang_y</em>, <em class="sig-param">rad_ang_z</em>, <em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneQubitGate.html#OneQubitGate.rot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneQubitGate.OneQubitGate.rot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns</p>
 <p>exp(1j*(rad_ang_x*sig_x + rad_ang_y*sig_y + rad_ang_z*sig_z))</p>
 <p>where rad_ang_x is an angle in radians and sig_x is the x Pauli
@@ -457,8 +457,8 @@ matrix, etc.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="qubiter.OneBitGates.OneBitGates.rot_ax">
-<em class="property">static </em><code class="sig-name descname">rot_ax</code><span class="sig-paren">(</span><em class="sig-param">rad_ang</em>, <em class="sig-param">axis</em>, <em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneBitGates.html#OneBitGates.rot_ax"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneBitGates.OneBitGates.rot_ax" title="Permalink to this definition">¶</a></dt>
+<dt id="qubiter.OneQubitGate.OneQubitGate.rot_ax">
+<em class="property">static </em><code class="sig-name descname">rot_ax</code><span class="sig-paren">(</span><em class="sig-param">rad_ang</em>, <em class="sig-param">axis</em>, <em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneQubitGate.html#OneQubitGate.rot_ax"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneQubitGate.OneQubitGate.rot_ax" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns</p>
 <p>exp(1j*rad_ang*sig_n)</p>
 <p>where n = x if axis = 1, n = y if axis = 2 and n = z if axis = 3</p>
@@ -480,8 +480,8 @@ matrix, etc.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="qubiter.OneBitGates.OneBitGates.sigx">
-<em class="property">static </em><code class="sig-name descname">sigx</code><span class="sig-paren">(</span><em class="sig-param">is_quantum=True</em>, <em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneBitGates.html#OneBitGates.sigx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneBitGates.OneBitGates.sigx" title="Permalink to this definition">¶</a></dt>
+<dt id="qubiter.OneQubitGate.OneQubitGate.sigx">
+<em class="property">static </em><code class="sig-name descname">sigx</code><span class="sig-paren">(</span><em class="sig-param">is_quantum=True</em>, <em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneQubitGate.html#OneQubitGate.sigx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneQubitGate.OneQubitGate.sigx" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns sigma_x Pauli matrix.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -500,8 +500,8 @@ matrix, etc.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="qubiter.OneBitGates.OneBitGates.sigy">
-<em class="property">static </em><code class="sig-name descname">sigy</code><span class="sig-paren">(</span><em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneBitGates.html#OneBitGates.sigy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneBitGates.OneBitGates.sigy" title="Permalink to this definition">¶</a></dt>
+<dt id="qubiter.OneQubitGate.OneQubitGate.sigy">
+<em class="property">static </em><code class="sig-name descname">sigy</code><span class="sig-paren">(</span><em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneQubitGate.html#OneQubitGate.sigy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneQubitGate.OneQubitGate.sigy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns sigma_y Pauli matrix.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -517,8 +517,8 @@ matrix, etc.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="qubiter.OneBitGates.OneBitGates.sigz">
-<em class="property">static </em><code class="sig-name descname">sigz</code><span class="sig-paren">(</span><em class="sig-param">is_quantum=True</em>, <em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneBitGates.html#OneBitGates.sigz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneBitGates.OneBitGates.sigz" title="Permalink to this definition">¶</a></dt>
+<dt id="qubiter.OneQubitGate.OneQubitGate.sigz">
+<em class="property">static </em><code class="sig-name descname">sigz</code><span class="sig-paren">(</span><em class="sig-param">is_quantum=True</em>, <em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneQubitGate.html#OneQubitGate.sigz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneQubitGate.OneQubitGate.sigz" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns sigma_z Pauli matrix.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -537,8 +537,8 @@ matrix, etc.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="qubiter.OneBitGates.OneBitGates.u2">
-<em class="property">static </em><code class="sig-name descname">u2</code><span class="sig-paren">(</span><em class="sig-param">rads0</em>, <em class="sig-param">rads1</em>, <em class="sig-param">rads2</em>, <em class="sig-param">rads3</em>, <em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneBitGates.html#OneBitGates.u2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneBitGates.OneBitGates.u2" title="Permalink to this definition">¶</a></dt>
+<dt id="qubiter.OneQubitGate.OneQubitGate.u2">
+<em class="property">static </em><code class="sig-name descname">u2</code><span class="sig-paren">(</span><em class="sig-param">rads0</em>, <em class="sig-param">rads1</em>, <em class="sig-param">rads2</em>, <em class="sig-param">rads3</em>, <em class="sig-param">lib='np'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/OneQubitGate.html#OneQubitGate.u2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.OneQubitGate.OneQubitGate.u2" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns arbitrary 2-dim unitary matrix (U(2) group) parametrized as
 follows:</p>
 <p>exp(1j*(rads0 + rads1*sig_x + rads2*sig_y + rads3*sig_z))</p>

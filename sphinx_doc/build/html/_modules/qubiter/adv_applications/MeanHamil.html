@@ -197,18 +197,18 @@
 <span class="sd">        Hamiltonian</span>
 <span class="sd">    init_st_vec : StateVec</span>
 <span class="sd">        initial state vector</span>
-<span class="sd">    num_bits : int</span>
+<span class="sd">    num_qbits : int</span>
 <span class="sd">        number of qubits</span>
 <span class="sd">    num_samples : int</span>
-<span class="sd">        number of samples (aka num_shots). If this is zero, the |psi&gt; in</span>
-<span class="sd">        &lt;psi|H|psi&gt; is calculated exactly from theory. If this is &gt;0,</span>
-<span class="sd">        the |psi&gt; is calculated empirically from a number num_samples of</span>
+<span class="sd">        number of samples (aka num_shots). If this is zero, the `|psi&gt;` in</span>
+<span class="sd">        `&lt;psi|H|psi&gt;` is calculated exactly from theory. If this is &gt;0,</span>
+<span class="sd">        the `|psi&gt;` is calculated empirically from a number num_samples of</span>
 <span class="sd">        &quot;one-shot&quot; experiments.</span>
 <span class="sd">    simulator_name : str | None</span>
 <span class="sd">        name of the simulator.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="MeanHamil.__init__"><a class="viewcode-back" href="../../../qubiter.adv_applications.MeanHamil.html#qubiter.adv_applications.MeanHamil.MeanHamil.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">,</span> <span class="n">hamil</span><span class="p">,</span>
+<div class="viewcode-block" id="MeanHamil.__init__"><a class="viewcode-back" href="../../../qubiter.adv_applications.MeanHamil.html#qubiter.adv_applications.MeanHamil.MeanHamil.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">,</span> <span class="n">hamil</span><span class="p">,</span>
             <span class="n">all_var_nums</span><span class="p">,</span> <span class="n">fun_name_to_fun</span><span class="p">,</span> <span class="n">init_st_vec</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">simulator_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">num_samples</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -217,7 +217,7 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        file_prefix : str</span>
-<span class="sd">        num_bits : int</span>
+<span class="sd">        num_qbits : int</span>
 <span class="sd">        hamil : QubitOperator</span>
 <span class="sd">        all_var_nums : list[int]</span>
 <span class="sd">        fun_name_to_fun : dict[str, function]</span>
@@ -230,15 +230,15 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">file_prefix</span> <span class="o">=</span> <span class="n">file_prefix</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span> <span class="o">=</span> <span class="n">num_bits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span> <span class="o">=</span> <span class="n">num_qbits</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">hamil</span> <span class="o">=</span> <span class="n">hamil</span>
         <span class="n">MeanHamil</span><span class="o">.</span><span class="n">check_hamil_is_herm</span><span class="p">(</span><span class="n">hamil</span><span class="p">)</span>
-        <span class="n">MeanHamil</span><span class="o">.</span><span class="n">check_hamil_is_in_range</span><span class="p">(</span><span class="n">hamil</span><span class="p">,</span> <span class="n">num_bits</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">MeanHamil</span><span class="o">.</span><span class="n">check_hamil_is_in_range</span><span class="p">(</span><span class="n">hamil</span><span class="p">,</span> <span class="n">num_qbits</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">all_var_nums</span> <span class="o">=</span> <span class="n">all_var_nums</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fun_name_to_fun</span> <span class="o">=</span> <span class="n">fun_name_to_fun</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">init_st_vec</span> <span class="o">=</span> <span class="n">init_st_vec</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">init_st_vec</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">init_st_vec</span> <span class="o">=</span> <span class="n">StateVec</span><span class="o">.</span><span class="n">get_ground_st_vec</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">init_st_vec</span> <span class="o">=</span> <span class="n">StateVec</span><span class="o">.</span><span class="n">get_ground_st_vec</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">simulator_name</span> <span class="o">=</span> <span class="n">simulator_name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_samples</span> <span class="o">=</span> <span class="n">num_samples</span></div>
 
@@ -273,6 +273,7 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        hamil : QubitOperator</span>
+<span class="sd">        max_bit_pos : int</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -285,7 +286,7 @@
 
 <div class="viewcode-block" id="MeanHamil.get_real_vec"><a class="viewcode-back" href="../../../qubiter.adv_applications.MeanHamil.html#qubiter.adv_applications.MeanHamil.MeanHamil.get_real_vec">[docs]</a>    <span class="k">def</span> <span class="nf">get_real_vec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">term</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Internal method that returns a numpy array, of shape [2]*num_bits,</span>
+<span class="sd">        Internal method that returns a numpy array, of shape [2]*num_qbits,</span>
 <span class="sd">        that will be used as input to the method</span>
 <span class="sd">        StateVec.get_mean_value_of_real_diag_mat()</span>
 
@@ -302,16 +303,16 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        np.ndarray</span>
-<span class="sd">            shape=[2]*num_bits</span>
+<span class="sd">            shape=[2]*num_qbits</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">arr_plus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">])</span>
         <span class="n">arr_minus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">])</span>
-        <span class="n">arr_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">arr_plus</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span>
+        <span class="n">arr_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">arr_plus</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span>
         <span class="k">for</span> <span class="n">bit_pos</span><span class="p">,</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">term</span><span class="p">:</span>
             <span class="n">arr_list</span><span class="p">[</span><span class="n">bit_pos</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr_minus</span>
         <span class="n">real_arr</span> <span class="o">=</span> <span class="n">utg</span><span class="o">.</span><span class="n">kron_prod</span><span class="p">(</span><span class="n">arr_list</span><span class="p">)</span>
-        <span class="n">real_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">real_arr</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">([</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bits</span><span class="p">))</span>
+        <span class="n">real_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">real_arr</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">([</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">num_qbits</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">real_arr</span></div>
 
 <div class="viewcode-block" id="MeanHamil.get_mean_val"><a class="viewcode-back" href="../../../qubiter.adv_applications.MeanHamil.html#qubiter.adv_applications.MeanHamil.MeanHamil.get_mean_val">[docs]</a>    <span class="k">def</span> <span class="nf">get_mean_val</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var_num_to_rads</span><span class="p">):</span>

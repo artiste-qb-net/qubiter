@@ -32,7 +32,7 @@ class SEO_simulator_mp(SEO_simulator):
 
     def use_PRINT(self, style, line_num):
         """
-        If circuit has any PRINT statements, skip them
+        If circuit has any PRINT statements, skip them.
 
         Parameters
         ----------
@@ -58,8 +58,8 @@ class SEO_MatrixProduct:
 
     In order to accomplish this goal, this class calls SEO_simulalor_mp
     repeatedly using as initial state vector all the standard basis vectors
-    (2^num_bits of them). Then the class assembles the product matrix that
-    we seek by stacking on top of each other all the 2^num_bits final
+    (2^num_qbits of them). Then the class assembles the product matrix that
+    we seek by stacking on top of each other all the 2^num_qbits final
     evolved state vectors. Admittedly, this is a very slow, inefficient way
     of finding the sought for matrix product. However, it works fine for a
     small number of qubits. It can be used to check that gate expansions
@@ -78,7 +78,7 @@ class SEO_MatrixProduct:
 
     """
 
-    def __init__(self, file_prefix, num_bits):
+    def __init__(self, file_prefix, num_qbits):
         """
         Constructor
 
@@ -86,7 +86,7 @@ class SEO_MatrixProduct:
         ----------
         file_prefix : str
             Prefix of English file being read
-        num_bits : int
+        num_qbits : int
             number of bits in English file begin read.
 
         Returns
@@ -97,37 +97,38 @@ class SEO_MatrixProduct:
 
         self.prod_arr = None
 
-        num_comps = 1 << num_bits
+        num_comps = 1 << num_qbits
         fin_list = []
         for s in range(num_comps):
             spin_dir_list = [(s >> bpos) & 1 for bpos in
-                             reversed(range(num_bits))]
+                             reversed(range(num_qbits))]
             init_st_vec = StateVec.get_standard_basis_st_vec(
                 spin_dir_list, ZL=True)
             # print("---", spin_dir_list)
             # print(init_st_vec)
-            sim = SEO_simulator_mp(file_prefix, num_bits,
+            sim = SEO_simulator_mp(file_prefix, num_qbits,
                                    init_st_vec=init_st_vec)
             fin_st_vec = sim.cur_st_vec_dict["pure"]
-            fin = StateVec.get_traditional_st_vec(fin_st_vec)
+            fin = StateVec.get_traditional_st_vec
             fin_list.append(fin)
             # print(fin_st_vec)
             # print(fin)
         self.prod_arr = np.vstack(fin_list).transpose()
         # print(self.prod_arr)
 
+
 if __name__ == "__main__":
     from qubiter.FouSEO_writer import *
 
     def main():
-        num_bits = 3
-        emb = CktEmbedder(num_bits, num_bits)
+        num_qbits = 3
+        emb = CktEmbedder(num_qbits, num_qbits)
         file_prefix = 'matrix_prod_test'
         wr = FouSEO_writer(True, file_prefix, emb)
         wr.close_files()
-        mp = SEO_MatrixProduct(file_prefix, num_bits)
+        mp = SEO_MatrixProduct(file_prefix, num_qbits)
         prod = mp.prod_arr
-        exact = FouSEO_writer.fourier_trans_mat(1 << num_bits)
+        exact = FouSEO_writer.fourier_trans_mat(1 << num_qbits)
         # print(prod)
         # print(exact)
         err = np.linalg.norm(prod - exact)

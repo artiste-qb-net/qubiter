@@ -10,7 +10,7 @@ class QbitPlanarLattice:
 
     Attributes
     ----------
-    num_bits : int
+    num_qbits : int
     qbit_2d_coords : list[tuple[int, int]]
         List of 2d coords for each qubit
 
@@ -44,7 +44,7 @@ class QbitPlanarLattice:
             for col, char in enumerate(line.strip()):
                 if char != '-':
                     self.qbit_2d_coords.append((row, col))
-        self.num_bits = len(self.qbit_2d_coords)
+        self.num_qbits = len(self.qbit_2d_coords)
 
     def two2one(self, pair):
         """
@@ -77,7 +77,7 @@ class QbitPlanarLattice:
         tuple[int, int]
 
         """
-        assert 0 <= index < self.num_bits
+        assert 0 <= index < self.num_qbits
         return self.qbit_2d_coords[index]
 
     def is_empty(self, pair):
@@ -130,9 +130,9 @@ class QbitPlanarLattice:
         r, c = self.one2two(ind)
         nbors = []
         for r1, c1 in [(r, c+1), (r, c-1), (r+1, c), (r-1, c)]:
-                ind1 = self.two2one((r1, c1))
-                if ind1 is not None:
-                    nbors.append(ind1)
+            ind1 = self.two2one((r1, c1))
+            if ind1 is not None:
+                nbors.append(ind1)
         return nbors
 
     def get_c_to_tars(self):
@@ -147,9 +147,10 @@ class QbitPlanarLattice:
 
         """
         c_to_tars = {}
-        for ind in range(self.num_bits):
+        for ind in range(self.num_qbits):
             c_to_tars[ind] = self.neighbors_of(ind)
         return c_to_tars
+
 
 if __name__ == "__main__":
     import qubiter.device_specific.chip_couplings_google as cc
@@ -158,7 +159,7 @@ if __name__ == "__main__":
     def main():
         lattice = QbitPlanarLattice(cc.BRISTLECONE_GRID)
         pp.pprint(lattice.qbit_2d_coords)
-        print('\nnum_bits=', lattice.num_bits, '\n')
+        print('\nnum_qbits=', lattice.num_qbits, '\n')
         c_to_tars = lattice.get_c_to_tars()
         pp.pprint(c_to_tars)
     main()

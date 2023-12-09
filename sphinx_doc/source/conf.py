@@ -87,9 +87,13 @@ autodoc_mock_imports = \
 [
     'autograd',
     'cuncsd_sq',
+    'graphviz',
     'IPython',
     'ipywidgets',
     'matplotlib',
+    'nbformat',
+    'nbconvert',
+    'nextworkx',
     'numpy',
     'openfermion',
     'pandas',

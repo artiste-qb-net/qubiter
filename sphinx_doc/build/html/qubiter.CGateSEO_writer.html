@@ -204,7 +204,7 @@ U(2) gate). When False, it writes an expansion of that gate.</p></li>
 <dt id="qubiter.CGateSEO_writer.CGateSEO_writer.su2_mat_prod">
 <em class="property">static </em><code class="sig-name descname">su2_mat_prod</code><span class="sig-paren">(</span><em class="sig-param">su2_pair1</em>, <em class="sig-param">su2_pair2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/CGateSEO_writer.html#CGateSEO_writer.su2_mat_prod"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.CGateSEO_writer.CGateSEO_writer.su2_mat_prod" title="Permalink to this definition">¶</a></dt>
 <dd><p>An SU(2) matrix can be expressed as exp(i*theta*sig_n) where theta
-is a real number and sig_n = n cdot sigma. Here n is a 3 dim real
+is a real number and <cite>sig_n = n cdot sigma</cite>. Here n is a 3 dim real
 UNIT vector and sigma = [sigx, sigy, sigz], where sigx, sigy and
 sigz are the 3 Pauli matrices. We define the su2_pair of this SU(2)
 matrix as the list [theta, n], with n expressed as a numpy array.
@@ -238,13 +238,13 @@ of the class are mostly internal and are called by this function.
 This function achieves the main goal of the class, which is to give
 various expansions of an c_u2 (controlled U(2) matrix). For
 one_line=True, this function just calls
-write_controlled_one_bit_gate() of the parent class. For
+write_controlled_one_qbit_gate() of the parent class. For
 one_line=False, it gives an expansion of the c_u2.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>trol_kinds</strong> (<em>list</em><em>[</em><em>bool</em><em>]</em>) – list of control types. Type is False if nbar=P_0 and True if n=P_1</p></li>
-<li><p><strong>u2_fun</strong> (<em>function</em>) – One of the functions in class OneBitGates</p></li>
+<li><p><strong>u2_fun</strong> (<em>function</em>) – One of the functions in class OneQubitGate</p></li>
 <li><p><strong>fun_arg_list</strong> (<em>list</em><em>[</em><em>int|float</em><em>]</em>) – list of arguments of u2_fun</p></li>
 </ul>
 </dd>
@@ -288,8 +288,8 @@ then U(2) gate given by e^{i*delta} exp(i*(radx*sigx + rady*sigy
 <dt id="qubiter.CGateSEO_writer.CGateSEO_writer.write_hads">
 <code class="sig-name descname">write_hads</code><span class="sig-paren">(</span><em class="sig-param">trol_kinds</em>, <em class="sig-param">herm_conj=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubiter/CGateSEO_writer.html#CGateSEO_writer.write_hads"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qubiter.CGateSEO_writer.CGateSEO_writer.write_hads" title="Permalink to this definition">¶</a></dt>
 <dd><p>Writes a chain of cnots that are useful when some of the controls of
-the c_u2 being considered are n_bar = P_0 = <a href="#id1"><span class="problematic" id="id2">|0&gt;&lt;0|</span></a> instead of n =
-P_1 = <a href="#id3"><span class="problematic" id="id4">|1&gt;&lt;1|</span></a>. We are using the identity sigx n sigx = nbar to
+the c_u2 being considered are <cite>n_bar = P_0 = |0&gt;&lt;0|</cite> instead of <cite>n =
+P_1 = |1&gt;&lt;1|</cite>. We are using the identity sigx n sigx = nbar to
 convert n’s to nbar’s.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -315,10 +315,10 @@ the latter. It expands an c_u2 into a product of 1c_u2 with
 intervening cnots.</p>
 <p>In the CGateSEO_writer.pdf documentation, we show that any c_u2 can
 be expanded into a product of several “generalized n” controlled U(
-2) gates of the form  W(num_bits-1)^GN, wherein U(2) matrix W(
-num_bits-1) is controlled by a “generalized n” equal to GN = n(
+2) gates of the form  W(num_qbits-1)^GN, wherein U(2) matrix W(
+num_qbits-1) is controlled by a “generalized n” equal to GN = n(
 n_index_list)</p>
-<p>Since the factors W(num_bits-1)^GN in the product commute amongst
+<p>Since the factors W(num_qbits-1)^GN in the product commute amongst
 themselves, it is possible and convenient to order them in Gray code
 order (Qubiter knows about Gray Code via its class BitVector).
 Ordering them in Gray Code allows this function to cancel some cnots

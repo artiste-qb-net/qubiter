@@ -155,6 +155,7 @@
 <span class="kn">from</span> <span class="nn">qubiter.SEO_MatrixProduct</span> <span class="k">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">qubiter.BitVector</span> <span class="k">import</span> <span class="o">*</span>
 
+
 <div class="viewcode-block" id="MultiplexorSEO_writer"><a class="viewcode-back" href="../../../qubiter.quantum_CSD_compiler.MultiplexorSEO_writer.html#qubiter.quantum_CSD_compiler.MultiplexorSEO_writer.MultiplexorSEO_writer">[docs]</a><span class="k">class</span> <span class="nc">MultiplexorSEO_writer</span><span class="p">(</span><span class="n">SEO_writer</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A multiplexor is a matrix of the form</span>
@@ -260,11 +261,11 @@
         <span class="k">if</span> <span class="n">style</span> <span class="o">==</span> <span class="s1">&#39;oracular&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">num_gbits</span> <span class="o">=</span> <span class="n">num_gbits</span>
 
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="n">emb</span><span class="o">.</span><span class="n">num_bits_bef</span>
-        <span class="k">assert</span> <span class="n">num_bits</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;multiplexor must have at least 2 qubits&quot;</span>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_bef</span>
+        <span class="k">assert</span> <span class="n">num_qbits</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;multiplexor must have at least 2 qubits&quot;</span>
 
         <span class="n">ntf</span> <span class="o">=</span> <span class="n">num_T_trols</span> <span class="o">+</span> <span class="n">num_F_trols</span>
-        <span class="n">num_MP_trols</span> <span class="o">=</span> <span class="n">num_bits</span> <span class="o">-</span> <span class="n">ntf</span> <span class="o">-</span> <span class="n">num_gbits</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">num_MP_trols</span> <span class="o">=</span> <span class="n">num_qbits</span> <span class="o">-</span> <span class="n">ntf</span> <span class="o">-</span> <span class="n">num_gbits</span> <span class="o">-</span> <span class="mi">1</span>
         <span class="k">assert</span> <span class="n">num_MP_trols</span> <span class="o">&gt;</span> <span class="mi">0</span>
         <span class="k">if</span> <span class="n">rad_angles</span><span class="p">:</span>
             <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">rad_angles</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_MP_trols</span><span class="p">),</span> \
@@ -281,12 +282,12 @@
 <span class="sd">        None</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_bef</span>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_bef</span>
         <span class="n">nt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_T_trols</span>
         <span class="n">nf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_F_trols</span>
         <span class="n">ntf</span> <span class="o">=</span> <span class="n">nt</span> <span class="o">+</span> <span class="n">nf</span>
-        <span class="n">num_MP_trols</span> <span class="o">=</span> <span class="n">num_bits</span> <span class="o">-</span> <span class="n">ntf</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_gbits</span> <span class="o">-</span> <span class="mi">1</span>
-        <span class="n">trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)</span>
+        <span class="n">num_MP_trols</span> <span class="o">=</span> <span class="n">num_qbits</span> <span class="o">-</span> <span class="n">ntf</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_gbits</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">)</span>
         <span class="n">trols</span><span class="o">.</span><span class="n">bit_pos_to_kind</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span>
                 <span class="p">[</span><span class="kc">True</span><span class="p">]</span><span class="o">*</span><span class="n">nt</span> <span class="o">+</span> <span class="p">[</span><span class="kc">False</span><span class="p">]</span><span class="o">*</span><span class="n">nf</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">num_MP_trols</span><span class="p">))</span>
             <span class="p">))</span>
@@ -306,11 +307,11 @@
 <span class="sd">        None</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_bef</span>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_bef</span>
         <span class="n">nt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_T_trols</span>
         <span class="n">nf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_F_trols</span>
         <span class="n">ntf</span> <span class="o">=</span> <span class="n">nt</span> <span class="o">+</span> <span class="n">nf</span>
-        <span class="n">num_MP_trols</span> <span class="o">=</span> <span class="n">num_bits</span> <span class="o">-</span> <span class="n">ntf</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_gbits</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">num_MP_trols</span> <span class="o">=</span> <span class="n">num_qbits</span> <span class="o">-</span> <span class="n">ntf</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_gbits</span> <span class="o">-</span> <span class="mi">1</span>
         <span class="n">rads_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rad_angles</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">rads_arr</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-6</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;unit multiplexor&quot;</span><span class="p">)</span>
@@ -323,10 +324,10 @@
         <span class="n">prev_bvec</span> <span class="o">=</span> <span class="n">BitVector</span><span class="p">(</span><span class="n">num_MP_trols</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
         <span class="n">TF_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">([</span><span class="kc">True</span><span class="p">]</span><span class="o">*</span><span class="n">nt</span> <span class="o">+</span> <span class="p">[</span><span class="kc">False</span><span class="p">]</span><span class="o">*</span><span class="n">nf</span><span class="p">))</span>
-        <span class="n">trols1</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)</span>
+        <span class="n">trols1</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">)</span>
         <span class="n">trols1</span><span class="o">.</span><span class="n">bit_pos_to_kind</span> <span class="o">=</span> <span class="n">TF_dict</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">trols1</span><span class="o">.</span><span class="n">refresh_lists</span><span class="p">()</span>
-        <span class="n">trols2</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)</span>
+        <span class="n">trols2</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">)</span>
 
         <span class="k">def</span> <span class="nf">write_cnots</span><span class="p">(</span><span class="n">diff_bvec1</span><span class="p">):</span>
             <span class="n">prev_T_bit</span> <span class="o">=</span> <span class="n">num_MP_trols</span>
@@ -337,8 +338,8 @@
                 <span class="n">trols2</span><span class="o">.</span><span class="n">bit_pos_to_kind</span> <span class="o">=</span> <span class="n">TF_dict</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
                 <span class="n">trols2</span><span class="o">.</span><span class="n">bit_pos_to_kind</span><span class="p">[</span><span class="n">cur_T_bit</span> <span class="o">+</span> <span class="n">ntf</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
                 <span class="n">trols2</span><span class="o">.</span><span class="n">refresh_lists</span><span class="p">()</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span>
-                    <span class="n">ntf</span> <span class="o">+</span> <span class="n">num_MP_trols</span><span class="p">,</span> <span class="n">trols2</span><span class="p">,</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigx</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span>
+                    <span class="n">ntf</span> <span class="o">+</span> <span class="n">num_MP_trols</span><span class="p">,</span> <span class="n">trols2</span><span class="p">,</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">sigx</span><span class="p">)</span>
                 <span class="n">prev_T_bit</span> <span class="o">=</span> <span class="n">cur_T_bit</span>
 
         <span class="n">norma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">num_MP_trols</span><span class="p">)</span>
@@ -351,8 +352,8 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">diff_bvec</span> <span class="o">=</span> <span class="n">BitVector</span><span class="o">.</span><span class="n">new_with_T_on_diff</span><span class="p">(</span><span class="n">cur_bvec</span><span class="p">,</span> <span class="n">prev_bvec</span><span class="p">)</span>
                 <span class="n">write_cnots</span><span class="p">(</span><span class="n">diff_bvec</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span>
-                    <span class="n">ntf</span> <span class="o">+</span> <span class="n">num_MP_trols</span><span class="p">,</span> <span class="n">trols1</span><span class="p">,</span> <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span> <span class="p">[</span><span class="n">rads</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span>
+                    <span class="n">ntf</span> <span class="o">+</span> <span class="n">num_MP_trols</span><span class="p">,</span> <span class="n">trols1</span><span class="p">,</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span> <span class="p">[</span><span class="n">rads</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
                 <span class="n">prev_bvec</span> <span class="o">=</span> <span class="n">BitVector</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">cur_bvec</span><span class="p">)</span>
             <span class="n">f</span><span class="p">,</span> <span class="n">lazy</span> <span class="o">=</span> <span class="n">BitVector</span><span class="o">.</span><span class="n">lazy_advance</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">lazy</span><span class="p">)</span>
             <span class="n">cur_bvec</span><span class="o">.</span><span class="n">dec_rep</span> <span class="o">=</span> <span class="n">lazy</span>
@@ -370,18 +371,18 @@
 <span class="sd">        -------</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_bits_bef</span>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">num_qbits_bef</span>
         <span class="n">nt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_T_trols</span>
         <span class="n">nf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_F_trols</span>
         <span class="n">ntf</span> <span class="o">=</span> <span class="n">nt</span> <span class="o">+</span> <span class="n">nf</span>
-        <span class="n">num_MP_trols</span> <span class="o">=</span> <span class="n">num_bits</span> <span class="o">-</span> <span class="n">ntf</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_gbits</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">num_MP_trols</span> <span class="o">=</span> <span class="n">num_qbits</span> <span class="o">-</span> <span class="n">ntf</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_gbits</span> <span class="o">-</span> <span class="mi">1</span>
         <span class="n">bit_precision</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_gbits</span>
         <span class="n">num_angles</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rad_angles</span><span class="p">)</span>
         <span class="n">ang_bools</span> <span class="o">=</span> <span class="p">[</span><span class="kc">True</span><span class="p">]</span><span class="o">*</span><span class="n">num_angles</span>
 
         <span class="n">TF_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">([</span><span class="kc">True</span><span class="p">]</span><span class="o">*</span><span class="n">nt</span> <span class="o">+</span> <span class="p">[</span><span class="kc">False</span><span class="p">]</span><span class="o">*</span><span class="n">nf</span><span class="p">))</span>
-        <span class="n">side_trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)</span>
-        <span class="n">center_trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)</span>
+        <span class="n">side_trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">)</span>
+        <span class="n">center_trols</span> <span class="o">=</span> <span class="n">Controls</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">)</span>
 
         <span class="k">def</span> <span class="nf">write_omega</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">ang_bools1</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">bit</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_angles</span><span class="p">):</span>
@@ -392,8 +393,8 @@
                     <span class="p">}</span>
                     <span class="n">side_trols</span><span class="o">.</span><span class="n">bit_pos_to_kind</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">TF_dict</span><span class="p">)</span>
                     <span class="n">side_trols</span><span class="o">.</span><span class="n">refresh_lists</span><span class="p">()</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span><span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">side_trols</span><span class="p">,</span>
-                                                       <span class="n">OneBitGates</span><span class="o">.</span><span class="n">sigx</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span>
+                        <span class="n">tar_bit_pos</span><span class="p">,</span> <span class="n">side_trols</span><span class="p">,</span> <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">sigx</span><span class="p">)</span>
 
         <span class="n">bit_pos</span> <span class="o">=</span> <span class="n">ntf</span> <span class="o">+</span> <span class="n">num_MP_trols</span>  <span class="c1"># this is the target of Ry, gbits follow</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">bit_precision</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
@@ -407,10 +408,10 @@
                 <span class="n">x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">fraction</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">k</span><span class="p">))</span>  <span class="c1"># keep only int part</span>
                 <span class="n">ang_bools</span><span class="p">[</span><span class="n">b</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">&amp;</span> <span class="mi">1</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
             <span class="n">write_omega</span><span class="p">(</span><span class="n">bit_pos</span><span class="p">,</span> <span class="n">ang_bools</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_bit_gate</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write_controlled_one_qbit_gate</span><span class="p">(</span>
                     <span class="n">ntf</span> <span class="o">+</span> <span class="n">num_MP_trols</span><span class="p">,</span>
                     <span class="n">center_trols</span><span class="p">,</span>
-                    <span class="n">OneBitGates</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">k</span><span class="p">),</span> <span class="mi">2</span><span class="p">])</span>
+                    <span class="n">OneQubitGate</span><span class="o">.</span><span class="n">rot_ax</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">k</span><span class="p">),</span> <span class="mi">2</span><span class="p">])</span>
             <span class="n">write_omega</span><span class="p">(</span><span class="n">bit_pos</span><span class="p">,</span> <span class="n">ang_bools</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="MultiplexorSEO_writer.write"><a class="viewcode-back" href="../../../qubiter.quantum_CSD_compiler.MultiplexorSEO_writer.html#qubiter.quantum_CSD_compiler.MultiplexorSEO_writer.MultiplexorSEO_writer.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -445,7 +446,8 @@
 <span class="sd">            [ cc, ss]</span>
 <span class="sd">            [-ss, cc]</span>
 
-<span class="sd">        in it, where cc (ss) is the component-wise cosine (sine) of rad_angles</span>
+<span class="sd">        in it, where cc (ss) is the component-wise cosine (sine) of</span>
+<span class="sd">        rad_angles.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -474,6 +476,7 @@
             <span class="n">mat</span><span class="p">[</span><span class="n">k</span><span class="o">+</span><span class="n">num_angles</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">sign</span><span class="o">*</span><span class="n">s</span>
         <span class="k">return</span> <span class="n">mat</span></div></div>
 
+
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
         <span class="n">nt</span> <span class="o">=</span> <span class="mi">1</span>
@@ -486,8 +489,8 @@
             <span class="n">num_gbits</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="k">if</span> <span class="n">style</span> <span class="o">==</span> <span class="s1">&#39;oracular&#39;</span><span class="p">:</span>
                 <span class="n">num_gbits</span> <span class="o">=</span> <span class="mi">3</span>
-            <span class="n">num_bits</span> <span class="o">=</span> <span class="n">nt</span> <span class="o">+</span> <span class="n">nf</span> <span class="o">+</span> <span class="n">num_MP_trols</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">num_gbits</span>
-            <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">)</span>
+            <span class="n">num_qbits</span> <span class="o">=</span> <span class="n">nt</span> <span class="o">+</span> <span class="n">nf</span> <span class="o">+</span> <span class="n">num_MP_trols</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">num_gbits</span>
+            <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">)</span>
             <span class="n">file_prefix</span> <span class="o">=</span> <span class="s2">&quot;plexor_test_&quot;</span> <span class="o">+</span> <span class="n">style</span>
             <span class="n">wr</span> <span class="o">=</span> <span class="n">MultiplexorSEO_writer</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">emb</span><span class="p">,</span> <span class="n">style</span><span class="p">,</span> <span class="n">rad_angles</span><span class="p">,</span>
                 <span class="n">num_T_trols</span><span class="o">=</span><span class="n">nt</span><span class="p">,</span> <span class="n">num_F_trols</span><span class="o">=</span><span class="n">nf</span><span class="p">,</span> <span class="n">num_gbits</span><span class="o">=</span><span class="n">num_gbits</span><span class="p">)</span>
@@ -495,14 +498,14 @@
             <span class="n">wr</span><span class="o">.</span><span class="n">close_files</span><span class="p">()</span>
 
         <span class="n">file_prefix</span> <span class="o">=</span> <span class="s2">&quot;plexor_exact_check&quot;</span>
-        <span class="n">num_bits</span> <span class="o">=</span> <span class="mi">4</span>
-        <span class="n">num_angles</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">num_bits</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
-        <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">)</span>
+        <span class="n">num_qbits</span> <span class="o">=</span> <span class="mi">4</span>
+        <span class="n">num_angles</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">num_qbits</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">emb</span> <span class="o">=</span> <span class="n">CktEmbedder</span><span class="p">(</span><span class="n">num_qbits</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">)</span>
         <span class="n">rad_angles</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">num_angles</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
         <span class="n">wr</span> <span class="o">=</span> <span class="n">MultiplexorSEO_writer</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">emb</span><span class="p">,</span> <span class="s1">&#39;exact&#39;</span><span class="p">,</span> <span class="n">rad_angles</span><span class="p">)</span>
         <span class="n">wr</span><span class="o">.</span><span class="n">write</span><span class="p">()</span>
         <span class="n">wr</span><span class="o">.</span><span class="n">close_files</span><span class="p">()</span>
-        <span class="n">matpro</span> <span class="o">=</span> <span class="n">SEO_MatrixProduct</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">)</span>
+        <span class="n">matpro</span> <span class="o">=</span> <span class="n">SEO_MatrixProduct</span><span class="p">(</span><span class="n">file_prefix</span><span class="p">,</span> <span class="n">num_qbits</span><span class="p">)</span>
         <span class="n">exact_mat</span> <span class="o">=</span> <span class="n">MultiplexorSEO_writer</span><span class="o">.</span><span class="n">mp_mat</span><span class="p">(</span><span class="n">rad_angles</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;error=&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">matpro</span><span class="o">.</span><span class="n">prod_arr</span> <span class="o">-</span> <span class="n">exact_mat</span><span class="p">))</span>
     <span class="n">main</span><span class="p">()</span>

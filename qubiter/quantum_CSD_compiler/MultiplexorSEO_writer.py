@@ -4,6 +4,7 @@ from qubiter.HadamardTransform import *
 from qubiter.SEO_MatrixProduct import *
 from qubiter.BitVector import *
 
+
 class MultiplexorSEO_writer(SEO_writer):
     """
     A multiplexor is a matrix of the form
@@ -68,7 +69,7 @@ class MultiplexorSEO_writer(SEO_writer):
     num_gbits : int
         number of gbits (grounded bits). This is only needed for the
         oracular approximation. Grounded bits are extra ancilla bits that
-        have been initialized to the ground state (state |0>).
+        have been initialized to the ground state (state ``|0>``).
     num_of_T_trols : int
         The number of True controls of the controlled multiplexor
     rad_angles : list(float)
@@ -109,11 +110,11 @@ class MultiplexorSEO_writer(SEO_writer):
         if style == 'oracular':
             self.num_gbits = num_gbits
 
-        num_bits = emb.num_bits_bef
-        assert num_bits >= 2, "multiplexor must have at least 2 qubits"
+        num_qbits = emb.num_qbits_bef
+        assert num_qbits >= 2, "multiplexor must have at least 2 qubits"
 
         ntf = num_T_trols + num_F_trols
-        num_MP_trols = num_bits - ntf - num_gbits - 1
+        num_MP_trols = num_qbits - ntf - num_gbits - 1
         assert num_MP_trols > 0
         if rad_angles:
             assert len(rad_angles) == (1 << num_MP_trols), \
@@ -130,12 +131,12 @@ class MultiplexorSEO_writer(SEO_writer):
         None
 
         """
-        num_bits = self.emb.num_bits_bef
+        num_qbits = self.emb.num_qbits_bef
         nt = self.num_T_trols
         nf = self.num_F_trols
         ntf = nt + nf
-        num_MP_trols = num_bits - ntf - self.num_gbits - 1
-        trols = Controls(num_bits)
+        num_MP_trols = num_qbits - ntf - self.num_gbits - 1
+        trols = Controls(num_qbits)
         trols.bit_pos_to_kind = dict(enumerate(
                 [True]*nt + [False]*nf + list(range(num_MP_trols))
             ))
@@ -155,11 +156,11 @@ class MultiplexorSEO_writer(SEO_writer):
         None
 
         """
-        num_bits = self.emb.num_bits_bef
+        num_qbits = self.emb.num_qbits_bef
         nt = self.num_T_trols
         nf = self.num_F_trols
         ntf = nt + nf
-        num_MP_trols = num_bits - ntf - self.num_gbits - 1
+        num_MP_trols = num_qbits - ntf - self.num_gbits - 1
         rads_arr = np.array(self.rad_angles)
         if np.linalg.norm(rads_arr) < 1e-6:
             print("unit multiplexor")
@@ -172,10 +173,10 @@ class MultiplexorSEO_writer(SEO_writer):
         prev_bvec = BitVector(num_MP_trols+1, 0)
 
         TF_dict = dict(enumerate([True]*nt + [False]*nf))
-        trols1 = Controls(num_bits)
+        trols1 = Controls(num_qbits)
         trols1.bit_pos_to_kind = TF_dict.copy()
         trols1.refresh_lists()
-        trols2 = Controls(num_bits)
+        trols2 = Controls(num_qbits)
 
         def write_cnots(diff_bvec1):
             prev_T_bit = num_MP_trols
@@ -186,8 +187,8 @@ class MultiplexorSEO_writer(SEO_writer):
                 trols2.bit_pos_to_kind = TF_dict.copy()
                 trols2.bit_pos_to_kind[cur_T_bit + ntf] = True
                 trols2.refresh_lists()
-                self.write_controlled_one_bit_gate(
-                    ntf + num_MP_trols, trols2, OneBitGates.sigx)
+                self.write_controlled_one_qbit_gate(
+                    ntf + num_MP_trols, trols2, OneQubitGate.sigx)
                 prev_T_bit = cur_T_bit
 
         norma = np.power(np.sqrt(2), num_MP_trols)
@@ -200,8 +201,8 @@ class MultiplexorSEO_writer(SEO_writer):
             else:
                 diff_bvec = BitVector.new_with_T_on_diff(cur_bvec, prev_bvec)
                 write_cnots(diff_bvec)
-                self.write_controlled_one_bit_gate(
-                    ntf + num_MP_trols, trols1, OneBitGates.rot_ax, [rads, 2])
+                self.write_controlled_one_qbit_gate(
+                    ntf + num_MP_trols, trols1, OneQubitGate.rot_ax, [rads, 2])
                 prev_bvec = BitVector.copy(cur_bvec)
             f, lazy = BitVector.lazy_advance(f, lazy)
             cur_bvec.dec_rep = lazy
@@ -219,18 +220,18 @@ class MultiplexorSEO_writer(SEO_writer):
         -------
 
         """
-        num_bits = self.emb.num_bits_bef
+        num_qbits = self.emb.num_qbits_bef
         nt = self.num_T_trols
         nf = self.num_F_trols
         ntf = nt + nf
-        num_MP_trols = num_bits - ntf - self.num_gbits - 1
+        num_MP_trols = num_qbits - ntf - self.num_gbits - 1
         bit_precision = self.num_gbits
         num_angles = len(self.rad_angles)
         ang_bools = [True]*num_angles
 
         TF_dict = dict(enumerate([True]*nt + [False]*nf))
-        side_trols = Controls(num_bits)
-        center_trols = Controls(num_bits)
+        side_trols = Controls(num_qbits)
+        center_trols = Controls(num_qbits)
 
         def write_omega(tar_bit_pos, ang_bools1):
             for bit in range(num_angles):
@@ -241,8 +242,8 @@ class MultiplexorSEO_writer(SEO_writer):
                     }
                     side_trols.bit_pos_to_kind.update(TF_dict)
                     side_trols.refresh_lists()
-                    self.write_controlled_one_bit_gate(tar_bit_pos, side_trols,
-                                                       OneBitGates.sigx)
+                    self.write_controlled_one_qbit_gate(
+                        tar_bit_pos, side_trols, OneQubitGate.sigx)
 
         bit_pos = ntf + num_MP_trols  # this is the target of Ry, gbits follow
         for k in range(1, bit_precision+1):
@@ -256,10 +257,10 @@ class MultiplexorSEO_writer(SEO_writer):
                 x = int(fraction*(1 << k))  # keep only int part
                 ang_bools[b] = (x & 1 == 1)
             write_omega(bit_pos, ang_bools)
-            self.write_controlled_one_bit_gate(
+            self.write_controlled_one_qbit_gate(
                     ntf + num_MP_trols,
                     center_trols,
-                    OneBitGates.rot_ax, [2*np.pi/(1 << k), 2])
+                    OneQubitGate.rot_ax, [2*np.pi/(1 << k), 2])
             write_omega(bit_pos, ang_bools)
 
     def write(self):
@@ -294,7 +295,8 @@ class MultiplexorSEO_writer(SEO_writer):
             [ cc, ss]
             [-ss, cc]
 
-        in it, where cc (ss) is the component-wise cosine (sine) of rad_angles
+        in it, where cc (ss) is the component-wise cosine (sine) of
+        rad_angles.
 
         Parameters
         ----------
@@ -323,6 +325,7 @@ class MultiplexorSEO_writer(SEO_writer):
             mat[k+num_angles, k] = -sign*s
         return mat
 
+
 if __name__ == "__main__":
     def main():
         nt = 1
@@ -335,8 +338,8 @@ if __name__ == "__main__":
             num_gbits = 0
             if style == 'oracular':
                 num_gbits = 3
-            num_bits = nt + nf + num_MP_trols + 1 + num_gbits
-            emb = CktEmbedder(num_bits, num_bits)
+            num_qbits = nt + nf + num_MP_trols + 1 + num_gbits
+            emb = CktEmbedder(num_qbits, num_qbits)
             file_prefix = "plexor_test_" + style
             wr = MultiplexorSEO_writer(file_prefix, emb, style, rad_angles,
                 num_T_trols=nt, num_F_trols=nf, num_gbits=num_gbits)
@@ -344,14 +347,14 @@ if __name__ == "__main__":
             wr.close_files()
 
         file_prefix = "plexor_exact_check"
-        num_bits = 4
-        num_angles = (1 << (num_bits-1))
-        emb = CktEmbedder(num_bits, num_bits)
+        num_qbits = 4
+        num_angles = (1 << (num_qbits-1))
+        emb = CktEmbedder(num_qbits, num_qbits)
         rad_angles = list(np.random.rand(num_angles)*2*np.pi)
         wr = MultiplexorSEO_writer(file_prefix, emb, 'exact', rad_angles)
         wr.write()
         wr.close_files()
-        matpro = SEO_MatrixProduct(file_prefix, num_bits)
+        matpro = SEO_MatrixProduct(file_prefix, num_qbits)
         exact_mat = MultiplexorSEO_writer.mp_mat(rad_angles)
         print("error=", np.linalg.norm(matpro.prod_arr - exact_mat))
     main()

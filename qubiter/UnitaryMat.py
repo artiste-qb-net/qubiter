@@ -1,5 +1,5 @@
 import numpy as np
-from qubiter.OneBitGates import *
+from qubiter.OneQubitGate import *
 
 
 class UnitaryMat:
@@ -84,7 +84,7 @@ class UnitaryMat:
         x_rads = rot_rads*unit_vec[0]
         y_rads = rot_rads*unit_vec[1]
         z_rads = rot_rads*unit_vec[2]
-        arr = np.exp(1j*delta)*OneBitGates.rot(x_rads, y_rads, z_rads)
+        arr = np.exp(1j*delta)*OneQubitGate.rot(x_rads, y_rads, z_rads)
         return arr
 
     @staticmethod
@@ -159,7 +159,7 @@ class UnitaryMat:
 
 
 if __name__ == "__main__":
-    from FouSEO_writer import *
+    from qubiter.FouSEO_writer import *
 
     def main():
         unit_vec = np.array([1, 2, 3])

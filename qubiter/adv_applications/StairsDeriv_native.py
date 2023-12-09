@@ -15,7 +15,7 @@ class StairsDeriv_native(StairsDeriv):
 
     """
     def __init__(self, deriv_gate_str, gate_str_to_rads_list,
-                 file_prefix, parent_num_bits, hamil, **kwargs):
+                 file_prefix, parent_num_qbits, hamil, **kwargs):
         """
         Constructor
 
@@ -24,7 +24,7 @@ class StairsDeriv_native(StairsDeriv):
         deriv_gate_str : str
         gate_str_to_rads_list : dict[str, list[float|str]]
         file_prefix : str
-        parent_num_bits : int
+        parent_num_qbits : int
         hamil : QubitOperator
         kwargs : dict
             key-word arguments of MeanHamil
@@ -34,7 +34,7 @@ class StairsDeriv_native(StairsDeriv):
 
         """
         StairsDeriv.__init__(self, deriv_gate_str, gate_str_to_rads_list,
-                 file_prefix, parent_num_bits, hamil, **kwargs)
+                 file_prefix, parent_num_qbits, hamil, **kwargs)
 
     def get_mean_val(self, var_num_to_rads):
         """
@@ -54,7 +54,7 @@ class StairsDeriv_native(StairsDeriv):
         """
         partials_list = [0., 0., 0., 0.]
         # number of bits with (i.e., including) ancilla
-        num_bits_w_anc = self.num_bits
+        num_qbits_w_anc = self.num_qbits
         for has_neg_polarity, deriv_direc in it.product(
                 *[[False, True], range(4)]):
             if self.deriv_gate_str == 'prior':
@@ -63,7 +63,7 @@ class StairsDeriv_native(StairsDeriv):
                 else:
                     continue  # this skips iteration in loop
             for dpart_name in StairsDeriv.dpart_dict[deriv_direc]:
-                emb = CktEmbedder(num_bits_w_anc, num_bits_w_anc)
+                emb = CktEmbedder(num_qbits_w_anc, num_qbits_w_anc)
                 wr = StairsDerivCkt_writer(self.deriv_gate_str,
                     has_neg_polarity, deriv_direc, dpart_name,
                         self.gate_str_to_rads_list, self.file_prefix, emb)
@@ -74,14 +74,14 @@ class StairsDeriv_native(StairsDeriv):
                 fun_name_to_fun = StairsDerivCkt_writer.\
                     get_fun_name_to_fun(t_list, deriv_direc, dpart_name)
                 lili = SEO_Lista.eng_file_to_line_list(wr.file_prefix,
-                                                       num_bits_w_anc)
-                lista = SEO_Lista(num_bits_w_anc, line_list=lili)
+                                                       num_qbits_w_anc)
+                lista = SEO_Lista(num_qbits_w_anc, line_list=lili)
                 len_lista_in = len(lista.line_list)
                 for term, coef in self.hamil.terms.items():
                     # we have checked before that coef is real
                     coef = complex(coef).real
                     # print('nnnnnbbbbb', term)
-                    new_term = tuple(list(term) + [(num_bits_w_anc-1, 'X')])
+                    new_term = tuple(list(term) + [(num_qbits_w_anc-1, 'X')])
                     # print('jjjjjjj', new_term)
 
                     # throw out previous coda
@@ -111,14 +111,14 @@ class StairsDeriv_native(StairsDeriv):
                         # sample qubiter-generated empirical prob dist
                         pd = fin_st_vec.get_pd()
                         obs_vec = StateVec.get_observations_vec(
-                            num_bits_w_anc, pd, self.num_samples)
+                            num_qbits_w_anc, pd, self.num_samples)
                         counts_dict = StateVec.get_counts_from_obs_vec(
-                            num_bits_w_anc, obs_vec)
+                            num_qbits_w_anc, obs_vec)
                         emp_pd = StateVec.get_empirical_pd_from_counts(
-                            num_bits_w_anc, counts_dict)
+                            num_qbits_w_anc, counts_dict)
                         # print('mmmmmmmm,,,', np.linalg.norm(pd-emp_pd))
                         emp_st_vec = StateVec.\
-                            get_emp_state_vec_from_emp_pd(num_bits_w_anc,
+                            get_emp_state_vec_from_emp_pd(num_qbits_w_anc,
                                                           emp_pd)
                         effective_st_vec = emp_st_vec
                     else:  # num_samples = 0
@@ -137,13 +137,13 @@ class StairsDeriv_native(StairsDeriv):
 
 if __name__ == "__main__":
     def main():
-        num_bits = 4
-        parent_num_bits = num_bits - 1  # one bit for ancilla
+        num_qbits = 4
+        parent_num_qbits = num_qbits - 1  # one bit for ancilla
 
         # u2_bit_to_higher_bits = None
         u2_bit_to_higher_bits = {0: [2], 1: [2], 2: []}
         gate_str_to_rads_list = StairsCkt_writer.\
-            get_gate_str_to_rads_list(parent_num_bits,
+            get_gate_str_to_rads_list(parent_num_qbits,
                 '#int', rads_const=np.pi/2,
                 u2_bit_to_higher_bits=u2_bit_to_higher_bits)
         pp.pprint(gate_str_to_rads_list)
@@ -157,7 +157,7 @@ if __name__ == "__main__":
 
         der = StairsDeriv_native(deriv_gate_str,
                                  gate_str_to_rads_list, file_prefix,
-                                 parent_num_bits, hamil)
+                                 parent_num_qbits, hamil)
 
         var_num_to_rads = StairsCkt_writer.get_var_num_to_rads(
             gate_str_to_rads_list, 'const', rads_const=np.pi/2)

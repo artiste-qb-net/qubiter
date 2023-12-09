@@ -58,23 +58,23 @@ class RigettiTools:
         vector. An obs vec is a 1-dim array, num_shots long, whose entries
         are integers which are the decimal representation of a string,
         num_qbits long, of zeros and ones. This string of zeros and ones
-        gives the state of each qubit in the ZL convention
+        gives the state of each qubit in the ZL convention.
 
         PyQuil likes to state the results of an experiment repeated num_shots
         times by what it calls bitstrings. A bitstrings is a dict that maps
         qubit number to a 1-dim array, num_shots long, of zeros and ones.
-        Here is an example:
+        Here is an example::
 
-        # [1]:
-        #
-        # bitstrings = qc.run_and_measure(program, trials=10)
-        # bitstrings
-        #
-        # [2]:
-        #
-        # {0: array([1, 0, 0, 1, 1, 1, 1, 0, 1, 0]),
-        #  1: array([1, 0, 0, 1, 1, 1, 1, 0, 1, 0]),
-        #  2: array([1, 0, 0, 1, 1, 1, 1, 0, 1, 0])}
+            [1]:
+
+            bitstrings = qc.run_and_measure(program, trials=10)
+            bitstrings
+
+            [2]:
+
+            {0: array([1, 0, 0, 1, 1, 1, 1, 0, 1, 0]),
+             1: array([1, 0, 0, 1, 1, 1, 1, 0, 1, 0]),
+             2: array([1, 0, 0, 1, 1, 1, 1, 0, 1, 0])}
 
         However, qc.run() returns a numpy array of zeros and ones and shape
         (num_shots, num_qbits), formed from the bitstrings dict just
@@ -116,7 +116,7 @@ class RigettiTools:
             obs_vec[shot] = int(s, 2)
         return obs_vec
 
-
+    @staticmethod
     def add_xy_meas_coda_to_program(prog, bit_pos_to_xy_str):
         """
         This method adds a "coda" (tail ending) to prog using data in
@@ -157,8 +157,8 @@ if __name__ == "__main__":
 
     def main2():
         bitstrings = np.vstack([
-            [1,1,0], [0,1,0], [1,0,0], [1,0,1], [1,1,1],
-            [1,0,1], [0,1,1], [1,0,0], [1,1,1], [0,0,1]
+            [1, 1, 0], [0, 1, 0], [1, 0, 0], [1, 0, 1], [1, 1, 1],
+            [1, 0, 1], [0, 1, 1], [1, 0, 0], [1, 1, 1], [0, 0, 1]
         ])
         num_qbits = 3
         obs_vec = RigettiTools.obs_vec_from_bitstrings(

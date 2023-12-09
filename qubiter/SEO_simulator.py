@@ -1,7 +1,7 @@
 import copy as cp
 # import pprint as pp
 from qubiter.SEO_reader import *
-from qubiter.OneBitGates import *
+from qubiter.OneQubitGate import *
 from qubiter.StateVec import *
 # import utilities_gen as ut
 
@@ -23,13 +23,14 @@ class SEO_simulator(SEO_reader):
     set to the ground state automatically by the constructor.
 
     3 kinds (called 0, 1, 2) of measurements MEAS are allowed. A type 0
-    measurement inserts a projector |0><0| = n = P_0 at the target bit. A
-    type 1 measurement inserts a projector |1><1| = nbar = P_1 at the target
-    bit. A type 2 measurement stores a copy of the state vector after |0><0|
-    has been applied, and another copy after |1><1| has been applied.
+    measurement inserts a projector ``|0><0| = n = P_0`` at the target bit.
+    A type 1 measurement inserts a projector ``|1><1| = nbar = P_1`` at the
+    target bit. A type 2 measurement stores a copy of the state vector after
+    ``|0><0|`` has been applied, and another copy after ``|1><1|`` has been
+    applied.
 
     self.cur_st_vec_dict is a dictionary of strings (called branch keys) to
-    state vectors StateVec on num_bits qubits. We will refer to each state
+    state vectors StateVec on num_qbits qubits. We will refer to each state
     vec in the dict as a branch. Initially, this dict contains a single
     branch with branch key = "pure". A measurement MEAS of kinds 0 or 1 does
     not change the number of branches in the dict, but a measurement of kind
@@ -39,12 +40,12 @@ class SEO_simulator(SEO_reader):
     cur_st_vec_dict are not expected have normalized state vectors as values
     except when there is only a single branch.
 
-    If cur_st_vec_dict contains as values the states |br0>, |br1>, |br2>,
-    ...], then one can construct the density matrix of that state as rho =
-    |br0><br0| + |br1><br1| + |br2><br2| + ... divided by a number so that
-    trace(rho)=1. In other words, cur_st_vec_dict is just a particular way
-    of storing the density matrix of a state. A state with a single branch
-    is a pure state, but a state with more than one branch may not be.
+    If cur_st_vec_dict contains as values the states ``|br0>, |br1>, |br2>,
+    ...``, then one can construct the density matrix of that state as ``rho
+    = |br0><br0| + |br1><br1| + |br2><br2| + ...`` divided by a number so
+    that trace(rho)=1. In other words, cur_st_vec_dict is just a particular
+    way of storing the density matrix of a state. A state with a single
+    branch is a pure state, but a state with more than one branch may not be.
 
     An item of cur_st_vec_dict may be key=some string, value=None. This
     means the state vector of that branch is zero.
@@ -78,7 +79,7 @@ class SEO_simulator(SEO_reader):
     # rrtucci: combines my java classes:
     # LineList, UnitaryMat, SEO_readerMu
 
-    def __init__(self, file_prefix, num_bits,
+    def __init__(self, file_prefix, num_qbits,
                  init_st_vec=None, **kwargs):
         """
         Constructor
@@ -86,9 +87,9 @@ class SEO_simulator(SEO_reader):
         Parameters
         ----------
         file_prefix : str
-        num_bits : int
+        num_qbits : int
         init_st_vec : StateVec
-            get this using the functions StateVec.get_ground_st_vec() or
+            Get this using the functions StateVec.get_ground_st_vec() or
             StateVec.get_standard_basis_st_vec().
 
         Returns
@@ -96,7 +97,7 @@ class SEO_simulator(SEO_reader):
 
         """
         if StateVec.is_zero(init_st_vec):
-            init_st_vec = StateVec.get_ground_st_vec(num_bits)
+            init_st_vec = StateVec.get_ground_st_vec(num_qbits)
         self.cur_st_vec_dict = {"pure": init_st_vec}
         self.cached_sts = {}
         self.use_tf = False
@@ -104,7 +105,7 @@ class SEO_simulator(SEO_reader):
 
         self.do_more_init_before_reading()
 
-        SEO_reader.__init__(self, file_prefix, num_bits, **kwargs)
+        SEO_reader.__init__(self, file_prefix, num_qbits, **kwargs)
 
     def do_more_init_before_reading(self):
         """
@@ -157,7 +158,7 @@ class SEO_simulator(SEO_reader):
     def get_controls_from_br_key(self, br_key):
         """
         Returns a Controls object built from br_key. br_key is assumed to be
-        a str key for self.cur_st_vec_dict
+        a str key for self.cur_st_vec_dict.
 
         Parameters
         ----------
@@ -183,7 +184,7 @@ class SEO_simulator(SEO_reader):
                     kinds.append(True)
                 else:
                     kinds.append(False)
-        trols = Controls(self.num_bits)
+        trols = Controls(self.num_qbits)
         trols.bit_pos_to_kind = dict(zip(bit_pos, kinds))
         trols.refresh_lists()
         return trols
@@ -192,7 +193,7 @@ class SEO_simulator(SEO_reader):
     def get_br_key_with_new_link(br_key, new_bit_pos, new_kind):
         """
         Say new_bit_pos=2 and new_kind=True. This returns a new branch key
-        with '2T' added to the end of the string br_key
+        with '2T' added to the end of the string br_key.
 
         Parameters
         ----------
@@ -212,7 +213,7 @@ class SEO_simulator(SEO_reader):
             new_br_key = br_key + x
         return new_br_key
 
-    def evolve_by_controlled_bit_swap(self, bit1, bit2, controls):
+    def evolve_by_controlled_qbit_swap(self, bit1, bit2, controls):
         """
         Evolve each branch of cur_st_vec_dict by controlled bit swap iff the
         bit swap line is (1) outside of any IF_M block, or (2) it is inside
@@ -232,10 +233,10 @@ class SEO_simulator(SEO_reader):
         """
         assert bit1 != bit2, "swapped bits must be different"
         for bit in [bit1, bit2]:
-            assert -1 < bit < self.num_bits
+            assert -1 < bit < self.num_qbits
             assert bit not in controls.bit_pos
  
-        slicex = [slice(None)]*self.num_bits
+        slicex = [slice(None)]*self.num_qbits
         num_controls = len(controls.bit_pos_to_kind)
         for k in range(num_controls):
             assert isinstance(controls.kinds[k], bool)
@@ -247,7 +248,7 @@ class SEO_simulator(SEO_reader):
 
         # components that are fixed are no longer axes
         scout = 0
-        for bit in range(self.num_bits):
+        for bit in range(self.num_qbits):
             if bit == bit1:
                 new1 = scout
             if bit == bit2:
@@ -285,13 +286,13 @@ class SEO_simulator(SEO_reader):
 
                 self.cur_st_vec_dict[br_key].arr[slicex] = sub_arr
 
-    def evolve_by_controlled_one_bit_gate(self,
-                tar_bit_pos, controls, one_bit_gate):
+    def evolve_by_controlled_one_qbit_gate(self,
+                tar_bit_pos, controls, one_qbit_gate):
         """
         Evolve each branch of cur_st_vec_dict by controlled one bit gate (
-        from class OneBitGates) iff the controlled one bit gate line is (1)
+        from class OneQubitGate) iff the controlled one bit gate line is (1)
         outside of an IF_M block, or (2) it is inside such a block, and it
-        satisfies self.mcase_trols. Note one_bit_gate is entered as
+        satisfies self.mcase_trols. Note one_qbit_gate is entered as
         np.ndarray.
 
         Parameters
@@ -299,16 +300,16 @@ class SEO_simulator(SEO_reader):
         tar_bit_pos : int
             bit position of target of one bit gate.
         controls : Controls
-        one_bit_gate : np.ndarray
+        one_qbit_gate : np.ndarray
 
         Returns
         -------
         None
 
         """
-        assert -1 < tar_bit_pos < self.num_bits
+        assert -1 < tar_bit_pos < self.num_qbits
 
-        vec_slicex = [slice(None)]*self.num_bits
+        vec_slicex = [slice(None)]*self.num_qbits
         num_controls = len(controls.bit_pos_to_kind)
         for k in range(num_controls):
             assert isinstance(controls.kinds[k], bool)
@@ -320,7 +321,7 @@ class SEO_simulator(SEO_reader):
 
         # components that are fixed are no longer axes
         scout = 0
-        for bit in range(self.num_bits):
+        for bit in range(self.num_qbits):
             if bit == tar_bit_pos:
                 new_tar = scout
             if bit not in controls.bit_pos:
@@ -355,10 +356,10 @@ class SEO_simulator(SEO_reader):
                     evolve_br = True
             if evolve_br:
                 sub_arr = self.cur_st_vec_dict[br_key].arr[vec_slicex]
-                # Axes 1 of one_bit_gate and new_tar of vec are summed over.
-                #  Axis 0 of one_bit_gate goes to the front of all the axes
+                # Axes 1 of one_qbit_gate and new_tar of vec are summed over.
+                #  Axis 0 of one_qbit_gate goes to the front of all the axes
                 # of new vec. Use transpose() to realign axes.
-                sub_arr = SEO_simulator.tensordot(one_bit_gate, sub_arr,
+                sub_arr = SEO_simulator.tensordot(one_qbit_gate, sub_arr,
                                          ([1], [new_tar]))
                 sub_arr = SEO_simulator.transpose(sub_arr, perm)
 
@@ -374,7 +375,7 @@ class SEO_simulator(SEO_reader):
 
     def do_array_assignment_workaround(self, br_key, slicex, sub_arr):
         """
-        internal function used in evolve_ methods iff autograd is on or
+        Internal function used in evolve_ methods iff autograd is on or
         use_tf is True. Should have same effect as
 
         self.cur_st_vec_dict[br_key].arr[slicex] = sub_arr
@@ -402,7 +403,7 @@ class SEO_simulator(SEO_reader):
             # print('arr1 aft', arr1_np)
         on_slicex = np.full(tuple(arr.shape), False)
         on_slicex[slicex] = True
-        bigger_shape = [1]*self.num_bits  # slicex is num_bits long
+        bigger_shape = [1]*self.num_qbits  # slicex is num_qbits long
         k = 0
         # print('wwwww', sub_arr.shape, slicex)
         for bit, kind in enumerate(slicex):
@@ -515,13 +516,14 @@ class SEO_simulator(SEO_reader):
             # print('..,,mm', 'was here')
             pd = self.cur_st_vec_dict['pure'].get_pd()
         else:
-            den_mat = StateVec.get_den_mat(self.num_bits, self.cur_st_vec_dict)
+            den_mat = StateVec.get_den_mat(self.num_qbits,
+                                           self.cur_st_vec_dict)
             pd = StateVec.get_den_mat_pd(den_mat)
         # print('....,,,', pd.shape)
         obs_vec = StateVec.get_observations_vec(
-            self.num_bits, pd, num_shots, rand_seed)
+            self.num_qbits, pd, num_shots, rand_seed)
 
-        out = StateVec.get_counts_from_obs_vec(self.num_bits, obs_vec,
+        out = StateVec.get_counts_from_obs_vec(self.num_qbits, obs_vec,
                         use_bin_labels, omit_zero_counts)
         self.convert_tensors_to_tf()
 
@@ -550,7 +552,7 @@ class SEO_simulator(SEO_reader):
     def use_HAD2(self, tar_bit_pos, controls):
         """
         Overrides the parent class use_ function. Calls
-        evolve_by_controlled_one_bit_gate() for had2.
+        evolve_by_controlled_one_qbit_gate() for had2.
 
 
         Parameters
@@ -563,8 +565,8 @@ class SEO_simulator(SEO_reader):
         None
 
         """
-        gate = OneBitGates.had2(lib=self.lib)
-        self.evolve_by_controlled_one_bit_gate(tar_bit_pos, controls, gate)
+        gate = OneQubitGate.had2(lib=self.lib)
+        self.evolve_by_controlled_one_qbit_gate(tar_bit_pos, controls, gate)
 
     def use_IF_M_beg(self, controls):
         """
@@ -599,8 +601,8 @@ class SEO_simulator(SEO_reader):
         """
         Overrides the parent class use_ function.
 
-        For kind 0 (resp., 1) measurements, it applies |0><0| (resp.,
-        |1><1|) to each branch of cur_st_vec_dict.
+        For kind 0 (resp., 1) measurements, it applies ``P_0=|0><0|`` (
+        resp., ``P_1=|1><1|``) to each branch of cur_st_vec_dict.
 
         For kind 2 measurements, it first doubles the number of branches in
         cur_st_vec_dict by adding a deep copy of each branch. Next,
@@ -619,7 +621,7 @@ class SEO_simulator(SEO_reader):
         """
         self.convert_tensors_to_numpy()
         # slicex = slice index
-        slicex = [slice(None)]*self.num_bits
+        slicex = [slice(None)]*self.num_qbits
         # br = branch
         if kind in [0, 1]:
             b = 1 if kind == 0 else 0
@@ -711,7 +713,7 @@ class SEO_simulator(SEO_reader):
     def use_PHAS(self, angle_rads, tar_bit_pos, controls):
         """
         Overrides the parent class use_ function. Calls
-        evolve_by_controlled_one_bit_gate() for PHAS.
+        evolve_by_controlled_one_qbit_gate() for PHAS.
 
         Parameters
         ----------
@@ -724,14 +726,14 @@ class SEO_simulator(SEO_reader):
         None
 
         """
-        gate = OneBitGates.phase_fac(angle_rads, lib=self.lib)
-        self.evolve_by_controlled_one_bit_gate(tar_bit_pos, controls, gate)
+        gate = OneQubitGate.phase_fac(angle_rads, lib=self.lib)
+        self.evolve_by_controlled_one_qbit_gate(tar_bit_pos, controls, gate)
 
     def use_P_PH(self, projection_bit,
                 angle_rads, tar_bit_pos, controls):
         """
         Overrides the parent class use_ function. Calls
-        evolve_by_controlled_one_bit_gate() for P_0 and P_1 phase factors.
+        evolve_by_controlled_one_qbit_gate() for P_0 and P_1 phase factors.
 
 
         Parameters
@@ -748,11 +750,11 @@ class SEO_simulator(SEO_reader):
 
         """
         fun = {
-            0: OneBitGates.P_0_phase_fac,
-            1: OneBitGates.P_1_phase_fac
+            0: OneQubitGate.P_0_phase_fac,
+            1: OneQubitGate.P_1_phase_fac
         }
         gate = fun[projection_bit](angle_rads, lib=self.lib)
-        self.evolve_by_controlled_one_bit_gate(tar_bit_pos, controls, gate)
+        self.evolve_by_controlled_one_qbit_gate(tar_bit_pos, controls, gate)
 
     def use_PRINT(self, style, line_num):
         """
@@ -785,7 +787,7 @@ class SEO_simulator(SEO_reader):
                  angle_rads, tar_bit_pos, controls):
         """
         Overrides the parent class use_ function. Calls
-        evolve_by_controlled_one_bit_gate() for rot along axes x, y, or z.
+        evolve_by_controlled_one_qbit_gate() for rot along axes x, y, or z.
 
         Parameters
         ----------
@@ -801,14 +803,14 @@ class SEO_simulator(SEO_reader):
 
         """
         # print('//////', angle_rads, axis)
-        gate = OneBitGates.rot_ax(angle_rads, axis, lib=self.lib)
-        self.evolve_by_controlled_one_bit_gate(tar_bit_pos, controls, gate)
+        gate = OneQubitGate.rot_ax(angle_rads, axis, lib=self.lib)
+        self.evolve_by_controlled_one_qbit_gate(tar_bit_pos, controls, gate)
 
     def use_ROTN(self, angle_x_rads, angle_y_rads, angle_z_rads,
                 tar_bit_pos, controls):
         """
         Overrides the parent class use_ function. Calls
-        evolve_by_controlled_one_bit_gate() for rot along arbitrary axis.
+        evolve_by_controlled_one_qbit_gate() for rot along arbitrary axis.
 
 
         Parameters
@@ -824,14 +826,14 @@ class SEO_simulator(SEO_reader):
         None
 
         """
-        gate = OneBitGates.rot(angle_x_rads, angle_y_rads, angle_z_rads,
+        gate = OneQubitGate.rot(angle_x_rads, angle_y_rads, angle_z_rads,
                                lib=self.lib)
-        self.evolve_by_controlled_one_bit_gate(tar_bit_pos, controls, gate)
+        self.evolve_by_controlled_one_qbit_gate(tar_bit_pos, controls, gate)
 
     def use_SIG(self, axis, tar_bit_pos, controls):
         """
         Overrides the parent class use_ function. Calls
-        evolve_by_controlled_one_bit_gate() for sigx, sigy, sigz.
+        evolve_by_controlled_one_qbit_gate() for sigx, sigy, sigz.
 
         Parameters
         ----------
@@ -846,17 +848,17 @@ class SEO_simulator(SEO_reader):
 
         """
         fun = {
-            1: OneBitGates.sigx,
-            2: OneBitGates.sigy,
-            3: OneBitGates.sigz
+            1: OneQubitGate.sigx,
+            2: OneQubitGate.sigy,
+            3: OneQubitGate.sigz
         }
         gate = fun[axis](lib=self.lib)
-        self.evolve_by_controlled_one_bit_gate(tar_bit_pos, controls, gate)
+        self.evolve_by_controlled_one_qbit_gate(tar_bit_pos, controls, gate)
 
     def use_SWAP(self, bit1, bit2, controls):
         """
         Overrides the parent class use_ function. Calls
-        evolve_by_controlled_bit_swap().
+        evolve_by_controlled_qbit_swap().
 
         Parameters
         ----------
@@ -869,12 +871,12 @@ class SEO_simulator(SEO_reader):
         None
 
         """
-        self.evolve_by_controlled_bit_swap(bit1, bit2, controls)
+        self.evolve_by_controlled_qbit_swap(bit1, bit2, controls)
 
     def use_SWAY(self, bit1, bit2, controls, rads_list):
         """
         Overrides the parent class use_ function. Calls
-        evolve_by_controlled_one_bit_gate() 3 times.
+        evolve_by_controlled_one_qbit_gate() 3 times.
 
         This relies on the fact that
 
@@ -911,19 +913,19 @@ class SEO_simulator(SEO_reader):
         assert len(rads_list) == 2
         rads0, rads1 = rads_list
 
-        self.evolve_by_controlled_one_bit_gate(
-            bit2, controls1, OneBitGates.sigx(lib=self.lib))
-        self.evolve_by_controlled_one_bit_gate(
-            bit1, controls2, OneBitGates.u2(rads0, rads1, 0.0, 0.0,
+        self.evolve_by_controlled_one_qbit_gate(
+            bit2, controls1, OneQubitGate.sigx(lib=self.lib))
+        self.evolve_by_controlled_one_qbit_gate(
+            bit1, controls2, OneQubitGate.u2(rads0, rads1, 0.0, 0.0,
                                             lib=self.lib))
-        self.evolve_by_controlled_one_bit_gate(
-            bit2, controls1, OneBitGates.sigx(lib=self.lib))
+        self.evolve_by_controlled_one_qbit_gate(
+            bit2, controls1, OneQubitGate.sigx(lib=self.lib))
 
     def use_U_2_(self, rads0, rads1, rads2, rads3,
                 tar_bit_pos, controls):
         """
         Overrides the parent class use_ function. Calls
-        evolve_by_controlled_one_bit_gate() for arbitrary unitary 2-dim
+        evolve_by_controlled_one_qbit_gate() for arbitrary unitary 2-dim
         matrix.
 
         Parameters
@@ -940,8 +942,9 @@ class SEO_simulator(SEO_reader):
         None
 
         """
-        gate = OneBitGates.u2(rads0, rads1, rads2, rads3, lib=self.lib)
-        self.evolve_by_controlled_one_bit_gate(tar_bit_pos, controls, gate)
+        gate = OneQubitGate.u2(rads0, rads1, rads2, rads3, lib=self.lib)
+        self.evolve_by_controlled_one_qbit_gate(tar_bit_pos, controls, gate)
+
 
 if __name__ == "__main__":
     def main():

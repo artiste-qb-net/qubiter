@@ -40,9 +40,9 @@ def Turing():
             tlist = [0., rad_ang_x, rad_ang_y, rad_ang_z]
             return pu2(*tlist)
     
-        mat_dict = OneBitGates.const_dict(0)
+        mat_dict = OneQubitGate.const_dict(0)
         vec = [rad_ang_x, rad_ang_y, rad_ang_z]
-        n = OneBitGates.get_fun(lib, 'sqrt')(vec[0]**2 + vec[1]**2 + vec[2]**2)
+        n = OneQubitGate.get_fun(lib, 'sqrt')(vec[0]**2 + vec[1]**2 + vec[2]**2)
         if abs(n) < 1e-8:
             mat_dict['00'] = 1
             mat_dict['11'] = 1
@@ -50,12 +50,12 @@ def Turing():
             nx = rad_ang_x/n
             ny = rad_ang_y/n
             nz = rad_ang_z/n
-            c = OneBitGates.get_fun(lib, 'cos')(n)
-            s = OneBitGates.get_fun(lib, 'sin')(n)
+            c = OneQubitGate.get_fun(lib, 'cos')(n)
+            s = OneQubitGate.get_fun(lib, 'sin')(n)
             mat_dict['00'] = c + 1j*s*nz
             mat_dict['01'] = s*ny + 1j*s*nx
             mat_dict['10'] = -s*ny + 1j*s*nx
             mat_dict['11'] = c - 1j*s*nz
-        return OneBitGates.get_mat(lib, mat_dict)
+        return OneQubitGate.get_mat(lib, mat_dict)
     qml.QubitUnitary(rot(-6.283185307179586, -6.283185307179586, -6.283185307179586), wires=0)
     return qml.expval.Hermitian(hamil)

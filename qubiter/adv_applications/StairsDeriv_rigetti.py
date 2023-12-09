@@ -37,7 +37,7 @@ class StairsDeriv_rigetti(StairsDeriv):
 
     """
     def __init__(self, qc, deriv_gate_str, gate_str_to_rads_list,
-                 file_prefix, parent_num_bits, hamil, **kwargs):
+                 file_prefix, parent_num_qbits, hamil, **kwargs):
         """
         Constructor
 
@@ -47,7 +47,7 @@ class StairsDeriv_rigetti(StairsDeriv):
         deriv_gate_str : str
         gate_str_to_rads_list : dict[str, list[float|str]]
         file_prefix : str
-        parent_num_bits : int
+        parent_num_qbits : int
         hamil : QubitOperator
         kwargs : dict
             key-word arguments of MeanHamil
@@ -57,7 +57,7 @@ class StairsDeriv_rigetti(StairsDeriv):
 
         """
         StairsDeriv.__init__(self, deriv_gate_str, gate_str_to_rads_list,
-                 file_prefix, parent_num_bits, hamil, **kwargs)
+                 file_prefix, parent_num_qbits, hamil, **kwargs)
 
         self.qc = qc
         self.translator = None
@@ -81,7 +81,7 @@ class StairsDeriv_rigetti(StairsDeriv):
         """
         partials_list = [0., 0., 0., 0.]
         # number of bits with (i.e., including) ancilla
-        num_bits_w_anc = self.num_bits
+        num_qbits_w_anc = self.num_qbits
         for has_neg_polarity, deriv_direc in it.product(
                 *[[False, True], range(4)]):
             if self.deriv_gate_str == 'prior':
@@ -90,7 +90,7 @@ class StairsDeriv_rigetti(StairsDeriv):
                 else:
                     continue  # this skips iteration in loop
             for dpart_name in StairsDeriv.dpart_dict[deriv_direc]:
-                emb = CktEmbedder(num_bits_w_anc, num_bits_w_anc)
+                emb = CktEmbedder(num_qbits_w_anc, num_qbits_w_anc)
                 wr = StairsDerivCkt_writer(self.deriv_gate_str,
                     has_neg_polarity, deriv_direc, dpart_name,
                         self.gate_str_to_rads_list, self.file_prefix, emb)
@@ -120,7 +120,7 @@ class StairsDeriv_rigetti(StairsDeriv):
                 #  qubit gates, using CGateExpander. Give CGateExpander a
                 # vman input so as to float all variables before expansion
 
-                expan = CGateExpander(self.file_prefix, num_bits_w_anc,
+                expan = CGateExpander(self.file_prefix, num_qbits_w_anc,
                               vars_manager=vman)
                 # this gives name of new file with expansion
                 out_file_prefix = SEO_reader.xed_file_prefix(self.file_prefix)
@@ -130,7 +130,7 @@ class StairsDeriv_rigetti(StairsDeriv):
                 # this creates a file with all PyQuil gates that are
                 # independent of hamil.
                 self.translator = Qubiter_to_RigettiPyQuil(
-                    out_file_prefix, self.num_bits,
+                    out_file_prefix, self.num_qbits,
                     aqasm_name='RigPyQuil', prelude_str='', ending_str='')
                 with open(utg.preface(self.translator.aqasm_path), 'r') as fi:
                     self.translation_line_list = fi.readlines()
@@ -146,7 +146,7 @@ class StairsDeriv_rigetti(StairsDeriv):
                     coef = complex(coef).real
 
                     # print('nnnnnbbbbb', term)
-                    new_term = tuple(list(term) + [(num_bits_w_anc-1, 'X')])
+                    new_term = tuple(list(term) + [(num_qbits_w_anc-1, 'X')])
                     # print('jjjjjjj', new_term)
 
                     # Throw out previous coda.
@@ -168,23 +168,23 @@ class StairsDeriv_rigetti(StairsDeriv):
                         bitstrings = self.qc.run_and_measure(pg,
                                                 trials=self.num_samples)
                         obs_vec = RigettiTools.obs_vec_from_bitstrings(
-                                bitstrings, self.num_bits, bs_is_array=False)
+                                bitstrings, self.num_qbits, bs_is_array=False)
 
                         # go from obs_vec to effective state vec
                         counts_dict = StateVec.get_counts_from_obs_vec(
-                            self.num_bits, obs_vec)
+                            self.num_qbits, obs_vec)
                         emp_pd = StateVec.get_empirical_pd_from_counts(
-                            self.num_bits, counts_dict)
+                            self.num_qbits, counts_dict)
                         effective_st_vec = StateVec.\
                             get_emp_state_vec_from_emp_pd(
-                                self.num_bits, emp_pd)
+                                self.num_qbits, emp_pd)
                     else:  # num_samples = 0
                         sim = WavefunctionSimulator()
                         st_vec_arr = sim.wavefunction(pg).amplitudes
-                        st_vec_arr = st_vec_arr.reshape([2]*self.num_bits)
-                        perm = list(reversed(range(self.num_bits)))
+                        st_vec_arr = st_vec_arr.reshape([2]*self.num_qbits)
+                        perm = list(reversed(range(self.num_qbits)))
                         st_vec_arr = np.transpose(st_vec_arr, perm)
-                        effective_st_vec = StateVec(self.num_bits, st_vec_arr)
+                        effective_st_vec = StateVec(self.num_qbits, st_vec_arr)
                     # add contribution to mean
                     real_arr = self.get_real_vec(new_term)
                     mean_val_change = coef*effective_st_vec.\

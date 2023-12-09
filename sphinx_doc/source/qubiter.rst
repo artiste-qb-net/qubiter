@@ -29,7 +29,7 @@ Submodules
    qubiter.HadamardTransform
    qubiter.LoopFileGenerator
    qubiter.LoopyPlaceholderManager
-   qubiter.OneBitGates
+   qubiter.OneQubitGate
    qubiter.PlaceholderManager
    qubiter.Plotter
    qubiter.SEO_Lista
